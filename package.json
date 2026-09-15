@@ -1,0 +1,24 @@
+{
+  "name": "infimatch",
+  "private": true,
+  "version": "0.1.0",
+  "workspaces": [
+    "backend"
+  ],
+  "scripts": {
+    "build": "npm run build -w backend",
+    "typecheck": "npm run typecheck -w backend",
+    "test": "npm run test -w backend",
+    "test:integration": "npm run test:integration -w backend",
+    "coverage": "npm run coverage -w backend",
+    "dev": "npm run dev -w backend",
+    "db:migrate": "npm run db:migrate -w backend",
+    "snapshot": "node scripts/snapshot.mjs",
+    "infra:up": "docker compose --env-file .env -f infra/compose.yaml up -d",
+    "infra:down": "docker compose --env-file .env -f infra/compose.yaml down",
+    "setup": "node scripts/setup-env.mjs",
+    "verify": "node scripts/verify.mjs",
+    "check:secrets": "node scripts/check-secrets.mjs",
+    "worker": "npm run worker -w backend"
+  }
+}

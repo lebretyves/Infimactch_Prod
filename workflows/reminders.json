@@ -1,0 +1,225 @@
+{
+  "id": "InfiMatchReminders",
+  "name": "InfiMatch - Unfilled reminders",
+  "active": false,
+  "nodes": [
+    {
+      "id": "webhook-reminders",
+      "name": "Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        0,
+        0
+      ],
+      "webhookId": "infimatch-reminders",
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "reminders",
+        "responseMode": "responseNode",
+        "options": {}
+      }
+    },
+    {
+      "id": "authorize",
+      "name": "Authorize",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [
+        220,
+        0
+      ],
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "token",
+              "leftValue": "={{ $json.headers['x-infimatch-token'] }}",
+              "rightValue": "={{ $env.INFIMATCH_SERVICE_TOKEN }}",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      }
+    },
+    {
+      "id": "backend",
+      "name": "Backend action",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        440,
+        0
+      ],
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $env.INFIMATCH_API + '/internal/automation/reminders' }}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "X-InfiMatch-Token",
+              "value": "={{ $env.INFIMATCH_SERVICE_TOKEN }}"
+            }
+          ]
+        },
+        "options": {
+          "timeout": 60000
+        }
+      }
+    },
+    {
+      "id": "reply",
+      "name": "Reply",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.4,
+      "position": [
+        670,
+        0
+      ],
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ $json }}",
+        "options": {
+          "responseCode": 200
+        }
+      }
+    },
+    {
+      "id": "deny",
+      "name": "Reject",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.4,
+      "position": [
+        440,
+        200
+      ],
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "{\"code\":\"UNAUTHORIZED\"}",
+        "options": {
+          "responseCode": 401
+        }
+      }
+    },
+    {
+      "id": "schedule",
+      "name": "Hourly reminder",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        0,
+        -200
+      ],
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "hours",
+              "hoursInterval": 1
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "scheduled-backend",
+      "name": "Scheduled backend action",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        440,
+        -200
+      ],
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $env.INFIMATCH_API + '/internal/automation/reminders' }}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "X-InfiMatch-Token",
+              "value": "={{ $env.INFIMATCH_SERVICE_TOKEN }}"
+            }
+          ]
+        },
+        "options": {
+          "timeout": 60000
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Authorize",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Authorize": {
+      "main": [
+        [
+          {
+            "node": "Backend action",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Reject",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Backend action": {
+      "main": [
+        [
+          {
+            "node": "Reply",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Hourly reminder": {
+      "main": [
+        [
+          {
+            "node": "Scheduled backend action",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "timezone": "Europe/Paris",
+    "saveDataSuccessExecution": "none",
+    "saveDataErrorExecution": "none",
+    "saveManualExecutions": false
+  },
+  "pinData": {},
+  "versionId": "f74b30ce-f185-4536-b0c2-133bde787cfa",
+  "tags": []
+}

@@ -1,0 +1,14 @@
+import {execFileSync} from 'node:child_process';
+import {mkdirSync,writeFileSync} from 'node:fs';
+import {join} from 'node:path';
+const root=process.cwd(), dir=join(root,'backups');
+mkdirSync(dir,{recursive:true});
+const stamp=new Date().toISOString().replace(/[:.]/g,'-');
+const commit=execFileSync('git',['rev-parse','HEAD'],{encoding:'utf8'}).trim();
+const changes=execFileSync('git',['status','--porcelain'],{encoding:'utf8'});
+if(changes.trim()) throw new Error('Commit tracked changes before snapshot; secrets must remain ignored.');
+const target=join(dir,stamp+'.bundle');
+execFileSync('git',['bundle','create',target,'--all']);
+execFileSync('git',['bundle','verify',target],{stdio:'inherit'});
+writeFileSync(join(dir,stamp+'.json'),JSON.stringify({createdAt:new Date().toISOString(),commit,bundle:target,scope:'Git history only; excludes ignored secrets, databases and node_modules'},null,2));
+console.log('Verified snapshot:',target);
