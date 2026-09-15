@@ -34,6 +34,69 @@ npm run worker
 
 Pour le développement : `npm run dev`.
 
+## Services, applications et acc?s
+
+Les bases tournent dans Docker. **pgAdmin et MongoDB Compass sont des applications de consultation compl?mentaires** ; les fermer n'arr?te pas les bases.
+
+| Service | R?le dans InfiMatch | Acc?s depuis le poste local | Application |
+|---|---|---|---|
+| PostgreSQL + PostGIS | Profils, missions, candidatures, affectations et calculs g?ographiques | `127.0.0.1:55432`, base `infimatch` | pgAdmin |
+| MongoDB | R?sultats et explications du matching interne, avec versions et expiration | `127.0.0.1:57017`, base `infimatch`, collection `matchingruns` | MongoDB Compass |
+| Vault | Secrets d'acc?s aux services, cl?s de chiffrement et acc?s fournisseurs | https://127.0.0.1:58200/ui/ | Navigateur |
+| n8n | Notifications, relances et confirmation PDF apr?s affectation | http://127.0.0.1:55678 | Navigateur |
+
+Ces adresses pointent vers **l'ordinateur sur lequel les services sont d?marr?s**. Les ports PostgreSQL et MongoDB ne sont pas des pages web. pgAdmin et Compass s'installent s?par?ment ; aucun compte cloud n'est n?cessaire pour consulter ces bases locales.
+
+### PostgreSQL avec pgAdmin
+
+Cr?er une connexion serveur avec :
+
+- H?te : `127.0.0.1`.
+- Port : `55432`.
+- Base de maintenance : `infimatch`.
+- Utilisateur : `infimatch` pour la configuration Compose fournie.
+- Mot de passe : valeur locale de `POSTGRES_PASSWORD`, ou celle de `DATABASE_URL` si les identifiants ont ?t? adapt?s.
+
+Si Vault est configur?, `POSTGRES_PASSWORD` se trouve dans `kv/infimatch/v1/infra` et `DATABASE_URL` dans `kv/infimatch/v1/backend`. Une ancienne connexion PostgreSQL sur le port 5432 peut correspondre ? une autre application.
+
+### MongoDB avec Compass
+
+Cr?er une connexion nomm?e **InfiMatch local** et utiliser la valeur de `MONGODB_URI` fournie localement ou conserv?e dans Vault, sous `kv/infimatch/v1/backend`. Cette URI contient les identifiants : ne pas la copier dans Git, les tickets ou les captures partag?es.
+
+Pour la configuration Compose fournie : h?te `127.0.0.1`, port `57017`, utilisateur `infimatch`, base d'authentification `admin`. Apr?s connexion, ouvrir **infimatch ? matchingruns**. Les bases techniques `admin`, `config` et `local` ne sont pas la base m?tier ? consulter.
+
+Le backend calcule le matching puis enregistre son r?sultat dans MongoDB. MongoDB n'importe pas directement les annonces France Travail. Si l'historique ne peut pas ?tre enregistr?, le calcul peut ?tre retourn? avec `historyStatus: UNAVAILABLE` ; les explications archiv?es ne sont alors pas disponibles. La conservation est configurable, avec 30 jours par d?faut dans le code.
+
+Les comptes de bases fournis pour le d?veloppement ont des droits ?tendus. Leur remplacement par des comptes applicatifs aux droits minimaux reste ? r?aliser avant livraison.
+
+### Vault : d?marrage et connexion
+
+Suivre [le guide Vault](docs/VAULT_V1.md) pour la premi?re installation. Sur une installation d?j? initialis?e :
+
+```powershell
+docker compose -f infra/vault/compose.yaml up -d
+npm run vault:unseal
+npm run vault:status
+npm run vault:check
+npm run start:vault
+```
+
+Dans un autre terminal : `npm run worker:vault`. Arr?ter l'ancienne instance de l'API avant d'en lancer une autre sur le m?me port.
+
+Le backend utilise **AppRole**. Pour un acc?s humain, choisir **Userpass uniquement si un administrateur a cr?? un compte sur cette instance**. Le bootstrap ne cr?e pas de compte personnel et les comptes du poste d'un d?veloppeur ne sont pas fournis dans Git. Le mot de passe PostgreSQL n'est pas un mot de passe Vault.
+
+`npm run vault:sync` copie explicitement les valeurs autoris?es du `.env` vers Vault. V?rifier les ?carts avant cette commande. Elle ne change pas les mots de passe des serveurs, ne recharge pas les processus d?marr?s et ne constitue pas une synchronisation permanente.
+
+### V?rifier l'?tat local
+
+```powershell
+docker compose --env-file .env -f infra/compose.yaml --profile automation ps
+npm run vault:status
+npm run vault:check
+```
+
+Le statut Docker indique l'?tat des conteneurs ; v?rifier aussi la connexion dans pgAdmin/Compass et les parcours API concern?s. Les donn?es des volumes Docker et les secrets Vault n?cessitent leurs propres sauvegardes : un push Git sauvegarde le code et les documents techniques.
+
 ## Workflows n8n
 
 Les trois fichiers dans `workflows/` assurent la notification de matching, la relance et la confirmation PDF après affectation humaine.
