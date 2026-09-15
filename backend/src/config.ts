@@ -4,7 +4,11 @@ const candidateRoot = resolve(__dirname, "../..");
 export const projectRoot = candidateRoot.endsWith("backend")
   ? resolve(candidateRoot, "..")
   : candidateRoot;
-config({ path: resolve(projectRoot, ".env"), quiet: true });
+// The Vault launcher supplies validated secrets before importing the application.
+// Never fall back to the legacy .env when Vault is the selected source.
+if (process.env.INFIMATCH_SECRET_SOURCE !== "vault") {
+  config({ path: resolve(projectRoot, ".env"), quiet: true });
+}
 export function required(name: string): string {
   const v = process.env[name];
   if (!v || v.startsWith("GENERATE_"))

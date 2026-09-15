@@ -102,3 +102,12 @@ Les justificatifs et données bancaires sont fictifs. Aucun document patient ou 
 - `scripts/` : installation, vérification et sauvegarde Git.
 
 Après un commit et avec un arbre propre, `npm run snapshot` crée un bundle Git vérifié. Il exclut les secrets, bases et fichiers privés : ceux-ci nécessitent une sauvegarde séparée.
+
+
+## Vault et preparation V2
+
+Le chargement des secrets depuis Vault est disponible : [installation, acces et maintenance](docs/VAULT_V1.md). Les commandes start:vault et worker:vault utilisent les valeurs du coffre sans repli vers .env.
+
+Le [dossier V2](V2/README.md) contient le backlog, l’architecture et la recette a preparer ; aucune fonctionnalite V2 n’est declaree livree. Les exigences de securite V1 restent a terminer.
+
+Verification de la publication Vault : typage, compilation et 55 tests unitaires passes dans cette copie ; 10 tests Vault passes sur l’installation locale avec les memes scripts. Le controle des secrets couvre les valeurs locales et les cles privees. La recette fonctionnelle complete n’a pas ete relancee.

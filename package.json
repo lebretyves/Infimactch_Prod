@@ -19,6 +19,19 @@
     "setup": "node scripts/setup-env.mjs",
     "verify": "node scripts/verify.mjs",
     "check:secrets": "node scripts/check-secrets.mjs",
-    "worker": "npm run worker -w backend"
+    "worker": "npm run worker -w backend",
+    "vault:setup": "node scripts/vault/setup.mjs",
+    "vault:status": "node scripts/vault/manage.mjs status",
+    "vault:unseal": "node scripts/vault/manage.mjs unseal",
+    "vault:rotate": "node scripts/vault/manage.mjs rotate",
+    "vault:sync": "node scripts/vault/manage.mjs sync",
+    "vault:snapshot": "node scripts/vault/manage.mjs snapshot",
+    "vault:check": "node scripts/vault/run.mjs check",
+    "start:vault": "node scripts/vault/run.mjs api",
+    "worker:vault": "node scripts/vault/run.mjs worker",
+    "cli:vault": "node scripts/vault/run.mjs cli",
+    "vault:infra": "node scripts/vault/run.mjs infra",
+    "test:vault": "node --test scripts/vault/vault.test.mjs",
+    "vault:trust": "node scripts/vault/trust.mjs"
   }
 }

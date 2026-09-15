@@ -1,0 +1,26 @@
+name: infimatch-vault
+services:
+  vault:
+    image: hashicorp/vault:2.1@sha256:5520cc26271c024e6ffa45cdf95255bd26b70d71ba4b7e0bc18925bef4128adb
+    command: ["server"]
+    restart: unless-stopped
+    cap_add: [IPC_LOCK]
+    ports: ["127.0.0.1:58200:8200"]
+    environment:
+      VAULT_ADDR: https://127.0.0.1:8200
+      VAULT_CACERT: /vault/tls/ca.crt
+    volumes:
+      - ./server.hcl:/vault/config/server.hcl:ro
+      - ../../data/vault/tls/server.crt:/vault/tls/server.crt:ro
+      - ../../data/vault/tls/server.key:/vault/tls/server.key:ro
+      - ../../data/vault/tls/ca.crt:/vault/tls/ca.crt:ro
+      - vault-data:/vault/file
+      - vault-audit:/vault/logs
+    healthcheck:
+      test: ["CMD", "vault", "status"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+volumes:
+  vault-data:
+  vault-audit:
