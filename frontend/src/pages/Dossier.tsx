@@ -13,6 +13,8 @@ import { Checkbox } from "@/ui/Choice";
 import { Icon } from "@/ui/Icon";
 import u from "@/components/NurseUI.module.css";
 import s from "./Dossier.module.css";
+const uploadLimitMiB = window.location.hostname.endsWith(".vercel.app") ? 3 : 5;
+
 type Document = {
   id: string;
   kind: string;
@@ -80,8 +82,8 @@ export default function Dossier() {
   }
   function choose(next: File | null) {
     setError("");
-    if (next && next.size > 5 * 1024 * 1024) {
-      setError("Le document doit peser au maximum 5 Mo.");
+    if (next && next.size > uploadLimitMiB * 1024 * 1024) {
+      setError(`Le document doit peser au maximum ${uploadLimitMiB} Mo.`);
       setFile(null);
       return;
     }
@@ -246,7 +248,7 @@ export default function Dossier() {
                     )}
                   </div>
                   <ButtonLink to="/profil" variant="ghost" size="sm">
-                    Modifier mon profil →
+                    Modifier mon profil â†’
                   </ButtonLink>
                 </div>
               </div>
@@ -356,7 +358,7 @@ export default function Dossier() {
                       />
                     </label>
                     <p>{file ? file.name : "Ou déposez votre fichier ici"}</p>
-                    <small>PDF, PNG ou JPEG · 5 Mo maximum</small>
+                    <small>PDF, PNG ou JPEG · {uploadLimitMiB} Mo maximum</small>
                   </div>
                   <Checkbox
                     required

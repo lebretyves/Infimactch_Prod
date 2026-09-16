@@ -327,13 +327,14 @@ class DocumentsController {
     @Body() b: UploadDto,
   ) {
     const data = Buffer.from(b.contentBase64, "base64");
+    const uploadLimitMiB = process.env.VERCEL ? 3 : 5;
     if (
       !data.length ||
-      data.length > 5 * 1024 * 1024 ||
+      data.length > uploadLimitMiB * 1024 * 1024 ||
       fileMime(data) !== b.mime
     )
       throw new BadRequestException(
-        "Allowed: fictional PDF/JPEG/PNG, maximum 5 MiB, matching signature",
+        `Allowed: fictional PDF/JPEG/PNG, maximum ${uploadLimitMiB} MiB, matching signature`,
       );
     await this.db.transaction(async (em) => nurse(em, user(r)));
     return this.documents.store(user(r), "EVIDENCE", b.mime, data, null, {

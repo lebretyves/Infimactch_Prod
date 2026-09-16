@@ -1,6 +1,7 @@
 import {CloudJobsModule} from "./automation/cloud-jobs.module";
+import {waitUntil} from "@vercel/functions";
 import type { IncomingMessage, ServerResponse } from "node:http";
-import { NotificationsModule } from "./notifications/notifications.module";
+import { NotificationsModule, NotificationsService } from "./notifications/notifications.module";
 import { PrivacyModule } from "./security/privacy.module";
 import { idleSession } from "./auth/idle-session";
 import { authRateLimit } from "./auth/auth-rate-limit";
@@ -33,7 +34,7 @@ import { ProfilesModule } from "./profiles/profiles.module";
 import { MissionsModule } from "./missions/missions.module";
 import { OrganizationsModule } from "./organizations/organizations.module";
 import { ReferenceDataModule } from "./reference-data/reference-data.module";
-import { AutomationModule } from "./automation/automation.module";
+import { AutomationModule, AutomationService } from "./automation/automation.module";
 import { MatchingModule } from "./matching/matching.module";
 import { ListingsModule } from "./listings/listings.module";
 import { DocumentsModule } from "./documents/documents.module";
@@ -249,5 +250,22 @@ export default async function vercelHandler(
     throw error;
   });
   const app = await vercelApplication;
+  if (["POST", "PUT", "PATCH", "DELETE"].includes(request.method || "") &&
+      !request.url?.startsWith("/api/v1/internal/")) {
+    // Register before returning; SQL leases protect concurrent deliveries.
+    waitUntil(new Promise<void>((resolve) => {
+      const complete = () => {
+        response.off("finish", complete);
+        response.off("close", complete);
+        if (!response.writableFinished || response.statusCode >= 400) return resolve();
+        void (async () => {
+          await app.get(AutomationService).dispatch(1);
+          await app.get(NotificationsService).dispatch(5);
+        })().catch(() => console.error("BACKGROUND_DELIVERY_RETRY_REQUIRED")).finally(resolve);
+      };
+      response.once("finish", complete);
+      response.once("close", complete);
+    }));
+  }
   app.getHttpAdapter().getInstance()(request, response);
 }

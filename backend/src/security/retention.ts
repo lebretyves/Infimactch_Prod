@@ -42,8 +42,10 @@ export async function cleanupRemovedDocuments(db: Database, ids?: string[]) {
     await db.transaction(async em => {
       await em.query("SELECT pg_advisory_xact_lock(hashtextextended($1,0))", ["document-file:" + id]);
       if ((await em.query("SELECT id FROM document WHERE id=$1", [id])).length) return;
+      if(process.env.DOCUMENT_STORAGE!=="postgres") {
       await rm(resolve(documentDirectory(), id + ".bin"), {force:true});
       await rm(resolve(documentDirectory(), id + ".tmp"), {force:true});
+      }
       await em.query("DELETE FROM document_erasure WHERE id=$1",[id]);
     });
   }

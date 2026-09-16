@@ -56,6 +56,8 @@ export const additionalResponses:Record<string,any>={
  "GET /api/v1/reference-data/finess/{finess}":obj({establishment:nullable(finess),status:{...str,enum:["FOUND_IN_SNAPSHOT","NOT_IN_SNAPSHOT"]},generated_at:date,imported_at:date,source_url:str,sha256:str,grantsOrganizationAccess:{type:"boolean",enum:[false]}},["establishment","status","grantsOrganizationAccess"]),
  "POST /api/v1/internal/automation/matches/{id}":obj({status:str,notifications:int},["status"]),
  "POST /api/v1/internal/automation/jobs/dispatch":obj({processed:int},["processed"]),
+ "POST /api/v1/internal/automation/jobs/refresh-offers":obj({providers:array(obj({provider:str,status:str,accepted:int},["provider","status","accepted"]))},["providers"]),
+ "POST /api/v1/internal/automation/jobs/maintenance":ok,
  "POST /api/v1/internal/automation/reminders":obj({status:str,notifications:int},["status","notifications"]),
  "POST /api/v1/internal/automation/confirmation/{id}":obj({status:str,documentId:uuid,done:bool},["status"]),
  "GET /api/v1/me/closure-request":obj({request:nullable(closure)},["request"]),

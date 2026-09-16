@@ -1,3 +1,5 @@
+import mongoose from "mongoose";
+import {executeClosure} from "../../src/security/closure";
 import "reflect-metadata";
 import {test,before,after} from "node:test";
 import assert from "node:assert/strict";
@@ -24,4 +26,18 @@ test("failed SQL transaction leaves neither metadata nor encrypted blobs",async(
  await assert.rejects(new DocumentsService(failing).store(owner,"EVIDENCE","application/pdf",Buffer.from("%PDF-1.4 fictional")));
  assert.equal((await db.query("SELECT 1 FROM document WHERE owner_id=$1",[owner])).length,0);
  assert.equal((await db.query("SELECT 1 FROM document_blob b LEFT JOIN document d ON d.id=b.document_id WHERE d.id IS NULL")).length,0);
+});
+
+test("cloud closure records a durable ledger before erasing encrypted documents",async()=>{
+ const mongoUrl=new URL(process.env.MONGODB_URI!);
+ if(mongoUrl.hostname!=="127.0.0.1"||mongoUrl.port!=="57018")throw Error("Cloud closure requires isolated local MongoDB");
+ const owner=await account(),docs=new DocumentsService(db);
+ const document=await docs.store(owner,"EVIDENCE","application/pdf",Buffer.from("%PDF-1.4 fictional erasure"));
+ const mongo=await mongoose.createConnection(process.env.MONGODB_URI!).asPromise();
+ try{
+  await executeClosure(db,owner);
+  const entry=await mongo.collection("erasureledger").findOne({accountId:owner});assert.ok(entry);
+  const [state]=await db.query("SELECT active,email FROM account WHERE id=$1",[owner]);assert.equal(state.active,false);assert.equal(state.email,"closed."+owner+"@anonymized.invalid");
+  assert.equal((await db.query("SELECT 1 FROM document_blob WHERE document_id=$1",[document.id])).length,0);
+ }finally{await mongo.collection("erasureledger").deleteOne({accountId:owner});await mongo.close();}
 });
