@@ -124,6 +124,7 @@ export async function applyRetention(em: SqlClient): Promise<RetentionSummary> {
     [retentionPolicy.completedOutboxDays],
   );
   await em.query("DELETE FROM session WHERE expire<now()");
+  await em.query("DELETE FROM discord_oauth_state WHERE expires_at<now()");
   await em.query(
     "DELETE FROM idempotency WHERE created_at<now()-make_interval(days=>$1)",
     [retentionPolicy.idempotencyDays],
@@ -184,6 +185,10 @@ export async function anonymizeAccount(em: SqlClient, accountId: string) {
   );
   await em.query("DELETE FROM session WHERE sess->>'userId'=$1", [accountId]);
   await em.query("DELETE FROM google_identity WHERE account_id=$1", [accountId]);
+  await em.query("DELETE FROM discord_link WHERE account_id=$1", [accountId]);
+  await em.query("DELETE FROM discord_challenge WHERE account_id=$1", [accountId]);
+  await em.query("DELETE FROM notification_preference WHERE account_id=$1", [accountId]);
+  await em.query("DELETE FROM discord_oauth_state WHERE account_id=$1", [accountId]);
   await em.query("UPDATE membership SET active=false WHERE user_id=$1", [accountId]);
   await em.query("DELETE FROM favorite WHERE user_id=$1", [accountId]);
   await em.query("DELETE FROM profile_qualification WHERE nurse_id=$1", [accountId]);

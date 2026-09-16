@@ -1,0 +1,58 @@
+import { useState } from "react";
+import { Link } from "react-router";
+import { useRemote } from "@/lib/useRemote";
+import { api } from "@/services/api";
+import { organizations } from "@/services/organizations";
+import { useAuth } from "@/context/AuthContext";
+import { usePageTitle } from "@/lib/usePageTitle";
+import { Button } from "@/ui/Button";
+import { TextField } from "@/ui/Field";
+import s from "./MarketPages.module.css";
+
+type Destination={id:string;user_id:string|null;organization_id:string|null;enabled:boolean;events:string[];channel_name:string|null;target_id:string};
+type Settings={configured:boolean;link:{discord_user_id:string}|null;destinations:Destination[];catalog:Record<string,string>;organizationKinds:string[];preferences:{kind:string;discord:boolean}[]};
+type Notice={id:string;kind:string;message:string;href:string;read_at:string|null;created_at:string};
+type Delivery={id:string;kind:string;status:string;created_at:string};
+const base="/me/notifications-settings";
+const deliveryLabels:Record<string,string>={PENDING:"En attente",SENDING:"Envoi en cours",SENT:"Envoyé",FAILED:"Échec — notification disponible ici",CANCELLED:"Envoi annulé : événement ou préférences modifiés",UNCERTAIN:"Réception non confirmée — notification disponible ici"};
+function DestinationEditor({destination,org,catalog,save}:{destination?:Destination;org?:string;catalog:Record<string,string>;save:(org:string|undefined,body:unknown)=>Promise<void>}) {
+  const [enabled,setEnabled]=useState(destination?.enabled??false),[events,setEvents]=useState(destination?.events??Object.keys(catalog)),[channelId,setChannelId]=useState(destination?.target_id??""),[busy,setBusy]=useState(false);
+  return <form onSubmit={e=>{e.preventDefault();setBusy(true);void save(org,{enabled,events,...(org&&enabled?{channelId}:{})}).finally(()=>setBusy(false));}}>
+    <label><input type="checkbox" checked={enabled} onChange={e=>setEnabled(e.target.checked)}/> Recevoir les notifications Discord</label>
+    {org&&<><TextField label="Identifiant du salon privé" value={channelId} onChange={e=>setChannelId(e.target.value)} required={enabled} pattern="[0-9]{17,20}"/><p>Réservez un salon à cette organisation, masquez-le à @everyone et donnez au bot accès au salon. Vous devez pouvoir gérer le serveur.</p></>}
+    <fieldset disabled={!enabled||busy}><legend>Événements à recevoir</legend>{Object.entries(catalog).map(([kind,label])=><label key={kind} style={{display:"block",marginBlock:8}}><input type="checkbox" checked={events.includes(kind)} onChange={e=>setEvents(v=>e.target.checked?[...v,kind]:v.filter(k=>k!==kind))}/> {label}</label>)}</fieldset>
+    <Button type="submit" disabled={busy}>{busy?"Enregistrement…":"Enregistrer les préférences"}</Button>
+  </form>;
+}
+export default function Notifications() {
+  usePageTitle("Notifications");
+  const {user}=useAuth();
+  const [offset,setOffset]=useState(0),[discordId,setDiscordId]=useState(""),[code,setCode]=useState(""),[busy,setBusy]=useState(false),[error,setError]=useState(""),[message,setMessage]=useState("");
+  const settings=useRemote(signal=>api<Settings>(base,{signal}),user?.id??"anonymous");
+  const notices=useRemote(signal=>api<Notice[]>("/me/notifications?limit=20&offset="+offset,{signal}),"notices:"+offset);
+  const orgs=useRemote(async signal=>user?.role==="interimaire"?null:organizations(signal),user?.id??"anonymous");
+  const deliveries=useRemote(signal=>api<Delivery[]>(base+"/deliveries",{signal}),user?.id??"anonymous");
+  async function action(fn:()=>Promise<unknown>,success:string) {setBusy(true);setError("");setMessage("");try{await fn();setMessage(success);settings.reload();notices.reload();deliveries.reload();}catch(e){setError((e as Error).message);}finally{setBusy(false);}}
+  const data=settings.data;
+  return <div className={s.page}>
+    <header className={s.header}><div><h1>Notifications</h1><p>Retrouvez les informations de vos missions et de votre compte. Les notifications restent disponibles ici, même si Discord est désactivé.</p></div></header>
+    {error&&<p role="alert">{error}</p>}{message&&<p role="status">{message}</p>}
+    <section className={s.card} aria-labelledby="notice-list"><h2 id="notice-list">Votre activité</h2>
+      {notices.loading?<p role="status">Chargement…</p>:notices.error?<p role="alert">{notices.error} <Button onClick={notices.reload}>Réessayer</Button></p>:<>
+      {notices.data?.length?<ul>{notices.data.map(n=><li key={n.id} style={{paddingBlock:14}}><strong>{data?.catalog[n.kind]||"Notification"}{!n.read_at?" — Non lue":""}</strong><p>{n.message}</p><time dateTime={n.created_at}>{new Date(n.created_at).toLocaleString("fr-FR")}</time><div className={s.actions}><Link to={n.href||"/accueil"}>Consulter</Link>{!n.read_at&&<Button disabled={busy} variant="outline" onClick={()=>void action(()=>api("/me/notifications/"+n.id+"/read",{method:"POST"}),"Notification marquée comme lue.")}>Marquer comme lue</Button>}</div></li>)}</ul>:<p>Aucune notification pour cette page.</p>}
+      <div className={s.actions}><Button variant="outline" disabled={offset===0} onClick={()=>setOffset(v=>Math.max(0,v-20))}>Précédent</Button><Button variant="outline" disabled={(notices.data?.length??0)<20} onClick={()=>setOffset(v=>v+20)}>Suivant</Button></div></>}
+    </section>
+    <section className={s.card} aria-labelledby="discord-settings"><h2 id="discord-settings">Notifications Discord</h2>
+      {settings.loading?<p role="status">Chargement…</p>:settings.error?<p role="alert">{settings.error} <Button onClick={settings.reload}>Réessayer</Button></p>:data&&!data.configured?<p>Discord n’est pas encore disponible. Vos notifications restent consultables dans cette page.</p>:data&&<>
+        {!data.link?<><p>Rejoignez le serveur du bot InfiMatch et autorisez les messages privés. Dans Discord, activez le mode développeur dans Paramètres → Avancés, puis copiez votre identifiant utilisateur depuis votre profil.</p>
+          <form onSubmit={e=>{e.preventDefault();void action(()=>api(base+"/discord/challenge",{method:"POST",body:{discordUserId:discordId}}),"Code envoyé en message privé Discord. Il expire dans 10 minutes.");}}><TextField label="Votre identifiant utilisateur Discord" value={discordId} onChange={e=>setDiscordId(e.target.value)} pattern="[0-9]{17,20}" required/><Button type="submit" disabled={busy}>Recevoir mon code privé</Button></form>
+          <form onSubmit={e=>{e.preventDefault();void action(()=>api(base+"/discord/verify",{method:"POST",body:{code}}),"Compte Discord associé. Choisissez maintenant les événements à recevoir.");}}><TextField label="Code reçu sur Discord" value={code} onChange={e=>setCode(e.target.value)} pattern="[0-9]{6}" inputMode="numeric" autoComplete="one-time-code" required/><Button type="submit" disabled={busy}>Associer mon compte</Button></form>
+        </>:<><p>Compte Discord associé : {data.link.discord_user_id}</p><Button variant="outline" disabled={busy} onClick={()=>void action(()=>api(base+"/discord",{method:"DELETE"}),"Discord déconnecté. Les envois liés à cette connexion sont arrêtés.")}>Déconnecter Discord</Button>
+          <h3>Mes messages privés</h3><DestinationEditor key={JSON.stringify(data.destinations.find(d=>d.user_id))} destination={data.destinations.find(d=>d.user_id)} catalog={Object.fromEntries(Object.entries(data.catalog).filter(([k])=>!["NEED_CREATED","NEED_UPDATED","MISSION_PUBLISHED","REMINDER"].includes(k)))} save={(_,body)=>action(()=>api(base+"/discord",{method:"PUT",body}),"Préférences enregistrées.")}/>
+          {orgs.error&&<p role="alert">{orgs.error}</p>}{orgs.data?.organizations.map(org=><section key={org.id}><h3>{org.name} — salon de l’organisation</h3><DestinationEditor key={JSON.stringify(data.destinations.find(d=>d.organization_id===org.id))} org={org.id} destination={data.destinations.find(d=>d.organization_id===org.id)} catalog={Object.fromEntries(Object.entries(data.catalog).filter(([k])=>data.organizationKinds.includes(k)))} save={(id,body)=>action(()=>api(base+"/organizations/"+id+"/discord",{method:"PUT",body}),"Salon et préférences enregistrés.")}/></section>)}
+        </>}
+      </>}
+    </section>
+    <section className={s.card}><h2>Suivi des envois Discord</h2><Button variant="outline" onClick={deliveries.reload}>Actualiser</Button>{deliveries.error?<p role="alert">{deliveries.error}</p>:deliveries.data?.length?<ul>{deliveries.data.map(d=><li key={d.id}>{data?.catalog[d.kind]||d.kind} : {deliveryLabels[d.status]||d.status}</li>)}</ul>:<p>Aucun envoi pour le moment.</p>}</section>
+  </div>;
+}

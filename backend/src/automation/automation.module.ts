@@ -27,7 +27,13 @@ import {
 } from "../missions/missions.service";
 import { professional } from "../profiles/profiles.module";
 import { match } from "../domain/matching";
-import { REMINDER_MESSAGE } from "../domain/messages";
+import { notificationMessage } from "../domain/notification-messages";
+async function missionNotice(em: import("../database/database").SqlClient, eventId: string, recipient: {user_id:string;role:string}, kind: "MATCH"|"REMINDER"|"CONFIRMATION"|"CANCELLATION", m: any) {
+  const org = recipient.role === "NURSE" ? null : recipient.role === "AGENCY" ? m.agency_id : m.establishment_id;
+  const href = (recipient.role === "NURSE" ? "/missions/m_" : "/gestion/missions/") + m.id;
+  const message = kind === "CANCELLATION" && recipient.role === "NURSE" ? "La mission qui vous concernait a ?t? annul?e. Consultez le suivi dans InfiMatch." : notificationMessage(recipient.role as any, kind);
+  return em.query("INSERT INTO notification(user_id,event_id,kind,message,organization_id,href,context) VALUES($1,$2,$3,$4,$5,$6,$7) ON CONFLICT DO NOTHING RETURNING id", [recipient.user_id,eventId,kind,message,org,href,JSON.stringify({missionId:m.id,version:m.version})]);
+}
 @Injectable()
 export class AutomationService {
   constructor(
@@ -73,10 +79,7 @@ export class AutomationService {
                 await geodesicKm(em, p, m),
               ).eligible
             ) {
-              await em.query(
-                "INSERT INTO notification(user_id,event_id,kind,message) VALUES($1,$2,'MATCH','Une mission compatible est disponible.') ON CONFLICT DO NOTHING",
-                [p.user_id, id],
-              );
+              await missionNotice(em,id,{user_id:p.user_id,role:"NURSE"},"MATCH",m);
               count++;
             }
           }
@@ -113,14 +116,11 @@ export class AutomationService {
             [JSON.stringify({ missionId: m.id, version: m.version })],
           );
           const members = await em.query(
-            "SELECT a.id AS user_id FROM account a WHERE a.active AND EXISTS(SELECT 1 FROM membership m WHERE m.user_id=a.id AND m.organization_id=$1 AND m.active) ORDER BY a.id FOR SHARE OF a",
-            [m.agency_id],
+            "SELECT a.id AS user_id, CASE WHEN EXISTS(SELECT 1 FROM membership s WHERE s.user_id=a.id AND s.organization_id=$1 AND s.active) THEN 'AGENCY' ELSE 'ESTABLISHMENT' END AS role FROM account a WHERE a.active AND EXISTS(SELECT 1 FROM membership s WHERE s.user_id=a.id AND s.organization_id IN($1,$2) AND s.active) ORDER BY a.id FOR SHARE OF a",
+            [m.agency_id, m.establishment_id],
           );
           for (const actor of members) {
-            await em.query(
-              "INSERT INTO notification(user_id,event_id,kind,message) VALUES($1,$2,'REMINDER',$3) ON CONFLICT DO NOTHING",
-              [actor.user_id, e.id, REMINDER_MESSAGE],
-            );
+            await missionNotice(em,e.id,actor,"REMINDER",m);
             count++;
           }
           await em.query(
@@ -247,14 +247,11 @@ export class AutomationService {
         );
         if (status === "READY") {
           const recipients = await em.query(
-            "SELECT a.id AS user_id FROM account a WHERE a.active AND (a.id=$3::uuid OR EXISTS(SELECT 1 FROM membership m WHERE m.user_id=a.id AND m.active AND m.organization_id IN($1,$2))) ORDER BY a.id FOR SHARE OF a",
+            "SELECT a.id AS user_id, CASE WHEN a.id=$3::uuid THEN 'NURSE' WHEN EXISTS(SELECT 1 FROM membership s WHERE s.user_id=a.id AND s.organization_id=$1 AND s.active) THEN 'AGENCY' ELSE 'ESTABLISHMENT' END AS role FROM account a WHERE a.active AND (a.id=$3::uuid OR EXISTS(SELECT 1 FROM membership s WHERE s.user_id=a.id AND s.active AND s.organization_id IN($1,$2))) ORDER BY a.id FOR SHARE OF a",
             [m.agency_id, m.establishment_id, a.nurse_id],
           );
           for (const r of recipients)
-            await em.query(
-              "INSERT INTO notification(user_id,event_id,kind,message) VALUES($1,$2,'CONFIRMATION','Votre confirmation de mission est disponible dans votre espace prive.') ON CONFLICT DO NOTHING",
-              [r.user_id, id],
-            );
+            await missionNotice(em,id,r,"CONFIRMATION",m);
         }
         await em.query(
           "INSERT INTO workflow_receipt(event_id,action) VALUES($1,'confirmation') ON CONFLICT DO NOTHING",
@@ -271,6 +268,31 @@ export class AutomationService {
       throw e;
     }
   }
+  async cancellation(id: string) {
+    return this.db.transaction(async em => {
+      const [e] = await em.query("SELECT * FROM outbox WHERE id=$1 AND event='MissionCANCELLED'", [id]);
+      if (!e) throw new NotFoundException();
+      const m = await lockMission(em, e.payload.missionId);
+      const receipt = await em.query("SELECT 1 FROM workflow_receipt WHERE event_id=$1 AND action='cancellation'", [id]);
+      if (receipt.length) return { status: "ALREADY_PROCESSED" };
+      let count = 0;
+      // No cancellation alert for an unpublished draft or a superseded mission version.
+      if (m.status === "CANCELLED" && m.version === e.payload.version && ["OPEN", "FILLED"].includes(e.payload.previousStatus)) {
+        const pending = await em.query("SELECT nurse_id FROM application WHERE mission_id=$1 AND status IN('SUBMITTED','SELECTED')",[m.id]);
+        const nurses = [...new Set([...(e.payload.nurseIds ?? []), ...pending.map((a: any)=>a.nurse_id)])];
+        const recipients = await em.query(
+          "SELECT a.id AS user_id, CASE WHEN a.id=ANY($3::uuid[]) THEN 'NURSE' WHEN EXISTS(SELECT 1 FROM membership s WHERE s.user_id=a.id AND s.organization_id=$1 AND s.active) THEN 'AGENCY' ELSE 'ESTABLISHMENT' END AS role FROM account a WHERE a.active AND (a.id=ANY($3::uuid[]) OR EXISTS(SELECT 1 FROM membership s WHERE s.user_id=a.id AND s.active AND s.organization_id IN($1,$2))) ORDER BY a.id FOR SHARE OF a",
+          [m.agency_id, m.establishment_id, nurses],
+        );
+        for (const recipient of recipients) {
+          const inserted = await missionNotice(em,id,recipient,"CANCELLATION",m);
+          count += inserted.length;
+        }
+      }
+      await em.query("INSERT INTO workflow_receipt(event_id,action) VALUES($1,'cancellation') ON CONFLICT DO NOTHING", [id]);
+      return { status: "PROCESSED", notifications: count };
+    });
+  }
   async dispatch(
     limit = 20,
     transport: typeof fetch = fetch,
@@ -278,7 +300,7 @@ export class AutomationService {
   ) {
     const events = await this.db.transaction(async (em) => {
       const rows = await em.query(
-        "SELECT * FROM outbox WHERE event IN('MissionOPEN','MatchRequested','AssignmentCreated') AND ($2::uuid IS NULL OR id=$2) AND completed_at IS NULL AND attempts<5 AND available_at<=now() AND (lease_until IS NULL OR lease_until<now()) ORDER BY CASE WHEN event='AssignmentCreated' THEN 0 ELSE 1 END,created_at,id LIMIT $1 FOR UPDATE SKIP LOCKED",
+        "SELECT * FROM outbox WHERE event IN('MissionOPEN','MatchRequested','AssignmentCreated','MissionCANCELLED') AND ($2::uuid IS NULL OR id=$2) AND completed_at IS NULL AND attempts<5 AND available_at<=now() AND (lease_until IS NULL OR lease_until<now()) ORDER BY CASE WHEN event='AssignmentCreated' THEN 0 ELSE 1 END,created_at,id LIMIT $1 FOR UPDATE SKIP LOCKED",
         [limit, eventId],
       );
       for (const row of rows) {
@@ -293,7 +315,7 @@ export class AutomationService {
     const results = [];
     for (const e of events) {
       const action =
-        e.event === "AssignmentCreated" ? "confirmation" : "matches";
+        e.event === "MissionCANCELLED" ? "cancellation" : e.event === "AssignmentCreated" ? "confirmation" : "matches";
       try {
         const response = await transport(
           required("N8N_WEBHOOK_BASE") + "/" + action,
@@ -354,6 +376,13 @@ class AutomationController {
     this.authorize(token);
     return this.service.reminders();
   }
+  @Post("cancellation/:id") cancellation(
+    @Headers("x-infimatch-token") token: string,
+    @Param("id", ParseUUIDPipe) id: string,
+  ) {
+    this.authorize(token);
+    return this.service.cancellation(id);
+  }
   @Post("confirmation/:id") confirmation(
     @Headers("x-infimatch-token") token: string,
     @Param("id", ParseUUIDPipe) id: string,
@@ -382,7 +411,7 @@ export async function retryOutbox(db: Database, id: string) {
     );
     if (
       !row ||
-      !["MissionOPEN", "MatchRequested", "AssignmentCreated"].includes(
+      !["MissionOPEN", "MatchRequested", "AssignmentCreated", "MissionCANCELLED"].includes(
         row.event,
       )
     )

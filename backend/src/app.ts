@@ -1,3 +1,4 @@
+import { NotificationsModule } from "./notifications/notifications.module";
 import { PrivacyModule } from "./security/privacy.module";
 import { idleSession } from "./auth/idle-session";
 import { authRateLimit } from "./auth/auth-rate-limit";
@@ -47,6 +48,7 @@ class HealthController {
   imports: [
     DatabaseModule,
     PrivacyModule,
+    NotificationsModule,
     AuthModule,
     ProfilesModule,
     MissionsModule,

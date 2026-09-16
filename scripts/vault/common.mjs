@@ -5,9 +5,9 @@ import {getCACertificates} from 'node:tls';
 export const root = resolve(import.meta.dirname, '../..');
 export const privateDir = resolve(root, 'data/vault');
 export const address = 'https://127.0.0.1:58200';
-export const backendKeys = ['DATABASE_URL','MONGODB_URI','SESSION_SECRET','DOCUMENT_KEY','SERVICE_TOKEN','RPPS_API_KEY','FT_CLIENT_ID','FT_CLIENT_SECRET','JOBSPIPE_API_KEY','GOOGLE_CLIENT_ID'];
+export const backendKeys = ['DATABASE_URL','MONGODB_URI','SESSION_SECRET','DOCUMENT_KEY','SERVICE_TOKEN','RPPS_API_KEY','FT_CLIENT_ID','FT_CLIENT_SECRET','JOBSPIPE_API_KEY','GOOGLE_CLIENT_ID','DISCORD_RELAY_URL','DISCORD_RELAY_TOKEN','DISCORD_BOT_TOKEN','NOTIFICATION_APP_ORIGIN'];
 export const infraKeys = ['POSTGRES_PASSWORD','MONGO_PASSWORD','N8N_ENCRYPTION_KEY','SERVICE_TOKEN'];
-export const configKeys = ['NODE_ENV','PORT','APP_ORIGIN','TRUST_PROXY','DOCUMENT_KEY_VERSION','DOCUMENT_QUOTA_BYTES','MATCHING_RETENTION_DAYS','BUSINESS_HISTORY_RETENTION_DAYS','MATCHING_WEIGHTS_JSON','N8N_WEBHOOK_BASE','REMINDER_DELAY_MINUTES','GOOGLE_CLIENT_ID'];
+export const configKeys = ['NODE_ENV','PORT','APP_ORIGIN','TRUST_PROXY','DOCUMENT_KEY_VERSION','DOCUMENT_QUOTA_BYTES','MATCHING_RETENTION_DAYS','BUSINESS_HISTORY_RETENTION_DAYS','N8N_EDITOR_BASE_URL','N8N_EXTRA_CA_CERTS','MATCHING_WEIGHTS_JSON','N8N_WEBHOOK_BASE','REMINDER_DELAY_MINUTES','GOOGLE_CLIENT_ID'];
 export async function readJson(name) { return JSON.parse(await readFile(resolve(privateDir,name),'utf8')); }
 export async function saveJson(name, data) {
   const path=resolve(privateDir,name), temporary=path+'.tmp';
@@ -49,7 +49,7 @@ export function selectKeys(input,keys) { return Object.fromEntries(keys.filter(k
 export function keyList(input) { return [...backendKeys,...Object.keys(input).filter(k=>/^DOCUMENT_KEY_V[1-9][0-9]*$/.test(k))]; }
 export function validateSecrets(values,group) {
   if(!values||typeof values!=='object'||Array.isArray(values))throw new Error('VAULT_INVALID_SECRET_OBJECT');
-  const allowed=group==='backend'?keyList(values):infraKeys;
+  const allowed=group==='backend'?[...keyList(values),...configKeys]:infraKeys;
   for(const [key,value] of Object.entries(values)) if(!allowed.includes(key)||typeof value!=='string'||value.includes('\0'))throw new Error('VAULT_INVALID_SECRET_FIELD');
   const required=group==='backend'?backendKeys.slice(0,5):infraKeys;
   for(const key of required)if(!values[key]||values[key].startsWith('GENERATE_'))throw new Error('VAULT_REQUIRED_SECRET_MISSING');

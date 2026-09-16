@@ -211,6 +211,7 @@ export class MissionsService {
       );
       await audit(em, actor, "MISSION_REVISED", id, {
         version: updated.version,
+        conditionsChanged: Boolean(revision),
       });
       if (revision && m.status === "OPEN")
         await event(em, "MissionOPEN", {
@@ -283,6 +284,7 @@ export class MissionsService {
       await event(em, "Mission" + target, {
         missionId: id,
         version: updated.version,
+        ...(action === "cancel" ? {previousStatus: m.status, nurseIds: assignments.map((a: {nurse_id: string}) => a.nurse_id)} : {}),
       });
       return receipt.save(updated);
     });

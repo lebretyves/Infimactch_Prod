@@ -1260,16 +1260,16 @@ test("every OpenAPI operation has a success contract and controlled errors",asyn
 
 
 test("reminders exclude disabled accounts and do not duplicate delivery on replay", async () => {
-  const owner=await account("ENTERPRISE","AGENCY"), disabled=await account("ENTERPRISE","AGENCY");
+  const owner=await account("ENTERPRISE","AGENCY"), disabled=await account("ENTERPRISE","AGENCY"), recipientFacility=await account("ENTERPRISE","ESTABLISHMENT");
   await db.query("INSERT INTO membership(user_id,organization_id) VALUES($1,$2)",[disabled.id,owner.org]);
   await db.query("UPDATE account SET active=false WHERE id=$1",[disabled.id]);
   const [template]=await db.query("SELECT * FROM mission LIMIT 1");
   const missionId=randomUUID();
-  await db.query("INSERT INTO mission SELECT * FROM jsonb_populate_record(NULL::mission,$1::jsonb)",[JSON.stringify({...template,id:missionId,agency_id:owner.org,status:'OPEN',start_at:'2036-01-01T08:00:00Z',end_at:'2036-01-01T16:00:00Z',created_at:'2020-01-01T00:00:00Z'})]);
+  await db.query("INSERT INTO mission SELECT * FROM jsonb_populate_record(NULL::mission,$1::jsonb)",[JSON.stringify({...template,id:missionId,agency_id:owner.org,establishment_id:recipientFacility.org,status:'OPEN',start_at:'2036-01-01T08:00:00Z',end_at:'2036-01-01T16:00:00Z',created_at:'2020-01-01T00:00:00Z'})]);
   const service=app.get(AutomationService);
   await service.reminders();await service.reminders();
   const rows=await db.query("SELECT n.user_id FROM notification n JOIN outbox e ON e.id=n.event_id WHERE n.kind='REMINDER' AND e.payload->>'missionId'=$1",[missionId]);
-  expect(rows.map((r:any)=>r.user_id)).toEqual([owner.id]);
+  expect(rows.map((r:any)=>r.user_id).sort()).toEqual([owner.id,recipientFacility.id].sort());
 });
 
 test("confirmation excludes a disabled nurse but keeps the authorized agency notification", async () => {

@@ -7,6 +7,7 @@ import { useAuth } from "@/context/AuthContext";
 import s from "./AppLayout.module.css";
 const nurseNavigation: { to: string; label: string; icon: IconName }[] = [
   { to: "/accueil", label: "Vue d’ensemble", icon: "nav-home" },
+  { to: "/notifications", label: "Notifications", icon: "bell" },
   { to: "/missions", label: "Rechercher une mission", icon: "search" },
   { to: "/candidatures", label: "Mes candidatures", icon: "file-text" },
   { to: "/calendrier", label: "Disponibilités", icon: "calendar" },
@@ -15,6 +16,7 @@ const nurseNavigation: { to: string; label: string; icon: IconName }[] = [
 ];
 const enterpriseNavigation: { to: string; label: string; icon: IconName }[] = [
   { to: "/accueil", label: "Mon espace", icon: "nav-home" },
+  { to: "/notifications", label: "Notifications", icon: "bell" },
   { to: "/missions", label: "Missions", icon: "search" },
   { to: "/besoins", label: "Besoins", icon: "briefcase" },
   { to: "/organisation", label: "Organisation", icon: "building" },

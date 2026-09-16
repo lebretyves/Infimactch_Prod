@@ -16,6 +16,15 @@ export const additionalSchemas={Profile:profile,Organization:organization,Sessio
  ExternalCorrespondence:obj({mode:str,score:nullable(num),eligibilityVerified:bool,criteria:{type:"object",additionalProperties:obj({status:str,reason:str,offerValue:{},profileValue:{},value:{}})},warnings:array(str),missingForFullMatching:array(str)}),
 };
 export const additionalResponses:Record<string,any>={
+ "GET /api/v1/me/notifications-settings":obj({configured:bool,link:nullable(obj({discord_user_id:str,connected_at:date})),destinations:array(obj({id:uuid,user_id:nullable(uuid),organization_id:nullable(uuid),enabled:bool,events:array(str),channel_name:nullable(str),target_id:str})),preferences:array(obj({kind:str,discord:bool})),catalog:{type:"object",additionalProperties:str},organizationKinds:array(str)},["configured","link","destinations","preferences","catalog","organizationKinds"]),
+ "POST /api/v1/me/notifications-settings/discord/challenge":ok,
+ "POST /api/v1/me/notifications-settings/discord/verify":ok,
+ "DELETE /api/v1/me/notifications-settings/discord":ok,
+ "PUT /api/v1/me/notifications-settings/discord":ok,
+ "PUT /api/v1/me/notifications-settings/organizations/{id}/discord":ok,
+ "PUT /api/v1/me/notifications-settings/preferences/{kind}":ok,
+ "GET /api/v1/me/notifications-settings/deliveries":array(obj({id:uuid,kind:str,status:str,last_error:nullable(str),created_at:date,sent_at:nullable(date)},["id","kind","status","created_at"])),
+ "POST /api/v1/internal/automation/cancellation/{id}":obj({status:str,notifications:int},["status"]),
  "GET /api/v1/facilities/{id}":{allOf:[ref("Facility"),obj({missions:array(ref("Mission"))})]},
  "GET /api/v1/health":obj({status:str,application:str},["status","application"]),
  "GET /api/v1/auth/google/config":obj({enabled:bool,clientId:nullable(str)},["enabled","clientId"]),

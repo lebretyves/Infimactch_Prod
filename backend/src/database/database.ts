@@ -1,3 +1,6 @@
+import { NotificationCenter1789381400000 } from "./notification-center";
+import { notifyAudit } from "../notifications/events";
+import { DiscordNotifications1789381300000 } from "./discord-notifications";
 import { ErasureRecovery1789381200000 } from "./erasure-recovery";
 import { PrivacyRequests1789381100000 } from "./privacy-requests";
 import { OfferParsing1789381000000 } from "./offer-parsing";
@@ -33,6 +36,8 @@ export class Database implements OnModuleDestroy {
       OfferParsing1789381000000,
       PrivacyRequests1789381100000,
       ErasureRecovery1789381200000,
+      DiscordNotifications1789381300000,
+      NotificationCenter1789381400000,
     ],
     logging: false,
     extra: { max: 12 },
@@ -77,6 +82,7 @@ export async function audit(
     "INSERT INTO audit(actor_id,event,resource_id,details) VALUES($1,$2,$3,$4)",
     [actor, event, id, JSON.stringify(details)],
   );
+  await notifyAudit(em, actor, event, id, details);
 }
 export async function event(em: SqlClient, name: string, payload: unknown) {
   await em.query("INSERT INTO outbox(event,payload) VALUES($1,$2)", [

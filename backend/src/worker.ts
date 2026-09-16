@@ -1,8 +1,10 @@
+import { NotificationsService } from "./notifications/notifications.module";
 import { createApp } from "./app";
 import { AutomationService } from "./automation/automation.module";
 async function run() {
   const app = await createApp();
   const automation = app.get(AutomationService);
+  const notifications = app.get(NotificationsService);
   let stopping = false;
   const stop = () => {
     stopping = true;
@@ -12,6 +14,7 @@ async function run() {
   try {
     while (!stopping) {
       const result = await automation.dispatch();
+      await notifications.dispatch();
       if (result.length) console.log(JSON.stringify({ outbox: result }));
       await new Promise((resolve) => setTimeout(resolve, 5000));
     }

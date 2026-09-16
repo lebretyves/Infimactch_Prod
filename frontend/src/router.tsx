@@ -1,3 +1,4 @@
+import Notifications from "./pages/Notifications";
 import ApercuAnnonces from "./pages/ApercuAnnonces";
 import Catalogue from "./pages/Catalogue";
 import Besoins from "./pages/Besoins";
@@ -82,6 +83,7 @@ export const router = creerRouteur([
         element: <AppLayout />,
         children: [
           { path: "/accueil", element: <Accueil /> },
+          { path: "/notifications", element: <Notifications /> },
           { path: "/missions", element: <Missions /> },
           { path: "/missions/:id", element: <MissionDetail /> },
           { path: "/missions/:id/candidater", element: <Candidater /> },
