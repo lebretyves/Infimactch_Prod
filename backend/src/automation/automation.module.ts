@@ -113,7 +113,7 @@ export class AutomationService {
             [JSON.stringify({ missionId: m.id, version: m.version })],
           );
           const members = await em.query(
-            "SELECT user_id FROM membership WHERE organization_id=$1 AND active FOR SHARE",
+            "SELECT a.id AS user_id FROM account a WHERE a.active AND EXISTS(SELECT 1 FROM membership m WHERE m.user_id=a.id AND m.organization_id=$1 AND m.active) ORDER BY a.id FOR SHARE OF a",
             [m.agency_id],
           );
           for (const actor of members) {
@@ -247,7 +247,7 @@ export class AutomationService {
         );
         if (status === "READY") {
           const recipients = await em.query(
-            "SELECT user_id FROM membership WHERE active AND organization_id IN($1,$2) UNION SELECT $3::uuid AS user_id",
+            "SELECT a.id AS user_id FROM account a WHERE a.active AND (a.id=$3::uuid OR EXISTS(SELECT 1 FROM membership m WHERE m.user_id=a.id AND m.active AND m.organization_id IN($1,$2))) ORDER BY a.id FOR SHARE OF a",
             [m.agency_id, m.establishment_id, a.nurse_id],
           );
           for (const r of recipients)

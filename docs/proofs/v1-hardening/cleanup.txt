@@ -1,6 +1,6 @@
+ Container infimatch-v1-test-postgres-1 Stopping 
  Container infimatch-v1-test-n8n-1 Stopping 
  Container infimatch-v1-test-mongo-1 Stopping 
- Container infimatch-v1-test-postgres-1 Stopping 
  Container infimatch-v1-test-postgres-1 Stopped 
  Container infimatch-v1-test-postgres-1 Removing 
  Container infimatch-v1-test-postgres-1 Removed 

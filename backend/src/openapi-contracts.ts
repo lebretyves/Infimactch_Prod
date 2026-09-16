@@ -16,6 +16,7 @@ export const additionalSchemas={Profile:profile,Organization:organization,Sessio
  ExternalCorrespondence:obj({mode:str,score:nullable(num),eligibilityVerified:bool,criteria:{type:"object",additionalProperties:obj({status:str,reason:str,offerValue:{},profileValue:{},value:{}})},warnings:array(str),missingForFullMatching:array(str)}),
 };
 export const additionalResponses:Record<string,any>={
+ "GET /api/v1/facilities/{id}":{allOf:[ref("Facility"),obj({missions:array(ref("Mission"))})]},
  "GET /api/v1/health":obj({status:str,application:str},["status","application"]),
  "GET /api/v1/auth/google/config":obj({enabled:bool,clientId:nullable(str)},["enabled","clientId"]),
  "POST /api/v1/auth/google/challenge":obj({nonce:str},["nonce"]),

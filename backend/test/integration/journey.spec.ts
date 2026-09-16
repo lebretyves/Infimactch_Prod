@@ -81,6 +81,12 @@ function post(c: any, path: string, body: any = {}) {
     .set("Idempotency-Key", randomUUID())
     .send(body);
 }
+async function readOpenApi() {
+  const address = app.getHttpServer().address();
+  const response = await fetch(`http://127.0.0.1:${address.port}/api/docs-json`, {signal: AbortSignal.timeout(10000)});
+  expect(response.status).toBe(200);
+  return {body: await response.json()};
+}
 beforeAll(async () => {
   app = await createApp();
   await app.listen(0, "127.0.0.1");
@@ -1028,11 +1034,7 @@ test("exhausted automation reports its state and explicit retry refuses active l
 });
 
 test("OpenAPI documents idempotency headers and paginated response contracts", async () => {
-  const result = await request(app.getHttpServer())
-    .get("/api/docs-json")
-    .set("Accept-Encoding", "identity")
-    .set("Connection", "close")
-    .expect(200);
+  const result = await readOpenApi();
   const command = result.body.paths["/api/v1/missions"].post;
   expect(
     command.parameters.some(
@@ -1243,7 +1245,7 @@ test("freshness never treats a bounded import as a complete snapshot",async()=>{
 });
 
 test("every OpenAPI operation has a success contract and controlled errors",async()=>{
- const r=await request(app.getHttpServer()).get('/api/docs-json').set('Accept-Encoding','identity').set('Connection','close').expect(200);
+ const r=await readOpenApi();
  const schemas=r.body.components.schemas;
  for(const [path,item]of Object.entries(r.body.paths) as any){for(const method of ['get','post','put','patch','delete']){
   const op=item[method];if(!op)continue;
@@ -1254,4 +1256,32 @@ test("every OpenAPI operation has a success contract and controlled errors",asyn
  expect(schemas.AuthReceipt.required).toContain('csrfToken');expect(schemas.Profile.properties.available.type).toBe('array');
  expect(r.body.paths['/api/v1/auth/google'].post.responses[201].content['application/json'].schema.oneOf.length).toBe(2);
  expect(r.body.paths['/api/v1/me/documents/{id}'].get.responses[200].content['application/pdf'].schema.format).toBe('binary');
+});
+
+
+test("reminders exclude disabled accounts and do not duplicate delivery on replay", async () => {
+  const owner=await account("ENTERPRISE","AGENCY"), disabled=await account("ENTERPRISE","AGENCY");
+  await db.query("INSERT INTO membership(user_id,organization_id) VALUES($1,$2)",[disabled.id,owner.org]);
+  await db.query("UPDATE account SET active=false WHERE id=$1",[disabled.id]);
+  const [template]=await db.query("SELECT * FROM mission LIMIT 1");
+  const missionId=randomUUID();
+  await db.query("INSERT INTO mission SELECT * FROM jsonb_populate_record(NULL::mission,$1::jsonb)",[JSON.stringify({...template,id:missionId,agency_id:owner.org,status:'OPEN',start_at:'2036-01-01T08:00:00Z',end_at:'2036-01-01T16:00:00Z',created_at:'2020-01-01T00:00:00Z'})]);
+  const service=app.get(AutomationService);
+  await service.reminders();await service.reminders();
+  const rows=await db.query("SELECT n.user_id FROM notification n JOIN outbox e ON e.id=n.event_id WHERE n.kind='REMINDER' AND e.payload->>'missionId'=$1",[missionId]);
+  expect(rows.map((r:any)=>r.user_id)).toEqual([owner.id]);
+});
+
+test("confirmation excludes a disabled nurse but keeps the authorized agency notification", async () => {
+ const [a]=await db.query("SELECT a.*,m.version,m.agency_id FROM assignment a JOIN mission m ON m.id=a.mission_id WHERE a.status='COMPLETED' AND m.status='COMPLETED' LIMIT 1");
+ const [before]=await db.query("SELECT active FROM account WHERE id=$1",[a.nurse_id]);
+ const [e]=await db.query("INSERT INTO outbox(event,payload,available_at) VALUES('AssignmentCreated',$1,now()+interval '1 day') RETURNING id",[JSON.stringify({assignmentId:a.id,missionId:a.mission_id,version:a.version})]);
+ try {
+  await db.query("UPDATE account SET active=false WHERE id=$1",[a.nurse_id]);
+  await db.query("UPDATE mission_confirmation SET status='FAILED',lease_until=NULL WHERE assignment_id=$1 AND mission_version=$2",[a.id,a.version]);
+  expect((await app.get(AutomationService).confirmation(e.id)).status).toBe('READY');
+  const rows=await db.query("SELECT user_id FROM notification WHERE event_id=$1",[e.id]);
+  expect(rows.some((r:any)=>r.user_id===a.nurse_id)).toBe(false);
+  expect(rows.length).toBeGreaterThan(0);
+ } finally {await db.query("UPDATE account SET active=$2 WHERE id=$1",[a.nurse_id,before.active]);}
 });

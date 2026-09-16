@@ -10,205 +10,183 @@
 > @infimatch/backend@0.1.0 test:compile
 > tsc --outDir .test-build
 
-✔ full internal journey and concurrency, with isolated fixture RPPS (4529.834ms)
-✔ CSRF required before registration (7.9091ms)
-✔ account revocation invalidates sessions and disabled login stays generic (767.2153ms)
-✔ a late RPPS answer cannot overwrite a newer number (238.5857ms)
-✔ PostgreSQL exclusion is a backstop against overlapping active assignments (18.0673ms)
-✔ MongoDB failure returns an explicit degraded result and an audit trace (14.9827ms)
-✔ an ended assignment completes atomically and cannot be reopened (59.7572ms)
-✔ document key rotation reads previous versions and writes the active version (30.8153ms)
-✔ secondary lists paginate, reject invalid limits and protect private caching (263.0363ms)
-✔ sensitive mission commands replay atomically, reject changed content and recheck rights (205.7753ms)
-✔ completed mission confirmation remains READY on delayed generation and replay (126.7235ms)
-✔ expired outbox lease is retried and HTTP success without business receipt is insufficient (24.2698ms)
-✔ expired PDF lease cannot overwrite the document published by its successor (114.6162ms)
-✔ V1 recommendations rank only eligible entries and expose pending RPPS separately (115.2863ms)
-✔ exhausted automation reports its state and explicit retry refuses active leases (68.5231ms)
-✖ OpenAPI documents idempotency headers and paginated response contracts (18956.6297ms)
-superagent: double callback bug
-✔ partial external comparison is private and incomplete leads require explicit opt-in (508.205ms)
-✔ stored parser is exposed with proof and stable reimports; preferences persist (295.6733ms)
-✔ idle expiry is enforced server-side; background reads never refresh activity (226.9296ms)
-✔ retention commits SQL before file cleanup and preserves reminder deduplication (241.2512ms)
-✔ account closure clears profile and private traces on real PostgreSQL (249.7466ms)
-✔ closure CLI removes Mongo history and can be retried (3263.0829ms)
-✔ closure requests are private, replayable, cancellable and require operator approval (479.096ms)
-✔ freshness never treats a bounded import as a complete snapshot (42.7713ms)
-✖ every OpenAPI operation has a success contract and controlled errors (18962.4077ms)
-superagent: double callback bug
-✔ Session reads do not consume login attempts, but the 51st auth write is refused (2156.2432ms)
-✔ authenticated activity does not consume shared login attempts (710.273ms)
-✔ unavailable sub-period splits availability and preserves both surrounding pieces (5.404ms)
-✔ three clicks return available then unavailable then truly unreported (0.8751ms)
-✔ re-enabling a sub-period overrides unavailability only inside the chosen slot (0.5584ms)
-✔ legacy overlaps normalize with unavailability priority, duplicates and adjacency merge (0.342ms)
-✔ a night spanning DST keeps exact instants and never uses a fixed eight-hour duration (0.495ms)
-✔ boundary-touching periods do not erase each other (0.4134ms)
-✔ patch DTO rejects empty, excessive, invalid-state and malformed change bodies (12.7672ms)
-✔ many alternating edits remain disjoint and agree with a pointwise reference model (1656.5565ms)
-✔ development does not trust forwarded headers by default (3.2875ms)
-✔ production requires an explicit trusted proxy (9.5233ms)
-✔ trusted proxy accepts bounded hops and explicit network ranges (18.0811ms)
-✔ document storage quota is bounded and deterministic (2.9977ms)
-✔ CDI du poste et alternatives CDI exclus (3.4135ms)
-✔ presentation recruteur et evolution future ne sont pas un CDI actuel (0.6157ms)
-✔ interim du poste accepte, presentation agence refusee (1.3542ms)
-✔ reimport CDI desactive une annonce existante sans supprimer les favoris (1.826ms)
-✔ reimport ferme ou expire desactive sans conclure a une disparition hors lot (0.6953ms)
-✔ authenticated encryption rejects tampering and swapped documents (5.7368ms)
-✔ encryption uses independent nonces (0.5079ms)
-✔ HTML is not accepted as PDF (0.2556ms)
-✔ IDE OR IADE filters stay in their branch and all values are bound (2.0745ms)
-✔ unselected branch filter rejected (0.9633ms)
-✔ incomplete location rejected (0.5834ms)
-✔ FINESS retains leading zero and Corsican identifiers (2.8324ms)
-✔ FINESS selects degree coordinates instead of projected XY (1.567ms)
-✔ FINESS refuses ambiguous pairs and retains unknown coordinates (2.0736ms)
-✔ FINESS identity lookup includes entries without address and inactive entries (1.9313ms)
-✔ Google identity uses the verified subject and normalizes email (4.0327ms)
-✔ Google login rejects a missing or mismatched session nonce (1.0656ms)
-✔ Google login rejects unverified or incomplete identity claims (0.575ms)
-✔ Google verifies the configured audience and logs in by subject, never by changed email (1.8496ms)
-✔ Google never auto-links accounts on matching email alone (2.8081ms)
-✔ Google cannot link with an invalid local password (166.4492ms)
-✔ Google links only after checking the local password and audits the association (150.9512ms)
-✔ A rejected Google signature never queries application accounts (1.0856ms)
-✔ First Google access prepares registration without creating an account (0.9436ms)
-✔ Certificate retrieval failures are service errors and never access accounts (0.9373ms)
-✔ New verified identity stays on server until explicit registration; session rotates on completion (1.5ms)
-✔ Google challenge cannot be consumed twice; another tab challenge is retained (0.3112ms)
-✔ Missing or expired Google preregistration cannot create an account (0.4088ms)
-✔ Google registration requires an explicit family and terms version and rejects supplied credentials (6.2983ms)
-✔ Google signup creates account, identity and profile in one transaction with a nonempty Argon2 hash (185.5311ms)
-✔ Google refuses disabled accounts (linked) (0.657ms)
-✔ Google refuses disabled accounts (email association) (0.2642ms)
-✔ idle session expires at exactly fifteen minutes (1.4857ms)
-✔ activity cannot extend absolute eight hour maximum (0.2585ms)
-✔ legacy or malformed sessions need fresh authentication (0.1476ms)
-✔ expired cookie session is destroyed before any route executes (0.4861ms)
-✔ JobsPipe preserves source, URL and nursing facts (9.6261ms)
-✔ JobsPipe rejects non interim, non nursing, closed and unsafe offers (2.5235ms)
-✔ JobsPipe records contextual interim, not agency wording (1.3007ms)
-✔ JobsPipe dry run deduplicates and never writes (6.4389ms)
-✔ JobsPipe request is bounded, authenticated and rejects quota errors without response body (43.146ms)
-✔ night requires full availability including next day (37.0084ms)
-✔ adjacent intervals merge but gaps do not (4.3635ms)
-✔ RPPS NOT_FOUND cannot be offset by score (1.6239ms)
-✔ RPPS PENDING cannot be offset by score (0.6162ms)
-✔ RPPS NOT_CHECKED cannot be offset by score (0.5031ms)
-✔ no IADE to IBODE equivalence (0.4518ms)
-✔ mixed population requires both competencies (0.4291ms)
-✔ unknown location is not zero distance (0.4376ms)
-✔ consecutive assignments do not overlap (6.344ms)
-✔ overlapping experience counted once (14.6328ms)
-✔ timezone required and interval positive (8.6807ms)
-✔ documented score example is 93.75 and exposes components (1.294ms)
-✔ reminder notification keeps its French encoding (8.3644ms)
-✔ identical cross-provider content is hidden deterministically (8.298ms)
-✔ different cities, shifts and qualifications remain separate (1.0365ms)
-✔ same France Travail detail URL identifies syndicated offer despite tracking (16.3722ms)
-✔ same-source offers and short boilerplate are not merged (23.5994ms)
-✔ guard preserves records and records the canonical offer (2.4206ms)
-✔ parser retains exact evidence offsets and deterministic input hash (50.9832ms)
-✔ missing unit never becomes hourly salary (1.3157ms)
-✔ transport allowance is not a base salary (1.9793ms)
-✔ night premium does not establish a night shift (1.1357ms)
-✔ candidate disability is not patient population (2.8753ms)
-✔ mixed diploma requirement and desired experience remain uncertain (1.5929ms)
-✔ alternative diplomas are not cumulative requirements (0.9959ms)
-✔ no housing remains negated (0.5847ms)
-✔ full time and part time conflict is visible (0.6856ms)
-✔ unrecognized important passages remain in review queue (0.6536ms)
-✔ stale extraction never appears as current (0.801ms)
-✔ JSONB key ordering preserves the parser input fingerprint (1.2079ms)
-✔ IDE acronym and ambiguous block diploma stay distinct (12.0227ms)
-✔ provider contradictions are flagged without overwriting reported values (3.6467ms)
-✔ external criteria never claim complete eligibility or a score (2.5436ms)
-✔ four provider searches deduplicate and enforce the requested department (62.6639ms)
-✔ empty keyword does not stop subsequent searches and failure is not partial success (6.2472ms)
-✔ invalid import bounds and department fail before network access (1.5389ms)
-✔ public offer cleanup retains provenance and no invented dates (8.7689ms)
-✔ permanent contract rejected from interim import (2.077ms)
-✔ unknown qualification stays unknown (1.0354ms)
-✔ IBODE does not become IADE (1.1356ms)
-✔ missing provider access cannot report an acquisition (6.2519ms)
-✔ partial IDE comparison never proves availability or full eligibility (40.9157ms)
-✔ partial IADE comparison never proves availability or full eligibility (4.2611ms)
-✔ partial IBODE comparison never proves availability or full eligibility (1.7204ms)
-✔ known qualification mismatch is distinct from unavailable evidence (2.9835ms)
-✔ RPPS not found blocks and pending stays pending even with matching qualification (2.655ms)
-✔ missing profile experience is a completion request, not proof of absent competence (2.0287ms)
-✔ approximate location and shifts remain indicative and cannot prove incompatibility (2.4798ms)
-✔ conflicting and ambiguous provider facts are not made into matches (2.4531ms)
-✔ profile accepts declared professional reference and years for each diploma (5.7496ms)
-✔ profile reference validates email, lengths and rejects invented verification fields (2.4909ms)
-✔ every diploma year is an integer with sensible bounds and cannot be future (3.2412ms)
-✔ legacy diploma details remain accepted when optional additions are omitted (0.3982ms)
-✔ retention policy keeps business records and bounds traces (2.3433ms)
-✔ dry inspection counts expired traces without deletes (5.4957ms)
-✔ apply deletes traces, superseded bank files and never missions (2.2518ms)
-✔ anonymize closes the account and removes private documents (1.1182ms)
-✔ missing credentials is pending (4.3101ms)
-✔ zero exact results is not found (42.9664ms)
-✔ exact RPPS found (1.8154ms)
-✔ HTTP 401 remains pending (1.0463ms)
-✔ HTTP 403 remains pending (0.6709ms)
-✔ HTTP 404 remains pending (1.4551ms)
-✔ HTTP 429 remains pending (1.4781ms)
-✔ HTTP 500 remains pending (0.9542ms)
-✔ HTTP 503 remains pending (1.2938ms)
-✔ malformed results cannot prove absence (1.5238ms)
-✔ a different practitioner does not count as found (1.4253ms)
-✔ session guard: valid (1.7353ms)
-✔ session guard: revoked (1.2683ms)
-✔ session guard: legacy (0.3221ms)
-✔ session guard: disabled (0.257ms)
-✔ structured need requires details and accepts complete nursing criteria (6.8639ms)
-✔ need rejects invented qualifications, services, blocks and specialties (2.0411ms)
-✔ need headcount and experience have explicit integer bounds (2.0258ms)
-✔ need rejects duplicate competencies and non-object details (0.5911ms)
-✔ need period is normalized to exact UTC instants (3.861ms)
-✔ need rejects backwards, missing-timezone and past periods (1.2519ms)
-✔ specialty is required only for specialized blocks (0.6847ms)
-✔ transient serialization failure is retried, then returns committed result (101.8252ms)
-✔ deadlock retries stop after three attempts (100.1491ms)
-✔ uniqueness/business conflicts are not retried (1.9229ms)
-ℹ tests 162
+✔ full internal journey and concurrency, with isolated fixture RPPS (2981.8109ms)
+✔ CSRF required before registration (7.5931ms)
+✔ account revocation invalidates sessions and disabled login stays generic (433.4134ms)
+✔ a late RPPS answer cannot overwrite a newer number (150.421ms)
+✔ PostgreSQL exclusion is a backstop against overlapping active assignments (11.7559ms)
+✔ MongoDB failure returns an explicit degraded result and an audit trace (10.1922ms)
+✔ an ended assignment completes atomically and cannot be reopened (45.9726ms)
+✔ document key rotation reads previous versions and writes the active version (25.2802ms)
+✔ secondary lists paginate, reject invalid limits and protect private caching (175.6844ms)
+✔ sensitive mission commands replay atomically, reject changed content and recheck rights (145.0635ms)
+✔ completed mission confirmation remains READY on delayed generation and replay (104.3536ms)
+✔ expired outbox lease is retried and HTTP success without business receipt is insufficient (36.9816ms)
+✔ expired PDF lease cannot overwrite the document published by its successor (170.4821ms)
+✔ V1 recommendations rank only eligible entries and expose pending RPPS separately (91.3169ms)
+✔ exhausted automation reports its state and explicit retry refuses active leases (43.5937ms)
+✔ OpenAPI documents idempotency headers and paginated response contracts (20.8661ms)
+✔ partial external comparison is private and incomplete leads require explicit opt-in (400.7939ms)
+✔ stored parser is exposed with proof and stable reimports; preferences persist (239.7149ms)
+✔ idle expiry is enforced server-side; background reads never refresh activity (185.3374ms)
+✔ retention commits SQL before file cleanup and preserves reminder deduplication (215.2576ms)
+✔ account closure clears profile and private traces on real PostgreSQL (175.6245ms)
+✔ closure CLI removes Mongo history and can be retried (3359.3746ms)
+✔ closure requests are private, replayable, cancellable and require operator approval (377.6315ms)
+✔ freshness never treats a bounded import as a complete snapshot (38.0796ms)
+✔ every OpenAPI operation has a success contract and controlled errors (40.8415ms)
+✔ reminders exclude disabled accounts and do not duplicate delivery on replay (335.7523ms)
+✔ confirmation excludes a disabled nurse but keeps the authorized agency notification (38.0421ms)
+✔ Session reads do not consume login attempts, but the 51st auth write is refused (1399.8338ms)
+✔ authenticated activity does not consume shared login attempts (487.8051ms)
+✔ unavailable sub-period splits availability and preserves both surrounding pieces (8.5528ms)
+✔ three clicks return available then unavailable then truly unreported (0.5916ms)
+✔ re-enabling a sub-period overrides unavailability only inside the chosen slot (0.427ms)
+✔ legacy overlaps normalize with unavailability priority, duplicates and adjacency merge (0.3013ms)
+✔ a night spanning DST keeps exact instants and never uses a fixed eight-hour duration (0.3719ms)
+✔ boundary-touching periods do not erase each other (0.2036ms)
+✔ patch DTO rejects empty, excessive, invalid-state and malformed change bodies (9.0617ms)
+✔ many alternating edits remain disjoint and agree with a pointwise reference model (768.0102ms)
+✔ development does not trust forwarded headers by default (1.6627ms)
+✔ production requires an explicit trusted proxy (4.547ms)
+✔ trusted proxy accepts bounded hops and explicit network ranges (3.8764ms)
+✔ document storage quota is bounded and deterministic (0.6944ms)
+✔ CDI du poste et alternatives CDI exclus (2.4455ms)
+✔ presentation recruteur et evolution future ne sont pas un CDI actuel (0.3953ms)
+✔ interim du poste accepte, presentation agence refusee (0.8441ms)
+✔ reimport CDI desactive une annonce existante sans supprimer les favoris (1.4388ms)
+✔ reimport ferme ou expire desactive sans conclure a une disparition hors lot (0.7527ms)
+✔ authenticated encryption rejects tampering and swapped documents (4.3259ms)
+✔ encryption uses independent nonces (0.5328ms)
+✔ HTML is not accepted as PDF (0.2125ms)
+✔ IDE OR IADE filters stay in their branch and all values are bound (0.9851ms)
+✔ unselected branch filter rejected (0.9079ms)
+✔ incomplete location rejected (0.4324ms)
+✔ FINESS retains leading zero and Corsican identifiers (2.2268ms)
+✔ FINESS selects degree coordinates instead of projected XY (1.5601ms)
+✔ FINESS refuses ambiguous pairs and retains unknown coordinates (0.602ms)
+✔ FINESS identity lookup includes entries without address and inactive entries (12.3992ms)
+✔ Google identity uses the verified subject and normalizes email (2.1114ms)
+✔ Google login rejects a missing or mismatched session nonce (0.6753ms)
+✔ Google login rejects unverified or incomplete identity claims (0.2057ms)
+✔ Google verifies the configured audience and logs in by subject, never by changed email (1.2489ms)
+✔ Google never auto-links accounts on matching email alone (0.9172ms)
+✔ Google cannot link with an invalid local password (99.7332ms)
+✔ Google links only after checking the local password and audits the association (98.2961ms)
+✔ A rejected Google signature never queries application accounts (0.4564ms)
+✔ First Google access prepares registration without creating an account (0.3071ms)
+✔ Certificate retrieval failures are service errors and never access accounts (0.4134ms)
+✔ New verified identity stays on server until explicit registration; session rotates on completion (0.6416ms)
+✔ Google challenge cannot be consumed twice; another tab challenge is retained (0.1586ms)
+✔ Missing or expired Google preregistration cannot create an account (0.2557ms)
+✔ Google registration requires an explicit family and terms version and rejects supplied credentials (3.7952ms)
+✔ Google signup creates account, identity and profile in one transaction with a nonempty Argon2 hash (104.1657ms)
+✔ Google refuses disabled accounts (linked) (0.3791ms)
+✔ Google refuses disabled accounts (email association) (0.1296ms)
+✔ idle session expires at exactly fifteen minutes (1.9035ms)
+✔ activity cannot extend absolute eight hour maximum (0.646ms)
+✔ legacy or malformed sessions need fresh authentication (0.6161ms)
+✔ expired cookie session is destroyed before any route executes (1.5138ms)
+✔ JobsPipe preserves source, URL and nursing facts (4.6672ms)
+✔ JobsPipe rejects non interim, non nursing, closed and unsafe offers (1.4405ms)
+✔ JobsPipe records contextual interim, not agency wording (0.7735ms)
+✔ JobsPipe dry run deduplicates and never writes (0.7489ms)
+✔ JobsPipe request is bounded, authenticated and rejects quota errors without response body (24.9816ms)
+✔ night requires full availability including next day (26.3604ms)
+✔ adjacent intervals merge but gaps do not (3.0274ms)
+✔ RPPS NOT_FOUND cannot be offset by score (1.9765ms)
+✔ RPPS PENDING cannot be offset by score (0.6641ms)
+✔ RPPS NOT_CHECKED cannot be offset by score (0.6645ms)
+✔ no IADE to IBODE equivalence (0.4466ms)
+✔ mixed population requires both competencies (0.3666ms)
+✔ unknown location is not zero distance (0.3836ms)
+✔ consecutive assignments do not overlap (0.6861ms)
+✔ overlapping experience counted once (1.6562ms)
+✔ timezone required and interval positive (1.4563ms)
+✔ documented score example is 93.75 and exposes components (1.1008ms)
+✔ reminder notification keeps its French encoding (2.1739ms)
+✔ identical cross-provider content is hidden deterministically (3.9487ms)
+✔ different cities, shifts and qualifications remain separate (0.9859ms)
+✔ same France Travail detail URL identifies syndicated offer despite tracking (0.5187ms)
+✔ same-source offers and short boilerplate are not merged (9.9998ms)
+✔ guard preserves records and records the canonical offer (2.8007ms)
+✔ parser retains exact evidence offsets and deterministic input hash (33.765ms)
+✔ missing unit never becomes hourly salary (2.1112ms)
+✔ transport allowance is not a base salary (1.411ms)
+✔ night premium does not establish a night shift (0.764ms)
+✔ candidate disability is not patient population (1.3565ms)
+✔ mixed diploma requirement and desired experience remain uncertain (0.6606ms)
+✔ alternative diplomas are not cumulative requirements (0.4932ms)
+✔ no housing remains negated (0.5443ms)
+✔ full time and part time conflict is visible (0.4796ms)
+✔ unrecognized important passages remain in review queue (2.7843ms)
+✔ stale extraction never appears as current (1.0726ms)
+✔ JSONB key ordering preserves the parser input fingerprint (0.7595ms)
+✔ IDE acronym and ambiguous block diploma stay distinct (16.7082ms)
+✔ provider contradictions are flagged without overwriting reported values (2.0582ms)
+✔ external criteria never claim complete eligibility or a score (5.4183ms)
+✔ four provider searches deduplicate and enforce the requested department (43.1862ms)
+✔ empty keyword does not stop subsequent searches and failure is not partial success (2.8366ms)
+✔ invalid import bounds and department fail before network access (0.789ms)
+✔ public offer cleanup retains provenance and no invented dates (20.6082ms)
+✔ permanent contract rejected from interim import (1.7472ms)
+✔ unknown qualification stays unknown (0.6845ms)
+✔ IBODE does not become IADE (0.5966ms)
+✔ missing provider access cannot report an acquisition (1.2251ms)
+✔ partial IDE comparison never proves availability or full eligibility (27.1378ms)
+✔ partial IADE comparison never proves availability or full eligibility (1.6719ms)
+✔ partial IBODE comparison never proves availability or full eligibility (1.087ms)
+✔ known qualification mismatch is distinct from unavailable evidence (1.9442ms)
+✔ RPPS not found blocks and pending stays pending even with matching qualification (2.6166ms)
+✔ missing profile experience is a completion request, not proof of absent competence (1.8897ms)
+✔ approximate location and shifts remain indicative and cannot prove incompatibility (1.8617ms)
+✔ conflicting and ambiguous provider facts are not made into matches (1.6766ms)
+✔ profile accepts declared professional reference and years for each diploma (5.708ms)
+✔ profile reference validates email, lengths and rejects invented verification fields (1.914ms)
+✔ every diploma year is an integer with sensible bounds and cannot be future (3.6659ms)
+✔ legacy diploma details remain accepted when optional additions are omitted (0.5033ms)
+✔ retention policy keeps business records and bounds traces (1.0563ms)
+✔ dry inspection counts expired traces without deletes (1.918ms)
+✔ apply deletes traces, superseded bank files and never missions (0.9046ms)
+✔ anonymize closes the account and removes private documents (1.267ms)
+✔ missing credentials is pending (3.6199ms)
+✔ zero exact results is not found (26.2078ms)
+✔ exact RPPS found (1.1135ms)
+✔ HTTP 401 remains pending (0.8074ms)
+✔ HTTP 403 remains pending (0.381ms)
+✔ HTTP 404 remains pending (0.3239ms)
+✔ HTTP 429 remains pending (0.4157ms)
+✔ HTTP 500 remains pending (0.5775ms)
+✔ HTTP 503 remains pending (0.5927ms)
+✔ malformed results cannot prove absence (0.9074ms)
+✔ a different practitioner does not count as found (0.7968ms)
+✔ session guard: valid (1.5052ms)
+✔ session guard: revoked (0.9597ms)
+✔ session guard: legacy (0.2523ms)
+✔ session guard: disabled (0.2707ms)
+✔ structured need requires details and accepts complete nursing criteria (6.5662ms)
+✔ need rejects invented qualifications, services, blocks and specialties (2.4597ms)
+✔ need headcount and experience have explicit integer bounds (1.6535ms)
+✔ need rejects duplicate competencies and non-object details (0.5987ms)
+✔ need period is normalized to exact UTC instants (2.6978ms)
+✔ need rejects backwards, missing-timezone and past periods (0.9765ms)
+✔ specialty is required only for specialized blocks (0.4794ms)
+✔ transient serialization failure is retried, then returns committed result (105.8539ms)
+✔ deadlock retries stop after three attempts (96.4884ms)
+✔ uniqueness/business conflicts are not retried (0.6612ms)
+ℹ tests 164
 ℹ suites 0
-ℹ pass 160
-ℹ fail 2
+ℹ pass 164
+ℹ fail 0
 ℹ cancelled 0
 ℹ skipped 0
 ℹ todo 0
-ℹ duration_ms 54426.8749
-
-✖ failing tests:
-
-test at .test-build\test\integration\journey.spec.js:806:22
-✖ OpenAPI documents idempotency headers and paginated response contracts (18956.6297ms)
-  Error: read ECONNRESET
-      at TCP.onStreamRead (node:internal/stream_base_commons:216:20) {
-    errno: -4077,
-    code: 'ECONNRESET',
-    syscall: 'read',
-    response: undefined
-  }
-
-test at .test-build\test\integration\journey.spec.js:995:22
-✖ every OpenAPI operation has a success contract and controlled errors (18962.4077ms)
-  Error: read ECONNRESET
-      at TCP.onStreamRead (node:internal/stream_base_commons:216:20) {
-    errno: -4077,
-    code: 'ECONNRESET',
-    syscall: 'read',
-    response: undefined
-  }
+ℹ duration_ms 22626.6113
 ------------------------------|---------|----------|---------|---------|----------------------------
 File                          | % Stmts | % Branch | % Funcs | % Lines | Uncovered Line #s          
 ------------------------------|---------|----------|---------|---------|----------------------------
-All files                     |   81.31 |    80.37 |   80.92 |   81.31 |                            
- src                          |   80.53 |    83.48 |   90.47 |   80.53 |                            
+All files                     |   81.99 |    80.34 |   81.17 |   81.99 |                            
+ src                          |   80.55 |    83.48 |   90.47 |   80.55 |                            
   app.ts                      |   96.13 |    81.81 |   77.77 |   96.13 | 42-44,79-81,227-229        
   cli.ts                      |   44.59 |    88.88 |     100 |   44.59 | ...263-281,293-297,300-304 
   config.ts                   |   96.51 |    73.17 |     100 |   96.51 | 11-12,81                   
@@ -219,8 +197,8 @@ All files                     |   81.31 |    80.37 |   80.92 |   81.31 |
   auth.module.ts              |   83.33 |    82.35 |    92.3 |   83.33 | ...235-242,285-286,288-298 
   google.ts                   |   93.97 |    89.65 |      75 |   93.97 | 31-35                      
   idle-session.ts             |     100 |    78.57 |     100 |     100 | 12,17                      
- src/automation               |   67.16 |    73.07 |   71.42 |   67.16 |                            
-  automation.module.ts        |   67.16 |    73.07 |   71.42 |   67.16 | ...272,342,347-352,358-363 
+ src/automation               |   79.35 |    72.88 |   78.57 |   79.35 |                            
+  automation.module.ts        |   79.35 |    72.88 |   78.57 |   79.35 | ...272,342,347-352,358-363 
  src/common                   |     100 |    95.74 |     100 |     100 |                            
   access.ts                   |     100 |       90 |     100 |     100 | 76,84                      
   idempotency.ts              |     100 |      100 |     100 |     100 |                            
@@ -242,9 +220,9 @@ All files                     |   81.31 |    80.37 |   80.92 |   81.31 |
   staffing-request-details.ts |   45.45 |      100 |       0 |   45.45 | 4-7,9-10                   
  src/demo                     |    7.89 |      100 |       0 |    7.89 |                            
   seed.ts                     |    7.89 |      100 |       0 |    7.89 | 10-114                     
- src/documents                |   74.25 |       80 |    91.3 |   74.25 |                            
+ src/documents                |   74.25 |    80.28 |    91.3 |   74.25 |                            
   crypto.ts                   |     100 |    55.55 |     100 |     100 | 3,21,34-36                 
-  documents.module.ts         |   71.78 |     83.6 |      90 |   71.78 | ...302-305,327-328,337-341 
+  documents.module.ts         |   71.78 |    83.87 |      90 |   71.78 | ...302-305,327-328,337-341 
  src/domain                   |   99.62 |     87.5 |     100 |   99.62 |                            
   availability.ts             |     100 |      100 |     100 |     100 |                            
   matching.ts                 |   99.43 |    86.66 |     100 |   99.43 | 153                        
@@ -290,10 +268,3 @@ All files                     |   81.31 |    80.37 |   80.92 |   81.31 |
   privacy.module.ts           |     100 |     90.9 |     100 |     100 | 18                         
   retention.ts                |   90.95 |       55 |     100 |   90.95 | 131-140,146-147,154-159    
 ------------------------------|---------|----------|---------|---------|----------------------------
-npm error Lifecycle script `coverage` failed with error:
-npm error code 1
-npm error path E:\Interimatch\publication-authentification\backend
-npm error workspace @infimatch/backend@0.1.0
-npm error location E:\Interimatch\publication-authentification\backend
-npm error command failed
-npm error command C:\WINDOWS\system32\cmd.exe /d /s /c npm run test:compile && c8 --reporter=text --reporter=json-summary --reporter=html --reports-dir=../docs/proofs/coverage node --test ".test-build/test/unit/*.spec.js" ".test-build/test/integration/*.spec.js"

@@ -90,3 +90,74 @@ Ajouter une entrée à chaque étape significative : changement, test et résult
 - Ajout du frontend valide (version conservee sur main), de la CI et du guide DEPLOIEMENT_PRODUCTION.md. Configuration Vercel frontend avec navigation SPA et exclusion des chemins API.
 - Utilisateur confirme que tous les services sont uniquement locaux. Hebergement des bases, documents, worker et automatisations encore necessaire. Aucun service cloud provisionne.
 - Premier build dans la copie sans dependances a echoue ; apres npm ci dans la copie de production, compilation frontend reussie. Douze tests frontend reussis avant copie ; nouvelle execution sur la copie de production. Avertissement de taille du bundle principal (~628 ko).
+
+## Comparaison local / branche production 38cf7e9
+
+- HEAD distant Backend verifie : 38cf7e9b43f9f60bf96e2197985fe25ba78e93bf. Deploiement GitHub associe termine selon Vercel ; cela ne prouve pas le fonctionnement runtime. Reglages internes Vercel non accessibles faute de session CLI.
+- Frontend : 493 fichiers identiques au projet local, configuration frontend/vercel.json supplementaire. Infrastructure : sept fichiers identiques.
+- Docker : PostgreSQL/PostGIS 17-3.5, MongoDB 8.0.5 et Vault 2.1 running/healthy ; n8n 2.38.7 running sans healthcheck. Conteneurs issus des fichiers Compose de InfiMatch/infra. Ports lies a 127.0.0.1 uniquement (55432, 57017, 55678, 58200).
+- Backend : 80 fichiers identiques, huit modifies et cinq nouveaux sur la branche. Changements conservation/cloture, fraicheur et OpenAPI encore en validation et non synchronises avec le runtime local. Scripts : restauration modifiee, trois nouveaux scripts de maintenance ; trois autres differences limitees aux fins de fichier.
+- API locale 3100 /api/v1/health repond ok ; ports 3101, 5173 et 8443 egalement en ecoute. Front, API et worker ne sont pas des services definis dans Compose. Aucun Dockerfile applicatif trouve dans infra.
+- Compose configure le fonctionnement local (n8n vers host.docker.internal:3100 et cookies non securises pour son acces local). Ce fichier ne constitue pas un deploiement cloud de l application complete. Volumes, secrets et certificats prives ne sont pas dans Git.
+
+## Verification GitHub et Vercel apres changement de branche
+
+- La branche distante est desormais Main (majuscule), branche par defaut ; Backend absente. Commit inchange 38cf7e9, contenant front et back.
+- Controle Vercel success et dernier deploiement termine pour ce commit, sans preuve de fonctionnement runtime.
+- CI precedente 35114246881 : frontend succes, compilation backend succes, test:isolated echec. Nouvelle CI 35122667024 sur Main : frontend succes, backend encore en cours lors de la verification. Le depot ne peut donc pas etre declare entierement vert.
+
+## Sauvegarde fusion-front_Back
+
+- Copie exacte du contenu de Infimactch_Prod/Main (38cf7e9) sur Ziwazou/infiMatch fusion-front_Back. Historique destination conserve via commit de fusion b5f2c6394efcc32d3eca2ecdb82633aefd6c813d ; egalite des arbres Git verifiee avant push. Aucun secret ou fichier prive local ajoute. Statut de validation backend inchange.
+
+
+## Integration dans l application locale et retest complet
+
+- Sources backend/scripts synchronisees vers E:/Interimatch/InfiMatch. Anciennes sources sauvegardees dans data/before-local-sync-1789577171. Sauvegarde privee complete apres arret API/worker : backups/full-v1-2026-09-16T16-48-20-024Z (26 fichiers).
+- Correction de la reponse OpenAPI GET /facilities/{id} manquante. Lecture HTTP du document dans les deux tests effectuee avec fetch et delai maximal explicite, sans retrait des assertions. Corrections recopiees dans les deux dossiers de publication, pas encore poussees.
+- Campagne isolee reussie : 162 tests backend, zero echec ; couverture 81,31 % lignes / 80,37 % branches ; regressions PostgreSQL et workflows n8n reussis.
+- Migration PrivacyRequests1789381100000 appliquee a la base locale. API 3100 et 3101, proxy HTTPS et worker redemarres. Sante des deux API ok ; accueil et OpenAPI HTTPS 200 ; cloture sans session 401 attendu.
+- Frontend local : 12 tests reussis et build reussi, avertissement bundle principal ~628 ko. Accueil et connexion verifies dans un navigateur Edge dedie ; pas de nouvelle connexion Google reelle testee.
+- Aucun traitement de purge ni planification destructive active. Une commande regroupee de diagnostic a ete refusee par la revue automatique car elle incluait des commandes nommees purge/retirement ; seules les verifications HTTP ont ensuite ete executees. Aucune suppression effectuee.
+- Vercel et ses services distants restent a configurer ; les tests locaux ne prouvent pas que l erreur 500 distante est resolue.
+
+## Verification de l hypothese architecture Vercel
+
+- Machine locale verifiee : win32 x64. Aucun node_modules, binaire .node ni .vercel/output suivi dans la copie Git. Les logs fournis montrent une installation et une construction sur Vercel depuis GitHub. Hypothese Apple Silicon ARM non etayee pour ce projet.
+- Documentation officielle FUNCTION_INVOCATION_FAILED accessible ; erreur generique de runtime, non preuve de conflit architecture. Diagnostic definitif toujours conditionne aux journaux runtime. Dernier deploiement Preview reference encore 38cf7e9.
+
+## Prise en main Vercel demandee
+
+- Session navigateur dediee vercel-setup ouverte sur les reglages du projet neotravel/infimactch-prod-backend ; redirection vers connexion Vercel. Connexion utilisateur demandee directement dans la fenetre, sans transmission de mot de passe.
+- Depot distant confirme : lebretyves/Infimactch_Prod, branche Main, commit 38cf7e9 ; dossier frontend et configuration Vite presents. Reglages Vercel non modifies tant que la connexion n est pas effectuee.
+
+## Objectif precise : application autonome sur Vercel
+
+- Utilisateur demande l application complete sans dependance au PC. Session Vercel connectee ; reglage confirme NestJS / backend / Node24. Aucun stockage raccorde visible ; catalogue PostgreSQL, MongoDB Atlas et Blob inspecte, aucune creation ni souscription.
+- Plan detaille dans docs/DEPLOIEMENT_AUTONOME.md. Decision demandee sur conservation n8n/Vault heberges separement ou remplacement pour Vercel ; aucune adaptation supprimant ces composants effectuee sans choix utilisateur.
+
+## Recherche solution autonome gratuite
+
+- Comparaison documentee Oracle Always Free, Vercel, Render et Koyeb. Proposition : frontend Vercel et pile V1 complete sur VM Oracle ARM, sous disponibilite et quotas. Aucun service cree. Image PostGIS actuelle uniquement amd64 verifiee : adaptation ARM necessaire. Proposition detaillee dans SOLUTION_HEBERGEMENT_GRATUIT.md ; hebergement API hors Vercel a valider.
+
+## Verification V1 / n8n / Teams et ordre de travail
+
+- Verification en lecture seule : n8n list:workflow --active=true confirme InfiMatchConfirm, InfiMatchMatches et InfiMatchReminders actifs localement. Les exports active=false sont des fichiers d import, pas la preuve de l etat runtime. Relances planifiees chaque heure.
+- Notifications internes MATCH, REMINDER et CONFIRMATION implementees ; worker/outbox avec verrous, tentatives et recus. Aucun noeud Teams dans les trois workflows. Base locale sans notification au moment du controle, aucun evenement en attente/exhausted dans les resultats affiches.
+- Ecarts : matching verifie account.active et notifications_enabled ; destinataires relance/confirmation filtrent membership.active mais pas explicitement account.active dans ces requetes. Preference par canal Teams et livraison externe a concevoir avant activation. Un recu interne ne prouve pas un envoi Teams.
+- Documentation V1 prevoit notifications internes de base et canal externe de demonstration optionnel ; Teams correspond a la demande supplementaire utilisateur. Commencer par definir un canal Teams de test autorise, evenements et destinataires, puis corriger ciblage, ajouter livraison Teams tracee et tester echec/reprise/doublons sur donnees fictives avant migration cloud. Aucun message externe envoye.
+
+## Relecture du kick-off original
+
+- Source lue : docs/proofs/kickoff-source-extracted.txt (extraction du sujet), pages physiques 3 a 7 ; architecture V1 section 10 recoupee. Kick-off exige deux automatisations minimum et conseille Slack/Discord, ne prescrit pas Teams, Redis ou Vercel. V1 retient trois workflows dont la confirmation.
+- Contraintes : backend Node TypeScript, SQL + NoSQL, auth classique securisee, chiffrement, missions/profils/matching/tableau de bord, donnees publiques nettoyees et utilisees, CLI, tests unitaires/fonctionnels avec couverture et exports workflows/README.
+- Correction notifications en cours : filtrage account.active pour relances/confirmations et deux tests ajoutes. Premiere campagne 164 tests : echec de fixture utilisant une colonne membership.role inexistante ; fixture corrigee et campagne relancee. Aucun envoi Teams ni push.
+
+## Audit global actuel
+
+- Rapport AUDIT_GLOBAL_ACTUEL_2026-09-16.md cree : exigences kickoff, sources, runtime, Git, notifications, retention, front, dependencies et exploitation. 164 tests backend PASS (81,99 % lignes / 80,34 % branches) ; npm audit production backend/frontend zero alerte connue. CI distante toujours rouge sur 38cf7e9. Trois workflows actifs, pas de Teams ni maintenance programmee. Aucun changement applicatif ni envoi externe pendant cet audit.
+
+## Point 1 ? alignement et publication des correctifs testes
+
+- Synchronisation des correctifs OpenAPI et ciblage des notifications depuis le backend local teste (164 tests PASS). Compilation locale reussie puis redemarrage API 3100, API HTTPS et worker. Accueil et sante HTTPS verifies 200.
+- Controle des fichiers de publication contre les secrets prives locaux : aucun secret configure detecte. Publication sur Infimactch_Prod/Main et fusion-front_Back en conservant leurs historiques. CI distante a suivre apres ce commit ; anciens rapports decrivent leur date de verification.
