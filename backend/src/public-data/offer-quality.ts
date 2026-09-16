@@ -1,3 +1,4 @@
+import { currentParsedOffer } from "./offer-parser";
 import type { Qualification } from "../domain/matching";
 
 export function clean(value: unknown, max: number): string {
@@ -108,7 +109,7 @@ export function offerFacts(raw: any) {
 }
 
 export function externalPresentation(e: any) {
-  const { raw_hash: _hash, ...safe } = e;
+  const { raw_hash: _hash, parsed_offer: _parsed, ...safe } = e;
   const facts = e.provenance?.facts;
   const warnings: string[] = facts?.warnings ?? [
     "LEGACY_OFFER_REIMPORT_REQUIRED",
@@ -121,6 +122,8 @@ export function externalPresentation(e: any) {
         : "UNKNOWN";
   return {
     ...safe,
+    parsedOffer: currentParsedOffer(e),
+    freshness: {lastSeenAt:e.imported_at??null,staleAfterDays:30,state:e.expires_at && new Date(e.expires_at).getTime()<=Date.now()?"EXPIRED":!e.imported_at || new Date(e.imported_at).getTime()<Date.now()-30*86400000?"STALE_UNVERIFIED":"RECENTLY_SEEN"},
     kind: "EXTERNAL_OFFER",
     applicationMode: "REDIRECT",
     eligibility: "INCOMPLETE",

@@ -77,7 +77,10 @@ export class MatchingService implements OnModuleDestroy {
     );
     try {
       await this.ready();
-      const run = await this.runs.create({
+      const run = await this.db.transaction(async em => {
+        const [account] = await em.query("SELECT id FROM account WHERE id=$1 AND active FOR SHARE", [owner]);
+        if (!account) throw new NotFoundException();
+        return this.runs.create({
         ownerId: owner,
         missionId: m.id,
         profileVersion:
@@ -87,6 +90,7 @@ export class MatchingService implements OnModuleDestroy {
         rulesVersion: MATCH_RULES.version,
         result,
         expiresAt: new Date(Date.now() + this.retentionDays * 86400000),
+        });
       });
       return {
         ...result,
@@ -108,7 +112,7 @@ export class MatchingService implements OnModuleDestroy {
     }
   }
   async forNurse(actor: string, page: PageDto = new PageDto()) {
-    const [p] = await this.db.query("SELECT * FROM profile WHERE user_id=$1", [
+    const [p] = await this.db.query("SELECT p.* FROM profile p JOIN account a ON a.id=p.user_id AND a.active WHERE p.user_id=$1", [
       actor,
     ]);
     if (!p) throw new NotFoundException();
@@ -173,7 +177,7 @@ export class MatchingService implements OnModuleDestroy {
     const top: any[] = [];
     while (true) {
       const batch = await this.db.query(
-        "SELECT * FROM profile WHERE visible AND $1=ANY(qualifications) AND user_id>$2::uuid ORDER BY user_id LIMIT 100",
+        "SELECT p.* FROM profile p JOIN account a ON a.id=p.user_id AND a.active WHERE p.visible AND $1=ANY(p.qualifications) AND p.user_id>$2::uuid ORDER BY p.user_id LIMIT 100",
         [m.qualification, cursor],
       );
       if (!batch.length) break;
@@ -193,6 +197,7 @@ export class MatchingService implements OnModuleDestroy {
         }
         top.push({
           candidateId: p.user_id,
+          display_name: p.display_name,
           qualifications: p.qualifications,
           skills: p.skills,
           ...result,

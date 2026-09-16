@@ -1,0 +1,14 @@
+{
+  "at": "2026-09-16T00:44:27.537Z",
+  "checks": [
+    "Public FINESS lookup returns imported address, postal code with leading zero, city and coordinates",
+    "Unknown FINESS is explicitly absent",
+    "Malformed FINESS rejected",
+    "Registration 1: official or edited coordinates persist in organization and are returned by auth/me",
+    "Registration 2: official or edited coordinates persist in organization and are returned by auth/me",
+    "Registration 3: official or edited coordinates persist in organization and are returned by auth/me",
+    "Rollback verified: isolated accounts and SQL data do not persist"
+  ],
+  "isolated": true,
+  "rollback": true
+}

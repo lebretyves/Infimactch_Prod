@@ -1,9 +1,20 @@
 name: infimatch-vault
 services:
+  vault-permissions:
+    image: hashicorp/vault:2.1@sha256:5520cc26271c024e6ffa45cdf95255bd26b70d71ba4b7e0bc18925bef4128adb
+    user: "0:0"
+    entrypoint: ["sh", "-c"]
+    command:
+      - chown vault:vault /tls/server.key && chmod 0600 /tls/server.key
+    volumes:
+      - ../../data/vault/tls:/tls
   vault:
     image: hashicorp/vault:2.1@sha256:5520cc26271c024e6ffa45cdf95255bd26b70d71ba4b7e0bc18925bef4128adb
     command: ["server"]
     restart: unless-stopped
+    depends_on:
+      vault-permissions:
+        condition: service_completed_successfully
     cap_add: [IPC_LOCK]
     ports: ["127.0.0.1:58200:8200"]
     environment:

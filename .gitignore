@@ -14,3 +14,7 @@ backups/
 **/~$*.docx
 
 !.env.vault.example
+
+!.env.vault.example
+!frontend/src/data/
+!frontend/src/data/**

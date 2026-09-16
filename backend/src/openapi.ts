@@ -1,3 +1,4 @@
+import { additionalSchemas, additionalResponses } from "./openapi-contracts";
 import { OpenAPIObject } from "@nestjs/swagger";
 const uuid = { type: "string", format: "uuid" };
 const integer = { type: "integer" };
@@ -85,12 +86,24 @@ const need = object(
     description: text,
     created_by: uuid,
     created_at: date,
+    updated_at: nullableDate,
+    establishment_name: text,
+    establishment_address: text,
+    details: {
+      nullable: true,
+      allOf: [{ $ref: "#/components/schemas/NeedDetailsDto" }],
+    },
   },
   ["id", "establishment_id"],
 );
 /** Explicit contracts for command receipts and paginated lists; other responses remain to complete. */
 export function configureOpenApi(doc: OpenAPIObject) {
   const schemas: any = {
+    ...additionalSchemas,
+    ParsedOffer: object({schemaVersion:{type:"integer",enum:[1]},parserVersion:text,inputHash:text,parsedAt:date,
+      fields:{type:"array",items:object({key:text,label:text,value:{},display:text,state:{type:"string",enum:["REPORTED","MENTION","DESIRED","REQUIRED","NEGATED","REVIEW_REQUIRED"]},evidence:object({origin:{type:"string",enum:["TITLE","DESCRIPTION"]},text,start:integer,end:integer},["origin","text","start","end"])},["key","label","value","display","state","evidence"])},
+      warnings:{type:"array",items:text},reviewQueue:{type:"array",items:text}},["schemaVersion","parserVersion","inputHash","parsedAt","fields","warnings","reviewQueue"]),
+    Listing: object({id:text,kind:text,title:text,description:text,freshness:{$ref:"#/components/schemas/OfferFreshness"},parsedOffer:{nullable:true,allOf:[{$ref:"#/components/schemas/ParsedOffer"}]}}),
     Mission: mission,
     Application: application,
     Assignment: assignment,
@@ -103,12 +116,13 @@ export function configureOpenApi(doc: OpenAPIObject) {
         fields: { type: "array", items: text, nullable: true },
         requestId: uuid,
       },
-      ["code", "message", "requestId"],
+      ["code", "message"],
     ),
     MissionCommand: object(
       { id: uuid, version: integer, status: missionStatus },
       ["id", "version", "status"],
     ),
+    DocumentCommand: object({ id: uuid, status: { type: "string", enum: ["READY"] } }, ["id", "status"]),
     DocumentMetadata: object(
       {
         id: uuid,
@@ -154,6 +168,13 @@ export function configureOpenApi(doc: OpenAPIObject) {
   doc.components.schemas = { ...doc.components.schemas, ...schemas };
   const ref = (name: string) => ({ $ref: "#/components/schemas/" + name });
   const responses: Record<string, any> = {
+    ...additionalResponses,
+    "POST /api/v1/auth/activity": object({idleTimeoutMs:integer,idleExpiresAt:{type:"integer",description:"Server expiry timestamp in milliseconds; 15 minutes idle, capped at 8 hours after authentication"}},["idleTimeoutMs","idleExpiresAt"]),
+    "GET /api/v1/listings/{id}": ref("Listing"),
+    "GET /api/v1/listings/external": object({items:{type:"array",items:ref("Listing")},total:integer,limit:integer,offset:integer}),
+    "POST /api/v1/listings/search": object({items:{type:"array",items:ref("Listing")},total:integer,limit:integer,offset:integer}),
+    "GET /api/v1/me/notification-preferences": object({enabled:{type:"boolean"}},["enabled"]),
+    "PUT /api/v1/me/notification-preferences": object({enabled:{type:"boolean"}},["enabled"]),
     "GET /api/v1/missions": { type: "array", items: ref("Mission") },
     "GET /api/v1/me/applications": { type: "array", items: ref("Application") },
     "GET /api/v1/missions/{id}/applications": {
@@ -174,6 +195,7 @@ export function configureOpenApi(doc: OpenAPIObject) {
       type: "array",
       items: ref("StaffingRequest"),
     },
+    "GET /api/v1/staffing-requests/{id}": ref("StaffingRequest"),
     "GET /api/v1/facilities": { type: "array", items: ref("Facility") },
   };
   const commands: Record<string, string> = {
@@ -189,13 +211,16 @@ export function configureOpenApi(doc: OpenAPIObject) {
     "POST /api/v1/applications/{id}/selection": "Application",
     "POST /api/v1/applications/{id}/rejection": "Application",
     "POST /api/v1/staffing-requests": "StaffingRequest",
+    "PUT /api/v1/staffing-requests/{id}": "StaffingRequest",
+    "POST /api/v1/me/documents": "DocumentCommand",
+    "PUT /api/v1/me/bank-details": "DocumentCommand",
   };
   for (const [path, item] of Object.entries(doc.paths))
     for (const method of ["get", "post", "put", "delete", "patch"]) {
       const op = (item as any)[method];
       if (!op) continue;
       const key = method.toUpperCase() + " " + path;
-      for (const code of [400, 401, 403, 404, 409, 429, 500, 503])
+      for (const code of [400, 401, 403, 404, 409, 413, 429, 500, 503])
         op.responses[code] ??= {
           description: "Controlled API error; applicability depends on route",
           content: { "application/json": { schema: ref("Error") } },
@@ -211,6 +236,14 @@ export function configureOpenApi(doc: OpenAPIObject) {
             "Stable key per command; reuse for retry with identical content. Reuse with changed content returns 409. Current permissions are checked on replay.",
         });
         responses[key] = ref(commands[key]);
+      }
+      if (key === "GET /api/v1/me/documents/{id}") {
+        op.responses[200] = {description:"Authorized decrypted document download",headers:{"Content-Disposition":{schema:{type:"string"}},"Cache-Control":{schema:{type:"string"}}},content:Object.fromEntries(["application/pdf","image/png","image/jpeg","application/octet-stream"].map(mime=>[mime,{schema:{type:"string",format:"binary"}}]))};
+      }
+      if (!["get"].includes(method)) {
+        op.parameters ??= [];
+        if (!path.startsWith("/api/v1/internal/")) op.parameters.push({name:"X-CSRF-Token",in:"header",required:true,schema:{type:"string"},description:"Token from /auth/csrf; cookie credentials and the configured Origin are required"});
+        else op.parameters.push({name:"X-InfiMatch-Token",in:"header",required:true,schema:{type:"string"},description:"Internal service credential; never expose in browser code"});
       }
       if (responses[key])
         op.responses[method === "post" ? "201" : "200"] = {

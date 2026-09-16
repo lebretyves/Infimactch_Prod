@@ -1,0 +1,1111 @@
+{
+  "at": "2026-09-15T22:44:47.107Z",
+  "checks": [
+    {
+      "path": "/health",
+      "status": 200,
+      "expected": 200,
+      "pass": true
+    },
+    {
+      "path": "/reference-data",
+      "status": 200,
+      "expected": 200,
+      "pass": true
+    },
+    {
+      "path": "/auth/google/config",
+      "status": 200,
+      "expected": 200,
+      "pass": true
+    },
+    {
+      "path": "/auth/me",
+      "status": 401,
+      "expected": 401,
+      "pass": true
+    },
+    {
+      "path": "/profile",
+      "status": 401,
+      "expected": 401,
+      "pass": true
+    },
+    {
+      "path": "/missions",
+      "status": 401,
+      "expected": 401,
+      "pass": true
+    },
+    {
+      "path": "/me/documents",
+      "status": 401,
+      "expected": 401,
+      "pass": true
+    },
+    {
+      "path": "/dashboards",
+      "status": 401,
+      "expected": 401,
+      "pass": true
+    }
+  ],
+  "endpointCount": 62,
+  "endpoints": [
+    {
+      "method": "GET",
+      "path": "/api/v1/health",
+      "operationId": "HealthController_health",
+      "documentedResponses": [
+        "200",
+        "400",
+        "401",
+        "403",
+        "404",
+        "409",
+        "429",
+        "500",
+        "503"
+      ],
+      "documentedSecurity": []
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/auth/google/config",
+      "operationId": "AuthController_googleConfig",
+      "documentedResponses": [
+        "200",
+        "400",
+        "401",
+        "403",
+        "404",
+        "409",
+        "429",
+        "500",
+        "503"
+      ],
+      "documentedSecurity": []
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/auth/google/challenge",
+      "operationId": "AuthController_googleChallenge",
+      "documentedResponses": [
+        "201",
+        "400",
+        "401",
+        "403",
+        "404",
+        "409",
+        "429",
+        "500",
+        "503"
+      ],
+      "documentedSecurity": []
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/auth/google",
+      "operationId": "AuthController_googleLogin",
+      "documentedResponses": [
+        "201",
+        "400",
+        "401",
+        "403",
+        "404",
+        "409",
+        "429",
+        "500",
+        "503"
+      ],
+      "documentedSecurity": []
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/auth/csrf",
+      "operationId": "AuthController_csrf",
+      "documentedResponses": [
+        "200",
+        "400",
+        "401",
+        "403",
+        "404",
+        "409",
+        "429",
+        "500",
+        "503"
+      ],
+      "documentedSecurity": []
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/auth/register",
+      "operationId": "AuthController_register",
+      "documentedResponses": [
+        "201",
+        "400",
+        "401",
+        "403",
+        "404",
+        "409",
+        "429",
+        "500",
+        "503"
+      ],
+      "documentedSecurity": []
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/auth/login",
+      "operationId": "AuthController_login",
+      "documentedResponses": [
+        "201",
+        "400",
+        "401",
+        "403",
+        "404",
+        "409",
+        "429",
+        "500",
+        "503"
+      ],
+      "documentedSecurity": []
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/auth/me",
+      "operationId": "AuthController_me",
+      "documentedResponses": [
+        "200",
+        "400",
+        "401",
+        "403",
+        "404",
+        "409",
+        "429",
+        "500",
+        "503"
+      ],
+      "documentedSecurity": []
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/auth/logout",
+      "operationId": "AuthController_logout",
+      "documentedResponses": [
+        "201",
+        "400",
+        "401",
+        "403",
+        "404",
+        "409",
+        "429",
+        "500",
+        "503"
+      ],
+      "documentedSecurity": []
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/profile",
+      "operationId": "ProfilesController_get",
+      "documentedResponses": [
+        "200",
+        "400",
+        "401",
+        "403",
+        "404",
+        "409",
+        "429",
+        "500",
+        "503"
+      ],
+      "documentedSecurity": []
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v1/profile",
+      "operationId": "ProfilesController_update",
+      "documentedResponses": [
+        "200",
+        "400",
+        "401",
+        "403",
+        "404",
+        "409",
+        "429",
+        "500",
+        "503"
+      ],
+      "documentedSecurity": []
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v1/profile/rpps",
+      "operationId": "ProfilesController_rppsCheck",
+      "documentedResponses": [
+        "200",
+        "400",
+        "401",
+        "403",
+        "404",
+        "409",
+        "429",
+        "500",
+        "503"
+      ],
+      "documentedSecurity": []
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/profile/rpps/retry",
+      "operationId": "ProfilesController_retry",
+      "documentedResponses": [
+        "201",
+        "400",
+        "401",
+        "403",
+        "404",
+        "409",
+        "429",
+        "500",
+        "503"
+      ],
+      "documentedSecurity": []
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/missions",
+      "operationId": "MissionsController_create",
+      "documentedResponses": [
+        "201",
+        "400",
+        "401",
+        "403",
+        "404",
+        "409",
+        "429",
+        "500",
+        "503"
+      ],
+      "documentedSecurity": []
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/missions",
+      "operationId": "MissionsController_missions",
+      "documentedResponses": [
+        "200",
+        "400",
+        "401",
+        "403",
+        "404",
+        "409",
+        "429",
+        "500",
+        "503"
+      ],
+      "documentedSecurity": []
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v1/missions/{id}",
+      "operationId": "MissionsController_edit",
+      "documentedResponses": [
+        "200",
+        "400",
+        "401",
+        "403",
+        "404",
+        "409",
+        "429",
+        "500",
+        "503"
+      ],
+      "documentedSecurity": []
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/missions/{id}",
+      "operationId": "MissionsController_ownMission",
+      "documentedResponses": [
+        "200",
+        "400",
+        "401",
+        "403",
+        "404",
+        "409",
+        "429",
+        "500",
+        "503"
+      ],
+      "documentedSecurity": []
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/missions/{id}/publish",
+      "operationId": "MissionsController_publish",
+      "documentedResponses": [
+        "201",
+        "400",
+        "401",
+        "403",
+        "404",
+        "409",
+        "429",
+        "500",
+        "503"
+      ],
+      "documentedSecurity": []
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/missions/{id}/cancel",
+      "operationId": "MissionsController_cancel",
+      "documentedResponses": [
+        "201",
+        "400",
+        "401",
+        "403",
+        "404",
+        "409",
+        "429",
+        "500",
+        "503"
+      ],
+      "documentedSecurity": []
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/missions/{id}/reopen",
+      "operationId": "MissionsController_reopen",
+      "documentedResponses": [
+        "201",
+        "400",
+        "401",
+        "403",
+        "404",
+        "409",
+        "429",
+        "500",
+        "503"
+      ],
+      "documentedSecurity": []
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/missions/{id}/complete",
+      "operationId": "MissionsController_complete",
+      "documentedResponses": [
+        "201",
+        "400",
+        "401",
+        "403",
+        "404",
+        "409",
+        "429",
+        "500",
+        "503"
+      ],
+      "documentedSecurity": []
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/missions/{id}/applications",
+      "operationId": "MissionsController_apply",
+      "documentedResponses": [
+        "201",
+        "400",
+        "401",
+        "403",
+        "404",
+        "409",
+        "429",
+        "500",
+        "503"
+      ],
+      "documentedSecurity": []
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/missions/{id}/applications",
+      "operationId": "MissionsController_candidates",
+      "documentedResponses": [
+        "200",
+        "400",
+        "401",
+        "403",
+        "404",
+        "409",
+        "429",
+        "500",
+        "503"
+      ],
+      "documentedSecurity": []
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/applications/{id}/withdrawal",
+      "operationId": "MissionsController_withdraw",
+      "documentedResponses": [
+        "201",
+        "400",
+        "401",
+        "403",
+        "404",
+        "409",
+        "429",
+        "500",
+        "503"
+      ],
+      "documentedSecurity": []
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/applications/{id}/selection",
+      "operationId": "MissionsController_select",
+      "documentedResponses": [
+        "201",
+        "400",
+        "401",
+        "403",
+        "404",
+        "409",
+        "429",
+        "500",
+        "503"
+      ],
+      "documentedSecurity": []
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/applications/{id}/rejection",
+      "operationId": "MissionsController_reject",
+      "documentedResponses": [
+        "201",
+        "400",
+        "401",
+        "403",
+        "404",
+        "409",
+        "429",
+        "500",
+        "503"
+      ],
+      "documentedSecurity": []
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/missions/{id}/assignments",
+      "operationId": "MissionsController_assign",
+      "documentedResponses": [
+        "201",
+        "400",
+        "401",
+        "403",
+        "404",
+        "409",
+        "429",
+        "500",
+        "503"
+      ],
+      "documentedSecurity": []
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/me/applications",
+      "operationId": "MissionsController_applications",
+      "documentedResponses": [
+        "200",
+        "400",
+        "401",
+        "403",
+        "404",
+        "409",
+        "429",
+        "500",
+        "503"
+      ],
+      "documentedSecurity": []
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/applications/{id}",
+      "operationId": "MissionsController_applicationDetail",
+      "documentedResponses": [
+        "200",
+        "400",
+        "401",
+        "403",
+        "404",
+        "409",
+        "429",
+        "500",
+        "503"
+      ],
+      "documentedSecurity": []
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/me/matches",
+      "operationId": "MatchingController_matches",
+      "documentedResponses": [
+        "200",
+        "400",
+        "401",
+        "403",
+        "404",
+        "409",
+        "429",
+        "500",
+        "503"
+      ],
+      "documentedSecurity": []
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/missions/{id}/candidates",
+      "operationId": "MatchingController_candidates",
+      "documentedResponses": [
+        "200",
+        "400",
+        "401",
+        "403",
+        "404",
+        "409",
+        "429",
+        "500",
+        "503"
+      ],
+      "documentedSecurity": []
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/matches/{id}/explanation",
+      "operationId": "MatchingController_explanation",
+      "documentedResponses": [
+        "200",
+        "400",
+        "401",
+        "403",
+        "404",
+        "409",
+        "429",
+        "500",
+        "503"
+      ],
+      "documentedSecurity": []
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/listings/search",
+      "operationId": "ListingsController_search",
+      "documentedResponses": [
+        "201",
+        "400",
+        "401",
+        "403",
+        "404",
+        "409",
+        "429",
+        "500",
+        "503"
+      ],
+      "documentedSecurity": []
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/me/listings/{id}/correspondence",
+      "operationId": "ListingsController_compareExternal",
+      "documentedResponses": [
+        "200",
+        "400",
+        "401",
+        "403",
+        "404",
+        "409",
+        "429",
+        "500",
+        "503"
+      ],
+      "documentedSecurity": []
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/listings/external",
+      "operationId": "ListingsController_external",
+      "documentedResponses": [
+        "200",
+        "400",
+        "401",
+        "403",
+        "404",
+        "409",
+        "429",
+        "500",
+        "503"
+      ],
+      "documentedSecurity": []
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/listings/{id}",
+      "operationId": "ListingsController_detail",
+      "documentedResponses": [
+        "200",
+        "400",
+        "401",
+        "403",
+        "404",
+        "409",
+        "429",
+        "500",
+        "503"
+      ],
+      "documentedSecurity": []
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/facilities",
+      "operationId": "ListingsController_facilities",
+      "documentedResponses": [
+        "200",
+        "400",
+        "401",
+        "403",
+        "404",
+        "409",
+        "429",
+        "500",
+        "503"
+      ],
+      "documentedSecurity": []
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/facilities/{id}",
+      "operationId": "ListingsController_facility",
+      "documentedResponses": [
+        "200",
+        "400",
+        "401",
+        "403",
+        "404",
+        "409",
+        "429",
+        "500",
+        "503"
+      ],
+      "documentedSecurity": []
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/me/favorites",
+      "operationId": "ListingsController_favorite",
+      "documentedResponses": [
+        "201",
+        "400",
+        "401",
+        "403",
+        "404",
+        "409",
+        "429",
+        "500",
+        "503"
+      ],
+      "documentedSecurity": []
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/me/favorites",
+      "operationId": "ListingsController_favorites",
+      "documentedResponses": [
+        "200",
+        "400",
+        "401",
+        "403",
+        "404",
+        "409",
+        "429",
+        "500",
+        "503"
+      ],
+      "documentedSecurity": []
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v1/me/favorites/{kind}/{id}",
+      "operationId": "ListingsController_remove",
+      "documentedResponses": [
+        "200",
+        "400",
+        "401",
+        "403",
+        "404",
+        "409",
+        "429",
+        "500",
+        "503"
+      ],
+      "documentedSecurity": []
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/me/history",
+      "operationId": "ListingsController_history",
+      "documentedResponses": [
+        "200",
+        "400",
+        "401",
+        "403",
+        "404",
+        "409",
+        "429",
+        "500",
+        "503"
+      ],
+      "documentedSecurity": []
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/dashboards",
+      "operationId": "ListingsController_dashboard",
+      "documentedResponses": [
+        "200",
+        "400",
+        "401",
+        "403",
+        "404",
+        "409",
+        "429",
+        "500",
+        "503"
+      ],
+      "documentedSecurity": []
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/me/notifications",
+      "operationId": "ListingsController_notifications",
+      "documentedResponses": [
+        "200",
+        "400",
+        "401",
+        "403",
+        "404",
+        "409",
+        "429",
+        "500",
+        "503"
+      ],
+      "documentedSecurity": []
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/me/notifications/{id}/read",
+      "operationId": "ListingsController_read",
+      "documentedResponses": [
+        "201",
+        "400",
+        "401",
+        "403",
+        "404",
+        "409",
+        "429",
+        "500",
+        "503"
+      ],
+      "documentedSecurity": []
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/me/documents",
+      "operationId": "DocumentsController_upload",
+      "documentedResponses": [
+        "201",
+        "400",
+        "401",
+        "403",
+        "404",
+        "409",
+        "429",
+        "500",
+        "503"
+      ],
+      "documentedSecurity": []
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/me/documents",
+      "operationId": "DocumentsController_list",
+      "documentedResponses": [
+        "200",
+        "400",
+        "401",
+        "403",
+        "404",
+        "409",
+        "429",
+        "500",
+        "503"
+      ],
+      "documentedSecurity": []
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/me/documents/{id}",
+      "operationId": "DocumentsController_download",
+      "documentedResponses": [
+        "200",
+        "400",
+        "401",
+        "403",
+        "404",
+        "409",
+        "429",
+        "500",
+        "503"
+      ],
+      "documentedSecurity": []
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v1/me/bank-details",
+      "operationId": "DocumentsController_bank",
+      "documentedResponses": [
+        "200",
+        "400",
+        "401",
+        "403",
+        "404",
+        "409",
+        "429",
+        "500",
+        "503"
+      ],
+      "documentedSecurity": []
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/me/bank-details",
+      "operationId": "DocumentsController_getBank",
+      "documentedResponses": [
+        "200",
+        "400",
+        "401",
+        "403",
+        "404",
+        "409",
+        "429",
+        "500",
+        "503"
+      ],
+      "documentedSecurity": []
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/internal/automation/matches/{id}",
+      "operationId": "AutomationController_matches",
+      "documentedResponses": [
+        "201",
+        "400",
+        "401",
+        "403",
+        "404",
+        "409",
+        "429",
+        "500",
+        "503"
+      ],
+      "documentedSecurity": []
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/internal/automation/reminders",
+      "operationId": "AutomationController_reminders",
+      "documentedResponses": [
+        "201",
+        "400",
+        "401",
+        "403",
+        "404",
+        "409",
+        "429",
+        "500",
+        "503"
+      ],
+      "documentedSecurity": []
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/internal/automation/confirmation/{id}",
+      "operationId": "AutomationController_confirmation",
+      "documentedResponses": [
+        "201",
+        "400",
+        "401",
+        "403",
+        "404",
+        "409",
+        "429",
+        "500",
+        "503"
+      ],
+      "documentedSecurity": []
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/me/organizations",
+      "operationId": "OrganizationsController_own",
+      "documentedResponses": [
+        "200",
+        "400",
+        "401",
+        "403",
+        "404",
+        "409",
+        "429",
+        "500",
+        "503"
+      ],
+      "documentedSecurity": []
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v1/organizations/{id}",
+      "operationId": "OrganizationsController_update",
+      "documentedResponses": [
+        "200",
+        "400",
+        "401",
+        "403",
+        "404",
+        "409",
+        "429",
+        "500",
+        "503"
+      ],
+      "documentedSecurity": []
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/staffing-requests",
+      "operationId": "OrganizationsController_create",
+      "documentedResponses": [
+        "201",
+        "400",
+        "401",
+        "403",
+        "404",
+        "409",
+        "429",
+        "500",
+        "503"
+      ],
+      "documentedSecurity": []
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/staffing-requests",
+      "operationId": "OrganizationsController_list",
+      "documentedResponses": [
+        "200",
+        "400",
+        "401",
+        "403",
+        "404",
+        "409",
+        "429",
+        "500",
+        "503"
+      ],
+      "documentedSecurity": []
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v1/me/notification-preferences",
+      "operationId": "OrganizationsController_preferences",
+      "documentedResponses": [
+        "200",
+        "400",
+        "401",
+        "403",
+        "404",
+        "409",
+        "429",
+        "500",
+        "503"
+      ],
+      "documentedSecurity": []
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/assignments/{id}/confirmation",
+      "operationId": "OrganizationsController_confirmation",
+      "documentedResponses": [
+        "200",
+        "400",
+        "401",
+        "403",
+        "404",
+        "409",
+        "429",
+        "500",
+        "503"
+      ],
+      "documentedSecurity": []
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/reference-data",
+      "operationId": "ReferenceController_get",
+      "documentedResponses": [
+        "200",
+        "400",
+        "401",
+        "403",
+        "404",
+        "409",
+        "429",
+        "500",
+        "503"
+      ],
+      "documentedSecurity": []
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/reference-data/finess",
+      "operationId": "FinessController_search",
+      "documentedResponses": [
+        "200",
+        "400",
+        "401",
+        "403",
+        "404",
+        "409",
+        "429",
+        "500",
+        "503"
+      ],
+      "documentedSecurity": []
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/reference-data/finess/{finess}",
+      "operationId": "FinessController_lookup",
+      "documentedResponses": [
+        "200",
+        "400",
+        "401",
+        "403",
+        "404",
+        "409",
+        "429",
+        "500",
+        "503"
+      ],
+      "documentedSecurity": []
+    }
+  ],
+  "scope": "Anonymous read-only HTTP checks and served OpenAPI inventory. Does not prove all permissions or business mutations."
+}

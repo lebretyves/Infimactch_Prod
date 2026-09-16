@@ -1,0 +1,7 @@
+
+> infimatch@0.1.0 typecheck
+> npm run typecheck -w backend
+
+
+> @infimatch/backend@0.1.0 typecheck
+> tsc --noEmit

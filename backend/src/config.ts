@@ -1,4 +1,5 @@
 import { config } from "dotenv";
+import { isIP } from "node:net";
 import { resolve } from "node:path";
 const candidateRoot = resolve(__dirname, "../..");
 export const projectRoot = candidateRoot.endsWith("backend")
@@ -14,6 +15,49 @@ export function required(name: string): string {
   if (!v || v.startsWith("GENERATE_"))
     throw new Error("Missing configuration: " + name);
   return v;
+}
+export function parseTrustProxy(
+  value = process.env.TRUST_PROXY,
+  environment = process.env.NODE_ENV,
+): false | number | string[] {
+  const configured = value?.trim();
+  if (!configured) {
+    if (environment === "production")
+      throw new Error("TRUST_PROXY required in production");
+    return false;
+  }
+  if (/^\d+$/.test(configured)) {
+    const hops = Number(configured);
+    if (!Number.isSafeInteger(hops) || hops < 1 || hops > 10)
+      throw new Error("TRUST_PROXY hop count must be between 1 and 10");
+    return hops;
+  }
+  const entries = configured.split(",").map((entry) => entry.trim());
+  if (
+    entries.some((entry) => {
+      if (["loopback", "linklocal", "uniquelocal"].includes(entry))
+        return false;
+      const [address, prefix, extra] = entry.split("/");
+      const version = address ? isIP(address) : 0;
+      if (extra !== undefined || !version) return true;
+      if (prefix === undefined) return false;
+      const bits = version === 4 ? 32 : 128;
+      return !/^\d+$/.test(prefix) || Number(prefix) > bits;
+    })
+  )
+    throw new Error("TRUST_PROXY must contain trusted IPs, CIDRs, or subnets");
+  return entries;
+}
+export function documentQuotaBytes(
+  value = process.env.DOCUMENT_QUOTA_BYTES,
+): number {
+  const quota =
+    value === undefined || value === "" ? 25 * 1024 * 1024 : Number(value);
+  if (!Number.isSafeInteger(quota) || quota < 5 * 1024 * 1024)
+    throw new Error(
+      "DOCUMENT_QUOTA_BYTES must be an integer of at least 5 MiB",
+    );
+  return quota;
 }
 export function validateConfiguration(): void {
   for (const n of [
@@ -37,4 +81,6 @@ export function validateConfiguration(): void {
     !required("APP_ORIGIN").startsWith("https://")
   )
     throw new Error("HTTPS origin required");
+  parseTrustProxy();
+  documentQuotaBytes();
 }

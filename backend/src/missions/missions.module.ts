@@ -13,6 +13,7 @@ import {
   Module,
   UseGuards,
   ParseUUIDPipe,
+  NotFoundException,
 } from "@nestjs/common";
 import { IsInt, Min, IsUUID } from "class-validator";
 import { Request } from "express";
@@ -123,7 +124,7 @@ class MissionsController {
     @Query() page: PageDto,
   ) {
     return this.db.query(
-      "SELECT a.*,m.title,m.version AS current_version,(a.consent_version!=m.version) AS requires_reconsent FROM application a JOIN mission m ON m.id=a.mission_id WHERE a.nurse_id=$1 ORDER BY a.updated_at DESC,a.id LIMIT $2 OFFSET $3",
+      "SELECT a.*,m.title,m.version AS current_version,(a.consent_version!=m.version) AS requires_reconsent,x.id AS assignment_id,x.status AS assignment_status FROM application a JOIN mission m ON m.id=a.mission_id LEFT JOIN LATERAL(SELECT id,status FROM assignment WHERE application_id=a.id ORDER BY created_at DESC LIMIT 1)x ON true WHERE a.nurse_id=$1 ORDER BY a.updated_at DESC,a.id LIMIT $2 OFFSET $3",
       [user(r), page.limit, page.offset],
     );
   }
@@ -134,6 +135,47 @@ class MissionsController {
       [user(r), page.limit, page.offset],
     );
   }
+  @Get("missions/:id") async ownMission(
+    @Req() r: Request,
+    @Param("id", ParseUUIDPipe) id: string,
+  ) {
+    return this.db.transaction(async (em) => {
+      const [m] = await em.query(missionSelect + " WHERE m.id=$1", [id]);
+      if (!m) throw new NotFoundException();
+      await scope(em, user(r), m);
+      const applications = await em.query(
+        "SELECT count(*)::integer AS count FROM application WHERE mission_id=$1",
+        [id],
+      );
+      const assignments = await em.query(
+        "SELECT a.id,a.status,a.nurse_id,p.display_name FROM assignment a JOIN profile p ON p.user_id=a.nurse_id WHERE a.mission_id=$1 ORDER BY a.created_at DESC",
+        [id],
+      );
+      return { ...m, application_count: applications[0].count, assignments };
+    });
+  }
+  @Get("applications/:id") async applicationDetail(
+    @Req() r: Request,
+    @Param("id", ParseUUIDPipe) id: string,
+  ) {
+    return this.db.transaction(async (em) => {
+      const [a] = await em.query(
+        "SELECT a.*,m.title,m.version AS current_version,m.agency_id,m.establishment_id,(a.consent_version!=m.version) AS requires_reconsent FROM application a JOIN mission m ON m.id=a.mission_id WHERE a.id=$1",
+        [id],
+      );
+      if (!a) throw new NotFoundException();
+      if (a.nurse_id !== user(r)) await scope(em, user(r), a);
+      const assignments = await em.query(
+        "SELECT id,status FROM assignment WHERE application_id=$1 ORDER BY created_at DESC",
+        [id],
+      );
+      const events = await em.query(
+        "SELECT event,created_at FROM audit WHERE resource_id=$1 OR resource_id IN(SELECT id FROM assignment WHERE application_id=$1) ORDER BY created_at,id",
+        [id],
+      );
+      return { ...a, assignments, events };
+    });
+  }
   @Get("missions/:id/applications") async candidates(
     @Req() r: Request,
     @Query() page: PageDto,
@@ -143,7 +185,7 @@ class MissionsController {
       const [m] = await em.query("SELECT * FROM mission WHERE id=$1", [id]);
       await scope(em, user(r), m ?? {});
       return em.query(
-        "SELECT a.*,p.display_name,p.qualifications,p.skills,p.rpps_status FROM application a JOIN profile p ON p.user_id=a.nurse_id WHERE a.mission_id=$1 ORDER BY a.updated_at DESC,a.id LIMIT $2 OFFSET $3",
+        "SELECT a.*,p.display_name,p.qualifications,p.skills,p.rpps_status,p.experience,p.available,p.unavailable,p.radius_km,p.details->>'city' AS city FROM application a JOIN profile p ON p.user_id=a.nurse_id WHERE a.mission_id=$1 ORDER BY a.updated_at DESC,a.id LIMIT $2 OFFSET $3",
         [id, page.limit, page.offset],
       );
     });

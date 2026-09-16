@@ -1,0 +1,27 @@
+{
+  "total": 184,
+  "unique": 184,
+  "pages": 4,
+  "last_page_size": 34,
+  "scope": "Real anonymous HTTP GET through frontend proxy, no writes",
+  "searches": [
+    {
+      "q": "Paris",
+      "total": 134
+    },
+    {
+      "q": "zzAbsent987654",
+      "total": 0
+    },
+    {
+      "q": "' OR true --",
+      "total": 0
+    },
+    {
+      "q": "%_",
+      "total": 0
+    }
+  ],
+  "invalid_requests_rejected": 4,
+  "empty_page_total_verified": true
+}

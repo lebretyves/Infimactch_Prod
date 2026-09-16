@@ -1,0 +1,3996 @@
+{
+  "mode": "READ_ONLY_NO_API_NO_LLM",
+  "total": 89,
+  "found": 89,
+  "offers": [
+    {
+      "id": "0025de76-1999-47d2-a303-135e828a502d",
+      "source": "FRANCE_TRAVAIL",
+      "title": "Infirmier Spécialisé en Hémodialyse (H/F)",
+      "url": "https://candidat.francetravail.fr/offres/recherche/detail/6593249",
+      "fields": [
+        {
+          "field": "service",
+          "value": "DIALYSE",
+          "evidence": "Infirmier Spécialisé en Hémodialyse (H/F)",
+          "origin": "TITLE",
+          "state": "MENTION_A_CONFIRMER"
+        },
+        {
+          "field": "contrat_texte",
+          "value": "INTERIM",
+          "evidence": "Merci La proposition de notre client pour ce poste est la suivante Contrat: Intérim",
+          "origin": "DESCRIPTION",
+          "state": "EXPLICITE_A_VERIFIER"
+        },
+        {
+          "field": "duree_mission",
+          "value": {
+            "amount": 10,
+            "unit": "jours"
+          },
+          "evidence": "Durée: 10/jours",
+          "origin": "DESCRIPTION",
+          "state": "EXPLICITE"
+        },
+        {
+          "field": "remuneration_texte",
+          "value": "Salaire: 24 euros/heure De plus, nous offrons un ensemble complet d'avantages aux intérimaires, y compris Fast TT, pour assurer leur succès professionnel et personnel",
+          "evidence": "Salaire: 24 euros/heure De plus, nous offrons un ensemble complet d'avantages aux intérimaires, y compris Fast TT, pour assurer leur succès professionnel et personnel",
+          "origin": "DESCRIPTION",
+          "state": "MONTANTS_UNITES_ET_COMPOSANTES_A_SEPARER"
+        },
+        {
+          "field": "api_lieu",
+          "value": "75 - Paris 9e Arrondissement",
+          "evidence": "\"75 - Paris 9e Arrondissement\"",
+          "origin": "PROVENANCE_STOCKEE",
+          "state": "NON_VERIFIE"
+        },
+        {
+          "field": "api_contrat",
+          "value": {
+            "code": "MIS",
+            "label": "Intérim - 10 Jour(s)"
+          },
+          "evidence": "{\"code\":\"MIS\",\"label\":\"Intérim - 10 Jour(s)\"}",
+          "origin": "PROVENANCE_STOCKEE",
+          "state": "NON_VERIFIE"
+        },
+        {
+          "field": "api_experience",
+          "value": {
+            "label": "1 An(s)",
+            "requirement": "E"
+          },
+          "evidence": "{\"label\":\"1 An(s)\",\"requirement\":\"E\"}",
+          "origin": "PROVENANCE_STOCKEE",
+          "state": "NON_VERIFIE"
+        },
+        {
+          "field": "api_salaire",
+          "value": "Mensuel de 3528.0 Euros",
+          "evidence": "\"Mensuel de 3528.0 Euros\"",
+          "origin": "PROVENANCE_STOCKEE",
+          "state": "NON_VERIFIE"
+        }
+      ],
+      "alerts": [
+        "DESCRIPTION_DEGRADEE"
+      ],
+      "unclassified": [
+        "Description du poste : Le texte s'est perdu en chemin, cliquez sur la flèche circulaire pour générer un nouveau contenu",
+        "Merci Le texte s'est perdu en chemin, cliquez sur la flèche circulaire pour générer un nouveau contenu",
+        "Description du profil : Le texte s'est perdu en chemin, cliquez sur la flèche circulaire pour générer un nouveau contenu",
+        "Merci Processus de recrutement Vous avez les compétences pour réussir dans ce poste",
+        "Postulez dès maintenant pour découvrir comment notre processus de recrutement unique peut vous aider à atteindre vos objectifs de carrière tout en vous offrant un accompagnement bienveillant"
+      ],
+      "controls": [
+        {
+          "field": "service",
+          "expected": "DIALYSE",
+          "retrieved": true
+        },
+        {
+          "field": "duree_mission",
+          "expected": "10",
+          "retrieved": true
+        },
+        {
+          "field": "remuneration_texte",
+          "expected": "24 euros/heure",
+          "retrieved": true
+        }
+      ],
+      "manualReview": "Description degradee : placeholder repete. 24 EUR/heure dans le texte et 3528 EUR/mois dans API : conserver les deux sans conversion."
+    },
+    {
+      "id": "023a610e-9795-4901-8c5e-6c914e294d35",
+      "source": "FRANCE_TRAVAIL",
+      "title": "Infirmier / Infirmière de soins généraux (H/F)",
+      "url": "https://candidat.francetravail.fr/offres/recherche/detail/6592954",
+      "fields": [
+        {
+          "field": "service",
+          "value": "IME",
+          "evidence": "Description du poste : Quelle contribution apporterez-vous comme Infirmier de (F/H) au sein d'un établissement IME",
+          "origin": "DESCRIPTION",
+          "state": "MENTION_A_CONFIRMER"
+        },
+        {
+          "field": "service",
+          "value": "IME",
+          "evidence": "IME PRO Vous contribuerez à une prise en charge bienveillante et sécurisée des enfants accueillis au sein d'un établissement spécialisé",
+          "origin": "DESCRIPTION",
+          "state": "MENTION_A_CONFIRMER"
+        },
+        {
+          "field": "population",
+          "value": "ENFANTS",
+          "evidence": "IME PRO Vous contribuerez à une prise en charge bienveillante et sécurisée des enfants accueillis au sein d'un établissement spécialisé",
+          "origin": "DESCRIPTION",
+          "state": "MENTION_A_CONFIRMER"
+        },
+        {
+          "field": "competence",
+          "value": "SURVEILLANCE",
+          "evidence": "Évaluer les besoins de santé, réaliser les soins prescrits et assurer la surveillance clinique quotidienne",
+          "origin": "DESCRIPTION",
+          "state": "MENTION_A_CONFIRMER"
+        },
+        {
+          "field": "population",
+          "value": "ENFANTS",
+          "evidence": "Participer aux projets personnalisés pour favoriser l'autonomie, le confort et l'inclusion de chaque enfant Découvrez cette offre alléchante Contrat: Intérim",
+          "origin": "DESCRIPTION",
+          "state": "MENTION_A_CONFIRMER"
+        },
+        {
+          "field": "contrat_texte",
+          "value": "INTERIM",
+          "evidence": "Participer aux projets personnalisés pour favoriser l'autonomie, le confort et l'inclusion de chaque enfant Découvrez cette offre alléchante Contrat: Intérim",
+          "origin": "DESCRIPTION",
+          "state": "EXPLICITE_A_VERIFIER"
+        },
+        {
+          "field": "duree_mission",
+          "value": {
+            "amount": 27,
+            "unit": "jours"
+          },
+          "evidence": "Durée: 27/jours",
+          "origin": "DESCRIPTION",
+          "state": "EXPLICITE"
+        },
+        {
+          "field": "experience_non_chiffree",
+          "value": "Salaire: 21.57 euros/heure Remboursement 50% Navigo Rejoignez notre équipe et profitez d'avantages qui feront la différence En nous rejoignant, vous aurez accès à notre programme Fastt TT, ainsi qu'à d'autres avantages exclusifs pour une expérience intérimaire exceptionnelle",
+          "evidence": "Salaire: 21.57 euros/heure Remboursement 50% Navigo Rejoignez notre équipe et profitez d'avantages qui feront la différence En nous rejoignant, vous aurez accès à notre programme Fastt TT, ainsi qu'à d'autres avantages exclusifs pour une expérience intérimaire exceptionnelle",
+          "origin": "DESCRIPTION",
+          "state": "MENTION_A_CONFIRMER"
+        },
+        {
+          "field": "remuneration_texte",
+          "value": "Salaire: 21.57 euros/heure Remboursement 50% Navigo Rejoignez notre équipe et profitez d'avantages qui feront la différence En nous rejoignant, vous aurez accès à notre programme Fastt TT, ainsi qu'à d'autres avantages exclusifs pour une expérience intérimaire exceptionnelle",
+          "evidence": "Salaire: 21.57 euros/heure Remboursement 50% Navigo Rejoignez notre équipe et profitez d'avantages qui feront la différence En nous rejoignant, vous aurez accès à notre programme Fastt TT, ainsi qu'à d'autres avantages exclusifs pour une expérience intérimaire exceptionnelle",
+          "origin": "DESCRIPTION",
+          "state": "MONTANTS_UNITES_ET_COMPOSANTES_A_SEPARER"
+        },
+        {
+          "field": "avantage",
+          "value": "TRANSPORT",
+          "evidence": "Salaire: 21.57 euros/heure Remboursement 50% Navigo Rejoignez notre équipe et profitez d'avantages qui feront la différence En nous rejoignant, vous aurez accès à notre programme Fastt TT, ainsi qu'à d'autres avantages exclusifs pour une expérience intérimaire exceptionnelle",
+          "origin": "DESCRIPTION",
+          "state": "A_STRUCTURER"
+        },
+        {
+          "field": "population",
+          "value": "ENFANTS",
+          "evidence": "Description du profil : Vous êtes infirmier ou infirmière diplômé(e), engagé(e) auprès d'enfants en situation de handicap",
+          "origin": "DESCRIPTION",
+          "state": "MENTION_A_CONFIRMER"
+        },
+        {
+          "field": "population",
+          "value": "HANDICAP",
+          "evidence": "Description du profil : Vous êtes infirmier ou infirmière diplômé(e), engagé(e) auprès d'enfants en situation de handicap",
+          "origin": "DESCRIPTION",
+          "state": "MENTION_A_CONFIRMER"
+        },
+        {
+          "field": "certification",
+          "value": "DIPLOME_INFIRMIER",
+          "evidence": "Vous détenez le Diplôme d'État d'Infirmier et maîtrisez les soins adaptés",
+          "origin": "DESCRIPTION",
+          "state": "MENTION_A_CONFIRMER"
+        },
+        {
+          "field": "experience_duree",
+          "value": {
+            "amount": 2,
+            "unit": "ANS"
+          },
+          "evidence": "Vous justifiez de deux ans d'expérience, garantissant autonomie, vigilance et réactivité",
+          "origin": "DESCRIPTION",
+          "state": "EXIGENCE_TEXTE"
+        },
+        {
+          "field": "api_lieu",
+          "value": "75 - Paris 9e Arrondissement",
+          "evidence": "\"75 - Paris 9e Arrondissement\"",
+          "origin": "PROVENANCE_STOCKEE",
+          "state": "NON_VERIFIE"
+        },
+        {
+          "field": "api_contrat",
+          "value": {
+            "code": "MIS",
+            "label": "Intérim - 27 Jour(s)"
+          },
+          "evidence": "{\"code\":\"MIS\",\"label\":\"Intérim - 27 Jour(s)\"}",
+          "origin": "PROVENANCE_STOCKEE",
+          "state": "NON_VERIFIE"
+        },
+        {
+          "field": "api_experience",
+          "value": {
+            "label": "1 An(s)",
+            "requirement": "E"
+          },
+          "evidence": "{\"label\":\"1 An(s)\",\"requirement\":\"E\"}",
+          "origin": "PROVENANCE_STOCKEE",
+          "state": "NON_VERIFIE"
+        },
+        {
+          "field": "api_salaire",
+          "value": "Mensuel de 3087.0 Euros",
+          "evidence": "\"Mensuel de 3087.0 Euros\"",
+          "origin": "PROVENANCE_STOCKEE",
+          "state": "NON_VERIFIE"
+        }
+      ],
+      "alerts": [
+        "EXPERIENCE_API_TEXTE_DIVERGENTE"
+      ],
+      "unclassified": [
+        "Infirmier / Infirmière de soins généraux (H/F)",
+        "Coordonner les parcours de soins avec les familles, l'équipe pluridisciplinaire et les partenaires médicaux",
+        "Vous communiquez avec empathie auprès des jeunes, familles et équipes pluridisciplinaires",
+        "Vous contribuez activement à un accompagnement sécurisant, individualisé et bienveillant Processus de recrutement Notre client recrute rapidement et simplement",
+        "Postulez en un clic, un(e) consultant(e) vous contactera dans les 48h pour valider votre candidature",
+        "Faites confiance à notre processus de recrutement clair et efficace"
+      ],
+      "controls": [
+        {
+          "field": "service",
+          "expected": "IME",
+          "retrieved": true
+        },
+        {
+          "field": "population",
+          "expected": "ENFANTS",
+          "retrieved": true
+        },
+        {
+          "field": "experience_duree",
+          "expected": "2",
+          "retrieved": true
+        },
+        {
+          "field": "avantage",
+          "expected": "TRANSPORT",
+          "retrieved": true
+        }
+      ],
+      "manualReview": "Contradiction : deux ans dans le texte, un an exige dans API. Navigo 50% est un avantage, pas une quotite de travail."
+    },
+    {
+      "id": "0329a34c-707a-48c7-a791-893df7981c4f",
+      "source": "FRANCE_TRAVAIL",
+      "title": "Infirmier / Infirmière de soins généraux (H/F)",
+      "url": "https://candidat.francetravail.fr/offres/recherche/detail/6592950",
+      "fields": [
+        {
+          "field": "avantage",
+          "value": "PRIMES",
+          "evidence": "Description du poste : Vos avantages & Cadre de travail Avantages établissement : Primes, intéressement, prévoyance et CSE",
+          "origin": "DESCRIPTION",
+          "state": "A_STRUCTURER"
+        },
+        {
+          "field": "certification",
+          "value": "DIPLOME_INFIRMIER",
+          "evidence": "Description du profil : Ce que nous recherchons Diplôme d'État d'Infirmier (IDE) indispensable",
+          "origin": "DESCRIPTION",
+          "state": "EXIGENCE_TEXTE"
+        },
+        {
+          "field": "experience_domaine",
+          "value": "DIALYSE",
+          "evidence": "1 an d'expérience minimum en dialyse hospitalière",
+          "origin": "DESCRIPTION",
+          "state": "EXIGENCE_TEXTE"
+        },
+        {
+          "field": "experience_duree",
+          "value": {
+            "amount": 1,
+            "unit": "ANS"
+          },
+          "evidence": "1 an d'expérience minimum en dialyse hospitalière",
+          "origin": "DESCRIPTION",
+          "state": "EXIGENCE_TEXTE"
+        },
+        {
+          "field": "equipement",
+          "value": "NIKISO_DBB_EXA",
+          "evidence": "Maîtrise technique du matériel NIKISO Modèle DBB-Exa",
+          "origin": "DESCRIPTION",
+          "state": "MENTION_A_CONFIRMER"
+        },
+        {
+          "field": "api_lieu",
+          "value": "75 - Paris 9e Arrondissement",
+          "evidence": "\"75 - Paris 9e Arrondissement\"",
+          "origin": "PROVENANCE_STOCKEE",
+          "state": "NON_VERIFIE"
+        },
+        {
+          "field": "api_contrat",
+          "value": {
+            "code": "MIS",
+            "label": "Intérim - 30 Jour(s)"
+          },
+          "evidence": "{\"code\":\"MIS\",\"label\":\"Intérim - 30 Jour(s)\"}",
+          "origin": "PROVENANCE_STOCKEE",
+          "state": "NON_VERIFIE"
+        },
+        {
+          "field": "api_experience",
+          "value": {
+            "label": "1 An(s)",
+            "requirement": "E"
+          },
+          "evidence": "{\"label\":\"1 An(s)\",\"requirement\":\"E\"}",
+          "origin": "PROVENANCE_STOCKEE",
+          "state": "NON_VERIFIE"
+        },
+        {
+          "field": "api_salaire",
+          "value": "Mensuel de 2646.0 Euros",
+          "evidence": "\"Mensuel de 2646.0 Euros\"",
+          "origin": "PROVENANCE_STOCKEE",
+          "state": "NON_VERIFIE"
+        }
+      ],
+      "alerts": [],
+      "unclassified": [
+        "Infirmier / Infirmière de soins généraux (H/F)",
+        "Les + Appel Médical / Fast TT : Garantie de salaire, formation continue et couverture sociale renforcée",
+        "Accès simple : Métro, bus et pistes cyclables au pied de l'établissement",
+        "Sens de l'écoute, maîtrise de soi face aux urgences et rigueur professionnelle"
+      ],
+      "controls": [
+        {
+          "field": "equipement",
+          "expected": "NIKISO_DBB_EXA",
+          "retrieved": true
+        },
+        {
+          "field": "experience_duree",
+          "expected": "1",
+          "retrieved": true
+        },
+        {
+          "field": "certification",
+          "expected": "DIPLOME_INFIRMIER",
+          "retrieved": true
+        }
+      ],
+      "manualReview": "Dialyse : domaine experience, pas necessairement service etabli. Urgences dans maitrise de soi ne doit pas devenir un service."
+    },
+    {
+      "id": "04adeac2-2307-428a-9a17-20058aaa03b4",
+      "source": "FRANCE_TRAVAIL",
+      "title": "INFIRMIER DIALYSE (F/H)",
+      "url": "https://candidat.francetravail.fr/offres/recherche/detail/6172400",
+      "fields": [
+        {
+          "field": "service",
+          "value": "DIALYSE",
+          "evidence": "INFIRMIER DIALYSE (F/H)",
+          "origin": "TITLE",
+          "state": "MENTION_A_CONFIRMER"
+        },
+        {
+          "field": "service",
+          "value": "DIALYSE",
+          "evidence": "Vous assurerez la prise en charge globale des personnes dialysées au sein d'un établissement hospitalier",
+          "origin": "DESCRIPTION",
+          "state": "MENTION_A_CONFIRMER"
+        },
+        {
+          "field": "service",
+          "value": "DIALYSE",
+          "evidence": "Vous préparerez et surveillerez les séances de dialyse selon les protocoles médicaux",
+          "origin": "DESCRIPTION",
+          "state": "MENTION_A_CONFIRMER"
+        },
+        {
+          "field": "competence",
+          "value": "SURVEILLANCE",
+          "evidence": "Vous préparerez et surveillerez les séances de dialyse selon les protocoles médicaux",
+          "origin": "DESCRIPTION",
+          "state": "MENTION_A_CONFIRMER"
+        },
+        {
+          "field": "api_lieu",
+          "value": "75 - Paris",
+          "evidence": "\"75 - Paris\"",
+          "origin": "PROVENANCE_STOCKEE",
+          "state": "NON_VERIFIE"
+        },
+        {
+          "field": "api_contrat",
+          "value": {
+            "code": "MIS",
+            "label": "Intérim - 10 Jour(s)"
+          },
+          "evidence": "{\"code\":\"MIS\",\"label\":\"Intérim - 10 Jour(s)\"}",
+          "origin": "PROVENANCE_STOCKEE",
+          "state": "NON_VERIFIE"
+        },
+        {
+          "field": "api_experience",
+          "value": {
+            "label": "Débutant accepté",
+            "requirement": "D"
+          },
+          "evidence": "{\"label\":\"Débutant accepté\",\"requirement\":\"D\"}",
+          "origin": "PROVENANCE_STOCKEE",
+          "state": "NON_VERIFIE"
+        }
+      ],
+      "alerts": [],
+      "unclassified": [
+        "descriptif du posteSouhaitez-vous valoriser vos compétences d'Infirmier de (F/H) au sein d'un établissement hospitalier",
+        "Vous dispenserez des soins adaptés en garantissant sécurité, confort et continuité des prises en charge",
+        "Vous collaborerez avec l'équipe plur"
+      ],
+      "controls": [
+        {
+          "field": "service",
+          "expected": "DIALYSE",
+          "retrieved": true
+        },
+        {
+          "field": "competence",
+          "expected": "SURVEILLANCE",
+          "retrieved": true
+        }
+      ],
+      "manualReview": "Description coupee apres equipe plur : impossible de recuperer la suite depuis le texte stocke."
+    },
+    {
+      "id": "073cae03-5cc1-4803-ac1d-12e53b2b9055",
+      "source": "FRANCE_TRAVAIL",
+      "title": "Mission intérim en laboratoire Infirmier D.E H/F : rejoignez Paris Ouest !",
+      "url": "https://candidat.francetravail.fr/offres/recherche/detail/6801826",
+      "fields": [
+        {
+          "field": "service",
+          "value": "LABORATOIRE",
+          "evidence": "Mission intérim en laboratoire Infirmier D.E H/F : rejoignez Paris Ouest !",
+          "origin": "TITLE",
+          "state": "MENTION_A_CONFIRMER"
+        },
+        {
+          "field": "contrat_texte",
+          "value": "INTERIM",
+          "evidence": "Mission intérim en laboratoire Infirmier D.E H/F : rejoignez Paris Ouest !",
+          "origin": "TITLE",
+          "state": "EXPLICITE_A_VERIFIER"
+        },
+        {
+          "field": "service",
+          "value": "LABORATOIRE",
+          "evidence": "Vitalis Médical recherche un(e) infirmier(e) pour une mission d'intérim en laboratoire à Paris 17",
+          "origin": "DESCRIPTION",
+          "state": "MENTION_A_CONFIRMER"
+        },
+        {
+          "field": "contrat_texte",
+          "value": "INTERIM",
+          "evidence": "Vitalis Médical recherche un(e) infirmier(e) pour une mission d'intérim en laboratoire à Paris 17",
+          "origin": "DESCRIPTION",
+          "state": "EXPLICITE_A_VERIFIER"
+        },
+        {
+          "field": "competence",
+          "value": "PRELEVEMENTS",
+          "evidence": "Vous serez responsable de la réalisation des prélèvements biologiques, du suivi et de la traçabilité des échantillons, dans le respect strict des protocoles",
+          "origin": "DESCRIPTION",
+          "state": "MENTION_A_CONFIRMER"
+        },
+        {
+          "field": "competence",
+          "value": "TRACABILITE",
+          "evidence": "Vous serez responsable de la réalisation des prélèvements biologiques, du suivi et de la traçabilité des échantillons, dans le respect strict des protocoles",
+          "origin": "DESCRIPTION",
+          "state": "MENTION_A_CONFIRMER"
+        },
+        {
+          "field": "service",
+          "value": "LABORATOIRE",
+          "evidence": "Vos missionsPréparer et effectuer les prélèvements biologiquesAssurer la qualité et la sécurité des analysesAccueillir et renseigner les patientsParticiper à l'organisation et à la gestion du laboratoire",
+          "origin": "DESCRIPTION",
+          "state": "MENTION_A_CONFIRMER"
+        },
+        {
+          "field": "competence",
+          "value": "PRELEVEMENTS",
+          "evidence": "Vos missionsPréparer et effectuer les prélèvements biologiquesAssurer la qualité et la sécurité des analysesAccueillir et renseigner les patientsParticiper à l'organisation et à la gestion du laboratoire",
+          "origin": "DESCRIPTION",
+          "state": "MENTION_A_CONFIRMER"
+        },
+        {
+          "field": "experience_domaine",
+          "value": "LABORATOIRE",
+          "evidence": "Pré-requisDiplôme d'État d'infirmier(e)Expérience en laboratoire souhaitéeInscription à l'ordre infirmier à jour",
+          "origin": "DESCRIPTION",
+          "state": "SOUHAITE"
+        },
+        {
+          "field": "certification",
+          "value": "DIPLOME_INFIRMIER",
+          "evidence": "Pré-requisDiplôme d'État d'infirmier(e)Expérience en laboratoire souhaitéeInscription à l'ordre infirmier à jour",
+          "origin": "DESCRIPTION",
+          "state": "SOUHAITE"
+        },
+        {
+          "field": "certification",
+          "value": "ORDRE_INFIRMIER",
+          "evidence": "Pré-requisDiplôme d'État d'infirmier(e)Expérience en laboratoire souhaitéeInscription à l'ordre infirmier à jour",
+          "origin": "DESCRIPTION",
+          "state": "SOUHAITE"
+        },
+        {
+          "field": "experience_non_chiffree",
+          "value": "Pré-requisDiplôme d'État d'infirmier(e)Expérience en laboratoire souhaitéeInscription à l'ordre infirmier à jour",
+          "evidence": "Pré-requisDiplôme d'État d'infirmier(e)Expérience en laboratoire souhaitéeInscription à l'ordre infirmier à jour",
+          "origin": "DESCRIPTION",
+          "state": "SOUHAITE"
+        },
+        {
+          "field": "competence",
+          "value": "HYGIENE",
+          "evidence": "Profil recherchéIDE autonome et rigoureux(se)Sens du relationnel et capacité à travailler en équipeConnaissance des normes d'hygiène et sécurité",
+          "origin": "DESCRIPTION",
+          "state": "MENTION_A_CONFIRMER"
+        },
+        {
+          "field": "contrat_texte",
+          "value": "INTERIM",
+          "evidence": "Type de contrat : Intérim",
+          "origin": "DESCRIPTION",
+          "state": "EXPLICITE_A_VERIFIER"
+        },
+        {
+          "field": "temps_travail",
+          "value": "PLEIN",
+          "evidence": "Temps de travail : Temps plein",
+          "origin": "DESCRIPTION",
+          "state": "EXPLICITE"
+        },
+        {
+          "field": "remuneration_texte",
+          "value": "Salaire : 18 € par heure",
+          "evidence": "Salaire : 18 € par heure",
+          "origin": "DESCRIPTION",
+          "state": "MONTANTS_UNITES_ET_COMPOSANTES_A_SEPARER"
+        },
+        {
+          "field": "api_lieu",
+          "value": "75 - Paris",
+          "evidence": "\"75 - Paris\"",
+          "origin": "PROVENANCE_STOCKEE",
+          "state": "NON_VERIFIE"
+        },
+        {
+          "field": "api_contrat",
+          "value": {
+            "code": "MIS",
+            "label": "Intérim - 61 Jour(s)"
+          },
+          "evidence": "{\"code\":\"MIS\",\"label\":\"Intérim - 61 Jour(s)\"}",
+          "origin": "PROVENANCE_STOCKEE",
+          "state": "NON_VERIFIE"
+        },
+        {
+          "field": "api_experience",
+          "value": {
+            "label": "Débutant accepté",
+            "requirement": "D"
+          },
+          "evidence": "{\"label\":\"Débutant accepté\",\"requirement\":\"D\"}",
+          "origin": "PROVENANCE_STOCKEE",
+          "state": "NON_VERIFIE"
+        }
+      ],
+      "alerts": [],
+      "unclassified": [
+        "Une mission idéale pour mettre en pratique votre expertise et travailler dans un environnement professionnel structuré",
+        "Informations complémentaires"
+      ],
+      "controls": [
+        {
+          "field": "service",
+          "expected": "LABORATOIRE",
+          "retrieved": true
+        },
+        {
+          "field": "competence",
+          "expected": "PRELEVEMENTS",
+          "retrieved": true
+        },
+        {
+          "field": "certification",
+          "expected": "ORDRE_INFIRMIER",
+          "retrieved": true
+        },
+        {
+          "field": "remuneration_texte",
+          "expected": "18",
+          "retrieved": true
+        }
+      ],
+      "manualReview": "Texte colle : laboratoire souhaite et ordre a jour a separer. Paris 17 present dans texte, API Paris general."
+    },
+    {
+      "id": "08abdbcf-c4af-41fb-8d88-f533e2909746",
+      "source": "FRANCE_TRAVAIL",
+      "title": "Infirmier / Infirmière de soins généraux (H/F)",
+      "url": "https://candidat.francetravail.fr/offres/recherche/detail/6593241",
+      "fields": [
+        {
+          "field": "contrat_texte",
+          "value": "INTERIM",
+          "evidence": "Merci Pour ce poste, vous profitez de Contrat: Intérim",
+          "origin": "DESCRIPTION",
+          "state": "EXPLICITE_A_VERIFIER"
+        },
+        {
+          "field": "duree_mission",
+          "value": {
+            "amount": 10,
+            "unit": "jours"
+          },
+          "evidence": "Durée: 10/jours",
+          "origin": "DESCRIPTION",
+          "state": "EXPLICITE"
+        },
+        {
+          "field": "experience_non_chiffree",
+          "value": "Salaire: 24 euros/heure Joignez-vous à nous pour profiter de nos avantages exclusifs, y compris Fast TT, qui vous garantissent une expérience intérimaire exceptionnelle",
+          "evidence": "Salaire: 24 euros/heure Joignez-vous à nous pour profiter de nos avantages exclusifs, y compris Fast TT, qui vous garantissent une expérience intérimaire exceptionnelle",
+          "origin": "DESCRIPTION",
+          "state": "MENTION_A_CONFIRMER"
+        },
+        {
+          "field": "remuneration_texte",
+          "value": "Salaire: 24 euros/heure Joignez-vous à nous pour profiter de nos avantages exclusifs, y compris Fast TT, qui vous garantissent une expérience intérimaire exceptionnelle",
+          "evidence": "Salaire: 24 euros/heure Joignez-vous à nous pour profiter de nos avantages exclusifs, y compris Fast TT, qui vous garantissent une expérience intérimaire exceptionnelle",
+          "origin": "DESCRIPTION",
+          "state": "MONTANTS_UNITES_ET_COMPOSANTES_A_SEPARER"
+        },
+        {
+          "field": "api_lieu",
+          "value": "75 - Paris 9e Arrondissement",
+          "evidence": "\"75 - Paris 9e Arrondissement\"",
+          "origin": "PROVENANCE_STOCKEE",
+          "state": "NON_VERIFIE"
+        },
+        {
+          "field": "api_contrat",
+          "value": {
+            "code": "MIS",
+            "label": "Intérim - 10 Jour(s)"
+          },
+          "evidence": "{\"code\":\"MIS\",\"label\":\"Intérim - 10 Jour(s)\"}",
+          "origin": "PROVENANCE_STOCKEE",
+          "state": "NON_VERIFIE"
+        },
+        {
+          "field": "api_experience",
+          "value": {
+            "label": "1 An(s)",
+            "requirement": "E"
+          },
+          "evidence": "{\"label\":\"1 An(s)\",\"requirement\":\"E\"}",
+          "origin": "PROVENANCE_STOCKEE",
+          "state": "NON_VERIFIE"
+        },
+        {
+          "field": "api_salaire",
+          "value": "Mensuel de 3528.0 Euros",
+          "evidence": "\"Mensuel de 3528.0 Euros\"",
+          "origin": "PROVENANCE_STOCKEE",
+          "state": "NON_VERIFIE"
+        }
+      ],
+      "alerts": [
+        "DESCRIPTION_DEGRADEE"
+      ],
+      "unclassified": [
+        "Infirmier / Infirmière de soins généraux (H/F)",
+        "Description du poste : Le texte s'est perdu en chemin, cliquez sur la flèche circulaire pour générer un nouveau contenu",
+        "Merci Le texte s'est perdu en chemin, cliquez sur la flèche circulaire pour générer un nouveau contenu",
+        "Description du profil : Le texte s'est perdu en chemin, cliquez sur la flèche circulaire pour générer un nouveau contenu",
+        "Merci Processus de recrutement Vous êtes intéressé(e) par cette offre d'emploi",
+        "C'est très simple, postulez en quelques clics",
+        "Notre équipe de consultant(e)s prendra contact avec vous pour valider vos compétences et objectifs de carrière",
+        "Si votre candidature est acceptée, nous vous fournirons tous les éléments nécessaires pour votre mission",
+        "À très bientôt"
+      ],
+      "controls": [
+        {
+          "field": "duree_mission",
+          "expected": "10",
+          "retrieved": true
+        },
+        {
+          "field": "remuneration_texte",
+          "expected": "24",
+          "retrieved": true
+        }
+      ],
+      "manualReview": "Placeholder fournisseur : aucune competence ne doit etre inventee."
+    },
+    {
+      "id": "095c9450-e76f-46e6-8556-1ba283174185",
+      "source": "FRANCE_TRAVAIL",
+      "title": "Infirmier D.E H/F",
+      "url": "https://candidat.francetravail.fr/offres/recherche/detail/6829477",
+      "fields": [
+        {
+          "field": "service",
+          "value": "ADDICTOLOGIE",
+          "evidence": "Vitalis Médical Paris Sud recherche un(e) Infirmier(ère) Diplômé(e) d'État pour intervenir dans un établissement spécialisé en addictologie",
+          "origin": "DESCRIPTION",
+          "state": "MENTION_A_CONFIRMER"
+        },
+        {
+          "field": "competence",
+          "value": "TRACABILITE",
+          "evidence": "Assurer la traçabilité des soins",
+          "origin": "DESCRIPTION",
+          "state": "MENTION_A_CONFIRMER"
+        },
+        {
+          "field": "certification",
+          "value": "DIPLOME_INFIRMIER",
+          "evidence": "Pré-requisDiplôme d'État d'Infirmier",
+          "origin": "DESCRIPTION",
+          "state": "EXIGENCE_TEXTE"
+        },
+        {
+          "field": "certification",
+          "value": "ORDRE_INFIRMIER",
+          "evidence": "Inscription à l'Ordre National des Infirmiers",
+          "origin": "DESCRIPTION",
+          "state": "MENTION_A_CONFIRMER"
+        },
+        {
+          "field": "contrat_texte",
+          "value": "INTERIM",
+          "evidence": "Type de contrat : Intérim",
+          "origin": "DESCRIPTION",
+          "state": "EXPLICITE_A_VERIFIER"
+        },
+        {
+          "field": "temps_travail",
+          "value": "PLEIN",
+          "evidence": "Temps de travail : Temps plein",
+          "origin": "DESCRIPTION",
+          "state": "EXPLICITE"
+        },
+        {
+          "field": "remuneration_texte",
+          "value": "Salaire : 20 € par heure",
+          "evidence": "Salaire : 20 € par heure",
+          "origin": "DESCRIPTION",
+          "state": "MONTANTS_UNITES_ET_COMPOSANTES_A_SEPARER"
+        },
+        {
+          "field": "api_lieu",
+          "value": "75 - Paris",
+          "evidence": "\"75 - Paris\"",
+          "origin": "PROVENANCE_STOCKEE",
+          "state": "NON_VERIFIE"
+        },
+        {
+          "field": "api_contrat",
+          "value": {
+            "code": "MIS",
+            "label": "Intérim - 88 Jour(s)"
+          },
+          "evidence": "{\"code\":\"MIS\",\"label\":\"Intérim - 88 Jour(s)\"}",
+          "origin": "PROVENANCE_STOCKEE",
+          "state": "NON_VERIFIE"
+        },
+        {
+          "field": "api_experience",
+          "value": {
+            "label": "Débutant accepté",
+            "requirement": "D"
+          },
+          "evidence": "{\"label\":\"Débutant accepté\",\"requirement\":\"D\"}",
+          "origin": "PROVENANCE_STOCKEE",
+          "state": "NON_VERIFIE"
+        }
+      ],
+      "alerts": [],
+      "unclassified": [
+        "Infirmier D.E H/F",
+        "Exercez votre métier au sein d'une équipe engagée et bienveillante",
+        "Vous participerez à une prise en charge globale favorisant l'écoute, la prévention et l'accompagnement personnalisé des patients",
+        "Vos missionsRéaliser les soins infirmiers",
+        "Participer au suivi des traitements",
+        "Évaluer l'évolution clinique des patients",
+        "Accompagner les patients dans leur projet thérapeutique",
+        "Collaborer avec les équipes médicales et paramédicales",
+        "Profil recherchéVous êtes autonome, rigoureux(se) et faites preuve d'empathie",
+        "Votre sens de l'écoute et votre implication feront la différence",
+        "Informations complémentaires"
+      ],
+      "controls": [
+        {
+          "field": "service",
+          "expected": "ADDICTOLOGIE",
+          "retrieved": true
+        },
+        {
+          "field": "certification",
+          "expected": "ORDRE_INFIRMIER",
+          "retrieved": true
+        },
+        {
+          "field": "temps_travail",
+          "expected": "PLEIN",
+          "retrieved": true
+        },
+        {
+          "field": "remuneration_texte",
+          "expected": "20",
+          "retrieved": true
+        }
+      ],
+      "manualReview": "Addictologie et suivi des traitements identifies ; debut/fin absents. Certaines activites restent libres."
+    },
+    {
+      "id": "0c3c3264-7486-4395-bc6e-1b40510bbf6f",
+      "source": "FRANCE_TRAVAIL",
+      "title": "Infirmier H/f Hematologie",
+      "url": "https://candidat.francetravail.fr/offres/recherche/detail/3973261",
+      "fields": [
+        {
+          "field": "service",
+          "value": "HEMATOLOGIE",
+          "evidence": "Infirmier H/f Hematologie",
+          "origin": "TITLE",
+          "state": "MENTION_A_CONFIRMER"
+        },
+        {
+          "field": "service",
+          "value": "HEMATOLOGIE",
+          "evidence": "TAGA MEDICAL recherche pour l'un de ses établissements partenaires un(e) Infirmier(ère) Diplômé(e) d'État pour intervenir au sein d'un service d'hématologie",
+          "origin": "DESCRIPTION",
+          "state": "MENTION_A_CONFIRMER"
+        },
+        {
+          "field": "service",
+          "value": "HEMATOLOGIE",
+          "evidence": "Vous intégrerez une équipe pluridisciplinaire spécialisée dans la prise en charge de patients atteints de pathologies hématologiques nécessitant des soins techniques et un accompagnement personnalisé",
+          "origin": "DESCRIPTION",
+          "state": "MENTION_A_CONFIRMER"
+        },
+        {
+          "field": "competence",
+          "value": "CHIMIOTHERAPIE",
+          "evidence": "- Administrer les traitements spécifiques, notamment les chimiothérapies selon les protocoles en vigueur",
+          "origin": "DESCRIPTION",
+          "state": "MENTION_A_CONFIRMER"
+        },
+        {
+          "field": "competence",
+          "value": "SURVEILLANCE",
+          "evidence": "- Surveiller l'état clinique des patients et détecter toute complication",
+          "origin": "DESCRIPTION",
+          "state": "MENTION_A_CONFIRMER"
+        },
+        {
+          "field": "competence",
+          "value": "EDUCATION_THERAPEUTIQUE",
+          "evidence": "- Participer à l'éducation thérapeutique et à l'accompagnement des patients et de leurs proches",
+          "origin": "DESCRIPTION",
+          "state": "MENTION_A_CONFIRMER"
+        },
+        {
+          "field": "competence",
+          "value": "TRACABILITE",
+          "evidence": "- Assurer la traçabilité des soins et la transmission des informations à l'équipe médicale",
+          "origin": "DESCRIPTION",
+          "state": "MENTION_A_CONFIRMER"
+        },
+        {
+          "field": "contrat_texte",
+          "value": "INTERIM",
+          "evidence": "Missions d'intérim en jour ou nuit Profil du candidat :",
+          "origin": "DESCRIPTION",
+          "state": "EXPLICITE_A_VERIFIER"
+        },
+        {
+          "field": "alternance",
+          "value": "JOUR_NUIT",
+          "evidence": "Missions d'intérim en jour ou nuit Profil du candidat :",
+          "origin": "DESCRIPTION",
+          "state": "EXPLICITE"
+        },
+        {
+          "field": "horaire_type",
+          "value": "NUIT",
+          "evidence": "Missions d'intérim en jour ou nuit Profil du candidat :",
+          "origin": "DESCRIPTION",
+          "state": "MENTION_A_CONFIRMER"
+        },
+        {
+          "field": "horaire_type",
+          "value": "JOUR",
+          "evidence": "Missions d'intérim en jour ou nuit Profil du candidat :",
+          "origin": "DESCRIPTION",
+          "state": "MENTION_A_CONFIRMER"
+        },
+        {
+          "field": "certification",
+          "value": "DIPLOME_INFIRMIER",
+          "evidence": "Diplôme d'État d'Infirmier(ère) obligatoire",
+          "origin": "DESCRIPTION",
+          "state": "EXIGENCE_TEXTE"
+        },
+        {
+          "field": "certification",
+          "value": "ORDRE_INFIRMIER",
+          "evidence": "- Inscription à l'Ordre National des Infirmiers",
+          "origin": "DESCRIPTION",
+          "state": "MENTION_A_CONFIRMER"
+        },
+        {
+          "field": "experience_domaine",
+          "value": "HEMATOLOGIE",
+          "evidence": "- Une expérience en hématologie, oncologie ou médecine spécialisée est appréciée",
+          "origin": "DESCRIPTION",
+          "state": "SOUHAITE"
+        },
+        {
+          "field": "experience_domaine",
+          "value": "ONCOLOGIE",
+          "evidence": "- Une expérience en hématologie, oncologie ou médecine spécialisée est appréciée",
+          "origin": "DESCRIPTION",
+          "state": "SOUHAITE"
+        },
+        {
+          "field": "experience_non_chiffree",
+          "value": "- Une expérience en hématologie, oncologie ou médecine spécialisée est appréciée",
+          "evidence": "- Une expérience en hématologie, oncologie ou médecine spécialisée est appréciée",
+          "origin": "DESCRIPTION",
+          "state": "SOUHAITE"
+        },
+        {
+          "field": "remuneration_texte",
+          "value": "Salaire :22 euros brut +10% de congés payés +10% de prime de précarité = euros brut + 3.38 prime de transport",
+          "evidence": "Salaire :22 euros brut +10% de congés payés +10% de prime de précarité = euros brut + 3.38 prime de transport",
+          "origin": "DESCRIPTION",
+          "state": "MONTANTS_UNITES_ET_COMPOSANTES_A_SEPARER"
+        },
+        {
+          "field": "avantage",
+          "value": "TRANSPORT",
+          "evidence": "Salaire :22 euros brut +10% de congés payés +10% de prime de précarité = euros brut + 3.38 prime de transport",
+          "origin": "DESCRIPTION",
+          "state": "A_STRUCTURER"
+        },
+        {
+          "field": "avantage",
+          "value": "PRIMES",
+          "evidence": "Salaire :22 euros brut +10% de congés payés +10% de prime de précarité = euros brut + 3.38 prime de transport",
+          "origin": "DESCRIPTION",
+          "state": "A_STRUCTURER"
+        },
+        {
+          "field": "api_lieu",
+          "value": "75 - Paris",
+          "evidence": "\"75 - Paris\"",
+          "origin": "PROVENANCE_STOCKEE",
+          "state": "NON_VERIFIE"
+        },
+        {
+          "field": "api_contrat",
+          "value": {
+            "code": "MIS",
+            "label": "Intérim - 1 Mois"
+          },
+          "evidence": "{\"code\":\"MIS\",\"label\":\"Intérim - 1 Mois\"}",
+          "origin": "PROVENANCE_STOCKEE",
+          "state": "NON_VERIFIE"
+        },
+        {
+          "field": "api_experience",
+          "value": {
+            "label": "Débutant accepté",
+            "requirement": "D"
+          },
+          "evidence": "{\"label\":\"Débutant accepté\",\"requirement\":\"D\"}",
+          "origin": "PROVENANCE_STOCKEE",
+          "state": "NON_VERIFIE"
+        },
+        {
+          "field": "api_horaires",
+          "value": "Travail en journée",
+          "evidence": "\"Travail en journée\"",
+          "origin": "PROVENANCE_STOCKEE",
+          "state": "NON_VERIFIE"
+        }
+      ],
+      "alerts": [
+        "HORAIRES_API_TEXTE_A_RECONCILIER"
+      ],
+      "unclassified": [
+        "Vos missionsAssurer les soins infirmiers prescrits et relevant du rôle propre",
+        "- Sens des responsabilités, rigueur et qualités relationnelles"
+      ],
+      "controls": [
+        {
+          "field": "service",
+          "expected": "HEMATOLOGIE",
+          "retrieved": true
+        },
+        {
+          "field": "competence",
+          "expected": "CHIMIOTHERAPIE",
+          "retrieved": true
+        },
+        {
+          "field": "alternance",
+          "expected": "JOUR_NUIT",
+          "retrieved": true
+        },
+        {
+          "field": "avantage",
+          "expected": "PRIMES",
+          "retrieved": true
+        }
+      ],
+      "manualReview": "Unite des 22 euros brut absente. 10% CP, 10% precarite, 3.38 transport a separer. API journee vs texte jour ou nuit."
+    },
+    {
+      "id": "0f0edf77-ae55-47c4-8220-05e2b4411a85",
+      "source": "FRANCE_TRAVAIL",
+      "title": "Infirmier / Infirmière de soins généraux (H/F)",
+      "url": "https://candidat.francetravail.fr/offres/recherche/detail/6592924",
+      "fields": [
+        {
+          "field": "service",
+          "value": "DIALYSE",
+          "evidence": "Description du poste : Quelle contribution apporterez-vous en tant qu'Infirmier de (F/H) au sein de cet établissement hospitalier Au sein d'un établissement hospitalier, vous assurez la prise en charge des personnes nécessitant une dialyse",
+          "origin": "DESCRIPTION",
+          "state": "MENTION_A_CONFIRMER"
+        },
+        {
+          "field": "service",
+          "value": "DIALYSE",
+          "evidence": "Vous réalisez les soins de dialyse conformément aux protocoles médicaux et aux règles d'hygiène",
+          "origin": "DESCRIPTION",
+          "state": "MENTION_A_CONFIRMER"
+        },
+        {
+          "field": "competence",
+          "value": "HYGIENE",
+          "evidence": "Vous réalisez les soins de dialyse conformément aux protocoles médicaux et aux règles d'hygiène",
+          "origin": "DESCRIPTION",
+          "state": "MENTION_A_CONFIRMER"
+        },
+        {
+          "field": "competence",
+          "value": "SURVEILLANCE",
+          "evidence": "Vous surveillez l'état clinique des personnes et intervenez face aux éventuelles complications",
+          "origin": "DESCRIPTION",
+          "state": "MENTION_A_CONFIRMER"
+        },
+        {
+          "field": "contrat_texte",
+          "value": "INTERIM",
+          "evidence": "Vous coordonnez les échanges avec l'équipe pluridisciplinaire et accompagnez les personnes tout au long du parcours de soins Tout ce que vous devez savoir sur l'offre se trouve ici Contrat: Intérim",
+          "origin": "DESCRIPTION",
+          "state": "EXPLICITE_A_VERIFIER"
+        },
+        {
+          "field": "duree_mission",
+          "value": {
+            "amount": 10,
+            "unit": "jours"
+          },
+          "evidence": "Durée: 10/jours",
+          "origin": "DESCRIPTION",
+          "state": "EXPLICITE"
+        },
+        {
+          "field": "remuneration_texte",
+          "value": "Salaire: 25 euros/heure Nous sommes fiers d'offrir des avantages exceptionnels aux travailleurs temporaires, y compris Fast TT, pour leur garantir une sécurité financière et professionnelle",
+          "evidence": "Salaire: 25 euros/heure Nous sommes fiers d'offrir des avantages exceptionnels aux travailleurs temporaires, y compris Fast TT, pour leur garantir une sécurité financière et professionnelle",
+          "origin": "DESCRIPTION",
+          "state": "MONTANTS_UNITES_ET_COMPOSANTES_A_SEPARER"
+        },
+        {
+          "field": "experience_domaine",
+          "value": "DIALYSE",
+          "evidence": "Description du profil : Vous êtes infirmier-ère diplômé-e, expérimenté-e en dialyse hospitalière, rigoureux-se et attentif-ve aux patients Vous détenez le Diplôme d'État d'Infirmier et justifiez d'une année d'expérience minimale Vous maîtrisez les protocoles de dialyse et la surveillance clinique des patients Vous faites preuve de réactivité face aux situations d'urgence et aux complications Vous exercez avec empathie, rigueur et sens de la coordination pluridisciplinaire Processus de recrutement Intéressé(e) par cette offre d'emploi",
+          "origin": "DESCRIPTION",
+          "state": "EXIGENCE_TEXTE"
+        },
+        {
+          "field": "competence",
+          "value": "SURVEILLANCE",
+          "evidence": "Description du profil : Vous êtes infirmier-ère diplômé-e, expérimenté-e en dialyse hospitalière, rigoureux-se et attentif-ve aux patients Vous détenez le Diplôme d'État d'Infirmier et justifiez d'une année d'expérience minimale Vous maîtrisez les protocoles de dialyse et la surveillance clinique des patients Vous faites preuve de réactivité face aux situations d'urgence et aux complications Vous exercez avec empathie, rigueur et sens de la coordination pluridisciplinaire Processus de recrutement Intéressé(e) par cette offre d'emploi",
+          "origin": "DESCRIPTION",
+          "state": "EXIGENCE_TEXTE"
+        },
+        {
+          "field": "certification",
+          "value": "DIPLOME_INFIRMIER",
+          "evidence": "Description du profil : Vous êtes infirmier-ère diplômé-e, expérimenté-e en dialyse hospitalière, rigoureux-se et attentif-ve aux patients Vous détenez le Diplôme d'État d'Infirmier et justifiez d'une année d'expérience minimale Vous maîtrisez les protocoles de dialyse et la surveillance clinique des patients Vous faites preuve de réactivité face aux situations d'urgence et aux complications Vous exercez avec empathie, rigueur et sens de la coordination pluridisciplinaire Processus de recrutement Intéressé(e) par cette offre d'emploi",
+          "origin": "DESCRIPTION",
+          "state": "EXIGENCE_TEXTE"
+        },
+        {
+          "field": "experience_duree",
+          "value": {
+            "amount": 1,
+            "unit": "ANS"
+          },
+          "evidence": "Description du profil : Vous êtes infirmier-ère diplômé-e, expérimenté-e en dialyse hospitalière, rigoureux-se et attentif-ve aux patients Vous détenez le Diplôme d'État d'Infirmier et justifiez d'une année d'expérience minimale Vous maîtrisez les protocoles de dialyse et la surveillance clinique des patients Vous faites preuve de réactivité face aux situations d'urgence et aux complications Vous exercez avec empathie, rigueur et sens de la coordination pluridisciplinaire Processus de recrutement Intéressé(e) par cette offre d'emploi",
+          "origin": "DESCRIPTION",
+          "state": "EXIGENCE_TEXTE"
+        },
+        {
+          "field": "api_lieu",
+          "value": "75 - Paris 9e Arrondissement",
+          "evidence": "\"75 - Paris 9e Arrondissement\"",
+          "origin": "PROVENANCE_STOCKEE",
+          "state": "NON_VERIFIE"
+        },
+        {
+          "field": "api_contrat",
+          "value": {
+            "code": "MIS",
+            "label": "Intérim - 10 Jour(s)"
+          },
+          "evidence": "{\"code\":\"MIS\",\"label\":\"Intérim - 10 Jour(s)\"}",
+          "origin": "PROVENANCE_STOCKEE",
+          "state": "NON_VERIFIE"
+        },
+        {
+          "field": "api_experience",
+          "value": {
+            "label": "1 An(s)",
+            "requirement": "E"
+          },
+          "evidence": "{\"label\":\"1 An(s)\",\"requirement\":\"E\"}",
+          "origin": "PROVENANCE_STOCKEE",
+          "state": "NON_VERIFIE"
+        },
+        {
+          "field": "api_salaire",
+          "value": "Mensuel de 3675.0 Euros",
+          "evidence": "\"Mensuel de 3675.0 Euros\"",
+          "origin": "PROVENANCE_STOCKEE",
+          "state": "NON_VERIFIE"
+        }
+      ],
+      "alerts": [],
+      "unclassified": [
+        "Infirmier / Infirmière de soins généraux (H/F)",
+        "Postulez facilement Nos consultants spécialisés examineront votre candidature avec respect de l'égalité des chances et de bienveillance",
+        "Nous vous donnerons une réponse transparente, quelle que soit l'issue de votre candidature"
+      ],
+      "controls": [
+        {
+          "field": "service",
+          "expected": "DIALYSE",
+          "retrieved": true
+        },
+        {
+          "field": "experience_duree",
+          "expected": "1",
+          "retrieved": true
+        },
+        {
+          "field": "duree_mission",
+          "expected": "10",
+          "retrieved": true
+        },
+        {
+          "field": "remuneration_texte",
+          "expected": "25",
+          "retrieved": true
+        }
+      ],
+      "manualReview": "Une annee experience minimale : valeur 1 an. Urgence/complications ne prouve pas service urgences."
+    },
+    {
+      "id": "112f6dfe-eaa0-4a40-a75e-146aed733497",
+      "source": "FRANCE_TRAVAIL",
+      "title": "Infirmier de santé au travail (F/H)",
+      "url": "https://candidat.francetravail.fr/offres/recherche/detail/6534477",
+      "fields": [
+        {
+          "field": "service",
+          "value": "SANTE_TRAVAIL",
+          "evidence": "Infirmier de santé au travail (F/H)",
+          "origin": "TITLE",
+          "state": "MENTION_A_CONFIRMER"
+        },
+        {
+          "field": "service",
+          "value": "SANTE_TRAVAIL",
+          "evidence": "service de santé au travail interentreprises, un infirmier de santé au travail H/F, dans le cadre d'une mission d'intérim",
+          "origin": "DESCRIPTION",
+          "state": "MENTION_A_CONFIRMER"
+        },
+        {
+          "field": "contrat_texte",
+          "value": "INTERIM",
+          "evidence": "service de santé au travail interentreprises, un infirmier de santé au travail H/F, dans le cadre d'une mission d'intérim",
+          "origin": "DESCRIPTION",
+          "state": "EXPLICITE_A_VERIFIER"
+        },
+        {
+          "field": "experience_domaine",
+          "value": "SANTE_TRAVAIL",
+          "evidence": "Vous disposez d'une 1ère expérience en santé au travail et êtes à l'écoute d'une nouvelle opportunité professionnelle, alors cette mission est faite pour vous",
+          "origin": "DESCRIPTION",
+          "state": "MENTION_A_CONFIRMER"
+        },
+        {
+          "field": "experience_non_chiffree",
+          "value": "Vous disposez d'une 1ère expérience en santé au travail et êtes à l'écoute d'une nouvelle opportunité professionnelle, alors cette mission est faite pour vous",
+          "evidence": "Vous disposez d'une 1ère expérience en santé au travail et êtes à l'écoute d'une nouvelle opportunité professionnelle, alors cette mission est faite pour vous",
+          "origin": "DESCRIPTION",
+          "state": "MENTION_A_CONFIRMER"
+        },
+        {
+          "field": "debut_mission",
+          "value": "DES_QUE_POSSIBLE",
+          "evidence": "Vous interviendrez dans le cadre d'un remplacement maladie et aurez pour missions : -tenue de l'infirmerie -le suivi des salariés avec la réalisation des différentes visites Cette mission est à pourvoir dès que possible, jusqu'à fin septembre pour commencer",
+          "origin": "DESCRIPTION",
+          "state": "DATE_NON_PRECISE"
+        },
+        {
+          "field": "periode_texte",
+          "value": "Vous interviendrez dans le cadre d'un remplacement maladie et aurez pour missions : -tenue de l'infirmerie -le suivi des salariés avec la réalisation des différentes visites Cette mission est à pourvoir dès que possible, jusqu'à fin septembre pour commencer",
+          "evidence": "Vous interviendrez dans le cadre d'un remplacement maladie et aurez pour missions : -tenue de l'infirmerie -le suivi des salariés avec la réalisation des différentes visites Cette mission est à pourvoir dès que possible, jusqu'à fin septembre pour commencer",
+          "origin": "DESCRIPTION",
+          "state": "ANNEE_ET_DATES_A_CONFIRMER"
+        },
+        {
+          "field": "horaires_detail",
+          "value": "Vos horaires 8h30 17h30 du lundi au jeudi, et 8h30 16h30 le vendredi",
+          "evidence": "Vos horaires 8h30 17h30 du lundi au jeudi, et 8h30 16h30 le vendredi",
+          "origin": "DESCRIPTION",
+          "state": "HORAIRES_A_STRUCTURER"
+        },
+        {
+          "field": "remuneration_texte",
+          "value": "Pour cette mission, votre salaire sera en fonction de votre ancienneté compris entre 21 et 23€/h",
+          "evidence": "Pour cette mission, votre salaire sera en fonction de votre ancienneté compris entre 21 et 23€/h",
+          "origin": "DESCRIPTION",
+          "state": "MONTANTS_UNITES_ET_COMPOSANTES_A_SEPARER"
+        },
+        {
+          "field": "experience_domaine",
+          "value": "SANTE_TRAVAIL",
+          "evidence": "Pour ce poste nous recherchons un infirmier ayant une expérience minimale de 2 ans en santé au travail, et étant titulaire du DIUST, ou de la licence en santé au travail ou de l'AFOMETRA",
+          "origin": "DESCRIPTION",
+          "state": "EXIGENCE_TEXTE"
+        },
+        {
+          "field": "certification",
+          "value": "DIUST",
+          "evidence": "Pour ce poste nous recherchons un infirmier ayant une expérience minimale de 2 ans en santé au travail, et étant titulaire du DIUST, ou de la licence en santé au travail ou de l'AFOMETRA",
+          "origin": "DESCRIPTION",
+          "state": "EXIGENCE_TEXTE"
+        },
+        {
+          "field": "certification",
+          "value": "AFOMETRA",
+          "evidence": "Pour ce poste nous recherchons un infirmier ayant une expérience minimale de 2 ans en santé au travail, et étant titulaire du DIUST, ou de la licence en santé au travail ou de l'AFOMETRA",
+          "origin": "DESCRIPTION",
+          "state": "EXIGENCE_TEXTE"
+        },
+        {
+          "field": "certification",
+          "value": "LICENCE_SANTE_TRAVAIL",
+          "evidence": "Pour ce poste nous recherchons un infirmier ayant une expérience minimale de 2 ans en santé au travail, et étant titulaire du DIUST, ou de la licence en santé au travail ou de l'AFOMETRA",
+          "origin": "DESCRIPTION",
+          "state": "EXIGENCE_TEXTE"
+        },
+        {
+          "field": "experience_duree",
+          "value": {
+            "amount": 2,
+            "unit": "ANS"
+          },
+          "evidence": "Pour ce poste nous recherchons un infirmier ayant une expérience minimale de 2 ans en santé au travail, et étant titulaire du DIUST, ou de la licence en santé au travail ou de l'AFOMETRA",
+          "origin": "DESCRIPTION",
+          "state": "EXIGENCE_TEXTE"
+        },
+        {
+          "field": "alternatives_professionnelles",
+          "value": "Pour ce poste nous recherchons un infirmier ayant une expérience minimale de 2 ans en santé au travail, et étant titulaire du DIUST, ou de la licence en santé au travail ou de l'AFOMETRA",
+          "evidence": "Pour ce poste nous recherchons un infirmier ayant une expérience minimale de 2 ans en santé au travail, et étant titulaire du DIUST, ou de la licence en santé au travail ou de l'AFOMETRA",
+          "origin": "DESCRIPTION",
+          "state": "ALTERNATIVES_PAS_CUMUL"
+        },
+        {
+          "field": "api_lieu",
+          "value": "75 - Paris 9e Arrondissement",
+          "evidence": "\"75 - Paris 9e Arrondissement\"",
+          "origin": "PROVENANCE_STOCKEE",
+          "state": "NON_VERIFIE"
+        },
+        {
+          "field": "api_contrat",
+          "value": {
+            "code": "MIS",
+            "label": "Intérim - 3 Mois"
+          },
+          "evidence": "{\"code\":\"MIS\",\"label\":\"Intérim - 3 Mois\"}",
+          "origin": "PROVENANCE_STOCKEE",
+          "state": "NON_VERIFIE"
+        },
+        {
+          "field": "api_experience",
+          "value": {
+            "label": "2 An(s)",
+            "requirement": "E"
+          },
+          "evidence": "{\"label\":\"2 An(s)\",\"requirement\":\"E\"}",
+          "origin": "PROVENANCE_STOCKEE",
+          "state": "NON_VERIFIE"
+        },
+        {
+          "field": "api_salaire",
+          "value": "Annuel de 40000.0 Euros à 42000.0 Euros",
+          "evidence": "\"Annuel de 40000.0 Euros à 42000.0 Euros\"",
+          "origin": "PROVENANCE_STOCKEE",
+          "state": "NON_VERIFIE"
+        }
+      ],
+      "alerts": [],
+      "unclassified": [
+        "Fed Médical (anciennement FED Santé), cabinet de recrutement spécialisé et dédié aux professionnels du secteur médical et paramédical, recherche pour son client",
+        "Au sein de ce service vous serez rattaché à un médecin du travail et pourrez collaborer avec les IDE et secrétaires du centre",
+        "La mission se situe à Issy les Moulineaux",
+        "Les qualités requises pour ce poste sont : l'écoute, la rigueur, l'adaptabilité et la gestion des urgences",
+        "Vous vous reconnaissez dans cette offre, et souhaitez rejoindre un centre reconnu",
+        "N'hésitez plus et transmettez votre candidature à Vanessa Consultante Fed Medical",
+        "Si vous n'avez pas déjà été rencontré par Fed Medical, un 1er entretien sera à prévoir",
+        "A l'issue de celui-ci, un échange avec le RH du centre aura lieu avant validation de la mission"
+      ],
+      "controls": [
+        {
+          "field": "service",
+          "expected": "SANTE_TRAVAIL",
+          "retrieved": true
+        },
+        {
+          "field": "experience_duree",
+          "expected": "2",
+          "retrieved": true
+        },
+        {
+          "field": "certification",
+          "expected": "DIUST",
+          "retrieved": true
+        },
+        {
+          "field": "certification",
+          "expected": "AFOMETRA",
+          "retrieved": true
+        },
+        {
+          "field": "horaires_detail",
+          "expected": "8h30",
+          "retrieved": true
+        },
+        {
+          "field": "remuneration_texte",
+          "expected": "21 et 23",
+          "retrieved": true
+        }
+      ],
+      "manualReview": "DIUST OU licence sante travail OU AFOMETRA : alternatives, pas trois obligations. Issy-les-Moulineaux dans texte. Fin septembre sans annee explicite."
+    },
+    {
+      "id": "1c6d75c4-bfef-4838-a228-6d4d07a6e05f",
+      "source": "JOBSPIPE",
+      "title": "Infirmier préleveur en laboratoire H/F",
+      "url": "https://fr.linkedin.com/jobs/view/infirmier-pr%C3%A9leveur-en-laboratoire-h-f-at-optima-groupe-piment-4467222226",
+      "fields": [
+        {
+          "field": "service",
+          "value": "LABORATOIRE",
+          "evidence": "Infirmier préleveur en laboratoire H/F",
+          "origin": "TITLE",
+          "state": "MENTION_A_CONFIRMER"
+        },
+        {
+          "field": "contexte_recruteur",
+          "value": "Présentation de la société Le Groupe PIMENT et ses marques spécialisées, PIMENT, au savoir-faire reconnu dans l’aéronautique et OPTIMA, cabinet de recrutement multi-sectoriel, vous accompagnent tout au long de votre évolution professionnelle, en vous proposant des contrats en intérim, CDD, CDI et freelance dans de nombreux secteurs d’activité",
+          "evidence": "Présentation de la société Le Groupe PIMENT et ses marques spécialisées, PIMENT, au savoir-faire reconnu dans l’aéronautique et OPTIMA, cabinet de recrutement multi-sectoriel, vous accompagnent tout au long de votre évolution professionnelle, en vous proposant des contrats en intérim, CDD, CDI et freelance dans de nombreux secteurs d’activité",
+          "origin": "DESCRIPTION",
+          "state": "NE_PAS_CLASSER_LE_CONTRAT"
+        },
+        {
+          "field": "service",
+          "value": "LABORATOIRE",
+          "evidence": "Description Nous recherchons un Infirmier préleveur en laboratoire H/F passionné par son métier et désireux de rejoindre une équipe dynamique dédiée à la santé",
+          "origin": "DESCRIPTION",
+          "state": "MENTION_A_CONFIRMER"
+        },
+        {
+          "field": "mobilite",
+          "value": "- Mobilité indispensable sur les sites d’Aurence, Couzeix et Aix sur Vienne (périphérie de Limoges)",
+          "evidence": "- Mobilité indispensable sur les sites d’Aurence, Couzeix et Aix sur Vienne (périphérie de Limoges)",
+          "origin": "DESCRIPTION",
+          "state": "EXIGENCE_TEXTE"
+        },
+        {
+          "field": "horaires_detail",
+          "value": "- Amplitude horaire : 7h00 au plus tôt – 17h00 au plus tard du lundi au vendredi 7h00",
+          "evidence": "- Amplitude horaire : 7h00 au plus tôt – 17h00 au plus tard du lundi au vendredi 7h00",
+          "origin": "DESCRIPTION",
+          "state": "AMPLITUDE_PAS_DUREE_POSTE"
+        },
+        {
+          "field": "roulement",
+          "value": "12h30 au plus tard le samedi (2 à 3 samedis travaillés par mois avec un jour de repos dans la semaine)",
+          "evidence": "12h30 au plus tard le samedi (2 à 3 samedis travaillés par mois avec un jour de repos dans la semaine)",
+          "origin": "DESCRIPTION",
+          "state": "A_STRUCTURER"
+        },
+        {
+          "field": "remuneration_texte",
+          "value": "Rémunération à partir de 2 221,95€ brut",
+          "evidence": "Rémunération à partir de 2 221,95€ brut",
+          "origin": "DESCRIPTION",
+          "state": "MONTANTS_UNITES_ET_COMPOSANTES_A_SEPARER"
+        },
+        {
+          "field": "service",
+          "value": "LABORATOIRE",
+          "evidence": "Avantage : prime de participation, mutuelle entreprise, CSE (chèque vacances, carte cadeau) En tant qu'infirmier préleveur H/F, vous serez responsable de la réalisation des prélèvements sanguins et autres analyses biologiques nécessaires au bon fonctionnement de notre laboratoire",
+          "origin": "DESCRIPTION",
+          "state": "MENTION_A_CONFIRMER"
+        },
+        {
+          "field": "competence",
+          "value": "PRELEVEMENTS",
+          "evidence": "Avantage : prime de participation, mutuelle entreprise, CSE (chèque vacances, carte cadeau) En tant qu'infirmier préleveur H/F, vous serez responsable de la réalisation des prélèvements sanguins et autres analyses biologiques nécessaires au bon fonctionnement de notre laboratoire",
+          "origin": "DESCRIPTION",
+          "state": "MENTION_A_CONFIRMER"
+        },
+        {
+          "field": "avantage",
+          "value": "PRIMES",
+          "evidence": "Avantage : prime de participation, mutuelle entreprise, CSE (chèque vacances, carte cadeau) En tant qu'infirmier préleveur H/F, vous serez responsable de la réalisation des prélèvements sanguins et autres analyses biologiques nécessaires au bon fonctionnement de notre laboratoire",
+          "origin": "DESCRIPTION",
+          "state": "A_STRUCTURER"
+        },
+        {
+          "field": "avantage",
+          "value": "MUTUELLE",
+          "evidence": "Avantage : prime de participation, mutuelle entreprise, CSE (chèque vacances, carte cadeau) En tant qu'infirmier préleveur H/F, vous serez responsable de la réalisation des prélèvements sanguins et autres analyses biologiques nécessaires au bon fonctionnement de notre laboratoire",
+          "origin": "DESCRIPTION",
+          "state": "A_STRUCTURER"
+        },
+        {
+          "field": "competence",
+          "value": "PRELEVEMENTS",
+          "evidence": "Réaliser des prélèvements sanguins et d'autres échantillons biologiques",
+          "origin": "DESCRIPTION",
+          "state": "MENTION_A_CONFIRMER"
+        },
+        {
+          "field": "competence",
+          "value": "PRELEVEMENTS",
+          "evidence": "- Assurer la traçabilité des prélèvements et la gestion des échantillons",
+          "origin": "DESCRIPTION",
+          "state": "MENTION_A_CONFIRMER"
+        },
+        {
+          "field": "competence",
+          "value": "TRACABILITE",
+          "evidence": "- Assurer la traçabilité des prélèvements et la gestion des échantillons",
+          "origin": "DESCRIPTION",
+          "state": "MENTION_A_CONFIRMER"
+        },
+        {
+          "field": "competence",
+          "value": "PRELEVEMENTS",
+          "evidence": "- Informer et rassurer les patients sur le déroulement des prélèvements",
+          "origin": "DESCRIPTION",
+          "state": "MENTION_A_CONFIRMER"
+        },
+        {
+          "field": "roulement",
+          "value": "- Informer et rassurer les patients sur le déroulement des prélèvements",
+          "evidence": "- Informer et rassurer les patients sur le déroulement des prélèvements",
+          "origin": "DESCRIPTION",
+          "state": "A_STRUCTURER"
+        },
+        {
+          "field": "service",
+          "value": "LABORATOIRE",
+          "evidence": "- Participer à l'amélioration continue des pratiques au sein du laboratoire",
+          "origin": "DESCRIPTION",
+          "state": "MENTION_A_CONFIRMER"
+        },
+        {
+          "field": "certification",
+          "value": "DIPLOME_INFIRMIER",
+          "evidence": "Diplôme d'État d'infirmier requis",
+          "origin": "DESCRIPTION",
+          "state": "EXIGENCE_TEXTE"
+        },
+        {
+          "field": "competence",
+          "value": "PRELEVEMENTS",
+          "evidence": "- Expérience en prélèvements sanguins souhaitée, mais les débutants motivés sont également les bienvenus",
+          "origin": "DESCRIPTION",
+          "state": "SOUHAITE"
+        },
+        {
+          "field": "experience_non_chiffree",
+          "value": "- Expérience en prélèvements sanguins souhaitée, mais les débutants motivés sont également les bienvenus",
+          "evidence": "- Expérience en prélèvements sanguins souhaitée, mais les débutants motivés sont également les bienvenus",
+          "origin": "DESCRIPTION",
+          "state": "SOUHAITE"
+        },
+        {
+          "field": "debutant_accepte",
+          "value": true,
+          "evidence": "- Expérience en prélèvements sanguins souhaitée, mais les débutants motivés sont également les bienvenus",
+          "origin": "DESCRIPTION",
+          "state": "EXPLICITE"
+        },
+        {
+          "field": "competence",
+          "value": "HYGIENE",
+          "evidence": "- Rigueur, organisation et respect des normes d'hygiène et de sécurité",
+          "origin": "DESCRIPTION",
+          "state": "MENTION_A_CONFIRMER"
+        },
+        {
+          "field": "contrat_texte",
+          "value": "CDI",
+          "evidence": "Informations complémentaires Ce poste est proposé en CDI 35 Heures",
+          "origin": "DESCRIPTION",
+          "state": "EXPLICITE_A_VERIFIER"
+        },
+        {
+          "field": "horaires_detail",
+          "value": "Informations complémentaires Ce poste est proposé en CDI 35 Heures",
+          "evidence": "Informations complémentaires Ce poste est proposé en CDI 35 Heures",
+          "origin": "DESCRIPTION",
+          "state": "HORAIRES_A_STRUCTURER"
+        },
+        {
+          "field": "experience_non_chiffree",
+          "value": "Le salaire se situe entre 2 220€ et 2 400€ par mois, en fonction de l'expérience et des compétences",
+          "evidence": "Le salaire se situe entre 2 220€ et 2 400€ par mois, en fonction de l'expérience et des compétences",
+          "origin": "DESCRIPTION",
+          "state": "MENTION_A_CONFIRMER"
+        },
+        {
+          "field": "remuneration_texte",
+          "value": "Le salaire se situe entre 2 220€ et 2 400€ par mois, en fonction de l'expérience et des compétences",
+          "evidence": "Le salaire se situe entre 2 220€ et 2 400€ par mois, en fonction de l'expérience et des compétences",
+          "origin": "DESCRIPTION",
+          "state": "MONTANTS_UNITES_ET_COMPOSANTES_A_SEPARER"
+        },
+        {
+          "field": "debut_mission",
+          "value": "DES_QUE_POSSIBLE",
+          "evidence": "Vous aurez la possibilité d'entrer en fonction immédiatement, ce qui vous permettra de rejoindre rapidement notre équipe",
+          "origin": "DESCRIPTION",
+          "state": "DATE_NON_PRECISE"
+        },
+        {
+          "field": "api_lieu",
+          "value": "Limoges, Nouvelle-Aquitaine, France",
+          "evidence": "\"Limoges, Nouvelle-Aquitaine, France\"",
+          "origin": "PROVENANCE_STOCKEE",
+          "state": "NON_VERIFIE"
+        },
+        {
+          "field": "api_contrat",
+          "value": {
+            "code": "MIS",
+            "label": null
+          },
+          "evidence": "{\"code\":\"MIS\",\"label\":null}",
+          "origin": "NORMALISATION_EXISTANTE",
+          "state": "NON_VERIFIE"
+        },
+        {
+          "field": "api_experience",
+          "value": {
+            "label": null,
+            "requirement": null
+          },
+          "evidence": "{\"label\":null,\"requirement\":null}",
+          "origin": "PROVENANCE_STOCKEE",
+          "state": "NON_VERIFIE"
+        },
+        {
+          "field": "api_salaire",
+          "value": "2 400€ par mois",
+          "evidence": "\"2 400€ par mois\"",
+          "origin": "PROVENANCE_STOCKEE",
+          "state": "NON_VERIFIE"
+        }
+      ],
+      "alerts": [
+        "CONTRAT_IMPORT_TEXTE_DIVERGENT"
+      ],
+      "unclassified": [
+        "Nous apportons une vision et des méthodes de recrutement centrées sur les qualités humaines",
+        "Pour cela, nous proposons à nos clients des solutions de recrutement sur-mesure",
+        "Notre mission : trouver l’entreprise qui correspond à vos attentes et inversement",
+        "Votre rôle sera essentiel pour garantir la qualité des échantillons et la satisfaction des patients",
+        "Vos principales missions incluront :",
+        "Profil Attendu Pour ce poste, nous recherchons un(e) candidat(e) ayant les compétences et qualifications suivantes :",
+        "- Capacité à travailler en équipe et à communiquer efficacement avec les patients et le personnel médical",
+        "- Qualités relationnelles et empathie envers les patients",
+        "Nous offrons un environnement de travail stimulant et l'opportunité de contribuer activement à la santé de nos patients",
+        "Rejoignez-nous pour faire la différence"
+      ],
+      "controls": [
+        {
+          "field": "contrat_texte",
+          "expected": "CDI",
+          "retrieved": true
+        },
+        {
+          "field": "mobilite",
+          "expected": "Aurence",
+          "retrieved": true
+        },
+        {
+          "field": "horaires_detail",
+          "expected": "7h00",
+          "retrieved": true
+        },
+        {
+          "field": "remuneration_texte",
+          "expected": "2 400",
+          "retrieved": true
+        }
+      ],
+      "manualReview": "Mobilite multisite obligatoire. Amplitude et samedis ne sont pas un poste continu. 2221.95 brut et fourchette 2220-2400 a reconcilier."
+    },
+    {
+      "id": "2ceed9ad-b0e6-49eb-b40f-fab2a81d58b4",
+      "source": "JOBSPIPE",
+      "title": "Infirmier-e en pool h/f",
+      "url": "https://fr.linkedin.com/jobs/view/infirmier-e-en-pool-h-f-at-talents-sant%C3%A9-4464884250",
+      "fields": [
+        {
+          "field": "contexte_recruteur",
+          "value": "Notre cabinet Talents Santé accompagne les entreprises et les candidats au travers de prestations de Recrutement et Intérim spécialisées sur les fonctions Médicales, Sanitaires et Pharmaceutiques",
+          "evidence": "Notre cabinet Talents Santé accompagne les entreprises et les candidats au travers de prestations de Recrutement et Intérim spécialisées sur les fonctions Médicales, Sanitaires et Pharmaceutiques",
+          "origin": "DESCRIPTION",
+          "state": "NE_PAS_CLASSER_LE_CONTRAT"
+        },
+        {
+          "field": "competence",
+          "value": "EDUCATION_THERAPEUTIQUE",
+          "evidence": "- Réaliser l'éducation thérapeutique et l'accompagnement des usagers et de leur entourage",
+          "origin": "DESCRIPTION",
+          "state": "MENTION_A_CONFIRMER"
+        },
+        {
+          "field": "horaires_detail",
+          "value": "Poste en 12h (7h-19h), planification du travail en \"petite / grande semaine\", avec des roulements les week-ends",
+          "evidence": "Poste en 12h (7h-19h), planification du travail en \"petite / grande semaine\", avec des roulements les week-ends",
+          "origin": "DESCRIPTION",
+          "state": "HORAIRES_A_STRUCTURER"
+        },
+        {
+          "field": "roulement",
+          "value": "Poste en 12h (7h-19h), planification du travail en \"petite / grande semaine\", avec des roulements les week-ends",
+          "evidence": "Poste en 12h (7h-19h), planification du travail en \"petite / grande semaine\", avec des roulements les week-ends",
+          "origin": "DESCRIPTION",
+          "state": "A_STRUCTURER"
+        },
+        {
+          "field": "alternance",
+          "value": "JOUR_NUIT",
+          "evidence": "Alternance jours / nuits (mais plus de jours que de nuits)",
+          "origin": "DESCRIPTION",
+          "state": "EXPLICITE"
+        },
+        {
+          "field": "horaire_type",
+          "value": "NUIT",
+          "evidence": "Alternance jours / nuits (mais plus de jours que de nuits)",
+          "origin": "DESCRIPTION",
+          "state": "MENTION_A_CONFIRMER"
+        },
+        {
+          "field": "remuneration_texte",
+          "value": "Rémunération Et Avantages À partir de 2750€ bruts/ mois, + ancienneté",
+          "evidence": "Rémunération Et Avantages À partir de 2750€ bruts/ mois, + ancienneté",
+          "origin": "DESCRIPTION",
+          "state": "MONTANTS_UNITES_ET_COMPOSANTES_A_SEPARER"
+        },
+        {
+          "field": "avantage",
+          "value": "PRIMES",
+          "evidence": "- Mutuelle, CSE dynamique, autres primes",
+          "origin": "DESCRIPTION",
+          "state": "A_STRUCTURER"
+        },
+        {
+          "field": "avantage",
+          "value": "MUTUELLE",
+          "evidence": "- Mutuelle, CSE dynamique, autres primes",
+          "origin": "DESCRIPTION",
+          "state": "A_STRUCTURER"
+        },
+        {
+          "field": "api_lieu",
+          "value": "Thionville, Grand Est, France",
+          "evidence": "\"Thionville, Grand Est, France\"",
+          "origin": "PROVENANCE_STOCKEE",
+          "state": "NON_VERIFIE"
+        },
+        {
+          "field": "api_contrat",
+          "value": {
+            "code": "MIS",
+            "label": null
+          },
+          "evidence": "{\"code\":\"MIS\",\"label\":null}",
+          "origin": "NORMALISATION_EXISTANTE",
+          "state": "NON_VERIFIE"
+        },
+        {
+          "field": "api_experience",
+          "value": {
+            "label": null,
+            "requirement": null
+          },
+          "evidence": "{\"label\":null,\"requirement\":null}",
+          "origin": "PROVENANCE_STOCKEE",
+          "state": "NON_VERIFIE"
+        }
+      ],
+      "alerts": [],
+      "unclassified": [
+        "Infirmier-e en pool h/f",
+        "En tant qu'Infirmier-ière en pool (H/F), vos principales missions sont :",
+        "Évaluer l'état de santé du patient et analyser les situations de soins",
+        "- Dispenser des soins de nature préventive, curative ou palliative visant à promouvoir, maintenir et restaurer la santé",
+        "- Participer à la mise en œuvre de la démarche qualité, du projet d'établissement et de l'évaluation des pratiques",
+        "- Réaliser les soins dans le respect de la personne, du devoir de réserve, du secret professionnel et des règles éthiques",
+        "Vous êtes Infirmier-ière Diplômé-e d'Etat,",
+        "Vous avez de la patience, vous êtes rigoureux-se, dynamique et avez un excellent relationnel",
+        "- Vous appréciez le travail en équipe",
+        "Les +",
+        ":",
+        "Vous rejoignez un groupe avec de belles valeurs humaines",
+        "Vous vous reconnaissez",
+        "N'hésitez plus, postulez",
+        "Vous pouvez exercer ces droits en cliquant ici"
+      ],
+      "controls": [
+        {
+          "field": "alternance",
+          "expected": "JOUR_NUIT",
+          "retrieved": true
+        },
+        {
+          "field": "horaires_detail",
+          "expected": "12h",
+          "retrieved": true
+        },
+        {
+          "field": "roulement",
+          "expected": "week-ends",
+          "retrieved": true
+        },
+        {
+          "field": "remuneration_texte",
+          "expected": "2750",
+          "retrieved": true
+        }
+      ],
+      "manualReview": "Alternance jour/nuit, poste 12h, petite/grande semaine. Contrat non etabli par presentation du cabinet."
+    },
+    {
+      "id": "4e435168-a3c1-43e5-8bb9-2354620d8b25",
+      "source": "JOBSPIPE",
+      "title": "Infirmier de régulation médicale - Poste à 50% H/F",
+      "url": "https://fr.linkedin.com/jobs/view/infirmier-de-r%C3%A9gulation-m%C3%A9dicale-poste-%C3%A0-50%25-h-f-at-talents-sant%C3%A9-4465913537",
+      "fields": [
+        {
+          "field": "service",
+          "value": "REGULATION",
+          "evidence": "Infirmier de régulation médicale - Poste à 50% H/F",
+          "origin": "TITLE",
+          "state": "MENTION_A_CONFIRMER"
+        },
+        {
+          "field": "quotite_pct",
+          "value": 50,
+          "evidence": "Infirmier de régulation médicale - Poste à 50% H/F",
+          "origin": "TITLE",
+          "state": "EXPLICITE"
+        },
+        {
+          "field": "contexte_recruteur",
+          "value": "Notre cabinet Talents Santé accompagne les entreprises et les candidats au travers de prestations de Recrutement et Intérim spécialisées sur les fonctions Médicales, Sanitaires et Pharmaceutiques",
+          "evidence": "Notre cabinet Talents Santé accompagne les entreprises et les candidats au travers de prestations de Recrutement et Intérim spécialisées sur les fonctions Médicales, Sanitaires et Pharmaceutiques",
+          "origin": "DESCRIPTION",
+          "state": "NE_PAS_CLASSER_LE_CONTRAT"
+        },
+        {
+          "field": "service",
+          "value": "REGULATION",
+          "evidence": "Rattaché(e) à Un Manager IDE, Vous Exercez Votre Activité à Temps Partiel (50%) Au Sein D’une Plateforme De Régulation Médicale Fonctionnant En Continu (24h/24 – 7j/7) Vous analysez et traitez les demandes médicales des patients, en priorisant les situations et en assurant la gestion des dossiers d’assistance (aspects médicaux, administratifs et logistiques)",
+          "origin": "DESCRIPTION",
+          "state": "MENTION_A_CONFIRMER"
+        },
+        {
+          "field": "temps_travail",
+          "value": "PARTIEL",
+          "evidence": "Rattaché(e) à Un Manager IDE, Vous Exercez Votre Activité à Temps Partiel (50%) Au Sein D’une Plateforme De Régulation Médicale Fonctionnant En Continu (24h/24 – 7j/7) Vous analysez et traitez les demandes médicales des patients, en priorisant les situations et en assurant la gestion des dossiers d’assistance (aspects médicaux, administratifs et logistiques)",
+          "origin": "DESCRIPTION",
+          "state": "EXPLICITE"
+        },
+        {
+          "field": "quotite_pct",
+          "value": 50,
+          "evidence": "Rattaché(e) à Un Manager IDE, Vous Exercez Votre Activité à Temps Partiel (50%) Au Sein D’une Plateforme De Régulation Médicale Fonctionnant En Continu (24h/24 – 7j/7) Vous analysez et traitez les demandes médicales des patients, en priorisant les situations et en assurant la gestion des dossiers d’assistance (aspects médicaux, administratifs et logistiques)",
+          "origin": "DESCRIPTION",
+          "state": "EXPLICITE"
+        },
+        {
+          "field": "avantage",
+          "value": "TRANSPORT",
+          "evidence": "Vous participez à l’organisation de transports médicalisés (admissions hospitalières, coordination avec les équipes de transport, échanges avec les établissements de santé) afin de mettre en œuvre les solutions les plus adaptées",
+          "origin": "DESCRIPTION",
+          "state": "A_STRUCTURER"
+        },
+        {
+          "field": "avantage",
+          "value": "TRANSPORT",
+          "evidence": "Coordonner avec les établissements de santé et organiser les prises en charge, notamment les transports médicalisés",
+          "origin": "DESCRIPTION",
+          "state": "A_STRUCTURER"
+        },
+        {
+          "field": "contraintes_planning",
+          "value": "Participer également à l’activité prévention et téléconsultation Organisation du poste : l'IDE doit donner 14 à 16 disponibilités 1.5 mois à l'avance dont 1 week-end ou 2 jours fériés",
+          "evidence": "Participer également à l’activité prévention et téléconsultation Organisation du poste : l'IDE doit donner 14 à 16 disponibilités 1.5 mois à l'avance dont 1 week-end ou 2 jours fériés",
+          "origin": "DESCRIPTION",
+          "state": "A_STRUCTURER"
+        },
+        {
+          "field": "roulement",
+          "value": "Participer également à l’activité prévention et téléconsultation Organisation du poste : l'IDE doit donner 14 à 16 disponibilités 1.5 mois à l'avance dont 1 week-end ou 2 jours fériés",
+          "evidence": "Participer également à l’activité prévention et téléconsultation Organisation du poste : l'IDE doit donner 14 à 16 disponibilités 1.5 mois à l'avance dont 1 week-end ou 2 jours fériés",
+          "origin": "DESCRIPTION",
+          "state": "A_STRUCTURER"
+        },
+        {
+          "field": "horaire_type",
+          "value": "NUIT",
+          "evidence": "Les horaires ne sont pas fixes et oscillent par équité entre : 8h-17h/ 10h-19h/ 11h-20h/ nuit 19h-7h",
+          "origin": "DESCRIPTION",
+          "state": "MENTION_A_CONFIRMER"
+        },
+        {
+          "field": "horaires_detail",
+          "value": "Les horaires ne sont pas fixes et oscillent par équité entre : 8h-17h/ 10h-19h/ 11h-20h/ nuit 19h-7h",
+          "evidence": "Les horaires ne sont pas fixes et oscillent par équité entre : 8h-17h/ 10h-19h/ 11h-20h/ nuit 19h-7h",
+          "origin": "DESCRIPTION",
+          "state": "HORAIRES_A_STRUCTURER"
+        },
+        {
+          "field": "certification",
+          "value": "DIPLOME_INFIRMIER",
+          "evidence": "Diplôme d’État d’infirmier",
+          "origin": "DESCRIPTION",
+          "state": "MENTION_A_CONFIRMER"
+        },
+        {
+          "field": "experience_domaine",
+          "value": "REANIMATION",
+          "evidence": "Expérience significative (minimum 5 ans) en milieu hospitalier, idéalement en urgences, réanimation, SAMU ou services de médecine/chirurgie",
+          "origin": "DESCRIPTION",
+          "state": "SOUHAITE"
+        },
+        {
+          "field": "experience_domaine",
+          "value": "URGENCES",
+          "evidence": "Expérience significative (minimum 5 ans) en milieu hospitalier, idéalement en urgences, réanimation, SAMU ou services de médecine/chirurgie",
+          "origin": "DESCRIPTION",
+          "state": "SOUHAITE"
+        },
+        {
+          "field": "experience_duree",
+          "value": {
+            "amount": 5,
+            "unit": "ANS"
+          },
+          "evidence": "Expérience significative (minimum 5 ans) en milieu hospitalier, idéalement en urgences, réanimation, SAMU ou services de médecine/chirurgie",
+          "origin": "DESCRIPTION",
+          "state": "EXIGENCE_TEXTE"
+        },
+        {
+          "field": "langue",
+          "value": "ANGLAIS",
+          "evidence": "Maitrise de l’anglais conversationnel (autres langues étrangères appréciées)",
+          "origin": "DESCRIPTION",
+          "state": "SOUHAITE"
+        },
+        {
+          "field": "api_lieu",
+          "value": "St.-Denis, Île-de-France, France",
+          "evidence": "\"St.-Denis, Île-de-France, France\"",
+          "origin": "PROVENANCE_STOCKEE",
+          "state": "NON_VERIFIE"
+        },
+        {
+          "field": "api_contrat",
+          "value": {
+            "code": "MIS",
+            "label": null
+          },
+          "evidence": "{\"code\":\"MIS\",\"label\":null}",
+          "origin": "NORMALISATION_EXISTANTE",
+          "state": "NON_VERIFIE"
+        },
+        {
+          "field": "api_experience",
+          "value": {
+            "label": null,
+            "requirement": null
+          },
+          "evidence": "{\"label\":null,\"requirement\":null}",
+          "origin": "PROVENANCE_STOCKEE",
+          "state": "NON_VERIFIE"
+        }
+      ],
+      "alerts": [],
+      "unclassified": [
+        "Dans le cadre de",
+        "vos missions, vous contribuez également à l’activité de téléconsultation et de prévention en orientant les patients vers les professionnels médicaux concernés",
+        "Selon vos disponibilités, vous pourrez être amené(e) à participer si vous le souhaitez à des missions de rapatriement sanitaire",
+        "Vos Missions Principales Sont",
+        "Réceptionner et analyser les demandes médicales (appels, documents) en évaluant leur priorité",
+        "Assurer la gestion et le suivi des dossiers (collecte, mise à jour et transmission des informations)",
+        "Informer et orienter les patients ainsi que les différents interlocuteurs",
+        "Profil",
+        "Vous avez en parallèle de ce nouveau poste, des vacations en milieu hospitalier",
+        "Compétences Et Qualités",
+        "Bonne connaissance de l’environnement hospitalier et du vocabulaire médical",
+        "Maîtrise des outils informatiques et aisance avec les outils de gestion de dossiers",
+        "Excellentes compétences en communication, notamment à distance (téléphone)",
+        "Capacité à gérer les priorités et à travailler en situation d’urgence",
+        "Sens de l’organisation, rigueur et réactivité",
+        "Qualités relationnelles, sens du service et empathie",
+        "Vous pouvez exercer ces droits en cliquant ici"
+      ],
+      "controls": [
+        {
+          "field": "quotite_pct",
+          "expected": "50",
+          "retrieved": true
+        },
+        {
+          "field": "experience_duree",
+          "expected": "5",
+          "retrieved": true
+        },
+        {
+          "field": "langue",
+          "expected": "ANGLAIS",
+          "retrieved": true
+        },
+        {
+          "field": "horaires_detail",
+          "expected": "19h-7h",
+          "retrieved": true
+        }
+      ],
+      "manualReview": "14-16 disponibilites a fournir 1.5 mois avant, weekend/feries : contrainte de planning non structuree. Cinq ans minimum et domaines idealement : niveaux differents. Anglais a ne pas rendre facultatif a cause des autres langues appreciees."
+    },
+    {
+      "id": "71a3522b-0618-4d42-a3d6-14f34ee2c0cd",
+      "source": "JOBSPIPE",
+      "title": "Infirmier(e) en SMR de nuit h/f",
+      "url": "https://fr.linkedin.com/jobs/view/infirmier-e-en-smr-de-nuit-h-f-at-talents-sant%C3%A9-4464583499",
+      "fields": [
+        {
+          "field": "service",
+          "value": "SMR",
+          "evidence": "Infirmier(e) en SMR de nuit h/f",
+          "origin": "TITLE",
+          "state": "MENTION_A_CONFIRMER"
+        },
+        {
+          "field": "horaire_type",
+          "value": "NUIT",
+          "evidence": "Infirmier(e) en SMR de nuit h/f",
+          "origin": "TITLE",
+          "state": "MENTION_A_CONFIRMER"
+        },
+        {
+          "field": "contexte_recruteur",
+          "value": "Notre cabinet Talents Santé accompagne les entreprises et les candidats au travers de prestations de Recrutement et Intérim spécialisées sur les fonctions Médicales, Sanitaires et Pharmaceutiques",
+          "evidence": "Notre cabinet Talents Santé accompagne les entreprises et les candidats au travers de prestations de Recrutement et Intérim spécialisées sur les fonctions Médicales, Sanitaires et Pharmaceutiques",
+          "origin": "DESCRIPTION",
+          "state": "NE_PAS_CLASSER_LE_CONTRAT"
+        },
+        {
+          "field": "service",
+          "value": "SMR",
+          "evidence": "Nous recrutons, pour l'un de nos partenaires, un établissement de réadaptation privé situé sur Mulhouse, un infirmier h/f de nuit",
+          "origin": "DESCRIPTION",
+          "state": "MENTION_A_CONFIRMER"
+        },
+        {
+          "field": "horaire_type",
+          "value": "NUIT",
+          "evidence": "Nous recrutons, pour l'un de nos partenaires, un établissement de réadaptation privé situé sur Mulhouse, un infirmier h/f de nuit",
+          "origin": "DESCRIPTION",
+          "state": "MENTION_A_CONFIRMER"
+        },
+        {
+          "field": "debut_mission",
+          "value": "DES_QUE_POSSIBLE",
+          "evidence": "- Prise de poste : Dès que possible",
+          "origin": "DESCRIPTION",
+          "state": "DATE_NON_PRECISE"
+        },
+        {
+          "field": "horaires_detail",
+          "value": "Horaires postés (7h)",
+          "evidence": "Horaires postés (7h)",
+          "origin": "DESCRIPTION",
+          "state": "HORAIRES_A_STRUCTURER"
+        },
+        {
+          "field": "contrat_texte",
+          "value": "CDI",
+          "evidence": "Contrat CDD long ou CDI",
+          "origin": "DESCRIPTION",
+          "state": "EXPLICITE_A_VERIFIER"
+        },
+        {
+          "field": "contrat_texte",
+          "value": "CDD",
+          "evidence": "Contrat CDD long ou CDI",
+          "origin": "DESCRIPTION",
+          "state": "EXPLICITE_A_VERIFIER"
+        },
+        {
+          "field": "certification",
+          "value": "DIPLOME_INFIRMIER",
+          "evidence": "Rémunération selon la convention Fehap51 Vous êtes titulaire du diplôme d’état d’Infirmier",
+          "origin": "DESCRIPTION",
+          "state": "MENTION_A_CONFIRMER"
+        },
+        {
+          "field": "remuneration_texte",
+          "value": "Rémunération selon la convention Fehap51 Vous êtes titulaire du diplôme d’état d’Infirmier",
+          "evidence": "Rémunération selon la convention Fehap51 Vous êtes titulaire du diplôme d’état d’Infirmier",
+          "origin": "DESCRIPTION",
+          "state": "MONTANTS_UNITES_ET_COMPOSANTES_A_SEPARER"
+        },
+        {
+          "field": "api_lieu",
+          "value": "Mulhouse, Grand Est, France",
+          "evidence": "\"Mulhouse, Grand Est, France\"",
+          "origin": "PROVENANCE_STOCKEE",
+          "state": "NON_VERIFIE"
+        },
+        {
+          "field": "api_contrat",
+          "value": {
+            "code": "MIS",
+            "label": null
+          },
+          "evidence": "{\"code\":\"MIS\",\"label\":null}",
+          "origin": "NORMALISATION_EXISTANTE",
+          "state": "NON_VERIFIE"
+        },
+        {
+          "field": "api_experience",
+          "value": {
+            "label": null,
+            "requirement": null
+          },
+          "evidence": "{\"label\":null,\"requirement\":null}",
+          "origin": "PROVENANCE_STOCKEE",
+          "state": "NON_VERIFIE"
+        }
+      ],
+      "alerts": [
+        "CONTRAT_IMPORT_TEXTE_DIVERGENT"
+      ],
+      "unclassified": [
+        "L'établissement comprend une variété de services de rééducation, et dans lesquels vous pourrez, selon vos appétences, exercer et monter en compétences",
+        "Vous travaillerez en équipe pluridisciplinaire avec un plateau médico-technique de qualité",
+        "Vous pouvez exercer ces droits en cliquant ici"
+      ],
+      "controls": [
+        {
+          "field": "service",
+          "expected": "SMR",
+          "retrieved": true
+        },
+        {
+          "field": "horaire_type",
+          "expected": "NUIT",
+          "retrieved": true
+        },
+        {
+          "field": "contrat_texte",
+          "expected": "CDD",
+          "retrieved": true
+        },
+        {
+          "field": "contrat_texte",
+          "expected": "CDI",
+          "retrieved": true
+        },
+        {
+          "field": "horaires_detail",
+          "expected": "7h",
+          "retrieved": true
+        }
+      ],
+      "manualReview": "CDD long OU CDI. Horaires postes 7h designe probablement duree, pas debut a 07h. Convention FEHAP51, montant absent."
+    },
+    {
+      "id": "76cb935f-81e8-4a0b-9f71-d8f0cb64d47a",
+      "source": "JOBSPIPE",
+      "title": "Infirmier(e)/ Technicien Préleveur(se) H/F - (69)",
+      "url": "https://fr.linkedin.com/jobs/view/infirmier-e-technicien-pr%C3%A9leveur-se-h-f-69-at-talents-sant%C3%A9-4437549763",
+      "fields": [
+        {
+          "field": "service",
+          "value": "LABORATOIRE",
+          "evidence": "Le cabinet TALENTS SANTE accompagne les entreprises et les candidats au travers de prestations de Recrutement CDI / CDD & Intérim spécialisé sur les métiers liés au secteur médical, paramédical et social : Centres de Soins, Santé à Domicile, Santé au Travail, Petite Enfance, Laboratoires",
+          "origin": "DESCRIPTION",
+          "state": "MENTION_A_CONFIRMER"
+        },
+        {
+          "field": "service",
+          "value": "SANTE_TRAVAIL",
+          "evidence": "Le cabinet TALENTS SANTE accompagne les entreprises et les candidats au travers de prestations de Recrutement CDI / CDD & Intérim spécialisé sur les métiers liés au secteur médical, paramédical et social : Centres de Soins, Santé à Domicile, Santé au Travail, Petite Enfance, Laboratoires",
+          "origin": "DESCRIPTION",
+          "state": "MENTION_A_CONFIRMER"
+        },
+        {
+          "field": "contrat_texte",
+          "value": "CDI",
+          "evidence": "Le cabinet TALENTS SANTE accompagne les entreprises et les candidats au travers de prestations de Recrutement CDI / CDD & Intérim spécialisé sur les métiers liés au secteur médical, paramédical et social : Centres de Soins, Santé à Domicile, Santé au Travail, Petite Enfance, Laboratoires",
+          "origin": "DESCRIPTION",
+          "state": "EXPLICITE_A_VERIFIER"
+        },
+        {
+          "field": "contrat_texte",
+          "value": "CDD",
+          "evidence": "Le cabinet TALENTS SANTE accompagne les entreprises et les candidats au travers de prestations de Recrutement CDI / CDD & Intérim spécialisé sur les métiers liés au secteur médical, paramédical et social : Centres de Soins, Santé à Domicile, Santé au Travail, Petite Enfance, Laboratoires",
+          "origin": "DESCRIPTION",
+          "state": "EXPLICITE_A_VERIFIER"
+        },
+        {
+          "field": "contrat_texte",
+          "value": "INTERIM",
+          "evidence": "Le cabinet TALENTS SANTE accompagne les entreprises et les candidats au travers de prestations de Recrutement CDI / CDD & Intérim spécialisé sur les métiers liés au secteur médical, paramédical et social : Centres de Soins, Santé à Domicile, Santé au Travail, Petite Enfance, Laboratoires",
+          "origin": "DESCRIPTION",
+          "state": "EXPLICITE_A_VERIFIER"
+        },
+        {
+          "field": "service",
+          "value": "LABORATOIRE",
+          "evidence": "Nous recherchons pour l'un de nos partenaires, un Laboratoire d'analyses médicales, un(e) Infirmier(e) ou Technicien(ne) de prélèvement en CDI à temps plein, pour un poste situé à proximité du 3ᵉ arrondissement de Lyon (69",
+          "origin": "DESCRIPTION",
+          "state": "MENTION_A_CONFIRMER"
+        },
+        {
+          "field": "competence",
+          "value": "PRELEVEMENTS",
+          "evidence": "Nous recherchons pour l'un de nos partenaires, un Laboratoire d'analyses médicales, un(e) Infirmier(e) ou Technicien(ne) de prélèvement en CDI à temps plein, pour un poste situé à proximité du 3ᵉ arrondissement de Lyon (69",
+          "origin": "DESCRIPTION",
+          "state": "MENTION_A_CONFIRMER"
+        },
+        {
+          "field": "contrat_texte",
+          "value": "CDI",
+          "evidence": "Nous recherchons pour l'un de nos partenaires, un Laboratoire d'analyses médicales, un(e) Infirmier(e) ou Technicien(ne) de prélèvement en CDI à temps plein, pour un poste situé à proximité du 3ᵉ arrondissement de Lyon (69",
+          "origin": "DESCRIPTION",
+          "state": "EXPLICITE_A_VERIFIER"
+        },
+        {
+          "field": "alternatives_professionnelles",
+          "value": "Nous recherchons pour l'un de nos partenaires, un Laboratoire d'analyses médicales, un(e) Infirmier(e) ou Technicien(ne) de prélèvement en CDI à temps plein, pour un poste situé à proximité du 3ᵉ arrondissement de Lyon (69",
+          "evidence": "Nous recherchons pour l'un de nos partenaires, un Laboratoire d'analyses médicales, un(e) Infirmier(e) ou Technicien(ne) de prélèvement en CDI à temps plein, pour un poste situé à proximité du 3ᵉ arrondissement de Lyon (69",
+          "origin": "DESCRIPTION",
+          "state": "ALTERNATIVES_PAS_CUMUL"
+        },
+        {
+          "field": "temps_travail",
+          "value": "PLEIN",
+          "evidence": "Nous recherchons pour l'un de nos partenaires, un Laboratoire d'analyses médicales, un(e) Infirmier(e) ou Technicien(ne) de prélèvement en CDI à temps plein, pour un poste situé à proximité du 3ᵉ arrondissement de Lyon (69",
+          "origin": "DESCRIPTION",
+          "state": "EXPLICITE"
+        },
+        {
+          "field": "service",
+          "value": "LABORATOIRE",
+          "evidence": "Nous recherchons pour l'un de nos partenaires, un Laboratoire d'analyses médicales,un(e) Infirmier(e) ou Technicien(ne) de prélèvement en CDI à temps plein, pour un poste situé à proximité du 3ᵉ arrondissement de Lyon (69",
+          "origin": "DESCRIPTION",
+          "state": "MENTION_A_CONFIRMER"
+        },
+        {
+          "field": "competence",
+          "value": "PRELEVEMENTS",
+          "evidence": "Nous recherchons pour l'un de nos partenaires, un Laboratoire d'analyses médicales,un(e) Infirmier(e) ou Technicien(ne) de prélèvement en CDI à temps plein, pour un poste situé à proximité du 3ᵉ arrondissement de Lyon (69",
+          "origin": "DESCRIPTION",
+          "state": "MENTION_A_CONFIRMER"
+        },
+        {
+          "field": "contrat_texte",
+          "value": "CDI",
+          "evidence": "Nous recherchons pour l'un de nos partenaires, un Laboratoire d'analyses médicales,un(e) Infirmier(e) ou Technicien(ne) de prélèvement en CDI à temps plein, pour un poste situé à proximité du 3ᵉ arrondissement de Lyon (69",
+          "origin": "DESCRIPTION",
+          "state": "EXPLICITE_A_VERIFIER"
+        },
+        {
+          "field": "alternatives_professionnelles",
+          "value": "Nous recherchons pour l'un de nos partenaires, un Laboratoire d'analyses médicales,un(e) Infirmier(e) ou Technicien(ne) de prélèvement en CDI à temps plein, pour un poste situé à proximité du 3ᵉ arrondissement de Lyon (69",
+          "evidence": "Nous recherchons pour l'un de nos partenaires, un Laboratoire d'analyses médicales,un(e) Infirmier(e) ou Technicien(ne) de prélèvement en CDI à temps plein, pour un poste situé à proximité du 3ᵉ arrondissement de Lyon (69",
+          "origin": "DESCRIPTION",
+          "state": "ALTERNATIVES_PAS_CUMUL"
+        },
+        {
+          "field": "temps_travail",
+          "value": "PLEIN",
+          "evidence": "Nous recherchons pour l'un de nos partenaires, un Laboratoire d'analyses médicales,un(e) Infirmier(e) ou Technicien(ne) de prélèvement en CDI à temps plein, pour un poste situé à proximité du 3ᵉ arrondissement de Lyon (69",
+          "origin": "DESCRIPTION",
+          "state": "EXPLICITE"
+        },
+        {
+          "field": "service",
+          "value": "LABORATOIRE",
+          "evidence": "Assurer l'accueil des patients et leur prise en charge au laboratoire",
+          "origin": "DESCRIPTION",
+          "state": "MENTION_A_CONFIRMER"
+        },
+        {
+          "field": "competence",
+          "value": "PRELEVEMENTS",
+          "evidence": "- Fournir des informations de premier niveau aux patients concernant le déroulement des prélèvements, les délais et les modalités de récupération des résultats",
+          "origin": "DESCRIPTION",
+          "state": "MENTION_A_CONFIRMER"
+        },
+        {
+          "field": "roulement",
+          "value": "- Fournir des informations de premier niveau aux patients concernant le déroulement des prélèvements, les délais et les modalités de récupération des résultats",
+          "evidence": "- Fournir des informations de premier niveau aux patients concernant le déroulement des prélèvements, les délais et les modalités de récupération des résultats",
+          "origin": "DESCRIPTION",
+          "state": "A_STRUCTURER"
+        },
+        {
+          "field": "competence",
+          "value": "PRELEVEMENTS",
+          "evidence": "- Effectuer les prélèvements en respectant strictement les normes d'hygiène et de sécurité",
+          "origin": "DESCRIPTION",
+          "state": "MENTION_A_CONFIRMER"
+        },
+        {
+          "field": "competence",
+          "value": "HYGIENE",
+          "evidence": "- Effectuer les prélèvements en respectant strictement les normes d'hygiène et de sécurité",
+          "origin": "DESCRIPTION",
+          "state": "MENTION_A_CONFIRMER"
+        },
+        {
+          "field": "competence",
+          "value": "PRELEVEMENTS",
+          "evidence": "- Veiller à ce que l'acte de prélèvement se déroule dans les meilleures conditions pour le patient",
+          "origin": "DESCRIPTION",
+          "state": "MENTION_A_CONFIRMER"
+        },
+        {
+          "field": "service",
+          "value": "LABORATOIRE",
+          "evidence": "Horaires : Amplitude horaire d’ouverture du laboratoire 7 h",
+          "origin": "DESCRIPTION",
+          "state": "MENTION_A_CONFIRMER"
+        },
+        {
+          "field": "horaires_detail",
+          "value": "Horaires : Amplitude horaire d’ouverture du laboratoire 7 h",
+          "evidence": "Horaires : Amplitude horaire d’ouverture du laboratoire 7 h",
+          "origin": "DESCRIPTION",
+          "state": "AMPLITUDE_PAS_DUREE_POSTE"
+        },
+        {
+          "field": "roulement",
+          "value": "18 h / 1 samedi matin/2 travaillé",
+          "evidence": "18 h / 1 samedi matin/2 travaillé",
+          "origin": "DESCRIPTION",
+          "state": "A_STRUCTURER"
+        },
+        {
+          "field": "remuneration_texte",
+          "value": "Rémunération comprise entre 25k et 28k bruts annuels, soit entre 2100 € et 2400 € brut mensuel",
+          "evidence": "Rémunération comprise entre 25k et 28k bruts annuels, soit entre 2100 € et 2400 € brut mensuel",
+          "origin": "DESCRIPTION",
+          "state": "MONTANTS_UNITES_ET_COMPOSANTES_A_SEPARER"
+        },
+        {
+          "field": "avantage",
+          "value": "REPAS",
+          "evidence": "Titres restaurants pris à 60%",
+          "origin": "DESCRIPTION",
+          "state": "A_STRUCTURER"
+        },
+        {
+          "field": "avantage",
+          "value": "TRANSPORT",
+          "evidence": "Abonnement transports en commun remboursé à 50%",
+          "origin": "DESCRIPTION",
+          "state": "A_STRUCTURER"
+        },
+        {
+          "field": "avantage",
+          "value": "MUTUELLE",
+          "evidence": "Mutuelle familiale d'entreprise prise en charge à 70%",
+          "origin": "DESCRIPTION",
+          "state": "A_STRUCTURER"
+        },
+        {
+          "field": "avantage",
+          "value": "PRIMES",
+          "evidence": "Prime de participation et plan d'épargne d'entreprise",
+          "origin": "DESCRIPTION",
+          "state": "A_STRUCTURER"
+        },
+        {
+          "field": "certification",
+          "value": "DIPLOME_INFIRMIER",
+          "evidence": "Mobilité interne Vous êtes diplômé(e) d'État d'Infirmier et votre AFGSU est à jour",
+          "origin": "DESCRIPTION",
+          "state": "MENTION_A_CONFIRMER"
+        },
+        {
+          "field": "certification",
+          "value": "AFGSU",
+          "evidence": "Mobilité interne Vous êtes diplômé(e) d'État d'Infirmier et votre AFGSU est à jour",
+          "origin": "DESCRIPTION",
+          "state": "MENTION_A_CONFIRMER"
+        },
+        {
+          "field": "api_lieu",
+          "value": "Lyon, Auvergne-Rhône-Alpes, France",
+          "evidence": "\"Lyon, Auvergne-Rhône-Alpes, France\"",
+          "origin": "PROVENANCE_STOCKEE",
+          "state": "NON_VERIFIE"
+        },
+        {
+          "field": "api_contrat",
+          "value": {
+            "code": "MIS",
+            "label": null
+          },
+          "evidence": "{\"code\":\"MIS\",\"label\":null}",
+          "origin": "NORMALISATION_EXISTANTE",
+          "state": "NON_VERIFIE"
+        },
+        {
+          "field": "api_experience",
+          "value": {
+            "label": null,
+            "requirement": null
+          },
+          "evidence": "{\"label\":null,\"requirement\":null}",
+          "origin": "PROVENANCE_STOCKEE",
+          "state": "NON_VERIFIE"
+        }
+      ],
+      "alerts": [
+        "CONTRAT_IMPORT_TEXTE_DIVERGENT"
+      ],
+      "unclassified": [
+        "Infirmier(e)/ Technicien Préleveur(se) H/F - (69)",
+        "Auvergne-Rhône-Alpes)",
+        "Auvergne-Rhône-Alpes)",
+        "Sous La Responsabilité Du Médecin Biologiste, Vous Intégrerez Une Équipe De 5 Personnes Et Vos Principales Missions Seront Les Suivantes",
+        "Avantages",
+        "CSE attractif (chèque vacances, chèque Noël...)",
+        "Poste ouvert à des profils de Technicien(ne) préleveur(se)",
+        "Vous faites preuve d'un excellent sens relationnel et appréciez le travail en équipe ainsi que la collaboration",
+        "Vous savez également vous organiser, gérer votre temps et établir des priorités de manière efficace",
+        "Vous pouvez exercer ces droits en cliquant ici"
+      ],
+      "controls": [
+        {
+          "field": "certification",
+          "expected": "AFGSU",
+          "retrieved": true
+        },
+        {
+          "field": "contrat_texte",
+          "expected": "CDI",
+          "retrieved": true
+        },
+        {
+          "field": "remuneration_texte",
+          "expected": "25k",
+          "retrieved": true
+        },
+        {
+          "field": "avantage",
+          "expected": "TRANSPORT",
+          "retrieved": true
+        }
+      ],
+      "manualReview": "IDE OU technicien : alternative de profils a conserver. Amplitude ouverture laboratoire distincte horaires individuels. AFGSU requise a jour."
+    },
+    {
+      "id": "8908373d-428e-4cec-a02f-1b5e60e99f29",
+      "source": "JOBSPIPE",
+      "title": "Infirmier(ère) de jour - SMR (H/F)",
+      "url": "https://fr.linkedin.com/jobs/view/infirmier-%C3%A8re-de-jour-smr-h-f-at-talents-sant%C3%A9-4465924483",
+      "fields": [
+        {
+          "field": "service",
+          "value": "SMR",
+          "evidence": "Infirmier(ère) de jour - SMR (H/F)",
+          "origin": "TITLE",
+          "state": "MENTION_A_CONFIRMER"
+        },
+        {
+          "field": "horaire_type",
+          "value": "JOUR",
+          "evidence": "Infirmier(ère) de jour - SMR (H/F)",
+          "origin": "TITLE",
+          "state": "MENTION_A_CONFIRMER"
+        },
+        {
+          "field": "contexte_recruteur",
+          "value": "Notre cabinet Talents Santé accompagne les entreprises et les candidats au travers de prestations de Recrutement et Intérim spécialisées sur les fonctions Médicales, Sanitaires et Pharmaceutiques",
+          "evidence": "Notre cabinet Talents Santé accompagne les entreprises et les candidats au travers de prestations de Recrutement et Intérim spécialisées sur les fonctions Médicales, Sanitaires et Pharmaceutiques",
+          "origin": "DESCRIPTION",
+          "state": "NE_PAS_CLASSER_LE_CONTRAT"
+        },
+        {
+          "field": "contexte_recruteur",
+          "value": "Notre cabinet accompagne un établissement privé de Soins Médicaux et de Réadaptation (SMR) appartenant à un groupe reconnu dans le secteur de la santé, dans le recrutement d’un(e) Infirmier(ère) de jour en CDI",
+          "evidence": "Notre cabinet accompagne un établissement privé de Soins Médicaux et de Réadaptation (SMR) appartenant à un groupe reconnu dans le secteur de la santé, dans le recrutement d’un(e) Infirmier(ère) de jour en CDI",
+          "origin": "DESCRIPTION",
+          "state": "NE_PAS_CLASSER_LE_CONTRAT"
+        },
+        {
+          "field": "service",
+          "value": "GERIATRIE",
+          "evidence": "L’établissement prend principalement en charge des patients âgés, dans un environnement à la fois gériatrique et polyvalent, avec une activité comprenant de nombreux soins techniques",
+          "origin": "DESCRIPTION",
+          "state": "MENTION_A_CONFIRMER"
+        },
+        {
+          "field": "population",
+          "value": "PERSONNES_AGEES",
+          "evidence": "L’établissement prend principalement en charge des patients âgés, dans un environnement à la fois gériatrique et polyvalent, avec une activité comprenant de nombreux soins techniques",
+          "origin": "DESCRIPTION",
+          "state": "MENTION_A_CONFIRMER"
+        },
+        {
+          "field": "charge_et_equipe",
+          "value": "Vos missions Au sein d’une équipe composée de 2 infirmier(ère)s et 4 aides-soignant(e)s, vous assurez la prise en charge d’environ 18 patients",
+          "evidence": "Vos missions Au sein d’une équipe composée de 2 infirmier(ère)s et 4 aides-soignant(e)s, vous assurez la prise en charge d’environ 18 patients",
+          "origin": "DESCRIPTION",
+          "state": "CONTEXTE_PAS_POSTES_A_POURVOIR"
+        },
+        {
+          "field": "competence",
+          "value": "SURVEILLANCE",
+          "evidence": "- Assurer la surveillance et le suivi de l’état de santé des patients",
+          "origin": "DESCRIPTION",
+          "state": "MENTION_A_CONFIRMER"
+        },
+        {
+          "field": "population",
+          "value": "PERSONNES_AGEES",
+          "evidence": "- Participer à la prise en charge globale des patients âgés et polyvalents",
+          "origin": "DESCRIPTION",
+          "state": "MENTION_A_CONFIRMER"
+        },
+        {
+          "field": "charge_et_equipe",
+          "value": "Vous évoluerez au sein d'un service de 36 patients, avec la présence de 2 médecins au sein du bureau médical",
+          "evidence": "Vous évoluerez au sein d'un service de 36 patients, avec la présence de 2 médecins au sein du bureau médical",
+          "origin": "DESCRIPTION",
+          "state": "CONTEXTE_PAS_POSTES_A_POURVOIR"
+        },
+        {
+          "field": "certification",
+          "value": "DIPLOME_INFIRMIER",
+          "evidence": "Profil recherché Vous êtes titulaire du Diplôme d'État Infirmier (DEI)",
+          "origin": "DESCRIPTION",
+          "state": "MENTION_A_CONFIRMER"
+        },
+        {
+          "field": "service",
+          "value": "SMR",
+          "evidence": "Vous appréciez particulièrement la prise en charge des personnes âgées et souhaitez évoluer dans un environnement SMR",
+          "origin": "DESCRIPTION",
+          "state": "SOUHAITE"
+        },
+        {
+          "field": "population",
+          "value": "PERSONNES_AGEES",
+          "evidence": "Vous appréciez particulièrement la prise en charge des personnes âgées et souhaitez évoluer dans un environnement SMR",
+          "origin": "DESCRIPTION",
+          "state": "SOUHAITE"
+        },
+        {
+          "field": "experience_domaine",
+          "value": "SMR",
+          "evidence": "- Ayant idéalement une première expérience en gériatrie, médecine ou SMR",
+          "origin": "DESCRIPTION",
+          "state": "SOUHAITE"
+        },
+        {
+          "field": "experience_domaine",
+          "value": "GERIATRIE",
+          "evidence": "- Ayant idéalement une première expérience en gériatrie, médecine ou SMR",
+          "origin": "DESCRIPTION",
+          "state": "SOUHAITE"
+        },
+        {
+          "field": "experience_non_chiffree",
+          "value": "- Ayant idéalement une première expérience en gériatrie, médecine ou SMR",
+          "evidence": "- Ayant idéalement une première expérience en gériatrie, médecine ou SMR",
+          "origin": "DESCRIPTION",
+          "state": "SOUHAITE"
+        },
+        {
+          "field": "contrat_texte",
+          "value": "CDI",
+          "evidence": "CDI – Temps plein",
+          "origin": "DESCRIPTION",
+          "state": "EXPLICITE_A_VERIFIER"
+        },
+        {
+          "field": "temps_travail",
+          "value": "PLEIN",
+          "evidence": "CDI – Temps plein",
+          "origin": "DESCRIPTION",
+          "state": "EXPLICITE"
+        },
+        {
+          "field": "horaire_type",
+          "value": "JOUR",
+          "evidence": "Poste de jour",
+          "origin": "DESCRIPTION",
+          "state": "MENTION_A_CONFIRMER"
+        },
+        {
+          "field": "horaires_detail",
+          "value": "Horaires : 7h00 – 18h30, avec 1h30 de pause",
+          "evidence": "Horaires : 7h00 – 18h30, avec 1h30 de pause",
+          "origin": "DESCRIPTION",
+          "state": "HORAIRES_A_STRUCTURER"
+        },
+        {
+          "field": "pause",
+          "value": "Horaires : 7h00 – 18h30, avec 1h30 de pause",
+          "evidence": "Horaires : 7h00 – 18h30, avec 1h30 de pause",
+          "origin": "DESCRIPTION",
+          "state": "EXPLICITE"
+        },
+        {
+          "field": "horaires_detail",
+          "value": "Journées de 10 heures",
+          "evidence": "Journées de 10 heures",
+          "origin": "DESCRIPTION",
+          "state": "HORAIRES_A_STRUCTURER"
+        },
+        {
+          "field": "roulement",
+          "value": "Roulement fixe :",
+          "evidence": "Roulement fixe :",
+          "origin": "DESCRIPTION",
+          "state": "A_STRUCTURER"
+        },
+        {
+          "field": "roulement",
+          "value": "mardi, mercredi, samedi, dimanche, lundi",
+          "evidence": "mardi, mercredi, samedi, dimanche, lundi",
+          "origin": "DESCRIPTION",
+          "state": "A_STRUCTURER"
+        },
+        {
+          "field": "remuneration_texte",
+          "value": "Rémunération : 31 200 à 33 600 € brut annuel, selon l'ancienneté / année de diplôme",
+          "evidence": "Rémunération : 31 200 à 33 600 € brut annuel, selon l'ancienneté / année de diplôme",
+          "origin": "DESCRIPTION",
+          "state": "MONTANTS_UNITES_ET_COMPOSANTES_A_SEPARER"
+        },
+        {
+          "field": "avantage",
+          "value": "PRIMES",
+          "evidence": "Prime Ségur",
+          "origin": "DESCRIPTION",
+          "state": "A_STRUCTURER"
+        },
+        {
+          "field": "api_lieu",
+          "value": "Guyancourt, Île-de-France, France",
+          "evidence": "\"Guyancourt, Île-de-France, France\"",
+          "origin": "PROVENANCE_STOCKEE",
+          "state": "NON_VERIFIE"
+        },
+        {
+          "field": "api_contrat",
+          "value": {
+            "code": "MIS",
+            "label": null
+          },
+          "evidence": "{\"code\":\"MIS\",\"label\":null}",
+          "origin": "NORMALISATION_EXISTANTE",
+          "state": "NON_VERIFIE"
+        },
+        {
+          "field": "api_experience",
+          "value": {
+            "label": null,
+            "requirement": null
+          },
+          "evidence": "{\"label\":null,\"requirement\":null}",
+          "origin": "PROVENANCE_STOCKEE",
+          "state": "NON_VERIFIE"
+        },
+        {
+          "field": "api_salaire",
+          "value": "31 200 à 33 600 €",
+          "evidence": "\"31 200 à 33 600 €\"",
+          "origin": "PROVENANCE_STOCKEE",
+          "state": "NON_VERIFIE"
+        }
+      ],
+      "alerts": [
+        "CONTRAT_IMPORT_TEXTE_DIVERGENT"
+      ],
+      "unclassified": [
+        "Vos Principales Missions Seront Notamment",
+        "Réaliser les soins infirmiers techniques et les soins de médecine",
+        "- Accompagner et stimuler les patients dans le maintien de leur autonomie",
+        "- Travailler en étroite collaboration avec les aides-soignant(e)s et les médecins",
+        "- Assurer la continuité et la qualité des soins",
+        "Nous Recherchons Avant Tout Un(e) Infirmier(ère)",
+        "À l'aise avec les soins techniques",
+        "- Rigoureux(se), organisé(e) et autonome",
+        "- Doté(e) d'un bon relationnel",
+        "- Appréciant le travail en équipe",
+        "Conditions du poste",
+        "lundi, jeudi, vendredi",
+        "Vous pouvez exercer ces droits en cliquant ici"
+      ],
+      "controls": [
+        {
+          "field": "service",
+          "expected": "SMR",
+          "retrieved": true
+        },
+        {
+          "field": "horaire_type",
+          "expected": "JOUR",
+          "retrieved": true
+        },
+        {
+          "field": "pause",
+          "expected": "1h30",
+          "retrieved": true
+        },
+        {
+          "field": "charge_et_equipe",
+          "expected": "18 patients",
+          "retrieved": true
+        },
+        {
+          "field": "remuneration_texte",
+          "expected": "33 600",
+          "retrieved": true
+        }
+      ],
+      "manualReview": "36 patients service versus 18 pris en charge ; 2 IDE+4 AS distincts postes ouverts. Fourchette 31200-33600 annuel. Pause 1h30."
+    },
+    {
+      "id": "971e454d-f267-4d02-b1cd-5c9aa1e386fb",
+      "source": "JOBSPIPE",
+      "title": "Infirmier préleveur en laboratoire h/f",
+      "url": "https://fr.linkedin.com/jobs/view/infirmier-pr%C3%A9leveur-en-laboratoire-h-f-at-talents-sant%C3%A9-4464598468",
+      "fields": [
+        {
+          "field": "service",
+          "value": "LABORATOIRE",
+          "evidence": "Infirmier préleveur en laboratoire h/f",
+          "origin": "TITLE",
+          "state": "MENTION_A_CONFIRMER"
+        },
+        {
+          "field": "contexte_recruteur",
+          "value": "Notre cabinet Talents Santé accompagne les entreprises et les candidats au travers de prestations de Recrutement et Intérim spécialisées sur les fonctions Médicales, Sanitaires et Pharmaceutiques",
+          "evidence": "Notre cabinet Talents Santé accompagne les entreprises et les candidats au travers de prestations de Recrutement et Intérim spécialisées sur les fonctions Médicales, Sanitaires et Pharmaceutiques",
+          "origin": "DESCRIPTION",
+          "state": "NE_PAS_CLASSER_LE_CONTRAT"
+        },
+        {
+          "field": "competence",
+          "value": "PRELEVEMENTS",
+          "evidence": "Réaliser les prélèvements dans le respect des procédures et de la démarche qualité,",
+          "origin": "DESCRIPTION",
+          "state": "MENTION_A_CONFIRMER"
+        },
+        {
+          "field": "competence",
+          "value": "TRACABILITE",
+          "evidence": "Effectuer les compte rendu et transmissions si besoin Poste en CDI temps plein, Salaire à partir de 26k, horaires de journée amplitude 7h30-17h, et environ un samedi matin sur deux travaillé (8h-12h)",
+          "origin": "DESCRIPTION",
+          "state": "MENTION_A_CONFIRMER"
+        },
+        {
+          "field": "contrat_texte",
+          "value": "CDI",
+          "evidence": "Effectuer les compte rendu et transmissions si besoin Poste en CDI temps plein, Salaire à partir de 26k, horaires de journée amplitude 7h30-17h, et environ un samedi matin sur deux travaillé (8h-12h)",
+          "origin": "DESCRIPTION",
+          "state": "EXPLICITE_A_VERIFIER"
+        },
+        {
+          "field": "temps_travail",
+          "value": "PLEIN",
+          "evidence": "Effectuer les compte rendu et transmissions si besoin Poste en CDI temps plein, Salaire à partir de 26k, horaires de journée amplitude 7h30-17h, et environ un samedi matin sur deux travaillé (8h-12h)",
+          "origin": "DESCRIPTION",
+          "state": "EXPLICITE"
+        },
+        {
+          "field": "horaire_type",
+          "value": "JOUR",
+          "evidence": "Effectuer les compte rendu et transmissions si besoin Poste en CDI temps plein, Salaire à partir de 26k, horaires de journée amplitude 7h30-17h, et environ un samedi matin sur deux travaillé (8h-12h)",
+          "origin": "DESCRIPTION",
+          "state": "MENTION_A_CONFIRMER"
+        },
+        {
+          "field": "horaires_detail",
+          "value": "Effectuer les compte rendu et transmissions si besoin Poste en CDI temps plein, Salaire à partir de 26k, horaires de journée amplitude 7h30-17h, et environ un samedi matin sur deux travaillé (8h-12h)",
+          "evidence": "Effectuer les compte rendu et transmissions si besoin Poste en CDI temps plein, Salaire à partir de 26k, horaires de journée amplitude 7h30-17h, et environ un samedi matin sur deux travaillé (8h-12h)",
+          "origin": "DESCRIPTION",
+          "state": "AMPLITUDE_PAS_DUREE_POSTE"
+        },
+        {
+          "field": "roulement",
+          "value": "Effectuer les compte rendu et transmissions si besoin Poste en CDI temps plein, Salaire à partir de 26k, horaires de journée amplitude 7h30-17h, et environ un samedi matin sur deux travaillé (8h-12h)",
+          "evidence": "Effectuer les compte rendu et transmissions si besoin Poste en CDI temps plein, Salaire à partir de 26k, horaires de journée amplitude 7h30-17h, et environ un samedi matin sur deux travaillé (8h-12h)",
+          "origin": "DESCRIPTION",
+          "state": "A_STRUCTURER"
+        },
+        {
+          "field": "remuneration_texte",
+          "value": "Effectuer les compte rendu et transmissions si besoin Poste en CDI temps plein, Salaire à partir de 26k, horaires de journée amplitude 7h30-17h, et environ un samedi matin sur deux travaillé (8h-12h)",
+          "evidence": "Effectuer les compte rendu et transmissions si besoin Poste en CDI temps plein, Salaire à partir de 26k, horaires de journée amplitude 7h30-17h, et environ un samedi matin sur deux travaillé (8h-12h)",
+          "origin": "DESCRIPTION",
+          "state": "MONTANTS_UNITES_ET_COMPOSANTES_A_SEPARER"
+        },
+        {
+          "field": "competence",
+          "value": "PRELEVEMENTS",
+          "evidence": "Vous avez le diplôme d'IDE, et vous maîtrisez les bonnes pratiques de prélèvements sanguins",
+          "origin": "DESCRIPTION",
+          "state": "MENTION_A_CONFIRMER"
+        },
+        {
+          "field": "certification",
+          "value": "DIPLOME_INFIRMIER",
+          "evidence": "Vous avez le diplôme d'IDE, et vous maîtrisez les bonnes pratiques de prélèvements sanguins",
+          "origin": "DESCRIPTION",
+          "state": "MENTION_A_CONFIRMER"
+        },
+        {
+          "field": "api_lieu",
+          "value": "Épernon, Centre-Val de Loire, France",
+          "evidence": "\"Épernon, Centre-Val de Loire, France\"",
+          "origin": "PROVENANCE_STOCKEE",
+          "state": "NON_VERIFIE"
+        },
+        {
+          "field": "api_contrat",
+          "value": {
+            "code": "MIS",
+            "label": null
+          },
+          "evidence": "{\"code\":\"MIS\",\"label\":null}",
+          "origin": "NORMALISATION_EXISTANTE",
+          "state": "NON_VERIFIE"
+        },
+        {
+          "field": "api_experience",
+          "value": {
+            "label": null,
+            "requirement": null
+          },
+          "evidence": "{\"label\":null,\"requirement\":null}",
+          "origin": "PROVENANCE_STOCKEE",
+          "state": "NON_VERIFIE"
+        }
+      ],
+      "alerts": [
+        "CONTRAT_IMPORT_TEXTE_DIVERGENT"
+      ],
+      "unclassified": [
+        "En tant qu'infirmier-e préleveur-se,",
+        "vos missions sont les suivantes:",
+        "Accueillir et prendre en charge les patients,",
+        "Vous êtes rigoureux-se et autonome",
+        "Vous pouvez exercer ces droits en cliquant ici"
+      ],
+      "controls": [
+        {
+          "field": "contrat_texte",
+          "expected": "CDI",
+          "retrieved": true
+        },
+        {
+          "field": "competence",
+          "expected": "PRELEVEMENTS",
+          "retrieved": true
+        },
+        {
+          "field": "remuneration_texte",
+          "expected": "26k",
+          "retrieved": true
+        },
+        {
+          "field": "roulement",
+          "expected": "samedi",
+          "retrieved": true
+        }
+      ],
+      "manualReview": "26k : ni devise ni periodicite explicites dans ce passage, ne pas inventer annuel. Samedi 8-12 distinct amplitude semaine."
+    },
+    {
+      "id": "af7ca4ec-c76f-4b80-8f0b-4bdafcb6198f",
+      "source": "JOBSPIPE",
+      "title": "Infirmier(e) Conseiller(e) Clinique H/F Secteur 92 / 95",
+      "url": "https://fr.linkedin.com/jobs/view/infirmier-e-conseiller-e-clinique-h-f-secteur-92-95-at-talents-sant%C3%A9-4466523192",
+      "fields": [
+        {
+          "field": "contexte_recruteur",
+          "value": "Notre cabinet Talents Santé accompagne les entreprises et les candidats au travers de prestations de Recrutement et Intérim spécialisées sur les fonctions Médicales, Sanitaires et Pharmaceutiques",
+          "evidence": "Notre cabinet Talents Santé accompagne les entreprises et les candidats au travers de prestations de Recrutement et Intérim spécialisées sur les fonctions Médicales, Sanitaires et Pharmaceutiques",
+          "origin": "DESCRIPTION",
+          "state": "NE_PAS_CLASSER_LE_CONTRAT"
+        },
+        {
+          "field": "remuneration_texte",
+          "value": "Rémunération Et Avantages Package entre 45K€ et 47K€ annuel brut",
+          "evidence": "Rémunération Et Avantages Package entre 45K€ et 47K€ annuel brut",
+          "origin": "DESCRIPTION",
+          "state": "MONTANTS_UNITES_ET_COMPOSANTES_A_SEPARER"
+        },
+        {
+          "field": "remuneration_texte",
+          "value": "Fixe compris entre 35K € et 37K € brut annuel, selon votre ancienneté + primes variables de 10K€ brut annuel",
+          "evidence": "Fixe compris entre 35K € et 37K € brut annuel, selon votre ancienneté + primes variables de 10K€ brut annuel",
+          "origin": "DESCRIPTION",
+          "state": "MONTANTS_UNITES_ET_COMPOSANTES_A_SEPARER"
+        },
+        {
+          "field": "avantage",
+          "value": "PRIMES",
+          "evidence": "Fixe compris entre 35K € et 37K € brut annuel, selon votre ancienneté + primes variables de 10K€ brut annuel",
+          "origin": "DESCRIPTION",
+          "state": "A_STRUCTURER"
+        },
+        {
+          "field": "avantage",
+          "value": "RTT",
+          "evidence": "Statut cadre, forfait jours avec 15 RTT",
+          "origin": "DESCRIPTION",
+          "state": "A_STRUCTURER"
+        },
+        {
+          "field": "avantage",
+          "value": "REPAS",
+          "evidence": "VL de fonction, carte essence, PC, téléphone, 16€ de prise en charge pour les repas, mutuelle remboursée à 100%, participation aux frais d'électricité et à la box internet, CSE",
+          "origin": "DESCRIPTION",
+          "state": "A_STRUCTURER"
+        },
+        {
+          "field": "avantage",
+          "value": "TRANSPORT",
+          "evidence": "VL de fonction, carte essence, PC, téléphone, 16€ de prise en charge pour les repas, mutuelle remboursée à 100%, participation aux frais d'électricité et à la box internet, CSE",
+          "origin": "DESCRIPTION",
+          "state": "A_STRUCTURER"
+        },
+        {
+          "field": "avantage",
+          "value": "MUTUELLE",
+          "evidence": "VL de fonction, carte essence, PC, téléphone, 16€ de prise en charge pour les repas, mutuelle remboursée à 100%, participation aux frais d'électricité et à la box internet, CSE",
+          "origin": "DESCRIPTION",
+          "state": "A_STRUCTURER"
+        },
+        {
+          "field": "certification",
+          "value": "DIPLOME_INFIRMIER",
+          "evidence": "Vous êtes titulaire du diplôme d’État d'infirmier(ère) avec une première expérience réussie en service hospitalier",
+          "origin": "DESCRIPTION",
+          "state": "MENTION_A_CONFIRMER"
+        },
+        {
+          "field": "experience_non_chiffree",
+          "value": "Vous êtes titulaire du diplôme d’État d'infirmier(ère) avec une première expérience réussie en service hospitalier",
+          "evidence": "Vous êtes titulaire du diplôme d’État d'infirmier(ère) avec une première expérience réussie en service hospitalier",
+          "origin": "DESCRIPTION",
+          "state": "MENTION_A_CONFIRMER"
+        },
+        {
+          "field": "certification",
+          "value": "DU_PLAIES",
+          "evidence": "Un DU en plaies et cicatrisation serait un plus",
+          "origin": "DESCRIPTION",
+          "state": "SOUHAITE"
+        },
+        {
+          "field": "api_lieu",
+          "value": "Nanterre, Île-de-France, France",
+          "evidence": "\"Nanterre, Île-de-France, France\"",
+          "origin": "PROVENANCE_STOCKEE",
+          "state": "NON_VERIFIE"
+        },
+        {
+          "field": "api_contrat",
+          "value": {
+            "code": "MIS",
+            "label": null
+          },
+          "evidence": "{\"code\":\"MIS\",\"label\":null}",
+          "origin": "NORMALISATION_EXISTANTE",
+          "state": "NON_VERIFIE"
+        },
+        {
+          "field": "api_experience",
+          "value": {
+            "label": null,
+            "requirement": null
+          },
+          "evidence": "{\"label\":null,\"requirement\":null}",
+          "origin": "PROVENANCE_STOCKEE",
+          "state": "NON_VERIFIE"
+        },
+        {
+          "field": "api_salaire",
+          "value": "45K€",
+          "evidence": "\"45K€\"",
+          "origin": "PROVENANCE_STOCKEE",
+          "state": "NON_VERIFIE"
+        }
+      ],
+      "alerts": [],
+      "unclassified": [
+        "Infirmier(e) Conseiller(e) Clinique H/F Secteur 92 / 95",
+        "Rattaché(e) au Directeur des Ventes, vous développez l'offre à destination des établissements de soins et de leurs différents services sur le 92/95, en binôme avec le responsable commercial, en intervenant sur la partie conseil et technique",
+        "À Ce Titre, Vous Serez Amené(e) à",
+        "Développer et fidéliser la clientèle à travers des visites cliniques et commerciales, accompagné(e) du responsable commercial",
+        "- Conseiller sur la partie technique des dispositifs médicaux à mettre en place",
+        "- Assurer le suivi clinique des marchés et grands comptes et identifier de nouvelles opportunités de développement",
+        "- Réaliser des bilans cliniques, audits escarres et actions de suivi spécifiques",
+        "- Former les utilisateurs aux produits et assurer leur accompagnement dans la durée",
+        "- Développer et entretenir un réseau de professionnels de santé et de leaders d’opinion",
+        "On vous décrit comme une personne dynamique, réactive avec une belle aisance relationnelle",
+        "Autonome, organisé(e) et consciencieux(se), vous appréciez le terrain",
+        "Aujourd'hui, vous aspirez à davantage d'autonomie et à accompagner les professionnels de santé",
+        "Force de proposition, vous saurez détecter les solutions adaptées pour développer votre activité",
+        "Ce poste nécessite un attrait pour le développement commercial, même si vous serez accompagné d'un responsable commercial sur le terrain",
+        "Alors, envie de vous lancer de nouveaux défis",
+        "Vous pouvez exercer ces droits en cliquant ici"
+      ],
+      "controls": [
+        {
+          "field": "remuneration_texte",
+          "expected": "45K",
+          "retrieved": true
+        },
+        {
+          "field": "remuneration_texte",
+          "expected": "35K",
+          "retrieved": true
+        },
+        {
+          "field": "avantage",
+          "expected": "REPAS",
+          "retrieved": true
+        },
+        {
+          "field": "certification",
+          "expected": "DU_PLAIES",
+          "retrieved": true
+        }
+      ],
+      "manualReview": "Poste de conseil commercial : pas mission de soins et interim non etabli. Package 45-47k, fixe 35-37k, variable10k, repas16 : composantes distinctes."
+    },
+    {
+      "id": "b14b0433-34bd-447a-b27e-d39ef89eee0c",
+      "source": "JOBSPIPE",
+      "title": "Infirmier de bloc opératoire (IBODE) F/H",
+      "url": "https://fr.linkedin.com/jobs/view/infirmier-de-bloc-op%C3%A9ratoire-ibode-f-h-at-synergie-france-4465224715",
+      "fields": [
+        {
+          "field": "qualification_titre",
+          "value": "IBODE",
+          "evidence": "Infirmier de bloc opératoire (IBODE) F/H",
+          "origin": "TITLE",
+          "state": "EXPLICITE"
+        },
+        {
+          "field": "service",
+          "value": "BLOC",
+          "evidence": "Infirmier de bloc opératoire (IBODE) F/H",
+          "origin": "TITLE",
+          "state": "MENTION_A_CONFIRMER"
+        },
+        {
+          "field": "service",
+          "value": "BLOC",
+          "evidence": "A propos de notre client Nous recrutons un Infirmier (H/F) en Contrat à Durée Indéterminée à temps plein pour le Bloc Opératoire et la Salle de réveil",
+          "origin": "DESCRIPTION",
+          "state": "MENTION_A_CONFIRMER"
+        },
+        {
+          "field": "service",
+          "value": "SSPI",
+          "evidence": "A propos de notre client Nous recrutons un Infirmier (H/F) en Contrat à Durée Indéterminée à temps plein pour le Bloc Opératoire et la Salle de réveil",
+          "origin": "DESCRIPTION",
+          "state": "MENTION_A_CONFIRMER"
+        },
+        {
+          "field": "contrat_texte",
+          "value": "CDI",
+          "evidence": "A propos de notre client Nous recrutons un Infirmier (H/F) en Contrat à Durée Indéterminée à temps plein pour le Bloc Opératoire et la Salle de réveil",
+          "origin": "DESCRIPTION",
+          "state": "EXPLICITE_A_VERIFIER"
+        },
+        {
+          "field": "temps_travail",
+          "value": "PLEIN",
+          "evidence": "A propos de notre client Nous recrutons un Infirmier (H/F) en Contrat à Durée Indéterminée à temps plein pour le Bloc Opératoire et la Salle de réveil",
+          "origin": "DESCRIPTION",
+          "state": "EXPLICITE"
+        },
+        {
+          "field": "debut_mission",
+          "value": "DES_QUE_POSSIBLE",
+          "evidence": "Poste à pourvoir dès que possible",
+          "origin": "DESCRIPTION",
+          "state": "DATE_NON_PRECISE"
+        },
+        {
+          "field": "service",
+          "value": "BLOC",
+          "evidence": "DE Infirmier exigé Mesures transitoires ou DE Infirmier de Bloc serait un plus mais débutants acceptés Descriptif du poste Missions Principales Réalisation de soins et d’activités liés à l’intervention et au geste opératoire Réalisation de soins auprès d’une personne bénéficiaire d’une intervention Mise en œuvre et contrôle de mesures d’hygiène en bloc opératoire Mise en œuvre de mesures de qualité et de sécurité en bloc opératoire Gestion d’équipement, de dispositifs médicaux et de produits en bloc opératoire Transmissions d’information, organisation, planification en bloc opératoire Accueillir et surveiller les patients en salle de surveillance post-interventionnelle (SSPI) Assurer le suivi des paramètres vitaux et l'évaluation de la douleur",
+          "origin": "DESCRIPTION",
+          "state": "SOUHAITE"
+        },
+        {
+          "field": "service",
+          "value": "SSPI",
+          "evidence": "DE Infirmier exigé Mesures transitoires ou DE Infirmier de Bloc serait un plus mais débutants acceptés Descriptif du poste Missions Principales Réalisation de soins et d’activités liés à l’intervention et au geste opératoire Réalisation de soins auprès d’une personne bénéficiaire d’une intervention Mise en œuvre et contrôle de mesures d’hygiène en bloc opératoire Mise en œuvre de mesures de qualité et de sécurité en bloc opératoire Gestion d’équipement, de dispositifs médicaux et de produits en bloc opératoire Transmissions d’information, organisation, planification en bloc opératoire Accueillir et surveiller les patients en salle de surveillance post-interventionnelle (SSPI) Assurer le suivi des paramètres vitaux et l'évaluation de la douleur",
+          "origin": "DESCRIPTION",
+          "state": "SOUHAITE"
+        },
+        {
+          "field": "competence",
+          "value": "TRACABILITE",
+          "evidence": "DE Infirmier exigé Mesures transitoires ou DE Infirmier de Bloc serait un plus mais débutants acceptés Descriptif du poste Missions Principales Réalisation de soins et d’activités liés à l’intervention et au geste opératoire Réalisation de soins auprès d’une personne bénéficiaire d’une intervention Mise en œuvre et contrôle de mesures d’hygiène en bloc opératoire Mise en œuvre de mesures de qualité et de sécurité en bloc opératoire Gestion d’équipement, de dispositifs médicaux et de produits en bloc opératoire Transmissions d’information, organisation, planification en bloc opératoire Accueillir et surveiller les patients en salle de surveillance post-interventionnelle (SSPI) Assurer le suivi des paramètres vitaux et l'évaluation de la douleur",
+          "origin": "DESCRIPTION",
+          "state": "SOUHAITE"
+        },
+        {
+          "field": "competence",
+          "value": "SURVEILLANCE",
+          "evidence": "DE Infirmier exigé Mesures transitoires ou DE Infirmier de Bloc serait un plus mais débutants acceptés Descriptif du poste Missions Principales Réalisation de soins et d’activités liés à l’intervention et au geste opératoire Réalisation de soins auprès d’une personne bénéficiaire d’une intervention Mise en œuvre et contrôle de mesures d’hygiène en bloc opératoire Mise en œuvre de mesures de qualité et de sécurité en bloc opératoire Gestion d’équipement, de dispositifs médicaux et de produits en bloc opératoire Transmissions d’information, organisation, planification en bloc opératoire Accueillir et surveiller les patients en salle de surveillance post-interventionnelle (SSPI) Assurer le suivi des paramètres vitaux et l'évaluation de la douleur",
+          "origin": "DESCRIPTION",
+          "state": "SOUHAITE"
+        },
+        {
+          "field": "competence",
+          "value": "HYGIENE",
+          "evidence": "DE Infirmier exigé Mesures transitoires ou DE Infirmier de Bloc serait un plus mais débutants acceptés Descriptif du poste Missions Principales Réalisation de soins et d’activités liés à l’intervention et au geste opératoire Réalisation de soins auprès d’une personne bénéficiaire d’une intervention Mise en œuvre et contrôle de mesures d’hygiène en bloc opératoire Mise en œuvre de mesures de qualité et de sécurité en bloc opératoire Gestion d’équipement, de dispositifs médicaux et de produits en bloc opératoire Transmissions d’information, organisation, planification en bloc opératoire Accueillir et surveiller les patients en salle de surveillance post-interventionnelle (SSPI) Assurer le suivi des paramètres vitaux et l'évaluation de la douleur",
+          "origin": "DESCRIPTION",
+          "state": "SOUHAITE"
+        },
+        {
+          "field": "certification",
+          "value": "DIPLOME_INFIRMIER",
+          "evidence": "DE Infirmier exigé Mesures transitoires ou DE Infirmier de Bloc serait un plus mais débutants acceptés Descriptif du poste Missions Principales Réalisation de soins et d’activités liés à l’intervention et au geste opératoire Réalisation de soins auprès d’une personne bénéficiaire d’une intervention Mise en œuvre et contrôle de mesures d’hygiène en bloc opératoire Mise en œuvre de mesures de qualité et de sécurité en bloc opératoire Gestion d’équipement, de dispositifs médicaux et de produits en bloc opératoire Transmissions d’information, organisation, planification en bloc opératoire Accueillir et surveiller les patients en salle de surveillance post-interventionnelle (SSPI) Assurer le suivi des paramètres vitaux et l'évaluation de la douleur",
+          "origin": "DESCRIPTION",
+          "state": "SOUHAITE"
+        },
+        {
+          "field": "alternatives_professionnelles",
+          "value": "DE Infirmier exigé Mesures transitoires ou DE Infirmier de Bloc serait un plus mais débutants acceptés Descriptif du poste Missions Principales Réalisation de soins et d’activités liés à l’intervention et au geste opératoire Réalisation de soins auprès d’une personne bénéficiaire d’une intervention Mise en œuvre et contrôle de mesures d’hygiène en bloc opératoire Mise en œuvre de mesures de qualité et de sécurité en bloc opératoire Gestion d’équipement, de dispositifs médicaux et de produits en bloc opératoire Transmissions d’information, organisation, planification en bloc opératoire Accueillir et surveiller les patients en salle de surveillance post-interventionnelle (SSPI) Assurer le suivi des paramètres vitaux et l'évaluation de la douleur",
+          "evidence": "DE Infirmier exigé Mesures transitoires ou DE Infirmier de Bloc serait un plus mais débutants acceptés Descriptif du poste Missions Principales Réalisation de soins et d’activités liés à l’intervention et au geste opératoire Réalisation de soins auprès d’une personne bénéficiaire d’une intervention Mise en œuvre et contrôle de mesures d’hygiène en bloc opératoire Mise en œuvre de mesures de qualité et de sécurité en bloc opératoire Gestion d’équipement, de dispositifs médicaux et de produits en bloc opératoire Transmissions d’information, organisation, planification en bloc opératoire Accueillir et surveiller les patients en salle de surveillance post-interventionnelle (SSPI) Assurer le suivi des paramètres vitaux et l'évaluation de la douleur",
+          "origin": "DESCRIPTION",
+          "state": "ALTERNATIVES_PAS_CUMUL"
+        },
+        {
+          "field": "debutant_accepte",
+          "value": true,
+          "evidence": "DE Infirmier exigé Mesures transitoires ou DE Infirmier de Bloc serait un plus mais débutants acceptés Descriptif du poste Missions Principales Réalisation de soins et d’activités liés à l’intervention et au geste opératoire Réalisation de soins auprès d’une personne bénéficiaire d’une intervention Mise en œuvre et contrôle de mesures d’hygiène en bloc opératoire Mise en œuvre de mesures de qualité et de sécurité en bloc opératoire Gestion d’équipement, de dispositifs médicaux et de produits en bloc opératoire Transmissions d’information, organisation, planification en bloc opératoire Accueillir et surveiller les patients en salle de surveillance post-interventionnelle (SSPI) Assurer le suivi des paramètres vitaux et l'évaluation de la douleur",
+          "origin": "DESCRIPTION",
+          "state": "EXPLICITE"
+        },
+        {
+          "field": "population",
+          "value": "ENFANTS",
+          "evidence": "Intervenir auprès d’enfants malades",
+          "origin": "DESCRIPTION",
+          "state": "MENTION_A_CONFIRMER"
+        },
+        {
+          "field": "competence",
+          "value": "HYGIENE",
+          "evidence": "Règles d’hygiène et d’asepsie",
+          "origin": "DESCRIPTION",
+          "state": "MENTION_A_CONFIRMER"
+        },
+        {
+          "field": "contexte_recruteur",
+          "value": "Capacité à gérer des situations stressantes Vaccinations prévues par le Code de Santé Publique à jour Description Société Synergie Care, réseau spécialisé dans l’emploi médical, paramédical et social vous accompagne dans l’évolution de votre carrière professionnelle : recrutement CDD-CDI, intérim médical, formation et conseil dans le secteur de la santé",
+          "evidence": "Capacité à gérer des situations stressantes Vaccinations prévues par le Code de Santé Publique à jour Description Société Synergie Care, réseau spécialisé dans l’emploi médical, paramédical et social vous accompagne dans l’évolution de votre carrière professionnelle : recrutement CDD-CDI, intérim médical, formation et conseil dans le secteur de la santé",
+          "origin": "DESCRIPTION",
+          "state": "NE_PAS_CLASSER_LE_CONTRAT"
+        },
+        {
+          "field": "api_lieu",
+          "value": "Avranches, Normandy, France",
+          "evidence": "\"Avranches, Normandy, France\"",
+          "origin": "PROVENANCE_STOCKEE",
+          "state": "NON_VERIFIE"
+        },
+        {
+          "field": "api_contrat",
+          "value": {
+            "code": "MIS",
+            "label": null
+          },
+          "evidence": "{\"code\":\"MIS\",\"label\":null}",
+          "origin": "NORMALISATION_EXISTANTE",
+          "state": "NON_VERIFIE"
+        },
+        {
+          "field": "api_experience",
+          "value": {
+            "label": null,
+            "requirement": null
+          },
+          "evidence": "{\"label\":null,\"requirement\":null}",
+          "origin": "PROVENANCE_STOCKEE",
+          "state": "NON_VERIFIE"
+        }
+      ],
+      "alerts": [
+        "CONTRAT_IMPORT_TEXTE_DIVERGENT",
+        "IBODE_TITRE_MAIS_DIPLOME_SOUHAITE_DANS_TEXTE"
+      ],
+      "unclassified": [
+        "Profil recherché Intervenir auprès de malades psychiatriques",
+        "Préparer les produits anesthésiques selon les indications du médecin anesthésiste réanimateur",
+        "Administrer une anesthésie générale ou locale",
+        "Intervenir en établissement scolaire",
+        "Adapter le traitement selon les besoins du patient et dans le cadre de sa mission",
+        "Cerner l'état du patient (clinique, psychologique) et consigner les informations recueillies dans le dossier médical",
+        "Informer la personne compétente en cas de dysfonctionnement des appareils et équipements biomédicaux",
+        "Identifier les signes et le degré de la douleur",
+        "Communiquer avec le patient (ressenti, douleur...) et actualiser le dossier de soins infirmiers (incidents, modifications d'état clinique...)",
+        "Intervenir dans un service de soins de sa spécialité (bloc, réa, néonat…)",
+        "Démarche de Soins Infirmiers (DSI)",
+        "Législation sociale",
+        "Classification Commune des Actes Médicaux (CCAM)",
+        "Classification Internationale des Maladies (CIM)",
+        "Hospitalisation à domicile",
+        "Identification des signes et du degré de la douleur",
+        "Gestion administrative",
+        "Médecine générale Adaptabilité",
+        "Attention",
+        "Autonomie",
+        "Bienveillance",
+        "Capacité à adapter son discours à son interlocuteur",
+        "Maîtrise de soi",
+        "Fiabilité",
+        "Synergie Care est une filiale du Groupe SYNERGIE, 1er groupe français en gestion des Ressources Humaines",
+        "Des milliers d'offres d'emploi, 17 pays, 800 agences, plus de 5000 collaborateurs",
+        "Mettons nos énergies en commun",
+        "2026-09-14 Avranches Normandie 50300 Synergie Care https://www.synergie-care.fr/ /themes/custom/am_theme/images/svg/am-logo-shortened.svg"
+      ],
+      "controls": [
+        {
+          "field": "contrat_texte",
+          "expected": "CDI",
+          "retrieved": true
+        },
+        {
+          "field": "service",
+          "expected": "SSPI",
+          "retrieved": true
+        },
+        {
+          "field": "debutant_accepte",
+          "expected": "true",
+          "retrieved": true
+        }
+      ],
+      "manualReview": "Titre IBODE mais texte DE infirmier exige, DE bloc souhaite et debutants acceptes. Liste heterogene de competences ne definit pas service/population. CDI explicite."
+    },
+    {
+      "id": "e2bc247f-21a1-4dc9-906b-1ae863a7a6b1",
+      "source": "JOBSPIPE",
+      "title": "Infirmier H/F",
+      "url": "https://www.indeed.com/viewjob?jk=a0a48d3fce29cb95",
+      "fields": [
+        {
+          "field": "contexte_recruteur",
+          "value": "Que vous recherchiez des missions d'intérim ou des postes en CDD ou CDI, nous avons certainement l'offre qui correspond à vos attentes, n'hésitez pas à postuler pour rejoindre nos équipes",
+          "evidence": "Que vous recherchiez des missions d'intérim ou des postes en CDD ou CDI, nous avons certainement l'offre qui correspond à vos attentes, n'hésitez pas à postuler pour rejoindre nos équipes",
+          "origin": "DESCRIPTION",
+          "state": "NE_PAS_CLASSER_LE_CONTRAT"
+        },
+        {
+          "field": "service",
+          "value": "EHPAD",
+          "evidence": "Team Staffing Médical est à la recherche d'un Infirmier H/F pour un des missions en vacation de jour dans un EHPAD situé à LANGON pour le mois de septembre",
+          "origin": "DESCRIPTION",
+          "state": "MENTION_A_CONFIRMER"
+        },
+        {
+          "field": "contrat_texte",
+          "value": "VACATION",
+          "evidence": "Team Staffing Médical est à la recherche d'un Infirmier H/F pour un des missions en vacation de jour dans un EHPAD situé à LANGON pour le mois de septembre",
+          "origin": "DESCRIPTION",
+          "state": "EXPLICITE_A_VERIFIER"
+        },
+        {
+          "field": "periode_texte",
+          "value": "Team Staffing Médical est à la recherche d'un Infirmier H/F pour un des missions en vacation de jour dans un EHPAD situé à LANGON pour le mois de septembre",
+          "evidence": "Team Staffing Médical est à la recherche d'un Infirmier H/F pour un des missions en vacation de jour dans un EHPAD situé à LANGON pour le mois de septembre",
+          "origin": "DESCRIPTION",
+          "state": "ANNEE_ET_DATES_A_CONFIRMER"
+        },
+        {
+          "field": "horaire_type",
+          "value": "JOUR",
+          "evidence": "Team Staffing Médical est à la recherche d'un Infirmier H/F pour un des missions en vacation de jour dans un EHPAD situé à LANGON pour le mois de septembre",
+          "origin": "DESCRIPTION",
+          "state": "MENTION_A_CONFIRMER"
+        },
+        {
+          "field": "service",
+          "value": "EHPAD",
+          "evidence": "Il s'agit d'un EHPAD composé de 83 chambres",
+          "origin": "DESCRIPTION",
+          "state": "MENTION_A_CONFIRMER"
+        },
+        {
+          "field": "charge_et_equipe",
+          "value": "Il s'agit d'un EHPAD composé de 83 chambres",
+          "evidence": "Il s'agit d'un EHPAD composé de 83 chambres",
+          "origin": "DESCRIPTION",
+          "state": "CONTEXTE_PAS_POSTES_A_POURVOIR"
+        },
+        {
+          "field": "population",
+          "value": "PERSONNES_AGEES",
+          "evidence": "Cette établissement fait partie du groupe Korian qui est l’un des leaders européens de l’accompagnement et des soins dédiés aux personnes âgées et aux publics fragilisés",
+          "origin": "DESCRIPTION",
+          "state": "MENTION_A_CONFIRMER"
+        },
+        {
+          "field": "service",
+          "value": "EHPAD",
+          "evidence": "Présent en France et à l’international, le groupe gère des EHPAD, cliniques, résidences services seniors et structures spécialisées, avec une ambition forte : proposer un accompagnement humain, personnalisé et de qualité",
+          "origin": "DESCRIPTION",
+          "state": "MENTION_A_CONFIRMER"
+        },
+        {
+          "field": "contrat_texte",
+          "value": "VACATION",
+          "evidence": "Contrat : Vacation",
+          "origin": "DESCRIPTION",
+          "state": "EXPLICITE_A_VERIFIER"
+        },
+        {
+          "field": "horaires_detail",
+          "value": "Horaires : 7H 19H",
+          "evidence": "Horaires : 7H 19H",
+          "origin": "DESCRIPTION",
+          "state": "HORAIRES_A_STRUCTURER"
+        },
+        {
+          "field": "periode_texte",
+          "value": "Dates : Septembre",
+          "evidence": "Dates : Septembre",
+          "origin": "DESCRIPTION",
+          "state": "ANNEE_ET_DATES_A_CONFIRMER"
+        },
+        {
+          "field": "remuneration_texte",
+          "value": "Salaire : Selon les conventions collectives des établissements",
+          "evidence": "Salaire : Selon les conventions collectives des établissements",
+          "origin": "DESCRIPTION",
+          "state": "MONTANTS_UNITES_ET_COMPOSANTES_A_SEPARER"
+        },
+        {
+          "field": "competence",
+          "value": "SURVEILLANCE",
+          "evidence": "Fournir des soins d’hygiène et de confort, réaliser des actes sur prescription médicale et assurer la surveillance de l’état clinique des patients",
+          "origin": "DESCRIPTION",
+          "state": "MENTION_A_CONFIRMER"
+        },
+        {
+          "field": "competence",
+          "value": "HYGIENE",
+          "evidence": "Fournir des soins d’hygiène et de confort, réaliser des actes sur prescription médicale et assurer la surveillance de l’état clinique des patients",
+          "origin": "DESCRIPTION",
+          "state": "MENTION_A_CONFIRMER"
+        },
+        {
+          "field": "competence",
+          "value": "TRACABILITE",
+          "evidence": "- Assurer les transmissions écrites via le logiciel de soins et les transmissions orales auprès de l’équipe pluridisciplinaire pour garantir le suivi de l’état de santé des patients",
+          "origin": "DESCRIPTION",
+          "state": "MENTION_A_CONFIRMER"
+        },
+        {
+          "field": "certification",
+          "value": "DIPLOME_INFIRMIER",
+          "evidence": "Titulaire du DE infirmier, vous êtes rigoureux·se, organisé·e et doté·e d’une grande capacité d’adaptation",
+          "origin": "DESCRIPTION",
+          "state": "MENTION_A_CONFIRMER"
+        },
+        {
+          "field": "api_lieu",
+          "value": "33210 Langon",
+          "evidence": "\"33210 Langon\"",
+          "origin": "PROVENANCE_STOCKEE",
+          "state": "NON_VERIFIE"
+        },
+        {
+          "field": "api_contrat",
+          "value": {
+            "code": "MIS",
+            "label": null
+          },
+          "evidence": "{\"code\":\"MIS\",\"label\":null}",
+          "origin": "NORMALISATION_EXISTANTE",
+          "state": "NON_VERIFIE"
+        },
+        {
+          "field": "api_experience",
+          "value": {
+            "label": null,
+            "requirement": null
+          },
+          "evidence": "{\"label\":null,\"requirement\":null}",
+          "origin": "PROVENANCE_STOCKEE",
+          "state": "NON_VERIFIE"
+        },
+        {
+          "field": "api_coordonnees",
+          "value": {
+            "latitude": 44.55,
+            "longitude": -0.25
+          },
+          "evidence": "{\"latitude\":44.55,\"longitude\":-0.25}",
+          "origin": "PROVENANCE_STOCKEE",
+          "state": "NON_VERIFIE"
+        }
+      ],
+      "alerts": [
+        "CONTRAT_IMPORT_TEXTE_DIVERGENT"
+      ],
+      "unclassified": [
+        "Infirmier H/F",
+        "Team Staffing médical est un réseau d'agences de travail temporaire spécialisé dans le médical et le paramédical",
+        "Proposant un accompagnement de la maladie d'Alzheimer et troubles apparentés",
+        "Le groupe accorde une attention particulière à la qualité de vie au travail de ses équipes",
+        "Les valeurs de respect, bienveillance, professionnalisme et esprit d’équipe guident les pratiques au quotidien",
+        "Nous vous proposons :",
+        "Lieu : Langon",
+        "Vos missions :",
+        "- Contribuer à l’amélioration continue de la qualité des soins et à la sécurité des patients",
+        "- Accompagner chaque patient dans le respect de sa dignité et de son autonomie, en adaptant la communication à ses besoins et à ceux de son entourage",
+        "- Travailler en collaboration avec l’ensemble de l’équipe",
+        "Profil recherché :",
+        "- Capable de travailler en équipe, de prioriser les soins et de gérer les situations d’urgence",
+        "- Vous faites preuve d’empathie et d’écoute envers les patients",
+        "- Vous respectez strictement le secret professionnel et les règles de confidentialité",
+        "Vous avez envie de postuler",
+        "Tant mieux, nous avons hâte d’en savoir davantage sur votre profil"
+      ],
+      "controls": [
+        {
+          "field": "contrat_texte",
+          "expected": "VACATION",
+          "retrieved": true
+        },
+        {
+          "field": "horaires_detail",
+          "expected": "7H 19H",
+          "retrieved": true
+        },
+        {
+          "field": "periode_texte",
+          "expected": "Septembre",
+          "retrieved": true
+        }
+      ],
+      "manualReview": "Vacation explicite ; ne pas classer CDI a cause du recruteur. Septembre sans annee ; convention sans montant. 83 chambres pas 83 postes."
+    },
+    {
+      "id": "b05cb741-2b7f-45e3-be37-76f1f2b6647c",
+      "source": "FRANCE_TRAVAIL",
+      "title": "Iade H/f - Anesthesie",
+      "url": "https://candidat.francetravail.fr/offres/recherche/detail/5040828",
+      "fields": [
+        {
+          "field": "qualification_titre",
+          "value": "IADE",
+          "evidence": "Iade H/f - Anesthesie",
+          "origin": "TITLE",
+          "state": "EXPLICITE"
+        },
+        {
+          "field": "certification",
+          "value": "DIPLOME_IADE",
+          "evidence": "TAGA MEDICAL recherche pour l'un de ses établissements de santé partenaires un(e) Infirmier(ère) Anesthésiste Diplômé(e) d'État (IADE) en intérim afin de renforcer les équipes du service d'anesthésie",
+          "origin": "DESCRIPTION",
+          "state": "MENTION_A_CONFIRMER"
+        },
+        {
+          "field": "service",
+          "value": "BLOC",
+          "evidence": "Au sein du bloc opératoire et en collaboration étroite avec les médecins anesthésistes-réanimateurs, vous assurez la prise en charge des patients avant, pendant et après les interventions chirurgicales",
+          "origin": "DESCRIPTION",
+          "state": "MENTION_A_CONFIRMER"
+        },
+        {
+          "field": "service",
+          "value": "REANIMATION",
+          "evidence": "Vos missions : Préparer et vérifier le matériel d'anesthésie et de réanimation",
+          "origin": "DESCRIPTION",
+          "state": "MENTION_A_CONFIRMER"
+        },
+        {
+          "field": "competence",
+          "value": "SURVEILLANCE",
+          "evidence": "Assurer la surveillance clinique du patient durant l'intervention",
+          "origin": "DESCRIPTION",
+          "state": "MENTION_A_CONFIRMER"
+        },
+        {
+          "field": "service",
+          "value": "URGENCES",
+          "evidence": "Participer à la prise en charge des urgences vitales",
+          "origin": "DESCRIPTION",
+          "state": "MENTION_A_CONFIRMER"
+        },
+        {
+          "field": "competence",
+          "value": "TRACABILITE",
+          "evidence": "Veiller à la sécurité, au confort et à la traçabilité des soins",
+          "origin": "DESCRIPTION",
+          "state": "MENTION_A_CONFIRMER"
+        },
+        {
+          "field": "certification",
+          "value": "DIPLOME_IADE",
+          "evidence": "Participer à l'entretien et à la gestion des équipements du service MISSION EN 10H OU 12H Profil du candidat : Diplôme d'État d'Infirmier Anesthésiste (IADE) exigé",
+          "origin": "DESCRIPTION",
+          "state": "EXIGENCE_TEXTE"
+        },
+        {
+          "field": "certification",
+          "value": "DIPLOME_INFIRMIER",
+          "evidence": "Participer à l'entretien et à la gestion des équipements du service MISSION EN 10H OU 12H Profil du candidat : Diplôme d'État d'Infirmier Anesthésiste (IADE) exigé",
+          "origin": "DESCRIPTION",
+          "state": "EXIGENCE_TEXTE"
+        },
+        {
+          "field": "horaires_detail",
+          "value": "Participer à l'entretien et à la gestion des équipements du service MISSION EN 10H OU 12H Profil du candidat : Diplôme d'État d'Infirmier Anesthésiste (IADE) exigé",
+          "evidence": "Participer à l'entretien et à la gestion des équipements du service MISSION EN 10H OU 12H Profil du candidat : Diplôme d'État d'Infirmier Anesthésiste (IADE) exigé",
+          "origin": "DESCRIPTION",
+          "state": "HORAIRES_A_STRUCTURER"
+        },
+        {
+          "field": "durees_poste_alternatives",
+          "value": "Participer à l'entretien et à la gestion des équipements du service MISSION EN 10H OU 12H Profil du candidat : Diplôme d'État d'Infirmier Anesthésiste (IADE) exigé",
+          "evidence": "Participer à l'entretien et à la gestion des équipements du service MISSION EN 10H OU 12H Profil du candidat : Diplôme d'État d'Infirmier Anesthésiste (IADE) exigé",
+          "origin": "DESCRIPTION",
+          "state": "DUREES_PAS_HEURES_DEBUT"
+        },
+        {
+          "field": "experience_domaine",
+          "value": "BLOC",
+          "evidence": "Inscription à l'Ordre National des Infirmiers en cours de validité et RPPS Expérience en bloc opératoire, SSPI ou réanimation appréciée",
+          "origin": "DESCRIPTION",
+          "state": "SOUHAITE"
+        },
+        {
+          "field": "experience_domaine",
+          "value": "SSPI",
+          "evidence": "Inscription à l'Ordre National des Infirmiers en cours de validité et RPPS Expérience en bloc opératoire, SSPI ou réanimation appréciée",
+          "origin": "DESCRIPTION",
+          "state": "SOUHAITE"
+        },
+        {
+          "field": "experience_domaine",
+          "value": "REANIMATION",
+          "evidence": "Inscription à l'Ordre National des Infirmiers en cours de validité et RPPS Expérience en bloc opératoire, SSPI ou réanimation appréciée",
+          "origin": "DESCRIPTION",
+          "state": "SOUHAITE"
+        },
+        {
+          "field": "certification",
+          "value": "RPPS",
+          "evidence": "Inscription à l'Ordre National des Infirmiers en cours de validité et RPPS Expérience en bloc opératoire, SSPI ou réanimation appréciée",
+          "origin": "DESCRIPTION",
+          "state": "SOUHAITE"
+        },
+        {
+          "field": "certification",
+          "value": "ORDRE_INFIRMIER",
+          "evidence": "Inscription à l'Ordre National des Infirmiers en cours de validité et RPPS Expérience en bloc opératoire, SSPI ou réanimation appréciée",
+          "origin": "DESCRIPTION",
+          "state": "SOUHAITE"
+        },
+        {
+          "field": "experience_non_chiffree",
+          "value": "Inscription à l'Ordre National des Infirmiers en cours de validité et RPPS Expérience en bloc opératoire, SSPI ou réanimation appréciée",
+          "evidence": "Inscription à l'Ordre National des Infirmiers en cours de validité et RPPS Expérience en bloc opératoire, SSPI ou réanimation appréciée",
+          "origin": "DESCRIPTION",
+          "state": "SOUHAITE"
+        },
+        {
+          "field": "remuneration_texte",
+          "value": "Salaire :36 € hors CP + FM, remboursement des transports : 3.39 €",
+          "evidence": "Salaire :36 € hors CP + FM, remboursement des transports : 3.39 €",
+          "origin": "DESCRIPTION",
+          "state": "MONTANTS_UNITES_ET_COMPOSANTES_A_SEPARER"
+        },
+        {
+          "field": "avantage",
+          "value": "TRANSPORT",
+          "evidence": "Salaire :36 € hors CP + FM, remboursement des transports : 3.39 €",
+          "origin": "DESCRIPTION",
+          "state": "A_STRUCTURER"
+        },
+        {
+          "field": "api_lieu",
+          "value": "75 - Paris",
+          "evidence": "\"75 - Paris\"",
+          "origin": "PROVENANCE_STOCKEE",
+          "state": "NON_VERIFIE"
+        },
+        {
+          "field": "api_contrat",
+          "value": {
+            "code": "MIS",
+            "label": "Intérim - 1 Mois"
+          },
+          "evidence": "{\"code\":\"MIS\",\"label\":\"Intérim - 1 Mois\"}",
+          "origin": "PROVENANCE_STOCKEE",
+          "state": "NON_VERIFIE"
+        },
+        {
+          "field": "api_experience",
+          "value": {
+            "label": "Débutant accepté",
+            "requirement": "D"
+          },
+          "evidence": "{\"label\":\"Débutant accepté\",\"requirement\":\"D\"}",
+          "origin": "PROVENANCE_STOCKEE",
+          "state": "NON_VERIFIE"
+        },
+        {
+          "field": "api_horaires",
+          "value": "Travail en journée",
+          "evidence": "\"Travail en journée\"",
+          "origin": "PROVENANCE_STOCKEE",
+          "state": "NON_VERIFIE"
+        }
+      ],
+      "alerts": [],
+      "unclassified": [
+        "Accueillir et prendre en charge les patients avant l'intervention",
+        "Mettre en œuvre les techniques d'anesthésie sous la responsabilité du médecin anesthésiste",
+        "Sens des responsabilités, rigueur et réactivité",
+        "Capacité à travailler en équipe pluridisciplinaire"
+      ],
+      "controls": [
+        {
+          "field": "qualification_titre",
+          "expected": "IADE",
+          "retrieved": true
+        },
+        {
+          "field": "certification",
+          "expected": "RPPS",
+          "retrieved": true
+        },
+        {
+          "field": "horaires_detail",
+          "expected": "10H OU 12H",
+          "retrieved": true
+        },
+        {
+          "field": "remuneration_texte",
+          "expected": "36",
+          "retrieved": true
+        }
+      ],
+      "manualReview": "IADE, diplome et RPPS ; experience bloc/SSPI/reanimation appreciee. 10 OU 12h = durees de poste ; 36 euros sans unite, CP/FM exclus."
+    },
+    {
+      "id": "55f4ddd4-ce55-4626-b7aa-f331b36e4028",
+      "source": "FRANCE_TRAVAIL",
+      "title": "Ibode H/f - Chir Gynecologique (H/F)",
+      "url": "https://candidat.francetravail.fr/offres/recherche/detail/5778620",
+      "fields": [
+        {
+          "field": "qualification_titre",
+          "value": "IBODE",
+          "evidence": "Ibode H/f - Chir Gynecologique (H/F)",
+          "origin": "TITLE",
+          "state": "EXPLICITE"
+        },
+        {
+          "field": "specialite",
+          "value": "GYNECOLOGIE",
+          "evidence": "Ibode H/f - Chir Gynecologique (H/F)",
+          "origin": "TITLE",
+          "state": "MENTION_A_CONFIRMER"
+        },
+        {
+          "field": "avantage",
+          "value": "TRANSPORT",
+          "evidence": "TAGA MEDICAL recherche pour le compte de son client, un établissement situé dans le 75, et facilement accessible en transport en commun",
+          "origin": "DESCRIPTION",
+          "state": "A_STRUCTURER"
+        },
+        {
+          "field": "service",
+          "value": "BLOC",
+          "evidence": "Dans le cadre du renforcement de son équipe opératoire, notre établissement recherche un(e) Infirmier(e) de Bloc Opératoire Diplômé(e) d'État (IBODE) pour intervenir en chirurgie gynécologique, notamment sur des actes de : Chirurgie gynécologique fonctionnelle (endométriose, myomectomie.)",
+          "origin": "DESCRIPTION",
+          "state": "MENTION_A_CONFIRMER"
+        },
+        {
+          "field": "specialite",
+          "value": "GYNECOLOGIE",
+          "evidence": "Dans le cadre du renforcement de son équipe opératoire, notre établissement recherche un(e) Infirmier(e) de Bloc Opératoire Diplômé(e) d'État (IBODE) pour intervenir en chirurgie gynécologique, notamment sur des actes de : Chirurgie gynécologique fonctionnelle (endométriose, myomectomie.)",
+          "origin": "DESCRIPTION",
+          "state": "MENTION_A_CONFIRMER"
+        },
+        {
+          "field": "experience_domaine",
+          "value": "BLOC",
+          "evidence": "Vos missions : Préparation de la salle et du matériel opératoire Prise en charge du patient au bloc opératoire Instrumentation et assistance au chirurgien Respect strict des protocoles d'hygiène et de sécurité Collaboration avec l'équipe anesthésique et les autres soignants Robot-assistée (selon équipement) HORAIRES EN 08H OU 10H / NUIT Profil du candidat : Diplôme IBODE exigé Expérience en chirurgie gynécologique ou en bloc polyvalent appréciée Sens des responsabilités, rigueur, réactivité Bon relationnel, travail d'équipe",
+          "origin": "DESCRIPTION",
+          "state": "CONDITIONNEL"
+        },
+        {
+          "field": "specialite",
+          "value": "GYNECOLOGIE",
+          "evidence": "Vos missions : Préparation de la salle et du matériel opératoire Prise en charge du patient au bloc opératoire Instrumentation et assistance au chirurgien Respect strict des protocoles d'hygiène et de sécurité Collaboration avec l'équipe anesthésique et les autres soignants Robot-assistée (selon équipement) HORAIRES EN 08H OU 10H / NUIT Profil du candidat : Diplôme IBODE exigé Expérience en chirurgie gynécologique ou en bloc polyvalent appréciée Sens des responsabilités, rigueur, réactivité Bon relationnel, travail d'équipe",
+          "origin": "DESCRIPTION",
+          "state": "CONDITIONNEL"
+        },
+        {
+          "field": "competence",
+          "value": "HYGIENE",
+          "evidence": "Vos missions : Préparation de la salle et du matériel opératoire Prise en charge du patient au bloc opératoire Instrumentation et assistance au chirurgien Respect strict des protocoles d'hygiène et de sécurité Collaboration avec l'équipe anesthésique et les autres soignants Robot-assistée (selon équipement) HORAIRES EN 08H OU 10H / NUIT Profil du candidat : Diplôme IBODE exigé Expérience en chirurgie gynécologique ou en bloc polyvalent appréciée Sens des responsabilités, rigueur, réactivité Bon relationnel, travail d'équipe",
+          "origin": "DESCRIPTION",
+          "state": "CONDITIONNEL"
+        },
+        {
+          "field": "competence",
+          "value": "INSTRUMENTATION",
+          "evidence": "Vos missions : Préparation de la salle et du matériel opératoire Prise en charge du patient au bloc opératoire Instrumentation et assistance au chirurgien Respect strict des protocoles d'hygiène et de sécurité Collaboration avec l'équipe anesthésique et les autres soignants Robot-assistée (selon équipement) HORAIRES EN 08H OU 10H / NUIT Profil du candidat : Diplôme IBODE exigé Expérience en chirurgie gynécologique ou en bloc polyvalent appréciée Sens des responsabilités, rigueur, réactivité Bon relationnel, travail d'équipe",
+          "origin": "DESCRIPTION",
+          "state": "CONDITIONNEL"
+        },
+        {
+          "field": "certification",
+          "value": "DIPLOME_IBODE",
+          "evidence": "Vos missions : Préparation de la salle et du matériel opératoire Prise en charge du patient au bloc opératoire Instrumentation et assistance au chirurgien Respect strict des protocoles d'hygiène et de sécurité Collaboration avec l'équipe anesthésique et les autres soignants Robot-assistée (selon équipement) HORAIRES EN 08H OU 10H / NUIT Profil du candidat : Diplôme IBODE exigé Expérience en chirurgie gynécologique ou en bloc polyvalent appréciée Sens des responsabilités, rigueur, réactivité Bon relationnel, travail d'équipe",
+          "origin": "DESCRIPTION",
+          "state": "CONDITIONNEL"
+        },
+        {
+          "field": "equipement",
+          "value": "ROBOT",
+          "evidence": "Vos missions : Préparation de la salle et du matériel opératoire Prise en charge du patient au bloc opératoire Instrumentation et assistance au chirurgien Respect strict des protocoles d'hygiène et de sécurité Collaboration avec l'équipe anesthésique et les autres soignants Robot-assistée (selon équipement) HORAIRES EN 08H OU 10H / NUIT Profil du candidat : Diplôme IBODE exigé Expérience en chirurgie gynécologique ou en bloc polyvalent appréciée Sens des responsabilités, rigueur, réactivité Bon relationnel, travail d'équipe",
+          "origin": "DESCRIPTION",
+          "state": "CONDITIONNEL"
+        },
+        {
+          "field": "experience_non_chiffree",
+          "value": "Vos missions : Préparation de la salle et du matériel opératoire Prise en charge du patient au bloc opératoire Instrumentation et assistance au chirurgien Respect strict des protocoles d'hygiène et de sécurité Collaboration avec l'équipe anesthésique et les autres soignants Robot-assistée (selon équipement) HORAIRES EN 08H OU 10H / NUIT Profil du candidat : Diplôme IBODE exigé Expérience en chirurgie gynécologique ou en bloc polyvalent appréciée Sens des responsabilités, rigueur, réactivité Bon relationnel, travail d'équipe",
+          "evidence": "Vos missions : Préparation de la salle et du matériel opératoire Prise en charge du patient au bloc opératoire Instrumentation et assistance au chirurgien Respect strict des protocoles d'hygiène et de sécurité Collaboration avec l'équipe anesthésique et les autres soignants Robot-assistée (selon équipement) HORAIRES EN 08H OU 10H / NUIT Profil du candidat : Diplôme IBODE exigé Expérience en chirurgie gynécologique ou en bloc polyvalent appréciée Sens des responsabilités, rigueur, réactivité Bon relationnel, travail d'équipe",
+          "origin": "DESCRIPTION",
+          "state": "SOUHAITE"
+        },
+        {
+          "field": "horaire_type",
+          "value": "NUIT",
+          "evidence": "Vos missions : Préparation de la salle et du matériel opératoire Prise en charge du patient au bloc opératoire Instrumentation et assistance au chirurgien Respect strict des protocoles d'hygiène et de sécurité Collaboration avec l'équipe anesthésique et les autres soignants Robot-assistée (selon équipement) HORAIRES EN 08H OU 10H / NUIT Profil du candidat : Diplôme IBODE exigé Expérience en chirurgie gynécologique ou en bloc polyvalent appréciée Sens des responsabilités, rigueur, réactivité Bon relationnel, travail d'équipe",
+          "origin": "DESCRIPTION",
+          "state": "MENTION_A_CONFIRMER"
+        },
+        {
+          "field": "horaires_detail",
+          "value": "Vos missions : Préparation de la salle et du matériel opératoire Prise en charge du patient au bloc opératoire Instrumentation et assistance au chirurgien Respect strict des protocoles d'hygiène et de sécurité Collaboration avec l'équipe anesthésique et les autres soignants Robot-assistée (selon équipement) HORAIRES EN 08H OU 10H / NUIT Profil du candidat : Diplôme IBODE exigé Expérience en chirurgie gynécologique ou en bloc polyvalent appréciée Sens des responsabilités, rigueur, réactivité Bon relationnel, travail d'équipe",
+          "evidence": "Vos missions : Préparation de la salle et du matériel opératoire Prise en charge du patient au bloc opératoire Instrumentation et assistance au chirurgien Respect strict des protocoles d'hygiène et de sécurité Collaboration avec l'équipe anesthésique et les autres soignants Robot-assistée (selon équipement) HORAIRES EN 08H OU 10H / NUIT Profil du candidat : Diplôme IBODE exigé Expérience en chirurgie gynécologique ou en bloc polyvalent appréciée Sens des responsabilités, rigueur, réactivité Bon relationnel, travail d'équipe",
+          "origin": "DESCRIPTION",
+          "state": "HORAIRES_A_STRUCTURER"
+        },
+        {
+          "field": "durees_poste_alternatives",
+          "value": "Vos missions : Préparation de la salle et du matériel opératoire Prise en charge du patient au bloc opératoire Instrumentation et assistance au chirurgien Respect strict des protocoles d'hygiène et de sécurité Collaboration avec l'équipe anesthésique et les autres soignants Robot-assistée (selon équipement) HORAIRES EN 08H OU 10H / NUIT Profil du candidat : Diplôme IBODE exigé Expérience en chirurgie gynécologique ou en bloc polyvalent appréciée Sens des responsabilités, rigueur, réactivité Bon relationnel, travail d'équipe",
+          "evidence": "Vos missions : Préparation de la salle et du matériel opératoire Prise en charge du patient au bloc opératoire Instrumentation et assistance au chirurgien Respect strict des protocoles d'hygiène et de sécurité Collaboration avec l'équipe anesthésique et les autres soignants Robot-assistée (selon équipement) HORAIRES EN 08H OU 10H / NUIT Profil du candidat : Diplôme IBODE exigé Expérience en chirurgie gynécologique ou en bloc polyvalent appréciée Sens des responsabilités, rigueur, réactivité Bon relationnel, travail d'équipe",
+          "origin": "DESCRIPTION",
+          "state": "DUREES_PAS_HEURES_DEBUT"
+        },
+        {
+          "field": "remuneration_texte",
+          "value": "Salaire :36 € hors CP + FM, remboursement des transports : 3.39 €",
+          "evidence": "Salaire :36 € hors CP + FM, remboursement des transports : 3.39 €",
+          "origin": "DESCRIPTION",
+          "state": "MONTANTS_UNITES_ET_COMPOSANTES_A_SEPARER"
+        },
+        {
+          "field": "avantage",
+          "value": "TRANSPORT",
+          "evidence": "Salaire :36 € hors CP + FM, remboursement des transports : 3.39 €",
+          "origin": "DESCRIPTION",
+          "state": "A_STRUCTURER"
+        },
+        {
+          "field": "api_lieu",
+          "value": "75 - Paris",
+          "evidence": "\"75 - Paris\"",
+          "origin": "PROVENANCE_STOCKEE",
+          "state": "NON_VERIFIE"
+        },
+        {
+          "field": "api_contrat",
+          "value": {
+            "code": "MIS",
+            "label": "Intérim - 1 Mois"
+          },
+          "evidence": "{\"code\":\"MIS\",\"label\":\"Intérim - 1 Mois\"}",
+          "origin": "PROVENANCE_STOCKEE",
+          "state": "NON_VERIFIE"
+        },
+        {
+          "field": "api_experience",
+          "value": {
+            "label": "Débutant accepté",
+            "requirement": "D"
+          },
+          "evidence": "{\"label\":\"Débutant accepté\",\"requirement\":\"D\"}",
+          "origin": "PROVENANCE_STOCKEE",
+          "state": "NON_VERIFIE"
+        }
+      ],
+      "alerts": [],
+      "unclassified": [],
+      "controls": [
+        {
+          "field": "qualification_titre",
+          "expected": "IBODE",
+          "retrieved": true
+        },
+        {
+          "field": "specialite",
+          "expected": "GYNECOLOGIE",
+          "retrieved": true
+        },
+        {
+          "field": "competence",
+          "expected": "INSTRUMENTATION",
+          "retrieved": true
+        },
+        {
+          "field": "equipement",
+          "expected": "ROBOT",
+          "retrieved": true
+        },
+        {
+          "field": "horaires_detail",
+          "expected": "08H OU 10H",
+          "retrieved": true
+        }
+      ],
+      "manualReview": "IBODE gynecologie, instrumentation ; robot selon equipement donc conditionnel. 8 OU 10h et nuit a distinguer. Salaire sans unite."
+    },
+    {
+      "id": "436e6c08-d17e-49e4-a588-292a1b5a5f1c",
+      "source": "FRANCE_TRAVAIL",
+      "title": "INFIRMIER ANESTHÉSISTE DE (F/H)",
+      "url": "https://candidat.francetravail.fr/offres/recherche/detail/6420676",
+      "fields": [
+        {
+          "field": "qualification_titre",
+          "value": "IADE",
+          "evidence": "INFIRMIER ANESTHÉSISTE DE (F/H)",
+          "origin": "TITLE",
+          "state": "CLASSIFICATION_TITRE"
+        },
+        {
+          "field": "competence",
+          "value": "SURVEILLANCE",
+          "evidence": "Assurer la surveillance des patientes et patients pendant l'anesthésie, avec vigilance et sang-fr",
+          "origin": "DESCRIPTION",
+          "state": "MENTION_A_CONFIRMER"
+        },
+        {
+          "field": "api_lieu",
+          "value": "75 - Paris",
+          "evidence": "\"75 - Paris\"",
+          "origin": "PROVENANCE_STOCKEE",
+          "state": "NON_VERIFIE"
+        },
+        {
+          "field": "api_contrat",
+          "value": {
+            "code": "MIS",
+            "label": "Intérim - 10 Jour(s)"
+          },
+          "evidence": "{\"code\":\"MIS\",\"label\":\"Intérim - 10 Jour(s)\"}",
+          "origin": "PROVENANCE_STOCKEE",
+          "state": "NON_VERIFIE"
+        },
+        {
+          "field": "api_experience",
+          "value": {
+            "label": "Débutant accepté",
+            "requirement": "D"
+          },
+          "evidence": "{\"label\":\"Débutant accepté\",\"requirement\":\"D\"}",
+          "origin": "PROVENANCE_STOCKEE",
+          "state": "NON_VERIFIE"
+        }
+      ],
+      "alerts": [],
+      "unclassified": [
+        "descriptif du postePrêt(e) à orchestrer chaque anesthésie en tant qu'Infirmier anesthésiste de (F/H) en hôpital",
+        "Au sein d'un établissement hospitalier, vous contribuez à des soins anesthésiques sûrs, précis et sereins, même lorsque le rythme s'accélère",
+        "Préparer le matériel, vérifier les équipements et participer à la prise en charge avant l'intervention"
+      ],
+      "controls": [
+        {
+          "field": "qualification_titre",
+          "expected": "IADE",
+          "retrieved": true
+        },
+        {
+          "field": "competence",
+          "expected": "SURVEILLANCE",
+          "retrieved": true
+        }
+      ],
+      "manualReview": "Texte coupe : qualification IADE depuis titre, materiel/anesthesie ; aucune date inventee."
+    },
+    {
+      "id": "4db97038-e962-456f-a56d-6d2f4cb8032c",
+      "source": "FRANCE_TRAVAIL",
+      "title": "INFIRMIER ANESTHÉSISTE DE (F/H)",
+      "url": "https://candidat.francetravail.fr/offres/recherche/detail/6386184",
+      "fields": [
+        {
+          "field": "qualification_titre",
+          "value": "IADE",
+          "evidence": "INFIRMIER ANESTHÉSISTE DE (F/H)",
+          "origin": "TITLE",
+          "state": "CLASSIFICATION_TITRE"
+        },
+        {
+          "field": "competence",
+          "value": "SURVEILLANCE",
+          "evidence": "Vous participez à l'administration de l'anesthésie et surveillez les constantes pendant les interventions",
+          "origin": "DESCRIPTION",
+          "state": "MENTION_A_CONFIRMER"
+        },
+        {
+          "field": "api_lieu",
+          "value": "75 - Paris",
+          "evidence": "\"75 - Paris\"",
+          "origin": "PROVENANCE_STOCKEE",
+          "state": "NON_VERIFIE"
+        },
+        {
+          "field": "api_contrat",
+          "value": {
+            "code": "MIS",
+            "label": "Intérim - 10 Jour(s)"
+          },
+          "evidence": "{\"code\":\"MIS\",\"label\":\"Intérim - 10 Jour(s)\"}",
+          "origin": "PROVENANCE_STOCKEE",
+          "state": "NON_VERIFIE"
+        },
+        {
+          "field": "api_experience",
+          "value": {
+            "label": "Débutant accepté",
+            "requirement": "D"
+          },
+          "evidence": "{\"label\":\"Débutant accepté\",\"requirement\":\"D\"}",
+          "origin": "PROVENANCE_STOCKEE",
+          "state": "NON_VERIFIE"
+        }
+      ],
+      "alerts": [],
+      "unclassified": [
+        "descriptif du posteSouhaitez-vous contribuer aux missions essentielles d'Infirmier anesthésiste de (F/H) au sein d'un hôpital",
+        "Vous assurez la sécurité anesthésique des patientes et patients au sein d'un établissement hospitalier",
+        "Vous préparez le matériel, vérifiez les protocoles et accueillez les patientes et patients avant l'intervention",
+        "Vous a"
+      ],
+      "controls": [
+        {
+          "field": "qualification_titre",
+          "expected": "IADE",
+          "retrieved": true
+        },
+        {
+          "field": "competence",
+          "expected": "SURVEILLANCE",
+          "retrieved": true
+        }
+      ],
+      "manualReview": "Texte coupe : qualification IADE depuis titre, aucune competence additionnelle inventee."
+    }
+  ]
+}

@@ -1,0 +1,16 @@
+﻿import {test} from 'node:test';import assert from 'node:assert/strict';
+import {parseOfferV3} from './parser-v3.mjs';
+const p=description=>parseOfferV3({title:'Infirmier',description});
+const has=(r,field,value)=>r.fields.some(f=>f.field===field&&(value===undefined||f.value===value));
+test('handicap candidature ne devient pas population soignee',()=>{const r=p('Tous nos postes sont ouverts aux personnes en situation de handicap.');assert.ok(has(r,'accessibilite_candidature'));assert.ok(!has(r,'population','HANDICAP'));});
+test('transport medicalise ne devient pas avantage transport',()=>{const r=p('Vous organisez les transports médicalisés.');assert.ok(!has(r,'avantage','TRANSPORT'));assert.ok(has(r,'activite_transport_sanitaire'));});
+test('experience pneumologie reste domaine souhaite',()=>{const r=p('Expérience en pneumologie fortement souhaitée.');assert.ok(!has(r,'service','PNEUMOLOGIE'));assert.equal(r.fields.find(f=>f.field==='experience_domaine'&&f.value==='PNEUMOLOGIE').state,'SOUHAITE');});
+test('bloc dans parcours preoperatoire pas service affectation',()=>{const r=p('Préparation des patients avant leur passage au bloc opératoire.');assert.ok(!has(r,'service','BLOC'));});
+test('pleintemps contradictoire non arbitre',()=>assert.ok(p('Mission à temps partiel. Temps plein.').alerts.includes('TEMPS_PLEIN_PARTIEL_CONTRADICTOIRE')));
+test('acompte deux fois semaine structure',()=>assert.deepEqual(p('Acomptes 2 fois par semaine.').fields.find(f=>f.field==='acompte').value,{frequency:2,period:'semaine'}));
+test('pause minutes sans deduction salaire',()=>assert.ok(has(p('Horaires 9h30 à 17h00 (1 heure de pause).'),'pause_minutes',60)));
+test('indemnite journaliere sans salaire horaire invente',()=>{const r=p('Indemnité de transport en commun 3.39 euros par jour travaillé.');const f=r.fields.find(f=>f.field==='montant_avantage');assert.equal(f.value.amount,3.39);assert.equal(f.value.period,'jour travaille');});
+test('prime de nuit ne prouve pas poste nuit',()=>assert.ok(!has(p('Prime de nuit et jour férié.'),'horaire_type','NUIT')));
+test('un mot reconnu ne masque pas reste clause importante',()=>assert.ok(p('Pansements, permis B obligatoire et logement non fourni.').reviewQueue.length));
+test('condition experience reste conditionnelle',()=>assert.ok(has(p("Vous respectez la loi Valletoux pour l'intérim (2 ans si pas de mission avant juillet 2024)."),'condition_experience')));
+test('aucun salaire invente selon convention',()=>assert.ok(has(p('Rémunération à convenir selon convention collective.'),'remuneration_non_chiffree',true)));

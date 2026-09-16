@@ -1,3 +1,6 @@
+import { executeClosure, processClosures } from "./security/closure";
+import { retireStaleOffers } from "./public-data/freshness";
+import { reparseOffers } from "./public-data/reparse-offers";
 import { retryOutbox } from "./automation/automation.module";
 import { importFiness } from "./reference-data/finess";
 import { DocumentsService } from "./documents/documents.module";
@@ -5,12 +8,22 @@ import { seedDemo } from "./demo/seed";
 import "reflect-metadata";
 import "./config";
 import { fetchOffers, importOffers } from "./public-data/offers";
+import { fetchJobsPipe, normalizeJobsPipe } from "./public-data/jobspipe";
 import { Command } from "commander";
-import { Database } from "./database/database";
+import { Database, audit } from "./database/database";
+import {
+  cleanupRemovedDocuments,
+  anonymizeAccount,
+  applyRetention,
+  inspectRetention,
+} from "./security/retention";
 const cli = new Command()
   .name("infimatch")
   .description("InfiMatch backend administration")
   .version("0.1.0");
+cli.command("reparse-offers").description("Recompute stored offer extractions without provider calls; dry-run unless --apply")
+  .option("--apply", "Persist new or changed extractions")
+  .action(async opts => { const db = await new Database().connect(); try { console.log(JSON.stringify(await reparseOffers(db, !!opts.apply))); } finally { await db.onModuleDestroy(); } });
 cli
   .command("migrate")
   .description("Apply explicit SQL migrations")
@@ -77,6 +90,20 @@ cli
     }
   });
 cli
+  .command("import-jobspipe")
+  .option("--limit <number>", "Bounded single request (1-100)", "10")
+  .option("--dry-run", "Acquire and normalize without database writes", false)
+  .action(async (opts) => {
+    const raw = await fetchJobsPipe(Number(opts.limit));
+    if (opts.dryRun) {
+      console.log(JSON.stringify(await importOffers(null as unknown as Database, raw, true, normalizeJobsPipe, "JOBSPIPE"), null, 2));
+      return;
+    }
+    const db = await new Database().connect();
+    try { console.log(JSON.stringify(await importOffers(db, raw, false, normalizeJobsPipe, "JOBSPIPE"), null, 2)); }
+    finally { await db.onModuleDestroy(); }
+  });
+cli
   .command("seed")
   .description("Create isolated fictional demo data; never marks RPPS as found")
   .action(async () => {
@@ -141,6 +168,134 @@ cli
       await db.onModuleDestroy();
     }
   });
+for (const action of ["disable", "enable", "revoke-sessions"] as const)
+  cli
+    .command(
+      action === "revoke-sessions"
+        ? "revoke-account-sessions"
+        : action + "-account",
+    )
+    .requiredOption("--account <uuid>")
+    .description(
+      action === "disable"
+        ? "Disable an account and revoke all sessions"
+        : action === "enable"
+          ? "Enable an account with all previous sessions revoked"
+          : "Revoke every session for an active account",
+    )
+    .action(async (opts) => {
+      const db = await new Database().connect();
+      try {
+        const result = await db.transaction(async (em) => {
+          const [account] = await em.query(
+            "SELECT id,active FROM account WHERE id=$1::uuid FOR UPDATE",
+            [opts.account],
+          );
+          if (!account) throw new Error("Account not found");
+          const active =
+            action === "disable"
+              ? false
+              : action === "enable"
+                ? true
+                : account.active;
+          const [updated] = await em.query(
+            "UPDATE account SET active=$2,session_version=session_version+1 WHERE id=$1 RETURNING id,active,session_version",
+            [opts.account, active],
+          );
+          await em.query("DELETE FROM session WHERE sess->>'userId'=$1", [
+            opts.account,
+          ]);
+          await audit(
+            em,
+            null,
+            action === "disable"
+              ? "ACCOUNT_DISABLED"
+              : action === "enable"
+                ? "ACCOUNT_ENABLED"
+                : "ACCOUNT_SESSIONS_REVOKED",
+            opts.account,
+          );
+          return updated;
+        });
+        console.log(JSON.stringify(result));
+      } finally {
+        await db.onModuleDestroy();
+      }
+    });
+cli
+  .command("purge-retention")
+  .description(
+    "Apply V1 retention: expired sessions, old traces, staging files and superseded bank details",
+  )
+  .option("--apply", "Delete matching rows and files; default is a dry-run", false)
+  .action(async (opts) => {
+    const db = await new Database().connect();
+    try {
+      if (!opts.apply) {
+        console.log(
+          JSON.stringify(
+            await db.transaction(async (em) => ({
+              dryRun: true,
+              ...(await inspectRetention(em)),
+            })),
+          ),
+        );
+        return;
+      }
+      const result = await db.transaction((em) => applyRetention(em));
+      await cleanupRemovedDocuments(db, result.documentIds ?? []);
+      console.log(JSON.stringify(result));
+    } finally {
+      await db.onModuleDestroy();
+    }
+  });
+cli
+  .command("anonymize-account")
+  .requiredOption("--account <uuid>")
+  .option("--apply", "Persist anonymization; default is a dry-run", false)
+  .description(
+    "Exercise of rights: close the account, wipe private profile fields and user documents",
+  )
+  .action(async (opts) => {
+    const db = await new Database().connect();
+    try {
+      if (!opts.apply) {
+        const [account] = await db.query(
+          "SELECT id,email,active FROM account WHERE id=$1::uuid",
+          [opts.account],
+        );
+        if (!account) throw new Error("Account not found");
+        const [documents] = await db.query(
+          "SELECT count(*)::int AS n FROM document WHERE owner_id=$1 AND kind IN('EVIDENCE','BANK')",
+          [opts.account],
+        );
+        console.log(
+          JSON.stringify({
+            dryRun: true,
+            id: account.id,
+            active: account.active,
+            documents: documents.n,
+          }),
+        );
+        return;
+      }
+      const result = await executeClosure(db, opts.account);
+      console.log(JSON.stringify(result));
+    } finally {
+      await db.onModuleDestroy();
+    }
+  });
+cli.command("retire-stale-offers").option("--apply", "Retire expired or unverified offers",false).action(async opts=>{const db=await new Database().connect();try{console.log(JSON.stringify(await retireStaleOffers(db,opts.apply)));}finally{await db.onModuleDestroy();}});
+cli.command("closure-requests").action(async()=>{const db=await new Database().connect();try{console.log(JSON.stringify(await db.query("SELECT id,account_id,status,requested_at FROM closure_request WHERE status IN('REQUESTED','APPROVED') ORDER BY requested_at")));}finally{await db.onModuleDestroy();}});
+cli.command("approve-closure").requiredOption("--request <uuid>").action(async opts=>{const db=await new Database().connect();try{const rows=await db.query("UPDATE closure_request SET status='APPROVED',approved_at=now() WHERE id=$1::uuid AND status='REQUESTED' RETURNING id,status",[opts.request]);if(!rows.length)throw Error("No pending request");console.log(JSON.stringify(rows[0]));}finally{await db.onModuleDestroy();}});
+cli.command("process-closure-requests").option("--apply", "Process operator-approved requests",false).action(async opts=>{const db=await new Database().connect();try{console.log(JSON.stringify(opts.apply?await processClosures(db):{dryRun:true,requests:await db.query("SELECT id FROM closure_request WHERE status='APPROVED'")}));}finally{await db.onModuleDestroy();}});
+cli.command("replay-erasures").requiredOption("--ledger <path>").action(async opts=>{
+ const {readFile}=await import("node:fs/promises");
+ const entries=(await readFile(opts.ledger,"utf8")).split(/\r?\n/).filter(Boolean).map(line=>JSON.parse(line).accountId);
+ if(entries.some(id=>typeof id!=="string"||!/^[0-9a-f-]{36}$/i.test(id)))throw Error("Invalid erasure ledger");
+ const db=await new Database().connect();let processed=0;
+ try{for(const id of new Set(entries)){if(!(await db.query("SELECT id FROM account WHERE id=$1",[id])).length)continue;await executeClosure(db,id);processed++;}console.log(JSON.stringify({processed}));}finally{await db.onModuleDestroy();}
+});
 void cli.parseAsync().catch((e) => {
   console.error(
     "Command failed:",

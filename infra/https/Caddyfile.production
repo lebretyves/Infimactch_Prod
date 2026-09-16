@@ -1,0 +1,17 @@
+{$APP_DOMAIN} {
+  encode zstd gzip
+  header {
+    Strict-Transport-Security "max-age=31536000"
+    X-Content-Type-Options nosniff
+    Referrer-Policy no-referrer-when-downgrade
+  }
+  @api path /api/*
+  handle @api {
+    reverse_proxy 127.0.0.1:3101
+  }
+  handle {
+    root * {$INFIMATCH_FRONTEND_DIST}
+    try_files {path} /index.html
+    file_server
+  }
+}

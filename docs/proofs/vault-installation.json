@@ -1,0 +1,32 @@
+{
+  "checkedAt": "2026-09-15T12:49:17.198970+00:00",
+  "vaultVersion": "2.1.0",
+  "vaultTestsPassed": 10,
+  "backendUnitTestsPassed": 55,
+  "typecheck": "passed",
+  "build": "passed",
+  "sourceCommit": "284724bf58d08749a1d1ab49b154ad19b1a4f189",
+  "workingTreeChanges": true,
+  "lifecycleProof": "vault-lifecycle.json",
+  "credentialRotation": "not executed; automatic review required separate explicit authorization",
+  "fullVaultRestore": "not executed",
+  "historicalEnv": "preserved; excluded by launcher in Vault mode",
+  "files": {
+    "V2/ARCHITECTURE.md": "3eb2c7a419c383a1f943a0b914447c58b15e4e19205aa910ef6f3529777eb116",
+    "V2/BACKLOG.md": "69aee9ae417f1607a33dd23873f550c6e86bfc989335cc72058c0cbe1680304e",
+    "V2/PASSATION.md": "0d41c9aa53d15bcc8ea9b6e5179ade3d2dbf183aeee91d151d15b685c28fb109",
+    "V2/README.md": "a7dca305d387b00001c8c87b36b95487afd8c015b25b41eb16d7ecb84c161758",
+    "V2/RECETTE.md": "acb2b4b97e752095c5abd1c399deb2095e534b8beaeb95f228b86a9f7c402758",
+    "backend/src/config.ts": "edb5a073115321734538c39aab76531cb1d74d7b1bfeed05a8f967230e068bf9",
+    "infra/vault/compose.yaml": "588a7a95fa0e6086fb4877fe0ff512738b5feab5da0c4cb753f2ebf9ec251590",
+    "infra/vault/server.hcl": "0fff06d97379b6856e8b67e05ffab14cd5886326246fc885abd8c183f3dce32f",
+    "scripts/vault/check-runtime.cjs": "c5b00adda6ff466507590b722d156860149430b9cafe7d6c523aa0f4f33da012",
+    "scripts/vault/common.mjs": "d5ed50386596ffc1ff8430cc3e57a633c4e176771d467fe65b883910f99d438f",
+    "scripts/vault/manage.mjs": "bba5315746bedc36ddf5957b903bf89f725e20df8f4266090129883a16f0bce8",
+    "scripts/vault/run.mjs": "d7e5b5cf9ebf7581bd6237c3dcade4cfd392a49a2c9651fab092336b1e6d546a",
+    "scripts/vault/setup.mjs": "bdf436041a2581581cafb5891eedff4859139021864b76b85a1c529ceef761d2",
+    "scripts/vault/trust.mjs": "6bc974c58c227d80e76ee2a55e941d982e47c1e649dda045f982f1450e85c08d",
+    "scripts/vault/vault.test.mjs": "70c30ad9784595fbb49ee0ff49f2d7b2cd1e075540773002b164e031703033c0",
+    "scripts/vault/verify-lifecycle.mjs": "ba95f657d99c395e5d138f153ec5454000866381b79899749c22077285a86c1b"
+  }
+}

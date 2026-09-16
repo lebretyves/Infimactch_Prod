@@ -1,0 +1,368 @@
+[
+  {
+    "id": "0025de76-1999-47d2-a303-135e828a502d",
+    "title": "Infirmier Spécialisé en Hémodialyse (H/F)",
+    "source": "FRANCE_TRAVAIL",
+    "salaryRanges": [],
+    "shiftDurationsHours": [],
+    "hourPairs": []
+  },
+  {
+    "id": "023a610e-9795-4901-8c5e-6c914e294d35",
+    "title": "Infirmier / Infirmière de soins généraux (H/F)",
+    "source": "FRANCE_TRAVAIL",
+    "salaryRanges": [],
+    "shiftDurationsHours": [],
+    "hourPairs": []
+  },
+  {
+    "id": "0329a34c-707a-48c7-a791-893df7981c4f",
+    "title": "Infirmier / Infirmière de soins généraux (H/F)",
+    "source": "FRANCE_TRAVAIL",
+    "salaryRanges": [],
+    "shiftDurationsHours": [],
+    "hourPairs": []
+  },
+  {
+    "id": "04adeac2-2307-428a-9a17-20058aaa03b4",
+    "title": "INFIRMIER DIALYSE (F/H)",
+    "source": "FRANCE_TRAVAIL",
+    "salaryRanges": [],
+    "shiftDurationsHours": [],
+    "hourPairs": []
+  },
+  {
+    "id": "073cae03-5cc1-4803-ac1d-12e53b2b9055",
+    "title": "Mission intérim en laboratoire Infirmier D.E H/F : rejoignez Paris Ouest !",
+    "source": "FRANCE_TRAVAIL",
+    "salaryRanges": [],
+    "shiftDurationsHours": [],
+    "hourPairs": []
+  },
+  {
+    "id": "08abdbcf-c4af-41fb-8d88-f533e2909746",
+    "title": "Infirmier / Infirmière de soins généraux (H/F)",
+    "source": "FRANCE_TRAVAIL",
+    "salaryRanges": [],
+    "shiftDurationsHours": [],
+    "hourPairs": []
+  },
+  {
+    "id": "095c9450-e76f-46e6-8556-1ba283174185",
+    "title": "Infirmier D.E H/F",
+    "source": "FRANCE_TRAVAIL",
+    "salaryRanges": [],
+    "shiftDurationsHours": [],
+    "hourPairs": []
+  },
+  {
+    "id": "0c3c3264-7486-4395-bc6e-1b40510bbf6f",
+    "title": "Infirmier H/f Hematologie",
+    "source": "FRANCE_TRAVAIL",
+    "salaryRanges": [],
+    "shiftDurationsHours": [],
+    "hourPairs": []
+  },
+  {
+    "id": "0f0edf77-ae55-47c4-8220-05e2b4411a85",
+    "title": "Infirmier / Infirmière de soins généraux (H/F)",
+    "source": "FRANCE_TRAVAIL",
+    "salaryRanges": [],
+    "shiftDurationsHours": [],
+    "hourPairs": []
+  },
+  {
+    "id": "112f6dfe-eaa0-4a40-a75e-146aed733497",
+    "title": "Infirmier de santé au travail (F/H)",
+    "source": "FRANCE_TRAVAIL",
+    "salaryRanges": [
+      {
+        "min": 21,
+        "max": 23,
+        "currency": "EUR",
+        "unit": "HOUR",
+        "gross": null,
+        "component": "UNSPECIFIED",
+        "evidence": "21 et 23€/h"
+      }
+    ],
+    "shiftDurationsHours": [],
+    "hourPairs": []
+  },
+  {
+    "id": "1c6d75c4-bfef-4838-a228-6d4d07a6e05f",
+    "title": "Infirmier préleveur en laboratoire H/F",
+    "source": "JOBSPIPE",
+    "salaryRanges": [
+      {
+        "min": 2220,
+        "max": 2400,
+        "currency": "EUR",
+        "unit": "MONTH",
+        "gross": null,
+        "component": "UNSPECIFIED",
+        "evidence": "2 220€ et 2 400€ par mois"
+      }
+    ],
+    "shiftDurationsHours": [],
+    "hourPairs": [
+      {
+        "start": "07:00",
+        "end": "12:30",
+        "state": "AMPLITUDE_OR_SHIFT_TO_CONFIRM",
+        "evidence": "7h00 - 12h30"
+      }
+    ]
+  },
+  {
+    "id": "2ceed9ad-b0e6-49eb-b40f-fab2a81d58b4",
+    "title": "Infirmier-e en pool h/f",
+    "source": "JOBSPIPE",
+    "salaryRanges": [],
+    "shiftDurationsHours": [
+      {
+        "values": [
+          12
+        ],
+        "evidence": "poste en 12h "
+      }
+    ],
+    "hourPairs": [
+      {
+        "start": "07:00",
+        "end": "19:00",
+        "state": "AMPLITUDE_OR_SHIFT_TO_CONFIRM",
+        "evidence": "7h-19h"
+      }
+    ]
+  },
+  {
+    "id": "4e435168-a3c1-43e5-8bb9-2354620d8b25",
+    "title": "Infirmier de régulation médicale - Poste à 50% H/F",
+    "source": "JOBSPIPE",
+    "salaryRanges": [],
+    "shiftDurationsHours": [],
+    "hourPairs": [
+      {
+        "start": "08:00",
+        "end": "17:00",
+        "state": "AMPLITUDE_OR_SHIFT_TO_CONFIRM",
+        "evidence": "8h-17h"
+      },
+      {
+        "start": "10:00",
+        "end": "19:00",
+        "state": "AMPLITUDE_OR_SHIFT_TO_CONFIRM",
+        "evidence": "10h-19h"
+      },
+      {
+        "start": "11:00",
+        "end": "20:00",
+        "state": "AMPLITUDE_OR_SHIFT_TO_CONFIRM",
+        "evidence": "11h-20h"
+      },
+      {
+        "start": "19:00",
+        "end": "07:00",
+        "state": "AMPLITUDE_OR_SHIFT_TO_CONFIRM",
+        "evidence": "19h-7h "
+      }
+    ]
+  },
+  {
+    "id": "71a3522b-0618-4d42-a3d6-14f34ee2c0cd",
+    "title": "Infirmier(e) en SMR de nuit h/f",
+    "source": "JOBSPIPE",
+    "salaryRanges": [],
+    "shiftDurationsHours": [
+      {
+        "values": [
+          7
+        ],
+        "evidence": "horaires postes (7h"
+      }
+    ],
+    "hourPairs": []
+  },
+  {
+    "id": "76cb935f-81e8-4a0b-9f71-d8f0cb64d47a",
+    "title": "Infirmier(e)/ Technicien Préleveur(se) H/F - (69)",
+    "source": "JOBSPIPE",
+    "salaryRanges": [
+      {
+        "min": 25000,
+        "max": 28000,
+        "currency": null,
+        "unit": "YEAR",
+        "gross": true,
+        "component": "UNSPECIFIED",
+        "evidence": "25k et 28k bruts annuels"
+      },
+      {
+        "min": 2100,
+        "max": 2400,
+        "currency": "EUR",
+        "unit": "MONTH",
+        "gross": true,
+        "component": "UNSPECIFIED",
+        "evidence": "2100 € et 2400 € brut mensuel"
+      }
+    ],
+    "shiftDurationsHours": [],
+    "hourPairs": [
+      {
+        "start": "07:00",
+        "end": "18:00",
+        "state": "AMPLITUDE_OR_SHIFT_TO_CONFIRM",
+        "evidence": "7 h - 18 h"
+      }
+    ]
+  },
+  {
+    "id": "8908373d-428e-4cec-a02f-1b5e60e99f29",
+    "title": "Infirmier(ère) de jour - SMR (H/F)",
+    "source": "JOBSPIPE",
+    "salaryRanges": [
+      {
+        "min": 31200,
+        "max": 33600,
+        "currency": "EUR",
+        "unit": "YEAR",
+        "gross": true,
+        "component": "UNSPECIFIED",
+        "evidence": "31 200 a 33 600 € brut annuel"
+      }
+    ],
+    "shiftDurationsHours": [],
+    "hourPairs": [
+      {
+        "start": "07:00",
+        "end": "18:30",
+        "state": "AMPLITUDE_OR_SHIFT_TO_CONFIRM",
+        "evidence": "7h00 – 18h30"
+      }
+    ]
+  },
+  {
+    "id": "971e454d-f267-4d02-b1cd-5c9aa1e386fb",
+    "title": "Infirmier préleveur en laboratoire h/f",
+    "source": "JOBSPIPE",
+    "salaryRanges": [
+      {
+        "min": 30,
+        "max": 17,
+        "currency": null,
+        "unit": "HOUR",
+        "gross": null,
+        "component": "UNSPECIFIED",
+        "evidence": "30-17h"
+      }
+    ],
+    "shiftDurationsHours": [],
+    "hourPairs": [
+      {
+        "start": "07:30",
+        "end": "17:00",
+        "state": "AMPLITUDE_OR_SHIFT_TO_CONFIRM",
+        "evidence": "7h30-17h"
+      },
+      {
+        "start": "08:00",
+        "end": "12:00",
+        "state": "AMPLITUDE_OR_SHIFT_TO_CONFIRM",
+        "evidence": "8h-12h"
+      }
+    ]
+  },
+  {
+    "id": "af7ca4ec-c76f-4b80-8f0b-4bdafcb6198f",
+    "title": "Infirmier(e) Conseiller(e) Clinique H/F Secteur 92 / 95",
+    "source": "JOBSPIPE",
+    "salaryRanges": [
+      {
+        "min": 45000,
+        "max": 47000,
+        "currency": "EUR",
+        "unit": "YEAR",
+        "gross": null,
+        "component": "PACKAGE",
+        "evidence": "45k€ et 47k€ annuel"
+      },
+      {
+        "min": 35000,
+        "max": 37000,
+        "currency": "EUR",
+        "unit": "YEAR",
+        "gross": true,
+        "component": "PACKAGE",
+        "evidence": "35k € et 37k € brut annuel"
+      }
+    ],
+    "shiftDurationsHours": [],
+    "hourPairs": []
+  },
+  {
+    "id": "b14b0433-34bd-447a-b27e-d39ef89eee0c",
+    "title": "Infirmier de bloc opératoire (IBODE) F/H",
+    "source": "JOBSPIPE",
+    "salaryRanges": [],
+    "shiftDurationsHours": [],
+    "hourPairs": []
+  },
+  {
+    "id": "e2bc247f-21a1-4dc9-906b-1ae863a7a6b1",
+    "title": "Infirmier H/F",
+    "source": "JOBSPIPE",
+    "salaryRanges": [],
+    "shiftDurationsHours": [],
+    "hourPairs": []
+  },
+  {
+    "id": "b05cb741-2b7f-45e3-be37-76f1f2b6647c",
+    "title": "Iade H/f - Anesthesie",
+    "source": "FRANCE_TRAVAIL",
+    "salaryRanges": [],
+    "shiftDurationsHours": [
+      {
+        "values": [
+          10,
+          12
+        ],
+        "evidence": "mission en 10h ou 12h"
+      }
+    ],
+    "hourPairs": []
+  },
+  {
+    "id": "55f4ddd4-ce55-4626-b7aa-f331b36e4028",
+    "title": "Ibode H/f - Chir Gynecologique (H/F)",
+    "source": "FRANCE_TRAVAIL",
+    "salaryRanges": [],
+    "shiftDurationsHours": [
+      {
+        "values": [
+          8,
+          10
+        ],
+        "evidence": "horaires en 08h ou 10h"
+      }
+    ],
+    "hourPairs": []
+  },
+  {
+    "id": "436e6c08-d17e-49e4-a588-292a1b5a5f1c",
+    "title": "INFIRMIER ANESTHÉSISTE DE (F/H)",
+    "source": "FRANCE_TRAVAIL",
+    "salaryRanges": [],
+    "shiftDurationsHours": [],
+    "hourPairs": []
+  },
+  {
+    "id": "4db97038-e962-456f-a56d-6d2f4cb8032c",
+    "title": "INFIRMIER ANESTHÉSISTE DE (F/H)",
+    "source": "FRANCE_TRAVAIL",
+    "salaryRanges": [],
+    "shiftDurationsHours": [],
+    "hourPairs": []
+  }
+]

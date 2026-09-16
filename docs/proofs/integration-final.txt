@@ -1,0 +1,47 @@
+
+
+> infimatch@0.1.0 test:integration
+
+> npm run test:integration -w backend
+
+
+
+
+
+> @infimatch/backend@0.1.0 test:integration
+
+> npm run test:compile && node --test ".test-build/test/integration/*.spec.js"
+
+
+
+
+
+> @infimatch/backend@0.1.0 test:compile
+
+> tsc --outDir .test-build
+
+
+
+✔ full internal journey and concurrency, with isolated fixture RPPS (2429.0434ms)
+
+✔ CSRF required before registration (8.6055ms)
+
+✔ a late RPPS answer cannot overwrite a newer number (195.8413ms)
+
+✔ PostgreSQL exclusion is a backstop against overlapping active assignments (14.2324ms)
+
+ℹ tests 4
+
+ℹ suites 0
+
+ℹ pass 4
+
+ℹ fail 0
+
+ℹ cancelled 0
+
+ℹ skipped 0
+
+ℹ todo 0
+
+ℹ duration_ms 13880.5477

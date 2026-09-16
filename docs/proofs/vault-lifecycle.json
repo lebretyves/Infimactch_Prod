@@ -1,0 +1,12 @@
+{
+  "date": "2026-09-15T12:46:25.716Z",
+  "checks": [
+    "restart_seals_vault",
+    "sealed_vault_refuses_launch_without_env_fallback",
+    "secrets_persist_after_restart_and_unseal",
+    "database_connection_from_vault",
+    "api_started_with_vault_secrets_health_200",
+    "encrypted_raft_snapshot_created"
+  ],
+  "scope": "Local Vault lifecycle and isolated API health; no live AppRole credential rotation or full restore performed."
+}

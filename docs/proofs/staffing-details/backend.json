@@ -1,0 +1,18 @@
+{
+  "at": "2026-09-16T01:23:24.406Z",
+  "checks": [
+    "Structured creation persists all criteria; idempotent replay creates only one need",
+    "IDE, IADE and IBODE needs accept complete corresponding details",
+    "Three updates survive fresh reads with exact overnight dates and changing headcount",
+    "Linked agency receives structured criteria and establishment identity",
+    "Unrelated users cannot read needs and agencies cannot create or edit establishment needs",
+    "Revoked agency relationship immediately removes need access",
+    "Missing details, invalid counts or codes, past and reversed dates are rejected",
+    "Invalid edit leaves stored need unchanged",
+    "Legacy needs remain readable and can be completed by their establishment",
+    "Need criteria are compatible with an agency mission draft without automatic publication",
+    "Rollback verified: isolated accounts and SQL data do not persist"
+  ],
+  "isolated": true,
+  "rollback": true
+}

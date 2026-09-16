@@ -1,14 +1,35 @@
-﻿# InfiMatch — Backend V1
+# InfiMatch — backend V1
 
-Backend NestJS / TypeScript : PostgreSQL + PostGIS, MongoDB, documents privés chiffrés et trois workflows n8n. Cette branche contient le code backend, ses tests et les fichiers techniques nécessaires au démarrage local.
+> État consolidé et reste à faire : [bilan V1 pour main](docs/BILAN_V1_MAIN_2026-09-16.md). Les bilans datés plus anciens sont historiques.
+> [Historique de la journée et suivi des travaux](docs/HISTORIQUE_2026-09-16.md).
+## Vérification kickoff du 16 septembre 2026
 
-## Prérequis
+Le [bilan actuel](docs/audits/kickoff-2026-09-16/BILAN_BACKEND_KICKOFF_V1_2026-09-16.md) compare le code et les raccordements aux exigences du sujet : comptes, 62 opérations API, 40 exigences kickoff et limites restantes. 65 tests unitaires backend, 9 tests client API et les compilations ont été relancés ; aucune donnée métier créée. Les états et taux de couverture plus anciens ci-dessous restent historiques.
 
-Node.js 24, npm, Git et Docker Desktop démarré. Les commandes suivantes sont à exécuter à la racine du dépôt, sur la branche Backend.
+Monolithe modulaire NestJS 12 / Express, Node.js 24 / TypeScript, PostgreSQL + PostGIS + btree_gist, TypeORM, MongoDB/Mongoose et n8n.
 
-## Installation locale
+Le périmètre cible reste **100 % de la V1 validée**. Ce dépôt contient une première réalisation exécutable et testée ; il ne constitue pas une déclaration de conformité intégrale ou de mise en production. Les écarts sont dans [la note de reprise](docs/REPRISE_BACKEND_V1.md).
+
+## Documentation du projet
+
+**Dernière recette : [bilan des corrections et manques V1](docs/RECETTE_BACKEND_V1.md).**
+
+- [Requirements : exigences V1, acceptation et limites](docs/REQUIREMENTS_V1.md)
+- [Architecture avec schéma intégré](docs/SCHEMA_ARCHITECTURE_V1.md) et [plan des fichiers](docs/PLAN_ARCHITECTURE_V1.md)
+- [Flux : authentification, RPPS, matching, affectation et n8n](docs/FLUX_V1.md)
+- [Matrice complète des exigences](docs/MATRICE_VALIDATION_V1.csv) et [contrat OpenAPI](docs/openapi.json)
+
+Les schémas Mermaid sont inclus dans les fichiers Markdown et s'affichent dans un lecteur compatible. La [source architecture-v1.mmd](docs/architecture-v1.mmd) reste modifiable. Les documents distinguent le backend présent, les scénarios testés et les travaux restants.
+
+Dernier code vérifié : voir docs/proofs/verification.json, **71 tests réussis**, couverture des lignes **79,38 %**. Les [preuves](docs/proofs/verification.json) conservent leur date ; une mise à jour documentaire ne constitue pas une nouvelle exécution des tests. Les accès ANS/RPPS (FOUND et NOT_FOUND), France Travail et FINESS sont vérifiés. Frontend et déploiement distant restent à valider.
+
+## Démarrer sous PowerShell
+
+Prérequis : Node 24, npm, Git et Docker Desktop démarré. Depuis ce dossier :
 
 ```powershell
+# Sur ce poste, le registre npm nécessite le magasin de certificats système.
+$env:NODE_OPTIONS='--use-system-ca'
 npm ci
 npm run setup
 docker compose --env-file .env -f infra/compose.yaml --profile automation up -d
@@ -18,88 +39,15 @@ npm run build
 npm run start -w backend
 ```
 
-Sur un poste Windows nécessitant le magasin de certificats système pour npm, définir `NODE_OPTIONS=--use-system-ca` avant l'installation.
+API : http://127.0.0.1:3100/api/v1/health  
+Documentation : http://127.0.0.1:3100/api/docs  
+n8n local : http://127.0.0.1:55678
 
-`npm run setup` génère la configuration locale depuis `.env.example`. Les secrets restent dans `.env`, exclu de Git. Le seed crée des comptes fictifs ; leurs identifiants sont enregistrés dans `data/demo-credentials-*.json`, également exclus de Git. Il ne fabrique pas de validation RPPS positive.
+Les mots de passe des comptes **fictifs** créés par le seed sont dans `data/demo-credentials-*.json`, ignorés par Git. Le seed est rejouable et interdit lorsque NODE_ENV=production. Il ne fabrique jamais de résultat RPPS positif. Les comptes de test sont distincts de ces comptes.
 
-- API : http://127.0.0.1:3100/api/v1/health
-- Swagger : http://127.0.0.1:3100/api/docs
-- n8n local : http://127.0.0.1:55678
+Pour développer : `npm run dev`. TypeScript recompile avant chaque redémarrage. Pour traiter les événements en continu, ouvrir un autre terminal : `npm run worker`.
 
-Démarrer le traitement des événements dans un autre terminal :
-
-```powershell
-npm run worker
-```
-
-Pour le développement : `npm run dev`.
-
-## Services, applications et acc?s
-
-Les bases tournent dans Docker. **pgAdmin et MongoDB Compass sont des applications de consultation compl?mentaires** ; les fermer n'arr?te pas les bases.
-
-| Service | R?le dans InfiMatch | Acc?s depuis le poste local | Application |
-|---|---|---|---|
-| PostgreSQL + PostGIS | Profils, missions, candidatures, affectations et calculs g?ographiques | `127.0.0.1:55432`, base `infimatch` | pgAdmin |
-| MongoDB | R?sultats et explications du matching interne, avec versions et expiration | `127.0.0.1:57017`, base `infimatch`, collection `matchingruns` | MongoDB Compass |
-| Vault | Secrets d'acc?s aux services, cl?s de chiffrement et acc?s fournisseurs | https://127.0.0.1:58200/ui/ | Navigateur |
-| n8n | Notifications, relances et confirmation PDF apr?s affectation | http://127.0.0.1:55678 | Navigateur |
-
-Ces adresses pointent vers **l'ordinateur sur lequel les services sont d?marr?s**. Les ports PostgreSQL et MongoDB ne sont pas des pages web. pgAdmin et Compass s'installent s?par?ment ; aucun compte cloud n'est n?cessaire pour consulter ces bases locales.
-
-### PostgreSQL avec pgAdmin
-
-Cr?er une connexion serveur avec :
-
-- H?te : `127.0.0.1`.
-- Port : `55432`.
-- Base de maintenance : `infimatch`.
-- Utilisateur : `infimatch` pour la configuration Compose fournie.
-- Mot de passe : valeur locale de `POSTGRES_PASSWORD`, ou celle de `DATABASE_URL` si les identifiants ont ?t? adapt?s.
-
-Si Vault est configur?, `POSTGRES_PASSWORD` se trouve dans `kv/infimatch/v1/infra` et `DATABASE_URL` dans `kv/infimatch/v1/backend`. Une ancienne connexion PostgreSQL sur le port 5432 peut correspondre ? une autre application.
-
-### MongoDB avec Compass
-
-Cr?er une connexion nomm?e **InfiMatch local** et utiliser la valeur de `MONGODB_URI` fournie localement ou conserv?e dans Vault, sous `kv/infimatch/v1/backend`. Cette URI contient les identifiants : ne pas la copier dans Git, les tickets ou les captures partag?es.
-
-Pour la configuration Compose fournie : h?te `127.0.0.1`, port `57017`, utilisateur `infimatch`, base d'authentification `admin`. Apr?s connexion, ouvrir **infimatch ? matchingruns**. Les bases techniques `admin`, `config` et `local` ne sont pas la base m?tier ? consulter.
-
-Le backend calcule le matching puis enregistre son r?sultat dans MongoDB. MongoDB n'importe pas directement les annonces France Travail. Si l'historique ne peut pas ?tre enregistr?, le calcul peut ?tre retourn? avec `historyStatus: UNAVAILABLE` ; les explications archiv?es ne sont alors pas disponibles. La conservation est configurable, avec 30 jours par d?faut dans le code.
-
-Les comptes de bases fournis pour le d?veloppement ont des droits ?tendus. Leur remplacement par des comptes applicatifs aux droits minimaux reste ? r?aliser avant livraison.
-
-### Vault : d?marrage et connexion
-
-Suivre [le guide Vault](docs/VAULT_V1.md) pour la premi?re installation. Sur une installation d?j? initialis?e :
-
-```powershell
-docker compose -f infra/vault/compose.yaml up -d
-npm run vault:unseal
-npm run vault:status
-npm run vault:check
-npm run start:vault
-```
-
-Dans un autre terminal : `npm run worker:vault`. Arr?ter l'ancienne instance de l'API avant d'en lancer une autre sur le m?me port.
-
-Le backend utilise **AppRole**. Pour un acc?s humain, choisir **Userpass uniquement si un administrateur a cr?? un compte sur cette instance**. Le bootstrap ne cr?e pas de compte personnel et les comptes du poste d'un d?veloppeur ne sont pas fournis dans Git. Le mot de passe PostgreSQL n'est pas un mot de passe Vault.
-
-`npm run vault:sync` copie explicitement les valeurs autoris?es du `.env` vers Vault. V?rifier les ?carts avant cette commande. Elle ne change pas les mots de passe des serveurs, ne recharge pas les processus d?marr?s et ne constitue pas une synchronisation permanente.
-
-### V?rifier l'?tat local
-
-```powershell
-docker compose --env-file .env -f infra/compose.yaml --profile automation ps
-npm run vault:status
-npm run vault:check
-```
-
-Le statut Docker indique l'?tat des conteneurs ; v?rifier aussi la connexion dans pgAdmin/Compass et les parcours API concern?s. Les donn?es des volumes Docker et les secrets Vault n?cessitent leurs propres sauvegardes : un push Git sauvegarde le code et les documents techniques.
-
-## Workflows n8n
-
-Les trois fichiers dans `workflows/` assurent la notification de matching, la relance et la confirmation PDF après affectation humaine.
+## Importer les trois workflows
 
 ```powershell
 docker cp workflows/. infimatch-n8n-1:/tmp/infimatch-workflows
@@ -110,67 +58,137 @@ docker exec infimatch-n8n-1 n8n publish:workflow --id=InfiMatchConfirm
 docker restart infimatch-n8n-1
 ```
 
-Les workflows utilisent le secret de service fourni par Compose. L'éditeur doit rester privé. Les notifications sont internes à l'application. Le raccordement d'une instance n8n Cloud nécessite un backend accessible en HTTPS et une configuration dédiée.
+Les exports ne contiennent aucun secret. Les appels sont authentifiés par un secret de service local fourni par Compose. L'accès aux variables d'environnement est activé pour ces workflows : l'éditeur n8n doit rester privé. Les nouvelles exécutions ne conservent pas leur corps ni leurs en-têtes. Les identifiants et statuts restent disponibles.
 
-## Fournisseurs et imports
+Le worker réserve les événements SQL, les remet à n8n et vérifie le reçu métier final. Cinq tentatives maximum, temporisation exponentielle, réservation avec expiration. Les notifications sont internes à InfiMatch : aucun email, Slack ou Teams n'est envoyé.
 
-Configurer localement `FT_CLIENT_ID`, `FT_CLIENT_SECRET` et `RPPS_API_KEY` selon les accès fournisseurs disponibles. Ne pas publier leurs valeurs.
+## API et parcours
+
+Le contrat exporté est [docs/openapi.json](docs/openapi.json). La documentation servie est régénérée au démarrage.
+
+1. GET /api/v1/auth/csrf : conserver le cookie et csrfToken.
+2. Pour toute écriture utilisateur, envoyer le cookie, `Origin` égal à APP_ORIGIN et `X-CSRF-Token`.
+3. POST /auth/register ou /auth/login renouvelle la session et retourne un nouveau csrfToken.
+4. Infirmier : /profile, /profile/rpps, /me/matches, /listings/search, /me/favorites, /me/applications, /me/history.
+5. Entreprise : /organizations/:id, /staffing-requests, /missions, /missions/:id/applications et /missions/:id/candidates.
+6. L'agence affecte via POST /missions/:id/assignments avec applicationId et `Idempotency-Key`.
+7. La confirmation se consulte via /assignments/:id/confirmation puis se télécharge avec la session sur /me/documents/:document_id.
+
+Les routes sont préfixées par /api/v1. Les filtres de recherche utilisent un corps JSON validé sur POST /listings/search. Les dates comportent un décalage UTC explicite ; les intervalles sont semi-ouverts. Les montants sont en EUR bruts par heure. Une mission correspond à un poste continu.
+
+L'inscription entreprise crée une organisation isolée. Pour autoriser une liaison de démonstration supplémentaire :
+
+```powershell
+node backend/dist/cli.js link-organizations --agency UUID_AGENCE --establishment UUID_ETABLISSEMENT
+```
+
+FINESS ne donne jamais accès à une organisation existante. L'établissement ne peut pas valider l'affectation finale.
+
+## Accès externes
+
+Renseigner localement RPPS_API_KEY et FT_CLIENT_ID / FT_CLIENT_SECRET dans .env. Ne pas transmettre ces clés dans une conversation ou un commit.
 
 ```powershell
 node backend/dist/cli.js import-offers --dry-run --limit 50
 node backend/dist/cli.js import-offers --limit 50
-node backend/dist/cli.js --help
 ```
 
-Les jeux de données privés et snapshots locaux ne sont pas inclus. Les outils d'import et de normalisation se trouvent dans `backend/src/public-data`, `backend/src/reference-data` et la CLI.
+Sans accès ANS : PENDING, candidature/affectation interdites. Sans accès France Travail : échec explicite, aucune acquisition réelle revendiquée et aucune suppression des anciennes offres. Les simulations de fournisseurs dans les tests ne constituent pas une preuve d'accès public réel.
 
-## Contrat frontend
+Références vérifiées : [ANS, accès API](https://ansforge.github.io/annuaire-sante-fhir-documentation/pages/guide/version-2/getting-started/get-api-key.html), [recherche Practitioner](https://ansforge.github.io/annuaire-sante-fhir-documentation/pages/guide/version-2/resources/practitioner.html), [identifiant RPPS FR Core](https://hl7.fr/ig/fhir/core/2.2.0/StructureDefinition-fr-core-practitioner.html), [catalogue France Travail](https://francetravail.io/produits-partages/catalogue/offres-emploi/documentation).
 
-L'API est préfixée par `/api/v1`. Consulter Swagger pour les routes et schémas.
+## Vérifier
 
-- Obtenir le jeton via `GET /auth/csrf` et conserver le cookie.
-- Pour les écritures utilisateur : cookie, `Origin` égal à `APP_ORIGIN` et `X-CSRF-Token`.
-- Après connexion ou inscription, utiliser le nouveau jeton CSRF retourné.
-- Les commandes métier documentées requièrent `Idempotency-Key` : une clé par action, la même pour son rejeu réseau.
-- Les profils, missions, candidatures et affectations sont contrôlés côté serveur. L'affectation finale reste humaine.
-- Les annonces externes ont une comparaison partielle, sans score global ni disponibilité présumée ; candidature par redirection.
-
-## Vérifications
+Les bases, n8n, ses workflows publiés et l'API sur le port 3100 doivent être démarrés pour la recette fonctionnelle. Les tests créent des données fictives ; utiliser l'environnement local dédié InfiMatch.
 
 ```powershell
-npm run typecheck
-npm run build
 npm test
 npm run test:integration
 npm run verify
 npm run check:secrets
 ```
 
-Les tests d'intégration nécessitent les bases locales, l'API et n8n avec ses workflows publiés. Utiliser un environnement dédié aux données fictives. `npm run verify` produit les rapports dans `docs/proofs/` ; la couverture HTML se trouve dans `docs/proofs/coverage/`.
+verify exécute typecheck, build et coverage et enregistre les sorties dans docs/proofs. Le rapport HTML est généré dans docs/proofs/coverage/index.html. Les tests des workflows interrogent le vrai n8n local et vérifient notifications, reçus SQL et document privé. Le processus API appelé par n8n est distinct du processus instrumenté : ses lignes ne sont pas comptabilisées dans cette couverture.
 
-Vérification de cette copie le 15 septembre 2026 : typage, compilation et **55 tests unitaires réussis** sur le code source identique. Les tests d'intégration et appels fournisseurs n'ont pas été relancés pour cette publication.
+## Historique et récupération
 
-## Limites actuelles
+- [Décisions de conversation](docs/history/DISCUSSION.md), [journal de réalisation](docs/history/IMPLEMENTATION.md), [reprise et écarts](docs/REPRISE_BACKEND_V1.md).
+- Git conserve les changements et leurs commits.
+- Après un commit et avec un arbre Git propre, `npm run snapshot` crée et vérifie un bundle dans backups/.
+- Restaurer le code dans un **nouveau dossier** avec `git clone CHEMIN_DU_BUNDLE NOUVEAU_DOSSIER`.
+- Le bundle exclut .env, les dépendances, les bases et les fichiers privés. Les dumps de bases et les clés nécessitent une sauvegarde séparée.
+- Un dump PostgreSQL et sa restauration dans infimatch_restore_20260914 ont été vérifiés. La restauration complète MongoDB + fichiers + clés + n8n reste à valider.
 
-Le déploiement fourni est local. Restent notamment HTTPS/proxy et sécurité de livraison, comptes de bases restreints, idempotence documentaire complète, purge/conservation, cycle complet de retrait des offres, restauration commune et recette frontend. Le calcul d'expérience actuel ne constitue pas un contrôle réglementaire complet en équivalent temps plein.
+Les justificatifs utilisent AES-256-GCM, un nonce aléatoire et un contexte lié à leur identifiant. Les fichiers sont privés dans data/documents. DOCUMENT_KEY_VERSION vaut 1 par défaut ; lors d'une rotation, les anciennes clés sont fournies par DOCUMENT_KEY_V1, etc. Ne pas retirer une ancienne clé tant que des documents l'utilisent. Aucun mécanisme ne sauvegarde en clair en cas d'échec. Le RIB de démo emploie un identifiant volontairement non bancaire comportant DEMO ; il est masqué en lecture.
 
-Les justificatifs et données bancaires sont fictifs. Aucun document patient ou clinique n'est prévu dans ce POC.
+Compose est un environnement local, avec ports liés à 127.0.0.1. HTTPS/TLS interservices, rôles SQL/Mongo de production et restauration complète ne sont pas encore validés : ne pas exposer ce déploiement tel quel sur Internet.
 
-## Sauvegarde et structure
+## Paramètres et récupération après interruption
 
-- `backend/src/` : API, domaine, migrations, imports, CLI et worker.
-- `backend/test/` : tests unitaires et d'intégration.
-- `infra/` : environnement Docker local.
-- `workflows/` : exports techniques n8n sans identifiants secrets.
-- `scripts/` : installation, vérification et sauvegarde Git.
+MATCHING_RETENTION_DAYS configure la rétention des explications (30 par défaut, entre 1 et 365). MATCHING_WEIGHTS_JSON permet une configuration C/Z/D/E totalisant 1 ; l'empreinte des pondérations entre dans la version visible des règles. Une explication d'une ancienne version est signalée périmée.
 
-Après un commit et avec un arbre propre, `npm run snapshot` crée un bundle Git vérifié. Il exclut les secrets, bases et fichiers privés : ceux-ci nécessitent une sauvegarde séparée.
+Les recommandations et candidats utilisent limit (20 par défaut, maximum 50) et offset ; le classement porte sur l'ensemble des résultats parcourus par lots. Les distances des décisions utilisent PostGIS comme la recherche.
+
+Après une interruption pendant l'enregistrement d'un fichier, exécuter :
+
+```powershell
+node backend/dist/cli.js reconcile-documents --minimum-age-minutes 5
+```
+
+La commande ne rend READY qu'un fichier dont le chiffrement et la taille ont été vérifiés. Un fichier absent, une clé manquante ou un tag invalide laisse le document en attente. Le rapport livré est aussi disponible dans [coverage-report.zip](docs/proofs/coverage-report.zip).
+
+## Contrat client apres recette V1
+
+Les creations/modifications/transitions de mission, candidatures et creations de besoins requierent `Idempotency-Key` en plus du cookie, Origin et CSRF. Generer une cle pour une nouvelle commande ; reutiliser la meme pour son rejeu reseau. Une cle absente donne 400, un contenu different avec la meme cle donne 409. Les droits sont controles a nouveau sur rejeu.
+
+Les listes secondaires acceptent `limit` (20 par defaut, maximum 50) et `offset` (0 a 10000), en conservant leur forme de reponse. Les propositions classent seulement les dossiers admissibles. `excluded` indique le nombre exclu et `rppsStatus` explique la situation RPPS du professionnel.
+
+Apres cinq echecs, un evenement est signale EXHAUSTED. Reprise explicite et tracee :
+
+```powershell
+node backend/dist/cli.js retry-outbox --event UUID_EVENEMENT
+```
+
+Le depot et le remplacement documentaire ne disposent pas encore du meme protocole complet d'idempotence. Voir le bilan pour les autres limites.
+
+## Fournisseurs et sauvegarde GitHub
+
+[Acquisition reelle et FINESS](docs/ACQUISITION_REELLE.md). Le RPPS positif est demontre dans [la preuve ANS](docs/proofs/ans-fhir-positive.json), sans modification de profil reel.
+
+Depot : https://github.com/lebretyves/Backend_Interimatch ; branche master. Apres verification et commit : `git push origin master`, puis `npm run snapshot`. Les cles, bases et fichiers locaux ignores ne sont pas sauvegardes par Git.
 
 
-## Vault et preparation V2
+## Rectification France Travail du 15 septembre 2026
 
-Le chargement des secrets depuis Vault est disponible : [installation, acces et maintenance](docs/VAULT_V1.md). Les commandes start:vault et worker:vault utilisent les valeurs du coffre sans repli vers .env.
+[Rectificatif du catalogue V1](docs/RECTIFICATIF_CATALOGUE_V1.md) et [contrat des offres externes](docs/OFFRES_EXTERNES_V1.md). Collecte multi-recherches, classement prudent, conservation des informations fournisseur et correspondance sans score complet. Lot Paris : 134 offres importees et rejeu sans doublon ; 120 IDE, 7 IADE, 1 IBODE, 6 non confirmees. Frontend et synchronisation exhaustive restent a completer.
 
-Le [dossier V2](V2/README.md) contient le backlog, l’architecture et la recette a preparer ; aucune fonctionnalite V2 n’est declaree livree. Les exigences de securite V1 restent a terminer.
 
-Verification de la publication Vault : typage, compilation et 55 tests unitaires passes dans cette copie ; 10 tests Vault passes sur l’installation locale avec les memes scripts. Le controle des secrets couvre les valeurs locales et les cles privees. La recette fonctionnelle complete n’a pas ete relancee.
+## Comparaison partielle des annonces externes
+
+Comparaison au profil connecte et option includeUncertainExternal implementees. Informations inconnues et indices restent distincts des incompatibilites connues. Aucun score externe complet. 71 tests reussis ; preuve complementaire avec offres reelles et profils fictifs dans docs/proofs/external-partial-live.json. [Explication a transmettre](docs/EXPLICATION_MATCHING_DONNEES_MANQUANTES.md) et [contrat API](docs/OFFRES_EXTERNES_V1.md). Integration frontend restante.
+
+
+## Vault V1 et pr?paration V2 ? 15 septembre 2026
+
+[Vault local : installation, acc?s, commandes et limites](docs/VAULT_V1.md). TLS, KV v2 persistant, AppRoles backend/infra s?par?s et audit install?s. `npm run start:vault` et `npm run worker:vault` chargent les secrets sans repli vers `.env`. Le mode historique et son `.env` restent pr?sents. 10 tests Vault et 55 tests unitaires backend r?ussis ; reprise apr?s red?marrage et sant? API v?rifi?es. La restauration int?grale et la rotation r?elle des SecretID ne sont pas d?clar?es valid?es.
+
+[Dossier V2](V2/README.md) : p?rim?tre, backlog, architecture et recette pr?par?s ; aucune fonctionnalit? V2 d?velopp?e et aucun travail obligatoire V1 report?.
+
+
+## 16 septembre 2026 ? R?cup?ration s?curit? et sessions
+
+Les deux branches s?curit? sont int?gr?es au code local avec adaptations Google, Vault, migrations et frontend documents/RIB. 101 tests unitaires backend et 10 tests API frontend passent ; les deux compilations passent. Migrations et activation non effectu?es : Docker/Vault indisponibles. Les deux bugs documentaires et la recette compl?te restent ? traiter. Voir le [bilan apr?s r?cup?ration](docs/BILAN_RECUPERATION_SECURITE_2026-09-16.md). Les ?tats ant?rieurs sont historiques.
+
+
+## S?curit? V1 activ?e ? 16 septembre 2026
+
+Quota/confirmations, nettoyage concurrent et suspension corrig?s et test?s sur bases isol?es. Sauvegarde/restauration SQL, MongoDB, Vault et n8n v?rifi?e ; migrations locales appliqu?es avec compte distinct ; comptes applicatifs restreints ; HTTPS local https://localhost:8443. 118 tests backend et 10 tests Vault passent. Voir le [bilan actuel](docs/BILAN_SECURITE_LIVRAISON_V1_2026-09-16.md) pour les preuves, les commandes et les limites de livraison publique. Les anciens ?tats ? bugs ouverts ?, ? migrations non appliqu?es ? ou ? Docker indisponible ? sont historiques.
+
+## Dernier lot V1
+
+Voir [les sept évolutions parsing et frontend](docs/LIVRAISON_SEPT_EVOLUTIONS_V1.md), leur migration, la commande de recalcul et les limites de validation.
+
+
+## Checkout authentification : frontend inclus
+
+Le frontend de ce checkout est dans `frontend/`. Depuis la racine : `npm ci`, puis `npm run build`. Dans un second terminal : `cd frontend`, `npm ci`, `npm run dev`. Pour compiler le frontend : `npm run build` dans ce dossier. Le lanceur HTTPS local retrouve automatiquement `frontend/dist`. Les configurations et secrets prives sont a creer localement : ils ne sont pas livres dans Git.

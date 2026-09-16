@@ -1,3 +1,8 @@
+import { PrivacyRequests1789381100000 } from "./privacy-requests";
+import { OfferParsing1789381000000 } from "./offer-parsing";
+import { StaffingRequestDetails1789380600000 } from "./staffing-request-details";
+import { FrontendFields1789380500000 } from "./frontend-fields";
+import { GoogleIdentity1789380400000 } from "./google-identity";
 import { Finess1789380300000 } from "./finess";
 import { retryTransaction } from "../common/retry";
 import { Global, Injectable, Module, OnModuleDestroy } from "@nestjs/common";
@@ -6,6 +11,8 @@ import { required } from "../config";
 import { Harden1789380200000 } from "./harden";
 import { Extended1789380100000 } from "./extended";
 import { InitialSchema1789380000000 } from "./schema";
+import { DocumentSecurity1789380700000 } from "./document-security";
+import { AccountSecurity1789380800000 } from "./account-security";
 @Injectable()
 export class Database implements OnModuleDestroy {
   readonly source = new DataSource({
@@ -17,6 +24,13 @@ export class Database implements OnModuleDestroy {
       Extended1789380100000,
       Harden1789380200000,
       Finess1789380300000,
+      GoogleIdentity1789380400000,
+      FrontendFields1789380500000,
+      StaffingRequestDetails1789380600000,
+      DocumentSecurity1789380700000,
+      AccountSecurity1789380800000,
+      OfferParsing1789381000000,
+      PrivacyRequests1789381100000,
     ],
     logging: false,
     extra: { max: 12 },

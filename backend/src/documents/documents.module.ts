@@ -7,6 +7,7 @@ import {
   Post,
   Put,
   Body,
+  Headers,
   Req,
   Res,
   Param,
@@ -15,6 +16,7 @@ import {
   UseGuards,
   NotFoundException,
   BadRequestException,
+  PayloadTooLargeException,
   ServiceUnavailableException,
   ParseUUIDPipe,
 } from "@nestjs/common";
@@ -28,11 +30,20 @@ import {
 } from "class-validator";
 import { Request, Response } from "express";
 import { randomUUID } from "node:crypto";
-import { mkdir, writeFile, readFile, rename } from "node:fs/promises";
+import {
+  mkdir,
+  writeFile,
+  readFile,
+  rename,
+  readdir,
+  rm,
+  stat,
+} from "node:fs/promises";
 import { resolve } from "node:path";
 import { Database, audit } from "../database/database";
 import { user, SessionGuard, nurse } from "../common/access";
-import { required, projectRoot } from "../config";
+import { documentQuotaBytes, required, projectRoot } from "../config";
+import { commandReceipt } from "../common/idempotency";
 import { encrypt, decrypt, fileMime } from "./crypto";
 class UploadDto {
   @ApiProperty({
@@ -58,9 +69,10 @@ class BankDto {
   @Equals(true)
   fictional!: boolean;
 }
+type StoredDocument = { id: string; status: "READY" };
 @Injectable()
 export class DocumentsService {
-  private readonly directory = resolve(projectRoot, "data/documents");
+  private readonly directory = resolve(process.env.DOCUMENT_DIRECTORY || resolve(projectRoot, "data/documents"));
   constructor(private readonly db: Database) {}
   private readonly keyVersion = Number(process.env.DOCUMENT_KEY_VERSION ?? 1);
   private key(version = this.keyVersion) {
@@ -84,27 +96,76 @@ export class DocumentsService {
     mime: string,
     data: Buffer,
     assignmentId: string | null = null,
-  ) {
-    const id = randomUUID(),
-      encrypted = encrypt(data, this.key(), id);
+    command?: { operation: string; key: string | undefined; content: unknown },
+    replacePrevious = false,
+  ): Promise<StoredDocument> {
     await mkdir(this.directory, { recursive: true });
-    await this.db.query(
-      "INSERT INTO document(id,owner_id,assignment_id,kind,mime,status,size_bytes,key_version) VALUES($1,$2,$3,$4,$5,'STAGING',$6,$7)",
-      [id, actor, assignmentId, kind, mime, data.length, this.keyVersion],
-    );
-    await writeFile(resolve(this.directory, id + ".tmp"), encrypted, {
-      flag: "wx",
-      mode: 0o600,
+    return this.db.transaction(async (em) => {
+      const receipt = command
+        ? await commandReceipt(
+            em,
+            actor,
+            command.operation,
+            command.key,
+            command.content,
+          )
+        : null;
+      if (receipt?.replay) {
+        const response = receipt.response;
+        if (typeof response?.id !== "string" || response.status !== "READY")
+          throw new ServiceUnavailableException(
+            "Invalid document command receipt",
+          );
+        return response as StoredDocument;
+      }
+      await em.query("SELECT pg_advisory_xact_lock(hashtextextended($1,0))", [
+        "document-storage:" + actor,
+      ]);
+      // System confirmations must remain available even when user uploads fill their quota.
+      // Replaced bank details remain retained but only the active version consumes user quota.
+      if (kind !== "CONFIRMATION") {
+        const [storage] = await em.query(
+          "SELECT COALESCE(sum(size_bytes),0)::text AS bytes FROM document WHERE owner_id=$1 AND kind IN('EVIDENCE','BANK') AND superseded_at IS NULL AND status IN('STAGING','READY') AND NOT ($2::boolean AND kind=$3)",
+          [actor, replacePrevious, kind],
+        );
+        if (Number(storage.bytes) + data.length > documentQuotaBytes())
+          throw new PayloadTooLargeException("Document storage quota exceeded");
+      }
+      const id = randomUUID();
+      // Held until SQL commit/rollback; the cleaner takes the same lock before inspecting files.
+      await em.query("SELECT pg_advisory_xact_lock(hashtextextended($1,0))", ["document-file:" + id]);
+      const temporary = resolve(this.directory, id + ".tmp");
+      const final = resolve(this.directory, id + ".bin");
+      await em.query(
+        "INSERT INTO document(id,owner_id,assignment_id,kind,mime,status,size_bytes,key_version) VALUES($1,$2,$3,$4,$5,'STAGING',$6,$7)",
+        [id, actor, assignmentId, kind, mime, data.length, this.keyVersion],
+      );
+      try {
+        await writeFile(temporary, encrypt(data, this.key(), id), {
+          flag: "wx",
+          mode: 0o600,
+        });
+        await rename(temporary, final);
+        await em.query("UPDATE document SET status='READY' WHERE id=$1", [id]);
+        if (replacePrevious)
+          await em.query(
+            "UPDATE document SET superseded_at=now() WHERE owner_id=$1 AND kind=$2 AND id<>$3 AND superseded_at IS NULL",
+            [actor, kind, id],
+          );
+        await audit(em, actor, "DOCUMENT_STORED", id, {
+          kind,
+          replacedPrevious: replacePrevious,
+        });
+        const response: StoredDocument = { id, status: "READY" };
+        return receipt ? receipt.save(response) : response;
+      } catch (error) {
+        await Promise.all([
+          rm(temporary, { force: true }),
+          rm(final, { force: true }),
+        ]);
+        throw error;
+      }
     });
-    await rename(
-      resolve(this.directory, id + ".tmp"),
-      resolve(this.directory, id + ".bin"),
-    );
-    await this.db.transaction(async (em) => {
-      await em.query("UPDATE document SET status='READY' WHERE id=$1", [id]);
-      await audit(em, actor, "DOCUMENT_STORED", id, { kind });
-    });
-    return { id, status: "READY" };
   }
   async reconcile(minimumAgeMinutes = 5) {
     if (
@@ -124,6 +185,7 @@ export class DocumentsService {
       if (!batch.length) break;
       for (const item of batch) {
         const ready = await this.db.transaction(async (em) => {
+          await em.query("SELECT pg_advisory_xact_lock(hashtextextended($1,0))", ["document-file:" + item.id]);
           const [d] = await em.query(
             "SELECT * FROM document WHERE id=$1 AND status='STAGING' FOR UPDATE",
             [item.id],
@@ -164,7 +226,40 @@ export class DocumentsService {
       }
       cursor = batch[batch.length - 1].id;
     }
-    return { recovered, pending };
+    let orphansRemoved = 0;
+    const cutoff = Date.now() - minimumAgeMinutes * 60_000;
+    const files = await readdir(this.directory).catch((error: any) => {
+      if (error.code === "ENOENT") return [];
+      throw error;
+    });
+    for (const name of files) {
+      const matched = name.match(
+        /^([0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12})\.(tmp|bin)$/i,
+      );
+      if (!matched) continue;
+      const removed = await this.db.transaction(async (em) => {
+        const [lock] = await em.query(
+          "SELECT pg_try_advisory_xact_lock(hashtextextended($1,0)) AS acquired",
+          ["document-file:" + matched[1]],
+        );
+        if (!lock.acquired) return false;
+        const path = resolve(this.directory, name);
+        try {
+          if ((await stat(path)).mtimeMs > cutoff) return false;
+          // READ COMMITTED sees the writer's commit after acquiring its lock.
+          const [document] = await em.query("SELECT status FROM document WHERE id=$1", [matched[1]]);
+          if (!document) { await rm(path, { force: true }); return true; }
+          if (matched[2] === "tmp" && document.status === "READY") {
+            await stat(resolve(this.directory, matched[1] + ".bin"));
+            await rm(path, { force: true });
+            return true;
+          }
+        } catch (error: any) { if (error.code !== "ENOENT") throw error; }
+        return false;
+      });
+      if (removed) orphansRemoved++;
+    }
+    return { recovered, pending, orphansRemoved };
   }
   async read(actor: string, id: string) {
     const doc = await this.db.transaction(async (em) => {
@@ -217,7 +312,11 @@ class DocumentsController {
     private readonly db: Database,
     private readonly documents: DocumentsService,
   ) {}
-  @Post("documents") async upload(@Req() r: Request, @Body() b: UploadDto) {
+  @Post("documents") async upload(
+    @Req() r: Request,
+    @Headers("idempotency-key") key: string | undefined,
+    @Body() b: UploadDto,
+  ) {
     const data = Buffer.from(b.contentBase64, "base64");
     if (
       !data.length ||
@@ -228,7 +327,11 @@ class DocumentsController {
         "Allowed: fictional PDF/JPEG/PNG, maximum 5 MiB, matching signature",
       );
     await this.db.transaction(async (em) => nurse(em, user(r)));
-    return this.documents.store(user(r), "EVIDENCE", b.mime, data);
+    return this.documents.store(user(r), "EVIDENCE", b.mime, data, null, {
+      operation: "document.upload",
+      key,
+      content: b,
+    });
   }
   @Get("documents") list(@Req() r: Request, @Query() page: PageDto) {
     return this.db.query(
@@ -256,18 +359,25 @@ class DocumentsController {
       })
       .send(d.data);
   }
-  @Put("bank-details") async bank(@Req() r: Request, @Body() b: BankDto) {
+  @Put("bank-details") async bank(
+    @Req() r: Request,
+    @Headers("idempotency-key") key: string | undefined,
+    @Body() b: BankDto,
+  ) {
     await this.db.transaction(async (em) => nurse(em, user(r)));
     return this.documents.store(
       user(r),
       "BANK",
       "application/json",
       Buffer.from(JSON.stringify({ iban: b.iban, fictional: true })),
+      null,
+      { operation: "bank-details.replace", key, content: b },
+      true,
     );
   }
   @Get("bank-details") async getBank(@Req() r: Request) {
     const [d] = await this.db.query(
-      "SELECT id FROM document WHERE owner_id=$1 AND kind='BANK' AND status='READY' ORDER BY created_at DESC,id LIMIT 1",
+      "SELECT id FROM document WHERE owner_id=$1 AND kind='BANK' AND status='READY' AND superseded_at IS NULL ORDER BY created_at DESC,id LIMIT 1",
       [user(r)],
     );
     if (!d) return { iban: null };

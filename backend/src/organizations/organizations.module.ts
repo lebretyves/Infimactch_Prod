@@ -1,3 +1,4 @@
+import { NeedDto, normalizeNeedDetails } from "./need.dto";
 import { commandReceipt } from "../common/idempotency";
 import { Headers } from "@nestjs/common";
 import { PageDto } from "../common/page.dto";
@@ -51,19 +52,6 @@ class OrganizationDto {
   @Matches(/^\d{14}$/)
   siret?: string;
 }
-class NeedDto {
-  @ApiProperty({ type: () => String, required: true })
-  @IsUUID()
-  establishmentId!: string;
-  @ApiProperty({ type: () => String, required: true })
-  @IsString()
-  @Length(3, 150)
-  title!: string;
-  @ApiProperty({ type: () => String, required: true })
-  @IsString()
-  @Length(10, 8000)
-  description!: string;
-}
 class NotificationDto {
   @ApiProperty({ type: () => Boolean, required: true })
   @IsBoolean()
@@ -73,6 +61,17 @@ class NotificationDto {
 @UseGuards(SessionGuard)
 class OrganizationsController {
   constructor(private readonly db: Database) {}
+  @Get("me/organizations") async own(@Req() r: Request) {
+    const organizations = await this.db.query(
+      "SELECT o.* FROM organization o JOIN membership m ON m.organization_id=o.id WHERE m.user_id=$1 AND m.active ORDER BY o.name,o.id",
+      [user(r)],
+    );
+    const links = await this.db.query(
+      "SELECT l.agency_id,o.id,o.name,o.address,o.finess FROM agency_link l JOIN organization o ON o.id=l.establishment_id WHERE EXISTS(SELECT 1 FROM membership m WHERE m.user_id=$1 AND m.active AND m.organization_id=l.agency_id) ORDER BY o.name,o.id",
+      [user(r)],
+    );
+    return { organizations, links };
+  }
   @Put("organizations/:id") update(
     @Req() r: Request,
     @Param("id", ParseUUIDPipe) id: string,
@@ -110,8 +109,14 @@ class OrganizationsController {
       );
       if (receipt.replay) return receipt.response;
       const [need] = await em.query(
-        "INSERT INTO staffing_request(establishment_id,title,description,created_by) VALUES($1,$2,$3,$4) RETURNING *",
-        [b.establishmentId, b.title, b.description, user(r)],
+        "INSERT INTO staffing_request(establishment_id,title,description,created_by,details,updated_at) VALUES($1,$2,$3,$4,$5,now()) RETURNING *",
+        [
+          b.establishmentId,
+          b.title.trim(),
+          b.description.trim(),
+          user(r),
+          JSON.stringify(normalizeNeedDetails(b.details)),
+        ],
       );
       await audit(em, user(r), "STAFFING_REQUEST_CREATED", need.id);
       return receipt.save(need);
@@ -119,9 +124,63 @@ class OrganizationsController {
   }
   @Get("staffing-requests") list(@Req() r: Request, @Query() page: PageDto) {
     return this.db.query(
-      "SELECT s.* FROM staffing_request s WHERE EXISTS(SELECT 1 FROM membership m WHERE m.user_id=$1 AND m.active AND (m.organization_id=s.establishment_id OR EXISTS(SELECT 1 FROM agency_link l WHERE l.agency_id=m.organization_id AND l.establishment_id=s.establishment_id))) ORDER BY s.created_at DESC,s.id LIMIT $2 OFFSET $3",
+      "SELECT s.*,o.name AS establishment_name,o.address AS establishment_address FROM staffing_request s JOIN organization o ON o.id=s.establishment_id WHERE EXISTS(SELECT 1 FROM membership m WHERE m.user_id=$1 AND m.active AND (m.organization_id=s.establishment_id OR EXISTS(SELECT 1 FROM agency_link l WHERE l.agency_id=m.organization_id AND l.establishment_id=s.establishment_id))) ORDER BY s.created_at DESC,s.id LIMIT $2 OFFSET $3",
       [user(r), page.limit, page.offset],
     );
+  }
+  @Get("staffing-requests/:id") async detail(
+    @Req() r: Request,
+    @Param("id", ParseUUIDPipe) id: string,
+  ) {
+    const [need] = await this.db.query(
+      "SELECT s.*,o.name AS establishment_name,o.address AS establishment_address FROM staffing_request s JOIN organization o ON o.id=s.establishment_id WHERE s.id=$2 AND EXISTS(SELECT 1 FROM membership m WHERE m.user_id=$1 AND m.active AND (m.organization_id=s.establishment_id OR EXISTS(SELECT 1 FROM agency_link l WHERE l.agency_id=m.organization_id AND l.establishment_id=s.establishment_id)))",
+      [user(r), id],
+    );
+    if (!need) throw new NotFoundException();
+    return need;
+  }
+  @Put("staffing-requests/:id") editNeed(
+    @Req() r: Request,
+    @Param("id", ParseUUIDPipe) id: string,
+    @Body() b: NeedDto,
+    @Headers("idempotency-key") key: string,
+  ) {
+    return this.db.transaction(async (em) => {
+      const [need] = await em.query(
+        "SELECT * FROM staffing_request WHERE id=$1 FOR UPDATE",
+        [id],
+      );
+      if (!need) throw new NotFoundException();
+      await member(em, user(r), need.establishment_id, "ESTABLISHMENT");
+      if (need.establishment_id !== b.establishmentId)
+        throw new BadRequestException("Organization cannot be reassigned");
+      const receipt = await commandReceipt(
+        em,
+        user(r),
+        "staffing-request:edit:" + id,
+        key,
+        b,
+      );
+      if (receipt.replay) return receipt.response;
+      const [updated] = await em.query(
+        "UPDATE staffing_request SET title=$2,description=$3,details=$4,updated_at=now() WHERE id=$1 RETURNING *",
+        [
+          id,
+          b.title.trim(),
+          b.description.trim(),
+          JSON.stringify(normalizeNeedDetails(b.details)),
+        ],
+      );
+      await audit(em, user(r), "STAFFING_REQUEST_UPDATED", id);
+      return receipt.save(updated);
+    });
+  }
+  @Get("me/notification-preferences") getPreferences(@Req() r: Request) {
+    return this.db.transaction(async em => {
+      await nurse(em, user(r));
+      const [p] = await em.query("SELECT notifications_enabled AS enabled FROM profile WHERE user_id=$1", [user(r)]);
+      return p;
+    });
   }
   @Put("me/notification-preferences") preferences(
     @Req() r: Request,

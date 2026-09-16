@@ -1,0 +1,175 @@
+
+--- PAGE PHYSIQUE 1 ---
+INTERIMATCH_
+< CONCEVOIR ET DÉVELOPPER UNEPLATEFORME DE MISE EN RELATION ENTRE
+ENTREPRISES ET INTÉRIMAIRES />
+
+
+--- PAGE PHYSIQUE 2 ---
+INTERIMATCH
+Introduction
+L'intérim reste un secteur largement dominé par des acteurs historiques (Adecco, Randstad, Manpower)
+dont les outils numériques sont souvent datés. Des acteurs plus récents (Brigad, Extracadabra, Bilhalp,
+Staffmatch…) montrent qu'il y a de la place pour des plateformes plus ciblées, plus rapides, et pensées
+pour un secteur précis plutôt que pour tous les métiers à la fois.
+Vous allez concevoir et développer une plateforme mettant en relation des entreprises et des
+intérimaires, sur un secteur d'activité que vous choisissez et justiﬁez vous-même (restauration,
+BTP , logistique, santé, événementiel, ou tout autre secteur pertinent).
+Le choix du secteur est libre mais doit être argumenté : concurrence existante, besoins
+spéciﬁques du secteur, disponibilité de données publiques exploitables. Ce choix oriente ensuite
+vos décisions produit, UX et techniques.
+Le projet dure 11 jours et se conclut par une soutenance orale avec une présentation de l'ensemble
+du travail réalisé.
+1
+
+--- PAGE PHYSIQUE 3 ---
+Sujet
+Choix et cadrage du secteur
+Avant de coder, votre groupe doit :
+✓ Choisir un secteur d'intérim précis et le justiﬁer (étude de marché courte : taille du marché,
+acteurs existants, douleur identiﬁée côté entreprises et côté intérimaires).
+✓ Identiﬁer au moins une source de données publique exploitable pour ce secteur (voir
+section Ressources) et vériﬁer que le format de données est consommable (API JSON, CSV, etc.).
+✓ Déﬁnir la proposition de valeur de la plateforme en une phrase claire, réutilisable pour le pitch.
+Cadrage projet et point go/nogo
+Un point de cadrage est ﬁxé à J+2. Vous devez présenter à ce moment-là un cahier des charges
+comprenant :
+✓ La roadmap fonctionnelle du projet (fonctionnalités retenues, périmètre du POC).
+✓ Un chiffrage du temps de travail estimé par fonctionnalité ou module.
+Ce point sert de go/nogo : si le périmètre est irréaliste au vu du temps restant, il est ajusté à
+ce moment-là plutôt qu'en ﬁn de projet.
+Comptes et authentification
+✓ Deux types de comptes distincts : entreprise et intérimaire, avec parcours d'inscription
+et permissions différentes.
+✓ Mécanisme d'authentiﬁcation sécurisé (hash des mots de passe, gestion de session ou token,
+protection contre les attaques basiques).
+✓ Chiffrement des données sensibles (coordonnées bancaires ou documents d'identité, selon votre
+secteur) au repos et en transit.
+Gestion des missions et matching
+✓ Côté entreprise : création d'une mission (poste, dates, lieu, compétences requises, rémunération).
+✓ Côté intérimaire : proﬁl détaillé (compétences, disponibilités, zone géographique, expérience).
+✓ Algorithme de matching entre missions ouvertes et proﬁls disponibles (scoring par
+compétences/zone/disponibilité).
+✓ Tableau de bord pour suivre l'état des missions (ouverte, pourvue, terminée).
+2
+
+--- PAGE PHYSIQUE 4 ---
+Données publiques
+Vous devez consommer au moins une source de données publique en lien avec votre secteur, par
+exemple les offres d'emploi du secteur, les statistiques de tension de recrutement, ou les codes
+NAF/APE pertinents.
+∇ Terminal - + x
+$> curl "https://api.francetravail.io/partenaire/offresdemploi/v2/offres/search?motsCles=<secteur>"
+\
+-H "Authorization: Bearer <token>"
+{
+"resultats": [
+{ "intitule": "Serveur en restauration", "lieuTravail": {...}, "typeContrat": "MIS" },
+...
+]
+}
+Les données récupérées doivent être nettoyées et reformatées (normalisation des libellés de
+poste, dédoublonnage, conversion de formats de dates/lieux) avant d'être exploitées dans la
+plateforme.
+L'appel API seul ne sufﬁt pas. Les données doivent alimenter une fonctionnalité concrète et
+visible du produit (ﬁche de poste enrichie, tableau de tendances marché, critère de matching...),
+pas simplement être afﬁchées brutes à titre de démonstration.
+Automatisations nocode
+En complément du développement web, vous devez mettre en place au moins deux automatisations
+nocode réalistes, par exemple :
+✓ Notiﬁcation automatique à l'intérimaire quand une mission correspond à son proﬁl.
+✓ Génération automatique d'un contrat ou d'une conﬁrmation de mission à partir d'un template.
+✓ Relance automatique des missions non pourvues après un délai donné.
+L'email et le SMS sont souvent plus lourds à mettre en place proprement (délivrabilité,
+vériﬁcation de numéro, coûts). Privilégiez un webhook Slack ou Discord pour les notiﬁcations,
+plus simple à orchestrer avec n8n. Airtable ou Google Sheets peuvent servir de base
+de données tampon entre le nocode et votre application.
+3
+
+--- PAGE PHYSIQUE 5 ---
+Accessibilité, éco-conception et conformité
+✓ Accessibilité : respecter les grands principes du RGAA 4.1 (contrastes sufﬁsants,
+textes alternatifs sur les images, navigation au clavier, structure sémantique des pages).
+Une conformité totale n'est pas attendue sur un POC de 11 jours, mais les critères de base
+doivent être appliqués et vous devez savoir les citer en soutenance.
+✓ Éco-conception : appliquer au moins deux pratiques concrètes issues du RGESN
+(Référentiel Général d'Écoconception de Services Numériques) — compression d'images, lazy
+loading, réduction des requêtes, choix d'un hébergement à faible impact — et les documenter.
+✓ Conformité légale : la plateforme manipule des données personnelles et des contrats de
+travail, ce qui implique des obligations concrètes :
+– RGPD : base légale du traitement, durée de conservation annoncée, mentions légales mini-
+males.
+– Code du travail : les missions générées doivent respecter les grandes règles de l'intérim
+(durée maximale de mission, mentions obligatoires d'un contrat de mission) propres à votre
+secteur.
+✓ Réfléchir à un axe d'achat responsable ou de réemploi propre à votre secteur si pertinent (par
+exemple : mutualisation d'équipements ou d'EPI entre intérimaires sur un même site pour le BTP).
+Référencement (SEO)
+Les pages publiques de la plateforme (annonces de missions, page d'accueil) doivent appliquer les
+bases du SEO on-page : balises meta (title, description), structure de titres sémantique (un seul
+h1 par page, hiérarchie logique), URLs lisibles, et un sitemap minimal.
+4
+
+--- PAGE PHYSIQUE 6 ---
+Contraintes techniques
+✓ Frontend : un framework JS en TypeScript (React, Vue ou équivalent), interface responsive
+(mobile, tablette, desktop).
+✓ Backend : un framework Node en TypeScript (NestJS, Express + TS, Fastify ou équivalent).
+✓ Bases de données : une base relationnelle pour les données structurées (utilisateurs, missions,
+contrats) et une base non relationnelle pour un usage complémentaire (cache, logs de matching,
+recherche full-text).
+✓ Tests : une séquence de tests unitaires et une séquence de tests fonctionnels sur les parcours
+critiques (inscription, création de mission, matching). Le taux de couverture (coverage) doit être
+généré et transmis avec la livraison.
+✓ CLI : utilisation d'au moins une bibliothèque en ligne de commande dans votre chaîne de
+développement ou de traitement des données (import/nettoyage de données publiques par exem-
+ple).
+L'authentiﬁcation classique (email/mot de passe, hash, sessions/tokens) doit être comprise et
+implémentée par vous-même. En revanche, ne redéveloppez pas l'OAuth : appuyez-vous sur une
+librairie ou un service existant (Passport.js, NextAuth, Firebase Auth, Auth0...) pour la
+connexion via un fournisseur tiers si vous en proposez une.
+5
+
+--- PAGE PHYSIQUE 7 ---
+Livrables
+Élément Détail
+Cahier des charges (J+2) Roadmap fonctionnelle + chiffrage estimé du temps de travail
+Dépôt de code Frontend + backend, README clair (installation, lancement)
+Workflows nocode Export ou capture des scénarios n8n
+Jeu de données publiques Script ou notebook de nettoyage/reformatage utilisé
+Dossier d'étude de marché Secteur choisi, concurrence, proposition de valeur
+Chiffrage réel (post-POC) Temps réellement passé par fonctionnalité, écart vs estimé
+Support de pitch Support oral pour la soutenance
+Votre environnement de travail doit être organisé : arborescence claire, pas de ﬁchiers de travail
+oubliés, README à jour.
+6
+
+--- PAGE PHYSIQUE 8 ---
+Soutenance
+Chaque groupe présente un pitch oral construit avec une vraie logique de storytelling : partir du
+problème identiﬁé sur le secteur choisi, montrer la solution, puis démontrer le produit en live.
+L'ensemble des membres du groupe doit participer activement à la soutenance (prise de parole,
+réponses aux questions), pas uniquement un ou deux porte-paroles.
+Le jury peut interrompre la présentation à tout moment avec des questions ou des mises en situation
+imprévues ; vous devez pouvoir vous adapter sans perdre le ﬁl.
+7
+
+--- PAGE PHYSIQUE 9 ---
+Ressources
+✓ France Travail (API Offres d'emploi) : données d'offres par secteur, ﬁltrables par mots-clés,
+type de contrat, localisation.
+✓ INSEE (Sirene, codes NAF/APE) : données sectorielles et démographie d'entreprises.
+✓ DARES (statistiques du travail, tension de recrutement par métier).
+✓ data.gouv.fr : point d'entrée général si vous cherchez un jeu de données spéciﬁque à votre
+secteur.
+✓ Ressources de la piscine MERN (WAC) : base directement exploitable, la stack visée est
+entièrement en TypeScript (frontend et backend).
+✓ RGAA 4.1 (référentiel accessibilité) et RGESN (référentiel éco-conception) : bases de critères
+à consulter pour les sections Accessibilité et Éco-conception.
+Regardez comment des acteurs comme Brigad (restauration), Bilhalp (BTP) ou Staffmatch
+(événementiel/logistique) positionnent leur produit : ça nourrit directement votre étude de
+marché et votre pitch.
+8
+
+--- PAGE PHYSIQUE 10 ---
+v 1

@@ -1,3 +1,9 @@
+import { parseOffer } from "./offer-parser";
+import { guardCrossSourceDuplicates } from "./offer-deduplication";
+import {
+  offerRetirementReasons,
+  permanentContractEvidence,
+} from "./contract-policy";
 import { createHash } from "node:crypto";
 import { Database } from "../database/database";
 import { clean, offerFacts } from "./offer-quality";
@@ -12,6 +18,7 @@ export function normalizeOffer(raw: any, fetchedAt = new Date().toISOString()) {
   const title = clean(raw.intitule, 150),
     description = clean(raw.description, 8000);
   if (!title || !description) throw new Error("MISSING_CONTENT");
+  if (permanentContractEvidence(title, description)) throw new Error("PERMANENT_POSITION_EXCLUDED");
   if (raw.typeContrat !== "MIS") throw new Error("NOT_TEMPORARY_EMPLOYMENT");
   const facts = offerFacts(raw);
   const qualification = facts.qualification;
@@ -122,13 +129,13 @@ export async function fetchOffers(
   }
   return [...unique.values()];
 }
-export async function importOffers(db: Database, raw: any[], dryRun: boolean) {
-  const accepted: ReturnType<typeof normalizeOffer>[] = [];
+export async function importOffers(db: Database, raw: any[], dryRun: boolean, normalize: (raw: any) => ReturnType<typeof normalizeOffer> & { expiresAt?: string | null } = normalizeOffer, source = "FRANCE_TRAVAIL") {
+  const accepted: (ReturnType<typeof normalizeOffer> & { expiresAt?: string | null })[] = [];
   const rejected: { index: number; reason: string }[] = [];
   const seen = new Set<string>();
   for (const [index, item] of raw.entries()) {
     try {
-      const offer = normalizeOffer(item);
+      const offer = normalize(item);
       if (!seen.has(offer.sourceId)) {
         accepted.push(offer);
         seen.add(offer.sourceId);
@@ -142,13 +149,30 @@ export async function importOffers(db: Database, raw: any[], dryRun: boolean) {
     accepted: accepted.length,
     rejected,
     dryRun,
-    source: "FRANCE_TRAVAIL",
+    source,
+    duplicates: [] as { id: string; duplicateOf: string; reason: string }[],
   };
   if (!dryRun)
     await db.transaction(async (em) => {
+      // Serialize provider imports, including the duplicate check, across processes.
+      await em.query("SELECT pg_advisory_xact_lock(1789380901)");
+      // Hide a previously imported offer when this lot proves it is closed, expired or non-compliant.
+      // Absence from a bounded import is never treated as disappearance.
+      for (const rejection of rejected) {
+        const sourceId = raw[rejection.index]?.id;
+        if (
+          !offerRetirementReasons.has(rejection.reason) ||
+          typeof sourceId !== "string"
+        )
+          continue;
+        await em.query(
+          "UPDATE external_offer SET active=false, provenance=jsonb_set(coalesce(provenance,'{}'::jsonb), '{retiredReason}', to_jsonb($3::text)) WHERE source=$1 AND source_id=$2 AND active",
+          [source, sourceId, rejection.reason],
+        );
+      }
       for (const o of accepted)
         await em.query(
-          `INSERT INTO external_offer(source,source_id,title,description,url,location_label,qualification,raw_hash,provenance) VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9) ON CONFLICT(source,source_id) DO UPDATE SET title=EXCLUDED.title,description=EXCLUDED.description,url=EXCLUDED.url,location_label=EXCLUDED.location_label,qualification=EXCLUDED.qualification,raw_hash=EXCLUDED.raw_hash,provenance=EXCLUDED.provenance,imported_at=now(),active=true`,
+          `INSERT INTO external_offer(source,source_id,title,description,url,location_label,qualification,raw_hash,provenance,expires_at,parsed_offer) VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11) ON CONFLICT(source,source_id) DO UPDATE SET title=EXCLUDED.title,description=EXCLUDED.description,url=EXCLUDED.url,location_label=EXCLUDED.location_label,qualification=EXCLUDED.qualification,raw_hash=EXCLUDED.raw_hash,provenance=EXCLUDED.provenance,expires_at=EXCLUDED.expires_at,parsed_offer=CASE WHEN external_offer.parsed_offer->>'inputHash'=EXCLUDED.parsed_offer->>'inputHash' AND external_offer.parsed_offer->>'parserVersion'=EXCLUDED.parsed_offer->>'parserVersion' THEN external_offer.parsed_offer ELSE EXCLUDED.parsed_offer END,imported_at=now(),active=true`,
           [
             o.source,
             o.sourceId,
@@ -159,11 +183,14 @@ export async function importOffers(db: Database, raw: any[], dryRun: boolean) {
             o.qualification,
             o.rawHash,
             JSON.stringify(o.provenance),
+            o.expiresAt ?? null,
+            JSON.stringify(parseOffer({ ...o, location_label: o.locationLabel })),
           ],
         );
+      summary.duplicates = await guardCrossSourceDuplicates(em);
       await em.query(
-        "INSERT INTO import_run(provider,status,summary) VALUES('FRANCE_TRAVAIL','SUCCESS',$1)",
-        [JSON.stringify(summary)],
+        "INSERT INTO import_run(provider,status,summary) VALUES($2,'SUCCESS',$1)",
+        [JSON.stringify(summary), source],
       );
     });
   return summary;

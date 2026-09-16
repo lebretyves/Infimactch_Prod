@@ -1,3 +1,4 @@
+import { requireActiveAccount } from "../common/access";
 import { commandReceipt } from "../common/idempotency";
 import { geodesicKm } from "../database/distance";
 import {
@@ -289,6 +290,7 @@ export class MissionsService {
   async apply(actor: string, id: string, version: number, key?: string) {
     return this.db.transaction(async (em) => {
       const m = await lockMission(em, id);
+      await requireActiveAccount(em, actor);
       const p = await nurse(em, actor);
       const receipt = await commandReceipt(
         em,
@@ -332,6 +334,7 @@ export class MissionsService {
       );
       if (!ref) throw new NotFoundException();
       const m = await lockMission(em, ref.mission_id);
+      if (action === "SELECTED") await requireActiveAccount(em, ref.nurse_id);
       await nurse(em, ref.nurse_id);
       const [a] = await em.query(
         "SELECT * FROM application WHERE id=$1 FOR UPDATE",
@@ -392,6 +395,7 @@ export class MissionsService {
           [applicationId, id],
         );
         if (!ref) throw new NotFoundException();
+        await requireActiveAccount(em, ref.nurse_id);
         const p = await nurse(em, ref.nurse_id);
         const [a] = await em.query(
           "SELECT * FROM application WHERE id=$1 FOR UPDATE",

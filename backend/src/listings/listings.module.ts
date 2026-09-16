@@ -22,7 +22,8 @@ import { Request } from "express";
 import { Database } from "../database/database";
 import { SessionGuard, user, nurse } from "../common/access";
 import { missionSelect } from "../missions/missions.service";
-import { SearchDto, searchSql } from "./search";
+import { listingPageQuery } from "./listing-page";
+import { ExternalListingsDto, SearchDto, searchSql } from "./search";
 import { externalPresentation } from "../public-data/offer-quality";
 class FavoriteDto {
   @ApiProperty({
@@ -41,7 +42,7 @@ class ListingsController {
   constructor(private readonly db: Database) {}
   @ApiOperation({
     description:
-      "External offers expose correspondence (EXTERNAL_CRITERIA), score=null, eligibilityVerified=false, provider-reported criteria and quality warnings. Unknown fields never prove eligibility; applicationMode=REDIRECT. Authenticated search also adds profileCorrespondence; includeUncertainExternal defaults false and unverifiedSearchFilters identifies filters not satisfied by evidence.",
+      "Paginated results include total, limit and offset. total counts the same filtered catalogue as items. External offers expose correspondence (EXTERNAL_CRITERIA), score=null, eligibilityVerified=false, provider-reported criteria and quality warnings. Unknown fields never prove eligibility; applicationMode=REDIRECT. Authenticated search also adds profileCorrespondence; includeUncertainExternal defaults false and unverifiedSearchFilters identifies filters not satisfied by evidence.",
   })
   @Post("listings/search")
   @UseGuards(SessionGuard)
@@ -82,16 +83,13 @@ class ListingsController {
               : externalQualifications,
           ) +
           ")";
-    const sql =
-      "SELECT data FROM (SELECT 'm_'||m.id AS listing_id,m.created_at AS listed_at,(to_jsonb(m)-'location')||jsonb_build_object('id','m_'||m.id,'kind','INTERNAL_MISSION','latitude',ST_Y(m.location::geometry),'longitude',ST_X(m.location::geometry),'salary',jsonb_build_object('amount',m.hourly_salary,'currency','EUR','unit','HOUR','gross',true)) AS data FROM mission m WHERE " +
+    const sourceSql =
+      "SELECT 'm_'||m.id AS listing_id,m.created_at AS listed_at,(to_jsonb(m)-'location')||jsonb_build_object('id','m_'||m.id,'kind','INTERNAL_MISSION','latitude',ST_Y(m.location::geometry),'longitude',ST_X(m.location::geometry),'salary',jsonb_build_object('amount',m.hourly_salary,'currency','EUR','unit','HOUR','gross',true)) AS data FROM mission m WHERE " +
       q.where +
       " UNION ALL SELECT 'e_'||e.id,e.imported_at,(to_jsonb(e)-'raw_hash')||jsonb_build_object('id','e_'||e.id,'kind','EXTERNAL_OFFER','applicationMode','REDIRECT','eligibility','INCOMPLETE') FROM external_offer e WHERE " +
-      externalWhere +
-      ") listings ORDER BY listed_at DESC,listing_id LIMIT " +
-      bind(b.limit ?? 20) +
-      " OFFSET " +
-      bind(b.offset ?? 0);
-    const rows = await this.db.query(sql, parameters);
+      externalWhere;
+    const pageQuery = listingPageQuery(sourceSql, parameters, b);
+    const [pageResult] = await this.db.query(pageQuery.sql, pageQuery.parameters);
     const unverifiedSearchFilters = [
       "start",
       "end",
@@ -111,19 +109,20 @@ class ListingsController {
     });
     const comparedAt = new Date().toISOString();
     return {
-      items: rows.map((r) =>
-        r.data.kind === "EXTERNAL_OFFER"
+      total: pageResult.total,
+      items: pageResult.items.map((data: any) =>
+        data.kind === "EXTERNAL_OFFER"
           ? {
-              ...externalPresentation(r.data),
+              ...externalPresentation(data),
               profileCorrespondence: partialOfferMatch(
-                r.data,
+                data,
                 professional(p),
                 comparedAt,
               ),
               unverifiedSearchFilters,
               requestedFiltersVerified: unverifiedSearchFilters.length === 0,
             }
-          : r.data,
+          : data,
       ),
       limit: b.limit ?? 20,
       offset: b.offset ?? 0,
@@ -162,17 +161,20 @@ class ListingsController {
   }
   @ApiOperation({
     description:
-      "External offers expose correspondence (EXTERNAL_CRITERIA), score=null, eligibilityVerified=false, provider-reported criteria and quality warnings. Unknown fields never prove eligibility; applicationMode=REDIRECT.",
+      "Paginated results include total, limit and offset. total counts the same filtered catalogue as items. External offers expose correspondence (EXTERNAL_CRITERIA), score=null, eligibilityVerified=false, provider-reported criteria and quality warnings. Unknown fields never prove eligibility; applicationMode=REDIRECT.",
   })
   @Get("listings/external")
-  async external(@Query() page: PageDto) {
+  async external(@Query() page: ExternalListingsDto) {
+    const query = listingPageQuery(
+      "SELECT e.id::text AS listing_id,e.imported_at AS listed_at,jsonb_build_object('id',e.id,'source',e.source,'source_id',e.source_id,'title',e.title,'description',e.description,'url',e.url,'location_label',e.location_label,'qualification',e.qualification,'imported_at',e.imported_at,'expires_at',e.expires_at,'provenance',e.provenance,'parsed_offer',e.parsed_offer) AS data FROM external_offer e WHERE e.active AND (e.expires_at IS NULL OR e.expires_at>now())",
+      [], page,
+    );
+    const [result] = await this.db.query(query.sql, query.parameters);
     return {
-      items: (
-        await this.db.query(
-          "SELECT id,source,source_id,title,description,url,location_label,qualification,imported_at,expires_at,provenance FROM external_offer WHERE active AND (expires_at IS NULL OR expires_at>now()) ORDER BY imported_at DESC,id LIMIT $1 OFFSET $2",
-          [page.limit, page.offset],
-        )
-      ).map((e) =>
+      total: result.total,
+      limit: page.limit,
+      offset: page.offset,
+      items: result.items.map((e: any) =>
         externalPresentation({
           ...e,
           id: "e_" + e.id,
@@ -209,13 +211,40 @@ class ListingsController {
       [id.slice(2)],
     );
     if (!m) throw new NotFoundException();
-    return { ...m, id, kind: "INTERNAL_MISSION" };
+    const organizations = await this.db.query(
+      "SELECT id,name FROM organization WHERE id IN($1,$2)",
+      [m.agency_id, m.establishment_id],
+    );
+    return {
+      ...m,
+      id,
+      kind: "INTERNAL_MISSION",
+      establishment_name: organizations.find((o) => o.id === m.establishment_id)
+        ?.name,
+      agency_name: organizations.find((o) => o.id === m.agency_id)?.name,
+    };
   }
   @Get("facilities") async facilities(@Query() page: PageDto) {
     return this.db.query(
       "SELECT id,name,address,finess FROM organization WHERE kind='ESTABLISHMENT' ORDER BY name,id LIMIT $1 OFFSET $2",
       [page.limit, page.offset],
     );
+  }
+  @Get("facilities/:id") async facility(
+    @Param("id", ParseUUIDPipe) id: string,
+    @Query() page: PageDto,
+  ) {
+    const [facility] = await this.db.query(
+      "SELECT id,name,address,finess FROM organization WHERE id=$1 AND kind='ESTABLISHMENT'",
+      [id],
+    );
+    if (!facility) throw new NotFoundException();
+    const missions = await this.db.query(
+      missionSelect +
+        " WHERE m.establishment_id=$1 AND m.status='OPEN' AND m.start_at>now() ORDER BY m.start_at,m.id LIMIT $2 OFFSET $3",
+      [id, page.limit, page.offset],
+    );
+    return { ...facility, missions };
   }
   @Post("me/favorites")
   @UseGuards(SessionGuard)

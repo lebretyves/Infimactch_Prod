@@ -27,6 +27,7 @@ import {
 } from "../missions/missions.service";
 import { professional } from "../profiles/profiles.module";
 import { match } from "../domain/matching";
+import { REMINDER_MESSAGE } from "../domain/messages";
 @Injectable()
 export class AutomationService {
   constructor(
@@ -55,7 +56,7 @@ export class AutomationService {
         let cursor = "00000000-0000-0000-0000-000000000000";
         while (true) {
           const profiles = await em.query(
-            "SELECT * FROM profile WHERE visible AND notifications_enabled AND $1=ANY(qualifications) AND ($2::uuid IS NULL OR user_id=$2) AND user_id>$3::uuid ORDER BY user_id LIMIT 100 FOR UPDATE",
+            "SELECT p.* FROM profile p JOIN account a ON a.id=p.user_id AND a.active WHERE p.visible AND p.notifications_enabled AND $1=ANY(p.qualifications) AND ($2::uuid IS NULL OR p.user_id=$2) AND p.user_id>$3::uuid ORDER BY p.user_id LIMIT 100 FOR UPDATE OF p FOR SHARE OF a",
             [m.qualification, e.payload.profileId ?? null, cursor],
           );
           if (!profiles.length) break;
@@ -117,8 +118,8 @@ export class AutomationService {
           );
           for (const actor of members) {
             await em.query(
-              "INSERT INTO notification(user_id,event_id,kind,message) VALUES($1,$2,'REMINDER','Une mission reste ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â  pourvoir.') ON CONFLICT DO NOTHING",
-              [actor.user_id, e.id],
+              "INSERT INTO notification(user_id,event_id,kind,message) VALUES($1,$2,'REMINDER',$3) ON CONFLICT DO NOTHING",
+              [actor.user_id, e.id, REMINDER_MESSAGE],
             );
             count++;
           }
@@ -277,7 +278,7 @@ export class AutomationService {
   ) {
     const events = await this.db.transaction(async (em) => {
       const rows = await em.query(
-        "SELECT * FROM outbox WHERE event IN('MissionOPEN','MatchRequested','AssignmentCreated') AND ($2::uuid IS NULL OR id=$2) AND completed_at IS NULL AND attempts<5 AND available_at<=now() AND (lease_until IS NULL OR lease_until<now()) ORDER BY created_at,id LIMIT $1 FOR UPDATE SKIP LOCKED",
+        "SELECT * FROM outbox WHERE event IN('MissionOPEN','MatchRequested','AssignmentCreated') AND ($2::uuid IS NULL OR id=$2) AND completed_at IS NULL AND attempts<5 AND available_at<=now() AND (lease_until IS NULL OR lease_until<now()) ORDER BY CASE WHEN event='AssignmentCreated' THEN 0 ELSE 1 END,created_at,id LIMIT $1 FOR UPDATE SKIP LOCKED",
         [limit, eventId],
       );
       for (const row of rows) {

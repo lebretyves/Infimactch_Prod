@@ -1,0 +1,1180 @@
+{
+  "at": "2026-09-16T09:49:59.849Z",
+  "parserVersion": "4.0.0",
+  "scope": "8 previously unseen stored France Travail offers; targeted manual expectations, not exhaustive recall/precision",
+  "targets": 22,
+  "found": 20,
+  "proofErrors": 0,
+  "targetedFalsePositives": [],
+  "offers": [
+    {
+      "id": "088f9ade-6da2-4cd9-8b1f-c7dd6c18a898",
+      "title": "Infirmier / Infirmière en soins généraux (IDE) (H/F)",
+      "source": "FRANCE_TRAVAIL",
+      "targets": [
+        {
+          "key": "certification",
+          "value": "DIPLOME_INFIRMIER",
+          "found": true
+        },
+        {
+          "key": "certification",
+          "value": "ORDRE_INFIRMIER",
+          "found": true
+        },
+        {
+          "key": "experience_duree",
+          "found": true
+        },
+        {
+          "key": "horaires_detail",
+          "found": true
+        }
+      ],
+      "proofErrors": 0,
+      "falsePositives": [],
+      "fieldCount": 14,
+      "reviewCount": 24,
+      "fields": [
+        {
+          "key": "qualification_titre",
+          "label": "Métier",
+          "value": "IDE",
+          "display": "IDE",
+          "state": "REPORTED",
+          "evidence": {
+            "origin": "TITLE",
+            "text": "Infirmier / Infirmière en soins généraux (IDE) (H/F)",
+            "start": 0,
+            "end": 52
+          }
+        },
+        {
+          "key": "contrat_texte",
+          "label": "Contrat mentionné",
+          "value": "INTERIM",
+          "display": "interim",
+          "state": "MENTION",
+          "evidence": {
+            "origin": "DESCRIPTION",
+            "text": "Le poste : Votre agence d'intérim PROMAN recrute un Infirmier Diplômé d'État H/F Au sein d'un établissement partenaire situé à Vesoul, vous réaliserez les tâches suivantes :",
+            "start": 0,
+            "end": 173
+          }
+        },
+        {
+          "key": "contrat_texte",
+          "label": "Contrat mentionné",
+          "value": "INTERIM",
+          "display": "interim",
+          "state": "MENTION",
+          "evidence": {
+            "origin": "DESCRIPTION",
+            "text": "Type de contrat : Interim Horaires de travail : 7h ou 10h",
+            "start": 570,
+            "end": 627
+          }
+        },
+        {
+          "key": "horaires_detail",
+          "label": "Horaires",
+          "value": "Type de contrat : Interim Horaires de travail : 7h ou 10h",
+          "display": "Type de contrat : Interim Horaires de travail : 7h ou 10h",
+          "state": "REVIEW_REQUIRED",
+          "evidence": {
+            "origin": "DESCRIPTION",
+            "text": "Type de contrat : Interim Horaires de travail : 7h ou 10h",
+            "start": 570,
+            "end": 627
+          }
+        },
+        {
+          "key": "durees_poste_alternatives",
+          "label": "Durées possibles",
+          "value": "Type de contrat : Interim Horaires de travail : 7h ou 10h",
+          "display": "Type de contrat : Interim Horaires de travail : 7h ou 10h",
+          "state": "MENTION",
+          "evidence": {
+            "origin": "DESCRIPTION",
+            "text": "Type de contrat : Interim Horaires de travail : 7h ou 10h",
+            "start": 570,
+            "end": 627
+          }
+        },
+        {
+          "key": "certification",
+          "label": "Diplôme ou certification",
+          "value": "DIPLOME_INFIRMIER",
+          "display": "Diplôme d’État infirmier",
+          "state": "REVIEW_REQUIRED",
+          "evidence": {
+            "origin": "DESCRIPTION",
+            "text": "Titulaire du diplôme d'État d'infirmiers/infirmières",
+            "start": 725,
+            "end": 777
+          }
+        },
+        {
+          "key": "certification",
+          "label": "Diplôme ou certification",
+          "value": "ORDRE_INFIRMIER",
+          "display": "Ordre infirmier",
+          "state": "REVIEW_REQUIRED",
+          "evidence": {
+            "origin": "DESCRIPTION",
+            "text": "Inscription à l'ordre national des infirmiers",
+            "start": 780,
+            "end": 825
+          }
+        },
+        {
+          "key": "experience_domaine",
+          "label": "Domaine d’expérience",
+          "value": "EHPAD",
+          "display": "EHPAD",
+          "state": "REVIEW_REQUIRED",
+          "evidence": {
+            "origin": "DESCRIPTION",
+            "text": "Expérience professionnelle d'au moins 2 ans en tant qu'infirmier (hôpital, clinique, EHPAD, médico-social ou soins à domicile)",
+            "start": 828,
+            "end": 954
+          }
+        },
+        {
+          "key": "experience_duree",
+          "label": "Durée d’expérience",
+          "value": {
+            "amount": 2,
+            "unit": "ANS"
+          },
+          "display": "2 an(s)",
+          "state": "REQUIRED",
+          "evidence": {
+            "origin": "DESCRIPTION",
+            "text": "Expérience professionnelle d'au moins 2 ans en tant qu'infirmier (hôpital, clinique, EHPAD, médico-social ou soins à domicile)",
+            "start": 828,
+            "end": 954
+          }
+        },
+        {
+          "key": "competence",
+          "label": "Compétence mentionnée",
+          "value": "HYGIENE",
+          "display": "hygiene",
+          "state": "REVIEW_REQUIRED",
+          "evidence": {
+            "origin": "DESCRIPTION",
+            "text": "Maîtrise des soins infirmiers courants, des protocoles et des règles d'hygiène et de sécurité",
+            "start": 957,
+            "end": 1050
+          }
+        },
+        {
+          "key": "experience_duree",
+          "label": "Durée d’expérience",
+          "value": {
+            "amount": 2,
+            "unit": "ANS"
+          },
+          "display": "2 an(s)",
+          "state": "REQUIRED",
+          "evidence": {
+            "origin": "DESCRIPTION",
+            "text": "Flexibilité et adaptabilité face aux besoins des patients et des établissements Description du profil : Nous recherchons un infirmier/infirmière H/F titulaire du diplôme d'État et inscrit à l'ordre national, avec une expérience d'au moins 2 ans en milieu hospitalier ou médico-social",
+            "start": 1875,
+            "end": 2158
+          }
+        },
+        {
+          "key": "certification",
+          "label": "Diplôme ou certification",
+          "value": "DIPLOME_INFIRMIER",
+          "display": "Diplôme d’État infirmier",
+          "state": "REQUIRED",
+          "evidence": {
+            "origin": "DESCRIPTION",
+            "text": "Niveau d'études requis : Diplôme d'État d'infirmiers/infirmières",
+            "start": 2584,
+            "end": 2648
+          }
+        },
+        {
+          "key": "accessibilite_candidature",
+          "label": "Accessibilité des candidatures",
+          "value": "HANDICAP",
+          "display": "handicap",
+          "state": "MENTION",
+          "evidence": {
+            "origin": "DESCRIPTION",
+            "text": "Tous nos postes sont ouverts aux personnes en situation de handicap",
+            "start": 2650,
+            "end": 2717
+          }
+        },
+        {
+          "key": "mode_exercice",
+          "label": "Information mentionnée",
+          "value": "DOMICILE",
+          "display": "domicile",
+          "state": "REVIEW_REQUIRED",
+          "evidence": {
+            "origin": "DESCRIPTION",
+            "text": "Expérience professionnelle d'au moins 2 ans en tant qu'infirmier (hôpital, clinique, EHPAD, médico-social ou soins à domicile)",
+            "start": 828,
+            "end": 954
+          }
+        }
+      ]
+    },
+    {
+      "id": "2533b4b3-fc6b-4979-bd65-e48a23018b15",
+      "title": "INFIRMIER DE EN MÉDECINE POLYVALENTE (F/H)",
+      "source": "FRANCE_TRAVAIL",
+      "targets": [
+        {
+          "key": "competence",
+          "value": "PERFUSIONS",
+          "found": true
+        },
+        {
+          "key": "competence",
+          "value": "PANSEMENTS",
+          "found": true
+        },
+        {
+          "key": "competence",
+          "value": "SURVEILLANCE",
+          "found": true
+        },
+        {
+          "key": "service",
+          "value": "MEDECINE_POLYVALENTE",
+          "found": false
+        }
+      ],
+      "proofErrors": 0,
+      "falsePositives": [],
+      "fieldCount": 3,
+      "reviewCount": 1,
+      "fields": [
+        {
+          "key": "competence",
+          "label": "Compétence mentionnée",
+          "value": "SURVEILLANCE",
+          "display": "surveillance",
+          "state": "REVIEW_REQUIRED",
+          "evidence": {
+            "origin": "DESCRIPTION",
+            "text": "Vos missions principales,Intégré(e) à l'équipe soignante d'un service de médecine générale / polyvalente, vous assurez la prise en charge globale des patients :- Réaliser les soins infirmiers préventifs, curatifs et paliatifs (médications, perfusions, pansements complexes, prises de sang).- Surveiller l'évolution de l'état de santé des patients et assurer la tenue des dossiers de soins.- Participer aux visites médicales et appliquer les",
+            "start": 19,
+            "end": 459
+          }
+        },
+        {
+          "key": "competence",
+          "label": "Compétence mentionnée",
+          "value": "PANSEMENTS",
+          "display": "pansements",
+          "state": "REVIEW_REQUIRED",
+          "evidence": {
+            "origin": "DESCRIPTION",
+            "text": "Vos missions principales,Intégré(e) à l'équipe soignante d'un service de médecine générale / polyvalente, vous assurez la prise en charge globale des patients :- Réaliser les soins infirmiers préventifs, curatifs et paliatifs (médications, perfusions, pansements complexes, prises de sang).- Surveiller l'évolution de l'état de santé des patients et assurer la tenue des dossiers de soins.- Participer aux visites médicales et appliquer les",
+            "start": 19,
+            "end": 459
+          }
+        },
+        {
+          "key": "competence",
+          "label": "Compétence mentionnée",
+          "value": "PERFUSIONS",
+          "display": "perfusions",
+          "state": "REVIEW_REQUIRED",
+          "evidence": {
+            "origin": "DESCRIPTION",
+            "text": "Vos missions principales,Intégré(e) à l'équipe soignante d'un service de médecine générale / polyvalente, vous assurez la prise en charge globale des patients :- Réaliser les soins infirmiers préventifs, curatifs et paliatifs (médications, perfusions, pansements complexes, prises de sang).- Surveiller l'évolution de l'état de santé des patients et assurer la tenue des dossiers de soins.- Participer aux visites médicales et appliquer les",
+            "start": 19,
+            "end": 459
+          }
+        }
+      ]
+    },
+    {
+      "id": "3d268fe9-65ce-4606-a4fc-b66d0e7b43e0",
+      "title": "Infirmier D.e (h/f) Salle De Reveil",
+      "source": "FRANCE_TRAVAIL",
+      "targets": [
+        {
+          "key": "service",
+          "value": "SSPI",
+          "found": true
+        },
+        {
+          "key": "competence",
+          "value": "DOULEUR",
+          "found": true
+        },
+        {
+          "key": "experience_domaine",
+          "found": true
+        },
+        {
+          "key": "montant_avantage",
+          "found": true
+        }
+      ],
+      "proofErrors": 0,
+      "falsePositives": [],
+      "fieldCount": 35,
+      "reviewCount": 22,
+      "fields": [
+        {
+          "key": "service",
+          "label": "Service mentionné",
+          "value": "SSPI",
+          "display": "SSPI",
+          "state": "REVIEW_REQUIRED",
+          "evidence": {
+            "origin": "TITLE",
+            "text": "Infirmier D.e (h/f) Salle De Reveil",
+            "start": 0,
+            "end": 35
+          }
+        },
+        {
+          "key": "service",
+          "label": "Service mentionné",
+          "value": "SSPI",
+          "display": "SSPI",
+          "state": "REVIEW_REQUIRED",
+          "evidence": {
+            "origin": "DESCRIPTION",
+            "text": "TAGA Médical recrute un(e) Infirmier(ère) en Salle de Réveil pour une structure hospitalière située à Paris 20",
+            "start": 0,
+            "end": 110
+          }
+        },
+        {
+          "key": "service",
+          "label": "Service mentionné",
+          "value": "REANIMATION",
+          "display": "reanimation",
+          "state": "DESIRED",
+          "evidence": {
+            "origin": "DESCRIPTION",
+            "text": "Vous êtes infirmier(ère) diplômé(e) d'État et vous souhaitez rejoindre un service de réanimation post-opératoire dynamique et spécialisé",
+            "start": 113,
+            "end": 249
+          }
+        },
+        {
+          "key": "service",
+          "label": "Service mentionné",
+          "value": "SSPI",
+          "display": "SSPI",
+          "state": "REVIEW_REQUIRED",
+          "evidence": {
+            "origin": "DESCRIPTION",
+            "text": "Prendre en charge les patients en salle de réveil après des interventions chirurgicales diverses (chirurgie générale, orthopédique, digestive, cardiaque, etc.)",
+            "start": 455,
+            "end": 614
+          }
+        },
+        {
+          "key": "specialite",
+          "label": "Spécialité mentionnée",
+          "value": "ORTHOPEDIE",
+          "display": "orthopedie",
+          "state": "REVIEW_REQUIRED",
+          "evidence": {
+            "origin": "DESCRIPTION",
+            "text": "Prendre en charge les patients en salle de réveil après des interventions chirurgicales diverses (chirurgie générale, orthopédique, digestive, cardiaque, etc.)",
+            "start": 455,
+            "end": 614
+          }
+        },
+        {
+          "key": "specialite",
+          "label": "Spécialité mentionnée",
+          "value": "DIGESTIF",
+          "display": "digestif",
+          "state": "REVIEW_REQUIRED",
+          "evidence": {
+            "origin": "DESCRIPTION",
+            "text": "Prendre en charge les patients en salle de réveil après des interventions chirurgicales diverses (chirurgie générale, orthopédique, digestive, cardiaque, etc.)",
+            "start": 455,
+            "end": 614
+          }
+        },
+        {
+          "key": "competence",
+          "label": "Compétence mentionnée",
+          "value": "SURVEILLANCE",
+          "display": "surveillance",
+          "state": "REVIEW_REQUIRED",
+          "evidence": {
+            "origin": "DESCRIPTION",
+            "text": "- Assurer la surveillance post-opératoire immédiate des patients (paramètres vitaux, douleur, vigilance, état général)",
+            "start": 616,
+            "end": 734
+          }
+        },
+        {
+          "key": "service",
+          "label": "Service mentionné",
+          "value": "SSPI",
+          "display": "SSPI",
+          "state": "REVIEW_REQUIRED",
+          "evidence": {
+            "origin": "DESCRIPTION",
+            "text": "- Assurer un suivi de l'évolution de chaque patient dans la salle de réveil et préparer son transfert en fonction de son état (vers la chambre, service de réanimationApporter un soutien émotionnel aux patients et à leurs proches en période post-opératoire",
+            "start": 1272,
+            "end": 1527
+          }
+        },
+        {
+          "key": "service",
+          "label": "Service mentionné",
+          "value": "REANIMATION",
+          "display": "reanimation",
+          "state": "REVIEW_REQUIRED",
+          "evidence": {
+            "origin": "DESCRIPTION",
+            "text": "- Assurer un suivi de l'évolution de chaque patient dans la salle de réveil et préparer son transfert en fonction de son état (vers la chambre, service de réanimationApporter un soutien émotionnel aux patients et à leurs proches en période post-opératoire",
+            "start": 1272,
+            "end": 1527
+          }
+        },
+        {
+          "key": "alternance",
+          "label": "Alternance",
+          "value": "JOUR_NUIT",
+          "display": "Jour / nuit",
+          "state": "REPORTED",
+          "evidence": {
+            "origin": "DESCRIPTION",
+            "text": "Des horaires flexibles (jour/nuit) selon vos disponibilités",
+            "start": 1560,
+            "end": 1619
+          }
+        },
+        {
+          "key": "horaire_type",
+          "label": "Jour ou nuit",
+          "value": "NUIT",
+          "display": "NUIT",
+          "state": "REVIEW_REQUIRED",
+          "evidence": {
+            "origin": "DESCRIPTION",
+            "text": "Des horaires flexibles (jour/nuit) selon vos disponibilités",
+            "start": 1560,
+            "end": 1619
+          }
+        },
+        {
+          "key": "avantage",
+          "label": "Avantage mentionné",
+          "value": "TRANSPORT",
+          "display": "transport",
+          "state": "REVIEW_REQUIRED",
+          "evidence": {
+            "origin": "DESCRIPTION",
+            "text": "- Une rémunération attractive et remboursement des frais de transport",
+            "start": 1621,
+            "end": 1690
+          }
+        },
+        {
+          "key": "experience_non_chiffree",
+          "label": "Expérience",
+          "value": "- Une expérience enrichissante dans un service clé de la prise en charge post-chirurgicale",
+          "display": "- Une expérience enrichissante dans un service clé de la prise en charge post-chirurgicale",
+          "state": "REVIEW_REQUIRED",
+          "evidence": {
+            "origin": "DESCRIPTION",
+            "text": "- Une expérience enrichissante dans un service clé de la prise en charge post-chirurgicale",
+            "start": 2041,
+            "end": 2131
+          }
+        },
+        {
+          "key": "certification",
+          "label": "Diplôme ou certification",
+          "value": "DIPLOME_INFIRMIER",
+          "display": "Diplôme d’État infirmier",
+          "state": "REQUIRED",
+          "evidence": {
+            "origin": "DESCRIPTION",
+            "text": "Diplôme d'État d'Infirmier(ère) requis",
+            "start": 2156,
+            "end": 2194
+          }
+        },
+        {
+          "key": "experience_domaine",
+          "label": "Domaine d’expérience",
+          "value": "SSPI",
+          "display": "SSPI",
+          "state": "DESIRED",
+          "evidence": {
+            "origin": "DESCRIPTION",
+            "text": "- Une expérience en salle de réveil ou en soins post-opératoires est souhaitée, mais les infirmiers(ères) motivé(e)s et désireux(se)s d'apprendre dans ce domaine sont également les bienvenus",
+            "start": 2196,
+            "end": 2386
+          }
+        },
+        {
+          "key": "experience_non_chiffree",
+          "label": "Expérience",
+          "value": "- Une expérience en salle de réveil ou en soins post-opératoires est souhaitée, mais les infirmiers(ères) motivé(e)s et désireux(se)s d'apprendre dans ce domaine sont également les bienvenus",
+          "display": "- Une expérience en salle de réveil ou en soins post-opératoires est souhaitée, mais les infirmiers(ères) motivé(e)s et désireux(se)s d'apprendre dans ce domaine sont également les bienvenus",
+          "state": "DESIRED",
+          "evidence": {
+            "origin": "DESCRIPTION",
+            "text": "- Une expérience en salle de réveil ou en soins post-opératoires est souhaitée, mais les infirmiers(ères) motivé(e)s et désireux(se)s d'apprendre dans ce domaine sont également les bienvenus",
+            "start": 2196,
+            "end": 2386
+          }
+        },
+        {
+          "key": "competence",
+          "label": "Compétence mentionnée",
+          "value": "HYGIENE",
+          "display": "hygiene",
+          "state": "REVIEW_REQUIRED",
+          "evidence": {
+            "origin": "DESCRIPTION",
+            "text": "- Respect des protocoles médicaux, d'hygiène et de sécurité en vigueur",
+            "start": 2564,
+            "end": 2634
+          }
+        },
+        {
+          "key": "service",
+          "label": "Service mentionné",
+          "value": "SSPI",
+          "display": "SSPI",
+          "state": "DESIRED",
+          "evidence": {
+            "origin": "DESCRIPTION",
+            "text": "Si vous êtes un(e) infirmier(ère) passionné(e) par les soins post-opératoires et que vous souhaitez intégrer une équipe dédiée à la qualité de la prise en charge des patients en salle de réveil, cette mission est pour vous",
+            "start": 2636,
+            "end": 2858
+          }
+        },
+        {
+          "key": "competence",
+          "label": "Compétence mentionnée",
+          "value": "SURVEILLANCE",
+          "display": "surveillance",
+          "state": "REVIEW_REQUIRED",
+          "evidence": {
+            "origin": "DESCRIPTION",
+            "text": "Rejoignez TAGA Médical et participez activement à la surveillance et au bien-être des patients après leur intervention chirurgicale dans une structure hospitalière à Paris 20",
+            "start": 2861,
+            "end": 3035
+          }
+        },
+        {
+          "key": "experience_non_chiffree",
+          "label": "Expérience",
+          "value": "Salaire :selon expérience + 10% de congés payés +10% de prime de précarité, Prime de nuit et jour férié, indemnité de transport en commun (3.39 euros par jour travaillé)",
+          "display": "Salaire :selon expérience + 10% de congés payés +10% de prime de précarité, Prime de nuit et jour férié, indemnité de transport en commun (3.39 euros par jour travaillé)",
+          "state": "REVIEW_REQUIRED",
+          "evidence": {
+            "origin": "DESCRIPTION",
+            "text": "Salaire :selon expérience + 10% de congés payés +10% de prime de précarité, Prime de nuit et jour férié, indemnité de transport en commun (3.39 euros par jour travaillé)",
+            "start": 3063,
+            "end": 3232
+          }
+        },
+        {
+          "key": "majoration_horaire",
+          "label": "Majoration horaire",
+          "value": "NUIT",
+          "display": "NUIT",
+          "state": "MENTION",
+          "evidence": {
+            "origin": "DESCRIPTION",
+            "text": "Salaire :selon expérience + 10% de congés payés +10% de prime de précarité, Prime de nuit et jour férié, indemnité de transport en commun (3.39 euros par jour travaillé)",
+            "start": 3063,
+            "end": 3232
+          }
+        },
+        {
+          "key": "remuneration_texte",
+          "label": "Rémunération",
+          "value": "Salaire :selon expérience + 10% de congés payés +10% de prime de précarité, Prime de nuit et jour férié, indemnité de transport en commun (3.39 euros par jour travaillé)",
+          "display": "Salaire :selon expérience + 10% de congés payés +10% de prime de précarité, Prime de nuit et jour férié, indemnité de transport en commun (3.39 euros par jour travaillé)",
+          "state": "MENTION",
+          "evidence": {
+            "origin": "DESCRIPTION",
+            "text": "Salaire :selon expérience + 10% de congés payés +10% de prime de précarité, Prime de nuit et jour férié, indemnité de transport en commun (3.39 euros par jour travaillé)",
+            "start": 3063,
+            "end": 3232
+          }
+        },
+        {
+          "key": "avantage",
+          "label": "Avantage mentionné",
+          "value": "TRANSPORT",
+          "display": "transport",
+          "state": "REVIEW_REQUIRED",
+          "evidence": {
+            "origin": "DESCRIPTION",
+            "text": "Salaire :selon expérience + 10% de congés payés +10% de prime de précarité, Prime de nuit et jour férié, indemnité de transport en commun (3.39 euros par jour travaillé)",
+            "start": 3063,
+            "end": 3232
+          }
+        },
+        {
+          "key": "avantage",
+          "label": "Avantage mentionné",
+          "value": "PRIMES",
+          "display": "primes",
+          "state": "REVIEW_REQUIRED",
+          "evidence": {
+            "origin": "DESCRIPTION",
+            "text": "Salaire :selon expérience + 10% de congés payés +10% de prime de précarité, Prime de nuit et jour férié, indemnité de transport en commun (3.39 euros par jour travaillé)",
+            "start": 3063,
+            "end": 3232
+          }
+        },
+        {
+          "key": "service",
+          "label": "Service mentionné",
+          "value": "CHIRURGIE",
+          "display": "chirurgie",
+          "state": "REVIEW_REQUIRED",
+          "evidence": {
+            "origin": "DESCRIPTION",
+            "text": "Prendre en charge les patients en salle de réveil après des interventions chirurgicales diverses (chirurgie générale, orthopédique, digestive, cardiaque, etc.).",
+            "start": 455,
+            "end": 615
+          }
+        },
+        {
+          "key": "competence",
+          "label": "Compétence mentionnée",
+          "value": "DOULEUR",
+          "display": "douleur",
+          "state": "REVIEW_REQUIRED",
+          "evidence": {
+            "origin": "DESCRIPTION",
+            "text": "Assurer la surveillance post-opératoire immédiate des patients (paramètres vitaux, douleur, vigilance, état général).",
+            "start": 618,
+            "end": 735
+          }
+        },
+        {
+          "key": "competence",
+          "label": "Compétence mentionnée",
+          "value": "PANSEMENTS",
+          "display": "pansements",
+          "state": "REVIEW_REQUIRED",
+          "evidence": {
+            "origin": "DESCRIPTION",
+            "text": "Assurer les soins post-opératoires essentiels : administration de médicaments, perfusions, gestion de la douleur, soins de pansements.",
+            "start": 738,
+            "end": 872
+          }
+        },
+        {
+          "key": "competence",
+          "label": "Compétence mentionnée",
+          "value": "PERFUSIONS",
+          "display": "perfusions",
+          "state": "REVIEW_REQUIRED",
+          "evidence": {
+            "origin": "DESCRIPTION",
+            "text": "Assurer les soins post-opératoires essentiels : administration de médicaments, perfusions, gestion de la douleur, soins de pansements.",
+            "start": 738,
+            "end": 872
+          }
+        },
+        {
+          "key": "competence",
+          "label": "Compétence mentionnée",
+          "value": "DOULEUR",
+          "display": "douleur",
+          "state": "REVIEW_REQUIRED",
+          "evidence": {
+            "origin": "DESCRIPTION",
+            "text": "Assurer les soins post-opératoires essentiels : administration de médicaments, perfusions, gestion de la douleur, soins de pansements.",
+            "start": 738,
+            "end": 872
+          }
+        },
+        {
+          "key": "competence",
+          "label": "Compétence mentionnée",
+          "value": "MEDICAMENTS",
+          "display": "medicaments",
+          "state": "REVIEW_REQUIRED",
+          "evidence": {
+            "origin": "DESCRIPTION",
+            "text": "Assurer les soins post-opératoires essentiels : administration de médicaments, perfusions, gestion de la douleur, soins de pansements.",
+            "start": 738,
+            "end": 872
+          }
+        },
+        {
+          "key": "service",
+          "label": "Service mentionné",
+          "value": "CHIRURGIE",
+          "display": "chirurgie",
+          "state": "REVIEW_REQUIRED",
+          "evidence": {
+            "origin": "DESCRIPTION",
+            "text": "Collaborer avec les anesthésistes, chirurgiens et autres professionnels de santé pour assurer une prise en charge optimale.",
+            "start": 1148,
+            "end": 1271
+          }
+        },
+        {
+          "key": "alternance",
+          "label": "Alternance",
+          "value": "JOUR_NUIT",
+          "display": "Jour / nuit",
+          "state": "REPORTED",
+          "evidence": {
+            "origin": "DESCRIPTION",
+            "text": "Des horaires flexibles (jour/nuit) selon vos disponibilités.",
+            "start": 1560,
+            "end": 1620
+          }
+        },
+        {
+          "key": "remuneration_non_chiffree",
+          "label": "Rémunération à préciser",
+          "value": true,
+          "display": "Salaire :selon expérience + 10% de congés payés +10% de prime de précarité, Prime de nuit et jour férié, indemnité de transport en commun (3.39 euros par jour travaillé)",
+          "state": "MENTION",
+          "evidence": {
+            "origin": "DESCRIPTION",
+            "text": "Salaire :selon expérience + 10% de congés payés +10% de prime de précarité, Prime de nuit et jour férié, indemnité de transport en commun (3.39 euros par jour travaillé)",
+            "start": 3063,
+            "end": 3232
+          }
+        },
+        {
+          "key": "taux_avantages",
+          "label": "Taux et primes",
+          "value": {
+            "rates": [
+              10,
+              10
+            ],
+            "assignment": "A_CONFIRMER_PAR_COMPOSANTE"
+          },
+          "display": "Salaire :selon expérience + 10% de congés payés +10% de prime de précarité, Prime de nuit et jour férié, indemnité de transport en commun (3.39 euros par jour travaillé)",
+          "state": "REPORTED",
+          "evidence": {
+            "origin": "DESCRIPTION",
+            "text": "Salaire :selon expérience + 10% de congés payés +10% de prime de précarité, Prime de nuit et jour férié, indemnité de transport en commun (3.39 euros par jour travaillé)",
+            "start": 3063,
+            "end": 3232
+          }
+        },
+        {
+          "key": "montant_avantage",
+          "label": "Indemnité à préciser",
+          "value": {
+            "amount": 3.39,
+            "currency": "EUR",
+            "period": "jour travaille"
+          },
+          "display": "Salaire :selon expérience + 10% de congés payés +10% de prime de précarité, Prime de nuit et jour férié, indemnité de transport en commun (3.39 euros par jour travaillé)",
+          "state": "REVIEW_REQUIRED",
+          "evidence": {
+            "origin": "DESCRIPTION",
+            "text": "Salaire :selon expérience + 10% de congés payés +10% de prime de précarité, Prime de nuit et jour férié, indemnité de transport en commun (3.39 euros par jour travaillé)",
+            "start": 3063,
+            "end": 3232
+          }
+        }
+      ]
+    },
+    {
+      "id": "50be4a00-652b-406b-8d1a-db60c5f5bc96",
+      "title": "INFIRMIER DE BLOC OPÉRATOIRE DE (F/H)",
+      "source": "FRANCE_TRAVAIL",
+      "targets": [
+        {
+          "key": "specialite",
+          "value": "MATERNITE",
+          "found": false
+        }
+      ],
+      "proofErrors": 0,
+      "falsePositives": [],
+      "fieldCount": 2,
+      "reviewCount": 3,
+      "fields": [
+        {
+          "key": "service",
+          "label": "Service mentionné",
+          "value": "BLOC",
+          "display": "BLOC",
+          "state": "REVIEW_REQUIRED",
+          "evidence": {
+            "origin": "TITLE",
+            "text": "INFIRMIER DE BLOC OPÉRATOIRE DE (F/H)",
+            "start": 0,
+            "end": 37
+          }
+        },
+        {
+          "key": "service",
+          "label": "Service mentionné",
+          "value": "BLOC",
+          "display": "BLOC",
+          "state": "DESIRED",
+          "evidence": {
+            "origin": "DESCRIPTION",
+            "text": "descriptif du posteSouhaitez-vous contribuer aux interventions en tant qu'Infirmier-ère de bloc opératoire (F/H) en hôpital",
+            "start": 0,
+            "end": 123
+          }
+        }
+      ]
+    },
+    {
+      "id": "6bfdd499-07be-4943-b3ad-e5020de29c54",
+      "title": "INFIRMIER DE BLOC OPÉRATOIRE DE (F/H)",
+      "source": "FRANCE_TRAVAIL",
+      "targets": [
+        {
+          "key": "service",
+          "value": "BLOC",
+          "found": true
+        },
+        {
+          "key": "service",
+          "value": "DIALYSE",
+          "found": true
+        }
+      ],
+      "proofErrors": 0,
+      "falsePositives": [],
+      "fieldCount": 5,
+      "reviewCount": 2,
+      "fields": [
+        {
+          "key": "service",
+          "label": "Service mentionné",
+          "value": "BLOC",
+          "display": "BLOC",
+          "state": "REVIEW_REQUIRED",
+          "evidence": {
+            "origin": "TITLE",
+            "text": "INFIRMIER DE BLOC OPÉRATOIRE DE (F/H)",
+            "start": 0,
+            "end": 37
+          }
+        },
+        {
+          "key": "service",
+          "label": "Service mentionné",
+          "value": "BLOC",
+          "display": "BLOC",
+          "state": "DESIRED",
+          "evidence": {
+            "origin": "DESCRIPTION",
+            "text": "descriptif du posteSouhaitez-vous valoriser vos compétences d'Infirmier de bloc opératoire (F/H) au sein d'un hôpital",
+            "start": 0,
+            "end": 117
+          }
+        },
+        {
+          "key": "service",
+          "label": "Service mentionné",
+          "value": "BLOC",
+          "display": "BLOC",
+          "state": "REVIEW_REQUIRED",
+          "evidence": {
+            "origin": "DESCRIPTION",
+            "text": "Vous contribuerez à la prise en charge sécurisée des patientes et patients au sein du bloc opératoire d'un établissement hospitalier",
+            "start": 119,
+            "end": 251
+          }
+        },
+        {
+          "key": "service",
+          "label": "Service mentionné",
+          "value": "DIALYSE",
+          "display": "dialyse",
+          "state": "REVIEW_REQUIRED",
+          "evidence": {
+            "origin": "DESCRIPTION",
+            "text": "Vous préparerez les salles, équipements et dispositifs nécessaires aux séances de dialyse",
+            "start": 254,
+            "end": 343
+          }
+        },
+        {
+          "key": "competence",
+          "label": "Compétence mentionnée",
+          "value": "SURVEILLANCE",
+          "display": "surveillance",
+          "state": "REVIEW_REQUIRED",
+          "evidence": {
+            "origin": "DESCRIPTION",
+            "text": "Vous assurerez la surveillance clinique des patientes et patients durant les interventions",
+            "start": 346,
+            "end": 436
+          }
+        }
+      ]
+    },
+    {
+      "id": "8a45bf0b-1baa-402c-9e1c-181892f9778e",
+      "title": "INFIRMIER DE (F/H)",
+      "source": "FRANCE_TRAVAIL",
+      "targets": [
+        {
+          "key": "service",
+          "value": "DIALYSE",
+          "found": true
+        },
+        {
+          "key": "competence",
+          "value": "SURVEILLANCE",
+          "found": true
+        }
+      ],
+      "proofErrors": 0,
+      "falsePositives": [],
+      "fieldCount": 3,
+      "reviewCount": 2,
+      "fields": [
+        {
+          "key": "service",
+          "label": "Service mentionné",
+          "value": "DIALYSE",
+          "display": "dialyse",
+          "state": "REVIEW_REQUIRED",
+          "evidence": {
+            "origin": "DESCRIPTION",
+            "text": "Au sein d'une clinique, vous assurez des soins essentiels en dialyse, en plaçant chaque patient au cœur de vos priorités",
+            "start": 98,
+            "end": 218
+          }
+        },
+        {
+          "key": "service",
+          "label": "Service mentionné",
+          "value": "DIALYSE",
+          "display": "dialyse",
+          "state": "REVIEW_REQUIRED",
+          "evidence": {
+            "origin": "DESCRIPTION",
+            "text": "Vous accueillez et accompagnez les patients et patientes avant, pendant et après chaque séance de dialyse",
+            "start": 221,
+            "end": 326
+          }
+        },
+        {
+          "key": "competence",
+          "label": "Compétence mentionnée",
+          "value": "SURVEILLANCE",
+          "display": "surveillance",
+          "state": "REVIEW_REQUIRED",
+          "evidence": {
+            "origin": "DESCRIPTION",
+            "text": "Vous surveillez les paramètres cliniques et intervenez avec réactivité pour garantir la sécurité des soins",
+            "start": 329,
+            "end": 435
+          }
+        }
+      ]
+    },
+    {
+      "id": "aac253e1-7629-46b9-983c-c5c68c2c4539",
+      "title": "INFIRMIER DE (F/H) LABORATOIRE",
+      "source": "FRANCE_TRAVAIL",
+      "targets": [
+        {
+          "key": "service",
+          "value": "LABORATOIRE",
+          "found": true
+        },
+        {
+          "key": "competence",
+          "value": "PRELEVEMENTS",
+          "found": true
+        }
+      ],
+      "proofErrors": 0,
+      "falsePositives": [],
+      "fieldCount": 3,
+      "reviewCount": 3,
+      "fields": [
+        {
+          "key": "service",
+          "label": "Service mentionné",
+          "value": "LABORATOIRE",
+          "display": "laboratoire",
+          "state": "REVIEW_REQUIRED",
+          "evidence": {
+            "origin": "TITLE",
+            "text": "INFIRMIER DE (F/H) LABORATOIRE",
+            "start": 0,
+            "end": 30
+          }
+        },
+        {
+          "key": "service",
+          "label": "Service mentionné",
+          "value": "LABORATOIRE",
+          "display": "laboratoire",
+          "state": "REVIEW_REQUIRED",
+          "evidence": {
+            "origin": "DESCRIPTION",
+            "text": "Vous jouerez un rôle essentiel en assurant un soutien médical au sein du laboratoire de notre hôpital",
+            "start": 99,
+            "end": 200
+          }
+        },
+        {
+          "key": "competence",
+          "label": "Compétence mentionnée",
+          "value": "PRELEVEMENTS",
+          "display": "prelevements",
+          "state": "REVIEW_REQUIRED",
+          "evidence": {
+            "origin": "DESCRIPTION",
+            "text": "- Assurer la réalisation des prélèvements et des analyses pour diagnostiquer et contrôler les pathologies",
+            "start": 202,
+            "end": 307
+          }
+        }
+      ]
+    },
+    {
+      "id": "d63d4958-572f-4ed1-8d5b-7a410eb56ec3",
+      "title": "Infirmier(ère) Depistage Drug Testing H/f (H/F)",
+      "source": "FRANCE_TRAVAIL",
+      "targets": [
+        {
+          "key": "competence",
+          "value": "PRELEVEMENTS",
+          "found": true
+        },
+        {
+          "key": "jours_nommes",
+          "found": true
+        },
+        {
+          "key": "salaire_structure",
+          "found": true
+        }
+      ],
+      "proofErrors": 0,
+      "falsePositives": [],
+      "fieldCount": 7,
+      "reviewCount": 2,
+      "fields": [
+        {
+          "key": "contrat_texte",
+          "label": "Contrat mentionné",
+          "value": "INTERIM",
+          "display": "interim",
+          "state": "MENTION",
+          "evidence": {
+            "origin": "DESCRIPTION",
+            "text": "Nous recrutons pour le compte d'un de nos client, un(e) infirmier(ère) pour une mission d'intérim pour une opération Drug Testing Date : Du Lundi 7 Septembre au Vendredi 11 Septembre",
+            "start": 0,
+            "end": 182
+          }
+        },
+        {
+          "key": "periode_texte",
+          "label": "Période annoncée",
+          "value": "Nous recrutons pour le compte d'un de nos client, un(e) infirmier(ère) pour une mission d'intérim pour une opération Drug Testing Date : Du Lundi 7 Septembre au Vendredi 11 Septembre",
+          "display": "Nous recrutons pour le compte d'un de nos client, un(e) infirmier(ère) pour une mission d'intérim pour une opération Drug Testing Date : Du Lundi 7 Septembre au Vendredi 11 Septembre",
+          "state": "REVIEW_REQUIRED",
+          "evidence": {
+            "origin": "DESCRIPTION",
+            "text": "Nous recrutons pour le compte d'un de nos client, un(e) infirmier(ère) pour une mission d'intérim pour une opération Drug Testing Date : Du Lundi 7 Septembre au Vendredi 11 Septembre",
+            "start": 0,
+            "end": 182
+          }
+        },
+        {
+          "key": "competence",
+          "label": "Compétence mentionnée",
+          "value": "PRELEVEMENTS",
+          "display": "prelevements",
+          "state": "REVIEW_REQUIRED",
+          "evidence": {
+            "origin": "DESCRIPTION",
+            "text": "Horaires : 08h30/17h30 Missions : Réalisation de prélèvements salivaire en vue de réaliser des analyses afin de détecter la présence de substances psychoactives, s'assurer des procédures d'emballage et de la conformité des dossiers administratifs et divers tâches administratives",
+            "start": 183,
+            "end": 462
+          }
+        },
+        {
+          "key": "horaires_detail",
+          "label": "Horaires",
+          "value": "Horaires : 08h30/17h30 Missions : Réalisation de prélèvements salivaire en vue de réaliser des analyses afin de détecter la présence de substances psychoactives, s'assurer des procédures d'emballage et de la conformité des dossiers administratifs et divers tâches administratives",
+          "display": "Horaires : 08h30/17h30 Missions : Réalisation de prélèvements salivaire en vue de réaliser des analyses afin de détecter la présence de substances psychoactives, s'assurer des procédures d'emballage et de la conformité des dossiers administratifs et divers tâches administratives",
+          "state": "REVIEW_REQUIRED",
+          "evidence": {
+            "origin": "DESCRIPTION",
+            "text": "Horaires : 08h30/17h30 Missions : Réalisation de prélèvements salivaire en vue de réaliser des analyses afin de détecter la présence de substances psychoactives, s'assurer des procédures d'emballage et de la conformité des dossiers administratifs et divers tâches administratives",
+            "start": 183,
+            "end": 462
+          }
+        },
+        {
+          "key": "remuneration_texte",
+          "label": "Rémunération",
+          "value": "Salaire :21€",
+          "display": "Salaire :21€",
+          "state": "MENTION",
+          "evidence": {
+            "origin": "DESCRIPTION",
+            "text": "Salaire :21€",
+            "start": 733,
+            "end": 745
+          }
+        },
+        {
+          "key": "jours_nommes",
+          "label": "Jours annoncés",
+          "value": [
+            "lundi",
+            "vendredi"
+          ],
+          "display": "Nous recrutons pour le compte d'un de nos client, un(e) infirmier(ère) pour une mission d'intérim pour une opération Drug Testing Date : Du Lundi 7 Septembre au Vendredi 11 Septembre Horaires : 08h30/17h30 Missions : Réalisation de prélèvements salivaire en vue de réaliser des analyses afin de détecter la présence de substances psychoactives, s'assurer des procédures d'emballage et de la conformité des dossiers administratifs et divers tâches administratives",
+          "state": "REVIEW_REQUIRED",
+          "evidence": {
+            "origin": "DESCRIPTION",
+            "text": "Nous recrutons pour le compte d'un de nos client, un(e) infirmier(ère) pour une mission d'intérim pour une opération Drug Testing Date : Du Lundi 7 Septembre au Vendredi 11 Septembre Horaires : 08h30/17h30 Missions : Réalisation de prélèvements salivaire en vue de réaliser des analyses afin de détecter la présence de substances psychoactives, s'assurer des procédures d'emballage et de la conformité des dossiers administratifs et divers tâches administratives",
+            "start": 0,
+            "end": 462
+          }
+        },
+        {
+          "key": "salaire_structure",
+          "label": "Montant annoncé",
+          "value": {
+            "amount": 21,
+            "currency": "EUR",
+            "unit": null,
+            "gross": null
+          },
+          "display": "21 € — brut/net non précisé — unité non précisée",
+          "state": "REVIEW_REQUIRED",
+          "evidence": {
+            "origin": "DESCRIPTION",
+            "text": "Profil du candidat : A l'écoute Sens du relationnel et de la communication Optimiste Ouvert Sociable Sérieux et rigoureux Réactivité Discrétion, sens de la confidentialité Organisé et méthodique Sens du travail en équipe L'entreprise : TAGA MEDICAL Sandra FERNANDES 64 Salaire :21€",
+            "start": 464,
+            "end": 745
+          }
+        }
+      ]
+    }
+  ],
+  "annotationCorrection": "Removed surveillance expectation: not explicitly present in truncated source. Two real omissions: medicine polyvalente, maternity."
+}

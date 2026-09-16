@@ -1,0 +1,24 @@
+import {createHash} from "node:crypto";
+import fs from 'node:fs';
+const corpus=[...JSON.parse(fs.readFileSync('data/parser-pilot/corpus.json')),...JSON.parse(fs.readFileSync('data/parser-pilot/holdout.json'))];
+const results=JSON.parse(fs.readFileSync('docs/proofs/parser-pilot-v3/results.json')).offers;
+function row(id){return corpus.find(r=>r.id===id);}
+function proof(id,field,needle){const r=results.find(r=>r.id===id);const f=r.fields.find(f=>f.field===field&&(!needle||f.evidence.includes(needle)));if(!f)throw Error('Missing proof '+field+' '+needle);return f.evidence;}
+const a='b05cb741-2b7f-45e3-be37-76f1f2b6647c',b='227c351f-e7ac-4ae4-9929-d9b37e421007',c='2ceed9ad-b0e6-49eb-b40f-fab2a81d58b4';
+const item=(label,value,status,evidence)=>({label,value,status,evidence});
+const data=[
+ {id:a,title:'IADE — Anesthésie au bloc opératoire',summary:'Une fiche spécialisée avec durée de poste et expérience souhaitée.',alerts:['Le montant de 36 € est indiqué sans unité : ne pas le présenter comme un tarif horaire.'],missing:['Dates précises de mission','Population adulte ou pédiatrique','Unité et caractère brut/net de la rémunération'],groups:[
+ {title:'Travail et horaires',items:[item('Métier','IADE','explicit',proof(a,'qualification_titre')),item('Lieu d’exercice','Bloc opératoire','explicit',proof(a,'service','Au sein du bloc')),item('Durée des postes','10 ou 12 heures','explicit',proof(a,'horaires_detail','10H OU 12H'))]},
+ {title:'Profil et compétences',items:[item('Diplôme','Diplôme d’État d’infirmier anesthésiste exigé','explicit',proof(a,'certification','exigé')),item('Expérience','Bloc opératoire, SSPI ou réanimation appréciés','desired',proof(a,'experience_domaine')),item('Références professionnelles','Ordre infirmier et RPPS mentionnés','uncertain',proof(a,'certification','RPPS'))]},
+ {title:'Rémunération et avantages',items:[item('Montant annoncé','36 € — unité à confirmer','uncertain',proof(a,'remuneration_texte')),item('Transport','Remboursement annoncé : 3,39 € — fréquence à confirmer','uncertain',proof(a,'remuneration_texte'))]}]},
+ {id:b,title:'Infirmier en entreprise — Santé au travail',summary:'Un exemple où la fiche signale une contradiction au lieu de choisir à votre place.',alerts:['Le texte annonce un temps partiel de 3 jours par semaine, puis indique « Temps plein ». À confirmer auprès du recruteur.'],missing:['Dates précises de début et de fin','Caractère brut ou net du salaire'],groups:[
+ {title:'Travail et horaires',items:[item('Secteur','Santé au travail — Paris 16e','explicit',proof(b,'service')),item('Temps de travail','Temps partiel / temps plein : contradiction','conflict',proof(b,'temps_travail','partiel')+'\n'+proof(b,'temps_travail','Temps plein')),item('Jours annoncés','Lundi, mardi et mercredi — 3 jours par semaine','explicit',proof(b,'jours_travailles_semaine')),item('Horaires','9 h 30 à 17 h — pause d’une heure','explicit',proof(b,'horaires_detail'))]},
+ {title:'Profil et compétences',items:[item('Diplôme','Diplôme d’État d’infirmier','explicit',proof(b,'certification','Diplôme')),item('Expérience','Entreprise ou santé au travail appréciée','desired',proof(b,'experience_domaine'))]},
+ {title:'Rémunération et avantages',items:[item('Salaire','22 € par heure — brut/net non précisé','explicit',proof(b,'remuneration_texte'))]}]},
+ {id:c,title:'Infirmier en pool — Alternance jour / nuit',summary:'Un exemple JobsPipe : horaires identifiés, contrat encore à confirmer.',alerts:['La présentation du cabinet mentionne l’intérim, mais le contrat précis de ce poste n’est pas établi.'],missing:['Contrat du poste','Dates de mission','Services concernés','Diplôme non extrait automatiquement : à relire dans l’annonce'],groups:[
+ {title:'Travail et horaires',items:[item('Organisation','Alternance jours / nuits, avec davantage de jours','explicit',proof(c,'alternance')),item('Postes','12 heures — plage de jour annoncée : 7 h à 19 h','explicit',proof(c,'horaires_detail')),item('Roulement','Petite / grande semaine, avec week-ends','explicit',proof(c,'roulement','week-ends'))]},
+ {title:'Rémunération et avantages',items:[item('Salaire','À partir de 2 750 € bruts par mois, plus ancienneté','explicit',proof(c,'remuneration_texte')),item('Avantages','Mutuelle, CSE et autres primes mentionnés','uncertain',proof(c,'avantage','Mutuelle'))]}]}
+].map(d=>({...d,descriptionHash:createHash('sha256').update(row(d.id).description).digest('hex'),source:row(d.id).source==='JOBSPIPE'?'JobsPipe':'France Travail',sourceUrl:row(d.id).url,location:row(d.id).location_label}));
+for(const d of data)for(const g of d.groups)for(const f of g.items)for(const part of f.evidence.split('\n'))if(!row(d.id).description.includes(part)&&!row(d.id).title.includes(part))throw Error('Evidence not in source');
+fs.writeFileSync('../infiMatch-front-end/src/data/parserPreview.json',JSON.stringify(data,null,2));
+console.log('3 exemples exportes ; extraits verifies contre le corpus.');

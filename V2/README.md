@@ -11,5 +11,6 @@ La V2 prolonge le backend NestJS existant, ses bases PostgreSQL/PostGIS et Mongo
 - [Crit?res de recette](RECETTE.md)
 - [?tat et conditions de d?marrage](PASSATION.md)
 
+Sources : `docs/DECISIONS_V1.md`, tableau de versions du prompt archiv? `docs/references/Interimatch_Sante_Mega_Prompt_Backend_V1.md`, d?cisions de conversation. L?ajout de Vault est un travail V1 autoris? le 15 septembre 2026.
 
 L?objectif de conformit? de la V1 ne change pas. HTTPS de livraison, contr?le d?exp?rience pr?alable applicable, droits minimaux, idempotence documentaire et restauration compl?te ne deviennent pas des t?ches V2 parce que ce dossier existe.

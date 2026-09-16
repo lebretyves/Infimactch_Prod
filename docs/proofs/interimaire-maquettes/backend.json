@@ -1,0 +1,24 @@
+{
+  "at": "2026-09-16T00:16:21.860Z",
+  "checks": [
+    "Profile, qualifications, availability and reference roundtrip 1",
+    "Profile, qualifications, availability and reference roundtrip 2",
+    "Profile, qualifications, availability and reference roundtrip 3",
+    "Invalid reference and future diploma rejected without data loss",
+    "Advanced search applies dates, distance, service, establishment and shifts before count/pagination",
+    "Search refuses qualifications not held",
+    "Favorite add/read/remove persisted three rounds: MISSION",
+    "Favorite add/read/remove persisted three rounds: EXTERNAL",
+    "Favorite add/read/remove persisted three rounds: ESTABLISHMENT",
+    "Candidature, timeline, withdrawal and ownership guards",
+    "Real matching and private Mongo explanation",
+    "External correspondence endpoint returns partial comparison",
+    "RPPS request/retry persist states using isolated provider response",
+    "Real encrypted temporary document upload/download and ownership",
+    "Demonstration bank details persist with masked readback",
+    "Assignment confirmation generated and downloadable",
+    "Dashboard, history, facility and notification actions read real relational data",
+    "Rollback verified: isolated accounts and SQL data do not persist"
+  ],
+  "scope": "Real Nest controllers, validation, PostgreSQL and matching MongoDB; SQL outer rollback, memory sessions, temporary encrypted files cleaned, Mongo explanations deleted only for fixture IDs; RPPS provider simulated. No changes to real accounts."
+}

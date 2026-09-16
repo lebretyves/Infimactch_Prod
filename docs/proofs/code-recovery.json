@@ -1,0 +1,35 @@
+{
+  "date": "2026-09-14",
+  "codeCommit": "28923fcfd80a9c1c317e42f226ddb887162f4020",
+  "bundle": "backups/2026-09-14T21-31-37-699Z.bundle",
+  "restoredDirectory": "backups/restore-code-28923fc",
+  "checks": [
+    {
+      "command": "git clone bundle into a new directory",
+      "exitCode": 0
+    },
+    {
+      "command": "npm ci in restored directory",
+      "exitCode": 0,
+      "auditVulnerabilities": 0
+    },
+    {
+      "command": "npm run typecheck in restored directory",
+      "exitCode": 0
+    },
+    {
+      "command": "npm run build in restored directory",
+      "exitCode": 0
+    }
+  ],
+  "scope": "Code recovery and clean dependency installation/build. Does not claim a full restoration of MongoDB, private files, keys or n8n.",
+  "liveApi": {
+    "url": "http://127.0.0.1:3100/api/v1/health",
+    "observed": {
+      "status": "ok",
+      "application": "InfiMatch"
+    }
+  },
+  "sourceArchiveHashesVerifiedInGitIndex": true,
+  "referenceStorage": "Original reference bytes preserved; no newline conversion"
+}

@@ -1,0 +1,31 @@
+﻿import assert from 'node:assert/strict';
+import {createRequire} from 'node:module';
+import {mkdir,writeFile} from 'node:fs/promises';
+import {nurseWorkspaceFixture} from './nurse-workspace-fixture.mjs';
+const require=createRequire(import.meta.url);const f=await nurseWorkspaceFixture();
+const {nurse,other,agency,facility,call,ok,db}=f;
+try{
+ for(let i=1;i<=3;i++){
+  const p={...f.profile,details:{...f.profile.details,firstName:'Camille '+i,referenceName:'Alex '+i},displayName:'Camille '+i};
+  await call(nurse,'PUT','/profile',p);const got=await call(nurse,'GET','/profile');assert.deepEqual(got.body.details,p.details);assert.deepEqual(got.body.available,p.available);ok('Profile, qualifications, availability and reference roundtrip '+i);
+ }
+ const current=(await call(nurse,'GET','/profile')).body;
+ await call(nurse,'PUT','/profile',{...f.profile,details:{referenceEmail:'invalid'}},400);
+ await call(nurse,'PUT','/profile',{...f.profile,details:{ideDiplomaYear:2099}},400);
+ assert.deepEqual((await call(nurse,'GET','/profile')).body.details,current.details);ok('Invalid reference and future diploma rejected without data loss');
+ const filters={qualifications:['IDE'],ideServices:['URGENCES'],shifts:['DAY'],latitude:48.85,longitude:2.35,radiusKm:30,start:'2030-01-10T00:00:00Z',end:'2030-01-11T00:00:00Z',establishmentId:facility.org,limit:20,offset:0};
+ const found=await call(nurse,'POST','/listings/search',filters,201);assert.ok(found.body.items.some(x=>x.id==='m_'+f.missionId));assert.equal(found.body.total,1);
+ const absent=await call(nurse,'POST','/listings/search',{...filters,shifts:['NIGHT']},201);assert.equal(absent.body.total,0);ok('Advanced search applies dates, distance, service, establishment and shifts before count/pagination');
+ await call(nurse,'POST','/listings/search',{qualifications:['IBODE']},400);ok('Search refuses qualifications not held');
+ for(const [kind,targetId] of [['MISSION',f.missionId],['EXTERNAL',f.externalId],['ESTABLISHMENT',facility.org]]){
+  for(let i=0;i<3;i++){await call(nurse,'POST','/me/favorites',{kind,targetId},201);assert.ok((await call(nurse,'GET','/me/favorites?limit=50')).body.some(x=>x.kind===kind&&x.target_id===targetId));await call(nurse,'DELETE','/me/favorites/'+kind+'/'+targetId,undefined,200);assert.ok(!(await call(nurse,'GET','/me/favorites?limit=50')).body.some(x=>x.kind===kind&&x.target_id===targetId));}ok('Favorite add/read/remove persisted three rounds: '+kind);
+ }
+ const a=await call(nurse,'POST','/missions/'+f.missionId+'/applications',{version:1},201);const detail=await call(nurse,'GET','/applications/'+a.body.id);assert.ok(detail.body.events.length);await call(other,'GET','/applications/'+a.body.id,undefined,404);await call(nurse,'POST','/applications/'+a.body.id+'/withdrawal',{},201);assert.equal((await call(nurse,'GET','/applications/'+a.body.id)).body.status,'WITHDRAWN');ok('Candidature, timeline, withdrawal and ownership guards');
+ const matches=await call(nurse,'GET','/me/matches?limit=20');const m=matches.body.items.find(x=>x.missionId===f.missionId);assert.ok(m);assert.equal(m.historyStatus,'SAVED');await call(nurse,'GET','/matches/'+m.explanationId+'/explanation');await call(other,'GET','/matches/'+m.explanationId+'/explanation',undefined,404);ok('Real matching and private Mongo explanation');
+ const comparison=await call(nurse,'GET','/me/listings/e_'+f.externalId+'/correspondence');assert.ok(comparison.body);ok('External correspondence endpoint returns partial comparison');
+ await call(nurse,'PUT','/profile/rpps',{number:'10000000001'});assert.equal((await call(nurse,'GET','/profile')).body.rpps_status,'PENDING');await call(nurse,'POST','/profile/rpps/retry',{},201);f.setRppsStatus('FOUND');await call(nurse,'POST','/profile/rpps/retry',{},201);ok('RPPS request/retry persist states using isolated provider response');
+ const pdf=Buffer.from('%PDF-1.7 FICTIONAL WORKSPACE TEST DOCUMENT');const upload=await call(nurse,'POST','/me/documents',{mime:'application/pdf',contentBase64:pdf.toString('base64'),fictional:true},201);const download=await call(nurse,'GET','/me/documents/'+upload.body.id);assert.deepEqual(download.body,pdf);await call(other,'GET','/me/documents/'+upload.body.id,undefined,404);ok('Real encrypted temporary document upload/download and ownership');
+ const iban='FR000000000000DEMO00000042';await call(nurse,'PUT','/me/bank-details',{iban,fictional:true});const bank=await call(nurse,'GET','/me/bank-details');assert.ok(!JSON.stringify(bank.body).includes(iban));assert.ok(JSON.stringify(bank.body).includes('0042'));ok('Demonstration bank details persist with masked readback');
+ const [{id:eventId}]=await db.query("SELECT id FROM outbox WHERE event='AssignmentCreated' AND payload->>'assignmentId'=$1",[f.assignmentId]);const {AutomationService}=require('../backend/dist/automation/automation.module');const result=await f.app.get(AutomationService).confirmation(eventId);assert.equal(result.status,'READY');const confirmation=await call(nurse,'GET','/assignments/'+f.assignmentId+'/confirmation');assert.equal(confirmation.body.status,'READY');await call(nurse,'GET','/me/documents/'+confirmation.body.document_id);ok('Assignment confirmation generated and downloadable');
+ const history=await call(nurse,'GET','/me/history?limit=50');assert.ok(history.body.some(x=>x.id===f.assignmentId));const dash=await call(nurse,'GET','/dashboards');assert.ok(dash.body.counts);await call(nurse,'GET','/facilities/'+facility.org);const notes=await call(nurse,'GET','/me/notifications?limit=50');assert.ok(notes.body.length);await call(nurse,'POST','/me/notifications/'+notes.body[0].id+'/read',{},201);assert.ok((await call(nurse,'GET','/me/notifications?limit=50')).body.find(n=>n.id===notes.body[0].id).read_at);ok('Dashboard, history, facility and notification actions read real relational data');
+}finally{await f.close();await mkdir('docs/proofs/interimaire-maquettes',{recursive:true});await writeFile('docs/proofs/interimaire-maquettes/backend.json',JSON.stringify({at:new Date().toISOString(),checks:f.checks,scope:'Real Nest controllers, validation, PostgreSQL and matching MongoDB; SQL outer rollback, memory sessions, temporary encrypted files cleaned, Mongo explanations deleted only for fixture IDs; RPPS provider simulated. No changes to real accounts.'},null,2));}

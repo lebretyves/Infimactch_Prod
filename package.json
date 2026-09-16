@@ -32,6 +32,11 @@
     "cli:vault": "node scripts/vault/run.mjs cli",
     "vault:infra": "node scripts/vault/run.mjs infra",
     "test:vault": "node --test scripts/vault/vault.test.mjs",
-    "vault:trust": "node scripts/vault/trust.mjs"
+    "vault:trust": "node scripts/vault/trust.mjs",
+    "test:isolated": "node scripts/security/isolated.mjs",
+    "backup:full": "node scripts/security/backup.mjs",
+    "restore:verify": "node scripts/security/restore-test.mjs",
+    "db:migrate:vault": "node scripts/security/migrate.mjs",
+    "start:https": "node scripts/security/start-https.mjs"
   }
 }

@@ -19,7 +19,7 @@ try {
     executable='docker';
     // Avoid Docker Compose implicitly reading the legacy .env file.
     childArgs=['compose','--env-file',resolve(root,'.env.vault.example'),'-f',resolve(root,'infra/compose.yaml'),'--profile','automation','up','-d'];
-  }else childArgs=[resolve(root,commands[target][0]),...args];
+  }else childArgs=['--use-system-ca',resolve(root,commands[target][0]),...args];
   const child=spawn(executable,childArgs,{cwd:root,env,stdio:'inherit',shell:false});
   child.on('error',()=>{console.error('Vault launcher: child could not start');process.exitCode=1;});
   child.on('exit',(code,signal)=>{process.exitCode=code??(signal?1:0);});

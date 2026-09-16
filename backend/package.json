@@ -5,15 +5,15 @@
   "scripts": {
     "build": "tsc -p tsconfig.build.json",
     "typecheck": "tsc --noEmit",
-    "dev": "tsc-watch --project tsconfig.build.json --onSuccess \"node dist/main.js\"",
-    "start": "node dist/main.js",
+    "dev": "tsc-watch --project tsconfig.build.json --onSuccess \"node --use-system-ca dist/main.js\"",
+    "start": "node --use-system-ca dist/main.js",
     "db:migrate": "tsx src/cli.ts migrate",
     "seed": "tsx src/cli.ts seed",
     "test": "npm run test:compile && node --test \".test-build/test/unit/*.spec.js\"",
     "test:integration": "npm run test:compile && node --test \".test-build/test/integration/*.spec.js\"",
     "coverage": "npm run test:compile && c8 --reporter=text --reporter=json-summary --reporter=html --reports-dir=../docs/proofs/coverage node --test \".test-build/test/unit/*.spec.js\" \".test-build/test/integration/*.spec.js\"",
     "test:compile": "tsc --outDir .test-build",
-    "worker": "node dist/worker.js",
+    "worker": "node --use-system-ca dist/worker.js",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\""
   },
   "engines": {
@@ -32,6 +32,7 @@
     "dotenv": "17.4.2",
     "express-rate-limit": "8.7.0",
     "express-session": "1.19.0",
+    "google-auth-library": "^11.0.2",
     "helmet": "8.3.0",
     "luxon": "3.7.2",
     "mongoose": "8.24.4",

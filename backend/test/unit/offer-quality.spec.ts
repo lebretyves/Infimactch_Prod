@@ -38,7 +38,7 @@ test("provider contradictions are flagged without overwriting reported values", 
     intitule: "IDE Paris 16ème",
     lieuTravail: { libelle: "Paris 15e Arrondissement" },
     experienceLibelle: "Débutant accepté",
-    description: "Poste en CDI. Expérience professionnelle minimum de 2 ans.",
+    description: "Poste en CDD. Expérience professionnelle minimum de 2 ans.",
   });
   expect(o.provenance.facts.warnings).toEqual(
     expect.arrayContaining([

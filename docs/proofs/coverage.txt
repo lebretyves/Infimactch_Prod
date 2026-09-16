@@ -1,0 +1,147 @@
+
+> infimatch@0.1.0 coverage
+> npm run coverage -w backend
+
+
+> @infimatch/backend@0.1.0 coverage
+> npm run test:compile && c8 --reporter=text --reporter=json-summary --reporter=html --reports-dir=../docs/proofs/coverage node --test ".test-build/test/unit/*.spec.js" ".test-build/test/integration/*.spec.js"
+
+
+> @infimatch/backend@0.1.0 test:compile
+> tsc --outDir .test-build
+
+✔ full internal journey and concurrency, with isolated fixture RPPS (3009.3012ms)
+✔ CSRF required before registration (9.3328ms)
+✔ a late RPPS answer cannot overwrite a newer number (186.4551ms)
+✔ PostgreSQL exclusion is a backstop against overlapping active assignments (17.5834ms)
+✔ MongoDB failure returns an explicit degraded result and an audit trace (15.3595ms)
+✔ an ended assignment completes atomically and cannot be reopened (61.8964ms)
+✔ document key rotation reads previous versions and writes the active version (30.4484ms)
+✔ secondary lists paginate, reject invalid limits and protect private caching (254.2645ms)
+✔ sensitive mission commands replay atomically, reject changed content and recheck rights (158.302ms)
+✔ completed mission confirmation remains READY on delayed generation and replay (96.7017ms)
+✔ expired outbox lease is retried and HTTP success without business receipt is insufficient (25.1178ms)
+✔ expired PDF lease cannot overwrite the document published by its successor (81.1742ms)
+✔ V1 recommendations rank only eligible entries and expose pending RPPS separately (119.1134ms)
+✔ exhausted automation reports its state and explicit retry refuses active leases (27.1126ms)
+✔ OpenAPI documents idempotency headers and paginated response contracts (11.6753ms)
+✔ partial external comparison is private and incomplete leads require explicit opt-in (418.9015ms)
+✔ authenticated encryption rejects tampering and swapped documents (2.828ms)
+✔ encryption uses independent nonces (0.4676ms)
+✔ HTML is not accepted as PDF (0.2237ms)
+✔ IDE OR IADE filters stay in their branch and all values are bound (0.7221ms)
+✔ unselected branch filter rejected (0.4102ms)
+✔ incomplete location rejected (0.1737ms)
+✔ FINESS retains leading zero and Corsican identifiers (2.1167ms)
+✔ FINESS selects degree coordinates instead of projected XY (1.0091ms)
+✔ FINESS refuses ambiguous pairs and retains unknown coordinates (0.4616ms)
+✔ FINESS identity lookup includes entries without address and inactive entries (2.6357ms)
+✔ night requires full availability including next day (28.9572ms)
+✔ adjacent intervals merge but gaps do not (2.5927ms)
+✔ RPPS NOT_FOUND cannot be offset by score (1.305ms)
+✔ RPPS PENDING cannot be offset by score (0.842ms)
+✔ RPPS NOT_CHECKED cannot be offset by score (0.4561ms)
+✔ no IADE to IBODE equivalence (0.5719ms)
+✔ mixed population requires both competencies (0.3847ms)
+✔ unknown location is not zero distance (0.4345ms)
+✔ consecutive assignments do not overlap (0.5403ms)
+✔ overlapping experience counted once (3.5717ms)
+✔ timezone required and interval positive (1.2701ms)
+✔ documented score example is 93.75 and exposes components (0.8104ms)
+✔ IDE acronym and ambiguous block diploma stay distinct (6.613ms)
+✔ provider contradictions are flagged without overwriting reported values (2.4655ms)
+✔ external criteria never claim complete eligibility or a score (1.4002ms)
+✔ four provider searches deduplicate and enforce the requested department (33.8069ms)
+✔ empty keyword does not stop subsequent searches and failure is not partial success (2.5371ms)
+✔ invalid import bounds and department fail before network access (0.5349ms)
+✔ public offer cleanup retains provenance and no invented dates (4.5095ms)
+✔ permanent contract rejected from interim import (0.9763ms)
+✔ unknown qualification stays unknown (0.5045ms)
+✔ IBODE does not become IADE (0.3758ms)
+✔ missing provider access cannot report an acquisition (1.8038ms)
+✔ partial IDE comparison never proves availability or full eligibility (30.2574ms)
+✔ partial IADE comparison never proves availability or full eligibility (1.2578ms)
+✔ partial IBODE comparison never proves availability or full eligibility (0.76ms)
+✔ known qualification mismatch is distinct from unavailable evidence (1.4578ms)
+✔ RPPS not found blocks and pending stays pending even with matching qualification (1.1955ms)
+✔ missing profile experience is a completion request, not proof of absent competence (1.1429ms)
+✔ approximate location and shifts remain indicative and cannot prove incompatibility (1.2387ms)
+✔ conflicting and ambiguous provider facts are not made into matches (0.7164ms)
+✔ missing credentials is pending (2.5088ms)
+✔ zero exact results is not found (16.7035ms)
+✔ exact RPPS found (0.5335ms)
+✔ HTTP 401 remains pending (0.304ms)
+✔ HTTP 403 remains pending (0.1729ms)
+✔ HTTP 404 remains pending (0.1338ms)
+✔ HTTP 429 remains pending (0.2844ms)
+✔ HTTP 500 remains pending (0.2615ms)
+✔ HTTP 503 remains pending (0.1509ms)
+✔ malformed results cannot prove absence (0.2644ms)
+✔ a different practitioner does not count as found (0.3097ms)
+✔ transient serialization failure is retried, then returns committed result (104.0325ms)
+✔ deadlock retries stop after three attempts (95.798ms)
+✔ uniqueness/business conflicts are not retried (0.4458ms)
+ℹ tests 71
+ℹ suites 0
+ℹ pass 71
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 16223.0375
+---------------------------|---------|----------|---------|---------|-------------------------------
+File                       | % Stmts | % Branch | % Funcs | % Lines | Uncovered Line #s
+---------------------------|---------|----------|---------|---------|-------------------------------
+All files                  |   79.38 |    84.33 |   81.14 |   79.38 |
+ src                       |    74.4 |     74.5 |      75 |    74.4 |
+  app.ts                   |   95.87 |    77.77 |   66.66 |   95.87 | 39-41,74-76,212-214
+  cli.ts                   |       0 |        0 |       0 |       0 | 1-150
+  config.ts                |   97.22 |    33.33 |     100 |   97.22 | 33
+  openapi.ts               |     100 |      100 |     100 |     100 |
+ src/auth                  |   93.66 |    86.95 |     100 |   93.66 |
+  auth.module.ts           |   93.66 |    86.95 |     100 |   93.66 | 136-141,150-157
+ src/automation            |   67.08 |    73.07 |   71.42 |   67.08 |
+  automation.module.ts     |   67.08 |    73.07 |   71.42 |   67.08 | ...66-271,341,346-351,357-362
+ src/common                |     100 |    97.22 |     100 |     100 |
+  access.ts                |     100 |    88.88 |     100 |     100 | 46
+  idempotency.ts           |     100 |      100 |     100 |     100 |
+  page.dto.ts              |     100 |      100 |     100 |     100 |
+  retry.ts                 |     100 |      100 |     100 |     100 |
+ src/database              |   63.54 |       96 |      60 |   63.54 |
+  database.ts              |     100 |      100 |     100 |     100 |
+  distance.ts              |     100 |     87.5 |     100 |     100 | 19
+  extended.ts              |   27.77 |      100 |       0 |   27.77 | 4-12,14-17
+  finess.ts                |   38.46 |      100 |       0 |   38.46 | 4-9,11-12
+  harden.ts                |   29.41 |      100 |       0 |   29.41 | 4-13,15-16
+  schema.ts                |   10.86 |      100 |       0 |   10.86 | 4-40,42-45
+ src/demo                  |       0 |        0 |       0 |       0 |
+  seed.ts                  |       0 |        0 |       0 |       0 | 1-114
+ src/documents             |   78.46 |    81.48 |    91.3 |   78.46 |
+  crypto.ts                |     100 |       50 |     100 |     100 | 3,21,34-36
+  documents.module.ts      |    75.6 |    86.95 |      90 |    75.6 | ...68,207-210,228-229,234-238
+ src/domain                |   99.52 |    85.48 |     100 |   99.52 |
+  matching.ts              |   99.43 |    87.93 |     100 |   99.43 | 153
+  rules.ts                 |     100 |       50 |     100 |     100 | 4,18
+ src/listings              |    87.1 |    82.24 |   71.79 |    87.1 |
+  listings.module.ts       |   78.99 |    82.35 |   72.22 |   78.99 | ...60,264-268,272-296,307-316
+  search.ts                |   97.57 |    82.14 |   71.42 |   97.57 | 188-191,207-208
+ src/matching              |   94.87 |    81.63 |     100 |   94.87 |
+  matching.module.ts       |   94.87 |    81.63 |     100 |   94.87 | 194-207
+ src/missions              |   79.08 |     80.5 |   88.67 |   79.08 |
+  mission.dto.ts           |     100 |      100 |     100 |     100 |
+  missions.module.ts       |   74.52 |      100 |      75 |   74.52 | ...05,107-112,122-129,138-150
+  missions.service.ts      |   75.57 |    72.28 |    92.3 |   75.57 | ...21,353-355,358-363,369-370
+ src/organizations         |   67.08 |    80.95 |   73.68 |   67.08 |
+  organizations.module.ts  |   67.08 |    80.95 |   73.68 |   67.08 | 37-51,77-96,121-125,127-138
+ src/profiles              |   93.33 |    85.71 |   74.28 |   93.33 |
+  profiles.module.ts       |   92.61 |    81.57 |   73.33 |   92.61 | ...77,249-250,255-256,258-264
+  rpps.ts                  |    95.5 |       92 |      80 |    95.5 | 55-56,62-63
+ src/public-data           |   91.53 |    92.75 |   84.61 |   91.53 |
+  offer-quality.ts         |   98.25 |     97.1 |     100 |   98.25 | 102-104
+  offers.ts                |   73.52 |    78.57 |      50 |   73.52 | 126-170
+  partial-matching.ts      |     100 |    95.83 |     100 |     100 | 47,57,97,152
+ src/reference-data        |   55.62 |    73.58 |   54.54 |   55.62 |
+  finess.module.ts         |   50.79 |    66.66 |      40 |   50.79 | 28-43,46-60
+  finess.ts                |   48.33 |       74 |      80 |   48.33 | 88-180
+  reference-data.module.ts |   72.63 |      100 |       0 |   72.63 | 67-92
+---------------------------|---------|----------|---------|---------|-------------------------------

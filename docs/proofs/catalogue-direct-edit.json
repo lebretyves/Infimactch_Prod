@@ -1,0 +1,15 @@
+{
+  "source": "E:\\Interimatch\\Interimatch_Sante_Catalogue_Complet_Fonctionnalites1.docx",
+  "preparedCopy": "E:\\Interimatch\\InfiMatch\\docs\\CATALOGUE_FONCTIONNALITES_V1_ACTUALISE.docx",
+  "originalReplacement": "BLOCKED_WINDOWS_ACCESS_DENIED",
+  "modifiedFunctions": [
+    "F04",
+    "F05",
+    "F15",
+    "F16",
+    "F20"
+  ],
+  "xmlVerification": "All other document content and package entries unchanged; V2 retained",
+  "sha256": "9db1367f636172518b3c63bb76450a48a1d0579a41e441c777e39f62c297e780",
+  "backup": "E:\\Interimatch\\backups\\catalogue-avant-rectification-20260915-010830.docx"
+}

@@ -10,13 +10,28 @@ import {
   Min,
   Max,
   IsString,
+  MaxLength,
   Matches,
   IsInt,
   IsBoolean,
 } from "class-validator";
 import { BadRequestException } from "@nestjs/common";
+import { PageDto } from "../common/page.dto";
 import { interval } from "../domain/matching";
+export class ExternalListingsDto extends PageDto {
+  @ApiProperty({ type: String, required: false, maxLength: 150, description: "Search across title, service and location, before pagination." })
+  @IsOptional()
+  @IsString()
+  @MaxLength(150)
+  q?: string;
+}
 export class SearchDto {
+  @ApiProperty({ type: String, required: false, maxLength: 150, description: "Search across title, service and location, before pagination." })
+  @IsOptional()
+  @IsString()
+  @MaxLength(150)
+  q?: string;
+
   @ApiProperty({
     type: () => Boolean,
     required: false,

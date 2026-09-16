@@ -1,3 +1,6 @@
+import { PrivacyModule } from "./security/privacy.module";
+import { idleSession } from "./auth/idle-session";
+import { authRateLimit } from "./auth/auth-rate-limit";
 import { configureOpenApi } from "./openapi";
 import { FinessModule } from "./reference-data/finess.module";
 import "reflect-metadata";
@@ -31,7 +34,7 @@ import { AutomationModule } from "./automation/automation.module";
 import { MatchingModule } from "./matching/matching.module";
 import { ListingsModule } from "./listings/listings.module";
 import { DocumentsModule } from "./documents/documents.module";
-import { required, validateConfiguration } from "./config";
+import { parseTrustProxy, required, validateConfiguration } from "./config";
 @Controller()
 class HealthController {
   constructor(private readonly db: Database) {}
@@ -43,6 +46,7 @@ class HealthController {
 @Module({
   imports: [
     DatabaseModule,
+    PrivacyModule,
     AuthModule,
     ProfilesModule,
     MissionsModule,
@@ -59,7 +63,8 @@ class HealthController {
 export class AppModule {}
 @Catch()
 class Errors implements ExceptionFilter {
-  catch(error: any, host: ArgumentsHost) {
+  constructor(private readonly db: Database) {}
+  async catch(error: any, host: ArgumentsHost) {
     const http = host.switchToHttp(),
       res = http.getResponse(),
       req = http.getRequest();
@@ -83,6 +88,21 @@ class Errors implements ExceptionFilter {
         : typeof detail === "string"
           ? detail
           : ((detail as any)?.message ?? "Request conflict");
+    if (req.session?.userId && [403, 404].includes(status))
+      await this.db
+        .query(
+          "INSERT INTO audit(actor_id,event,details) VALUES($1,'ACCESS_DENIED',$2)",
+          [
+            req.session.userId,
+            JSON.stringify({
+              method: req.method,
+              path: req.path,
+              status,
+              requestId: req.requestId,
+            }),
+          ],
+        )
+        .catch(() => {});
     res.status(status).json({
       code: (detail as any)?.code ?? "HTTP_" + status,
       message,
@@ -96,6 +116,7 @@ export async function createApp() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule, {
     logger: ["error", "warn"],
   });
+  app.set("trust proxy", parseTrustProxy());
   app.setGlobalPrefix("api/v1");
   app.useBodyParser("json", { limit: "7mb" });
   app.use((req: any, res: any, next: any) => {
@@ -128,15 +149,9 @@ export async function createApp() {
       res.setHeader("Cache-Control", "no-store");
     next();
   });
-  app.use(
-    "/api/v1/auth",
-    rateLimit({
-      windowMs: 15 * 60 * 1000,
-      limit: 50,
-      standardHeaders: "draft-8",
-      legacyHeaders: false,
-    }),
-  );
+  app.use(idleSession);
+  app.use("/api/v1/auth", authRateLimit());
+  app.use("/api/v1/auth/activity", rateLimit({windowMs: 60_000, limit: 20, keyGenerator: req => req.sessionID, standardHeaders: "draft-8", legacyHeaders: false}));
   app.use(
     "/api/v1/profile/rpps",
     rateLimit({
@@ -195,7 +210,7 @@ export async function createApp() {
       transformOptions: { enableImplicitConversion: false },
     }),
   );
-  app.useGlobalFilters(new Errors());
+  app.useGlobalFilters(new Errors(app.get(Database)));
   const document = SwaggerModule.createDocument(
     app,
     new DocumentBuilder()

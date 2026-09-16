@@ -1,0 +1,12 @@
+{
+  "checkedAt": "2026-09-14T22:13:01.987Z",
+  "provider": "ANS_ANNUAIRE_SANTE_FHIR",
+  "result": {
+    "status": "FOUND",
+    "reason": "EXACT_IDENTIFIER_FOUND"
+  },
+  "scope": "Positive adapter lookup on public provider identifier; no profile mutation, no identity stored",
+  "identifierSha256": "0b90df559dff8a7ba77c77d073d427cbc3fbda12d7df687b3f3ed6b63c604c06",
+  "codeCommit": "3ca3c4f06954edc627973625eb1ac60e77f95f06",
+  "adapterUnchangedDuringReview": true
+}

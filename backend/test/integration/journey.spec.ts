@@ -83,6 +83,7 @@ function post(c: any, path: string, body: any = {}) {
 }
 beforeAll(async () => {
   app = await createApp();
+  await app.listen(0, "127.0.0.1");
   db = app.get(Database);
 });
 afterAll(async () => {
@@ -150,6 +151,15 @@ test("full internal journey and concurrency, with isolated fixture RPPS", async 
     hourlySalary: 25,
   };
   await post(outsider, "missions", dto).expect(404);
+  const denied = await db.query(
+    "SELECT details FROM audit WHERE actor_id=$1 AND event='ACCESS_DENIED' ORDER BY id DESC LIMIT 1",
+    [outsider.id],
+  );
+  expect(denied[0].details).toMatchObject({
+    method: "POST",
+    path: "/api/v1/missions",
+    status: 404,
+  });
   const created = await post(agency, "missions", dto).expect(201),
     id = created.body.id;
   await post(agency, "missions/" + id + "/publish").expect(201);
@@ -241,13 +251,42 @@ test("full internal journey and concurrency, with isolated fixture RPPS", async 
   expect(
     favorites.body.find((x: any) => x.target_id === external.id).active,
   ).toBe(false);
-  const document = await post(n, "me/documents", {
+  const documentBody = {
     mime: "application/pdf",
     contentBase64: Buffer.from("%PDF-1.7 FICTIONAL TEST DOCUMENT").toString(
       "base64",
     ),
     fictional: true,
-  }).expect(201);
+  };
+  await n.agent
+    .post("/api/v1/me/documents")
+    .set("Origin", process.env.APP_ORIGIN!)
+    .set("X-CSRF-Token", n.token)
+    .send(documentBody)
+    .expect(400);
+  const documentKey = randomUUID();
+  const upload = () =>
+    n.agent
+      .post("/api/v1/me/documents")
+      .set("Origin", process.env.APP_ORIGIN!)
+      .set("X-CSRF-Token", n.token)
+      .set("Idempotency-Key", documentKey)
+      .send(documentBody)
+      .expect(201);
+  const [document, documentReplay] = await Promise.all([upload(), upload()]);
+  expect(documentReplay.body.id).toBe(document.body.id);
+  await n.agent
+    .post("/api/v1/me/documents")
+    .set("Origin", process.env.APP_ORIGIN!)
+    .set("X-CSRF-Token", n.token)
+    .set("Idempotency-Key", documentKey)
+    .send({
+      ...documentBody,
+      contentBase64: Buffer.from("%PDF-1.7 DIFFERENT FICTIONAL TEST").toString(
+        "base64",
+      ),
+    })
+    .expect(409);
   await n2.agent.get("/api/v1/me/documents/" + document.body.id).expect(404);
   await n.agent.get("/api/v1/me/documents/" + document.body.id).expect(200);
   const [opened] = await db.query(
@@ -260,14 +299,17 @@ test("full internal journey and concurrency, with isolated fixture RPPS", async 
   expect((await workflow("matches", opened.id)).status).toBe(
     "ALREADY_PROCESSED",
   );
-  expect(
-    (
-      await db.query(
-        "SELECT id FROM notification WHERE user_id=$1 AND event_id=$2 AND kind='MATCH'",
-        [n.id, opened.id],
-      )
-    ).length,
-  ).toBe(1);
+  const notifications = await db.query(
+    "SELECT id FROM notification WHERE user_id=$1 AND event_id=$2 AND kind='MATCH'",
+    [n.id, opened.id],
+  );
+  expect(notifications.length).toBe(1);
+  await post(n2, "me/notifications/" + notifications[0]!.id + "/read").expect(
+    404,
+  );
+  await post(n, "me/notifications/" + notifications[0]!.id + "/read").expect(
+    201,
+  );
   await db.query(
     "UPDATE mission SET created_at=now()-interval '2 hours' WHERE id=$1",
     [id],
@@ -368,16 +410,46 @@ test("full internal journey and concurrency, with isolated fixture RPPS", async 
     .set("Idempotency-Key", randomUUID())
     .send({ ...profile, available: [] })
     .expect(409);
+  const bankKey = randomUUID();
   const bank = await n.agent
     .put("/api/v1/me/bank-details")
     .set("Origin", process.env.APP_ORIGIN!)
     .set("X-CSRF-Token", n.token)
-    .set("Idempotency-Key", randomUUID())
+    .set("Idempotency-Key", bankKey)
     .send({ iban: "FR001234567890DEMO12345678", fictional: true })
     .expect(200);
+  const bankReplay = await n.agent
+    .put("/api/v1/me/bank-details")
+    .set("Origin", process.env.APP_ORIGIN!)
+    .set("X-CSRF-Token", n.token)
+    .set("Idempotency-Key", bankKey)
+    .send({ iban: "FR001234567890DEMO12345678", fictional: true })
+    .expect(200);
+  expect(bankReplay.body.id).toBe(bank.body.id);
+  await n.agent
+    .put("/api/v1/me/bank-details")
+    .set("Origin", process.env.APP_ORIGIN!)
+    .set("X-CSRF-Token", n.token)
+    .set("Idempotency-Key", bankKey)
+    .send({ iban: "FR991234567890DEMO87654321", fictional: true })
+    .expect(409);
+  const replacementBank = await n.agent
+    .put("/api/v1/me/bank-details")
+    .set("Origin", process.env.APP_ORIGIN!)
+    .set("X-CSRF-Token", n.token)
+    .set("Idempotency-Key", randomUUID())
+    .send({ iban: "FR111111111111DEMO11111111", fictional: true })
+    .expect(200);
+  expect(replacementBank.body.id).not.toBe(bank.body.id);
+  const [supersededBank] = await db.query(
+    "SELECT superseded_at FROM document WHERE id=$1",
+    [bank.body.id],
+  );
+  expect(supersededBank.superseded_at).not.toBeNull();
   await n.agent.get("/api/v1/me/documents/" + bank.body.id).expect(404);
   const bankRead = await n.agent.get("/api/v1/me/bank-details").expect(200);
   expect(bankRead.body.iban).not.toContain("DEMO");
+  expect(bankRead.body.iban.endsWith("1111")).toBe(true);
   await post(agency, "missions/" + id + "/cancel").expect(201);
   const cancelledConfirmation = await agency.agent
     .get("/api/v1/assignments/" + winner.body.id + "/confirmation")
@@ -427,6 +499,52 @@ test("CSRF required before registration", async () => {
     .post("/api/v1/auth/register")
     .send({})
     .expect(403);
+});
+
+test("account revocation invalidates sessions and disabled login stays generic", async () => {
+  const client = await account("NURSE");
+  await client.agent.get("/api/v1/profile").expect(200);
+  await db.query(
+    "UPDATE account SET session_version=session_version+1 WHERE id=$1",
+    [client.id],
+  );
+  await client.agent.get("/api/v1/profile").expect(401);
+
+  const csrf = await client.agent.get("/api/v1/auth/csrf").expect(200);
+  const login = await client.agent
+    .post("/api/v1/auth/login")
+    .set("Origin", process.env.APP_ORIGIN!)
+    .set("X-CSRF-Token", csrf.body.csrfToken)
+    .send({ email: client.email, password: client.password })
+    .expect(201);
+  client.token = login.body.csrfToken;
+  await client.agent.get("/api/v1/profile").expect(200);
+
+  await db.query(
+    "UPDATE account SET active=false,session_version=session_version+1 WHERE id=$1",
+    [client.id],
+  );
+  try {
+    await client.agent.get("/api/v1/profile").expect(401);
+    const retryCsrf = await client.agent.get("/api/v1/auth/csrf").expect(200);
+    const refused = await client.agent
+      .post("/api/v1/auth/login")
+      .set("Origin", process.env.APP_ORIGIN!)
+      .set("X-CSRF-Token", retryCsrf.body.csrfToken)
+      .send({ email: client.email, password: client.password })
+      .expect(401);
+    expect(refused.body.message).toBe("Invalid credentials");
+    const rejected = await db.query(
+      "SELECT id FROM audit WHERE actor_id=$1 AND event='ACCOUNT_SESSION_REJECTED'",
+      [client.id],
+    );
+    expect(rejected.length).toBeGreaterThanOrEqual(2);
+  } finally {
+    await db.query(
+      "UPDATE account SET active=true,session_version=session_version+1 WHERE id=$1",
+      [client.id],
+    );
+  }
 });
 
 test("a late RPPS answer cannot overwrite a newer number", async () => {
@@ -582,7 +700,7 @@ test("document key rotation reads previous versions and writes the active versio
     else process.env.DOCUMENT_KEY_V1 = previous;
     if (created) {
       await db.query("DELETE FROM document WHERE id=$1", [created]);
-      await rm(resolve(projectRoot, "data/documents", created + ".bin"), {
+      await rm(resolve(process.env.DOCUMENT_DIRECTORY || resolve(projectRoot, "data/documents"), created + ".bin"), {
         force: true,
       });
     }
@@ -621,13 +739,23 @@ test("secondary lists paginate, reject invalid limits and protect private cachin
     await client.agent.get("/api/v1/" + path + "?limit=51").expect(400);
     await client.agent.get("/api/v1/" + path + "?offset=-1").expect(400);
   }
-  const external1 = await request(app.getHttpServer())
-    .get("/api/v1/listings/external?limit=1&offset=0")
-    .expect(200);
-  const external2 = await request(app.getHttpServer())
-    .get("/api/v1/listings/external?limit=1&offset=1")
-    .expect(200);
-  expect(external1.body.items[0].id).not.toBe(external2.body.items[0].id);
+  const fixtures = await db.query(
+    "INSERT INTO external_offer(source,source_id,title,description,url,location_label,qualification,raw_hash) VALUES('PAGINATION_FIXTURE',$1,'Offre fictive A','Test pagination','https://example.invalid/a','Paris','IDE','fixture-a'),('PAGINATION_FIXTURE',$2,'Offre fictive B','Test pagination','https://example.invalid/b','Paris','IDE','fixture-b') RETURNING id",
+    [randomUUID(), randomUUID()],
+  );
+  try {
+    const external1 = await request(app.getHttpServer())
+      .get("/api/v1/listings/external?limit=1&offset=0")
+      .expect(200);
+    const external2 = await request(app.getHttpServer())
+      .get("/api/v1/listings/external?limit=1&offset=1")
+      .expect(200);
+    expect(external1.body.items[0].id).not.toBe(external2.body.items[0].id);
+  } finally {
+    await db.query("DELETE FROM external_offer WHERE id=ANY($1::uuid[])", [
+      fixtures.map((fixture: any) => fixture.id),
+    ]);
+  }
   const foreign = await outsider.agent
     .get("/api/v1/missions?limit=50")
     .expect(200);
@@ -698,6 +826,7 @@ test("sensitive mission commands replay atomically, reject changed content and r
     establishmentId: facility.org,
     title: "FICTIF besoin",
     description: "FICTIF besoin de recette",
+    details: {qualification:'IDE',service:'URGENCES',start:'2035-01-10T06:00:00Z',end:'2035-01-10T14:00:00Z',shift:'DAY',headcount:1,population:'ADULT',block:'NONE',requiredSkills:[],minExperienceMonths:0,address:'1 rue fictive Paris'},
   };
   const n1 = await post(facility, "staffing-requests", need)
     .set("Idempotency-Key", needKey)
@@ -901,6 +1030,8 @@ test("exhausted automation reports its state and explicit retry refuses active l
 test("OpenAPI documents idempotency headers and paginated response contracts", async () => {
   const result = await request(app.getHttpServer())
     .get("/api/docs-json")
+    .set("Accept-Encoding", "identity")
+    .set("Connection", "close")
     .expect(200);
   const command = result.body.paths["/api/v1/missions"].post;
   expect(
@@ -995,4 +1126,132 @@ test("partial external comparison is private and incomplete leads require explic
   } finally {
     await db.query("DELETE FROM external_offer WHERE id=$1", [e.id]);
   }
+});
+
+test("stored parser is exposed with proof and stable reimports; preferences persist", async () => {
+ const {importOffers}=await import("../../src/public-data/offers");
+ const {reparseOffers}=await import("../../src/public-data/reparse-offers");
+ const id="parser-"+randomUUID();
+ const raw={id,intitule:"IDE mission intérim",description:"Diplôme infirmier requis. Horaires : 7h à 19h. Salaire : 2750 euros brut par mois.",typeContrat:"MIS",lieuTravail:{libelle:"Paris"}};
+ await importOffers(db,[raw],false);
+ const [stored]=await db.query("SELECT * FROM external_offer WHERE source_id=$1",[id]);
+ const first=stored.parsed_offer;
+ expect(first.parserVersion).toBe("4.0.0");
+ const detail=await request(app.getHttpServer()).get("/api/v1/listings/e_"+stored.id).expect(200);
+ expect(detail.body.parsedOffer.inputHash).toBe(first.inputHash);
+ expect(detail.body.parsed_offer).toBeUndefined();
+ await importOffers(db,[raw],false);
+ expect((await db.query("SELECT parsed_offer FROM external_offer WHERE id=$1",[stored.id]))[0].parsed_offer.parsedAt).toBe(first.parsedAt);
+ await importOffers(db,[{...raw,description:raw.description+" Permis B obligatoire."}],false);
+ expect((await db.query("SELECT parsed_offer FROM external_offer WHERE id=$1",[stored.id]))[0].parsed_offer.inputHash).not.toBe(first.inputHash);
+ await reparseOffers(db,true);
+ expect((await reparseOffers(db,false)).changed).toBe(0);
+ const c=await account("NURSE");
+ await c.agent.put("/api/v1/me/notification-preferences").set("Origin",process.env.APP_ORIGIN!).set("X-CSRF-Token",c.token).send({enabled:false}).expect(200);
+ expect((await c.agent.get("/api/v1/me/notification-preferences").expect(200)).body.enabled).toBe(false);
+ await request(app.getHttpServer()).get("/api/v1/me/notification-preferences").expect(401);
+ await c.agent.get("/api/v1/me/listings/e_"+stored.id+"/correspondence").expect(200);
+});
+
+test("idle expiry is enforced server-side; background reads never refresh activity",async()=>{
+ const c=await account("NURSE");
+ const before=(await c.agent.get("/api/v1/auth/me").expect(200)).body.session;
+ const after=(await c.agent.get("/api/v1/auth/me").expect(200)).body.session;
+ expect(after.idleExpiresAt).toBe(before.idleExpiresAt);
+ await post(c,"auth/activity").expect(201);
+ await db.query("UPDATE session SET sess=jsonb_set(sess::jsonb,'{lastActivityAt}',to_jsonb($2::bigint))::json WHERE sess::jsonb->>'userId'=$1",[c.id,Date.now()-16*60*1000]);
+ await c.agent.get("/api/v1/auth/me").expect(401);
+ await post(c,"auth/activity").expect(403);
+});
+
+test("retention commits SQL before file cleanup and preserves reminder deduplication", async () => {
+ const {applyRetention,cleanupRemovedDocuments}=await import("../../src/security/retention");
+ const {readFile,stat}=await import("node:fs/promises");
+ const c=await account("NURSE"),docs=app.get(DocumentsService);
+ const bank=await docs.store(c.id,"BANK","application/json",Buffer.from('{"fictional":true}'));
+ await db.query("UPDATE document SET superseded_at=now()-interval '31 days' WHERE id=$1",[bank.id]);
+ const [mission]=await db.query("SELECT id,version FROM mission LIMIT 1");
+ const [event]=await db.query("INSERT INTO outbox(event,payload,completed_at) VALUES('ReminderCreated','{}',now()-interval '31 days') RETURNING id");
+ await db.query("INSERT INTO reminder_window(mission_id,version,window_key,event_id) VALUES($1,$2,'retention-test',$3)",[mission.id,mission.version,event.id]);
+ const path=resolve(process.env.DOCUMENT_DIRECTORY!,bank.id+".bin"),encrypted=await readFile(path);
+ await expect(db.transaction(async em=>{await applyRetention(em);throw Error("forced rollback");})).rejects.toThrow("forced rollback");
+ expect((await readFile(path)).equals(encrypted)).toBe(true);
+ expect((await db.query("SELECT id FROM document WHERE id=$1",[bank.id])).length).toBe(1);
+ const result=await db.transaction(em=>applyRetention(em));
+ expect((await db.query("SELECT id FROM outbox WHERE id=$1",[event.id])).length).toBe(1);
+ expect((await readFile(path)).equals(encrypted)).toBe(true);
+ await cleanupRemovedDocuments(db,result.documentIds??[]);
+ await expect(stat(path)).rejects.toThrow();
+ await cleanupRemovedDocuments(db,result.documentIds??[]);
+});
+
+test("account closure clears profile and private traces on real PostgreSQL",async()=>{
+ const {anonymizeAccount,cleanupRemovedDocuments}=await import("../../src/security/retention");
+ const c=await account("NURSE");
+ await db.query("UPDATE profile SET skills=ARRAY['TRIAGE'],experience='[{\"service\":\"URGENCES\"}]',available='[{\"start\":\"2030-01-01\"}]',details='{\"firstName\":\"Fictif\"}',radius_km=25 WHERE user_id=$1",[c.id]);
+ await db.query("INSERT INTO notification(user_id,kind,message) VALUES($1,'TEST','private')",[c.id]);
+ const result=await db.transaction(em=>anonymizeAccount(em,c.id));await cleanupRemovedDocuments(db,result.documentIds);
+ const [p]=await db.query("SELECT * FROM profile WHERE user_id=$1",[c.id]);
+ expect(p.skills).toEqual([]);expect(p.experience).toEqual([]);expect(p.available).toEqual([]);expect(p.details).toEqual({});expect(p.notifications_enabled).toBe(false);
+ expect((await db.query("SELECT id FROM notification WHERE user_id=$1",[c.id])).length).toBe(0);
+ const [a]=await db.query("SELECT * FROM account WHERE id=$1",[c.id]);expect(a.active).toBe(false);expect(a.password_hash).toBe('disabled');
+ await c.agent.get('/api/v1/auth/me').expect(401);
+});
+
+
+test("closure CLI removes Mongo history and can be retried",async()=>{
+ const {spawnSync}=await import("node:child_process");
+ const c=await account("NURSE"),matching=new MatchingService(db);await matching.ready();
+ try {
+ await matching.connection.collection("matchingruns").insertOne({ownerId:c.id,fixture:true});
+ for(let i=0;i<2;i++){
+  const run=spawnSync(process.execPath,["backend/dist/cli.js","anonymize-account","--account",c.id,"--apply"],{cwd:projectRoot,env:process.env,encoding:"utf8"});
+  if(run.status!==0)throw new Error(run.stderr || "Closure CLI failed");
+ }
+ expect(await matching.connection.collection("matchingruns").countDocuments({ownerId:c.id})).toBe(0);
+ } finally {await matching.onModuleDestroy();}
+});
+
+test("closure requests are private, replayable, cancellable and require operator approval",async()=>{
+ const c=await account('NURSE'),other=await account('NURSE');
+ await request(app.getHttpServer()).get('/api/v1/me/closure-request').expect(401);
+ const first=await post(c,'me/closure-request').expect(201),again=await post(c,'me/closure-request').expect(201);
+ expect(first.body.id).toBe(again.body.id);
+ expect((await other.agent.get('/api/v1/me/closure-request').expect(200)).body.request).toBeNull();
+ const {processClosures}=await import('../../src/security/closure');
+ expect((await processClosures(db)).processed).toBe(0);
+ await c.agent.delete('/api/v1/me/closure-request').set('Origin',process.env.APP_ORIGIN!).set('X-CSRF-Token',c.token).expect(200);
+ expect((await c.agent.get('/api/v1/me/closure-request')).body.request.status).toBe('CANCELLED');
+ const next=await post(c,'me/closure-request').expect(201);expect(next.body.id).not.toBe(first.body.id);
+ await db.query("UPDATE closure_request SET status='CANCELLED' WHERE id=$1",[next.body.id]);
+});
+
+test("freshness never treats a bounded import as a complete snapshot",async()=>{
+ const {importOffers}=await import('../../src/public-data/offers');const {retireStaleOffers}=await import('../../src/public-data/freshness');
+ const id='fresh-'+randomUUID(),raw={id,intitule:'IDE interim',description:'Mission en interim.',typeContrat:'MIS'};
+ await importOffers(db,[raw],false);
+ const [offer]=await db.query('SELECT id FROM external_offer WHERE source_id=$1',[id]);
+ await importOffers(db,[],false);
+ expect((await db.query('SELECT active FROM external_offer WHERE id=$1',[offer.id]))[0].active).toBe(true);
+ await db.query("UPDATE external_offer SET imported_at=now()-interval '31 days' WHERE id=$1",[offer.id]);
+ expect((await retireStaleOffers(db)).unverified).toBeGreaterThan(0);
+ expect((await db.query('SELECT active FROM external_offer WHERE id=$1',[offer.id]))[0].active).toBe(true);
+ await retireStaleOffers(db,true);
+ expect((await db.query('SELECT provenance FROM external_offer WHERE id=$1',[offer.id]))[0].provenance.retiredReason).toBe('STALE_UNVERIFIED');
+ await importOffers(db,[raw],false);
+ expect((await db.query('SELECT active FROM external_offer WHERE id=$1',[offer.id]))[0].active).toBe(true);
+});
+
+test("every OpenAPI operation has a success contract and controlled errors",async()=>{
+ const r=await request(app.getHttpServer()).get('/api/docs-json').set('Accept-Encoding','identity').set('Connection','close').expect(200);
+ const schemas=r.body.components.schemas;
+ for(const [path,item]of Object.entries(r.body.paths) as any){for(const method of ['get','post','put','patch','delete']){
+  const op=item[method];if(!op)continue;
+  const response=op.responses[method==='post'?201:200];
+  if(!response?.content)throw Error('Missing success schema: '+method+' '+path);
+  expect(op.responses[403].content['application/json'].schema.$ref).toBe('#/components/schemas/Error');
+ }}
+ expect(schemas.AuthReceipt.required).toContain('csrfToken');expect(schemas.Profile.properties.available.type).toBe('array');
+ expect(r.body.paths['/api/v1/auth/google'].post.responses[201].content['application/json'].schema.oneOf.length).toBe(2);
+ expect(r.body.paths['/api/v1/me/documents/{id}'].get.responses[200].content['application/pdf'].schema.format).toBe('binary');
 });

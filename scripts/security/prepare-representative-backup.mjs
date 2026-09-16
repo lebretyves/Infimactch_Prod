@@ -1,0 +1,40 @@
+import {spawnSync} from 'node:child_process';
+import {readFile,writeFile,mkdir,cp,readdir} from 'node:fs/promises';
+import {resolve,join} from 'node:path';
+import {randomBytes,randomUUID,createHash} from 'node:crypto';
+import {parse} from 'dotenv';
+const root=resolve(import.meta.dirname,'../..'),source=resolve(process.argv[2]||'');
+const original=JSON.parse(await readFile(join(source,'manifest.json'),'utf8'));
+for(const f of original.files)if(createHash('sha256').update(await readFile(join(source,f.path))).digest('hex')!==f.sha256)throw Error('Source checksum mismatch');
+const folder=join(root,'backups','representative-'+Date.now());await mkdir(folder,{recursive:true});await cp(source,folder,{recursive:true});
+const name='infimatch-representative-'+Date.now(),pass=randomBytes(24).toString('hex');
+function docker(args,input){const r=spawnSync('docker',args,{input,maxBuffer:512*1024*1024});if(r.status!==0)throw Error('Fixture docker command failed');return r.stdout;}
+let db;
+try{
+ docker(['run','-d','--name',name,'-e','POSTGRES_USER=fixture_admin','-e','POSTGRES_PASSWORD='+pass,'-e','POSTGRES_DB=infimatch_fixture_test','-p','127.0.0.1:55435:5432','--tmpfs','/var/lib/postgresql/data','postgis/postgis:17-3.5@sha256:01a6a70e41e6c4467c8f55f6063555ed72db2d6662cd0d571040d42eadaeb6f6']);
+ let ready=false;for(let i=0;i<120;i++){try{docker(['exec',name,'pg_isready','-h','127.0.0.1','-U','fixture_admin','-d','infimatch_fixture_test']);ready=true;break;}catch{}await new Promise(r=>setTimeout(r,500));}if(!ready)throw Error('Fixture PostgreSQL timeout');
+ const config=parse(await readFile(join(folder,'legacy.env')));
+ Object.assign(process.env,config,{INFIMATCH_SECRET_SOURCE:'vault',NODE_ENV:'test',DATABASE_URL:`postgresql://fixture_admin:${pass}@127.0.0.1:55435/infimatch_fixture_test`,DOCUMENT_DIRECTORY:join(folder,'documents')});
+ const {Database}=await import('../../backend/dist/database/database.js');const {AuthService}=await import('../../backend/dist/auth/auth.module.js');const {MissionsService}=await import('../../backend/dist/missions/missions.service.js');const {DocumentsService}=await import('../../backend/dist/documents/documents.module.js');const {AutomationService}=await import('../../backend/dist/automation/automation.module.js');
+ db=await new Database().connect();await db.source.runMigrations();
+ const auth=new AuthService(db),base={password:randomBytes(24).toString('base64url'),termsVersion:'2026-09-14'};
+ const agency=await auth.register({...base,email:randomUUID()+'@example.invalid',family:'ENTERPRISE',organizationType:'AGENCY',name:'FICTIF restauration',address:'Adresse fictive',referent:'Contact fictif',siret:'00000000000001'});
+ const nurse=await auth.register({...base,email:randomUUID()+'@example.invalid',family:'NURSE'});
+ const [org]=await db.query('SELECT organization_id AS id FROM membership WHERE user_id=$1',[agency.id]);
+ const [facility]=await db.query("INSERT INTO organization(kind,name,address,referent,finess) VALUES('ESTABLISHMENT','FICTIF restauration','Adresse fictive','Contact fictif','000000001') RETURNING id");
+ await db.query('INSERT INTO agency_link VALUES($1,$2)',[org.id,facility.id]);
+ const slot={start:'2032-01-10T20:00:00Z',end:'2032-01-11T06:00:00Z'};
+ await db.query("UPDATE profile SET qualifications=ARRAY['IDE'],skills=ARRAY['TRIAGE'],available=$2,rpps_status='FOUND',visible=true,latitude=48,longitude=2,radius_km=30,accepted_shifts=ARRAY['NIGHT'] WHERE user_id=$1",[nurse.id,JSON.stringify([slot])]);
+ const missions=new MissionsService(db),docs=new DocumentsService(db),automation=new AutomationService(db,docs);
+ const m=await missions.create(agency.id,{...slot,agencyId:org.id,establishmentId:facility.id,title:'Mission FICTIVE restauration',description:'Fixture de restauration uniquement',qualification:'IDE',service:'URGENCES',population:'ADULT',block:'NONE',requiredSkills:['TRIAGE'],desiredSkills:[],minExperienceMonths:0,shift:'NIGHT',address:'Lieu fictif',latitude:48,longitude:2,hourlySalary:25},randomUUID());
+ await missions.transition(agency.id,m.id,'publish',randomUUID());const app=await missions.apply(nurse.id,m.id,1,randomUUID());const assignment=await missions.assign(agency.id,m.id,app.id,randomUUID());
+ const [event]=await db.query("SELECT id FROM outbox WHERE event='AssignmentCreated' AND payload->>'assignmentId'=$1",[assignment.id]);
+ const confirmation=await automation.confirmation(event.id);if(confirmation.status!=='READY')throw Error('Fixture confirmation not ready');
+ const [{counts}]=await db.query("SELECT json_build_object('accounts',(SELECT count(*) FROM account),'missions',(SELECT count(*) FROM mission),'assignments',(SELECT count(*) FROM assignment),'documents',(SELECT count(*) FROM document)) AS counts");
+ await db.onModuleDestroy();db=null;
+ await writeFile(join(folder,'postgres.dump'),docker(['exec',name,'pg_dump','-U','fixture_admin','-d','infimatch_fixture_test','-Fc','--no-owner','--no-privileges']));
+ await writeFile(join(folder,'postgres-roles.sql'),(await readFile(join(folder,'postgres-roles.sql'),'utf8'))+'\nCREATE ROLE fixture_admin NOLOGIN;\n');
+ const files=[];async function walk(dir){for(const e of await readdir(dir,{withFileTypes:true})){const p=join(dir,e.name);if(e.isDirectory())await walk(p);else if(p!==join(folder,'manifest.json')){const b=await readFile(p);files.push({path:p.slice(folder.length+1).replaceAll('\\','/'),bytes:b.length,sha256:createHash('sha256').update(b).digest('hex')});}}}await walk(folder);
+ await writeFile(join(folder,'manifest.json'),JSON.stringify({date:new Date().toISOString(),quiesced:true,fixture:true,scope:'Fresh fictional SQL/mission/assignment/PDF; MongoDB/Vault/n8n from verified historical backup',sqlCounts:counts,files},null,2));
+ console.log(JSON.stringify({backup:folder,sqlCounts:counts}));
+}finally{await db?.onModuleDestroy();docker(['rm','-f','-v',name]);}

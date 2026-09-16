@@ -1,0 +1,14 @@
+{
+  "date": "2026-09-16T07:00:02.537Z",
+  "status": "PASS",
+  "postgres": {
+    "role": "infimatch_app",
+    "rolsuper": false,
+    "rolcreatedb": false,
+    "rolcreaterole": false,
+    "schema_create": false,
+    "migration_access": false
+  },
+  "mongo": "application database readWrite; administration denied",
+  "vault": "backend cannot read migration credentials; configured values match local fallback"
+}

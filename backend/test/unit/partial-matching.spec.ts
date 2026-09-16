@@ -129,7 +129,7 @@ test("conflicting and ambiguous provider facts are not made into matches", () =>
     offer("IDE Paris 16e", {
       lieuTravail: { libelle: "Paris 15e", latitude: 48.85, longitude: 2.35 },
       experienceLibelle: "Débutant accepté",
-      description: "Expérience minimum de 2 ans. Poste en CDI.",
+      description: "Expérience minimum de 2 ans. Poste en CDD.",
       dureeTravailLibelle: "Travail en journée et travail de nuit",
     }),
     profile,

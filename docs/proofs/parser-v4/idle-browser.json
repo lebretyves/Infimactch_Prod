@@ -1,0 +1,11 @@
+{
+  "at": "2026-09-16T12:14:55.362Z",
+  "status": "PASS",
+  "scope": "Mock browser identity and timing; accelerated frontend clock; server expiry separately covered by isolated integration test",
+  "checks": [
+    "warning one minute before",
+    "explicit activity renews",
+    "warning at minute 14",
+    "logout and login message at minute 15"
+  ]
+}

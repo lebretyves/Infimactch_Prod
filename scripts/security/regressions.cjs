@@ -1,0 +1,44 @@
+﻿const assert=require('node:assert/strict');const {randomUUID}=require('node:crypto');const {readFile,writeFile,stat,utimes}=require('node:fs/promises');const {resolve}=require('node:path');const {spawnSync}=require('node:child_process');
+const {Database}=require('../../backend/dist/database/database');const {DocumentsService}=require('../../backend/dist/documents/documents.module');const {MissionsService}=require('../../backend/dist/missions/missions.service');const {MatchingService}=require('../../backend/dist/matching/matching.module');const {AutomationService}=require('../../backend/dist/automation/automation.module');const {AuthService}=require('../../backend/dist/auth/auth.module');
+if(!new URL(process.env.DATABASE_URL).pathname.endsWith('_test'))throw Error('Isolated test database required');
+(async()=>{const db=await new Database().connect();const docs=new DocumentsService(db),missions=new MissionsService(db),auth=new AuthService(db),matching=new MatchingService(db),automation=new AutomationService(db,docs);const checks=[];
+try{
+ const base={password:'Fictional-password-123',termsVersion:'2026-09-14'};
+ const actor=await auth.register({...base,email:randomUUID()+'@example.invalid',family:'ENTERPRISE',organizationType:'AGENCY',name:'FICTIF',address:'Adresse fictive',referent:'Fictif',siret:'00000000000001'});
+ const [agency]=await db.query('SELECT organization_id AS id FROM membership WHERE user_id=$1',[actor.id]);
+ const [facility]=await db.query("INSERT INTO organization(kind,name,address,referent,finess) VALUES('ESTABLISHMENT','FICTIF','Adresse fictive','Fictif','000000001') RETURNING id");
+ await db.query('INSERT INTO agency_link VALUES($1,$2)',[agency.id,facility.id]);
+ const slot={start:'2032-01-10T20:00:00Z',end:'2032-01-11T06:00:00Z'};
+ const n=await auth.register({...base,email:randomUUID()+'@example.invalid',family:'NURSE',profile:{displayName:'FICTIF',qualifications:['IDE'],skills:['TRIAGE'],experience:[],available:[slot],unavailable:[],latitude:48,longitude:2,radiusKm:30,acceptedShifts:['NIGHT'],preferredShifts:['NIGHT'],visible:true}});
+ await db.query("UPDATE profile SET rpps_status='FOUND' WHERE user_id=$1",[n.id]);
+ const dto={...slot,agencyId:agency.id,establishmentId:facility.id,title:'Mission FICTIVE',description:'Description fictive de test',qualification:'IDE',service:'URGENCES',population:'ADULT',block:'NONE',requiredSkills:['TRIAGE'],desiredSkills:[],minExperienceMonths:0,shift:'NIGHT',address:'Lieu fictif',latitude:48,longitude:2,hourlySalary:25};
+ const m=await missions.create(actor.id,dto,randomUUID());await missions.transition(actor.id,m.id,'publish',randomUUID());const a=await missions.apply(n.id,m.id,1,randomUUID());
+ assert.ok((await matching.forMission(actor.id,m.id)).items.some(x=>x.candidateId===n.id));
+ const cli=(action)=>{const r=spawnSync(process.execPath,['backend/dist/cli.js',action,'--account',n.id],{env:process.env,encoding:'utf8'});assert.equal(r.status,0,r.stderr);};
+ await db.query("INSERT INTO session(sid,sess,expire) VALUES($1,$2,now()+interval '1 hour'),($3,$2,now()+interval '1 hour')",[randomUUID(),JSON.stringify({userId:n.id,sessionVersion:1}),randomUUID()]);
+ cli('disable-account');assert.equal((await db.query("SELECT * FROM session WHERE sess->>'userId'=$1",[n.id])).length,0);
+ assert.equal((await matching.forMission(actor.id,m.id)).items.some(x=>x.candidateId===n.id),false);
+ await assert.rejects(missions.assign(actor.id,m.id,a.id,randomUUID()),e=>e.getStatus()===404);
+ await assert.rejects(missions.applicationAction(actor.id,a.id,'SELECTED',randomUUID()),e=>e.getStatus()===404);
+ const [event]=await db.query("SELECT id FROM outbox WHERE event='MissionOPEN' AND payload->>'missionId'=$1",[m.id]);await automation.matches(event.id);
+ assert.equal((await db.query('SELECT id FROM notification WHERE user_id=$1 AND event_id=$2',[n.id,event.id])).length,0);checks.push('disabled account excluded from candidates, notifications, selection and assignment; CLI removes multiple sessions');
+ cli('enable-account');const assigned=await missions.assign(actor.id,m.id,a.id,randomUUID());cli('disable-account');assert.equal((await db.query('SELECT status FROM assignment WHERE id=$1',[assigned.id]))[0].status,'ACTIVE');cli('enable-account');cli('revoke-account-sessions');checks.push('reactivation, session revocation and confirmed assignment preservation');
+ await db.query("INSERT INTO document(id,owner_id,kind,mime,status,key_version,size_bytes) VALUES($1,$2,'EVIDENCE','application/pdf','READY',1,26214400)",[randomUUID(),n.id]);
+ await assert.rejects(docs.store(n.id,'EVIDENCE','application/pdf',Buffer.from('%PDF extra')),e=>e.getStatus()===413);
+ const [created]=await db.query("SELECT id FROM outbox WHERE event='AssignmentCreated' AND payload->>'assignmentId'=$1",[assigned.id]);const confirmation=await automation.confirmation(created.id);assert.equal(confirmation.status,'READY');assert.ok((await docs.read(n.id,confirmation.documentId)).data.subarray(0,5).equals(Buffer.from('%PDF-')));checks.push('saturated upload quota still produces readable mission confirmation PDF');
+ // Hold a real SQL transaction after file creation and before commit; another connection runs cleanup.
+ let release,entered;const gate=new Promise(r=>release=r),ready=new Promise(r=>entered=r);let storedId;
+ const slow={transaction:fn=>db.transaction(async em=>fn({query:async(sql,args)=>{const rows=await em.query(sql,args);if(sql.startsWith("UPDATE document SET status='READY'")){storedId=args[0];const path=resolve(process.env.DOCUMENT_DIRECTORY,storedId+'.bin');await utimes(path,new Date(0),new Date(0));entered();await gate;}return rows;}}))};
+ const pending=new DocumentsService(slow).store(actor.id,'EVIDENCE','application/pdf',Buffer.from('%PDF concurrency'));
+ await ready;try{await docs.reconcile(0);assert.ok(await stat(resolve(process.env.DOCUMENT_DIRECTORY,storedId+'.bin')));}finally{release();}const stored=await pending;assert.equal((await docs.read(actor.id,stored.id)).data.toString(),'%PDF concurrency');
+ const orphan=resolve(process.env.DOCUMENT_DIRECTORY,randomUUID()+'.bin');await writeFile(orphan,'orphan');await utimes(orphan,new Date(0),new Date(0));const result=await docs.reconcile(0);assert.ok(result.orphansRemoved>=1);await assert.rejects(stat(orphan));checks.push('two real SQL connections: cleanup skips uncommitted file and removes actual orphan');
+ const bankBody=Buffer.from(JSON.stringify({iban:'FR001234567890DEMO12345678',fictional:true}));
+ const firstBank=await docs.store(actor.id,'BANK','application/json',bankBody,null,undefined,true);
+ const [{bytes}]=await db.query("SELECT sum(size_bytes)::int AS bytes FROM document WHERE owner_id=$1 AND kind IN('EVIDENCE','BANK') AND superseded_at IS NULL",[actor.id]);
+ await db.query("INSERT INTO document(id,owner_id,kind,mime,status,key_version,size_bytes) VALUES($1,$2,'EVIDENCE','application/pdf','READY',1,$3)",[randomUUID(),actor.id,26214400-bytes]);
+ const replacedBank=await docs.store(actor.id,'BANK','application/json',bankBody,null,undefined,true);
+ assert.notEqual(firstBank.id,replacedBank.id);assert.ok((await db.query('SELECT superseded_at FROM document WHERE id=$1',[firstBank.id]))[0].superseded_at);
+ checks.push('bank replacement at quota limit counts only active version, retained previous version remains superseded');
+ console.log(JSON.stringify({status:'PASS',checks},null,2));
+}finally{await matching.onModuleDestroy();await db.onModuleDestroy();}})().catch(e=>{console.error(e);process.exitCode=1;});
+
