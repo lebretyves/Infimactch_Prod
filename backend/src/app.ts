@@ -1,3 +1,4 @@
+import type { IncomingMessage, ServerResponse } from "node:http";
 import { NotificationsModule } from "./notifications/notifications.module";
 import { PrivacyModule } from "./security/privacy.module";
 import { idleSession } from "./auth/idle-session";
@@ -232,4 +233,19 @@ export async function createApp() {
   };
   await app.init();
   return app;
+}
+
+// Vercel detects src/app.ts as an entrypoint. Reuse one initialized Nest app
+// across warm/concurrent requests; a failed initialization may be retried.
+let vercelApplication: Promise<NestExpressApplication> | undefined;
+export default async function vercelHandler(
+  request: IncomingMessage,
+  response: ServerResponse,
+): Promise<void> {
+  vercelApplication ??= createApp().catch((error) => {
+    vercelApplication = undefined;
+    throw error;
+  });
+  const app = await vercelApplication;
+  app.getHttpAdapter().getInstance()(request, response);
 }
