@@ -1,3 +1,4 @@
+import {CloudJobsModule} from "./automation/cloud-jobs.module";
 import type { IncomingMessage, ServerResponse } from "node:http";
 import { NotificationsModule } from "./notifications/notifications.module";
 import { PrivacyModule } from "./security/privacy.module";
@@ -57,6 +58,7 @@ class HealthController {
     ListingsModule,
     DocumentsModule,
     AutomationModule,
+    CloudJobsModule,
     OrganizationsModule,
     ReferenceDataModule,
     FinessModule,

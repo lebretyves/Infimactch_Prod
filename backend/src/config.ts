@@ -60,6 +60,8 @@ export function documentQuotaBytes(
   return quota;
 }
 export function validateConfiguration(): void {
+  if (process.env.DOCUMENT_STORAGE && !["filesystem", "postgres"].includes(process.env.DOCUMENT_STORAGE)) throw new Error("Invalid DOCUMENT_STORAGE");
+  if (process.env.VERCEL && process.env.DOCUMENT_STORAGE !== "postgres") throw new Error("Persistent DOCUMENT_STORAGE required on Vercel");
   for (const n of [
     "DATABASE_URL",
     "MONGODB_URI",

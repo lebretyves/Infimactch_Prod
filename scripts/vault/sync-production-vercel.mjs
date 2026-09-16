@@ -1,0 +1,10 @@
+import {withRole,request} from './common.mjs';import {spawnSync} from 'node:child_process';
+const project='infimactch-prod-backend';
+const keys=['DATABASE_URL','MONGODB_URI','SESSION_SECRET','DOCUMENT_KEY','SERVICE_TOKEN','APP_ORIGIN','NOTIFICATION_APP_ORIGIN','TRUST_PROXY','DOCUMENT_STORAGE','NODE_OPTIONS','GOOGLE_CLIENT_ID','FT_CLIENT_ID','FT_CLIENT_SECRET','RPPS_API_KEY','JOBSPIPE_API_KEY','N8N_WEBHOOK_BASE','DISCORD_RELAY_URL','DISCORD_RELAY_TOKEN','INFIMATCH_SECRET_SOURCE'];
+try{await withRole('operator',async token=>{const values=(await request('kv/data/infimatch/v1/production',{token})).data.data;
+for(const key of keys.slice(0,10))if(!values[key])throw Error('Missing required production key');
+if(new URL(values.DATABASE_URL).username!=='infimatch_app'||new URL(values.MONGODB_URI).username!=='infimatch_app')throw Error('Expected restricted database users');
+const input=keys.filter(key=>values[key]).map(key=>({key,value:values[key],target:['production'],type:'sensitive'}));
+if(process.argv.includes('--apply')){const cli=process.env.INFIMATCH_VERCEL_CLI||'C:/Users/lebre/AppData/Roaming/npm/node_modules/vercel/dist/vc.js';for(const entry of input){const run=spawnSync(process.execPath,['--use-system-ca',cli,'env','add',entry.key,'production','--sensitive','--force','--yes','--scope','neotravel'],{cwd:'E:/Interimatch/.deployment-tools',input:entry.value,encoding:'utf8'});if(run.status!==0){let detail=(run.stderr||'')+(run.stdout||'');for(const value of Object.values(values))if(typeof value==='string'&&value.length>=8)detail=detail.replaceAll(value,'[redacted]');console.error(detail.slice(-1200));throw Error('Vercel synchronization failed');}console.log('Configured '+entry.key);}}
+
+console.log(JSON.stringify({project,mode:process.argv.includes('--apply')?'applied':'validated',keys:input.map(x=>x.key)}));});}catch(e){console.error(e.message==='Expected restricted database users'?e.message:'Production synchronization failed; no secret values displayed.');process.exitCode=1;}

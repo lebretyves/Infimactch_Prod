@@ -1,0 +1,4 @@
+import {withRole,request} from './common.mjs';
+try{let input='';for await(const chunk of process.stdin)input+=chunk;const values=JSON.parse(input);if(!values||Array.isArray(values)||typeof values!=='object')throw Error();for(const [key,value] of Object.entries(values))if(!/^[A-Z][A-Z0-9_]*$/.test(key)||typeof value!=='string'||value.includes('\0'))throw Error();
+await withRole('operator',async token=>{const path='kv/data/infimatch/v1/production';let previous;try{previous=(await request(path,{token})).data;}catch(e){if(e.status!==404)throw e;}await request(path,{method:'POST',token,data:{options:{cas:previous?.metadata.version??0},data:{...previous?.data,...values}}});});console.log('Production values stored in Vault; no secrets displayed.');
+}catch{console.error('Vault production update failed.');process.exitCode=1;}

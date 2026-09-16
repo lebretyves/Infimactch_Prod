@@ -12,6 +12,7 @@ try{
  writeFileSync(resolve(proof,'result.json'),JSON.stringify({date:new Date().toISOString(),status:'RUNNING'},null,2));
  console.log('Starting isolated services');run('docker',[...compose,'up','-d','--wait','--wait-timeout','120'],'services');
  run(process.execPath,['backend/dist/cli.js','migrate'],'fresh-migrations');
+ let n8nReady=false;for(let i=0;i<90;i++){try{if((await fetch('http://127.0.0.1:55679/healthz/readiness')).ok){n8nReady=true;break;}}catch{}await new Promise(r=>setTimeout(r,1000));}if(!n8nReady)throw Error('Isolated n8n startup did not finish');
  console.log('Importing and publishing three real n8n workflows');
  run('docker',[...compose,'exec','-T','n8n','n8n','import:workflow','--separate','--input=/workflows'],'n8n-import');
  for(const id of ['InfiMatchConfirm','InfiMatchMatches','InfiMatchReminders'])run('docker',[...compose,'exec','-T','n8n','n8n','publish:workflow','--id='+id],'publish-'+id);

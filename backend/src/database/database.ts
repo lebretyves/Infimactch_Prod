@@ -1,3 +1,4 @@
+import { CloudStorage1789381500000 } from "./cloud-storage";
 import { NotificationCenter1789381400000 } from "./notification-center";
 import { notifyAudit } from "../notifications/events";
 import { DiscordNotifications1789381300000 } from "./discord-notifications";
@@ -38,6 +39,7 @@ export class Database implements OnModuleDestroy {
       ErasureRecovery1789381200000,
       DiscordNotifications1789381300000,
       NotificationCenter1789381400000,
+      CloudStorage1789381500000,
     ],
     logging: false,
     extra: { max: 12 },

@@ -99,7 +99,8 @@ export class DocumentsService {
     command?: { operation: string; key: string | undefined; content: unknown },
     replacePrevious = false,
   ): Promise<StoredDocument> {
-    await mkdir(this.directory, { recursive: true });
+    const postgresStorage = process.env.DOCUMENT_STORAGE === "postgres";
+    if (!postgresStorage) await mkdir(this.directory, { recursive: true });
     return this.db.transaction(async (em) => {
       const receipt = command
         ? await commandReceipt(
@@ -137,15 +138,17 @@ export class DocumentsService {
       const temporary = resolve(this.directory, id + ".tmp");
       const final = resolve(this.directory, id + ".bin");
       await em.query(
-        "INSERT INTO document(id,owner_id,assignment_id,kind,mime,status,size_bytes,key_version) VALUES($1,$2,$3,$4,$5,'STAGING',$6,$7)",
-        [id, actor, assignmentId, kind, mime, data.length, this.keyVersion],
+        "INSERT INTO document(id,owner_id,assignment_id,kind,mime,status,size_bytes,key_version,storage_backend) VALUES($1,$2,$3,$4,$5,'STAGING',$6,$7,$8)",
+        [id, actor, assignmentId, kind, mime, data.length, this.keyVersion, postgresStorage ? "postgres" : "filesystem"],
       );
       try {
-        await writeFile(temporary, encrypt(data, this.key(), id), {
-          flag: "wx",
-          mode: 0o600,
-        });
-        await rename(temporary, final);
+        const encrypted = encrypt(data, this.key(), id);
+        if (postgresStorage) {
+          await em.query("INSERT INTO document_blob(document_id,encrypted) VALUES($1,$2)", [id, encrypted]);
+        } else {
+          await writeFile(temporary, encrypted, { flag: "wx", mode: 0o600 });
+          await rename(temporary, final);
+        }
         await em.query("UPDATE document SET status='READY' WHERE id=$1", [id]);
         if (replacePrevious)
           await em.query(
@@ -159,7 +162,7 @@ export class DocumentsService {
         const response: StoredDocument = { id, status: "READY" };
         return receipt ? receipt.save(response) : response;
       } catch (error) {
-        await Promise.all([
+        if (!postgresStorage) await Promise.all([
           rm(temporary, { force: true }),
           rm(final, { force: true }),
         ]);
@@ -194,7 +197,11 @@ export class DocumentsService {
           try {
             let encrypted: Buffer;
             let temporary = false;
-            try {
+            if (d.storage_backend === "postgres") {
+              const [blob] = await em.query("SELECT encrypted FROM document_blob WHERE document_id=$1", [d.id]);
+              if (!blob) throw new Error("BLOB_MISSING");
+              encrypted = blob.encrypted;
+            } else try {
               encrypted = await readFile(
                 resolve(this.directory, d.id + ".bin"),
               );
@@ -228,7 +235,7 @@ export class DocumentsService {
     }
     let orphansRemoved = 0;
     const cutoff = Date.now() - minimumAgeMinutes * 60_000;
-    const files = await readdir(this.directory).catch((error: any) => {
+    const files = process.env.DOCUMENT_STORAGE === "postgres" ? [] : await readdir(this.directory).catch((error: any) => {
       if (error.code === "ENOENT") return [];
       throw error;
     });
@@ -293,7 +300,9 @@ export class DocumentsService {
         mime: doc.mime,
         confirmationStatus: doc.confirmationStatus,
         data: decrypt(
-          await readFile(resolve(this.directory, id + ".bin")),
+          doc.storage_backend === "postgres"
+            ? (await this.db.query("SELECT encrypted FROM document_blob WHERE document_id=$1", [id]))[0]?.encrypted
+            : await readFile(resolve(this.directory, id + ".bin")),
           this.key(doc.key_version),
           id,
         ),
