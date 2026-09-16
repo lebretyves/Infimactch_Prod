@@ -1,0 +1,19 @@
+{
+  "date": "2026-09-15T22:14:44.982Z",
+  "clientId": "665514544182-s8h26n10qre7kuk2jguqbgknror86jqv.apps.googleusercontent.com",
+  "activeSource": "InfiMatch/data/vault/runtime.json through scripts/vault/run.mjs",
+  "runtimeMatches": true,
+  "backendEnabled": true,
+  "frontendApiMatches": true,
+  "authorizedOrigins": [
+    "http://127.0.0.1:5173",
+    "http://localhost:5173",
+    "http://localhost"
+  ],
+  "originUsedByLocalBackend": "http://127.0.0.1:5173",
+  "testUserConfigured": true,
+  "officialButtonVisible": true,
+  "realGoogleAccountChooserOpened": true,
+  "fullUserAccountLinkingVerified": false,
+  "scope": "Google Cloud client, saved origins and test audience verified in real browser; no real Google identity linked to an InfiMatch account during this verification."
+}

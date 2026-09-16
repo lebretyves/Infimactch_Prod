@@ -1,0 +1,272 @@
+.deja {
+  margin: 0;
+  font-size: var(--font-body);
+  color: var(--ink-600);
+}
+
+.deja a {
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.titrePage {
+  font-size: var(--font-display);
+}
+
+.form {
+  display: grid;
+  gap: var(--space-5);
+  margin-top: var(--space-6);
+}
+
+.sectionTitre {
+  font-size: var(--font-h3);
+  font-weight: 700;
+  color: var(--brand-900);
+  margin-top: var(--space-4);
+  padding-bottom: var(--space-2);
+  border-bottom: 1px solid var(--line);
+}
+
+.paire {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-4);
+}
+
+.bloc {
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+.legende {
+  display: flex;
+  gap: var(--space-1);
+  padding: 0;
+  font-size: var(--font-label);
+  font-weight: 600;
+  color: var(--ink-900);
+}
+
+.requis {
+  color: var(--danger-700);
+}
+
+.aide {
+  margin-top: 2px;
+  font-size: var(--font-caption);
+  color: var(--ink-600);
+}
+
+.erreur {
+  margin-top: var(--space-2);
+  font-size: var(--font-caption);
+  font-weight: 500;
+  color: var(--danger-700);
+}
+
+.diplomes {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--space-3);
+  margin-top: var(--space-4);
+}
+
+.consentement {
+  display: grid;
+  gap: var(--space-1);
+}
+
+.consentement .aide {
+  padding-left: 32px;
+}
+
+.obligatoires {
+  max-width: none;
+  margin-top: var(--space-4);
+  font-size: var(--font-caption);
+  font-weight: 600;
+  color: var(--brand-800);
+  text-align: center;
+}
+
+.etapes {
+  display: grid;
+  gap: var(--space-5);
+}
+
+.etape {
+  display: grid;
+  grid-template-columns: 34px minmax(0, 1fr);
+  column-gap: var(--space-4);
+  align-items: start;
+}
+
+.numero {
+  position: relative;
+  display: grid;
+  place-items: center;
+  grid-row: span 2;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: var(--sky-200);
+  color: var(--ink-600);
+  font-size: var(--font-body-sm);
+  font-weight: 700;
+}
+
+.courante .numero {
+  background: var(--brand-600);
+  color: var(--white);
+}
+
+.etape:not(:last-child) .numero::after {
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  width: 2px;
+  height: calc(100% + var(--space-5) - 12px);
+  margin-top: 6px;
+  border-radius: 1px;
+  background: var(--sky-200);
+  transform: translateX(-50%);
+}
+
+.titre {
+  font-size: var(--font-h3);
+  font-weight: 700;
+  color: var(--ink-900);
+}
+
+.texte {
+  max-width: 28ch;
+  font-size: var(--font-body-sm);
+  line-height: var(--leading-snug);
+  color: var(--ink-600);
+}
+
+@media (max-width: 479px) {
+  .dejaTexte {
+    display: none;
+  }
+}
+
+@media (max-width: 560px) {
+  .paire,
+  .diplomes {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+@media (max-width: 1023px) {
+  .etapes {
+    display: none;
+  }
+}
+
+.googleAcces {
+  margin-block: var(--space-5);
+  padding: var(--space-4);
+  border: 1px solid var(--sky-200);
+  border-radius: var(--radius-lg);
+  background: var(--sky-50);
+  color: var(--ink-700);
+  font-size: var(--font-body-sm);
+  overflow-wrap: anywhere;
+}
+.googleAcces:has(> section[hidden]) {
+  display: none;
+}
+.googleAcces p {
+  margin-block: 0 var(--space-3);
+}
+.googleAcces p:last-child {
+  margin-bottom: 0;
+}
+.googleTitre {
+  font-weight: 700;
+  color: var(--ink-900);
+}
+.googleLien {
+  display: block;
+  margin-top: var(--space-3);
+  border: 0;
+  padding: 0;
+  background: transparent;
+  color: var(--blue-700, #084eac);
+  text-align: left;
+  text-decoration: underline;
+  font: inherit;
+  cursor: pointer;
+}
+.googleLien:focus-visible {
+  outline: 2px solid var(--blue-700, #084eac);
+  outline-offset: 4px;
+}
+
+.finessLookup {
+  display: grid;
+  gap: 12px;
+  padding: 20px;
+  background: var(--sky-50);
+  border: 1px solid var(--sky-200);
+  border-radius: 12px;
+  min-width: 0;
+}
+.finessLookup p {
+  margin: 0;
+}
+.finessResult {
+  display: grid;
+  gap: 8px;
+  padding: 16px;
+  border: 1px solid #b8dedc;
+  border-left: 3px solid var(--teal-700);
+  border-radius: 8px;
+  background: white;
+  overflow-wrap: anywhere;
+  font-size: 13px;
+  line-height: 1.65;
+  color: var(--ink-700);
+}
+.finessTitle {
+  font-size: 12px;
+  font-weight: 800;
+  color: var(--teal-700);
+}
+.finessResult strong {
+  font-size: 14px;
+  color: var(--brand-900);
+}
+.finessSource {
+  color: var(--ink-600);
+  font-size: 12px;
+}
+.finessHelp {
+  font-size: 12px;
+  line-height: 1.7;
+  color: var(--ink-600);
+}
+.finessNotice {
+  display: grid;
+  gap: 12px;
+  font-size: 13px;
+  line-height: 1.7;
+  color: var(--ink-700);
+}
+.finessNotice button {
+  white-space: normal;
+  justify-self: start;
+  max-width: 100%;
+}
+@media (max-width: 560px) {
+  .finessLookup {
+    padding: 14px;
+  }
+  .finessResult {
+    padding: 12px;
+  }
+}

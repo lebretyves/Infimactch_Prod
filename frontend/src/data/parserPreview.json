@@ -1,0 +1,219 @@
+[
+  {
+    "id": "b05cb741-2b7f-45e3-be37-76f1f2b6647c",
+    "title": "IADE — Anesthésie au bloc opératoire",
+    "summary": "Une fiche spécialisée avec durée de poste et expérience souhaitée.",
+    "alerts": [
+      "Le montant de 36 € est indiqué sans unité : ne pas le présenter comme un tarif horaire."
+    ],
+    "missing": [
+      "Dates précises de mission",
+      "Population adulte ou pédiatrique",
+      "Unité et caractère brut/net de la rémunération"
+    ],
+    "groups": [
+      {
+        "title": "Travail et horaires",
+        "items": [
+          {
+            "label": "Métier",
+            "value": "IADE",
+            "status": "explicit",
+            "evidence": "Iade H/f - Anesthesie"
+          },
+          {
+            "label": "Lieu d’exercice",
+            "value": "Bloc opératoire",
+            "status": "explicit",
+            "evidence": "Au sein du bloc opératoire et en collaboration étroite avec les médecins anesthésistes-réanimateurs, vous assurez la prise en charge des patients avant, pendant et après les interventions chirurgicales"
+          },
+          {
+            "label": "Durée des postes",
+            "value": "10 ou 12 heures",
+            "status": "explicit",
+            "evidence": "Participer à l'entretien et à la gestion des équipements du service MISSION EN 10H OU 12H Profil du candidat : Diplôme d'État d'Infirmier Anesthésiste (IADE) exigé"
+          }
+        ]
+      },
+      {
+        "title": "Profil et compétences",
+        "items": [
+          {
+            "label": "Diplôme",
+            "value": "Diplôme d’État d’infirmier anesthésiste exigé",
+            "status": "explicit",
+            "evidence": "Participer à l'entretien et à la gestion des équipements du service MISSION EN 10H OU 12H Profil du candidat : Diplôme d'État d'Infirmier Anesthésiste (IADE) exigé"
+          },
+          {
+            "label": "Expérience",
+            "value": "Bloc opératoire, SSPI ou réanimation appréciés",
+            "status": "desired",
+            "evidence": "Inscription à l'Ordre National des Infirmiers en cours de validité et RPPS Expérience en bloc opératoire, SSPI ou réanimation appréciée"
+          },
+          {
+            "label": "Références professionnelles",
+            "value": "Ordre infirmier et RPPS mentionnés",
+            "status": "uncertain",
+            "evidence": "Inscription à l'Ordre National des Infirmiers en cours de validité et RPPS Expérience en bloc opératoire, SSPI ou réanimation appréciée"
+          }
+        ]
+      },
+      {
+        "title": "Rémunération et avantages",
+        "items": [
+          {
+            "label": "Montant annoncé",
+            "value": "36 € — unité à confirmer",
+            "status": "uncertain",
+            "evidence": "Salaire :36 € hors CP + FM, remboursement des transports : 3.39 €"
+          },
+          {
+            "label": "Transport",
+            "value": "Remboursement annoncé : 3,39 € — fréquence à confirmer",
+            "status": "uncertain",
+            "evidence": "Salaire :36 € hors CP + FM, remboursement des transports : 3.39 €"
+          }
+        ]
+      }
+    ],
+    "descriptionHash": "8fdcae054cff080b6476c9a28398b4d39c11bb5160de823558d66f656b3cf55d",
+    "source": "France Travail",
+    "sourceUrl": "https://candidat.francetravail.fr/offres/recherche/detail/5040828",
+    "location": "75 - Paris"
+  },
+  {
+    "id": "227c351f-e7ac-4ae4-9929-d9b37e421007",
+    "title": "Infirmier en entreprise — Santé au travail",
+    "summary": "Un exemple où la fiche signale une contradiction au lieu de choisir à votre place.",
+    "alerts": [
+      "Le texte annonce un temps partiel de 3 jours par semaine, puis indique « Temps plein ». À confirmer auprès du recruteur."
+    ],
+    "missing": [
+      "Dates précises de début et de fin",
+      "Caractère brut ou net du salaire"
+    ],
+    "groups": [
+      {
+        "title": "Travail et horaires",
+        "items": [
+          {
+            "label": "Secteur",
+            "value": "Santé au travail — Paris 16e",
+            "status": "explicit",
+            "evidence": "Infirmier d'entreprise H/F - Santé au travail - Paris 16e"
+          },
+          {
+            "label": "Temps de travail",
+            "value": "Temps partiel / temps plein : contradiction",
+            "status": "conflict",
+            "evidence": "Informations complémentaires:Mission à temps partiel : 3 jours par semaine (lundi, mardi et mercredi)\nTemps de travail : Temps plein"
+          },
+          {
+            "label": "Jours annoncés",
+            "value": "Lundi, mardi et mercredi — 3 jours par semaine",
+            "status": "explicit",
+            "evidence": "Informations complémentaires:Mission à temps partiel : 3 jours par semaine (lundi, mardi et mercredi)"
+          },
+          {
+            "label": "Horaires",
+            "value": "9 h 30 à 17 h — pause d’une heure",
+            "status": "explicit",
+            "evidence": "Horaires : 9h30 à 17h00 (1 heure de pause)"
+          }
+        ]
+      },
+      {
+        "title": "Profil et compétences",
+        "items": [
+          {
+            "label": "Diplôme",
+            "value": "Diplôme d’État d’infirmier",
+            "status": "explicit",
+            "evidence": "Pré-requisDiplôme d'État d'Infirmier"
+          },
+          {
+            "label": "Expérience",
+            "value": "Entreprise ou santé au travail appréciée",
+            "status": "desired",
+            "evidence": "Une expérience en entreprise, santé au travail est appréciée"
+          }
+        ]
+      },
+      {
+        "title": "Rémunération et avantages",
+        "items": [
+          {
+            "label": "Salaire",
+            "value": "22 € par heure — brut/net non précisé",
+            "status": "explicit",
+            "evidence": "Salaire : 22 € par heure"
+          }
+        ]
+      }
+    ],
+    "descriptionHash": "ef60ddcd79bc9882ea3cae3bed1f4f67e9f5a39ba9ce0e55b04416e0c79cba9e",
+    "source": "France Travail",
+    "sourceUrl": "https://candidat.francetravail.fr/offres/recherche/detail/6850244",
+    "location": "75 - Paris"
+  },
+  {
+    "id": "2ceed9ad-b0e6-49eb-b40f-fab2a81d58b4",
+    "title": "Infirmier en pool — Alternance jour / nuit",
+    "summary": "Un exemple JobsPipe : horaires identifiés, contrat encore à confirmer.",
+    "alerts": [
+      "La présentation du cabinet mentionne l’intérim, mais le contrat précis de ce poste n’est pas établi."
+    ],
+    "missing": [
+      "Contrat du poste",
+      "Dates de mission",
+      "Services concernés",
+      "Diplôme non extrait automatiquement : à relire dans l’annonce"
+    ],
+    "groups": [
+      {
+        "title": "Travail et horaires",
+        "items": [
+          {
+            "label": "Organisation",
+            "value": "Alternance jours / nuits, avec davantage de jours",
+            "status": "explicit",
+            "evidence": "Alternance jours / nuits (mais plus de jours que de nuits)"
+          },
+          {
+            "label": "Postes",
+            "value": "12 heures — plage de jour annoncée : 7 h à 19 h",
+            "status": "explicit",
+            "evidence": "Poste en 12h (7h-19h), planification du travail en \"petite / grande semaine\", avec des roulements les week-ends"
+          },
+          {
+            "label": "Roulement",
+            "value": "Petite / grande semaine, avec week-ends",
+            "status": "explicit",
+            "evidence": "Poste en 12h (7h-19h), planification du travail en \"petite / grande semaine\", avec des roulements les week-ends"
+          }
+        ]
+      },
+      {
+        "title": "Rémunération et avantages",
+        "items": [
+          {
+            "label": "Salaire",
+            "value": "À partir de 2 750 € bruts par mois, plus ancienneté",
+            "status": "explicit",
+            "evidence": "Rémunération Et Avantages À partir de 2750€ bruts/ mois, + ancienneté"
+          },
+          {
+            "label": "Avantages",
+            "value": "Mutuelle, CSE et autres primes mentionnés",
+            "status": "uncertain",
+            "evidence": "- Mutuelle, CSE dynamique, autres primes"
+          }
+        ]
+      }
+    ],
+    "descriptionHash": "8d8368d47a02252921213d084402b5caf11bbec010e2aacc6166ca54f250d6fd",
+    "source": "JobsPipe",
+    "sourceUrl": "https://fr.linkedin.com/jobs/view/infirmier-e-en-pool-h-f-at-talents-sant%C3%A9-4464884250",
+    "location": "Thionville, Grand Est, France"
+  }
+]

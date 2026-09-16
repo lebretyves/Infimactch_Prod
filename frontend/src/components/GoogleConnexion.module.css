@@ -1,0 +1,40 @@
+.section {
+  display: grid;
+  gap: 12px;
+  min-width: 0;
+}
+.section[hidden] {
+  display: none;
+}
+.section p {
+  font-size: 13px;
+  line-height: 1.65;
+}
+.permission {
+  display: grid;
+  gap: 12px;
+  justify-items: start;
+}
+.permission p {
+  color: var(--ink-700);
+}
+.permission strong {
+  color: var(--ink-900);
+}
+.permission button {
+  max-width: 100%;
+  white-space: normal;
+}
+.preferences {
+  padding: 0;
+  border: 0;
+  background: transparent;
+  font-size: 12px;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  color: var(--brand-800);
+  cursor: pointer;
+}
+.section > div[hidden] {
+  display: none;
+}

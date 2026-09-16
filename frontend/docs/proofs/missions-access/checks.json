@@ -1,0 +1,10 @@
+{
+  "scope": "Simulated identity/profiles; public offers fetched from real local backend. No user profile changed.",
+  "checks": [
+    "no-qualification",
+    "qualified",
+    "enterprise",
+    "server-error",
+    "favorites-error"
+  ]
+}

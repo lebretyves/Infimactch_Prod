@@ -1,0 +1,60 @@
+.rayon {
+  display: grid;
+  gap: var(--space-3);
+  padding: var(--space-5);
+  border-radius: var(--radius-lg);
+  background: var(--tint);
+}
+
+.label {
+  font-size: var(--font-label);
+  font-weight: 500;
+}
+
+.ligne {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+}
+
+.curseur {
+  flex: 1;
+  height: 6px;
+  appearance: none;
+  border-radius: var(--radius-pill);
+  background: var(--blue);
+  cursor: pointer;
+}
+
+.curseur::-webkit-slider-thumb {
+  appearance: none;
+  width: 22px;
+  height: 22px;
+  border: 3px solid var(--blue-500);
+  border-radius: 50%;
+  background: var(--white);
+  cursor: grab;
+}
+
+.curseur::-moz-range-thumb {
+  width: 16px;
+  height: 16px;
+  border: 3px solid var(--blue-500);
+  border-radius: 50%;
+  background: var(--white);
+  cursor: grab;
+}
+
+.valeur {
+  min-width: 72px;
+  font-size: var(--font-h2);
+  font-weight: 600;
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+.retour {
+  font-size: var(--font-body-sm);
+  color: var(--blue-700);
+  font-weight: 500;
+}

@@ -73,3 +73,20 @@ Ajouter une entrée à chaque étape significative : changement, test et résult
 - Sauvegarde du backend, scripts et documentation sur la branche existante `Backend` de `Ziwazou/infiMatch`, en conservant son historique. Aucun fichier frontend ajoute a cette sauvegarde.
 - Le lot conservation, fraicheur et OpenAPI reste en cours : compilation reussie mais la derniere campagne isolee a termine en echec dans la commande coverage. Les preuves de cet echec sont conservees ; validation et activation restent a terminer.
 - Google : connexion Firefox et verification des origines toujours en attente. Vercel non commence.
+
+## Copie vers le depot de production
+
+- A la demande utilisateur, copie exacte de la branche Backend de Ziwazou/infiMatch vers le depot vide lebretyves/Infimactch_Prod, avec historique Git. Commit distant verifie : a9eda6f3fd5e2d3e46411f54fe9bb674692e6db7.
+- Droits ADMIN confirmes sur le depot destination ; Backend definie comme branche par defaut. Aucun deploiement Vercel effectue. Le statut de validation du lot reste inchange.
+
+## Diagnostic du premier deploiement Vercel
+
+- Deploiement GitHub Production du commit a9eda6f confirme. Utilisateur signale FUNCTION_INVOCATION_FAILED (500). URL de deploiement protegee : controle HTTP externe redirige (302), pas de validation de sante possible sans acces.
+- Code inspecte : configuration obligatoire au demarrage (DATABASE_URL, MONGODB_URI, SESSION_SECRET, DOCUMENT_KEY, SERVICE_TOKEN, APP_ORIGIN, TRUST_PROXY en production), connexion PostgreSQL immediate. Secrets locaux exclus du depot par conception.
+- CLI Vercel non authentifiee ; journal runtime demande pour distinguer configuration manquante, connexion base et erreur de runtime. Cause exacte non encore confirmee. Branche Backend sans interface frontend ; stockage documentaire local et worker demandent une configuration de production specifique. Aucun correctif ni redeploiement affirme.
+
+## Ajout de l application complete au depot de production
+
+- Ajout du frontend valide (version conservee sur main), de la CI et du guide DEPLOIEMENT_PRODUCTION.md. Configuration Vercel frontend avec navigation SPA et exclusion des chemins API.
+- Utilisateur confirme que tous les services sont uniquement locaux. Hebergement des bases, documents, worker et automatisations encore necessaire. Aucun service cloud provisionne.
+- Premier build dans la copie sans dependances a echoue ; apres npm ci dans la copie de production, compilation frontend reussie. Douze tests frontend reussis avant copie ; nouvelle execution sur la copie de production. Avertissement de taille du bundle principal (~628 ko).

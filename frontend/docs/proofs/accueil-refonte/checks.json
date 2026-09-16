@@ -1,0 +1,58 @@
+{
+  "at": "2026-09-15T23:07:45.692Z",
+  "checks": [
+    "Accueil 1440px: header, anchors, menu, FAQ, image, no overflow",
+    "Accueil 1024px: header, anchors, menu, FAQ, image, no overflow",
+    "Accueil 768px: header, anchors, menu, FAQ, image, no overflow",
+    "Accueil 375px: header, anchors, menu, FAQ, image, no overflow",
+    "Inscription preselected candidat",
+    "Inscription preselected etablissement",
+    "Inscription preselected agence",
+    "Unknown registration query keeps default"
+  ],
+  "pages": [
+    {
+      "href": "/",
+      "destination": "/"
+    },
+    {
+      "href": "/connexion",
+      "destination": "/connexion"
+    },
+    {
+      "href": "/inscription",
+      "destination": "/inscription"
+    },
+    {
+      "href": "/inscription?espace=candidat",
+      "destination": "/inscription"
+    },
+    {
+      "href": "/inscription?espace=etablissement",
+      "destination": "/inscription"
+    },
+    {
+      "href": "/inscription?espace=agence",
+      "destination": "/inscription"
+    },
+    {
+      "href": "/mentions-legales",
+      "destination": "/mentions-legales"
+    },
+    {
+      "href": "/mentions-legales#confidentialite",
+      "destination": "/mentions-legales"
+    },
+    {
+      "href": "/mentions-legales#conditions",
+      "destination": "/mentions-legales"
+    },
+    {
+      "href": "/catalogue",
+      "destination": "/catalogue"
+    }
+  ],
+  "errors": [],
+  "writes": [],
+  "scope": "Real local pages, isolated browser, no form submission; API writes blocked. Google disabled only in the isolated test context; OAuth outside scope."
+}

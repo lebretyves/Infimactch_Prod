@@ -1,0 +1,105 @@
+.retour {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-size: var(--font-body);
+  font-weight: 600;
+  color: var(--ink-700);
+  text-decoration: none;
+}
+
+.retour:hover {
+  color: var(--brand-800);
+}
+
+.intro {
+  display: grid;
+  gap: var(--space-2);
+}
+
+.intro h1 {
+  font-size: var(--font-display);
+}
+
+.intro p {
+  font-size: var(--font-lead);
+  color: var(--ink-600);
+}
+
+.form {
+  display: grid;
+  gap: var(--space-5);
+  margin-top: var(--space-6);
+}
+
+.form > :last-child {
+  margin-top: var(--space-2);
+}
+
+.optionsMotDePasse {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: calc(-1 * var(--space-3));
+}
+
+.optionsMotDePasse a {
+  font-size: var(--font-body-sm);
+  color: var(--brand-700);
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.optionsMotDePasse a:hover {
+  text-decoration: underline;
+}
+
+.alerte {
+  max-width: none;
+  padding: var(--space-3) var(--space-4);
+  border: 1px solid var(--danger-200);
+  border-radius: var(--radius-control);
+  background: var(--danger-50);
+  color: var(--danger-700);
+  font-size: var(--font-body-sm);
+  font-weight: 500;
+}
+
+.bascule {
+  max-width: none;
+  margin-top: var(--space-5);
+  color: var(--ink-600);
+  text-align: center;
+}
+
+.bascule a {
+  font-weight: 700;
+}
+
+.filet {
+  margin: var(--space-6) 0 var(--space-4);
+  border: 0;
+  border-top: 1px solid var(--line);
+}
+
+.legal {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: var(--space-4);
+  max-width: none;
+  font-size: var(--font-caption);
+}
+
+.legal a {
+  color: var(--ink-600);
+  text-decoration: none;
+}
+
+.legal a:hover {
+  color: var(--brand-800);
+  text-decoration: underline;
+}
+
+.legal span {
+  color: var(--line-strong);
+}

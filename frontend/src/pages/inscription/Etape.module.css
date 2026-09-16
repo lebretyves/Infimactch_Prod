@@ -1,0 +1,76 @@
+.titre {
+  margin-bottom: var(--space-2);
+}
+
+.chapeau {
+  margin-bottom: var(--space-8);
+  color: var(--grey-600);
+}
+
+.champs {
+  display: grid;
+  gap: var(--space-5);
+}
+
+.paire {
+  display: grid;
+  gap: var(--space-5);
+  min-width: 0;
+}
+
+@media (min-width: 600px) {
+  .paire {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.bloc {
+  display: grid;
+  gap: var(--space-4);
+  padding: var(--space-5);
+  border: 1px solid var(--grey-300);
+  border-radius: var(--radius-lg);
+}
+
+.bloc > legend,
+.blocTitre {
+  padding: 0 var(--space-2);
+  font-size: var(--font-h3);
+  font-weight: 600;
+}
+
+.actions {
+  display: flex;
+  flex-direction: column-reverse;
+  gap: var(--space-3);
+  margin-top: var(--space-10);
+  padding-top: var(--space-6);
+  border-top: 1px solid var(--grey-300);
+}
+
+.actions > * {
+  width: 100%;
+}
+
+@media (min-width: 600px) {
+  .actions {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-4);
+  }
+
+  .actions > * {
+    width: auto;
+  }
+}
+
+.obligatoire {
+  margin-bottom: var(--space-6);
+  font-size: var(--font-caption);
+  color: var(--grey-600);
+}
+
+.etoile {
+  color: var(--danger-700);
+}

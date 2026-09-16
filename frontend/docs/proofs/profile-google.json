@@ -1,0 +1,12 @@
+{
+  "date": "2026-09-15T20:07:58.460Z",
+  "checks": [
+    "google_disabled_without_client_id",
+    "google_endpoint_requires_csrf",
+    "profile_saved_and_persisted_without_losing_other_fields",
+    "availability_saved_in_utc_and_persisted",
+    "profile_mobile_no_horizontal_overflow",
+    "fictional_profile_restored"
+  ],
+  "googleLiveLogin": "Not tested: Google Client ID has not been created."
+}

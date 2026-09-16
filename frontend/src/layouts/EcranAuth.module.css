@@ -1,0 +1,83 @@
+.marque {
+  display: inline-flex;
+  border-radius: var(--radius-sm);
+  text-decoration: none;
+}
+
+.split {
+  display: grid;
+  flex: 1;
+}
+
+.promo {
+  display: flex;
+  align-items: center;
+  padding: clamp(var(--space-8), 4vw, var(--space-16)) clamp(var(--space-5), 4vw, var(--space-10));
+  background: linear-gradient(170deg, #e8f5fb 0%, #f4fbfd 78%);
+}
+
+.promoInterieur {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+  width: 100%;
+  max-width: 520px;
+  margin-inline: auto;
+}
+
+.formulaire {
+  display: flex;
+  align-items: center;
+  padding: clamp(var(--space-8), 4vw, var(--space-16)) clamp(var(--space-5), 4vw, var(--space-10));
+}
+
+.interieur {
+  width: 100%;
+  max-width: 520px;
+  margin-inline: auto;
+}
+
+.large .interieur {
+  max-width: 620px;
+}
+
+@media (min-width: 1024px) {
+  .split {
+    grid-template-columns: 47fr 53fr;
+    align-items: stretch;
+  }
+
+  .split.large {
+    grid-template-columns: 42fr 58fr;
+  }
+
+  .promoInterieur {
+    gap: var(--space-8);
+  }
+}
+
+.claim {
+  max-width: 14ch;
+  font-size: clamp(30px, 2.2vw + 16px, 46px);
+  font-weight: 800;
+  line-height: var(--leading-tight);
+  letter-spacing: -0.03em;
+  color: var(--ink-900);
+}
+
+.sous {
+  max-width: 26ch;
+  font-size: var(--font-lead);
+  font-weight: 500;
+  color: var(--ink-600);
+}
+
+/* Les champs restent prioritaires sur petit écran. */
+@media (max-width: 767px) {
+  .avecPhoto .formulaire { order: 1; }
+  .avecPhoto .promo { order: 2; }
+}
+
+.split, .formulaire, .interieur, .promo, .promoInterieur { min-width: 0; }
+@media (max-width: 1023px) { .split, .split.large { grid-template-columns: minmax(0, 1fr); } }
+.formulaire button { max-width: 100%; white-space: normal; height: auto; min-height: 48px; padding-block: 12px; }

@@ -1,0 +1,2635 @@
+{
+  "generatedAt": "2026-09-16T01:34:11.024Z",
+  "entryCount": 56,
+  "captureCount": 112,
+  "viewports": {
+    "desktop": "1440x960",
+    "mobile": "375x812"
+  },
+  "scope": "Composants réels, API entièrement interceptée, données fictives uniquement, aucun compte ni enregistrement serveur. Polices publiques autorisées. Google OAuth hors capture. Le catalogue lui-même est la page de consultation, sans capture récursive.",
+  "routes": [
+    "*",
+    "/",
+    "/catalogue",
+    "/connexion",
+    "/mot-de-passe-oublie",
+    "/inscription",
+    "/mentions-legales",
+    "/inscription/identite",
+    "/inscription/localisation",
+    "/inscription/qualification",
+    "/inscription/mobilite",
+    "/inscription/disponibilites",
+    "/inscription/rib",
+    "/inscription/consentements",
+    "/inscription/confirmation",
+    "/inscription/confirmation-etablissement",
+    "/accueil",
+    "/missions",
+    "/missions/:id",
+    "/missions/:id/candidater",
+    "/candidatures",
+    "/calendrier",
+    "/profil",
+    "/dossier",
+    "/favoris",
+    "/etablissements/:id",
+    "/historique",
+    "/organisation",
+    "/besoins",
+    "/gestion/missions/nouvelle",
+    "/gestion/missions/:id",
+    "/gestion/missions/:id/modifier",
+    "/candidatures/:id"
+  ],
+  "capturedRoutes": [
+    "/",
+    "/connexion",
+    "/inscription?espace=etablissement",
+    "/inscription?google=1",
+    "/inscription",
+    "/mentions-legales",
+    "/inscription/identite",
+    "/inscription/localisation",
+    "/inscription/qualification",
+    "/inscription/mobilite",
+    "/inscription/disponibilites",
+    "/inscription/rib",
+    "/inscription/consentements",
+    "/inscription/confirmation",
+    "/accueil",
+    "/missions",
+    "/missions/:id",
+    "/missions/:id/candidater",
+    "/candidatures",
+    "/candidatures/:id",
+    "/calendrier",
+    "/profil",
+    "/dossier",
+    "/favoris",
+    "/etablissements/:id",
+    "/historique",
+    "/inscription/confirmation-etablissement",
+    "/gestion/missions/:id",
+    "/organisation",
+    "/besoins",
+    "/gestion/missions/nouvelle",
+    "/gestion/missions/nouvelle?besoin=00000000-0000-4000-8000-000000000017",
+    "/gestion/missions/:id/modifier",
+    "/mot-de-passe-oublie",
+    "*"
+  ],
+  "uncovered": [],
+  "reports": [
+    {
+      "id": "besoins-etablissement",
+      "device": "desktop",
+      "route": "/besoins",
+      "path": "/besoins",
+      "role": "etablissement",
+      "headings": [
+        "Besoins de personnel"
+      ],
+      "alerts": [],
+      "width": {
+        "viewport": 1441,
+        "document": 1426
+      },
+      "api": [
+        "GET /auth/me",
+        "GET /me/organizations",
+        "GET /staffing-requests",
+        "GET /reference-data"
+      ],
+      "blockedExternal": [],
+      "errors": [],
+      "unknown": []
+    },
+    {
+      "id": "besoins-etablissement",
+      "device": "mobile",
+      "route": "/besoins",
+      "path": "/besoins",
+      "role": "etablissement",
+      "headings": [
+        "Besoins de personnel"
+      ],
+      "alerts": [],
+      "width": {
+        "viewport": 376,
+        "document": 361
+      },
+      "api": [
+        "GET /auth/me",
+        "GET /me/organizations",
+        "GET /staffing-requests",
+        "GET /reference-data"
+      ],
+      "blockedExternal": [],
+      "errors": [],
+      "unknown": []
+    },
+    {
+      "id": "besoins-agence",
+      "device": "desktop",
+      "route": "/besoins",
+      "path": "/besoins",
+      "role": "agence",
+      "headings": [
+        "Besoins de personnel"
+      ],
+      "alerts": [],
+      "width": {
+        "viewport": 1441,
+        "document": 1426
+      },
+      "api": [
+        "GET /auth/me",
+        "GET /me/organizations",
+        "GET /staffing-requests",
+        "GET /reference-data"
+      ],
+      "blockedExternal": [],
+      "errors": [],
+      "unknown": []
+    },
+    {
+      "id": "besoins-agence",
+      "device": "mobile",
+      "route": "/besoins",
+      "path": "/besoins",
+      "role": "agence",
+      "headings": [
+        "Besoins de personnel"
+      ],
+      "alerts": [],
+      "width": {
+        "viewport": 376,
+        "document": 361
+      },
+      "api": [
+        "GET /auth/me",
+        "GET /me/organizations",
+        "GET /staffing-requests",
+        "GET /reference-data"
+      ],
+      "blockedExternal": [],
+      "errors": [],
+      "unknown": []
+    },
+    {
+      "id": "mission-depuis-besoin",
+      "device": "desktop",
+      "route": "/gestion/missions/nouvelle?besoin=00000000-0000-4000-8000-000000000017",
+      "path": "/gestion/missions/nouvelle?besoin=00000000-0000-4000-8000-000000000017",
+      "role": "agence",
+      "headings": [
+        "Préparer une mission"
+      ],
+      "alerts": [],
+      "width": {
+        "viewport": 1441,
+        "document": 1426
+      },
+      "api": [
+        "GET /auth/me",
+        "GET /me/organizations",
+        "GET /reference-data",
+        "GET /staffing-requests/00000000-0000-4000-8000-000000000017"
+      ],
+      "blockedExternal": [],
+      "errors": [],
+      "unknown": []
+    },
+    {
+      "id": "mission-depuis-besoin",
+      "device": "mobile",
+      "route": "/gestion/missions/nouvelle?besoin=00000000-0000-4000-8000-000000000017",
+      "path": "/gestion/missions/nouvelle?besoin=00000000-0000-4000-8000-000000000017",
+      "role": "agence",
+      "headings": [
+        "Préparer une mission"
+      ],
+      "alerts": [],
+      "width": {
+        "viewport": 376,
+        "document": 361
+      },
+      "api": [
+        "GET /auth/me",
+        "GET /me/organizations",
+        "GET /reference-data",
+        "GET /staffing-requests/00000000-0000-4000-8000-000000000017"
+      ],
+      "blockedExternal": [],
+      "errors": [],
+      "unknown": []
+    },
+    {
+      "id": "calendrier",
+      "device": "desktop",
+      "route": "/calendrier",
+      "path": "/calendrier",
+      "role": "candidat",
+      "headings": [
+        "Mon planning"
+      ],
+      "alerts": [],
+      "width": {
+        "viewport": 1441,
+        "document": 1426
+      },
+      "api": [
+        "GET /auth/me",
+        "GET /profile",
+        "GET /me/history"
+      ],
+      "blockedExternal": [],
+      "errors": [],
+      "unknown": []
+    },
+    {
+      "id": "calendrier",
+      "device": "mobile",
+      "route": "/calendrier",
+      "path": "/calendrier",
+      "role": "candidat",
+      "headings": [
+        "Mon planning"
+      ],
+      "alerts": [],
+      "width": {
+        "viewport": 376,
+        "document": 361
+      },
+      "api": [
+        "GET /auth/me",
+        "GET /profile",
+        "GET /me/history"
+      ],
+      "blockedExternal": [],
+      "errors": [],
+      "unknown": []
+    },
+    {
+      "id": "calendrier-mois",
+      "device": "desktop",
+      "route": "/calendrier",
+      "path": "/calendrier",
+      "role": "candidat",
+      "headings": [
+        "Mon planning"
+      ],
+      "alerts": [],
+      "width": {
+        "viewport": 1441,
+        "document": 1426
+      },
+      "api": [
+        "GET /auth/me",
+        "GET /profile",
+        "GET /me/history"
+      ],
+      "blockedExternal": [],
+      "errors": [],
+      "unknown": []
+    },
+    {
+      "id": "calendrier-mois",
+      "device": "mobile",
+      "route": "/calendrier",
+      "path": "/calendrier",
+      "role": "candidat",
+      "headings": [
+        "Mon planning"
+      ],
+      "alerts": [],
+      "width": {
+        "viewport": 376,
+        "document": 361
+      },
+      "api": [
+        "GET /auth/me",
+        "GET /profile",
+        "GET /me/history"
+      ],
+      "blockedExternal": [],
+      "errors": [],
+      "unknown": []
+    },
+    {
+      "id": "connexion-candidat",
+      "device": "desktop",
+      "route": "/connexion",
+      "path": "/connexion",
+      "role": "public",
+      "headings": [
+        "Bienvenue sur InfiMatch"
+      ],
+      "alerts": [],
+      "width": {
+        "viewport": 1441,
+        "document": 1441
+      },
+      "api": [
+        "GET /auth/google/config",
+        "GET /auth/me"
+      ],
+      "blockedExternal": [],
+      "errors": [],
+      "unknown": []
+    },
+    {
+      "id": "connexion-candidat",
+      "device": "mobile",
+      "route": "/connexion",
+      "path": "/connexion",
+      "role": "public",
+      "headings": [
+        "Bienvenue sur InfiMatch"
+      ],
+      "alerts": [],
+      "width": {
+        "viewport": 376,
+        "document": 361
+      },
+      "api": [
+        "GET /auth/google/config",
+        "GET /auth/me"
+      ],
+      "blockedExternal": [],
+      "errors": [],
+      "unknown": []
+    },
+    {
+      "id": "mentions",
+      "device": "desktop",
+      "route": "/mentions-legales",
+      "path": "/mentions-legales",
+      "role": "public",
+      "headings": [
+        "Mentions légales et données personnelles"
+      ],
+      "alerts": [],
+      "width": {
+        "viewport": 1441,
+        "document": 1426
+      },
+      "api": [
+        "GET /auth/me"
+      ],
+      "blockedExternal": [],
+      "errors": [],
+      "unknown": []
+    },
+    {
+      "id": "mentions",
+      "device": "mobile",
+      "route": "/mentions-legales",
+      "path": "/mentions-legales",
+      "role": "public",
+      "headings": [
+        "Mentions légales et données personnelles"
+      ],
+      "alerts": [],
+      "width": {
+        "viewport": 376,
+        "document": 361
+      },
+      "api": [
+        "GET /auth/me"
+      ],
+      "blockedExternal": [],
+      "errors": [],
+      "unknown": []
+    },
+    {
+      "id": "inscription-finess",
+      "device": "desktop",
+      "route": "/inscription?espace=etablissement",
+      "path": "/inscription?espace=etablissement",
+      "role": "public",
+      "headings": [
+        "Créer mon compte établissement"
+      ],
+      "alerts": [],
+      "width": {
+        "viewport": 1441,
+        "document": 1426
+      },
+      "api": [
+        "GET /auth/google/config",
+        "GET /auth/me",
+        "GET /reference-data/finess/010000024"
+      ],
+      "blockedExternal": [],
+      "errors": [],
+      "unknown": []
+    },
+    {
+      "id": "inscription-finess",
+      "device": "mobile",
+      "route": "/inscription?espace=etablissement",
+      "path": "/inscription?espace=etablissement",
+      "role": "public",
+      "headings": [
+        "Créer mon compte établissement"
+      ],
+      "alerts": [],
+      "width": {
+        "viewport": 376,
+        "document": 361
+      },
+      "api": [
+        "GET /auth/google/config",
+        "GET /auth/me",
+        "GET /reference-data/finess/010000024"
+      ],
+      "blockedExternal": [],
+      "errors": [],
+      "unknown": []
+    },
+    {
+      "id": "inscription-etablissement",
+      "device": "desktop",
+      "route": "/inscription",
+      "path": "/inscription",
+      "role": "public",
+      "headings": [
+        "Créer mon compte établissement"
+      ],
+      "alerts": [],
+      "width": {
+        "viewport": 1441,
+        "document": 1426
+      },
+      "api": [
+        "GET /auth/google/config",
+        "GET /auth/me"
+      ],
+      "blockedExternal": [],
+      "errors": [],
+      "unknown": []
+    },
+    {
+      "id": "inscription-etablissement",
+      "device": "mobile",
+      "route": "/inscription",
+      "path": "/inscription",
+      "role": "public",
+      "headings": [
+        "Créer mon compte établissement"
+      ],
+      "alerts": [],
+      "width": {
+        "viewport": 376,
+        "document": 361
+      },
+      "api": [
+        "GET /auth/google/config",
+        "GET /auth/me"
+      ],
+      "blockedExternal": [],
+      "errors": [],
+      "unknown": []
+    },
+    {
+      "id": "inscription-agence",
+      "device": "desktop",
+      "route": "/inscription",
+      "path": "/inscription",
+      "role": "public",
+      "headings": [
+        "Créer mon compte agence"
+      ],
+      "alerts": [],
+      "width": {
+        "viewport": 1441,
+        "document": 1426
+      },
+      "api": [
+        "GET /auth/google/config",
+        "GET /auth/me"
+      ],
+      "blockedExternal": [],
+      "errors": [],
+      "unknown": []
+    },
+    {
+      "id": "inscription-agence",
+      "device": "mobile",
+      "route": "/inscription",
+      "path": "/inscription",
+      "role": "public",
+      "headings": [
+        "Créer mon compte agence"
+      ],
+      "alerts": [],
+      "width": {
+        "viewport": 376,
+        "document": 361
+      },
+      "api": [
+        "GET /auth/google/config",
+        "GET /auth/me"
+      ],
+      "blockedExternal": [],
+      "errors": [],
+      "unknown": []
+    },
+    {
+      "id": "cookies",
+      "device": "desktop",
+      "route": "/connexion",
+      "path": "/connexion",
+      "role": "public",
+      "headings": [
+        "Bienvenue sur InfiMatch"
+      ],
+      "alerts": [],
+      "width": {
+        "viewport": 1441,
+        "document": 1441
+      },
+      "api": [
+        "GET /auth/google/config",
+        "GET /auth/me"
+      ],
+      "blockedExternal": [],
+      "errors": [],
+      "unknown": []
+    },
+    {
+      "id": "cookies",
+      "device": "mobile",
+      "route": "/connexion",
+      "path": "/connexion",
+      "role": "public",
+      "headings": [
+        "Bienvenue sur InfiMatch"
+      ],
+      "alerts": [],
+      "width": {
+        "viewport": 376,
+        "document": 361
+      },
+      "api": [
+        "GET /auth/google/config",
+        "GET /auth/me"
+      ],
+      "blockedExternal": [],
+      "errors": [],
+      "unknown": []
+    },
+    {
+      "id": "cookies-personnalisation",
+      "device": "desktop",
+      "route": "/connexion",
+      "path": "/connexion",
+      "role": "public",
+      "headings": [
+        "Bienvenue sur InfiMatch"
+      ],
+      "alerts": [],
+      "width": {
+        "viewport": 1441,
+        "document": 1441
+      },
+      "api": [
+        "GET /auth/google/config",
+        "GET /auth/me"
+      ],
+      "blockedExternal": [],
+      "errors": [],
+      "unknown": []
+    },
+    {
+      "id": "cookies-personnalisation",
+      "device": "mobile",
+      "route": "/connexion",
+      "path": "/connexion",
+      "role": "public",
+      "headings": [
+        "Bienvenue sur InfiMatch"
+      ],
+      "alerts": [],
+      "width": {
+        "viewport": 376,
+        "document": 361
+      },
+      "api": [
+        "GET /auth/google/config",
+        "GET /auth/me"
+      ],
+      "blockedExternal": [],
+      "errors": [],
+      "unknown": []
+    },
+    {
+      "id": "inscription-google",
+      "device": "desktop",
+      "route": "/inscription?google=1",
+      "path": "/inscription?google=1",
+      "role": "public",
+      "headings": [
+        "Créer mon compte professionnel de santé"
+      ],
+      "alerts": [],
+      "width": {
+        "viewport": 1441,
+        "document": 1426
+      },
+      "api": [
+        "GET /auth/google/registration",
+        "GET /auth/me"
+      ],
+      "blockedExternal": [],
+      "errors": [],
+      "unknown": []
+    },
+    {
+      "id": "inscription-google",
+      "device": "mobile",
+      "route": "/inscription?google=1",
+      "path": "/inscription?google=1",
+      "role": "public",
+      "headings": [
+        "Créer mon compte professionnel de santé"
+      ],
+      "alerts": [],
+      "width": {
+        "viewport": 376,
+        "document": 361
+      },
+      "api": [
+        "GET /auth/google/registration",
+        "GET /auth/me"
+      ],
+      "blockedExternal": [],
+      "errors": [],
+      "unknown": []
+    },
+    {
+      "id": "candidature-suivi",
+      "device": "desktop",
+      "route": "/candidatures/:id",
+      "path": "/candidatures/00000000-0000-4000-8000-000000000005",
+      "role": "candidat",
+      "headings": [
+        "Suivi de candidature"
+      ],
+      "alerts": [],
+      "width": {
+        "viewport": 1441,
+        "document": 1441
+      },
+      "api": [
+        "GET /auth/me",
+        "GET /profile",
+        "GET /applications/00000000-0000-4000-8000-000000000005"
+      ],
+      "blockedExternal": [],
+      "errors": [],
+      "unknown": []
+    },
+    {
+      "id": "candidature-suivi",
+      "device": "mobile",
+      "route": "/candidatures/:id",
+      "path": "/candidatures/00000000-0000-4000-8000-000000000005",
+      "role": "candidat",
+      "headings": [
+        "Suivi de candidature"
+      ],
+      "alerts": [],
+      "width": {
+        "viewport": 376,
+        "document": 361
+      },
+      "api": [
+        "GET /auth/me",
+        "GET /profile",
+        "GET /applications/00000000-0000-4000-8000-000000000005"
+      ],
+      "blockedExternal": [],
+      "errors": [],
+      "unknown": []
+    },
+    {
+      "id": "etablissement-public",
+      "device": "desktop",
+      "route": "/etablissements/:id",
+      "path": "/etablissements/00000000-0000-4000-8000-000000000003",
+      "role": "candidat",
+      "headings": [
+        "Clinique des Jardins — démonstration"
+      ],
+      "alerts": [],
+      "width": {
+        "viewport": 1441,
+        "document": 1441
+      },
+      "api": [
+        "GET /auth/me",
+        "GET /profile",
+        "GET /facilities/00000000-0000-4000-8000-000000000003",
+        "GET /me/favorites"
+      ],
+      "blockedExternal": [],
+      "errors": [],
+      "unknown": []
+    },
+    {
+      "id": "etablissement-public",
+      "device": "mobile",
+      "route": "/etablissements/:id",
+      "path": "/etablissements/00000000-0000-4000-8000-000000000003",
+      "role": "candidat",
+      "headings": [
+        "Clinique des Jardins — démonstration"
+      ],
+      "alerts": [],
+      "width": {
+        "viewport": 376,
+        "document": 361
+      },
+      "api": [
+        "GET /auth/me",
+        "GET /profile",
+        "GET /facilities/00000000-0000-4000-8000-000000000003",
+        "GET /me/favorites"
+      ],
+      "blockedExternal": [],
+      "errors": [],
+      "unknown": []
+    },
+    {
+      "id": "dashboard-candidat",
+      "device": "desktop",
+      "route": "/accueil",
+      "path": "/accueil",
+      "role": "candidat",
+      "headings": [
+        "Bonjour Camille,"
+      ],
+      "alerts": [],
+      "width": {
+        "viewport": 1441,
+        "document": 1426
+      },
+      "api": [
+        "GET /auth/me",
+        "GET /profile",
+        "GET /dashboards",
+        "GET /me/notifications",
+        "GET /me/history",
+        "GET /me/applications",
+        "GET /me/favorites",
+        "GET /auth/csrf",
+        "POST /listings/search"
+      ],
+      "blockedExternal": [],
+      "errors": [],
+      "unknown": []
+    },
+    {
+      "id": "dashboard-candidat",
+      "device": "mobile",
+      "route": "/accueil",
+      "path": "/accueil",
+      "role": "candidat",
+      "headings": [
+        "Bonjour Camille,"
+      ],
+      "alerts": [],
+      "width": {
+        "viewport": 376,
+        "document": 361
+      },
+      "api": [
+        "GET /auth/me",
+        "GET /profile",
+        "GET /dashboards",
+        "GET /me/notifications",
+        "GET /me/history",
+        "GET /me/applications",
+        "GET /me/favorites",
+        "GET /auth/csrf",
+        "POST /listings/search"
+      ],
+      "blockedExternal": [],
+      "errors": [],
+      "unknown": []
+    },
+    {
+      "id": "missions-candidat",
+      "device": "desktop",
+      "route": "/missions",
+      "path": "/missions",
+      "role": "candidat",
+      "headings": [
+        "Des missions qui vous correspondent"
+      ],
+      "alerts": [],
+      "width": {
+        "viewport": 1441,
+        "document": 1426
+      },
+      "api": [
+        "GET /auth/me",
+        "GET /profile",
+        "GET /me/favorites",
+        "GET /facilities",
+        "GET /reference-data",
+        "GET /auth/csrf",
+        "POST /listings/search"
+      ],
+      "blockedExternal": [],
+      "errors": [],
+      "unknown": []
+    },
+    {
+      "id": "missions-candidat",
+      "device": "mobile",
+      "route": "/missions",
+      "path": "/missions",
+      "role": "candidat",
+      "headings": [
+        "Des missions qui vous correspondent"
+      ],
+      "alerts": [],
+      "width": {
+        "viewport": 376,
+        "document": 361
+      },
+      "api": [
+        "GET /auth/me",
+        "GET /profile",
+        "GET /me/favorites",
+        "GET /facilities",
+        "GET /reference-data",
+        "GET /auth/csrf",
+        "POST /listings/search"
+      ],
+      "blockedExternal": [],
+      "errors": [],
+      "unknown": []
+    },
+    {
+      "id": "missions-profil-incomplet",
+      "device": "desktop",
+      "route": "/missions",
+      "path": "/missions",
+      "role": "candidat",
+      "headings": [
+        "Des missions qui vous correspondent"
+      ],
+      "alerts": [],
+      "width": {
+        "viewport": 1441,
+        "document": 1426
+      },
+      "api": [
+        "GET /auth/me",
+        "GET /profile",
+        "GET /me/favorites",
+        "GET /facilities",
+        "GET /reference-data",
+        "GET /listings/external"
+      ],
+      "blockedExternal": [],
+      "errors": [],
+      "unknown": []
+    },
+    {
+      "id": "missions-profil-incomplet",
+      "device": "mobile",
+      "route": "/missions",
+      "path": "/missions",
+      "role": "candidat",
+      "headings": [
+        "Des missions qui vous correspondent"
+      ],
+      "alerts": [],
+      "width": {
+        "viewport": 376,
+        "document": 361
+      },
+      "api": [
+        "GET /auth/me",
+        "GET /profile",
+        "GET /me/favorites",
+        "GET /facilities",
+        "GET /reference-data",
+        "GET /listings/external"
+      ],
+      "blockedExternal": [],
+      "errors": [],
+      "unknown": []
+    },
+    {
+      "id": "mission-detail",
+      "device": "desktop",
+      "route": "/missions/:id",
+      "path": "/missions/m_00000000-0000-4000-8000-000000000004",
+      "role": "candidat",
+      "headings": [
+        "Renfort infirmier en service d’urgences"
+      ],
+      "alerts": [],
+      "width": {
+        "viewport": 1441,
+        "document": 1426
+      },
+      "api": [
+        "GET /auth/me",
+        "GET /profile",
+        "GET /listings/m_00000000-0000-4000-8000-000000000004",
+        "GET /me/favorites"
+      ],
+      "blockedExternal": [],
+      "errors": [],
+      "unknown": []
+    },
+    {
+      "id": "mission-detail",
+      "device": "mobile",
+      "route": "/missions/:id",
+      "path": "/missions/m_00000000-0000-4000-8000-000000000004",
+      "role": "candidat",
+      "headings": [
+        "Renfort infirmier en service d’urgences"
+      ],
+      "alerts": [],
+      "width": {
+        "viewport": 376,
+        "document": 361
+      },
+      "api": [
+        "GET /auth/me",
+        "GET /profile",
+        "GET /listings/m_00000000-0000-4000-8000-000000000004",
+        "GET /me/favorites"
+      ],
+      "blockedExternal": [],
+      "errors": [],
+      "unknown": []
+    },
+    {
+      "id": "offre-externe",
+      "device": "desktop",
+      "route": "/missions/:id",
+      "path": "/missions/e_demo-annonce",
+      "role": "candidat",
+      "headings": [
+        "Infirmier en soins de suite — annonce externe"
+      ],
+      "alerts": [],
+      "width": {
+        "viewport": 1441,
+        "document": 1441
+      },
+      "api": [
+        "GET /auth/me",
+        "GET /profile",
+        "GET /listings/e_demo-annonce",
+        "GET /me/favorites"
+      ],
+      "blockedExternal": [],
+      "errors": [],
+      "unknown": []
+    },
+    {
+      "id": "offre-externe",
+      "device": "mobile",
+      "route": "/missions/:id",
+      "path": "/missions/e_demo-annonce",
+      "role": "candidat",
+      "headings": [
+        "Infirmier en soins de suite — annonce externe"
+      ],
+      "alerts": [],
+      "width": {
+        "viewport": 376,
+        "document": 361
+      },
+      "api": [
+        "GET /auth/me",
+        "GET /profile",
+        "GET /listings/e_demo-annonce",
+        "GET /me/favorites"
+      ],
+      "blockedExternal": [],
+      "errors": [],
+      "unknown": []
+    },
+    {
+      "id": "candidater",
+      "device": "desktop",
+      "route": "/missions/:id/candidater",
+      "path": "/missions/m_00000000-0000-4000-8000-000000000004/candidater",
+      "role": "candidat",
+      "headings": [
+        "Postuler à cette mission"
+      ],
+      "alerts": [],
+      "width": {
+        "viewport": 1441,
+        "document": 1426
+      },
+      "api": [
+        "GET /auth/me",
+        "GET /profile",
+        "GET /listings/m_00000000-0000-4000-8000-000000000004"
+      ],
+      "blockedExternal": [],
+      "errors": [],
+      "unknown": []
+    },
+    {
+      "id": "candidater",
+      "device": "mobile",
+      "route": "/missions/:id/candidater",
+      "path": "/missions/m_00000000-0000-4000-8000-000000000004/candidater",
+      "role": "candidat",
+      "headings": [
+        "Postuler à cette mission"
+      ],
+      "alerts": [],
+      "width": {
+        "viewport": 376,
+        "document": 361
+      },
+      "api": [
+        "GET /auth/me",
+        "GET /profile",
+        "GET /listings/m_00000000-0000-4000-8000-000000000004"
+      ],
+      "blockedExternal": [],
+      "errors": [],
+      "unknown": []
+    },
+    {
+      "id": "candidature-envoyee",
+      "device": "desktop",
+      "route": "/missions/:id/candidater",
+      "path": "/missions/m_00000000-0000-4000-8000-000000000004/candidater",
+      "role": "candidat",
+      "headings": [
+        "Candidature enregistrée"
+      ],
+      "alerts": [],
+      "width": {
+        "viewport": 1441,
+        "document": 1441
+      },
+      "api": [
+        "GET /auth/me",
+        "GET /profile",
+        "GET /listings/m_00000000-0000-4000-8000-000000000004",
+        "GET /auth/csrf",
+        "POST /missions/00000000-0000-4000-8000-000000000004/applications"
+      ],
+      "blockedExternal": [],
+      "errors": [],
+      "unknown": []
+    },
+    {
+      "id": "candidature-envoyee",
+      "device": "mobile",
+      "route": "/missions/:id/candidater",
+      "path": "/missions/m_00000000-0000-4000-8000-000000000004/candidater",
+      "role": "candidat",
+      "headings": [
+        "Candidature enregistrée"
+      ],
+      "alerts": [],
+      "width": {
+        "viewport": 376,
+        "document": 376
+      },
+      "api": [
+        "GET /auth/me",
+        "GET /profile",
+        "GET /listings/m_00000000-0000-4000-8000-000000000004",
+        "GET /auth/csrf",
+        "POST /missions/00000000-0000-4000-8000-000000000004/applications"
+      ],
+      "blockedExternal": [],
+      "errors": [],
+      "unknown": []
+    },
+    {
+      "id": "candidatures",
+      "device": "desktop",
+      "route": "/candidatures",
+      "path": "/candidatures",
+      "role": "candidat",
+      "headings": [
+        "Mes candidatures"
+      ],
+      "alerts": [],
+      "width": {
+        "viewport": 1441,
+        "document": 1441
+      },
+      "api": [
+        "GET /auth/me",
+        "GET /profile",
+        "GET /me/applications"
+      ],
+      "blockedExternal": [],
+      "errors": [],
+      "unknown": []
+    },
+    {
+      "id": "candidatures",
+      "device": "mobile",
+      "route": "/candidatures",
+      "path": "/candidatures",
+      "role": "candidat",
+      "headings": [
+        "Mes candidatures"
+      ],
+      "alerts": [],
+      "width": {
+        "viewport": 376,
+        "document": 361
+      },
+      "api": [
+        "GET /auth/me",
+        "GET /profile",
+        "GET /me/applications"
+      ],
+      "blockedExternal": [],
+      "errors": [],
+      "unknown": []
+    },
+    {
+      "id": "profil",
+      "device": "desktop",
+      "route": "/profil",
+      "path": "/profil",
+      "role": "candidat",
+      "headings": [
+        "Mon profil professionnel"
+      ],
+      "alerts": [],
+      "width": {
+        "viewport": 1441,
+        "document": 1426
+      },
+      "api": [
+        "GET /auth/me",
+        "GET /profile",
+        "GET /reference-data",
+        "GET /me/bank-details"
+      ],
+      "blockedExternal": [],
+      "errors": [],
+      "unknown": []
+    },
+    {
+      "id": "profil",
+      "device": "mobile",
+      "route": "/profil",
+      "path": "/profil",
+      "role": "candidat",
+      "headings": [
+        "Mon profil professionnel"
+      ],
+      "alerts": [],
+      "width": {
+        "viewport": 376,
+        "document": 361
+      },
+      "api": [
+        "GET /auth/me",
+        "GET /profile",
+        "GET /reference-data",
+        "GET /me/bank-details"
+      ],
+      "blockedExternal": [],
+      "errors": [],
+      "unknown": []
+    },
+    {
+      "id": "dossier",
+      "device": "desktop",
+      "route": "/dossier",
+      "path": "/dossier",
+      "role": "candidat",
+      "headings": [
+        "Mon dossier professionnel"
+      ],
+      "alerts": [],
+      "width": {
+        "viewport": 1441,
+        "document": 1426
+      },
+      "api": [
+        "GET /auth/me",
+        "GET /profile",
+        "GET /me/documents",
+        "GET /me/bank-details"
+      ],
+      "blockedExternal": [],
+      "errors": [],
+      "unknown": []
+    },
+    {
+      "id": "dossier",
+      "device": "mobile",
+      "route": "/dossier",
+      "path": "/dossier",
+      "role": "candidat",
+      "headings": [
+        "Mon dossier professionnel"
+      ],
+      "alerts": [],
+      "width": {
+        "viewport": 376,
+        "document": 361
+      },
+      "api": [
+        "GET /auth/me",
+        "GET /profile",
+        "GET /me/documents",
+        "GET /me/bank-details"
+      ],
+      "blockedExternal": [],
+      "errors": [],
+      "unknown": []
+    },
+    {
+      "id": "favoris",
+      "device": "desktop",
+      "route": "/favoris",
+      "path": "/favoris",
+      "role": "candidat",
+      "headings": [
+        "Mes favoris"
+      ],
+      "alerts": [],
+      "width": {
+        "viewport": 1441,
+        "document": 1426
+      },
+      "api": [
+        "GET /auth/me",
+        "GET /profile",
+        "GET /me/favorites"
+      ],
+      "blockedExternal": [],
+      "errors": [],
+      "unknown": []
+    },
+    {
+      "id": "favoris",
+      "device": "mobile",
+      "route": "/favoris",
+      "path": "/favoris",
+      "role": "candidat",
+      "headings": [
+        "Mes favoris"
+      ],
+      "alerts": [],
+      "width": {
+        "viewport": 376,
+        "document": 361
+      },
+      "api": [
+        "GET /auth/me",
+        "GET /profile",
+        "GET /me/favorites"
+      ],
+      "blockedExternal": [],
+      "errors": [],
+      "unknown": []
+    },
+    {
+      "id": "historique",
+      "device": "desktop",
+      "route": "/historique",
+      "path": "/historique",
+      "role": "candidat",
+      "headings": [
+        "Mon planning"
+      ],
+      "alerts": [],
+      "width": {
+        "viewport": 1441,
+        "document": 1441
+      },
+      "api": [
+        "GET /auth/me",
+        "GET /profile",
+        "GET /me/history"
+      ],
+      "blockedExternal": [],
+      "errors": [],
+      "unknown": []
+    },
+    {
+      "id": "historique",
+      "device": "mobile",
+      "route": "/historique",
+      "path": "/historique",
+      "role": "candidat",
+      "headings": [
+        "Mon planning"
+      ],
+      "alerts": [],
+      "width": {
+        "viewport": 376,
+        "document": 361
+      },
+      "api": [
+        "GET /auth/me",
+        "GET /profile",
+        "GET /me/history"
+      ],
+      "blockedExternal": [],
+      "errors": [],
+      "unknown": []
+    },
+    {
+      "id": "dashboard-etablissement",
+      "device": "desktop",
+      "route": "/accueil",
+      "path": "/accueil",
+      "role": "etablissement",
+      "headings": [
+        "Bonjour Clinique des Jardins — démonstration,"
+      ],
+      "alerts": [],
+      "width": {
+        "viewport": 1441,
+        "document": 1441
+      },
+      "api": [
+        "GET /auth/me",
+        "GET /dashboards",
+        "GET /me/notifications"
+      ],
+      "blockedExternal": [],
+      "errors": [],
+      "unknown": []
+    },
+    {
+      "id": "dashboard-etablissement",
+      "device": "mobile",
+      "route": "/accueil",
+      "path": "/accueil",
+      "role": "etablissement",
+      "headings": [
+        "Bonjour Clinique des Jardins — démonstration,"
+      ],
+      "alerts": [],
+      "width": {
+        "viewport": 376,
+        "document": 361
+      },
+      "api": [
+        "GET /auth/me",
+        "GET /dashboards",
+        "GET /me/notifications"
+      ],
+      "blockedExternal": [],
+      "errors": [],
+      "unknown": []
+    },
+    {
+      "id": "dashboard-agence",
+      "device": "desktop",
+      "route": "/accueil",
+      "path": "/accueil",
+      "role": "agence",
+      "headings": [
+        "Bonjour Agence Horizon — démonstration,"
+      ],
+      "alerts": [],
+      "width": {
+        "viewport": 1441,
+        "document": 1441
+      },
+      "api": [
+        "GET /auth/me",
+        "GET /dashboards",
+        "GET /me/notifications"
+      ],
+      "blockedExternal": [],
+      "errors": [],
+      "unknown": []
+    },
+    {
+      "id": "dashboard-agence",
+      "device": "mobile",
+      "route": "/accueil",
+      "path": "/accueil",
+      "role": "agence",
+      "headings": [
+        "Bonjour Agence Horizon — démonstration,"
+      ],
+      "alerts": [],
+      "width": {
+        "viewport": 376,
+        "document": 361
+      },
+      "api": [
+        "GET /auth/me",
+        "GET /dashboards",
+        "GET /me/notifications"
+      ],
+      "blockedExternal": [],
+      "errors": [],
+      "unknown": []
+    },
+    {
+      "id": "accueil-public",
+      "device": "desktop",
+      "route": "/",
+      "path": "/",
+      "role": "public",
+      "headings": [
+        "L’intérim infirmier,pensé pour le soin."
+      ],
+      "alerts": [],
+      "width": {
+        "viewport": 1441,
+        "document": 1426
+      },
+      "api": [
+        "GET /auth/me"
+      ],
+      "blockedExternal": [],
+      "errors": [],
+      "unknown": []
+    },
+    {
+      "id": "accueil-public",
+      "device": "mobile",
+      "route": "/",
+      "path": "/",
+      "role": "public",
+      "headings": [
+        "L’intérim infirmier,pensé pour le soin."
+      ],
+      "alerts": [],
+      "width": {
+        "viewport": 376,
+        "document": 361
+      },
+      "api": [
+        "GET /auth/me"
+      ],
+      "blockedExternal": [],
+      "errors": [],
+      "unknown": []
+    },
+    {
+      "id": "inscription-google-consentements",
+      "device": "desktop",
+      "route": "/inscription/consentements",
+      "path": "/inscription/consentements",
+      "role": "public",
+      "headings": [
+        "Consentements"
+      ],
+      "alerts": [],
+      "width": {
+        "viewport": 1441,
+        "document": 1441
+      },
+      "api": [
+        "GET /auth/me"
+      ],
+      "blockedExternal": [],
+      "errors": [],
+      "unknown": []
+    },
+    {
+      "id": "inscription-google-consentements",
+      "device": "mobile",
+      "route": "/inscription/consentements",
+      "path": "/inscription/consentements",
+      "role": "public",
+      "headings": [
+        "Consentements"
+      ],
+      "alerts": [],
+      "width": {
+        "viewport": 376,
+        "document": 376
+      },
+      "api": [
+        "GET /auth/me"
+      ],
+      "blockedExternal": [],
+      "errors": [],
+      "unknown": []
+    },
+    {
+      "id": "inscription-qualification",
+      "device": "desktop",
+      "route": "/inscription/qualification",
+      "path": "/inscription/qualification",
+      "role": "public",
+      "headings": [
+        "Qualification"
+      ],
+      "alerts": [],
+      "width": {
+        "viewport": 1441,
+        "document": 1426
+      },
+      "api": [
+        "GET /reference-data",
+        "GET /auth/me"
+      ],
+      "blockedExternal": [],
+      "errors": [],
+      "unknown": []
+    },
+    {
+      "id": "inscription-qualification",
+      "device": "mobile",
+      "route": "/inscription/qualification",
+      "path": "/inscription/qualification",
+      "role": "public",
+      "headings": [
+        "Qualification"
+      ],
+      "alerts": [],
+      "width": {
+        "viewport": 376,
+        "document": 361
+      },
+      "api": [
+        "GET /reference-data",
+        "GET /auth/me"
+      ],
+      "blockedExternal": [],
+      "errors": [],
+      "unknown": []
+    },
+    {
+      "id": "inscription-compte",
+      "device": "desktop",
+      "route": "/inscription",
+      "path": "/inscription",
+      "role": "public",
+      "headings": [
+        "Créer mon compte professionnel de santé"
+      ],
+      "alerts": [],
+      "width": {
+        "viewport": 1441,
+        "document": 1426
+      },
+      "api": [
+        "GET /auth/me"
+      ],
+      "blockedExternal": [],
+      "errors": [],
+      "unknown": []
+    },
+    {
+      "id": "inscription-compte",
+      "device": "mobile",
+      "route": "/inscription",
+      "path": "/inscription",
+      "role": "public",
+      "headings": [
+        "Créer mon compte professionnel de santé"
+      ],
+      "alerts": [],
+      "width": {
+        "viewport": 376,
+        "document": 361
+      },
+      "api": [
+        "GET /auth/me"
+      ],
+      "blockedExternal": [],
+      "errors": [],
+      "unknown": []
+    },
+    {
+      "id": "inscription-identite",
+      "device": "desktop",
+      "route": "/inscription/identite",
+      "path": "/inscription/identite",
+      "role": "public",
+      "headings": [
+        "Identité"
+      ],
+      "alerts": [],
+      "width": {
+        "viewport": 1441,
+        "document": 1441
+      },
+      "api": [
+        "GET /auth/me"
+      ],
+      "blockedExternal": [],
+      "errors": [],
+      "unknown": []
+    },
+    {
+      "id": "inscription-identite",
+      "device": "mobile",
+      "route": "/inscription/identite",
+      "path": "/inscription/identite",
+      "role": "public",
+      "headings": [
+        "Identité"
+      ],
+      "alerts": [],
+      "width": {
+        "viewport": 376,
+        "document": 361
+      },
+      "api": [
+        "GET /auth/me"
+      ],
+      "blockedExternal": [],
+      "errors": [],
+      "unknown": []
+    },
+    {
+      "id": "inscription-localisation",
+      "device": "desktop",
+      "route": "/inscription/localisation",
+      "path": "/inscription/localisation",
+      "role": "public",
+      "headings": [
+        "Localisation"
+      ],
+      "alerts": [],
+      "width": {
+        "viewport": 1441,
+        "document": 1441
+      },
+      "api": [
+        "GET /auth/me"
+      ],
+      "blockedExternal": [],
+      "errors": [],
+      "unknown": []
+    },
+    {
+      "id": "inscription-localisation",
+      "device": "mobile",
+      "route": "/inscription/localisation",
+      "path": "/inscription/localisation",
+      "role": "public",
+      "headings": [
+        "Localisation"
+      ],
+      "alerts": [],
+      "width": {
+        "viewport": 376,
+        "document": 361
+      },
+      "api": [
+        "GET /auth/me"
+      ],
+      "blockedExternal": [],
+      "errors": [],
+      "unknown": []
+    },
+    {
+      "id": "inscription-mobilite",
+      "device": "desktop",
+      "route": "/inscription/mobilite",
+      "path": "/inscription/mobilite",
+      "role": "public",
+      "headings": [
+        "Mobilité"
+      ],
+      "alerts": [],
+      "width": {
+        "viewport": 1441,
+        "document": 1441
+      },
+      "api": [
+        "GET /auth/me"
+      ],
+      "blockedExternal": [],
+      "errors": [],
+      "unknown": []
+    },
+    {
+      "id": "inscription-mobilite",
+      "device": "mobile",
+      "route": "/inscription/mobilite",
+      "path": "/inscription/mobilite",
+      "role": "public",
+      "headings": [
+        "Mobilité"
+      ],
+      "alerts": [],
+      "width": {
+        "viewport": 376,
+        "document": 376
+      },
+      "api": [
+        "GET /auth/me"
+      ],
+      "blockedExternal": [],
+      "errors": [],
+      "unknown": []
+    },
+    {
+      "id": "inscription-disponibilites",
+      "device": "desktop",
+      "route": "/inscription/disponibilites",
+      "path": "/inscription/disponibilites",
+      "role": "public",
+      "headings": [
+        "Disponibilités"
+      ],
+      "alerts": [],
+      "width": {
+        "viewport": 1441,
+        "document": 1441
+      },
+      "api": [
+        "GET /auth/me"
+      ],
+      "blockedExternal": [],
+      "errors": [],
+      "unknown": []
+    },
+    {
+      "id": "inscription-disponibilites",
+      "device": "mobile",
+      "route": "/inscription/disponibilites",
+      "path": "/inscription/disponibilites",
+      "role": "public",
+      "headings": [
+        "Disponibilités"
+      ],
+      "alerts": [],
+      "width": {
+        "viewport": 376,
+        "document": 361
+      },
+      "api": [
+        "GET /auth/me"
+      ],
+      "blockedExternal": [],
+      "errors": [],
+      "unknown": []
+    },
+    {
+      "id": "inscription-rib",
+      "device": "desktop",
+      "route": "/inscription/rib",
+      "path": "/inscription/rib",
+      "role": "public",
+      "headings": [
+        "Coordonnées bancaires"
+      ],
+      "alerts": [],
+      "width": {
+        "viewport": 1441,
+        "document": 1441
+      },
+      "api": [
+        "GET /auth/me"
+      ],
+      "blockedExternal": [],
+      "errors": [],
+      "unknown": []
+    },
+    {
+      "id": "inscription-rib",
+      "device": "mobile",
+      "route": "/inscription/rib",
+      "path": "/inscription/rib",
+      "role": "public",
+      "headings": [
+        "Coordonnées bancaires"
+      ],
+      "alerts": [],
+      "width": {
+        "viewport": 376,
+        "document": 376
+      },
+      "api": [
+        "GET /auth/me"
+      ],
+      "blockedExternal": [],
+      "errors": [],
+      "unknown": []
+    },
+    {
+      "id": "inscription-consentements",
+      "device": "desktop",
+      "route": "/inscription/consentements",
+      "path": "/inscription/consentements",
+      "role": "public",
+      "headings": [
+        "Consentements"
+      ],
+      "alerts": [],
+      "width": {
+        "viewport": 1441,
+        "document": 1441
+      },
+      "api": [
+        "GET /auth/me"
+      ],
+      "blockedExternal": [],
+      "errors": [],
+      "unknown": []
+    },
+    {
+      "id": "inscription-consentements",
+      "device": "mobile",
+      "route": "/inscription/consentements",
+      "path": "/inscription/consentements",
+      "role": "public",
+      "headings": [
+        "Consentements"
+      ],
+      "alerts": [],
+      "width": {
+        "viewport": 376,
+        "document": 361
+      },
+      "api": [
+        "GET /auth/me"
+      ],
+      "blockedExternal": [],
+      "errors": [],
+      "unknown": []
+    },
+    {
+      "id": "confirmation-candidat",
+      "device": "desktop",
+      "route": "/inscription/confirmation",
+      "path": "/inscription/confirmation",
+      "role": "candidat",
+      "headings": [
+        "Votre compte est créé"
+      ],
+      "alerts": [],
+      "width": {
+        "viewport": 1441,
+        "document": 1441
+      },
+      "api": [
+        "GET /auth/me",
+        "GET /profile"
+      ],
+      "blockedExternal": [],
+      "errors": [],
+      "unknown": []
+    },
+    {
+      "id": "confirmation-candidat",
+      "device": "mobile",
+      "route": "/inscription/confirmation",
+      "path": "/inscription/confirmation",
+      "role": "candidat",
+      "headings": [
+        "Votre compte est créé"
+      ],
+      "alerts": [],
+      "width": {
+        "viewport": 376,
+        "document": 376
+      },
+      "api": [
+        "GET /auth/me",
+        "GET /profile"
+      ],
+      "blockedExternal": [],
+      "errors": [],
+      "unknown": []
+    },
+    {
+      "id": "confirmation-etablissement",
+      "device": "desktop",
+      "route": "/inscription/confirmation-etablissement",
+      "path": "/inscription/confirmation-etablissement",
+      "role": "etablissement",
+      "headings": [
+        "Votre compte établissement est créé"
+      ],
+      "alerts": [],
+      "width": {
+        "viewport": 1441,
+        "document": 1441
+      },
+      "api": [
+        "GET /auth/me"
+      ],
+      "blockedExternal": [],
+      "errors": [],
+      "unknown": []
+    },
+    {
+      "id": "confirmation-etablissement",
+      "device": "mobile",
+      "route": "/inscription/confirmation-etablissement",
+      "path": "/inscription/confirmation-etablissement",
+      "role": "etablissement",
+      "headings": [
+        "Votre compte établissement est créé"
+      ],
+      "alerts": [],
+      "width": {
+        "viewport": 376,
+        "document": 376
+      },
+      "api": [
+        "GET /auth/me"
+      ],
+      "blockedExternal": [],
+      "errors": [],
+      "unknown": []
+    },
+    {
+      "id": "missions-etablissement",
+      "device": "desktop",
+      "route": "/missions",
+      "path": "/missions",
+      "role": "etablissement",
+      "headings": [
+        "Missions de mon organisation"
+      ],
+      "alerts": [],
+      "width": {
+        "viewport": 1441,
+        "document": 1441
+      },
+      "api": [
+        "GET /auth/me",
+        "GET /missions"
+      ],
+      "blockedExternal": [],
+      "errors": [],
+      "unknown": []
+    },
+    {
+      "id": "missions-etablissement",
+      "device": "mobile",
+      "route": "/missions",
+      "path": "/missions",
+      "role": "etablissement",
+      "headings": [
+        "Missions de mon organisation"
+      ],
+      "alerts": [],
+      "width": {
+        "viewport": 376,
+        "document": 400
+      },
+      "api": [
+        "GET /auth/me",
+        "GET /missions"
+      ],
+      "blockedExternal": [],
+      "errors": [],
+      "unknown": []
+    },
+    {
+      "id": "gestion-etablissement",
+      "device": "desktop",
+      "route": "/gestion/missions/:id",
+      "path": "/gestion/missions/00000000-0000-4000-8000-000000000004",
+      "role": "etablissement",
+      "headings": [
+        "Renfort infirmier en service d’urgences"
+      ],
+      "alerts": [],
+      "width": {
+        "viewport": 1441,
+        "document": 1441
+      },
+      "api": [
+        "GET /auth/me",
+        "GET /missions/00000000-0000-4000-8000-000000000004",
+        "GET /missions/00000000-0000-4000-8000-000000000004/applications",
+        "GET /missions/00000000-0000-4000-8000-000000000004/candidates"
+      ],
+      "blockedExternal": [],
+      "errors": [],
+      "unknown": []
+    },
+    {
+      "id": "gestion-etablissement",
+      "device": "mobile",
+      "route": "/gestion/missions/:id",
+      "path": "/gestion/missions/00000000-0000-4000-8000-000000000004",
+      "role": "etablissement",
+      "headings": [
+        "Renfort infirmier en service d’urgences"
+      ],
+      "alerts": [],
+      "width": {
+        "viewport": 376,
+        "document": 364
+      },
+      "api": [
+        "GET /auth/me",
+        "GET /missions/00000000-0000-4000-8000-000000000004",
+        "GET /missions/00000000-0000-4000-8000-000000000004/applications",
+        "GET /missions/00000000-0000-4000-8000-000000000004/candidates"
+      ],
+      "blockedExternal": [],
+      "errors": [],
+      "unknown": []
+    },
+    {
+      "id": "organisation-etablissement",
+      "device": "desktop",
+      "route": "/organisation",
+      "path": "/organisation",
+      "role": "etablissement",
+      "headings": [
+        "Mon organisation"
+      ],
+      "alerts": [],
+      "width": {
+        "viewport": 1441,
+        "document": 1441
+      },
+      "api": [
+        "GET /auth/me",
+        "GET /me/organizations"
+      ],
+      "blockedExternal": [],
+      "errors": [],
+      "unknown": []
+    },
+    {
+      "id": "organisation-etablissement",
+      "device": "mobile",
+      "route": "/organisation",
+      "path": "/organisation",
+      "role": "etablissement",
+      "headings": [
+        "Mon organisation"
+      ],
+      "alerts": [],
+      "width": {
+        "viewport": 376,
+        "document": 364
+      },
+      "api": [
+        "GET /auth/me",
+        "GET /me/organizations"
+      ],
+      "blockedExternal": [],
+      "errors": [],
+      "unknown": []
+    },
+    {
+      "id": "confirmation-agence",
+      "device": "desktop",
+      "route": "/inscription/confirmation-etablissement",
+      "path": "/inscription/confirmation-etablissement",
+      "role": "agence",
+      "headings": [
+        "Votre compte agence est créé"
+      ],
+      "alerts": [],
+      "width": {
+        "viewport": 1441,
+        "document": 1441
+      },
+      "api": [
+        "GET /auth/me"
+      ],
+      "blockedExternal": [],
+      "errors": [],
+      "unknown": []
+    },
+    {
+      "id": "confirmation-agence",
+      "device": "mobile",
+      "route": "/inscription/confirmation-etablissement",
+      "path": "/inscription/confirmation-etablissement",
+      "role": "agence",
+      "headings": [
+        "Votre compte agence est créé"
+      ],
+      "alerts": [],
+      "width": {
+        "viewport": 376,
+        "document": 376
+      },
+      "api": [
+        "GET /auth/me"
+      ],
+      "blockedExternal": [],
+      "errors": [],
+      "unknown": []
+    },
+    {
+      "id": "missions-agence",
+      "device": "desktop",
+      "route": "/missions",
+      "path": "/missions",
+      "role": "agence",
+      "headings": [
+        "Missions de mon organisation"
+      ],
+      "alerts": [],
+      "width": {
+        "viewport": 1441,
+        "document": 1441
+      },
+      "api": [
+        "GET /auth/me",
+        "GET /missions"
+      ],
+      "blockedExternal": [],
+      "errors": [],
+      "unknown": []
+    },
+    {
+      "id": "missions-agence",
+      "device": "mobile",
+      "route": "/missions",
+      "path": "/missions",
+      "role": "agence",
+      "headings": [
+        "Missions de mon organisation"
+      ],
+      "alerts": [],
+      "width": {
+        "viewport": 376,
+        "document": 400
+      },
+      "api": [
+        "GET /auth/me",
+        "GET /missions"
+      ],
+      "blockedExternal": [],
+      "errors": [],
+      "unknown": []
+    },
+    {
+      "id": "gestion-agence",
+      "device": "desktop",
+      "route": "/gestion/missions/:id",
+      "path": "/gestion/missions/00000000-0000-4000-8000-000000000004",
+      "role": "agence",
+      "headings": [
+        "Renfort infirmier en service d’urgences"
+      ],
+      "alerts": [],
+      "width": {
+        "viewport": 1441,
+        "document": 1426
+      },
+      "api": [
+        "GET /auth/me",
+        "GET /missions/00000000-0000-4000-8000-000000000004",
+        "GET /missions/00000000-0000-4000-8000-000000000004/applications",
+        "GET /missions/00000000-0000-4000-8000-000000000004/candidates"
+      ],
+      "blockedExternal": [],
+      "errors": [],
+      "unknown": []
+    },
+    {
+      "id": "gestion-agence",
+      "device": "mobile",
+      "route": "/gestion/missions/:id",
+      "path": "/gestion/missions/00000000-0000-4000-8000-000000000004",
+      "role": "agence",
+      "headings": [
+        "Renfort infirmier en service d’urgences"
+      ],
+      "alerts": [],
+      "width": {
+        "viewport": 376,
+        "document": 364
+      },
+      "api": [
+        "GET /auth/me",
+        "GET /missions/00000000-0000-4000-8000-000000000004",
+        "GET /missions/00000000-0000-4000-8000-000000000004/applications",
+        "GET /missions/00000000-0000-4000-8000-000000000004/candidates"
+      ],
+      "blockedExternal": [],
+      "errors": [],
+      "unknown": []
+    },
+    {
+      "id": "organisation-agence",
+      "device": "desktop",
+      "route": "/organisation",
+      "path": "/organisation",
+      "role": "agence",
+      "headings": [
+        "Mon organisation"
+      ],
+      "alerts": [],
+      "width": {
+        "viewport": 1441,
+        "document": 1441
+      },
+      "api": [
+        "GET /auth/me",
+        "GET /me/organizations"
+      ],
+      "blockedExternal": [],
+      "errors": [],
+      "unknown": []
+    },
+    {
+      "id": "organisation-agence",
+      "device": "mobile",
+      "route": "/organisation",
+      "path": "/organisation",
+      "role": "agence",
+      "headings": [
+        "Mon organisation"
+      ],
+      "alerts": [],
+      "width": {
+        "viewport": 376,
+        "document": 364
+      },
+      "api": [
+        "GET /auth/me",
+        "GET /me/organizations"
+      ],
+      "blockedExternal": [],
+      "errors": [],
+      "unknown": []
+    },
+    {
+      "id": "mission-nouvelle",
+      "device": "desktop",
+      "route": "/gestion/missions/nouvelle",
+      "path": "/gestion/missions/nouvelle",
+      "role": "agence",
+      "headings": [
+        "Créer une mission"
+      ],
+      "alerts": [],
+      "width": {
+        "viewport": 1441,
+        "document": 1426
+      },
+      "api": [
+        "GET /auth/me",
+        "GET /me/organizations",
+        "GET /reference-data"
+      ],
+      "blockedExternal": [],
+      "errors": [],
+      "unknown": []
+    },
+    {
+      "id": "mission-nouvelle",
+      "device": "mobile",
+      "route": "/gestion/missions/nouvelle",
+      "path": "/gestion/missions/nouvelle",
+      "role": "agence",
+      "headings": [
+        "Créer une mission"
+      ],
+      "alerts": [],
+      "width": {
+        "viewport": 376,
+        "document": 364
+      },
+      "api": [
+        "GET /auth/me",
+        "GET /me/organizations",
+        "GET /reference-data"
+      ],
+      "blockedExternal": [],
+      "errors": [],
+      "unknown": []
+    },
+    {
+      "id": "mission-modifier",
+      "device": "desktop",
+      "route": "/gestion/missions/:id/modifier",
+      "path": "/gestion/missions/00000000-0000-4000-8000-000000000004/modifier",
+      "role": "agence",
+      "headings": [
+        "Modifier la mission"
+      ],
+      "alerts": [],
+      "width": {
+        "viewport": 1441,
+        "document": 1426
+      },
+      "api": [
+        "GET /auth/me",
+        "GET /me/organizations",
+        "GET /reference-data",
+        "GET /missions/00000000-0000-4000-8000-000000000004"
+      ],
+      "blockedExternal": [],
+      "errors": [],
+      "unknown": []
+    },
+    {
+      "id": "mission-modifier",
+      "device": "mobile",
+      "route": "/gestion/missions/:id/modifier",
+      "path": "/gestion/missions/00000000-0000-4000-8000-000000000004/modifier",
+      "role": "agence",
+      "headings": [
+        "Modifier la mission"
+      ],
+      "alerts": [],
+      "width": {
+        "viewport": 376,
+        "document": 364
+      },
+      "api": [
+        "GET /auth/me",
+        "GET /me/organizations",
+        "GET /reference-data",
+        "GET /missions/00000000-0000-4000-8000-000000000004"
+      ],
+      "blockedExternal": [],
+      "errors": [],
+      "unknown": []
+    },
+    {
+      "id": "mission-brouillon",
+      "device": "desktop",
+      "route": "/gestion/missions/:id",
+      "path": "/gestion/missions/00000000-0000-4000-8000-000000000004",
+      "role": "agence",
+      "headings": [
+        "Renfort infirmier en service d’urgences"
+      ],
+      "alerts": [],
+      "width": {
+        "viewport": 1441,
+        "document": 1441
+      },
+      "api": [
+        "GET /auth/me",
+        "GET /missions/00000000-0000-4000-8000-000000000004",
+        "GET /missions/00000000-0000-4000-8000-000000000004/applications",
+        "GET /missions/00000000-0000-4000-8000-000000000004/candidates"
+      ],
+      "blockedExternal": [],
+      "errors": [],
+      "unknown": []
+    },
+    {
+      "id": "mission-brouillon",
+      "device": "mobile",
+      "route": "/gestion/missions/:id",
+      "path": "/gestion/missions/00000000-0000-4000-8000-000000000004",
+      "role": "agence",
+      "headings": [
+        "Renfort infirmier en service d’urgences"
+      ],
+      "alerts": [],
+      "width": {
+        "viewport": 376,
+        "document": 376
+      },
+      "api": [
+        "GET /auth/me",
+        "GET /missions/00000000-0000-4000-8000-000000000004",
+        "GET /missions/00000000-0000-4000-8000-000000000004/applications",
+        "GET /missions/00000000-0000-4000-8000-000000000004/candidates"
+      ],
+      "blockedExternal": [],
+      "errors": [],
+      "unknown": []
+    },
+    {
+      "id": "mission-pourvue",
+      "device": "desktop",
+      "route": "/gestion/missions/:id",
+      "path": "/gestion/missions/00000000-0000-4000-8000-000000000004",
+      "role": "agence",
+      "headings": [
+        "Renfort infirmier en service d’urgences"
+      ],
+      "alerts": [],
+      "width": {
+        "viewport": 1441,
+        "document": 1426
+      },
+      "api": [
+        "GET /auth/me",
+        "GET /missions/00000000-0000-4000-8000-000000000004",
+        "GET /missions/00000000-0000-4000-8000-000000000004/applications",
+        "GET /missions/00000000-0000-4000-8000-000000000004/candidates"
+      ],
+      "blockedExternal": [],
+      "errors": [],
+      "unknown": []
+    },
+    {
+      "id": "mission-pourvue",
+      "device": "mobile",
+      "route": "/gestion/missions/:id",
+      "path": "/gestion/missions/00000000-0000-4000-8000-000000000004",
+      "role": "agence",
+      "headings": [
+        "Renfort infirmier en service d’urgences"
+      ],
+      "alerts": [],
+      "width": {
+        "viewport": 376,
+        "document": 364
+      },
+      "api": [
+        "GET /auth/me",
+        "GET /missions/00000000-0000-4000-8000-000000000004",
+        "GET /missions/00000000-0000-4000-8000-000000000004/applications",
+        "GET /missions/00000000-0000-4000-8000-000000000004/candidates"
+      ],
+      "blockedExternal": [],
+      "errors": [],
+      "unknown": []
+    },
+    {
+      "id": "suivi-organisation",
+      "device": "desktop",
+      "route": "/candidatures/:id",
+      "path": "/candidatures/00000000-0000-4000-8000-000000000005",
+      "role": "agence",
+      "headings": [
+        "Suivi de candidature"
+      ],
+      "alerts": [],
+      "width": {
+        "viewport": 1441,
+        "document": 1441
+      },
+      "api": [
+        "GET /auth/me",
+        "GET /applications/00000000-0000-4000-8000-000000000005"
+      ],
+      "blockedExternal": [],
+      "errors": [],
+      "unknown": []
+    },
+    {
+      "id": "suivi-organisation",
+      "device": "mobile",
+      "route": "/candidatures/:id",
+      "path": "/candidatures/00000000-0000-4000-8000-000000000005",
+      "role": "agence",
+      "headings": [
+        "Suivi de candidature"
+      ],
+      "alerts": [],
+      "width": {
+        "viewport": 376,
+        "document": 376
+      },
+      "api": [
+        "GET /auth/me",
+        "GET /applications/00000000-0000-4000-8000-000000000005"
+      ],
+      "blockedExternal": [],
+      "errors": [],
+      "unknown": []
+    },
+    {
+      "id": "mot-de-passe",
+      "device": "desktop",
+      "route": "/mot-de-passe-oublie",
+      "path": "/mot-de-passe-oublie",
+      "role": "public",
+      "headings": [
+        "Retrouver mon accès"
+      ],
+      "alerts": [],
+      "width": {
+        "viewport": 1441,
+        "document": 1441
+      },
+      "api": [
+        "GET /auth/me"
+      ],
+      "blockedExternal": [],
+      "errors": [],
+      "unknown": []
+    },
+    {
+      "id": "mot-de-passe",
+      "device": "mobile",
+      "route": "/mot-de-passe-oublie",
+      "path": "/mot-de-passe-oublie",
+      "role": "public",
+      "headings": [
+        "Retrouver mon accès"
+      ],
+      "alerts": [],
+      "width": {
+        "viewport": 376,
+        "document": 376
+      },
+      "api": [
+        "GET /auth/me"
+      ],
+      "blockedExternal": [],
+      "errors": [],
+      "unknown": []
+    },
+    {
+      "id": "session-expiree",
+      "device": "desktop",
+      "route": "/inscription/confirmation",
+      "path": "/inscription/confirmation",
+      "role": "public",
+      "headings": [
+        "Retrouvons votre compte"
+      ],
+      "alerts": [
+        "Votre session n’est pas disponible. Si vous venez de créer votre compte, connectez-vous avec vos identifiants pour le retrouver."
+      ],
+      "width": {
+        "viewport": 1441,
+        "document": 1441
+      },
+      "api": [
+        "GET /auth/me"
+      ],
+      "blockedExternal": [],
+      "errors": [],
+      "unknown": []
+    },
+    {
+      "id": "session-expiree",
+      "device": "mobile",
+      "route": "/inscription/confirmation",
+      "path": "/inscription/confirmation",
+      "role": "public",
+      "headings": [
+        "Retrouvons votre compte"
+      ],
+      "alerts": [
+        "Votre session n’est pas disponible. Si vous venez de créer votre compte, connectez-vous avec vos identifiants pour le retrouver."
+      ],
+      "width": {
+        "viewport": 376,
+        "document": 376
+      },
+      "api": [
+        "GET /auth/me"
+      ],
+      "blockedExternal": [],
+      "errors": [],
+      "unknown": []
+    },
+    {
+      "id": "page-introuvable",
+      "device": "desktop",
+      "route": "*",
+      "path": "/catalogue-exemple-introuvable",
+      "role": "public",
+      "headings": [
+        "Page introuvable"
+      ],
+      "alerts": [],
+      "width": {
+        "viewport": 1441,
+        "document": 1441
+      },
+      "api": [
+        "GET /auth/me"
+      ],
+      "blockedExternal": [],
+      "errors": [],
+      "unknown": []
+    },
+    {
+      "id": "page-introuvable",
+      "device": "mobile",
+      "route": "*",
+      "path": "/catalogue-exemple-introuvable",
+      "role": "public",
+      "headings": [
+        "Page introuvable"
+      ],
+      "alerts": [],
+      "width": {
+        "viewport": 376,
+        "document": 376
+      },
+      "api": [
+        "GET /auth/me"
+      ],
+      "blockedExternal": [],
+      "errors": [],
+      "unknown": []
+    }
+  ]
+}

@@ -1,0 +1,19 @@
+{
+  "date": "2026-09-15T22:36:34.549Z",
+  "checks": [
+    "98 images served successfully",
+    "gallery and viewer at 1440px",
+    "gallery and viewer at 768px",
+    "gallery and viewer at 375px"
+  ],
+  "entries": 49,
+  "images": 98,
+  "groups": {
+    "public": 6,
+    "candidat": 23,
+    "etablissement": 6,
+    "agence": 11,
+    "systeme": 3
+  },
+  "errors": []
+}

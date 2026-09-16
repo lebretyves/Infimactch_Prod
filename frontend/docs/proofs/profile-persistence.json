@@ -1,0 +1,11 @@
+{
+  "date": "2026-09-15T21:41:26.106Z",
+  "scope": "Real local API, isolated fictional account, no provider RPPS verification",
+  "checks": [
+    "signup_profile_atomic_all_fields",
+    "save_reload_relogin_round_1",
+    "save_reload_relogin_round_2",
+    "save_reload_relogin_round_3",
+    "invalid_date_rejected_without_data_loss"
+  ]
+}

@@ -1,0 +1,17 @@
+{
+  "date": "2026-09-15T22:06:11.920Z",
+  "checks": [
+    "protected_route_requires_session",
+    "nurse_login_real_backend",
+    "session_survives_reload",
+    "http_only_cookie_no_local_jwt",
+    "favorite_persisted_then_restored",
+    "internal_detail_real_backend",
+    "ineligible_application_not_reported_as_sent",
+    "applications_loaded",
+    "server_rejects_missing_csrf",
+    "logout_revokes_session",
+    "enterprise_session_and_missions"
+  ],
+  "scope": "Real local API with existing fictional seed. Positive application not exercised: nurse fixture RPPS_NOT_CHECKED."
+}

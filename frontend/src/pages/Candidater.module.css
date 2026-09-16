@@ -1,0 +1,109 @@
+﻿.page {
+  display: grid;
+  gap: 24px;
+  max-width: 960px;
+  margin: auto;
+}
+.titre {
+  font-size: clamp(26px, 3vw, 36px);
+  letter-spacing: -1px;
+  margin: 0;
+}
+.rappel,
+.bloc {
+  background: white;
+  border: 1px solid var(--line);
+  padding: 24px;
+  border-radius: 12px;
+}
+.rappel {
+  border-top: 3px solid var(--brand-600);
+}
+.rappel h2,
+.bloc h2 {
+  font-size: 20px;
+  margin: 0 0 16px;
+}
+.rappel p,
+.bloc p {
+  font-size: 14px;
+  color: var(--ink-600);
+  line-height: 1.8;
+  margin: 8px 0;
+}
+.actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+.page > label {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 20px;
+  border: 1px solid var(--line);
+  background: white;
+  border-radius: 10px;
+  font-size: 14px;
+  line-height: 1.7;
+}
+.page > label input {
+  margin-top: 5px;
+  flex-shrink: 0;
+  accent-color: var(--brand-600);
+  width: 18px;
+  height: 18px;
+}
+.page > [role="alert"] {
+  padding: 16px;
+  background: var(--danger-50);
+  color: var(--danger-700);
+  border-radius: 8px;
+}
+.success {
+  text-align: center;
+  background: white;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 40px 24px;
+  display: grid;
+  justify-items: center;
+  gap: 18px;
+}
+.success h1 {
+  font-size: 28px;
+  margin: 0;
+}
+.success p {
+  max-width: 560px;
+  color: var(--ink-600);
+  line-height: 1.8;
+  margin: 0;
+}
+.success svg {
+  color: var(--teal-700);
+}
+@media (max-width: 600px) {
+  .rappel,
+  .bloc {
+    padding: 18px;
+  }
+  .actions > * {
+    flex: 1;
+  }
+  .page {
+    gap: 18px;
+  }
+}
+.page button,
+.page a {
+  white-space: normal;
+  max-width: 100%;
+}
+.page h1,
+.page h2,
+.page p {
+  overflow-wrap: anywhere;
+}

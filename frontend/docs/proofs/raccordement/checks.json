@@ -1,0 +1,24 @@
+{
+  "date": "2026-09-15T21:59:40.280Z",
+  "checks": [
+    "profile_three_full_ui_save_reload_cycles",
+    "calendar_auto_includes_single_day_without_add_button",
+    "bank_three_ui_saves_and_masked_readback",
+    "rpps_request_and_retry_display_truthful_status",
+    "document_upload_list_download",
+    "organization_both_roles_three_save_reload_cycles",
+    "agency_create_mission_all_fields",
+    "mission_three_edit_readback_cycles",
+    "mission_publish_and_scope_protection",
+    "facility_favorite_add_open_remove",
+    "application_blocked_without_verified_rpps",
+    "application_submit_with_isolated_rpps_fixture",
+    "withdraw_reapply_reject_reapply_and_reconsent",
+    "staffing_request_three_real_saves_visible_to_linked_agency_only",
+    "establishment_select_and_agency_assign",
+    "real_worker_confirmation_pdf_download_and_notification_read",
+    "mission_cancel_reopen_with_persisted_status",
+    "mobile_routes_no_overflow_no_dead_links_no_raw_rpps"
+  ],
+  "scope": "Real local UI and API, fictional accounts. RPPS positive state and agency affiliation are isolated test fixtures; no claim of a real provider verification."
+}

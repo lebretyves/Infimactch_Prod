@@ -1,0 +1,9 @@
+User-agent: *
+Allow: /
+Disallow: /accueil
+Disallow: /candidatures
+Disallow: /calendrier
+Disallow: /profil
+Disallow: /inscription
+
+Sitemap: https://infimatch.fr/sitemap.xml
