@@ -161,3 +161,17 @@ Ajouter une entrée à chaque étape significative : changement, test et résult
 
 - Synchronisation des correctifs OpenAPI et ciblage des notifications depuis le backend local teste (164 tests PASS). Compilation locale reussie puis redemarrage API 3100, API HTTPS et worker. Accueil et sante HTTPS verifies 200.
 - Controle des fichiers de publication contre les secrets prives locaux : aucun secret configure detecte. Publication sur Infimactch_Prod/Main et fusion-front_Back en conservant leurs historiques. CI distante a suivre apres ce commit ; anciens rapports decrivent leur date de verification.
+
+## Point 1 termine ? CI verte sur les deux depots
+
+- Infimactch_Prod/Main : 774ef7e1df1287e99fac4351a3a89a4316de8567 ; CI 35129806860 completed/success (frontend et backend).
+- Ziwazou/infiMatch/fusion-front_Back : 19253dac7d3596229e129ff74e7343c988e34456 ; CI 35129813604 completed/success (frontend et backend).
+- Egalite des contenus Git verifiee par diff sans ecart. Tous les fichiers backend de publication identiques aux sources locales apres normalisation des fins de ligne. API et worker recompiles/redemarres ; accueil et sante HTTPS 200.
+- Les constats anterieurs du rapport global sur la CI rouge et la correction notifications non activee sont desormais resolus. Cette entree de verification finale reste locale apres les pushes ; aucun deploiement cloud fonctionnel declare.
+
+## Point 2 ? conservation et preparation des utilisateurs reels
+
+- Historique metier sans purge automatique par defaut ; BUSINESS_HISTORY_RETENTION_DAYS exige une duree explicite a valider. Politique detaillee dans CONSERVATION_UTILISATEURS_REELS.md, sources CNIL consultees. Pas de declaration de conformite ni activation de purge reelle.
+- File SQL document_erasure atomique avec suppression SQL, reprise des fichiers apres panne ; approbation cloture auditee ; echec individuel isole et code de sortie CLI non nul si lot incomplet. Registre privacy ajoute aux sauvegardes, registre de recette separe lors de restauration.
+- 167 tests backend PASS, couverture 82,11 % lignes / 80,54 % branches. Premiere compilation des nouveaux tests corrigee (ordre des arguments store), puis campagne complete PASS. Restauration representative avec verification effective de l effacement d un compte dans la base restauree PASS.
+- Sauvegarde privee pre-migration full-v1-2026-09-16T18-49-11-878Z (27 fichiers). Migration ErasureRecovery1789381200000 appliquee localement ; API/worker/HTTPS redemarres. Aucune tache de purge installee.

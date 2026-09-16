@@ -13,7 +13,8 @@ export const retentionPolicy = {
   completedOutboxDays: 30,
   matchingExplanationDays: 30,
   backupDays: 30,
-  businessHistoryDays: 365,
+  // Business history purge is disabled unless an explicit policy is configured.
+  businessHistoryDays: null,
 } as const;
 
 export type RetentionSummary = {
@@ -34,7 +35,8 @@ function documentDirectory() {
 }
 
 /** Run only after the SQL transaction has committed. A failed cleanup is retryable. */
-export async function cleanupRemovedDocuments(db: Database, ids: string[]) {
+export async function cleanupRemovedDocuments(db: Database, ids?: string[]) {
+  ids ??= (await db.query("SELECT id FROM document_erasure ORDER BY created_at,id LIMIT 500")).map((r:{id:string})=>r.id);
   for (const id of new Set(ids)) {
     if (!/^[0-9a-f-]{36}$/i.test(id)) throw new Error("Invalid document id");
     await db.transaction(async em => {
@@ -42,10 +44,17 @@ export async function cleanupRemovedDocuments(db: Database, ids: string[]) {
       if ((await em.query("SELECT id FROM document WHERE id=$1", [id])).length) return;
       await rm(resolve(documentDirectory(), id + ".bin"), {force:true});
       await rm(resolve(documentDirectory(), id + ".tmp"), {force:true});
+      await em.query("DELETE FROM document_erasure WHERE id=$1",[id]);
     });
   }
 }
 
+export function businessHistoryDays(): number | null {
+ const value=process.env.BUSINESS_HISTORY_RETENTION_DAYS;
+ if(!value)return null;
+ if(!/^[1-9][0-9]*$/.test(value)||!Number.isSafeInteger(Number(value)))throw Error("Invalid BUSINESS_HISTORY_RETENTION_DAYS");
+ return Number(value);
+}
 async function count(em: SqlClient, sql: string, parameters: unknown[] = []) {
   const [row] = await em.query(sql, parameters);
   return Number(row?.n ?? 0);
@@ -96,7 +105,7 @@ export async function inspectRetention(
     stagingDocuments,
     supersededBankDocuments,
     completedOutbox,
-    businessMissions: await count(em,"SELECT count(*)::int AS n FROM mission m WHERE status IN('COMPLETED','CANCELLED') AND end_at<now()-make_interval(days=>$1) AND NOT EXISTS(SELECT 1 FROM assignment a WHERE a.mission_id=m.id AND a.status='ACTIVE')",[retentionPolicy.businessHistoryDays]),
+    businessMissions: await count(em,"SELECT count(*)::int AS n FROM mission m WHERE $1::integer IS NOT NULL AND status IN('COMPLETED','CANCELLED') AND end_at<now()-make_interval(days=>$1) AND NOT EXISTS(SELECT 1 FROM assignment a WHERE a.mission_id=m.id AND a.status='ACTIVE')",[businessHistoryDays()]),
   };
 }
 
@@ -139,13 +148,14 @@ export async function applyRetention(em: SqlClient): Promise<RetentionSummary> {
     await em.query("DELETE FROM outbox WHERE id=ANY($1::uuid[])", [ids]);
   }
   // POC fictional history only: preserve open missions and every active assignment.
-  const history=await em.query("SELECT id FROM mission m WHERE status IN('COMPLETED','CANCELLED') AND end_at<now()-make_interval(days=>$1) AND NOT EXISTS(SELECT 1 FROM assignment a WHERE a.mission_id=m.id AND a.status='ACTIVE') FOR UPDATE",[retentionPolicy.businessHistoryDays]);
+  const history=await em.query("SELECT id FROM mission m WHERE $1::integer IS NOT NULL AND status IN('COMPLETED','CANCELLED') AND end_at<now()-make_interval(days=>$1) AND NOT EXISTS(SELECT 1 FROM assignment a WHERE a.mission_id=m.id AND a.status='ACTIVE') FOR UPDATE",[businessHistoryDays()]);
   const missionIds=history.map((row:{id:string})=>row.id);
   const historicalDocuments=missionIds.length?await em.query("SELECT d.id FROM document d JOIN assignment a ON a.id=d.assignment_id WHERE a.mission_id=ANY($1::uuid[])",[missionIds]):[];
   if(missionIds.length){
     await em.query("DELETE FROM mission_confirmation WHERE assignment_id IN(SELECT id FROM assignment WHERE mission_id=ANY($1::uuid[]))",[missionIds]);
   }
   const documentIds = [...staging, ...banks,...historicalDocuments].map((row: { id: string }) => row.id);
+  if (documentIds.length) await em.query("INSERT INTO document_erasure(id,owner_id) SELECT id,owner_id FROM document WHERE id=ANY($1::uuid[]) ON CONFLICT DO NOTHING",[documentIds]);
   if (documentIds.length)
     await em.query("DELETE FROM document WHERE id=ANY($1::uuid[])", [
       documentIds,
@@ -181,6 +191,7 @@ export async function anonymizeAccount(em: SqlClient, accountId: string) {
   await em.query("DELETE FROM idempotency WHERE actor_id=$1", [accountId]);
   await em.query("UPDATE audit SET actor_id=NULL,details='{}'::jsonb WHERE actor_id=$1 OR resource_id=$1", [accountId]);
   const ids = documents.map((row: { id: string }) => row.id);
+  if (ids.length) await em.query("INSERT INTO document_erasure(id,owner_id) SELECT id,owner_id FROM document WHERE id=ANY($1::uuid[]) ON CONFLICT DO NOTHING",[ids]);
   if (ids.length)
     await em.query("DELETE FROM document WHERE id=ANY($1::uuid[])", [ids]);
   await em.query(

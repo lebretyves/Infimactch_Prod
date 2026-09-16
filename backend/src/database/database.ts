@@ -1,3 +1,4 @@
+import { ErasureRecovery1789381200000 } from "./erasure-recovery";
 import { PrivacyRequests1789381100000 } from "./privacy-requests";
 import { OfferParsing1789381000000 } from "./offer-parsing";
 import { StaffingRequestDetails1789380600000 } from "./staffing-request-details";
@@ -31,6 +32,7 @@ export class Database implements OnModuleDestroy {
       AccountSecurity1789380800000,
       OfferParsing1789381000000,
       PrivacyRequests1789381100000,
+      ErasureRecovery1789381200000,
     ],
     logging: false,
     extra: { max: 12 },

@@ -108,3 +108,13 @@ test("anonymize closes the account and removes private documents", async () => {
   );
   assert.ok(em.queries.some((q) => q.parameters.includes("ACCOUNT_ANONYMIZED")));
 });
+
+
+test("business history has no automatic duration for real users", async()=>{
+ const {businessHistoryDays}=await import('../../src/security/retention');
+ const previous=process.env.BUSINESS_HISTORY_RETENTION_DAYS;
+ try{delete process.env.BUSINESS_HISTORY_RETENTION_DAYS;assert.equal(businessHistoryDays(),null);
+ process.env.BUSINESS_HISTORY_RETENTION_DAYS='365';assert.equal(businessHistoryDays(),365);
+ process.env.BUSINESS_HISTORY_RETENTION_DAYS='0';assert.throws(()=>businessHistoryDays());
+ }finally{if(previous===undefined)delete process.env.BUSINESS_HISTORY_RETENTION_DAYS;else process.env.BUSINESS_HISTORY_RETENTION_DAYS=previous;}
+});

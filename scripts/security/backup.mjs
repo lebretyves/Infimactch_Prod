@@ -25,6 +25,7 @@ try{
  await cp(resolve(root,'data/vault'),resolve(target,'vault-private'),{recursive:true});
  await cp(resolve(root,'.env'),resolve(target,'legacy.env'));
  await cp(resolve(root,'workflows'),resolve(target,'workflows'),{recursive:true});
+ try{await cp(resolve(root,'data/privacy'),resolve(target,'privacy'),{recursive:true});}catch(e){if(e.code!=='ENOENT')throw e;}
  const sqlCounts=JSON.parse(docker(['exec','infimatch-postgres-1','psql','-U','infimatch','-d','infimatch','-Atc',"SELECT json_build_object('accounts',(SELECT count(*) FROM account),'missions',(SELECT count(*) FROM mission),'assignments',(SELECT count(*) FROM assignment),'documents',(SELECT count(*) FROM document))"]).toString());
  const files=[];async function walk(dir){for(const entry of await readdir(dir,{withFileTypes:true})){const p=resolve(dir,entry.name);if(entry.isDirectory())await walk(p);else{const b=await readFile(p);files.push({path:p.slice(target.length+1).replaceAll('\\','/'),bytes:b.length,sha256:createHash('sha256').update(b).digest('hex')});}}}await walk(target);
  await writeFile(resolve(target,'manifest.json'),JSON.stringify({date:new Date().toISOString(),quiesced:true,sqlCounts,components:['PostgreSQL','MongoDB','documents','Vault Raft and recovery material','n8n SQLite and encryption key','legacy configuration'],files},null,2));

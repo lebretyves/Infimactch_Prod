@@ -1285,3 +1285,40 @@ test("confirmation excludes a disabled nurse but keeps the authorized agency not
   expect(rows.length).toBeGreaterThan(0);
  } finally {await db.query("UPDATE account SET active=$2 WHERE id=$1",[a.nurse_id,before.active]);}
 });
+
+
+test("committed document erasures survive failure and can be resumed without the old SQL document",async()=>{
+ const {mkdir,writeFile,readFile,rm,stat}=await import('node:fs/promises');
+ const {anonymizeAccount,cleanupRemovedDocuments}=await import('../../src/security/retention');
+ const c=await account('NURSE'),doc=await app.get(DocumentsService).store(c.id,'BANK','application/pdf',Buffer.from('%PDF-1.4 fictif'));
+ const path=resolve(process.env.DOCUMENT_DIRECTORY!,doc.id+'.bin');
+ await db.transaction(em=>anonymizeAccount(em,c.id));
+ expect((await db.query('SELECT id FROM document_erasure WHERE id=$1',[doc.id])).length).toBe(1);
+ const contents=await readFile(path);await rm(path);await mkdir(path);await writeFile(resolve(path,'block'),'fixture');
+ await expect(cleanupRemovedDocuments(db,[doc.id])).rejects.toThrow();
+ expect((await db.query('SELECT id FROM document_erasure WHERE id=$1',[doc.id])).length).toBe(1);
+ await rm(path,{recursive:true});await writeFile(path,contents);
+ await cleanupRemovedDocuments(db);
+ await expect(stat(path)).rejects.toThrow();
+ expect((await db.query('SELECT id FROM document_erasure WHERE id=$1',[doc.id])).length).toBe(0);
+});
+
+test("a failed closure does not block the next request and approval is audited",async()=>{
+ const {approveClosure,processClosures}=await import('../../src/security/closure');
+ const {cleanupRemovedDocuments}=await import('../../src/security/retention');
+ const {mkdir,writeFile,rm}=await import('node:fs/promises');
+ const first=await account('NURSE'),second=await account('NURSE');
+ const doc=await app.get(DocumentsService).store(first.id,'BANK','application/pdf',Buffer.from('%PDF-1.4 fictif'));
+ const path=resolve(process.env.DOCUMENT_DIRECTORY!,doc.id+'.bin');await rm(path);await mkdir(path);await writeFile(resolve(path,'block'),'fixture');
+ const r1=(await post(first,'me/closure-request').expect(201)).body;
+ const r2=(await post(second,'me/closure-request').expect(201)).body;
+ await approveClosure(db,r1.id);await approveClosure(db,r2.id);
+ try{
+  const result=await processClosures(db);expect(result.failed).toBe(1);expect(result.processed).toBe(1);
+  expect((await db.query('SELECT status FROM closure_request WHERE id=$1',[r1.id]))[0].status).toBe('APPROVED');
+  expect((await db.query('SELECT status FROM closure_request WHERE id=$1',[r2.id]))[0].status).toBe('COMPLETED');
+  expect((await db.query("SELECT id FROM audit WHERE event='CLOSURE_APPROVED' AND resource_id=$1",[r2.id])).length).toBe(1);
+ }finally{await rm(path,{recursive:true});}
+ expect((await processClosures(db)).processed).toBe(1);
+ await cleanupRemovedDocuments(db);
+});

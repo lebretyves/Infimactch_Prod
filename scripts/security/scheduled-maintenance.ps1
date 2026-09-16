@@ -1,11 +1,11 @@
-﻿$ErrorActionPreference = 'Stop'
+﻿$ErrorActionPreference = 'Continue'
 $projectRoot = [IO.Path]::GetFullPath((Join-Path $PSScriptRoot '../..'))
 Set-Location -LiteralPath $projectRoot
 $logDirectory = Join-Path $projectRoot 'data/security/maintenance'
 New-Item -ItemType Directory -Force -Path $logDirectory | Out-Null
 $logFile = Join-Path $logDirectory ((Get-Date -Format 'yyyy-MM') + '.log')
 $nodeExecutable = (Get-Command node -ErrorAction Stop).Source
-$commands = @('process-closure-requests','purge-retention','retire-stale-offers')
+$commands = @('process-closure-requests','purge-retention','retry-document-erasures','retire-stale-offers')
 $resultCode = 0
 foreach ($command in $commands) {
  Add-Content -LiteralPath $logFile -Value ((Get-Date -Format o) + ' START ' + $command)

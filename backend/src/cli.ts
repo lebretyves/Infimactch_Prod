@@ -1,4 +1,4 @@
-import { executeClosure, processClosures } from "./security/closure";
+import { executeClosure, processClosures, approveClosure } from "./security/closure";
 import { retireStaleOffers } from "./public-data/freshness";
 import { reparseOffers } from "./public-data/reparse-offers";
 import { retryOutbox } from "./automation/automation.module";
@@ -287,8 +287,8 @@ cli
   });
 cli.command("retire-stale-offers").option("--apply", "Retire expired or unverified offers",false).action(async opts=>{const db=await new Database().connect();try{console.log(JSON.stringify(await retireStaleOffers(db,opts.apply)));}finally{await db.onModuleDestroy();}});
 cli.command("closure-requests").action(async()=>{const db=await new Database().connect();try{console.log(JSON.stringify(await db.query("SELECT id,account_id,status,requested_at FROM closure_request WHERE status IN('REQUESTED','APPROVED') ORDER BY requested_at")));}finally{await db.onModuleDestroy();}});
-cli.command("approve-closure").requiredOption("--request <uuid>").action(async opts=>{const db=await new Database().connect();try{const rows=await db.query("UPDATE closure_request SET status='APPROVED',approved_at=now() WHERE id=$1::uuid AND status='REQUESTED' RETURNING id,status",[opts.request]);if(!rows.length)throw Error("No pending request");console.log(JSON.stringify(rows[0]));}finally{await db.onModuleDestroy();}});
-cli.command("process-closure-requests").option("--apply", "Process operator-approved requests",false).action(async opts=>{const db=await new Database().connect();try{console.log(JSON.stringify(opts.apply?await processClosures(db):{dryRun:true,requests:await db.query("SELECT id FROM closure_request WHERE status='APPROVED'")}));}finally{await db.onModuleDestroy();}});
+cli.command("approve-closure").requiredOption("--request <uuid>").action(async opts=>{const db=await new Database().connect();try{console.log(JSON.stringify(await approveClosure(db,opts.request)));}finally{await db.onModuleDestroy();}});
+cli.command("process-closure-requests").option("--apply", "Process operator-approved requests",false).action(async opts=>{const db=await new Database().connect();try{const result=opts.apply?await processClosures(db):{dryRun:true,requests:await db.query("SELECT id FROM closure_request WHERE status='APPROVED'")};console.log(JSON.stringify(result));if("failed" in result && result.failed)process.exitCode=1;}finally{await db.onModuleDestroy();}});
 cli.command("replay-erasures").requiredOption("--ledger <path>").action(async opts=>{
  const {readFile}=await import("node:fs/promises");
  const entries=(await readFile(opts.ledger,"utf8")).split(/\r?\n/).filter(Boolean).map(line=>JSON.parse(line).accountId);
@@ -296,6 +296,7 @@ cli.command("replay-erasures").requiredOption("--ledger <path>").action(async op
  const db=await new Database().connect();let processed=0;
  try{for(const id of new Set(entries)){if(!(await db.query("SELECT id FROM account WHERE id=$1",[id])).length)continue;await executeClosure(db,id);processed++;}console.log(JSON.stringify({processed}));}finally{await db.onModuleDestroy();}
 });
+cli.command("retry-document-erasures").option("--apply", "Retry committed document deletions",false).action(async opts=>{const db=await new Database().connect();try{if(opts.apply)await cleanupRemovedDocuments(db);console.log(JSON.stringify({dryRun:!opts.apply,pending:Number((await db.query("SELECT count(*) AS n FROM document_erasure"))[0].n)}));}finally{await db.onModuleDestroy();}});
 void cli.parseAsync().catch((e) => {
   console.error(
     "Command failed:",

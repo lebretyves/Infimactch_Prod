@@ -18,12 +18,21 @@ try{
  let init;for(let i=0;i<30;i++){try{init=JSON.parse(docker(['exec',vault,'vault','operator','init','-key-shares=1','-key-threshold=1','-format=json']).toString());break;}catch{}await new Promise(r=>setTimeout(r,500));}if(!init)throw Error('Vault restore initialization failed');docker(['exec',vault,'vault','operator','unseal',init.unseal_keys_b64[0]]);docker(['cp',join(folder,'vault.snap'),vault+':/tmp/vault.snap']);docker(['exec','-e','VAULT_TOKEN='+init.root_token,vault,'vault','operator','raft','snapshot','restore','-force','/tmp/vault.snap']);await new Promise(r=>setTimeout(r,1500));
  const recovery=JSON.parse(await readFile(join(folder,'vault-private/recovery.json'),'utf8'));for(const key of recovery.keys_base64.slice(0,recovery.threshold||2))docker(['exec',vault,'vault','operator','unseal',key]);
  const creds=JSON.parse(await readFile(join(folder,'vault-private/backend.json'),'utf8'));const login=JSON.parse(docker(['exec',vault,'vault','write','-format=json','auth/approle/login','role_id='+creds.role_id,'secret_id='+creds.secret_id]).toString());const value=JSON.parse(docker(['exec','-e','VAULT_TOKEN='+login.auth.client_token,vault,'vault','kv','get','-format=json','kv/infimatch/v1/backend']).toString());if(value.data.data.DOCUMENT_KEY!==old.DOCUMENT_KEY)throw Error('Restored Vault key differs');checks.push('Vault Raft restored, original unseal keys and backend AppRole verified');
- const ledger=join(root,'data/privacy/erasure-ledger.ndjson');
+ let ledger=join(root,'data/privacy/erasure-ledger.ndjson');
+ let probeId;
+ if(process.argv.includes('--verify-erasure-replay')){
+  probeId=docker(['exec',pg,'psql','-U','restore_admin','-d','infimatch_restore','-Atc','SELECT id FROM account ORDER BY id LIMIT 1']).toString().trim();
+  if(!probeId)throw Error('No restored account for erasure rehearsal');
+  ledger=join(root,'data/security',id+'-erasure-probe.ndjson');
+  const prior=await readFile(join(root,'data/privacy/erasure-ledger.ndjson'),'utf8').catch(e=>{if(e.code==='ENOENT')return '';throw e;});
+  await writeFile(ledger,prior+'\n'+JSON.stringify({accountId:probeId})+'\n');
+ }
  const ledgerPresent=await readFile(ledger,'utf8').then(()=>true,e=>{if(e.code==='ENOENT')return false;throw e;});
  if(ledgerPresent){
   const workDocuments=join(root,'data/security',id+'-documents');await cp(join(folder,'documents'),workDocuments,{recursive:true});
-  const replay=spawnSync(process.execPath,['backend/dist/cli.js','replay-erasures','--ledger',ledger],{cwd:root,env:{...process.env,...old,INFIMATCH_SECRET_SOURCE:'vault',DATABASE_URL:`postgresql://restore_admin:${pass}@127.0.0.1:55434/infimatch_restore`,MONGODB_URI:'mongodb://127.0.0.1:57019/infimatch',DOCUMENT_DIRECTORY:workDocuments},encoding:'utf8'});
+  const replay=spawnSync(process.execPath,['backend/dist/cli.js','replay-erasures','--ledger',ledger],{cwd:root,env:{...process.env,...old,INFIMATCH_SECRET_SOURCE:'vault',DATABASE_URL:`postgresql://restore_admin:${pass}@127.0.0.1:55434/infimatch_restore`,MONGODB_URI:'mongodb://127.0.0.1:57019/infimatch',DOCUMENT_DIRECTORY:workDocuments,ERASURE_LEDGER_DIRECTORY:join(root,'data/security',id+'-privacy')},encoding:'utf8'});
   if(replay.status!==0)throw Error('Erasure replay failed; restored service must remain offline');checks.push('current erasure ledger replayed on restored databases');
+  if(probeId){const state=JSON.parse(docker(['exec',pg,'psql','-U','restore_admin','-d','infimatch_restore','-Atc',"SELECT row_to_json(t) FROM (SELECT active,email FROM account WHERE id='"+probeId+"'::uuid) t"]).toString());if(state.active||state.email!=='closed.'+probeId+'@anonymized.invalid')throw Error('Restored erasure probe failed');checks.push('restored account erasure verified; source backup and live databases untouched');}
  }else checks.push('no current erasure ledger; operator must confirm there are no later erasures before reopening');
  await writeFile(join(proof,'restore.json'),JSON.stringify({date:new Date().toISOString(),status:'PASS',checks,sqlCounts:after,representative:after.missions>=1&&after.assignments>=1&&after.documents>=1},null,2));console.log(JSON.stringify({status:'PASS',checks,representative:after.missions>=1&&after.assignments>=1&&after.documents>=1}));
 }catch(e){await writeFile(join(proof,'restore.json'),JSON.stringify({date:new Date().toISOString(),status:'FAIL',checks},null,2));throw e;}finally{for(const name of containers.reverse())docker(['rm','-f','-v',name]);}
