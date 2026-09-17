@@ -15,6 +15,7 @@ for (const [path, title, description] of pages) {
     .replace(/(<meta\s+name="description"\s+content=")[^"]*/, `$1${escape(description)}`)
     .replace(/(<meta\s+property="og:title"\s+content=")[^"]*/, `$1${escape(title)} — InfiMatch`)
     .replace(/(<meta\s+property="og:description"\s+content=")[^"]*/, `$1${escape(description)}`)
+    .replace(/(<meta\s+property="og:url"\s+content=")[^"]*/, `$1https://infimactch-prod-backend-l5bc.vercel.app/${path}`)
     .replace(/(<link\s+rel="canonical"\s+href=")[^"]*/, `$1https://infimactch-prod-backend-l5bc.vercel.app/${path}`);
   fs.writeFileSync(`dist/${path}.html`, html);
 }
@@ -24,6 +25,7 @@ console.log('Static metadata generated for four useful public routes.');
 const privateShell = shell.replace(/<title>.*?<\/title>/s, '<title>Espace personnel — InfiMatch</title>')
  .replace(/(<meta\s+name="robots"\s+content=")[^"]*/, '$1noindex,follow')
  .replace(/<link\s+rel="canonical"[^>]*>/, '')
+ .replace(/<meta\s+property="og:url"[^>]*>/, '')
  .replace(/(<meta\s+name="description"\s+content=")[^"]*/, '$1Connectez-vous pour accéder à votre espace InfiMatch.')
  .replace(/(<meta\s+property="og:title"\s+content=")[^"]*/, '$1Espace personnel — InfiMatch')
  .replace(/(<meta\s+property="og:description"\s+content=")[^"]*/, '$1Connectez-vous pour accéder à votre espace InfiMatch.')
