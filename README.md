@@ -1,3 +1,5 @@
+> [Livraison administration independante, recommandations mixtes et restauration verifiee](docs/quality/LIVRAISON_ADMIN_MIXTE_2026-09-17.md).
+
 # InfiMatch — backend V1
 
 > Mise a jour du 17 septembre 2026 : [correctifs, administration et deploiement](docs/quality/PLAN_CORRECTIFS_DEPLOIEMENT.md), [configuration](docs/quality/CONFIGURATION.md), [preuves qualite frontend](docs/quality/frontend-quality-2026-09-17.md). Les bilans ci-dessous sont historiques ; ils ne remplacent pas cet inventaire.
