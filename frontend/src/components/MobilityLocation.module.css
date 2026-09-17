@@ -1,0 +1,5 @@
+﻿.root { min-width: 0; }
+.options { list-style: none; margin: 8px 0 0; padding: 4px; border: 1px solid #cad6e8; border-radius: 12px; background: #fff; }
+.options li { padding: 12px; cursor: pointer; border-radius: 8px; overflow-wrap: anywhere; color: #10355b; }
+.options li:hover, .options .active { background: #eaf1ff; }
+.status { font-size: .875rem; line-height: 1.5; margin: 8px 0 0; }

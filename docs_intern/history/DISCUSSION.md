@@ -68,3 +68,12 @@ Ajout d'un import PDF/JPEG/PNG dans Qualifications et expérience. Extraction PD
 ## 2026-09-17 — Installation sur l’accueil et retrait du catalogue
 
 Le bouton Installer l’application est proposé dans le premier bloc de l’accueil public, avec accès au parcours d’installation existant. Le lien d’installation est retiré de la navigation connectée. Les liens Catalogue des pages sont retirés de l’accueil et de l’espace connecté ; /catalogue redirige vers /. Compilation frontend et trois contrôles PWA réussis, vérification navigateur mobile/bureau et navigation connectée effectuée.
+
+
+## 2026-09-17 — Autocomplétion de la ville de mobilité
+
+Demande : reconnaître la ville ou le code postal dès la saisie dans Ma zone de mobilité. Suggestions après 350 ms, trois lettres ou code postal complet, choix au clavier ou au clic. Le service IGN existant est interrogé avec type=municipality et fournit les coordonnées du centre de commune. Aucun nouvel abonnement ni dépendance.
+
+La commune et son code postal sont stockés dans details.mobilityCity, séparément de la ville personnelle verrouillée. Latitude/longitude sont enregistrées pour le calcul réel du rayon et reprises dans la recherche des missions. Modifier la saisie efface l’ancienne position ; une ville non sélectionnée ne peut pas être enregistrée. GPS et saisie manuelle des coordonnées restent disponibles et effacent l’ancien libellé. Réponses obsolètes annulées, erreurs et absence de résultat expliquées.
+
+Validation : compilation frontend/backend ; 199 tests unitaires backend ; six tests SQL sur base PostGIS isolée, dont conservation de Paris comme ville personnelle avec centre de mobilité Nantes ; tests navigateur de saisie, sélection clavier, coordonnées sauvegardées, annulation des réponses lentes et affichage 375/1440 px ; régression recherche des missions. Appels réels IGN vérifiés pour 44000 et Nan. Publication autorisée sur Main et Backend selon accord antérieur.

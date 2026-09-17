@@ -1,3 +1,5 @@
+import { MobilityLocation } from "@/components/MobilityLocation";
+import { validCoordinates } from "@/components/SearchPlace";
 import { useRef, useState, type FormEvent } from "react";
 import { NavLink, Link } from "react-router";
 import { useRemote } from "@/lib/useRemote";
@@ -51,7 +53,7 @@ function Editor({
     [busy, setBusy] = useState(""),
     [error, setError] = useState(""),
     [message, setMessage] = useState("");
-  const [city, setCity] = useState(initial.details?.city || ""),
+  const [city, setCity] = useState(initial.details?.mobilityCity || ""),
     [radius, setRadius] = useState(initial.radius_km?.toString() || ""),
     [transport, setTransport] = useState(initial.details?.transport || ""),
     [latitude, setLatitude] = useState(initial.latitude?.toString() || ""),
@@ -566,9 +568,13 @@ function Editor({
                 throw new Error(
                   "Renseignez ensemble la latitude et la longitude, ou effacez les deux.",
                 );
+              if (city.trim() && !validCoordinates(latitude, longitude))
+                throw new Error("Choisissez une commune dans les suggestions avant d’enregistrer.");
+              if (radius !== "" && !validCoordinates(latitude, longitude))
+                throw new Error("Choisissez une commune ou renseignez votre position pour utiliser un rayon.");
               const details = { ...latest.details };
-              if (city.trim()) details.city = city.trim();
-              else delete details.city;
+              if (city.trim()) details.mobilityCity = city.trim();
+              else delete details.mobilityCity;
               if (transport) details.transport = transport;
               else delete details.transport;
               return {
@@ -589,11 +595,14 @@ function Editor({
         </h2>
         <fieldset disabled={!!busy} className={s.fields}>
           <div className={s.mobility}>
-            <TextField
-              label="Ville de référence"
-              maxLength={150}
+            <MobilityLocation
               value={city}
-              onChange={(e) => setCity(e.target.value)}
+              selected={!!validCoordinates(latitude, longitude)}
+              onChange={(value, location) => {
+                setCity(value);
+                setLatitude(location ? String(location.latitude) : "");
+                setLongitude(location ? String(location.longitude) : "");
+              }}
             />
             <TextField
               label="Distance maximale (km)"
@@ -636,6 +645,7 @@ function Editor({
                 }
                 navigator.geolocation.getCurrentPosition(
                   (position) => {
+                    setCity("");
                     setLatitude(String(position.coords.latitude));
                     setLongitude(String(position.coords.longitude));
                     setMessage(
@@ -668,7 +678,7 @@ function Editor({
                 min={-90}
                 max={90}
                 value={latitude}
-                onChange={(e) => setLatitude(e.target.value)}
+                onChange={(e) => { setCity(""); setLatitude(e.target.value); }}
               />
               <TextField
                 label="Longitude"
@@ -677,7 +687,7 @@ function Editor({
                 min={-180}
                 max={180}
                 value={longitude}
-                onChange={(e) => setLongitude(e.target.value)}
+                onChange={(e) => { setCity(""); setLongitude(e.target.value); }}
               />
             </div>
           </details>
