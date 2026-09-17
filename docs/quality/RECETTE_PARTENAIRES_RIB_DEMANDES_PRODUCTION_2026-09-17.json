@@ -1,0 +1,35 @@
+{
+  "status": "PASS",
+  "date": "2026-09-17",
+  "applicationCommit": "627fb2e90d9f67bb1c9b6131d1e9482d0d7d09a6",
+  "frontend": "https://infimactch-prod-backend-l5bc.vercel.app",
+  "backend": "https://infimactch-prod-backend.vercel.app",
+  "admin": "https://infimatch-admin.vercel.app",
+  "isolatedBackend": {
+    "tests": 208,
+    "failures": 0
+  },
+  "productionApi": [
+    "registration",
+    "profile persistence",
+    "encrypted document",
+    "private bank upload/download",
+    "origin filtering",
+    "admin access/roles",
+    "recovery and privacy list routes",
+    "secure session",
+    "CSRF"
+  ],
+  "deployedUiWithInterceptedApi": [
+    "seven-step signup and legacy redirect",
+    "bank upload/download/capture inputs/reminder deep link",
+    "partner origin choices and pagination",
+    "client recovery and closure"
+  ],
+  "fictionalAccountsCleaned": true,
+  "limitations": [
+    "Physical camera not tested",
+    "Resend deferred",
+    "POC documents remain fictional"
+  ]
+}

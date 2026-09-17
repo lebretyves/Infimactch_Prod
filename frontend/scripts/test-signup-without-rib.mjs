@@ -6,6 +6,7 @@ try {
   await context.route('**/api/**',route=>{if(route.request().method()!=='GET')writes++;return route.fulfill({status:401,json:{}});});
   const page=await context.newPage();const base=process.env.BASE_URL||'http://127.0.0.1:4187';
   await page.goto(base+'/inscription/disponibilites');await page.getByRole('button',{name:'Tout refuser',exact:true}).click();
+  await page.locator('[aria-current=step]').waitFor();
   assert.equal(await page.locator('nav[aria-label] > a, nav[aria-label] > span').count(),7);
   assert.match(await page.locator('[aria-current=step]').innerText(),/6/);
   await page.getByRole('button',{name:/Continuer/}).click();await page.waitForURL('**/inscription/consentements');await page.getByRole('heading',{name:'Consentements',exact:true}).waitFor();
