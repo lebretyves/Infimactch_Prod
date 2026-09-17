@@ -118,3 +118,27 @@ test('Discord infrastructure reports a checked bot identity without claiming mes
  response=await owner.agent.get('/api/v1/admin/infrastructure').expect(200);assert.equal(response.body.services.find((x:any)=>x.name==='n8n / Discord').state,'unavailable');
  }finally{globalThis.fetch=originalFetch;if(oldToken===undefined)delete process.env.DISCORD_BOT_TOKEN;else process.env.DISCORD_BOT_TOKEN=oldToken;}
 });
+
+test('admin account Discord status is scoped, redacted and distinguishes association from preferences',async()=>{
+ const owner=await enroll(),support=await enroll('SUPPORT'),ops=await enroll('OPS'),a=await account(),other=await account();
+ const path='/api/v1/admin/accounts/'+a.id+'/notifications';
+ await a.agent.get(path).expect(401);await ops.agent.get(path).expect(403);await owner.agent.get('/api/v1/admin/accounts/'+randomUUID()+'/notifications').expect(404);
+ let response=(await support.agent.get(path).expect(200)).body;assert.equal(response.connection.state,'NOT_ASSOCIATED');assert.equal(response.personal.state,'NOT_ASSOCIATED');assert.ok(response.internal.total>=1);
+ const discord=String(800000000000000000n+BigInt(Math.floor(Math.random()*100000000)));
+ await db.query("INSERT INTO discord_challenge(account_id,discord_user_id,code_hash,expires_at) VALUES($1,$2,'do-not-expose-this-hash',now()+interval '10 minutes')",[a.id,discord]);
+ response=(await owner.agent.get(path).expect(200)).body;assert.equal(response.connection.state,'PENDING');assert.equal(response.connection.discordUserId,null);assert.doesNotMatch(JSON.stringify(response),/do-not-expose|code_hash/);
+ await db.query("UPDATE discord_challenge SET expires_at=now()-interval '1 minute' WHERE account_id=$1",[a.id]);assert.equal((await owner.agent.get(path)).body.connection.state,'EXPIRED');
+ await db.query("INSERT INTO discord_link(account_id,discord_user_id,username) VALUES($1,$2,'fixture')",[a.id,discord]);
+ const [dest]=await db.query("INSERT INTO discord_destination(user_id,connected_by,target_type,target_id,enabled,events) VALUES($1,$1,'user',$2,false,ARRAY['WELCOME']) RETURNING id",[a.id,discord]);
+ response=(await owner.agent.get(path)).body;assert.equal(response.connection.state,'ASSOCIATED');assert.equal(response.personal.state,'DISABLED');assert.deepEqual(response.personal.effectiveEvents,[]);assert.equal(response.connection.discordUserId,discord);
+ await db.query('UPDATE discord_destination SET enabled=true WHERE id=$1',[dest.id]);await db.query("INSERT INTO notification_preference(account_id,kind,discord) VALUES($1,'WELCOME',false)",[a.id]);
+ assert.equal((await owner.agent.get(path)).body.personal.state,'NO_EVENTS');await db.query('DELETE FROM notification_preference WHERE account_id=$1',[a.id]);
+ const [notice]=await db.query('SELECT id FROM notification WHERE user_id=$1 LIMIT 1',[a.id]);
+ await db.query("INSERT INTO notification_delivery(notification_id,destination_id,destination_version,kind,status,last_error) VALUES($1,$2,1,'WELCOME','FAILED','private-content-secret')",[notice.id,dest.id]);
+ response=(await owner.agent.get(path)).body;assert.equal(response.personal.state,'ENABLED');assert.deepEqual(response.personal.effectiveEvents,['WELCOME']);assert.equal(response.deliveries.latest.errorCode,'DELIVERY_FAILED');assert.equal(response.deliveries.counts.FAILED,1);assert.doesNotMatch(JSON.stringify(response),/private-content-secret|code_hash|message_id|lease_token/);
+ await db.query("UPDATE notification_delivery SET last_error='DISCORD_403' WHERE destination_id=$1",[dest.id]);assert.equal((await owner.agent.get(path)).body.deliveries.latest.errorCode,'DISCORD_HTTP_403');
+ const otherView=(await owner.agent.get('/api/v1/admin/accounts/'+other.id+'/notifications')).body;assert.equal(otherView.connection.state,'NOT_ASSOCIATED');assert.equal(otherView.deliveries.latest,null);
+ for(let i=0;i<12;i++)await db.query("INSERT INTO notification_delivery(notification_id,destination_id,destination_version,kind,status,sent_at) VALUES($1,$2,1,'WELCOME','SENT',now())",[notice.id,dest.id]);
+ response=(await owner.agent.get(path)).body;assert.equal(response.deliveries.recent.length,10);assert.equal(response.deliveries.counts.SENT,12);
+ const enterprise=await account('ENTERPRISE');const orgView=(await owner.agent.get('/api/v1/admin/accounts/'+enterprise.id+'/notifications')).body;assert.equal(orgView.organizations.length,1);assert.equal(orgView.organizations[0].configured,false);assert.equal(orgView.personal.state,'NOT_ASSOCIATED');
+});

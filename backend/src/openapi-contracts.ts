@@ -17,6 +17,7 @@ export const additionalSchemas={Profile:profile,Organization:organization,Sessio
 };
 export const additionalResponses:Record<string,any>={
  "GET /api/v1/admin/csrf":obj({csrfToken:str}),
+ "GET /api/v1/admin/accounts/{id}/notifications":obj({observedAt:str,connection:obj({}),personal:obj({}),internal:obj({}),deliveries:obj({}),organizations:array(obj({})),catalog:obj({})}),
  "POST /api/v1/admin/login":obj({status:str,csrfToken:str,role:str}),
  "POST /api/v1/admin/activate":obj({status:str,csrfToken:str,role:str}),
  "POST /api/v1/admin/reauth":ok,"POST /api/v1/admin/logout":ok,

@@ -296,8 +296,8 @@ test("full internal journey and concurrency, with isolated fixture RPPS", async 
   await n2.agent.get("/api/v1/me/documents/" + document.body.id).expect(404);
   await n.agent.get("/api/v1/me/documents/" + document.body.id).expect(200);
   const [opened] = await db.query(
-    "SELECT id FROM outbox WHERE event='MatchRequested' AND payload->>'missionId'=$1 ORDER BY created_at DESC LIMIT 1",
-    [id],
+    "SELECT id FROM outbox WHERE event='MatchRequested' AND payload->>'missionId'=$1 AND payload->>'profileId'=$2 ORDER BY created_at DESC,id DESC LIMIT 1",
+    [id,n.id],
   );
   expect(["PROCESSED", "ALREADY_PROCESSED"]).toContain(
     (await workflow("matches", opened.id)).status,

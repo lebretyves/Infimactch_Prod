@@ -1,3 +1,4 @@
+import {notificationCatalog} from '../notifications/catalog';
 import {BadRequestException,Body,ConflictException,Controller,Get,NotFoundException,Param,ParseUUIDPipe,Post,Query,Req,UseGuards} from '@nestjs/common';
 import {IsBoolean,IsEmail,IsIn,IsString,IsUUID,Length} from 'class-validator';
 import {Request} from 'express';
@@ -24,6 +25,27 @@ export class AdminOperationsController {
     const [count]=await this.db.query(`SELECT count(*)::int AS total FROM (${sql}) bounded`,args);
     const items=await this.db.query(sql+` LIMIT $${args.length+1} OFFSET $${args.length+2}`,[...args,p.limit,p.offset]);
     return {items,total:count.total,limit:p.limit,offset:p.offset};
+  }
+
+  @Get('accounts/:id/notifications') async accountNotifications(@Req() r:Request,@Param('id',ParseUUIDPipe) id:string) {
+    const actor=authorizeAdmin(r,'accounts');
+    if(!(await this.db.query('SELECT id FROM account WHERE id=$1',[id])).length)throw new NotFoundException();
+    const [links,challenges,destinations,preferences,internalRows,countRows,rows,organizations]=await Promise.all([
+      this.db.query('SELECT discord_user_id,connected_at FROM discord_link WHERE account_id=$1',[id]),
+      this.db.query('SELECT expires_at FROM discord_challenge WHERE account_id=$1 AND verified_at IS NULL ORDER BY created_at DESC,id DESC LIMIT 1',[id]),
+      this.db.query('SELECT enabled,events,updated_at FROM discord_destination WHERE user_id=$1',[id]),
+      this.db.query('SELECT kind FROM notification_preference WHERE account_id=$1 AND NOT discord',[id]),
+      this.db.query('SELECT count(*)::int AS total,count(*) FILTER(WHERE read_at IS NULL)::int AS unread FROM notification WHERE user_id=$1',[id]),
+      this.db.query('SELECT d.status,count(*)::int AS total FROM notification_delivery d JOIN discord_destination x ON x.id=d.destination_id WHERE x.user_id=$1 GROUP BY d.status',[id]),
+      this.db.query(`SELECT d.id,d.kind,d.status,d.attempts,d.created_at AS "createdAt",d.sent_at AS "sentAt",CASE WHEN d.last_error ~ '^DISCORD_[0-9]{3}$' THEN replace(d.last_error,'DISCORD_','DISCORD_HTTP_') WHEN d.status='UNCERTAIN' THEN 'DELIVERY_UNCERTAIN' WHEN d.last_error IS NOT NULL THEN 'DELIVERY_FAILED' ELSE NULL END AS "errorCode" FROM notification_delivery d JOIN discord_destination x ON x.id=d.destination_id WHERE x.user_id=$1 ORDER BY d.created_at DESC,d.id DESC LIMIT 10`,[id]),
+      this.db.query(`SELECT o.id,o.name,o.kind,d.id IS NOT NULL AS configured,COALESCE(d.enabled,false) AS enabled,d.channel_name AS "channelName",COALESCE(d.events,'{}'::text[]) AS events,d.updated_at AS "updatedAt" FROM membership m JOIN organization o ON o.id=m.organization_id LEFT JOIN discord_destination d ON d.organization_id=o.id WHERE m.user_id=$1 AND m.active ORDER BY o.name,o.id LIMIT 100`,[id]),
+    ]);
+    const link=links[0],challenge=challenges[0],destination=destinations[0];
+    const selectedEvents:string[]=destination?.events??[],mutedEvents:string[]=preferences.map(p=>p.kind);
+    const effectiveEvents=link&&destination?.enabled?selectedEvents.filter(kind=>!mutedEvents.includes(kind)):[];
+    const state=link?'ASSOCIATED':challenge?(new Date(challenge.expires_at).getTime()>Date.now()?'PENDING':'EXPIRED'):'NOT_ASSOCIATED';
+    await audit(this.db,actor,'ADMIN_NOTIFICATION_SETTINGS_VIEWED',id);
+    return {observedAt:new Date().toISOString(),connection:{state,discordUserId:link?.discord_user_id??null,connectedAt:link?.connected_at??null,challengeExpiresAt:!link?(challenge?.expires_at??null):null},personal:{state:!link?'NOT_ASSOCIATED':!destination?.enabled?'DISABLED':effectiveEvents.length?'ENABLED':'NO_EVENTS',selectedEvents,mutedEvents,effectiveEvents,updatedAt:destination?.updated_at??null},internal:internalRows[0],deliveries:{counts:Object.fromEntries(countRows.map(row=>[row.status,row.total])),latest:rows[0]??null,recent:rows},organizations,catalog:notificationCatalog};
   }
 
   @Get('organizations/:id') async organization(@Req() r:Request,@Param('id',ParseUUIDPipe) id:string) {
