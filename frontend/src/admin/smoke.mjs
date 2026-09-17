@@ -18,21 +18,20 @@ try {
   const page = await browser.newPage(); const errors = [];
   page.on('pageerror', e => errors.push(e.message));
   let activations = 0; let authenticated = false; let fresh = false; let mutations = 0;
-  const user = { id: 'fixture-admin', email: 'admin@example.invalid', role: 'SUPPORT', permissions: ['overview', 'accounts', 'accounts:write', 'organizations', 'missions', 'quality'], mfaAt: new Date().toISOString() };
+  const user = { id: 'fixture-admin', email: 'admin@example.invalid', role: 'SUPPORT', permissions: ['overview', 'accounts', 'accounts:write', 'organizations', 'missions', 'quality'], confirmedAt: new Date().toISOString() };
   await page.route('**/api/v1/admin/**', async route => {
     const path = new URL(route.request().url()).pathname.replace('/api/v1/admin', ''); let status = 200; let body = {};
     if (path === '/me') { status = authenticated ? 200 : 401; body = authenticated ? user : {}; }
     else if (path === '/csrf') body = { csrfToken: 'isolated-fixture-csrf' };
-    else if (path === '/activate') { activations++; const payload = route.request().postDataJSON(); assert.equal(payload.invitation, 'fixture-private-invitation'); assert.equal(payload.password, 'fixture-password-123'); assert.equal('passwordConfirmation' in payload, false); body = {status:'MFA_ENROLLMENT',csrfToken:'isolated-fixture-csrf',otpauthUri:'otpauth://totp/Fictional?secret=JBSWY3DPEHPK3PXP&issuer=Fictional'}; }
-    else if (path === '/login') body = { status: 'MFA_REQUIRED', csrfToken: 'isolated-fixture-csrf' };
-    else if (path === '/mfa') { authenticated = true; body = { role: 'SUPPORT', csrfToken: 'isolated-fixture-csrf' }; }
+    else if (path === '/activate') { activations++; const payload = route.request().postDataJSON(); assert.equal(payload.invitation, 'fixture-private-invitation'); assert.equal(payload.password, 'fixture-password-123'); assert.equal('passwordConfirmation' in payload, false); authenticated=true; body = {status:'AUTHENTICATED',csrfToken:'isolated-fixture-csrf'}; }
+    else if (path === '/login') { authenticated=true;body = { status: 'AUTHENTICATED', csrfToken: 'isolated-fixture-csrf' }; }
     else if (path === '/overview') body = { observedAt: new Date().toISOString(), counts: { accounts: 1, organizations: 0, applications: 0, pendingEvents: 0, failedEvents: 0, documents: 0, missions: { OPEN: 0 } }, alerts: [{kind: 'backup', message: 'Fixture backup status', href: '/backups'}] };
     else if (path === '/executions') body = {items: [{id: 'fixture-run', state: 'completed', checked_at: '2026-09-17T10:00:00Z', execution_id: 'fixture-execution', workflow_id: 'fixture/unsafe?fragment', action: 'confirmation', duration_ms: 125}], total: 1, limit: 20, offset: 0};
     else if (path === '/accounts') body = { items: [{ id: 'fixture-account', email: 'client@example.invalid', family: 'NURSE', active: true }], total: 1, limit: 20, offset: 0 };
     else if (path === '/accounts/fixture-account/verification') body = {directory: {status:'FOUND'}, professionalIdentity:null, reviews:[]};
     else if (path === '/accounts/fixture-account') body = { account: { id: 'fixture-account', email: 'client@example.invalid', active: true, family:'NURSE' }, organizations: [{name: 'Organisation fictive', kind: 'ESTABLISHMENT', active: true}], profile: {display_name: 'Profil fictif', qualifications: ['IDE', 'IADE'], rpps_status: 'FOUND', rpps_checked_at: '2026-09-17T10:00:00Z'}, documents: [], audit: [{event: 'FIXTURE_AUDIT', created_at: '2026-09-17T10:00:00Z'}] };
     else if (path === '/accounts/fixture-account/state') { assert.equal(route.request().headers()['x-csrf-token'], 'isolated-fixture-csrf'); if (!fresh) { status = 403; body = { code: 'ADMIN_REAUTH_REQUIRED' }; } else { mutations++; body = { ok: true }; } }
-    else if (path === '/reauth') fresh = true;
+    else if (path === '/reauth') {assert.deepEqual(route.request().postDataJSON(), {password:'test-only-password'});fresh = true;}
     else if (path === '/logout') authenticated = false;
     else throw new Error(`Unexpected fixture endpoint: ${path}`);
     await route.fulfill({ status, json: body });
@@ -43,25 +42,21 @@ try {
   await page.getByLabel('Nouveau mot de passe (12 caractères minimum)',{exact:true}).fill('fixture-password-123');
   await page.getByLabel('Confirmer le nouveau mot de passe',{exact:true}).fill('fixture-mismatch-123');
   await page.getByLabel('Code d’invitation administrateur',{exact:true}).fill('fixture-private-invitation');
-  await page.getByRole('button',{name:'Continuer',exact:true}).click();
+  await page.getByRole('button',{name:'Activer mon accès',exact:true}).click();
   await page.getByText('Les deux mots de passe doivent être identiques.').waitFor();
   assert.equal(activations,0,'Mismatched confirmation never calls activation');
   await page.getByLabel('Confirmer le nouveau mot de passe',{exact:true}).fill('fixture-password-123');
-  await page.getByRole('button',{name:'Continuer',exact:true}).click();
-  await page.getByRole('heading',{name:'Configurer l’authentificateur',exact:true}).waitFor();
+  await page.getByRole('button',{name:'Activer mon accès',exact:true}).click();
+  await page.getByRole('heading',{name:'Vue d’ensemble',exact:true}).waitFor();
   assert.equal(activations,1);
   assert.equal(page.url().includes('fixture-private-invitation'),false);
   assert.equal(page.url().includes('fixture-password'),false);
-  await page.getByLabel('Code de vérification',{exact:true}).fill('123456');
-  await page.getByRole('button',{name:'Vérifier et accéder'}).click();
   await page.getByRole('heading',{name:'Vue d’ensemble',exact:true}).waitFor();
   assert.equal(await page.getByLabel('Lien de configuration',{exact:true}).count(),0);
   await page.getByRole('button',{name:'Se déconnecter'}).click();
   await page.getByLabel('Adresse e-mail', { exact: true }).fill('admin@example.invalid');
   await page.getByLabel('Mot de passe', { exact: true }).fill('test-only-password');
-  await page.getByRole('button', { name: 'Continuer', exact: true }).click();
-  await page.getByLabel('Code de vérification', { exact: true }).fill('123456');
-  await page.getByRole('button', { name: 'Vérifier et accéder' }).click();
+  await page.getByRole('button', { name: 'Se connecter', exact: true }).click();
   await page.getByRole('heading', { name: 'Vue d’ensemble', exact: true }).waitFor();
   assert.equal(await page.getByRole('link', { name: 'Accès administrateurs' }).count(), 0);
   assert.equal(await page.locator('a[href*="jobs"],a[href*="backups"]').count(), 0, 'Overview destinations obey SUPPORT permissions');
@@ -74,8 +69,8 @@ try {
   assert.equal(await page.getByLabel('Justification (journalisée)').getAttribute('maxlength'), '500');
   await page.getByLabel('Justification (journalisée)').fill('Test isolé de confirmation motivée');
   await page.getByRole('button', { name: 'Confirmer l’opération' }).click();
-  await page.getByLabel('Nouveau code d’authentification').fill('123456');
-  await page.getByRole('button', { name: 'Vérifier mon identité' }).click();
+  await page.getByLabel('Confirmer votre mot de passe').fill('test-only-password');
+  await page.getByRole('button', { name: 'Confirmer mon mot de passe' }).click();
   assert.equal(mutations, 0, 'No automatic mutation after reauthentication');
   await page.getByRole('button', { name: 'Confirmer l’opération' }).click();
   await page.getByText('Opération enregistrée. Les données ont été actualisées.').waitFor();
@@ -90,5 +85,5 @@ try {
   await page.getByText('fixture-execution', {exact: true}).waitFor();
   assert.equal(await page.getByRole('link', {name: 'Voir le workflow n8n (nouvel onglet)'}).getAttribute('href'), 'https://infimatch.app.n8n.cloud/workflow/fixture%2Funsafe%3Ffragment');
   assert.deepEqual(errors, []);
-  console.log('PASS isolated admin UI: MFA, role navigation, reason, CSRF, explicit reauth retry, mobile, logout. Backend MFA not tested by this fixture.');
+  console.log('PASS isolated admin UI: password-only activation/login, role navigation, reason, CSRF, explicit reauth retry, mobile, logout. Backend authentication not tested by this fixture.');
 } finally { await browser.close(); await new Promise(r => server.close(r)); }

@@ -9,24 +9,23 @@ import {randomUUID,randomBytes} from 'node:crypto';
 import {createApp} from '../../src/app';
 import {Database} from '../../src/database/database';
 import {hashInvitation} from '../../src/admin/admin-auth';
-import {totp} from '../../src/admin/mfa';
 let app:Awaited<ReturnType<typeof createApp>>,db:Database;
 const origin='http://127.0.0.1:5174',password='Fictional-admin-account-123';
 beforeEach(async()=>{const u=new URL(process.env.DATABASE_URL!);if(process.env.NODE_ENV!=='test'||u.hostname!=='127.0.0.1'||u.port!=='55433'||u.pathname!=='/infimatch_test')throw Error('Isolated test database required');process.env.ADMIN_ORIGIN=origin;app=await createApp();await app.listen(0,'127.0.0.1');db=app.get(Database);});
 afterEach(async()=>{await app?.close();});
 async function account(family="NURSE"){const agent=request.agent(app.getHttpServer()),email=randomUUID()+'@example.invalid';const csrf=await agent.get('/api/v1/auth/csrf');const r=await agent.post('/api/v1/auth/register').set('Origin',process.env.APP_ORIGIN!).set('X-CSRF-Token',csrf.body.csrfToken).set('Idempotency-Key',randomUUID()).send({email,password,family,termsVersion:'2026-09-14',...(family==='ENTERPRISE'?{organizationType:'ESTABLISHMENT',name:'Organisation FICTIVE',address:'1 rue fictive Paris',referent:'Contact fictif',finess:'000000001'}:{})}).expect(201);return {agent,email,id:r.body.user.id};}
 function post(agent:ReturnType<typeof request.agent>,path:string,csrf:string,body:object){return agent.post('/api/v1/admin/'+path).set('Origin',origin).set('X-CSRF-Token',csrf).send(body);}
-async function enroll(role='OWNER'){const a=await account(),invitation=randomBytes(32).toString('hex');await db.query("INSERT INTO platform_admin(user_id,role,invitation_hash,invitation_expires_at) VALUES($1,$2,$3,now()+interval '1 hour')",[a.id,role,hashInvitation(invitation)]);const agent=request.agent(app.getHttpServer()),c=await agent.get('/api/v1/admin/csrf').expect(200);const login=await post(agent,'login',c.body.csrfToken,{email:a.email,password,invitation}).expect(201);assert.equal(login.body.status,'MFA_ENROLLMENT');const secret=new URL(login.body.otpauthUri).searchParams.get('secret')!;const counter=Math.floor(Date.now()/30000);const confirmed=await post(agent,'mfa',login.body.csrfToken,{code:totp(secret,counter)}).expect(201);return {...a,agent,csrf:confirmed.body.csrfToken,secret,counter};}
-test('admin routes require enrollment and separate MFA session, with origin isolation',async()=>{const client=await account();await client.agent.get('/api/v1/admin/overview').expect(401);const c=await client.agent.get('/api/v1/admin/csrf');await post(client.agent,'login',c.body.csrfToken,{email:client.email,password}).expect(401);const owner=await enroll();const me=await owner.agent.get('/api/v1/admin/me').expect(200);assert.equal(me.body.role,'OWNER');await owner.agent.get('/api/v1/auth/me').expect(401);await owner.agent.get('/api/v1/admin/overview').expect(200);await post(owner.agent,'accounts/'+client.id+'/state',owner.csrf,{active:false,reason:'Test isolated suspension'}).set('Origin',process.env.APP_ORIGIN!).expect(403);await post(owner.agent,'reauth',owner.csrf,{code:totp(owner.secret,owner.counter)}).expect(401);});
+async function enroll(role='OWNER'){const a=await account(),invitation=randomBytes(32).toString('hex');await db.query("INSERT INTO platform_admin(user_id,role,invitation_hash,invitation_expires_at) VALUES($1,$2,$3,now()+interval '1 hour')",[a.id,role,hashInvitation(invitation)]);const agent=request.agent(app.getHttpServer()),c=await agent.get('/api/v1/admin/csrf').expect(200);const login=await post(agent,'login',c.body.csrfToken,{email:a.email,password,invitation}).expect(201);assert.equal(login.body.status,'AUTHENTICATED');assert.equal(login.body.otpauthUri,undefined);return {...a,agent,csrf:login.body.csrfToken};}
+test('admin routes require authorized access and separate session, with origin isolation',async()=>{const client=await account();await client.agent.get('/api/v1/admin/overview').expect(401);const c=await client.agent.get('/api/v1/admin/csrf');await post(client.agent,'login',c.body.csrfToken,{email:client.email,password}).expect(401);const owner=await enroll();const me=await owner.agent.get('/api/v1/admin/me').expect(200);assert.equal(me.body.role,'OWNER');await owner.agent.get('/api/v1/auth/me').expect(401);await owner.agent.get('/api/v1/admin/overview').expect(200);await post(owner.agent,'accounts/'+client.id+'/state',owner.csrf,{active:false,reason:'Test isolated suspension'}).set('Origin',process.env.APP_ORIGIN!).expect(403);await post(owner.agent,'reauth',owner.csrf,{password:'incorrect-password-123'}).expect(401);});
 test('admin permissions, suspension and session revocation are enforced server side',async()=>{const owner=await enroll(),ops=await enroll('OPS'),client=await account();await ops.agent.get('/api/v1/admin/accounts').expect(403);await ops.agent.get('/api/v1/admin/jobs').expect(200);await post(ops.agent,'accounts/'+client.id+'/state',ops.csrf,{active:false,reason:'Forbidden suspension'}).expect(403);await post(owner.agent,'accounts/'+client.id+'/state',owner.csrf,{active:false,reason:'Isolated suspension test'}).expect(201);await client.agent.get('/api/v1/auth/me').expect(401);await post(owner.agent,'access/'+ops.id,owner.csrf,{active:false,role:'OPS',reason:'Isolated revoke access'}).expect(201);await ops.agent.get('/api/v1/admin/jobs').expect(401);});
 test('admin read endpoints expose bounded selected fields and no credentials',async()=>{const owner=await enroll();for(const path of ['accounts','organizations','missions','jobs','sources','infrastructure','audit','access','quality','backups']){const r=await owner.agent.get('/api/v1/admin/'+path).expect(200);assert.doesNotMatch(JSON.stringify(r.body),/password_hash|totp_secret|invitation_hash|postgresql:\/\//);}await owner.agent.get('/api/v1/admin/accounts?limit=1000').expect(400);});
 
-test('last usable owner cannot be removed and sensitive actions require fresh MFA',async()=>{
+test('last usable owner cannot be removed and sensitive actions require recent password confirmation',async()=>{
  const owner=await enroll();const others=await db.query("UPDATE platform_admin SET role='AUDITOR' WHERE role='OWNER' AND user_id<>$1 RETURNING user_id",[owner.id]);
  try {await post(owner.agent,'access/'+owner.id,owner.csrf,{active:false,role:'OWNER',reason:'Last owner rejection test'}).expect(409);} finally {await db.query("UPDATE platform_admin SET role='OWNER' WHERE user_id=ANY($1::uuid[])",[others.map(a=>a.user_id)]);}
- await db.query("UPDATE admin_session SET sess=jsonb_set(sess::jsonb,'{adminMfaAt}',to_jsonb($2::bigint))::json WHERE sess->>'adminId'=$1",[owner.id,Date.now()-6*60000]);
- const client=await account();const denied=await post(owner.agent,'accounts/'+client.id+'/revoke',owner.csrf,{reason:'Fresh MFA required test'}).expect(403);assert.equal(denied.body.code,'ADMIN_REAUTH_REQUIRED');
- await post(owner.agent,'reauth',owner.csrf,{code:totp(owner.secret,owner.counter+1)}).expect(201);await post(owner.agent,'accounts/'+client.id+'/revoke',owner.csrf,{reason:'Fresh MFA accepted test'}).expect(201);
+ await db.query("UPDATE admin_session SET sess=jsonb_set(sess::jsonb,'{adminVerifiedAt}',to_jsonb($2::bigint))::json WHERE sess->>'adminId'=$1",[owner.id,Date.now()-6*60000]);
+ const client=await account();const denied=await post(owner.agent,'accounts/'+client.id+'/revoke',owner.csrf,{reason:'Recent password confirmation required test'}).expect(403);assert.equal(denied.body.code,'ADMIN_REAUTH_REQUIRED');
+ await post(owner.agent,'reauth',owner.csrf,{password}).expect(201);await post(owner.agent,'accounts/'+client.id+'/revoke',owner.csrf,{reason:'Recent password confirmation accepted test'}).expect(201);
 });
 
 
@@ -87,15 +86,24 @@ test('dedicated administrator activation requires an invitation and never grants
  const agent=request.agent(app.getHttpServer()),c=await agent.get('/api/v1/admin/csrf');
  await post(agent,'activate',c.body.csrfToken,{email,password,invitation:'x'.repeat(64)}).expect(401);
  const activated=await post(agent,'activate',c.body.csrfToken,{email,password,invitation}).expect(201);
- assert.equal(activated.body.status,'MFA_ENROLLMENT');
- await agent.get('/api/v1/admin/overview').expect(401);
+ assert.equal(activated.body.status,'AUTHENTICATED');
+ await agent.get('/api/v1/admin/overview').expect(200);
  await post(agent,'activate',activated.body.csrfToken,{email,password,invitation}).expect(401);
- const secret=new URL(activated.body.otpauthUri).searchParams.get('secret')!;
- await post(agent,'mfa',activated.body.csrfToken,{code:totp(secret,Math.floor(Date.now()/30000))}).expect(201);
  assert.equal((await agent.get('/api/v1/admin/me').expect(200)).body.role,'OWNER');
  await agent.get('/api/v1/auth/me').expect(401);
  const client=request.agent(app.getHttpServer()),csrf=await client.get('/api/v1/auth/csrf');
  await client.post('/api/v1/auth/login').set('Origin',process.env.APP_ORIGIN!).set('X-CSRF-Token',csrf.body.csrfToken).send({email,password}).expect(401);
  assert.equal((await db.query('SELECT 1 FROM membership WHERE user_id=$1',[a.id])).length,0);
  assert.equal((await db.query('SELECT 1 FROM profile WHERE user_id=$1',[a.id])).length,0);
+});
+
+
+test('activated dedicated administrator signs in with password alone and can reconnect after idle expiration',async()=>{
+ const owner=await enroll();await db.query("UPDATE account SET platform_only=true,terms_version='ADMIN_ACTIVATED' WHERE id=$1",[owner.id]);
+ await db.query("UPDATE admin_session SET sess=jsonb_set(sess::jsonb,'{adminActivityAt}','0'::jsonb)::json WHERE sess->>'adminId'=$1",[owner.id]);
+ await owner.agent.get('/api/v1/admin/overview').expect(401);
+ const csrf=await owner.agent.get('/api/v1/admin/csrf');
+ const login=await post(owner.agent,'login',csrf.body.csrfToken,{email:owner.email,password}).expect(201);assert.equal(login.body.status,'AUTHENTICATED');
+ await owner.agent.get('/api/v1/admin/overview').expect(200);
+ await post(owner.agent,'mfa',login.body.csrfToken,{code:'000000'}).expect(404);
 });
