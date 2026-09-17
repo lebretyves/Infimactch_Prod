@@ -19,7 +19,7 @@ function warningText(code: string, check: ApplicationCheck | null, mission: List
         ? `Expérience en ${labelCode(mission.service || "ce service")} : ${(Math.floor(check.experienceMonths * 10) / 10).toLocaleString("fr-FR", { maximumFractionDigits: 1 })} mois renseignés pour ${check.requiredExperienceMonths} mois demandés.`
         : "L’expérience renseignée est inférieure à celle demandée pour ce service.";
     case "NOT_FULLY_AVAILABLE":
-      return `Vos disponibilités enregistrées ne couvrent pas toute la mission, du ${date(mission.start_at)} au ${date(mission.end_at)}.`;
+      return `Vos disponibilités enregistrées ne couvrent pas toute la mission, du ${date(mission.start_at, mission.timezone)} au ${date(mission.end_at, mission.timezone)}.`;
     case "SHIFT_NOT_ACCEPTED":
       return `Les horaires de cette mission (${({ DAY: "jour", NIGHT: "nuit", MIXED: "jour et nuit" } as Record<string, string>)[mission.shift || ""] || "voir les conditions"}) ne figurent pas parmi vos horaires acceptés.`;
     case "OUTSIDE_RADIUS":
@@ -113,7 +113,7 @@ export default function Candidater() {
       <section className={s.rappel}>
         <h2>{m.title}</h2>
         <p>
-          {date(m.start_at)} → {date(m.end_at)}
+          {date(m.start_at, m.timezone)} → {date(m.end_at, m.timezone)}
         </p>
         <p>{salary(m)}</p>
         <p>{m.address}</p>

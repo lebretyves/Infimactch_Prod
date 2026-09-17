@@ -35,7 +35,8 @@ type Dashboard = {
     id: string;
     title: string;
     status: string;
-    start_at: string;
+    timezone?: string;
+  start_at: string;
     end_at: string;
     application_count: number;
   }[];
@@ -227,7 +228,7 @@ export default function Accueil() {
                         </div>
                         <p className={s.date}>
                           <Icon name="calendar" size={19} />
-                          {date(next.start_at)} — {date(next.end_at)}
+                          {date(next.start_at, next.timezone)} — {date(next.end_at, next.timezone)}
                         </p>
                         <div className={u.actions}>
                           <ButtonLink to={"/missions/m_" + next.mission_id}>
@@ -392,7 +393,7 @@ export default function Accueil() {
                     <article key={m.id}>
                       <h3>{m.title}</h3>
                       <p>
-                        {labels[m.status] || m.status} · {date(m.start_at)} ·{" "}
+                        {labels[m.status] || m.status} · {date(m.start_at, m.timezone)} ·{" "}
                         {m.application_count} candidature(s) à traiter
                       </p>
                       <ButtonLink to={"/gestion/missions/" + m.id}>

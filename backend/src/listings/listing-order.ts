@@ -66,7 +66,7 @@ export async function rankedListingPage(db: Database, sourceSql: string, sourceP
     const bind = (v: unknown) => { parameters.push(v); return '$' + parameters.length; };
     const q = search.q?.trim();
     const textFilter = q ? "strpos(lower(concat_ws(' ',data->>'title',data->>'service',data->>'location_label',data->>'address')),lower(" + bind(q) + "::text))>0" : 'true';
-    const fields = ['id','kind','title','qualification','service','status','start_at','end_at','created_at','publicationDate','required_skills','desired_skills','min_experience_months','population','block','specialty','shift','latitude','longitude'];
+    const fields = ['id','kind','title','qualification','service','status','start_at','end_at','timezone','created_at','publicationDate','required_skills','desired_skills','min_experience_months','population','block','specialty','shift','latitude','longitude'];
     const profilePoint = point(profile.latitude, profile.longitude);
     const matchDistance = profilePoint
       ? "CASE WHEN data->>'kind'='INTERNAL_MISSION' THEN ST_Distance(ST_SetSRID(ST_MakePoint((data->>'longitude')::double precision,(data->>'latitude')::double precision),4326)::geography,ST_SetSRID(ST_MakePoint(" + bind(profilePoint.longitude) + "," + bind(profilePoint.latitude) + "),4326)::geography)/1000 ELSE NULL END"

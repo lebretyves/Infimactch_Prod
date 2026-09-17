@@ -37,12 +37,12 @@ export class RecommendationsController {
   }
   private async internal(actor:string,profile:any) {
     if(!profile.qualifications.length || profile.rpps_status!=='FOUND'){
-      const rows=await this.db.query("SELECT id,title,qualification,service,shift,address,start_at,end_at,hourly_salary,status,version,created_at FROM mission WHERE status='OPEN' AND start_at>now() ORDER BY created_at DESC,id LIMIT 3");
+      const rows=await this.db.query("SELECT id,title,qualification,service,shift,address,start_at,end_at,timezone,hourly_salary,status,version,created_at FROM mission WHERE status='OPEN' AND start_at>now() ORDER BY created_at DESC,id LIMIT 3");
       return {status:'READY',personalization:'GENERAL_PROFILE_INCOMPLETE',rppsStatus:profile.rpps_status,items:rows.map(m=>({...m,id:'m_'+m.id,kind:'INTERNAL_MISSION',publicationDate:m.created_at,importedAt:null,sourceUpdatedAt:null,salary:{amount:Number(m.hourly_salary),currency:'EUR',unit:'HOUR',gross:true}}))};
     }
     const selected=await this.matching.forNurse(actor,{limit:3,offset:0},'recent');
     if(!selected.items.length)return {status:'READY',personalization:'COMPATIBLE',rppsStatus:selected.rppsStatus,items:[]};
-    const rows=await this.db.query("SELECT id,title,qualification,service,shift,address,start_at,end_at,hourly_salary,status,version FROM mission WHERE id=ANY($1::uuid[]) AND status='OPEN' AND start_at>now()",[selected.items.map(x=>x.missionId)]);
+    const rows=await this.db.query("SELECT id,title,qualification,service,shift,address,start_at,end_at,timezone,hourly_salary,status,version FROM mission WHERE id=ANY($1::uuid[]) AND status='OPEN' AND start_at>now()",[selected.items.map(x=>x.missionId)]);
     return {status:'READY',personalization:'COMPATIBLE',rppsStatus:selected.rppsStatus,items:selected.items.flatMap((x:any)=>{
       const m=rows.find(r=>r.id===x.missionId);if(!m||m.version!==x.missionVersion)return [];
       return [{...m,id:'m_'+m.id,kind:'INTERNAL_MISSION',matching_score:x.score,match_explanation_id:x.explanationId,publicationDate:x.publishedAt??null,importedAt:null,sourceUpdatedAt:null,salary:{amount:Number(m.hourly_salary),currency:'EUR',unit:'HOUR',gross:true}}];

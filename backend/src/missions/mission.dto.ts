@@ -1,6 +1,8 @@
 import { ApiProperty } from "@nestjs/swagger";
 import {
   IsString,
+  IsTimeZone,
+  ValidateIf,
   IsUUID,
   IsIn,
   IsNumber,
@@ -81,6 +83,11 @@ export class MissionDto {
   @ApiProperty({ type: () => String, required: true })
   @IsString()
   start!: string;
+  @ApiProperty({ type: () => String, required: false, default: "Europe/Paris", example: "America/Guadeloupe" })
+  @ValidateIf((_object, value) => value !== undefined)
+  @IsTimeZone()
+  @Matches(/^[A-Za-z_]+(?:\/[A-Za-z0-9_+.-]+)*$/)
+  timezone?: string;
   @ApiProperty({ type: () => String, required: true })
   @IsString()
   end!: string;

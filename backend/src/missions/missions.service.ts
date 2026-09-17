@@ -83,6 +83,12 @@ async function applicationAssessment(em: SqlClient, p: any, m: any) {
 export class MissionsService {
   constructor(private readonly db: Database) {}
   private validate(b: MissionDto) {
+    if (b.timezone !== undefined) {
+      try {
+        if (typeof b.timezone !== "string" || !/^[A-Za-z_]+(?:\/[A-Za-z0-9_+.-]+)*$/.test(b.timezone)) throw new Error();
+        new Intl.DateTimeFormat("en", { timeZone: b.timezone }).format();
+      } catch { throw new BadRequestException("Invalid mission timezone"); }
+    }
     try {
       interval(b);
     } catch {
@@ -112,7 +118,7 @@ export class MissionsService {
       const receipt = await commandReceipt(em, actor, "mission:create", key, b);
       if (receipt.replay) return receipt.response;
       const [m] = await em.query(
-        `INSERT INTO mission(agency_id,establishment_id,title,description,qualification,service,population,block,specialty,required_skills,desired_skills,min_experience_months,start_at,end_at,shift,address,location,hourly_salary,staffing_request_id) VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,ST_SetSRID(ST_MakePoint($17,$18),4326)::geography,$19,$20) RETURNING id,version,status`,
+        `INSERT INTO mission(agency_id,establishment_id,title,description,qualification,service,population,block,specialty,required_skills,desired_skills,min_experience_months,start_at,end_at,shift,address,location,hourly_salary,staffing_request_id,timezone) VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,ST_SetSRID(ST_MakePoint($17,$18),4326)::geography,$19,$20,$21) RETURNING id,version,status`,
         [
           b.agencyId ?? null,
           b.establishmentId,
@@ -134,6 +140,7 @@ export class MissionsService {
           b.latitude,
           b.hourlySalary,
           b.staffingRequestId ?? null,
+          b.timezone ?? "Europe/Paris",
         ],
       );
       await audit(em, actor, "MISSION_CREATED", m.id);
@@ -179,6 +186,7 @@ export class MissionsService {
         m.longitude,
         m.latitude,
         Number(m.hourly_salary),
+        m.timezone ?? "Europe/Paris",
       ];
       const newTerms = [
         b.qualification,
@@ -196,11 +204,12 @@ export class MissionsService {
         b.longitude,
         b.latitude,
         b.hourlySalary,
+        b.timezone ?? m.timezone ?? "Europe/Paris",
       ];
       const revision =
         JSON.stringify(oldTerms) === JSON.stringify(newTerms) ? 0 : 1;
       const [updated] = await em.query(
-        `UPDATE mission SET title=$2,description=$3,qualification=$4,service=$5,population=$6,block=$7,specialty=$8,required_skills=$9,desired_skills=$10,min_experience_months=$11,start_at=$12,end_at=$13,shift=$14,address=$15,location=ST_SetSRID(ST_MakePoint($16,$17),4326)::geography,hourly_salary=$18,version=version+$19 WHERE id=$1 RETURNING id,version,status`,
+        `UPDATE mission SET title=$2,description=$3,qualification=$4,service=$5,population=$6,block=$7,specialty=$8,required_skills=$9,desired_skills=$10,min_experience_months=$11,start_at=$12,end_at=$13,shift=$14,address=$15,location=ST_SetSRID(ST_MakePoint($16,$17),4326)::geography,hourly_salary=$18,version=version+$19,timezone=$20 WHERE id=$1 RETURNING id,version,status`,
         [
           id,
           b.title,
@@ -221,6 +230,7 @@ export class MissionsService {
           b.latitude,
           b.hourlySalary,
           revision,
+          b.timezone ?? m.timezone ?? "Europe/Paris",
         ],
       );
       await audit(em, actor, "MISSION_REVISED", id, {

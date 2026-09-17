@@ -44,7 +44,7 @@ export default function EntrepriseMissions() {
                 {m.qualification}
               </p>
               <p>
-                {date(m.start_at)} → {date(m.end_at)}
+                {date(m.start_at, m.timezone)} → {date(m.end_at, m.timezone)}
               </p>
               <ButtonLink to={"/gestion/missions/" + m.id}>
                 Consulter la mission et les candidatures

@@ -69,7 +69,7 @@ export function MixedRecommendations({
               {!external && (
                 <span>
                   {item.start_at
-                    ? `${date(item.start_at)}${item.end_at ? ` — ${date(item.end_at)}` : ""}`
+                    ? `${date(item.start_at, item.timezone)}${item.end_at ? ` — ${date(item.end_at, item.timezone)}` : ""}`
                     : "Dates de mission non précisées"}
                 </span>
               )}
