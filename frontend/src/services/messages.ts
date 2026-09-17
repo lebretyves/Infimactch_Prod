@@ -27,6 +27,8 @@ export function explainReasons(fields: unknown): string {
     : "";
 }
 export const serverMessages: Record<string, string> = {
+  "Impossible d’envoyer le code. Rejoignez le serveur du bot et autorisez ses messages privés, puis vérifiez votre identifiant Discord.": "Impossible d’envoyer le code. Rejoignez le serveur du bot et autorisez ses messages privés, puis vérifiez votre identifiant Discord.",
+  "Trois codes maximum par heure. Réessayez plus tard.": "Trois codes maximum par heure. Réessayez plus tard.",
   "At least one qualification required":
     "Renseignez au moins une qualification dans votre profil.",
   "Complete the IDE qualification explicitly":
