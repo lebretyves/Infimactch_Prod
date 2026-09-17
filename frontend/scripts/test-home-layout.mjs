@@ -1,4 +1,4 @@
-﻿import assert from "node:assert/strict";
+import assert from "node:assert/strict";
 import { mkdir } from "node:fs/promises";
 import { chromium } from "playwright";
 const browser = await chromium.launch({ channel: "msedge", headless: true });
@@ -127,17 +127,7 @@ try {
       .count(),
     0,
   );
-  assert.equal(
-    await page
-      .locator("details")
-      .filter({
-        has: page
-          .locator("summary")
-          .filter({ hasText: "Préférences de notification" }),
-      })
-      .getAttribute("open"),
-    null,
-  );
+  assert.equal(await page.getByRole("heading", {name:"Notifications de mission",exact:true}).count(),0);
   await mkdir("artifacts/home-redesign", { recursive: true });
   for (const width of [1440, 768, 375]) {
     await page.setViewportSize({ width, height: 1100 });
@@ -176,15 +166,15 @@ try {
   bank = true;
   await page.reload();
   await page
-    .getByRole("heading", { name: "Votre prochaine mission", exact: true })
+    .getByRole("heading", { name: "Missions à venir", exact: true })
     .waitFor();
   await page
-    .getByRole("button", { name: "Voir la confirmation", exact: true })
+    .getByRole("link", { name: "Voir la mission : Mission confirmée de médecine", exact: true })
     .waitFor();
   await page.getByRole("complementary", { name: "RIB à compléter" }).waitFor();
   const confirmedCard = page.locator("section").filter({
     has: page.getByRole("heading", {
-      name: "Votre prochaine mission",
+      name: "Missions à venir",
       exact: true,
     }),
   });
@@ -201,7 +191,7 @@ try {
   );
   assert.deepEqual(errors, []);
   console.log(
-    "PASS home: offers first/mobile order, date-only Paris in US browser timezone, no empty mission panel, real follow-up counts, preferences collapsed, confirmed mission times/actions and RIB preserved,375/768/1440 no overflow, no writes.",
+    "PASS home: offers first/mobile order, date-only Paris in US browser timezone, no empty mission panel, real follow-up counts, notifications replaced, confirmed mission times/actions and RIB preserved,375/768/1440 no overflow, no writes.",
   );
 } finally {
   await browser.close();

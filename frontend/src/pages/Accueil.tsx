@@ -1,6 +1,7 @@
 import { BankReminder } from "@/components/BankReminder";
 import { MixedRecommendations } from "@/components/MixedRecommendations";
-import { NotificationPreferences } from "@/components/NotificationPreferences";
+import { UpcomingMissions } from "@/components/UpcomingMissions";
+import { notificationHref } from "@/lib/notificationHref";
 import { useState } from "react";
 import { Link } from "react-router";
 import { useAuth } from "@/context/AuthContext";
@@ -18,7 +19,6 @@ import {
 import { availabilityDateLabel } from "@/lib/availabilityDateLabel";
 import { Button, ButtonLink } from "@/ui/Button";
 import { Icon } from "@/ui/Icon";
-import { ConfirmationButton } from "@/components/ConfirmationButton";
 import u from "@/components/NurseUI.module.css";
 import s from "./Accueil.module.css";
 type Dashboard = {
@@ -64,7 +64,7 @@ export default function Accueil() {
   const r = useRemote(async (signal) => {
     const [dashboard, notifications] = await Promise.all([
       api<Dashboard>("/dashboards", { signal }),
-      api<Notification[]>("/me/notifications?limit=20", { signal }),
+      nurse ? Promise.resolve([] as Notification[]) : api<Notification[]>("/me/notifications?limit=20", { signal }),
     ]);
     if (!nurse) return { dashboard, notifications, nurse: null };
     const [profile, history, applications, saved] = await Promise.all([
@@ -98,11 +98,6 @@ export default function Accueil() {
     }
   }
   const data = r.data?.nurse;
-  const next = data?.history
-    .filter(
-      (m) => m.status === "ACTIVE" && new Date(m.end_at).getTime() > Date.now(),
-    )
-    .sort((a, b) => Date.parse(a.start_at) - Date.parse(b.start_at))[0];
   const availabilityLabels = [
     ...new Set(
       (data?.profile.available || [])
@@ -212,33 +207,6 @@ export default function Accueil() {
                       <Icon name="chevron" size={17} />
                     </Link>
                   </div>
-                  {next && (
-                    <section className={u.card}>
-                      <div className={u.row}>
-                        <h2>Votre prochaine mission</h2>
-                        <span className={u.badge}>Confirmée</span>
-                      </div>
-
-                      <>
-                        <div className={s.missionTitle}>
-                          <span className={s.icon}>
-                            <Icon name="building" />
-                          </span>
-                          <h3>{next.title}</h3>
-                        </div>
-                        <p className={s.date}>
-                          <Icon name="calendar" size={19} />
-                          {date(next.start_at, next.timezone)} — {date(next.end_at, next.timezone)}
-                        </p>
-                        <div className={u.actions}>
-                          <ButtonLink to={"/missions/m_" + next.mission_id}>
-                            Voir la mission
-                          </ButtonLink>
-                          <ConfirmationButton assignmentId={next.id} />
-                        </div>
-                      </>
-                    </section>
-                  )}
                 </div>
                 <div className={u.stack}>
                   <section className={u.card}>
@@ -289,25 +257,7 @@ export default function Accueil() {
                       <Link to="/calendrier">Ma mobilité</Link>
                     </div>
                   </section>
-                  <section className={u.card}>
-                    <h2 className={u.cardHeading}>
-                      <Icon name="bell" />
-                      Notifications de mission
-                    </h2>
-                    {notificationList()}
-                    <Link to="/notifications" className={s.textLink}>
-                      Toutes mes notifications →
-                    </Link>
-                    {user && (
-                      <details className={s.preferences}>
-                        <summary>Préférences de notification</summary>
-                        <NotificationPreferences
-                          key={user.id}
-                          userId={user.id}
-                        />
-                      </details>
-                    )}
-                  </section>
+                  <UpcomingMissions assignments={data.history} />
                 </div>
               </div>
               <BankReminder />
@@ -430,33 +380,12 @@ export default function Accueil() {
             <div className={u.actions}>
               <Link
                 className={s.textLink}
-                to={
-                  n.href ||
-                  (n.kind === "CONFIRMATION" ? "/historique" : "/missions")
-                }
+                to={notificationHref(n.href || (n.kind === "CONFIRMATION" ? "/historique" : "/missions"), n.id)}
               >
                 {n.kind === "CONFIRMATION"
                   ? "Voir mes confirmations"
                   : "Consulter les missions"}
               </Link>
-              {!n.read_at ? (
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  disabled={!!busy}
-                  onClick={() =>
-                    void act(n.id, () =>
-                      api("/me/notifications/" + n.id + "/read", {
-                        method: "POST",
-                      }),
-                    )
-                  }
-                >
-                  Marquer comme lue
-                </Button>
-              ) : (
-                <span className={u.muted}>Lue</span>
-              )}
             </div>
           </li>
         ))}
