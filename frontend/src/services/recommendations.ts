@@ -9,7 +9,7 @@ export type Recommendation = Listing & {
 };
 export type Recommendations = {
   mode: 'MIXED'; generatedAt: string;
-  internal: { status: 'READY' | 'UNAVAILABLE'; rppsStatus: string | null; items: Recommendation[] };
-  external: { status: 'READY' | 'UNAVAILABLE'; personalization: 'PARTIAL' | 'GENERAL_PROFILE_INCOMPLETE'; items: Recommendation[]; sources: { provider: string; status: string; created_at: string | null }[] };
+  internal: { status: 'READY' | 'UNAVAILABLE' | 'HIDDEN'; personalization?: 'COMPATIBLE' | 'GENERAL_PROFILE_INCOMPLETE'; rppsStatus: string | null; items: Recommendation[] };
+  external: { status: 'READY' | 'UNAVAILABLE' | 'HIDDEN'; personalization: 'PARTIAL' | 'GENERAL_PROFILE_INCOMPLETE'; items: Recommendation[]; sources: { provider: string; status: string; created_at: string | null }[] };
 };
-export const getRecommendations = (signal: AbortSignal) => api<Recommendations>('/me/recommendations', { signal });
+export const getRecommendations = (signal: AbortSignal, origine: 'toutes' | 'partenaires' | 'externes' = 'toutes') => api<Recommendations>('/me/recommendations?origine=' + origine, { signal });

@@ -133,6 +133,7 @@ export function AppLayout() {
           </div>
         )}
         <div className={s.bottom}>
+          <Link to="/compte" className={s.catalogue}>Mon compte</Link>
           <Link to="/installer" className={s.catalogue}>Installer l’application</Link>
           <Link to="/catalogue" className={s.catalogue}>
             Catalogue des pages

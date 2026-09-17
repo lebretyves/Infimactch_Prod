@@ -186,10 +186,6 @@ export async function logout() {
   clearAuth();
   resetCsrf();
 }
-export async function forgotPassword(
-  _email: string,
-): Promise<{ message: string }> {
-  throw new Error(
-    "La réinitialisation du mot de passe n'est pas encore disponible. Aucun e-mail n'a été envoyé.",
-  );
+export async function forgotPassword(email: string): Promise<{ ok: boolean; message: string }> {
+  return api('/auth/recovery/request', { method: 'POST', body: { email } });
 }

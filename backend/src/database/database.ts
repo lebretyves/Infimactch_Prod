@@ -1,3 +1,4 @@
+import { ClientRequests1789382000000 } from "./client-requests";
 import { AdminOperations1789381900000 } from "./admin-operations";
 import { ProfessionalIdentity1789381800000 } from "./professional-identity";
 import { PlatformAdmin1789381700000 } from "./platform-admin";
@@ -48,6 +49,7 @@ export class Database implements OnModuleDestroy {
       PlatformAdmin1789381700000,
       ProfessionalIdentity1789381800000,
       AdminOperations1789381900000,
+      ClientRequests1789382000000,
     ],
     logging: false,
     extra: { max: 12 },

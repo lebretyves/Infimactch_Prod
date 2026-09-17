@@ -93,11 +93,13 @@ export function list(
   signal?: AbortSignal,
   q?: string,
   filters: SearchFilters = {},
+  origine: "toutes" | "partenaires" | "externes" = "toutes",
 ) {
   return api<ListingPage>("/listings/search", {
     method: "POST",
     body: {
       qualifications,
+      origine,
       ...filters,
       limit: 20,
       offset,

@@ -134,6 +134,7 @@ export default function Connexion() {
           Se connecter
         </Button>
       </form>
+      <p><Link to="/mot-de-passe-oublie">Mot de passe oublié ? Retrouver mon accès</Link></p>
       <GoogleConnexion password={motDePasse} />
       <ProSanteConnect />
 

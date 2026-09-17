@@ -385,19 +385,34 @@ class DocumentsController {
       true,
     );
   }
+  @Put("bank-document") async bankDocument(
+    @Req() r:Request,@Headers("idempotency-key") key:string|undefined,@Body() b:UploadDto,
+  ) {
+    const data=Buffer.from(b.contentBase64,'base64');
+    if(!data.length || data.length>3*1024*1024 || fileMime(data)!==b.mime)
+      throw new BadRequestException('PDF, JPEG ou PNG requis, 3 Mo maximum, avec un contenu conforme au format.');
+    await this.db.transaction(em=>nurse(em,user(r)));
+    return this.documents.store(user(r),'BANK',b.mime,data,null,{operation:'bank-document.replace',key,content:b},true);
+  }
+  @Get("bank-document") async downloadBank(@Req() r:Request,@Res() res:Response){
+    const [doc]=await this.db.query("SELECT id FROM document WHERE owner_id=$1 AND kind='BANK' AND status='READY' AND superseded_at IS NULL AND mime IN('application/pdf','image/jpeg','image/png') ORDER BY created_at DESC,id LIMIT 1",[user(r)]);
+    if(!doc)throw new NotFoundException();
+    const data=await this.documents.read(user(r),doc.id);
+    const ext=data.mime==='application/pdf'?'pdf':data.mime==='image/png'?'png':'jpg';
+    res.set({'Content-Type':data.mime,'Content-Disposition':'attachment; filename="infimatch-rib.'+ext+'"','Cache-Control':'no-store'}).send(data.data);
+  }
   @Get("bank-details") async getBank(@Req() r: Request) {
     const [d] = await this.db.query(
-      "SELECT id FROM document WHERE owner_id=$1 AND kind='BANK' AND status='READY' AND superseded_at IS NULL ORDER BY created_at DESC,id LIMIT 1",
+      "SELECT id,mime,size_bytes,created_at FROM document WHERE owner_id=$1 AND kind='BANK' AND status='READY' AND superseded_at IS NULL ORDER BY created_at DESC,id LIMIT 1",
       [user(r)],
     );
-    if (!d) return { iban: null };
-    const data = await this.documents.read(user(r), d.id);
-    const b = JSON.parse(data.data.toString());
-    return {
-      iban: "FR** **** **** **** **** **" + b.iban.slice(-4),
-      fictional: true,
-    };
+    const [assignment]=await this.db.query("SELECT 1 FROM assignment WHERE nurse_id=$1 AND status IN('ACTIVE','COMPLETED') LIMIT 1",[user(r)]);
+    if(!d)return {iban:null,document:null,required:!!assignment};
+    if(d.mime!=='application/json')return {iban:null,document:d,required:false,fictional:true};
+    const data=await this.documents.read(user(r),d.id),b=JSON.parse(data.data.toString());
+    return {iban:'FR** **** **** **** **** **'+b.iban.slice(-4),document:null,required:false,fictional:true};
   }
+
 }
 @Module({
   controllers: [DocumentsController],

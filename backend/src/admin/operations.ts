@@ -152,7 +152,5 @@ export class AdminOperationsController {
     const actor=authorizeAdmin(r,'incidents:write',true);
     return this.db.transaction(async em=>{const rows=await em.query("UPDATE operational_incident SET state=$2,updated_at=now(),resolved_at=CASE WHEN $2='RESOLVED' THEN COALESCE(resolved_at,now()) ELSE NULL END WHERE id=$1 RETURNING id",[id,b.state]);if(!rows.length)throw new NotFoundException();await audit(em,actor,'ADMIN_INCIDENT_UPDATED',id,{state:b.state,reason:b.reason});return {ok:true};});
   }
-  @Get('privacy-requests') privacy(@Req() r:Request,@Query() p:PageDto) {
-    authorizeAdmin(r,'accounts');return this.page('SELECT id,account_id,status,requested_at,approved_at,completed_at FROM closure_request ORDER BY requested_at DESC,id',[],p);
-  }
+
 }

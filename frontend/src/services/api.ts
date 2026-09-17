@@ -123,6 +123,8 @@ export async function api<T>(
         : ["/auth/register", "/auth/google/register"].includes(path) &&
         data.message === "Registration unavailable for these details"
         ? "Inscription impossible avec ces informations. Si vous avez déjà un compte, connectez-vous."
+        : data.code === "CLOSURE_PASSWORD_INVALID"
+          ? "Mot de passe incorrect. Vérifiez votre mot de passe actuel et réessayez."
         : data.code === "INELIGIBLE"
           ? "Votre profil ne remplit pas les conditions de cette mission. " +
             explainReasons(data.fields)

@@ -57,7 +57,7 @@ try {
   for(const expected of [failure,rateLimit,'Serveur indisponible.']) {
     await localForm.getByRole('alert').filter({hasText:expected}).waitFor();
     assert.equal(await page.getByRole('status').filter({hasText:'Code envoyé'}).count(),0);
-    assert.equal(await localForm.getByRole('link').getAttribute('href'),'https://discord.gg/5V7AZZjAET');
+    assert.equal(await localForm.getByRole('link').getAttribute('href'),'https://discord.gg/Ed73jG3pRd');
     for(const width of [375,1440]) {
       await page.setViewportSize({width,height:1000});
       assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth+1),false);
@@ -75,7 +75,7 @@ try {
   await page.getByLabel('Code reçu sur Discord').waitFor();
   linked=true; await page.reload();
   await page.getByText('Compte Discord associé :', {exact:false}).waitFor();
-  assert.equal(await page.getByRole('link',{name:'Rejoindre le serveur InfiMatch',exact:true}).getAttribute('href'),'https://discord.gg/5V7AZZjAET');
+  assert.equal(await page.getByRole('link',{name:'Rejoindre le serveur InfiMatch',exact:true}).getAttribute('href'),'https://discord.gg/Ed73jG3pRd');
   console.log('PASS scoped actual HTTP400 send/rate errors, network failure, no false success, sending disabled/repeat guard, retry success, linked-account join, 375/1440.');
   console.log('PASS: no automatic messages, numeric keyboard hint, names/short/internal-space IDs rejected without request, pasted outer whitespace trimmed, exact string ID preserved, code verification remains separate. All APIs intercepted; no actual Discord delivery.');
 } finally { await browser.close(); }

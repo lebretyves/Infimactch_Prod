@@ -55,14 +55,13 @@ async function candidate(page, address, { navigation = false } = {}) {
   await page.getByLabel(/^Numéro RPPS/).fill('10000000001');
   await step(page, '/inscription/mobilite');
   await step(page, '/inscription/disponibilites');
-  await step(page, '/inscription/rib');
+  await step(page, '/inscription/consentements');
   if (navigation) {
     await page.getByRole('link', { name: 'Retour', exact: true }).click();
     await page.waitForURL('**/inscription/disponibilites');
-    await step(page, '/inscription/rib');
-    checks.push('rib_back_returns_to_availability');
+    await step(page, '/inscription/consentements');
+    checks.push('consent_back_returns_to_availability');
   }
-  await step(page, '/inscription/consentements');
 }
 async function consent(page) {
   await page.getByRole('checkbox').first().waitFor();

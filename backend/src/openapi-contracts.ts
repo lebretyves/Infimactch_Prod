@@ -6,7 +6,7 @@ const interval=obj({start:date,end:date},["start","end"]);
 const organization=obj({id:uuid,kind:{...str,enum:["AGENCY","ESTABLISHMENT"]},name:str,address:str,referent:str,finess:nullable(str),siret:nullable(str)},["id","kind","name"]);
 const session=obj({idleTimeoutMs:int,idleExpiresAt:int},["idleTimeoutMs","idleExpiresAt"]);
 const match=obj({eligible:bool,score:nullable(num),reasons:array(str),missionId:uuid,explanationId:nullable(str),historyStatus:str,candidateId:uuid,display_name:str,qualifications:array(str),skills:array(str)},["eligible","score"]);
-const closure=obj({id:uuid,status:{...str,enum:["REQUESTED","APPROVED","COMPLETED","CANCELLED"]},requested_at:date,approved_at:nullable(date),completed_at:nullable(date)},["id","status","requested_at"]);
+const closure=obj({id:uuid,status:{...str,enum:["REQUESTED","APPROVED","PROCESSING","COMPLETED","CANCELLED","REJECTED"]},requested_at:date,approved_at:nullable(date),completed_at:nullable(date),decision_reason:nullable(str),last_error:nullable(str)},["id","status","requested_at"]);
 const profile=obj({user_id:uuid,display_name:str,qualifications:array(str),skills:array(str),experience:array(obj({service:str,months:num})),available:array(interval),unavailable:array(interval),latitude:nullable(num),longitude:nullable(num),radius_km:nullable(num),accepted_shifts:array(str),preferred_shifts:array(str),visible:bool,notifications_enabled:bool,rpps_number:nullable(str),rpps_status:{...str,enum:["NOT_CHECKED","FOUND","NOT_FOUND","PENDING"]},rpps_version:int,rpps_checked_at:nullable(date),updated_at:date,details:{type:"object",additionalProperties:true,description:"Versioned professional form fields; no bank document or credential"}},["user_id","display_name","qualifications","available","unavailable","rpps_status"]);
 const auth=obj({user:obj({id:uuid,family:{...str,enum:["NURSE","ENTERPRISE"]}},["id","family"]),csrfToken:str},["user","csrfToken"]);
 const ok=obj({ok:{type:"boolean",enum:[true]}},["ok"]);
@@ -16,6 +16,19 @@ export const additionalSchemas={Profile:profile,Organization:organization,Sessio
  ExternalCorrespondence:obj({mode:str,score:nullable(num),eligibilityVerified:bool,criteria:{type:"object",additionalProperties:obj({status:str,reason:str,offerValue:{},profileValue:{},value:{}})},warnings:array(str),missingForFullMatching:array(str)}),
 };
 export const additionalResponses:Record<string,any>={
+ "PUT /api/v1/me/bank-document":obj({id:uuid,status:str}),
+ "GET /api/v1/me/bank-document":{type:'string',format:'binary'},
+
+ "POST /api/v1/auth/recovery/request":obj({ok:bool,message:str}),
+ "POST /api/v1/auth/recovery/complete":ok,
+ "GET /api/v1/admin/recovery-requests":page(obj({id:uuid,account_id:uuid,email:str,status:str,requested_at:date,issued_at:nullable(date),expires_at:nullable(date),completed_at:nullable(date),decision_reason:nullable(str)})),
+ "POST /api/v1/admin/recovery-requests/{id}/issue":obj({id:uuid,status:str,resetUrl:str,expiresAt:date}),
+ "POST /api/v1/admin/recovery-requests/{id}/reject":ok,
+ "GET /api/v1/admin/privacy-requests/{id}":obj({request:closure,blockers:array(obj({code:str,label:str})),canExecute:bool}),
+ "POST /api/v1/admin/privacy-requests/{id}/approve":ok,
+ "POST /api/v1/admin/privacy-requests/{id}/reject":ok,
+ "POST /api/v1/admin/privacy-requests/{id}/execute":obj({ok:bool,status:str,last_error:nullable(str)}),
+
  "GET /api/v1/admin/csrf":obj({csrfToken:str}),
  "GET /api/v1/admin/accounts/{id}/notifications":obj({observedAt:str,connection:obj({}),personal:obj({}),internal:obj({}),deliveries:obj({}),organizations:array(obj({})),catalog:obj({})}),
  "POST /api/v1/admin/login":obj({status:str,csrfToken:str,role:str}),
@@ -90,7 +103,7 @@ export const additionalResponses:Record<string,any>={
  "GET /api/v1/me/organizations":obj({organizations:array(organization),links:array(obj({agency_id:uuid,establishment_id:uuid}))},["organizations","links"]),
  "PUT /api/v1/organizations/{id}":ok,
  "GET /api/v1/assignments/{id}/confirmation":obj({status:str,document_id:nullable(uuid),mission_version:int,template_version:int},["status","document_id"]),
- "GET /api/v1/me/bank-details":obj({iban:nullable(str),fictional:bool},["iban"]),
+ "GET /api/v1/me/bank-details":obj({iban:nullable(str),fictional:bool,required:bool,document:nullable(obj({id:uuid,mime:str,size_bytes:int,created_at:date}))},["iban","required","document"]),
  "GET /api/v1/reference-data":obj({qualifications:array(str),ideServices:array(str),populations:array(str),blocks:array(str),blockSpecialties:array(str),shifts:array(str),salary:obj({currency:str,unit:str,gross:bool}),timezone:str,intervalConvention:str,search:obj({sameDimension:str,withinBranch:str,branches:str,dateWindow:str}),matching:{type:"object",additionalProperties:true},limits:obj({pageSize:int,maxPageSize:int,maxRadiusKm:int,documentMiB:int}),termsVersion:str}),
  "GET /api/v1/reference-data/finess":{...page(finess),properties:{...page(finess).properties,generated_at:date,imported_at:date,source_url:str,sha256:str,grantsOrganizationAccess:{type:"boolean",enum:[false]}}},
  "GET /api/v1/reference-data/finess/{finess}":obj({establishment:nullable(finess),status:{...str,enum:["FOUND_IN_SNAPSHOT","NOT_IN_SNAPSHOT"]},generated_at:date,imported_at:date,source_url:str,sha256:str,grantsOrganizationAccess:{type:"boolean",enum:[false]}},["establishment","status","grantsOrganizationAccess"]),

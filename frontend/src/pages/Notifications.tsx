@@ -15,7 +15,7 @@ type Settings={configured:boolean;link:{discord_user_id:string}|null;destination
 type Notice={id:string;kind:string;message:string;href:string;read_at:string|null;created_at:string};
 type Delivery={id:string;kind:string;status:string;created_at:string};
 const base="/me/notifications-settings";
-const discordInvite=import.meta.env.VITE_DISCORD_INVITE_URL || "https://discord.gg/5V7AZZjAET";
+const discordInvite=import.meta.env.VITE_DISCORD_INVITE_URL || "https://discord.gg/Ed73jG3pRd";
 const deliveryLabels:Record<string,string>={PENDING:"En attente",SENDING:"Envoi en cours",SENT:"Envoyé",FAILED:"Échec — notification disponible ici",CANCELLED:"Envoi annulé : événement ou préférences modifiés",UNCERTAIN:"Réception non confirmée — notification disponible ici"};
 function DestinationEditor({destination,org,catalog,save}:{destination?:Destination;org?:string;catalog:Record<string,string>;save:(org:string|undefined,body:unknown)=>Promise<void>}) {
   const [enabled,setEnabled]=useState(destination?.enabled??false),[events,setEvents]=useState(destination?.events??Object.keys(catalog)),[channelId,setChannelId]=useState(destination?.target_id??""),[busy,setBusy]=useState(false);

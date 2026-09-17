@@ -81,3 +81,5 @@
 .split, .formulaire, .interieur, .promo, .promoInterieur { min-width: 0; }
 @media (max-width: 1023px) { .split, .split.large { grid-template-columns: minmax(0, 1fr); } }
 .formulaire button { max-width: 100%; white-space: normal; height: auto; min-height: 48px; padding-block: 12px; }
+
+@media (max-width: 1023px) { .compactMobile .promo { display: none; } .compactMobile { min-height: auto; } .compactMobile .formulaire { align-items: flex-start; } }

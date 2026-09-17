@@ -1,0 +1,33 @@
+import assert from 'node:assert/strict';
+import fs from 'node:fs';
+import { chromium } from 'playwright';
+const browser=await chromium.launch({channel:'msedge'}),base=process.env.BASE_URL||'http://127.0.0.1:4187';
+try {
+  const context=await browser.newContext();let logged=false,closure=null,failReset=false,wrongPassword=false;const requests=[],completions=[],closures=[];
+  await context.route('**/api/**',route=>{
+    const path=new URL(route.request().url()).pathname,method=route.request().method();let json={};
+    if(path.endsWith('/auth/me')) {if(!logged)return route.fulfill({status:401,json:{}});json={id:'fixture-user',family:'NURSE',email:'fixture@example.invalid',organizations:[]};}
+    else if(path.endsWith('/profile'))json={display_name:'Camille',qualifications:['IDE'],details:{}};
+    else if(path.endsWith('/auth/csrf'))json={csrfToken:'fixture'};
+    else if(path.endsWith('/auth/recovery/request')){requests.push(route.request().postDataJSON());json={ok:true,message:'Demande prise en compte.'};}
+    else if(path.endsWith('/auth/recovery/complete')){completions.push(route.request().postDataJSON());if(failReset)return route.fulfill({status:400,json:{message:'Invalid token'}});json={ok:true};}
+    else if(path.endsWith('/me/closure-request')){if(method==='POST'){if(wrongPassword)return route.fulfill({status:400,json:{code:'CLOSURE_PASSWORD_INVALID',message:'Mot de passe incorrect.'}});closures.push(route.request().postDataJSON());closure={id:'fixture-closure',status:'REQUESTED',requested_at:'2030-01-01T12:00:00Z'};}if(method==='DELETE')closure={...closure,status:'CANCELLED'};json={request:closure};}
+    return route.fulfill({status:200,json});
+  });
+  const page=await context.newPage();await page.goto(base+'/mot-de-passe-oublie');await page.getByRole('button',{name:'Tout refuser',exact:true}).click();
+  await page.getByLabel('Adresse e-mail du compte').fill('wrong');await page.getByRole('button',{name:'Demander de l’aide pour mon accès'}).click();assert.equal(requests.length,0);
+  await page.getByLabel('Adresse e-mail du compte').fill('fixture@example.invalid');await page.getByRole('button',{name:'Demander de l’aide pour mon accès'}).click();await page.getByRole('status').filter({hasText:'Si un compte correspond'}).waitFor();assert.equal(requests.length,1);
+  const token='fictional-reset-token-do-not-log';await page.goto(base+'/reinitialiser-mot-de-passe#token='+token);await page.getByLabel(/^Nouveau mot de passe/).waitFor();assert.equal(new URL(page.url()).hash,'');await page.getByText('12 à 128 caractères.',{exact:true}).waitFor();
+  assert.equal(await page.evaluate(value=>JSON.stringify({...localStorage,...sessionStorage}).includes(value),token),false);
+  await page.getByLabel(/^Nouveau mot de passe/).fill('A fictional password 2030!');await page.getByLabel('Confirmer le nouveau mot de passe').fill('not the same');await page.getByRole('button',{name:'Modifier mon mot de passe'}).click();assert.equal(completions.length,0);
+  await page.getByLabel('Confirmer le nouveau mot de passe').fill('A fictional password 2030!');failReset=true;await page.getByRole('button',{name:'Modifier mon mot de passe'}).click();await page.getByRole('alert').filter({hasText:'n’a pas été confirmée'}).waitFor();
+  failReset=false;await page.getByRole('button',{name:'Modifier mon mot de passe'}).click();await page.getByRole('status').filter({hasText:'Votre mot de passe a été modifié'}).waitFor();assert.equal(completions[1].token,token);assert.equal(new URL(page.url()).pathname,'/reinitialiser-mot-de-passe');
+  logged=true;await page.goto(base+'/compte');await page.getByRole('heading',{name:'Clôturer mon compte'}).waitFor();await page.getByRole('button',{name:'Confirmer ma demande de clôture'}).click();assert.equal(closures.length,0);
+  await page.getByLabel('Mot de passe actuel').fill('A fictional password 2030!');await page.getByRole('checkbox').check();wrongPassword=true;await page.getByRole('button',{name:'Confirmer ma demande de clôture'}).click();await page.getByRole('alert').filter({hasText:'Mot de passe incorrect.'}).waitFor();assert.equal(new URL(page.url()).pathname,'/compte');assert.equal(closures.length,0);wrongPassword=false;await page.getByRole('button',{name:'Confirmer ma demande de clôture'}).click();await page.getByRole('heading',{name:'En attente d’examen'}).waitFor();assert.equal(closures.length,1);
+  await page.getByRole('button',{name:'Annuler ma demande de clôture'}).click();await page.getByRole('heading',{name:'Demande annulée'}).waitFor();
+  for(const status of ['APPROVED','PROCESSING','REJECTED']){closure={...closure,status,last_error:status==='PROCESSING'?'CLOSURE_RETRY_REQUIRED':null,decision_reason:status==='REJECTED'?'Mission ouverte à terminer.':null};await page.reload();await page.getByRole('heading',{name:'Clôturer mon compte'}).waitFor();if(status==='PROCESSING'){await page.getByText('reprendre les opérations restantes.',{exact:false}).waitFor();assert.equal(await page.getByText('CLOSURE_RETRY_REQUIRED',{exact:false}).count(),0);await page.getByText('ne peut plus être annulée ici',{exact:false}).waitFor();assert.equal(await page.getByRole('button',{name:'Annuler ma demande de clôture'}).count(),0);}if(status==='REJECTED')await page.getByText('Mission ouverte à terminer.',{exact:false}).waitFor();}
+  fs.mkdirSync('../InfiMatch/docs/quality',{recursive:true});
+  for(const width of [375,1440]){await page.setViewportSize({width,height:1000});for(const path of ['/compte','/mot-de-passe-oublie']){await page.goto(base+path);await page.locator('h1').waitFor();assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth+1),false);if(width===375 && path==='/compte'){const box=await page.getByRole('checkbox').boundingBox();assert.ok(box.width>=18&&box.height>=18);}
+if(width===375 && path==='/mot-de-passe-oublie'){assert.equal(await page.locator('aside').isVisible(),false);assert.ok((await page.locator('h1').boundingBox()).y<250);}await page.screenshot({path:`../InfiMatch/docs/quality/client-${path.slice(1)}-${width}.png`,fullPage:true});}}
+  console.log('PASS recovery generic acknowledgement, fragment stripped/no storage, confirmation validation, invalid link retry, no autologin, closure consent/password required, request/cancel/status/rejection, 375/1440. Only fictional intercepted APIs.');
+}finally{await browser.close();}

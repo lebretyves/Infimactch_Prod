@@ -142,3 +142,44 @@ test('admin account Discord status is scoped, redacted and distinguishes associa
  response=(await owner.agent.get(path)).body;assert.equal(response.deliveries.recent.length,10);assert.equal(response.deliveries.counts.SENT,12);
  const enterprise=await account('ENTERPRISE');const orgView=(await owner.agent.get('/api/v1/admin/accounts/'+enterprise.id+'/notifications')).body;assert.equal(orgView.organizations.length,1);assert.equal(orgView.organizations[0].configured,false);assert.equal(orgView.personal.state,'NOT_ASSOCIATED');
 });
+
+async function clientPost(a:any,path:string,body:object){const c=await a.agent.get('/api/v1/auth/csrf');return a.agent.post('/api/v1/'+path).set('Origin',process.env.APP_ORIGIN!).set('X-CSRF-Token',c.body.csrfToken).send(body);}
+test('manual recovery is private, authorized, single-use, expiring and revokes sessions',async()=>{
+ const owner=await enroll(),ops=await enroll('OPS'),client=await account();
+ const known=await clientPost(client,'auth/recovery/request',{email:client.email});assert.equal(known.status,201);
+ const unknown=await clientPost(client,'auth/recovery/request',{email:randomUUID()+'@example.invalid'});assert.deepEqual(known.body,unknown.body);
+ await clientPost(client,'auth/recovery/request',{email:client.email});
+ const rows=await db.query('SELECT * FROM recovery_request WHERE account_id=$1',[client.id]);assert.equal(rows.length,1);const id=rows[0].id;
+ await post(ops.agent,'recovery-requests/'+id+'/issue',ops.csrf,{reason:'Identity checked offline',identityVerified:true}).expect(403);
+ await post(owner.agent,'recovery-requests/'+id+'/issue',owner.csrf,{reason:'Identity checked offline',identityVerified:false}).expect(400);
+ const issue=()=>post(owner.agent,'recovery-requests/'+id+'/issue',owner.csrf,{reason:'Identity checked offline',identityVerified:true}).expect(201);
+ const old=(await issue()).body,newer=(await issue()).body;
+ const token=(url:string)=>new URLSearchParams(new URL(url).hash.slice(1)).get('token');
+ const freshPassword='New-fictional-password-456';
+ assert.equal((await clientPost(client,'auth/recovery/complete',{token:token(old.resetUrl),password:freshPassword})).status,400);
+ const listing=await owner.agent.get('/api/v1/admin/recovery-requests?accountId='+client.id).expect(200);assert.equal(listing.body.total,1);assert.doesNotMatch(JSON.stringify(listing.body),/token_hash|resetUrl|account_version/);
+ await db.query("UPDATE recovery_request SET expires_at=now()-interval '1 second' WHERE id=$1",[id]);assert.equal((await clientPost(client,'auth/recovery/complete',{token:token(newer.resetUrl),password:freshPassword})).status,400);
+ const fresh=(await issue()).body;
+ const result=await clientPost(client,'auth/recovery/complete',{token:token(fresh.resetUrl),password:freshPassword});assert.equal(result.status,201);
+ await client.agent.get('/api/v1/auth/me').expect(401);
+ assert.equal((await clientPost(client,'auth/recovery/complete',{token:token(fresh.resetUrl),password:freshPassword})).status,400);
+ assert.equal((await clientPost(client,'auth/login',{email:client.email,password})).status,401);
+ assert.equal((await clientPost(client,'auth/login',{email:client.email,password:freshPassword})).status,201);
+ const [stored]=await db.query('SELECT status,token_hash FROM recovery_request WHERE id=$1',[id]);assert.equal(stored.status,'COMPLETED');assert.equal(stored.token_hash,null);
+ const logs=await db.query('SELECT details FROM audit WHERE resource_id=$1',[id]);assert.ok(!JSON.stringify(logs).includes(token(fresh.resetUrl)!));
+ await clientPost(client,'auth/recovery/request',{email:owner.email});assert.equal((await db.query('SELECT id FROM recovery_request WHERE account_id=$1',[owner.id])).length,0);
+});
+test('client closure needs password, owner approval and preserves organization management',async()=>{
+ const owner=await enroll(),support=await enroll('SUPPORT'),client=await account(),company=await account('ENTERPRISE');
+ assert.equal((await clientPost(client,'me/closure-request',{password:'wrong'})).status,400);
+ const created=await clientPost(client,'me/closure-request',{password});assert.equal(created.status,201);const id=created.body.id;
+ await post(support.agent,'privacy-requests/'+id+'/approve',support.csrf,{reason:'Client identity checked'}).expect(403);
+ await post(owner.agent,'privacy-requests/'+id+'/execute',owner.csrf,{reason:'Client identity checked'}).expect(409);
+ await post(owner.agent,'privacy-requests/'+id+'/approve',owner.csrf,{reason:'Client identity checked'}).expect(201);
+ assert.equal((await db.query('SELECT active FROM account WHERE id=$1',[client.id]))[0].active,true);
+ const executed=await post(owner.agent,'privacy-requests/'+id+'/execute',owner.csrf,{reason:'Confirmed isolated closure'}).expect(201);assert.equal(executed.body.status,'COMPLETED');await client.agent.get('/api/v1/auth/me').expect(401);
+ const [closed]=await db.query('SELECT email,active FROM account WHERE id=$1',[client.id]);assert.equal(closed.active,false);assert.match(closed.email,/@anonymized.invalid$/);
+ const requestCompany=await clientPost(company,'me/closure-request',{password});const detail=await owner.agent.get('/api/v1/admin/privacy-requests/'+requestCompany.body.id).expect(200);assert.ok(detail.body.blockers.some((x:any)=>x.code==='LAST_MANAGER'));await post(owner.agent,'privacy-requests/'+requestCompany.body.id+'/approve',owner.csrf,{reason:'Blocked last organization manager'}).expect(409);
+ await post(owner.agent,'privacy-requests/'+requestCompany.body.id+'/reject',owner.csrf,{reason:'Transfer organization management first'}).expect(201);
+ assert.equal((await company.agent.get('/api/v1/me/closure-request')).body.request.status,'REJECTED');
+});
