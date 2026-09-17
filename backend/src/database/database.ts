@@ -1,3 +1,4 @@
+import { AdminOperations1789381900000 } from "./admin-operations";
 import { ProfessionalIdentity1789381800000 } from "./professional-identity";
 import { PlatformAdmin1789381700000 } from "./platform-admin";
 import { EnterpriseFollowUp1789381600000 } from "./enterprise-follow-up";
@@ -46,6 +47,7 @@ export class Database implements OnModuleDestroy {
       EnterpriseFollowUp1789381600000,
       PlatformAdmin1789381700000,
       ProfessionalIdentity1789381800000,
+      AdminOperations1789381900000,
     ],
     logging: false,
     extra: { max: 12 },

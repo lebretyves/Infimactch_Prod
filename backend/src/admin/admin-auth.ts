@@ -38,6 +38,18 @@ export class AdminAuthController {
  if(!a.totp_secret&&(!b.invitation||hashInvitation(b.invitation)!==a.invitation_hash||new Date(a.invitation_expires_at).getTime()<Date.now()))throw new UnauthorizedException('Invitation valide nécessaire.');
  await regenerate(req);const enrollment=a.totp_secret?undefined:newTotpSecret();req.session.adminChallenge={userId:a.id,version:a.version,accountVersion:a.session_version,expires:Date.now()+5*60000,...(enrollment?{enrollment:sealSecret(enrollment),invitationHash:a.invitation_hash}:{})};await saveSession(req);
  return {status:enrollment?'MFA_ENROLLMENT':'MFA_REQUIRED',csrfToken:req.session.csrf,...(enrollment?{otpauthUri:`otpauth://totp/${encodeURIComponent('InfiMatch administration:'+b.email)}?secret=${enrollment}&issuer=InfiMatch&algorithm=SHA1&digits=6&period=30`}:{})};}
+ @Post('activate') async activate(@Req() req:Request,@Body() b:LoginDto){
+  if(!adminConfigured())throw new NotFoundException();
+  if(!b.invitation)throw new UnauthorizedException('Invitation valide necessaire.');
+  await this.db.transaction(async em=>{
+   const [a]=await em.query('SELECT a.id,a.password_hash,a.active AS account_active,a.platform_only,p.active,p.totp_secret,p.invitation_hash,p.invitation_expires_at FROM account a JOIN platform_admin p ON p.user_id=a.id WHERE lower(a.email)=lower($1) FOR UPDATE OF a,p',[b.email]);
+   if(!a||!a.account_active||!a.active||!a.platform_only||a.totp_secret||a.password_hash!=='ADMIN_ACTIVATION_PENDING'||a.invitation_hash!==hashInvitation(b.invitation!)||new Date(a.invitation_expires_at).getTime()<Date.now())throw new UnauthorizedException('Activation indisponible. Verifiez votre invitation.');
+   const hash=await argon2.hash(b.password,{type:argon2.argon2id,memoryCost:65536,timeCost:3,parallelism:1});
+   await em.query("UPDATE account SET password_hash=$2,session_version=session_version+1,terms_version='ADMIN_ACTIVATED',terms_at=now() WHERE id=$1",[a.id,hash]);
+   await audit(em,a.id,'ADMIN_ACCOUNT_ACTIVATED',a.id);
+  });
+  return this.login(req,b);
+ }
  private async failed(id:string){await this.db.query("UPDATE platform_admin SET failed_attempts=failed_attempts+1,locked_until=CASE WHEN failed_attempts>=4 THEN now()+interval '15 minutes' ELSE locked_until END WHERE user_id=$1",[id]);await audit(this.db,id,'ADMIN_AUTH_FAILED',id);}
  @Post('mfa') async mfa(@Req() req:Request,@Body() b:MfaDto){const c=req.session.adminChallenge;delete req.session.adminChallenge;await saveSession(req);if(!c||c.expires<Date.now())throw new UnauthorizedException();
  const result=await this.db.transaction(async em=>{const [a]=await em.query('SELECT p.*,a.active AS account_active,a.session_version FROM platform_admin p JOIN account a ON a.id=p.user_id WHERE p.user_id=$1 FOR UPDATE OF p',[c.userId]);

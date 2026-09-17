@@ -33,7 +33,7 @@ export class SessionGuard implements CanActivate {
     const version = req.session.sessionVersion;
     const active = Number.isSafeInteger(version)
       ? await this.db.query(
-          "SELECT 1 FROM account WHERE id=$1 AND active AND session_version=$2",
+          "SELECT 1 FROM account WHERE id=$1 AND active AND NOT platform_only AND session_version=$2",
           [actor, version],
         )
       : [];

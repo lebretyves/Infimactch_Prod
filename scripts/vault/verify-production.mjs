@@ -2,6 +2,7 @@ import {withRole,request} from './common.mjs';
 import {Client} from 'pg';
 import {randomUUID,randomBytes} from 'node:crypto';
 import assert from 'node:assert/strict';
+import {spawnSync} from 'node:child_process';
 const origin='https://infimactch-prod-backend-l5bc.vercel.app';
 const email='qa-cloud-'+randomUUID()+'@example.invalid';
 let cookie='',csrf='',actor;
@@ -19,6 +20,13 @@ try{
  const content=Buffer.from('%PDF-1.4\n% FICTITIOUS InfiMatch deployment test\n%%EOF\n');
  const doc=await (await call('/me/documents','POST',{mime:'application/pdf',contentBase64:content.toString('base64'),fictional:true},201)).json();
  const downloaded=Buffer.from(await (await call('/me/documents/'+doc.id)).arrayBuffer());assert.deepEqual(downloaded,content);console.log('Encrypted document upload and download PASS');
+ const recommendations=await (await call('/me/recommendations')).json();assert.equal(recommendations.mode,'MIXED');assert.ok(Array.isArray(recommendations.internal.items));assert.ok(Array.isArray(recommendations.external.items));console.log('Mixed recommendations contract PASS');
+ if(process.argv.includes('--with-backup-probe')){
+  const backup=spawnSync(process.execPath,['--use-system-ca','scripts/vault/backup-production.mjs'],{encoding:'utf8',timeout:180000});assert.equal(backup.status,0,'Encrypted backup');
+  const report=JSON.parse(backup.stdout.trim());assert.equal(report.status,'PASS');
+  const restore=spawnSync(process.execPath,['--use-system-ca','scripts/vault/restore-production-isolated.mjs',report.folder],{encoding:'utf8',timeout:180000});assert.equal(restore.status,0,'Isolated production backup restore');
+  console.log('Encrypted production backup and isolated restore with fictional PDF PASS');
+ }
  const notices=await (await call('/me/notifications')).json();assert.ok(JSON.stringify(notices).includes('WELCOME'));console.log('Welcome notification PASS');
  const settings=await (await call('/me/notifications-settings')).json();assert.equal(settings.configured,true);console.log('Discord relay configuration PASS');
  const saved=csrf;csrf='invalid';await call('/profile','PUT',{},403);csrf=saved;console.log('CSRF rejection PASS');

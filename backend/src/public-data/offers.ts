@@ -45,6 +45,7 @@ export function normalizeOffer(raw: any, fetchedAt = new Date().toISOString()) {
       fetchedAt,
       publishedAt:
         typeof raw.dateCreation === "string" ? raw.dateCreation : null,
+      sourceUpdatedAt: typeof raw.dateActualisation === "string" ? raw.dateActualisation : null,
       rawTitle: clean(raw.intitule, 300),
       locationPrecision: "PROVIDER_LABEL",
       salaryRaw: clean(raw.salaire?.libelle, 300) || null,

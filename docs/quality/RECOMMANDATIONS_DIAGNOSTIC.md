@@ -1,3 +1,17 @@
+# Recommandations mixtes : fonctionnement valide
+
+Choix du proprietaire le 17 septembre 2026 : deux groupes independants de trois cartes au maximum.
+
+- Missions internes compatibles : prerequis stricts inchanges, score decroissant, publication (audit MISSION_OPEN) decroissante, debut puis identifiant. Seules les missions ouvertes et futures sont retenues. Aucune compensation des prerequis par un score.
+- Offres externes France Travail / JobsPipe : offres actives non expirees, criteres connus compatibles en premier, puis date de publication fournisseur valide decroissante. Une date absente ou future n'est jamais remplacee par la date d'import. La mise a jour fournisseur est affichee separement. Les ecarts connus sont visibles ; il ne s'agit pas d'une eligibilite clinique certifiee.
+- GET /api/v1/me/recommendations fournit les groupes separement et leurs etats. Une erreur d'un groupe ne supprime pas l'autre. Les profils incomplets recoivent une selection externe generale clairement annoncee.
+- La disponibilite nocturne et les changements d'heure sont couverts par les tests. Les offres fermees, expirees, inactives et missions passees sont exclues. Le dedoublonnage d'import existant reste applique.
+- Aucun stockage persistant des recommandations dans la PWA, ni score global invente pour les offres externes. Les cartes conservent les liens details et favoris.
+
+Implementation : backend/src/listings/recommendations.ts, frontend/src/components/MixedRecommendations.tsx. Tests : integration/enterprise-flow.spec.ts, unit/recommendations.spec.ts, frontend/scripts/test-mixed-recommendations.mjs.
+
+## Diagnostic historique avant modification
+
 # Recommandations — diagnostic du 17 septembre 2026
 
 Décision produit en attente. Le bloc `frontend/src/pages/Accueil.tsx` n’a pas été modifié dans ce lot : titre, sources, classement et trois cartes conservés.

@@ -187,3 +187,5 @@
     align-items: flex-start;
   }
 }
+
+.dashboard > div { align-content: start; }

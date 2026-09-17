@@ -52,19 +52,19 @@ export class GoogleAuth {
     }
     return this.db.transaction(async (em) => {
       const [linked] = await em.query(
-        "SELECT a.id,a.family,a.active,a.session_version FROM google_identity g JOIN account a ON a.id=g.account_id WHERE g.subject=$1",
+        "SELECT a.id,a.family,a.active,a.session_version,a.platform_only FROM google_identity g JOIN account a ON a.id=g.account_id WHERE g.subject=$1",
         [identity.subject],
       );
       if (linked) {
-        if (!linked.active) throw new UnauthorizedException("Invalid credentials");
+        if (!linked.active || linked.platform_only) throw new UnauthorizedException("Invalid credentials");
         return { id: linked.id, family: linked.family, session_version: linked.session_version };
       }
       const [a] = await em.query(
-        "SELECT id,family,password_hash,active,session_version FROM account WHERE email=$1",
+        "SELECT id,family,password_hash,active,session_version,platform_only FROM account WHERE email=$1",
         [identity.email],
       );
       if (!a) return { registrationRequired: true as const, identity };
-      if (!a.active) throw new UnauthorizedException("Invalid credentials");
+      if (!a.active || a.platform_only) throw new UnauthorizedException("Invalid credentials");
       if (!password)
         throw new ConflictException({
           code: "GOOGLE_LINK_REQUIRED",

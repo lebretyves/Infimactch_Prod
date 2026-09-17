@@ -1,0 +1,20 @@
+{
+  "date": "2026-09-17T06:19:56.630Z",
+  "status": "PASS",
+  "synthetic": false,
+  "elapsedMs": 7814,
+  "sqlCounts": {
+    "accounts": 4,
+    "missions": 0,
+    "documents": 0,
+    "blobs": 0
+  },
+  "mongoCollections": 1,
+  "mongoDocuments": 0,
+  "decryptedDocuments": 0,
+  "network": "none",
+  "portsPublished": false,
+  "productionModified": false,
+  "reopeningAllowed": false,
+  "limit": "This probe never promotes data or replays the current erasure ledger. Before any recovery, reconcile the CURRENT ledger separately."
+}

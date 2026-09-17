@@ -50,3 +50,33 @@ test('enterprise need becomes a tracked direct mission visible to nurses only af
  await post(owner,'missions/'+id+'/cancel').expect(201);
  const cancelled=await owner.agent.get('/api/v1/missions/'+id).expect(200);assert.equal(cancelled.body.status,'CANCELLED');assert.ok(cancelled.body.events.some((e:any)=>e.event==='MISSION_CANCELLED'));
 });
+
+
+test('mixed recommendations keep eligible internal missions distinct from active external offers',async()=>{
+ const owner=await account('ENTERPRISE'),nurse=await account('NURSE');
+ const slot={start:'2037-10-24T20:00:00+02:00',end:'2037-10-25T06:00:00+01:00'};
+ await nurse.agent.put('/api/v1/profile').set('Origin',process.env.APP_ORIGIN!).set('X-CSRF-Token',nurse.token).send({displayName:'Fictional mixed profile',qualifications:['IDE'],skills:[],experience:[],available:[slot],unavailable:[],latitude:48,longitude:2,radiusKm:30,acceptedShifts:['NIGHT'],preferredShifts:[],visible:false}).expect(200);
+ await db.query("UPDATE profile SET rpps_status='FOUND' WHERE user_id=$1",[nurse.id]);
+ const ids:string[]=[];
+ for(const name of ['Older open','Recent open','Closed recent','Past open']){
+  const created=await post(owner,'missions',{...slot,establishmentId:owner.org,title:'Fictional '+name,description:'Isolated mixed recommendation test',qualification:'IDE',service:'URGENCES',shift:'NIGHT',population:'ADULT',block:'NONE',requiredSkills:[],desiredSkills:[],minExperienceMonths:0,address:'Fictional test address',latitude:48,longitude:2,hourlySalary:25}).expect(201);
+  ids.push(created.body.id);await post(owner,'missions/'+created.body.id+'/publish').expect(201);
+ }
+ await db.query("UPDATE audit SET created_at='2020-01-01T00:00:00Z' WHERE resource_id=$1 AND event='MISSION_OPEN'",[ids[0]]);
+ await db.query("UPDATE audit SET created_at='2021-01-01T00:00:00Z' WHERE resource_id=$1 AND event='MISSION_OPEN'",[ids[1]]);
+ await post(owner,'missions/'+ids[2]+'/cancel').expect(201);
+ await db.query("UPDATE mission SET start_at='2000-01-01T20:00Z',end_at='2000-01-02T06:00Z' WHERE id=$1",[ids[3]]);
+ const externalIds:string[]=[];
+ for(const [active,expires] of [[true,null],[false,null],[true,'2000-01-01T00:00Z']] as const){const [row]=await db.query("INSERT INTO external_offer(source,source_id,title,description,url,location_label,qualification,raw_hash,active,expires_at,provenance) VALUES('JOBSPIPE',$1,'Fictional external IDE','Isolated external description','https://example.invalid/jobs/fictional','Fictional location','IDE','fictional-hash',$2,$3,$4) RETURNING id",[randomUUID(),active,expires,JSON.stringify({publishedAt:'2022-01-01T00:00:00Z',facts:{qualification:'IDE',warnings:[]}})]);externalIds.push(row.id);}
+ const response=await nurse.agent.get('/api/v1/me/recommendations').expect(200),mix=response.body;
+ assert.equal(mix.mode,'MIXED');assert.equal(mix.internal.status,'READY');assert.equal(mix.external.status,'READY');
+ assert.deepEqual(mix.internal.items.filter((x:any)=>ids.includes(x.id.slice(2))).map((x:any)=>x.id),['m_'+ids[1],'m_'+ids[0]]);
+ assert.ok(mix.internal.items.every((x:any)=>x.kind==='INTERNAL_MISSION'&&x.matching_score!==null&&Date.parse(x.start_at)>Date.now()));
+ assert.ok(!mix.internal.items.some((x:any)=>['m_'+ids[2],'m_'+ids[3]].includes(x.id)));
+ assert.ok(!mix.external.items.some((x:any)=>['e_'+externalIds[1],'e_'+externalIds[2]].includes(x.id)));
+ assert.ok(mix.external.items.every((x:any)=>x.profileCorrespondence.score===null&&x.profileCorrespondence.eligibilityVerified===false));
+ await db.query("UPDATE profile SET qualifications='{}',rpps_status='NOT_CHECKED' WHERE user_id=$1",[nurse.id]);
+ const incomplete=(await nurse.agent.get('/api/v1/me/recommendations').expect(200)).body;
+ assert.equal(incomplete.internal.items.length,0);assert.equal(incomplete.external.personalization,'GENERAL_PROFILE_INCOMPLETE');assert.ok(incomplete.external.items.length>0);
+ await owner.agent.get('/api/v1/me/recommendations').expect(404);
+});

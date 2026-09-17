@@ -1,3 +1,5 @@
+import {RecommendationsController} from './recommendations';
+import {MatchingModule} from '../matching/matching.module';
 import { partialOfferMatch } from "../public-data/partial-matching";
 import { professional } from "../profiles/profiles.module";
 import { PageDto } from "../common/page.dto";
@@ -350,5 +352,5 @@ class ListingsController {
     return { ok: true };
   }
 }
-@Module({ controllers: [ListingsController] })
+@Module({ imports:[MatchingModule], controllers: [ListingsController,RecommendationsController] })
 export class ListingsModule {}

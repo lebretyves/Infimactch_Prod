@@ -1,3 +1,4 @@
+import {RESTORE_POSTGRES_IMAGE} from '../security/restore-images.mjs';
 import {withRole,request,root} from './common.mjs';
 import {randomBytes,createCipheriv,hkdfSync} from 'node:crypto';
 import {mkdir,writeFile} from 'node:fs/promises';
@@ -16,7 +17,7 @@ try{await withRole('operator',async token=>{
  const key=Buffer.from(values.DOCUMENT_KEY,'base64');if(key.length!==32)throw Error('Invalid backup key');
  await mkdir(folder,{recursive:true});
  async function encryptStream(name,stream){const salt=randomBytes(32),iv=randomBytes(12);const derived=hkdfSync('sha256',key,salt,'infimatch-production-backup-v1',32);const cipher=createCipheriv('aes-256-gcm',derived,iv);await pipeline(stream,cipher,createWriteStream(resolve(folder,name+'.enc'),{flags:'wx',mode:0o600}));return {file:name+'.enc',salt:salt.toString('base64'),iv:iv.toString('base64'),tag:cipher.getAuthTag().toString('base64')};}
- const dump=spawn('docker',['exec','-i','infimatch-postgres-1','sh','-c','IFS= read -r PGPASSWORD; export PGPASSWORD; export PGSSLMODE=verify-full; exec pg_dump "$@"','pg_dump','--host',url.hostname,'--port',url.port||'5432','--username',decodeURIComponent(url.username),'--dbname',url.pathname.slice(1),'--format=custom','--no-owner','--no-acl'],{stdio:['pipe','pipe','pipe'],shell:false});
+ const dump=spawn('docker',['run','--rm','-i',RESTORE_POSTGRES_IMAGE,'sh','-c','IFS= read -r PGPASSWORD; export PGPASSWORD; export PGSSLMODE=verify-full; export PGSSLROOTCERT=system; exec pg_dump "$@"','pg_dump','--host',url.hostname,'--port',url.port||'5432','--username',decodeURIComponent(url.username),'--dbname',url.pathname.slice(1),'--format=custom','--no-owner','--no-acl'],{stdio:['pipe','pipe','pipe'],shell:false});
  let stderr='';dump.stderr.on('data',x=>{stderr+=x;});const exit=new Promise((ok,fail)=>{dump.on('error',fail);dump.on('exit',code=>code===0?ok():fail(Error('PostgreSQL backup failed')));});
  dump.stdin.end(decodeURIComponent(url.password)+'\n');
  const files=[];files.push(await encryptStream('postgres.dump',dump.stdout));await exit;

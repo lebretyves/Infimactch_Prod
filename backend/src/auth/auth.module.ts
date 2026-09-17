@@ -227,7 +227,7 @@ export class AuthService {
   }
   async login(body: Credentials) {
     const [a] = await this.db.query(
-      "SELECT id,family,password_hash,active,session_version FROM account WHERE email=$1",
+      "SELECT id,family,password_hash,active,session_version,platform_only FROM account WHERE email=$1",
       [body.email.trim().toLowerCase()],
     );
     // Same expensive password operation for unknown users.
@@ -240,7 +240,7 @@ export class AuthService {
       });
       throw new UnauthorizedException("Invalid credentials");
     }
-    if (!(await argon2.verify(a.password_hash, body.password)) || !a.active)
+    if (!(await argon2.verify(a.password_hash, body.password).catch(()=>false)) || !a.active || a.platform_only)
       throw new UnauthorizedException("Invalid credentials");
     return {
       id: a.id,

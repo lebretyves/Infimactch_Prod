@@ -13,6 +13,6 @@ for (const scenario of ["valid", "revoked", "legacy", "disabled"] as const) {
     if (scenario === "valid") { assert.equal(await guard.canActivate(context), true); assert.equal(destroyed, false); }
     else { await assert.rejects(guard.canActivate(context), (e: any) => e.getStatus() === 401); assert.equal(destroyed, true); }
     if (scenario === "legacy") assert.equal(calls.some(sql => sql.startsWith("SELECT")), false);
-    else assert.ok(calls.some(sql => sql.includes("AND active AND session_version=$2")));
+    else assert.ok(calls.some(sql => sql.includes("AND active AND NOT platform_only AND session_version=$2")));
   });
 }

@@ -1,3 +1,4 @@
+import {RESTORE_POSTGRES_IMAGE} from '../security/restore-images.mjs';
 import {withRole,request,root} from './common.mjs';
 import {createDecipheriv,hkdfSync} from 'node:crypto';
 import {readFile} from 'node:fs/promises';
@@ -16,7 +17,7 @@ try{await withRole('operator',async token=>{
   const key=hkdfSync('sha256',Buffer.from(values.DOCUMENT_KEY,'base64'),Buffer.from(file.salt,'base64'),'infimatch-production-backup-v1',32);
   const decipher=createDecipheriv('aes-256-gcm',key,Buffer.from(file.iv,'base64'));decipher.setAuthTag(Buffer.from(file.tag,'base64'));
   if(file.file==='postgres.dump.enc'){
-   const child=spawn('docker',['exec','-i','infimatch-postgres-1','pg_restore','--list'],{stdio:['pipe','pipe','pipe'],shell:false});let size=0;child.stdout.on('data',x=>{size+=x.length;});child.stderr.resume();const done=new Promise((ok,fail)=>{child.on('error',fail);child.on('exit',c=>c===0?ok():fail(Error('Invalid PostgreSQL archive')));});await pipeline(createReadStream(resolve(folder,file.file)),decipher,child.stdin);await done;if(size<100)throw Error('Empty PostgreSQL archive');
+   const child=spawn('docker',['run','--rm','-i','--network','none',RESTORE_POSTGRES_IMAGE,'pg_restore','--list'],{stdio:['pipe','pipe','pipe'],shell:false});let size=0;child.stdout.on('data',x=>{size+=x.length;});child.stderr.resume();const done=new Promise((ok,fail)=>{child.on('error',fail);child.on('exit',c=>c===0?ok():fail(Error('Invalid PostgreSQL archive')));});await pipeline(createReadStream(resolve(folder,file.file)),decipher,child.stdin);await done;if(size<100)throw Error('Empty PostgreSQL archive');
   }else{const chunks=[];await pipeline(createReadStream(resolve(folder,file.file)),decipher,async source=>{for await(const chunk of source)chunks.push(chunk);});JSON.parse(Buffer.concat(chunks).toString());}
   console.log(file.file+' authenticated and readable');
  }

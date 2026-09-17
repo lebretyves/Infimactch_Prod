@@ -1,0 +1,13 @@
+.group { display: grid; gap: 12px; padding-top: 20px; margin-top: 8px; border-top: 1px solid var(--line); min-width: 0; }
+.group h3 { font-size: 17px; }
+.group h4 { font-size: 15px; line-height: 1.5; overflow-wrap: anywhere; }
+.group p { font-size: 13px; line-height: 1.6; }
+.item { display: grid; gap: 10px; padding-block: 16px; border-top: 1px solid var(--line); min-width: 0; }
+.item:first-child { border-top: 0; }
+.metadata { display: flex; flex-wrap: wrap; gap: 6px 14px; color: var(--ink-700); font-size: 12px; line-height: 1.6; }
+.actions { display: flex; align-items: center; flex-wrap: wrap; gap: 10px; }
+.source { font-size: 12px; font-weight: 700; color: var(--teal-700); }
+.notice { padding: 12px; background: var(--sky-50); border-left: 3px solid var(--teal-700); color: var(--ink-700); }
+
+.favorite[aria-pressed="true"] { background: var(--brand-800); color: var(--white); border: 2px solid var(--brand-800); }
+.favorite[aria-pressed="true"]:hover { background: var(--brand-900); color: var(--white); }

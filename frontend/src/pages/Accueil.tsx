@@ -1,3 +1,4 @@
+import { MixedRecommendations } from "@/components/MixedRecommendations";
 import { NotificationPreferences } from "@/components/NotificationPreferences";
 import { useState } from "react";
 import { Link } from "react-router";
@@ -7,8 +8,6 @@ import { api } from "@/services/api";
 import { getProfile } from "@/services/profile";
 import { allHistory, allPages } from "@/services/nurse";
 import {
-  matches,
-  detail,
   date,
   favorite,
   favorites,
@@ -54,12 +53,6 @@ export default function Accueil() {
       allPages<Application>("/me/applications", signal),
       favorites(signal),
     ]);
-    const recommendations = await matches(0, signal);
-    const listings = await Promise.all(recommendations.items.slice(0, 3).map(async match => ({
-      ...(await detail("m_" + match.missionId, signal)),
-      matching_score: match.score,
-      match_explanation_id: match.explanationId,
-    })));
 
     return {
       dashboard,
@@ -69,7 +62,6 @@ export default function Accueil() {
         history,
         applications,
         saved,
-        listings,
       },
     };
   }, user?.id || "");
@@ -217,58 +209,7 @@ export default function Accueil() {
                       </div>
                     )}
                   </section>
-                  <section className={u.card}>
-                    <div className={u.row}>
-                      <h2>Recommandées pour vous</h2>
-                      <Link to="/missions?vue=recommandees" className={s.textLink}>
-                        Toutes les recommandations →
-                      </Link>
-                    </div>
-                    <ul className={u.list}>
-                      {data.listings.map((m) => (
-                        <li
-                          key={m.id}
-                          className={`${u.listItem} ${s.discovery}`}
-                        >
-                          <span className={`${s.icon} ${s.teal}`}>
-                            <Icon name="building" size={22} />
-                          </span>
-                          <div>
-                            <h3>{m.title}</h3>
-                            <p className={u.muted}>
-                              {m.qualification}
-                              {m.location_label ? " · " + m.location_label : ""}
-                            </p>
-                          </div>
-                          <div className={u.actions}>
-                            <ButtonLink to={"/missions/" + m.id + (m.match_explanation_id ? "?correspondance=" + encodeURIComponent(m.match_explanation_id) : "")} size="sm">
-                              Voir
-                            </ButtonLink>
-                            <Button
-                              variant="icon"
-                              aria-label={
-                                isSaved(m)
-                                  ? "Retirer " + m.title + " des favoris"
-                                  : "Ajouter " + m.title + " aux favoris"
-                              }
-                              aria-pressed={isSaved(m)}
-                              disabled={!!busy}
-                              onClick={() =>
-                                void act(m.id, () => favorite(m, isSaved(m)))
-                              }
-                            >
-                              <Icon name="heart-outline" size={21} />
-                            </Button>
-                          </div>
-                        </li>
-                      ))}
-                    </ul>
-                    {!data.listings.length && (
-                      <p className={u.muted}>
-                        Aucune recommandation pour le moment. Vérifiez votre profil, votre statut RPPS et vos disponibilités, ou consultez le catalogue.
-                      </p>
-                    )}
-                  </section>
+                  <MixedRecommendations userId={user!.id} isSaved={isSaved} busy={!!busy} onFavorite={m => void act(m.id, () => favorite(m, isSaved(m)))} />
                 </div>
                 <div className={u.stack}>
                   <section className={u.card}>

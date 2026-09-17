@@ -1,3 +1,4 @@
+import {RefreshService,RefreshModule,PROVIDERS} from "../public-data/refresh.service";
 import {UseInterceptors} from "@nestjs/common";
 import {ExecutionTrace} from "./execution-trace";
 import {processClosures} from "../security/closure";
@@ -6,8 +7,6 @@ import {timingSafeEqual} from "node:crypto";
 import {required} from "../config";
 import {Database} from "../database/database";
 import {DocumentsModule,DocumentsService} from "../documents/documents.module";
-import {fetchOffers,importOffers} from "../public-data/offers";
-import {fetchJobsPipe,normalizeJobsPipe} from "../public-data/jobspipe";
 import {retireStaleOffers} from "../public-data/freshness";
 import {applyRetention,cleanupRemovedDocuments} from "../security/retention";
 import {AutomationModule,AutomationService} from "./automation.module";
@@ -15,7 +14,7 @@ import {NotificationsModule,NotificationsService} from "../notifications/notific
 @Controller("internal/automation/jobs")
 @UseInterceptors(ExecutionTrace)
 export class CloudJobsController {
- constructor(private readonly automation:AutomationService,private readonly notifications:NotificationsService,private readonly db:Database,private readonly documents:DocumentsService){}
+ constructor(private readonly automation:AutomationService,private readonly notifications:NotificationsService,private readonly db:Database,private readonly documents:DocumentsService,private readonly refreshService:RefreshService){}
  private authorize(token:string){
   const expected=required("SERVICE_TOKEN");
   if(typeof token!=="string"||Buffer.byteLength(token)!==Buffer.byteLength(expected)||!timingSafeEqual(Buffer.from(token),Buffer.from(expected)))throw new UnauthorizedException();
@@ -29,12 +28,7 @@ export class CloudJobsController {
  }
  @Post("refresh-offers") async refresh(@Headers("x-infimatch-token") token:string){
   this.authorize(token);
-  const results=await Promise.allSettled([
-   (async()=>importOffers(this.db,await fetchOffers(25),false))(),
-   (async()=>importOffers(this.db,await fetchJobsPipe(10),false,normalizeJobsPipe,"JOBSPIPE"))(),
-  ]);
-  const providers=results.map((r,i)=>({provider:i===0?"FRANCE_TRAVAIL":"JOBSPIPE",status:r.status==='fulfilled'?"SUCCESS":"RETRY_REQUIRED",accepted:r.status==='fulfilled'?r.value.accepted:0}));
-  for(const p of providers)if(p.status!=="SUCCESS")await this.db.query("INSERT INTO import_run(provider,status,summary) VALUES($1,'FAILED',$2)",[p.provider,JSON.stringify({code:"PROVIDER_REFRESH_FAILED"})]);
+  const providers=await Promise.all(PROVIDERS.map(provider=>this.refreshService.run(provider)));
   return {providers};
  }
  @Post("maintenance") async maintenance(@Headers("x-infimatch-token") token:string){
@@ -48,5 +42,5 @@ export class CloudJobsController {
   return {ok:true};
  }
 }
-@Module({imports:[AutomationModule,NotificationsModule,DocumentsModule],controllers:[CloudJobsController],providers:[ExecutionTrace]})
+@Module({imports:[AutomationModule,NotificationsModule,DocumentsModule,RefreshModule],controllers:[CloudJobsController],providers:[ExecutionTrace]})
 export class CloudJobsModule {}

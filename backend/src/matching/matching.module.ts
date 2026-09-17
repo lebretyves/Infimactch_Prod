@@ -111,7 +111,7 @@ export class MatchingService implements OnModuleDestroy {
       };
     }
   }
-  async forNurse(actor: string, page: PageDto = new PageDto()) {
+  async forNurse(actor: string, page: PageDto = new PageDto(), ranking: "start" | "recent" = "start") {
     const [p] = await this.db.query("SELECT p.* FROM profile p JOIN account a ON a.id=p.user_id AND a.active WHERE p.user_id=$1", [
       actor,
     ]);
@@ -126,11 +126,12 @@ export class MatchingService implements OnModuleDestroy {
     const top: any[] = [];
     const compare = (a: any, b: any) =>
       (b.result.score ?? -1) - (a.result.score ?? -1) ||
+      (ranking === "recent" ? (new Date(b.m.published_at??0).getTime()-new Date(a.m.published_at??0).getTime()) : 0) ||
       new Date(a.m.start_at).getTime() - new Date(b.m.start_at).getTime() ||
       a.m.id.localeCompare(b.m.id);
     while (true) {
       const batch = await this.db.query(
-        missionSelect +
+        (ranking === "recent" ? missionSelect.replace(" FROM mission m", ",(SELECT max(created_at) FROM audit WHERE resource_id=m.id AND event='MISSION_OPEN') AS published_at FROM mission m") : missionSelect) +
           " WHERE m.status='OPEN' AND m.start_at>now() AND m.qualification=ANY($1) AND m.id>$2::uuid ORDER BY m.id LIMIT 100",
         [p.qualifications, cursor],
       );
@@ -154,7 +155,7 @@ export class MatchingService implements OnModuleDestroy {
     }
     const items = [];
     for (const item of top.slice(page.offset))
-      items.push(await this.calculate(actor, item.m, p, conflicts));
+      items.push({...await this.calculate(actor, item.m, p, conflicts),...(ranking === "recent" ? {publishedAt:item.m.published_at?new Date(item.m.published_at).toISOString():null,missionVersion:item.m.version} : {})});
     return {
       items,
       limit: page.limit,
