@@ -14,7 +14,7 @@ try{
  csrf=(await (await call('/auth/csrf')).json()).csrfToken;
  const reg=await (await call('/auth/register','POST',{email,password:randomBytes(24).toString('hex'),family:'ENTERPRISE',organizationType:'ESTABLISHMENT',name:'Entreprise FICTIVE recette',address:'1 rue fictive Paris',referent:'Contact fictif',finess:'000000001',termsVersion:'2026-09-14'},201)).json();actor=reg.user.id;csrf=reg.csrfToken;console.log('Registration and secure session PASS');
  const me=await (await call('/auth/me')).json(),org=me.organizations[0].id;
- await call('/organizations');
+ await call('/me/organizations');
  const details={start:'2037-03-10T08:00:00Z',end:'2037-03-10T16:00:00Z',qualification:'IDE',service:'URGENCES',shift:'DAY',headcount:1,population:'ADULT',block:'NONE',requiredSkills:[],minExperienceMonths:0,address:'1 rue fictive Paris'};
  const need=await (await call('/staffing-requests','POST',{establishmentId:org,title:'Besoin FICTIF recette',description:'Recette technique fictive',details},201)).json();
  const dashboard=await (await call('/dashboards')).json();assert.equal(dashboard.activity.needs,1);assert.equal(dashboard.recentNeeds[0].id,need.id);console.log('Enterprise dashboard and need persistence PASS');

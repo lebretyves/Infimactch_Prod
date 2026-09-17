@@ -7,3 +7,5 @@ Le tableau de bord affiche les besoins enregistr?s, les offres r?centes et les c
 Migration EnterpriseFollowUp1789381600000 : agence facultative et lien mission ? besoin. Recette isol?e : 180 tests r?ussis, contr?les PostgreSQL r?ussis, compilation frontend r?ussie. Le test enterprise-flow couvre les droits entre entreprises, le brouillon priv?, la publication, le matching, la candidature, la s?lection, l?affectation, la confirmation et l?annulation.
 
 La recette publique verify-production-enterprise.mjs cr?e uniquement un compte fictif et un brouillon, puis les supprime. Elle ne publie aucune mission r?elle.
+
+Recette publique du 17 septembre 2026 : inscription entreprise, session s?curis?e, contexte organisation, besoin persistant dans le tableau de bord, cr?ation directe du brouillon, liaison au besoin, droit de gestion et invisibilit? publique du brouillon valid?s. Donn?es fictives nettoy?es apr?s contr?le.
