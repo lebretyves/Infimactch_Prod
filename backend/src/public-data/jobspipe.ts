@@ -1,3 +1,4 @@
+import { transferOfferLocation } from "./offer-geolocation";
 import {
   interimContractEvidence,
   permanentContractEvidence,
@@ -19,7 +20,7 @@ export function normalizeJobsPipe(raw: any): ReturnType<typeof normalizeOffer> &
   let url: URL;
   try { url = new URL(raw.final_url || raw.source_url || raw.url); } catch { throw Error("INVALID_URL"); }
   if (url.protocol !== "https:" || url.username || url.password || !url.hostname.includes(".") || /^(localhost|127\.|10\.|192\.168\.|169\.254\.|172\.(1[6-9]|2\d|3[01])\.)/i.test(url.hostname)) throw Error("INVALID_URL");
-  const offer = normalizeOffer({ id: createHash("sha256").update(raw.id).digest("hex").slice(0, 40), intitule: title, description, typeContrat: "MIS", lieuTravail: { libelle: raw.location, latitude: raw.latitude, longitude: raw.longitude, codePostal: raw.postal_code }, salaire: { libelle: raw.salary_string }, dateCreation: raw.date_posted });
+  const offer = normalizeOffer(transferOfferLocation(raw, { id: createHash("sha256").update(raw.id).digest("hex").slice(0, 40), intitule: title, description, typeContrat: "MIS", lieuTravail: { libelle: raw.location, latitude: raw.latitude, longitude: raw.longitude, codePostal: raw.postal_code }, salaire: { libelle: raw.salary_string }, dateCreation: raw.date_posted }));
   if (!offer.qualification) throw Error("NURSING_QUALIFICATION_UNCONFIRMED");
   return { ...offer, expiresAt: raw.expires_at ? new Date(raw.expires_at).toISOString() : null, source: "JOBSPIPE", sourceId: raw.id, url: url.href,
     rawHash: createHash("sha256").update(JSON.stringify(raw)).digest("hex"),
@@ -27,7 +28,7 @@ export function normalizeJobsPipe(raw: any): ReturnType<typeof normalizeOffer> &
 }
 
 export async function fetchJobsPipe(limit = 10, transport: typeof fetch = fetch) {
-  if (!Number.isInteger(limit) || limit < 1 || limit > 100) throw Error("JobsPipe limit must be 1-100");
+  if (!Number.isInteger(limit) || limit < 1 || limit > 25) throw Error("JobsPipe Free limit must be 1-25");
   const key = process.env.JOBSPIPE_API_KEY;
   if (!key) throw Error("JOBSPIPE_API_KEY missing: configure Vault first");
   const res = await transport("https://api.jobspipe.dev/v1/jobs/search", {

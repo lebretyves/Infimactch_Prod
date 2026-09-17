@@ -1,3 +1,4 @@
+import {FranceTravailClient,FT_KEYWORDS,advanceFtQuery,type FtQuery} from "./france-travail-client";
 import { parseOffer } from "./offer-parser";
 import { guardCrossSourceDuplicates } from "./offer-deduplication";
 import {
@@ -47,7 +48,7 @@ export function normalizeOffer(raw: any, fetchedAt = new Date().toISOString()) {
         typeof raw.dateCreation === "string" ? raw.dateCreation : null,
       sourceUpdatedAt: typeof raw.dateActualisation === "string" ? raw.dateActualisation : null,
       rawTitle: clean(raw.intitule, 300),
-      locationPrecision: "PROVIDER_LABEL",
+      locationPrecision: facts.location.precision,
       salaryRaw: clean(raw.salaire?.libelle, 300) || null,
       contract: "MIS",
       shift: null,
@@ -55,80 +56,14 @@ export function normalizeOffer(raw: any, fetchedAt = new Date().toISOString()) {
     },
   };
 }
-export async function fetchOffers(
-  limit = 50,
-  transport: typeof fetch = fetch,
-  department?: string,
-) {
-  if (!Number.isInteger(limit) || limit < 1 || limit > 150)
-    throw new Error("Limit must be between 1 and 150");
-  if (department !== undefined && !/^(?:\d{2}|2A|2B|97\d)$/.test(department))
-    throw new Error("Invalid department");
-  const id = process.env.FT_CLIENT_ID,
-    secret = process.env.FT_CLIENT_SECRET;
-  if (!id || !secret)
-    throw new Error(
-      "France Travail credentials missing; no real acquisition performed",
-    );
-  const token = await transport(
-    "https://entreprise.francetravail.fr/connexion/oauth2/access_token?realm=/partenaire",
-    {
-      method: "POST",
-      headers: { "Content-Type": "application/x-www-form-urlencoded" },
-      body: new URLSearchParams({
-        grant_type: "client_credentials",
-        client_id: id,
-        client_secret: secret,
-        scope: "api_offresdemploiv2 o2dsoffre",
-      }),
-      signal: AbortSignal.timeout(15000),
-    },
-  );
-  if (!token.ok) throw new Error("France Travail authentication unavailable");
-  const auth: any = await token.json();
-  if (typeof auth.access_token !== "string")
-    throw new Error("Invalid token response");
-  const unique = new Map<string, any>();
-  // Bounded batch: limit per keyword, not an exhaustive snapshot.
-  for (const keyword of ["infirmier", "IDE", "IADE", "IBODE"]) {
-    const url = new URL(
-      "https://api.francetravail.io/partenaire/offresdemploi/v2/offres/search",
-    );
-    url.searchParams.set("motsCles", keyword);
-    if (department) url.searchParams.set("departement", department);
-    url.searchParams.set("typeContrat", "MIS");
-    url.searchParams.set("range", "0-" + (limit - 1));
-    const res = await transport(url, {
-      headers: {
-        Authorization: "Bearer " + auth.access_token,
-        Accept: "application/json",
-      },
-      signal: AbortSignal.timeout(15000),
-    });
-    if (res.status === 204) continue;
-    if (!res.ok)
-      throw new Error(
-        "France Travail search unavailable (HTTP " + res.status + ")",
-      );
-    const data: any = await res.json();
-    if (!Array.isArray(data.resultats) || data.resultats.length > limit)
-      throw new Error("Unexpected offer response");
-    for (const offer of data.resultats) {
-      if (
-        !offer ||
-        typeof offer.id !== "string" ||
-        !/^[A-Za-z0-9_-]{1,50}$/.test(offer.id)
-      )
-        throw new Error("Unexpected offer identifier");
-      if (department) {
-        const commune = offer.lieuTravail?.commune;
-        if (typeof commune !== "string" || !commune.startsWith(department))
-          continue;
-      }
-      if (!unique.has(offer.id)) unique.set(offer.id, offer);
-    }
-  }
-  return [...unique.values()];
+export async function fetchOffers(limit=150,transport:typeof fetch=fetch,department?:string){
+ if(!Number.isInteger(limit)||limit<1||limit>150)throw Error('Limit must be between 1 and 150');
+ if(department!==undefined&&!/^(?:\d{2}|2A|2B|97\d)$/.test(department))throw Error('Invalid department');
+ const client=new FranceTravailClient(transport),queue:FtQuery[]=FT_KEYWORDS.map(keyword=>({keyword,department,start:0})),unique=new Map<string,any>();let requests=0;
+ while(queue.length){if(++requests>1024)throw Error('FT_COLLECTION_INCOMPLETE_REQUEST_LIMIT');const query=queue[0]!,page=await client.search(query,limit);const next=advanceFtQuery(query,page);queue.splice(0,1,...next);
+  for(const row of page.rows){if(department&&(typeof row.lieuTravail?.commune!=='string'||!row.lieuTravail.commune.startsWith(department)))continue;unique.set(row.id,row);}
+ }
+ return [...unique.values()];
 }
 export async function importOffers(db: Database, raw: any[], dryRun: boolean, normalize: (raw: any) => ReturnType<typeof normalizeOffer> & { expiresAt?: string | null } = normalizeOffer, source = "FRANCE_TRAVAIL") {
   const accepted: (ReturnType<typeof normalizeOffer> & { expiresAt?: string | null })[] = [];
@@ -173,7 +108,7 @@ export async function importOffers(db: Database, raw: any[], dryRun: boolean, no
       }
       for (const o of accepted)
         await em.query(
-          `INSERT INTO external_offer(source,source_id,title,description,url,location_label,qualification,raw_hash,provenance,expires_at,parsed_offer) VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11) ON CONFLICT(source,source_id) DO UPDATE SET title=EXCLUDED.title,description=EXCLUDED.description,url=EXCLUDED.url,location_label=EXCLUDED.location_label,qualification=EXCLUDED.qualification,raw_hash=EXCLUDED.raw_hash,provenance=EXCLUDED.provenance,expires_at=EXCLUDED.expires_at,parsed_offer=CASE WHEN external_offer.parsed_offer->>'inputHash'=EXCLUDED.parsed_offer->>'inputHash' AND external_offer.parsed_offer->>'parserVersion'=EXCLUDED.parsed_offer->>'parserVersion' THEN external_offer.parsed_offer ELSE EXCLUDED.parsed_offer END,imported_at=now(),active=true`,
+          `INSERT INTO external_offer(source,source_id,title,description,url,location_label,qualification,raw_hash,provenance,expires_at,parsed_offer) VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11) ON CONFLICT(source,source_id) DO UPDATE SET title=EXCLUDED.title,description=EXCLUDED.description,url=EXCLUDED.url,location_label=EXCLUDED.location_label,qualification=EXCLUDED.qualification,raw_hash=EXCLUDED.raw_hash,provenance=EXCLUDED.provenance || CASE WHEN external_offer.provenance ? 'availabilityCheck' THEN jsonb_build_object('availabilityCheck',external_offer.provenance->'availabilityCheck') ELSE '{}'::jsonb END || CASE WHEN external_offer.provenance->>'retiredReason'='PROVIDER_CLOSED' THEN jsonb_build_object('retiredReason','PROVIDER_CLOSED') ELSE '{}'::jsonb END,expires_at=EXCLUDED.expires_at,parsed_offer=CASE WHEN external_offer.parsed_offer->>'inputHash'=EXCLUDED.parsed_offer->>'inputHash' AND external_offer.parsed_offer->>'parserVersion'=EXCLUDED.parsed_offer->>'parserVersion' THEN external_offer.parsed_offer ELSE EXCLUDED.parsed_offer END,imported_at=now(),active=CASE WHEN external_offer.provenance->>'retiredReason'='PROVIDER_CLOSED' THEN false ELSE true END`,
           [
             o.source,
             o.sourceId,

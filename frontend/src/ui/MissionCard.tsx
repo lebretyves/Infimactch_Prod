@@ -114,17 +114,17 @@ export function MissionCard({
       <div className={s.bas}>
         {external && url && !expired ? (
           <>
+            <Link className={s.source} to={target}>
+              Détails de l’annonce
+            </Link>
             <a
-              className={s.source}
+              className={s.details}
               href={url}
               target="_blank"
               rel="noopener noreferrer"
             >
               Voir l’offre source ↗
             </a>
-            <Link className={s.details} to={target}>
-              Détails de l’annonce
-            </Link>
           </>
         ) : (
           <ButtonLink
