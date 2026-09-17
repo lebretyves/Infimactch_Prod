@@ -30,10 +30,13 @@ export function QualityRoot() {
     const indexable = publicPages.has(location.pathname) && !location.search && window.location.origin === origin;
     robots.content = indexable ? 'index,follow' : 'noindex,follow';
     let canonical = document.querySelector<HTMLLinkElement>('link[rel="canonical"]');
+    let ogUrl = document.querySelector<HTMLMetaElement>('meta[property="og:url"]');
     if (publicPages.has(location.pathname)) {
       if (!canonical) { canonical = document.createElement('link'); canonical.rel = 'canonical'; document.head.append(canonical); }
       canonical.href = origin + location.pathname;
-    } else canonical?.remove();
+      if (!ogUrl) { ogUrl = document.createElement('meta'); ogUrl.setAttribute('property', 'og:url'); document.head.append(ogUrl); }
+      ogUrl.content = origin + location.pathname;
+    } else { canonical?.remove(); ogUrl?.remove(); }
   }, [location.pathname, location.search]);
   return <>
     {draftExpired && location.pathname.startsWith('/inscription') && <p role="status" className="qualityNotice">Votre brouillon d’inscription a expiré et a été effacé de cet appareil. Vous pouvez recommencer.</p>}
