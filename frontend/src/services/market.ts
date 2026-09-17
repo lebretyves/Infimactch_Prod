@@ -32,8 +32,20 @@ export type Listing = {
   source?: string;
   active?: boolean;
   expires_at?: string;
+  imported_at?: string;
   search_unverified_filters?: string[];
   url?: string;
+  provenance?: {
+    publishedAt?: string | null;
+    sourceUpdatedAt?: string | null;
+    provider?: string | null;
+    originalPublisher?: string | null;
+  };
+  freshness?: {
+    lastSeenAt?: string | null;
+    staleAfterDays?: number;
+    state?: string;
+  };
   salary?: {
     amount?: number;
     currency?: string;
@@ -41,6 +53,9 @@ export type Listing = {
     gross?: boolean;
   };
 };
+/** Official entry point for the France Travail offers reuse licence. */
+export const FRANCE_TRAVAIL_LICENCE_URL =
+  "https://francetravail.io/produits-partages/catalogue/offres-emploi/documentation";
 export type ListingPage = {
   items: Listing[];
   total: number;
@@ -255,7 +270,19 @@ export const facilityFavorite = (id: string, remove: boolean) =>
 export const sourceLabel = (m: Listing) =>
   m.source === "FRANCE_TRAVAIL"
     ? "France Travail"
-    : m.source || "Site de l’annonceur";
+    : m.source === "JOBSPIPE"
+      ? "JobsPipe"
+      : m.source || "Site de l’annonceur";
 export const externalExpired = (m: Listing) =>
   m.active === false ||
   !!(m.expires_at && Date.parse(m.expires_at) <= Date.now());
+export function externalSyncLabel(m: Listing): string | null {
+  const sourceUpdated = m.provenance?.sourceUpdatedAt;
+  if (sourceUpdated && !Number.isNaN(Date.parse(sourceUpdated)))
+    return "Mise à jour source : " + date(sourceUpdated);
+  if (m.imported_at && !Number.isNaN(Date.parse(m.imported_at)))
+    return "Dernier import InfiMatch : " + date(m.imported_at);
+  if (m.freshness?.lastSeenAt && !Number.isNaN(Date.parse(m.freshness.lastSeenAt)))
+    return "Dernière observation : " + date(m.freshness.lastSeenAt);
+  return null;
+}

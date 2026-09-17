@@ -1,7 +1,7 @@
 import { createHash } from "node:crypto";
 import { parseOfferV3 } from "./parser/legacy-v3";
 import { fold } from "./parser/legacy-v2";
-export const PARSER_VERSION = "4.0.0";
+export const PARSER_VERSION = "4.0.1";
 export type ParsedField = { key: string; label: string; value: unknown; display: string; state: "REPORTED" | "MENTION" | "DESIRED" | "REQUIRED" | "NEGATED" | "REVIEW_REQUIRED"; evidence: { origin: "TITLE" | "DESCRIPTION"; text: string; start: number; end: number } };
 export type ParsedOffer = { schemaVersion: 1; parserVersion: string; inputHash: string; parsedAt: string; fields: ParsedField[]; warnings: string[]; reviewQueue: string[] };
 export type ParserInput = { title?: string; description?: string; location_label?: string; qualification?: string | null; source?: string; provenance?: any };
@@ -26,6 +26,21 @@ function displayValue(key: string, value: any, evidence: string): string {
  if(typeof value === "string") return values[value] || (/^[A-Z_]+$/.test(value) && value.length > 5 ? value.toLowerCase().replace(/_/g," ") : value);
  return evidence;
 }
+function formatHourPair(start: string, end: string) {
+  return start.replace(":", "h") + " - " + end.replace(":", "h");
+}
+/** Keep full ranges like 8h00 - 20h00 instead of a single provider start time. */
+export function hourPairsFromText(text: string) {
+  const pairs: { start: string; end: string; evidence: string }[] = [];
+  for (const m of text.matchAll(/\b([01]?\d|2[0-3])\s*[hH]\s*([0-5]\d)?\s*(?:-|–|—|à|a)\s*([01]?\d|2[0-3])\s*[hH]\s*([0-5]\d)?\b/g)) {
+    pairs.push({
+      start: m[1]!.padStart(2, "0") + ":" + (m[2] || "00"),
+      end: m[3]!.padStart(2, "0") + ":" + (m[4] || "00"),
+      evidence: m[0],
+    });
+  }
+  return pairs;
+}
 function clauses(text: string): string[] { return text.split(/\n|;|[.!?](?=\s+[A-ZÀ-Ý])|\s+-\s+(?=[A-ZÀ-Ý])/).map(x=>x.trim()).filter(Boolean); }
 export function parseOffer(row: ParserInput, at = new Date().toISOString()): ParsedOffer {
  const result: ParsedOffer = {schemaVersion:1,parserVersion:PARSER_VERSION,inputHash:parserInputHash(row),parsedAt:at,fields:[],warnings:[],reviewQueue:[]};
@@ -46,7 +61,12 @@ export function parseOffer(row: ParserInput, at = new Date().toISOString()): Par
   if(f.field === "certification" && /\bou\b/.test(s)) state="REVIEW_REQUIRED";
   if(f.field === "service" && /urgence[s]? vitale|materiel.{0,30}reanimation|chariot.{0,30}reanimation/.test(s)) continue;
   if(f.field === "avantage" && /sans logement|pas de logement|aucun logement/.test(s) && f.value === "LOGEMENT") state="NEGATED";
+  // Prefer explicit ranges from the text over a truncated API working-time label.
+  if(f.field === "api_horaires" && hourPairsFromText(row.description || "").length) continue;
   add(f.field,f.value,f.evidence,f.origin,state);
+ }
+ for (const pair of hourPairsFromText(row.description || "")) {
+  add("horaires_detail", { start: pair.start, end: pair.end }, pair.evidence, "DESCRIPTION", "REVIEW_REQUIRED", formatHourPair(pair.start, pair.end));
  }
  for(const text of clauses(row.description || "")) {
   const s=fold(text);

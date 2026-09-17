@@ -16,6 +16,8 @@ import {
   facilityFavorite,
   sourceLabel,
   externalExpired,
+  externalSyncLabel,
+  FRANCE_TRAVAIL_LICENCE_URL,
 } from "@/services/market";
 import { api } from "@/services/api";
 import { useAuth } from "@/context/AuthContext";
@@ -111,7 +113,8 @@ export default function MissionDetail() {
     external = id.startsWith("e_"),
     url = safeUrl(m.url),
     expired = externalExpired(m),
-    nurse = user?.role === "interimaire";
+    nurse = user?.role === "interimaire",
+    syncLabel = external ? externalSyncLabel(m) : null;
   const favoriteDisabled = !!busy || saved.loading || !!saved.error;
   return (
     <div className={s.page}>
@@ -145,6 +148,25 @@ export default function MissionDetail() {
                 : statusLabels[m.status || ""] || "Statut à confirmer"}
             </span>
           </div>
+          {external && (
+            <p className={s.muted} style={{ marginTop: 10, fontSize: 13 }}>
+              Source : {sourceLabel(m)}
+              {syncLabel ? " · " + syncLabel : ""}
+              {m.source === "FRANCE_TRAVAIL" && (
+                <>
+                  {" · "}
+                  <a
+                    href={FRANCE_TRAVAIL_LICENCE_URL}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    Licence de réutilisation France Travail
+                    <span aria-hidden="true"> ↗</span>
+                  </a>
+                </>
+              )}
+            </p>
+          )}
         </div>
       </header>
       {error && (
@@ -369,7 +391,9 @@ export default function MissionDetail() {
           </div>
           <p className={s.muted} style={{ fontSize: 12, marginTop: 18 }}>
             {external
-              ? "Les conditions et la candidature sont gérées par le site de l’annonceur."
+              ? "Résumé InfiMatch à confirmer dans l’annonce source. Les conditions et la candidature sont gérées par " +
+                sourceLabel(m) +
+                "."
               : "Votre admissibilité est vérifiée lors de l’envoi. L’agence confirme ensuite votre affectation."}
           </p>
           {!external && (

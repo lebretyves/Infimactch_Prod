@@ -52,3 +52,19 @@ test("JSONB key ordering preserves the parser input fingerprint",()=>{
  const parsed_offer=parseOffer(row);
  assert.ok(currentParsedOffer({...row,provenance:{facts:{skills:[],contract:{label:"Interim",code:"MIS"}}},parsed_offer}));
 });
+
+test("hour ranges keep both bounds instead of a single start time",()=>{
+ const fields=parse("Horaires : 8h00 - 20h00. Poste en service de jour.").fields.filter(f=>f.key==="horaires_detail");
+ assert.ok(fields.some(f=>/8h00/.test(f.display) && /20h00/.test(f.display)));
+ assert.ok(fields.every(f=>!/^\s*8h00\s*$/i.test(f.display)));
+});
+
+test("provider-only start time is ignored when the description already has a range",()=>{
+ const fields=parseOffer({
+  title:"IDE",
+  description:"Mission de 8h00 - 20h00 en service.",
+  provenance:{facts:{workingTime:"8H00"}},
+ }).fields;
+ assert.ok(fields.some(f=>f.key==="horaires_detail" && /20h00/.test(f.display)));
+ assert.ok(!fields.some(f=>f.key==="api_horaires"));
+});

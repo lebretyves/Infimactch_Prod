@@ -44,9 +44,13 @@ export default function Mentions() {
         <section aria-labelledby="titre-mentions">
           <h2 id="titre-mentions">À propos du projet</h2>
           <p>
-            Les annonces externes proviennent des sources indiquées sur chaque
-            offre. Les pages de démonstration du catalogue utilisent des
-            exemples fictifs, distincts des données de votre compte.
+            Les annonces externes affichées dans InfiMatch proviennent
+            actuellement de <strong>France Travail</strong> (API Offres
+            d’emploi) et de <strong>JobsPipe</strong>. Chaque fiche indique sa
+            source et, lorsque le lien est disponible, renvoie vers l’annonce
+            d’origine pour candidater. Les pages de démonstration du catalogue
+            utilisent des exemples fictifs, distincts des données de votre
+            compte.
           </p>
           <p>
             Les coordonnées de l’éditeur, du responsable de traitement et de
@@ -93,11 +97,20 @@ export default function Mentions() {
             depuis les préférences cookies.
           </p>
           <p>
-            Les durées de conservation des comptes et des dossiers, ainsi que le
-            canal de traitement des demandes d’accès, de rectification et
-            d’effacement, doivent être définis pour la mise en production. Cette
-            page ne présente pas de suppression automatique qui ne serait pas
-            implémentée.
+            Une politique technique de purge existe déjà côté serveur pour cette
+            version de démonstration : sessions expirées, traces
+            d’idempotence (1&nbsp;jour), notifications (90&nbsp;jours), journal
+            d’audit (365&nbsp;jours), fichiers temporaires (24&nbsp;h), RIB
+            remplacés (30&nbsp;jours) et messages d’envoi terminés
+            (30&nbsp;jours). Les missions, affectations et justificatifs
+            courants ne sont pas effacés automatiquement. Une clôture de compte
+            peut anonymiser le profil et retirer les documents privés.
+          </p>
+          <p>
+            Les durées commerciales définitives (vivier de CV, comptes inactifs)
+            et le canal de traitement des demandes d’accès, de rectification et
+            d’effacement restent à publier avant une ouverture publique. Cette
+            page ne décrit que les mécanismes déjà implémentés.
           </p>
         </section>
         <section aria-labelledby="titre-cookies" id="cookies">
