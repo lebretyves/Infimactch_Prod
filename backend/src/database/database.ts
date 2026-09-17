@@ -1,3 +1,4 @@
+import {PersonalCorrections1789382300000} from './personal-corrections';
 import { JobsPipeCredits1789382200000 } from "./jobspipe-credits";
 import { ExternalCollection1789382100000 } from "./external-collection";
 import { ClientRequests1789382000000 } from "./client-requests";
@@ -54,6 +55,7 @@ export class Database implements OnModuleDestroy {
       ClientRequests1789382000000,
       ExternalCollection1789382100000,
       JobsPipeCredits1789382200000,
+      PersonalCorrections1789382300000,
     ],
     logging: false,
     extra: { max: 12 },

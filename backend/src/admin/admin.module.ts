@@ -1,3 +1,4 @@
+import {PersonalCorrectionsService,PersonalCorrectionsController,AdminPersonalCorrectionsController} from '../profiles/personal-corrections';
 import {AdminClientRequestsController} from './client-requests';
 import {discordApi,discordConfigured} from '../notifications/discord-client';
 import {AdminOperationsController} from './operations';
@@ -48,5 +49,5 @@ export class AdminController {
  @Get('backups') async backups(@Req() r:Request){authorizeAdmin(r,'backups');const [proof]=await this.db.query("SELECT state,checked_at,summary FROM operational_check WHERE service='backup-restore' ORDER BY checked_at DESC LIMIT 1");return {state:proof?.state??'unknown',message:proof?'Restauration isolee verifiee. Aucune restauration en production ni sauvegarde quotidienne automatique.':'Aucune preuve de restauration enregistree.',lastVerifiedAt:proof?.checked_at??null,proof:proof?.summary??null};}
 
 }
-@Module({imports:[MatchingModule,RefreshModule],controllers:[AdminClientRequestsController,AdminAuthController,AdminController,AdminOperationsController],providers:[AdminGuard]})
+@Module({imports:[MatchingModule,RefreshModule],controllers:[PersonalCorrectionsController,AdminPersonalCorrectionsController,AdminClientRequestsController,AdminAuthController,AdminController,AdminOperationsController],providers:[AdminGuard,PersonalCorrectionsService]})
 export class AdminModule {}

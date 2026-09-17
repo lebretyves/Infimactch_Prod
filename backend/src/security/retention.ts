@@ -200,6 +200,7 @@ export async function anonymizeAccount(em: SqlClient, accountId: string) {
   await em.query("DELETE FROM professional_review WHERE user_id=$1",[accountId]);
   await em.query("DELETE FROM platform_admin WHERE user_id=$1",[accountId]);
   await em.query("DELETE FROM recovery_request WHERE account_id=$1", [accountId]);
+  await em.query("DELETE FROM personal_correction_request WHERE account_id=$1", [accountId]);
   await em.query("DELETE FROM google_identity WHERE account_id=$1", [accountId]);
   await em.query("DELETE FROM discord_link WHERE account_id=$1", [accountId]);
   await em.query("DELETE FROM discord_challenge WHERE account_id=$1", [accountId]);
