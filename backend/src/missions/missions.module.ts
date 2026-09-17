@@ -82,6 +82,12 @@ class MissionsController {
   ) {
     return this.service.transition(user(r), id, "complete", key);
   }
+  @Get("missions/:id/application-check") applicationCheck(
+    @Req() r: Request,
+    @Param("id", ParseUUIDPipe) id: string,
+  ) {
+    return this.service.applicationCheck(user(r), id);
+  }
   @Post("missions/:id/applications") apply(
     @Req() r: Request,
     @Headers("idempotency-key") key: string,

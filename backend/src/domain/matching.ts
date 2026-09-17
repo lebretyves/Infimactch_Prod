@@ -94,6 +94,17 @@ export function distanceKm(a: number, b: number, c: number, d: number): number {
       Math.cos(a * r) * Math.cos(c * r) * Math.sin(((d - b) * r) / 2) ** 2;
   return 6371.0088 * 2 * Math.asin(Math.min(1, Math.sqrt(h)));
 }
+export function requiredMissionSkills(m: MatchMission): string[] {
+  const required = [...m.requiredSkills];
+  if (m.qualification !== "IDE") {
+    if (m.population === "ADULT" || m.population === "MIXED")
+      required.push("POPULATION_ADULT");
+    if (m.population === "PEDIATRIC" || m.population === "MIXED")
+      required.push("POPULATION_PEDIATRIC");
+    if (m.block === "SPECIALIZED") required.push("BLOCK_" + m.specialty);
+  }
+  return [...new Set(required)];
+}
 export function match(
   p: Professional,
   m: MatchMission,
@@ -104,14 +115,7 @@ export function match(
   if (!p.qualifications.includes(m.qualification))
     reasons.push("QUALIFICATION_MISSING");
   if (p.rppsStatus !== "FOUND") reasons.push("RPPS_" + p.rppsStatus);
-  const required = [...m.requiredSkills];
-  if (m.qualification !== "IDE") {
-    if (m.population === "ADULT" || m.population === "MIXED")
-      required.push("POPULATION_ADULT");
-    if (m.population === "PEDIATRIC" || m.population === "MIXED")
-      required.push("POPULATION_PEDIATRIC");
-    if (m.block === "SPECIALIZED") required.push("BLOCK_" + m.specialty);
-  }
+  const required = requiredMissionSkills(m);
   if (required.some((s) => !p.skills.includes(s)))
     reasons.push("REQUIRED_SKILLS_MISSING");
   const months = experienceMonths(p.experience, m.service, m.start);

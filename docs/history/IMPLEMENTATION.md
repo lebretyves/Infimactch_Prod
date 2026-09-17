@@ -247,3 +247,14 @@ Demande : reconnaître la ville ou le code postal dès la saisie dans Ma zone de
 La commune et son code postal sont stockés dans details.mobilityCity, séparément de la ville personnelle verrouillée. Latitude/longitude sont enregistrées pour le calcul réel du rayon et reprises dans la recherche des missions. Modifier la saisie efface l’ancienne position ; une ville non sélectionnée ne peut pas être enregistrée. GPS et saisie manuelle des coordonnées restent disponibles et effacent l’ancien libellé. Réponses obsolètes annulées, erreurs et absence de résultat expliquées.
 
 Validation : compilation frontend/backend ; 199 tests unitaires backend ; six tests SQL sur base PostGIS isolée, dont conservation de Paris comme ville personnelle avec centre de mobilité Nantes ; tests navigateur de saisie, sélection clavier, coordonnées sauvegardées, annulation des réponses lentes et affichage 375/1440 px ; régression recherche des missions. Appels réels IGN vérifiés pour 44000 et Nan. Publication autorisée sur Main et Backend selon accord antérieur.
+
+
+## 2026-09-17 — Candidatures possibles malgré les divergences de correspondance
+
+Demande utilisateur (avec autre agent) : remplacer le refus de candidature pour compétences, expérience et disponibilités divergentes par une alerte adaptée et permettre l’envoi. Agent dédié au backend ; intégration et interface par l’agent principal.
+
+GET /missions/:id/application-check fournit les avertissements actualisés et leurs détails. L’écran affiche les compétences non renseignées, les mois renseignés/demandés dans le service, la période de disponibilité, ainsi que les éventuels écarts d’horaires ou de mobilité. Le bouton devient « Envoyer quand même ma candidature ». POST enregistre la candidature, conserve les avertissements dans l’audit et la réponse idempotente, puis affiche une confirmation explicite. Une indisponibilité du précontrôle ne bloque pas le POST, qui revérifie les critères côté serveur.
+
+Le changement porte uniquement sur l’envoi : les contrôles qualification/RPPS, compte actif, conflit d’affectation, état et début de mission, version du consentement restent effectifs, ainsi que l’éligibilité stricte lors de l’affectation. Aucun changement des scores ou recommandations et aucune migration.
+
+Validation : builds frontend/backend ; 203 tests unitaires backend ; deux tests SQL sur PostgreSQL/PostGIS isolé (avertissements, audit, envoi, absence de doublon, rejeu idempotent, blocages conservés et affectation stricte) ; test Playwright avec API fictives interceptées sur 375/1440 px, libellés détaillés, consentement, envoi malgré trois écarts, confirmation, indisponibilité du précontrôle et version obsolète. Publication sur Main et Backend conformément à l’autorisation permanente.

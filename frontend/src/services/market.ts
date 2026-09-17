@@ -143,8 +143,18 @@ export const favorite = (m: Listing, remove: boolean) =>
         : {}),
     },
   );
+export type ApplicationCheck = {
+  warnings: string[];
+  blockingReasons: string[];
+  missingSkills: string[];
+  experienceMonths: number;
+  requiredExperienceMonths: number;
+  distanceKm: number | null;
+};
+export const applicationCheck = (id: string, signal?: AbortSignal) =>
+  api<ApplicationCheck>("/missions/" + id.slice(2) + "/application-check", { signal });
 export const apply = (m: Listing, key: string) =>
-  api("/missions/" + m.id.slice(2) + "/applications", {
+  api<{ warnings?: string[] }>("/missions/" + m.id.slice(2) + "/applications", {
     method: "POST",
     body: { version: m.version },
     key,
