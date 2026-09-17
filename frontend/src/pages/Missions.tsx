@@ -1,3 +1,4 @@
+import { SearchPlace, validCoordinates } from '@/components/SearchPlace';
 import { OfferOriginChoices, readOfferOrigin } from '@/components/OfferOrigin';
 ﻿import EntrepriseMissions from "./EntrepriseMissions";
 import { useEffect, useRef, useState, type FormEvent } from "react";
@@ -46,6 +47,9 @@ const filterKeys = [
   "shift",
   "establishment",
   "radius",
+  "place",
+  "lat",
+  "lon",
   "start",
   "end",
 ] as const;
@@ -89,6 +93,8 @@ function NurseMissions() {
       ),
     "search-reference",
   );
+  const homeCoordinates = validCoordinates(p.data?.latitude,p.data?.longitude);
+  const home = homeCoordinates ? {...homeCoordinates,label:p.data?.details?.city || "Mon domicile"} : null;
   const qualifications = p.data?.qualifications || [];
   const selectedQualification = qualifications.includes(values.qualification)
     ? values.qualification
@@ -133,14 +139,10 @@ function NurseMissions() {
         end.setDate(end.getDate() + 1);
         filters.end = end.toISOString();
       }
-      if (
-        values.radius &&
-        p.data.latitude != null &&
-        p.data.longitude != null
-      ) {
-        filters.radiusKm = Number(values.radius);
-        filters.latitude = Number(p.data.latitude);
-        filters.longitude = Number(p.data.longitude);
+      if (values.radius) {
+        const center = values.place || values.lat || values.lon ? validCoordinates(values.lat,values.lon) : homeCoordinates;
+        if (!center || ![5,10,25,50,100,200].includes(Number(values.radius))) throw new Error("Choisissez un lieu valide et une distance avant de rechercher.");
+        filters.radiusKm=Number(values.radius);filters.latitude=center.latitude;filters.longitude=center.longitude;
       }
       const response = await list(selected, offset, signal, values.q, filters, origin);
       if (!Number.isSafeInteger(response.total) || response.total < 0)
@@ -195,6 +197,10 @@ function NurseMissions() {
     if (draft.start && draft.end < draft.start) {
       setFormError("La fin doit être après le début de la période.");
       return;
+    }
+    if (draft.radius) {
+      const center = draft.place || draft.lat || draft.lon ? validCoordinates(draft.lat,draft.lon) : homeCoordinates;
+      if (!center || ![5,10,25,50,100,200].includes(Number(draft.radius))) {setFormError("Choisissez explicitement un lieu parmi les propositions ou votre domicile avant de rechercher par rayon.");return;}
     }
     update({ ...draft, q: draft.q.trim(), page: 1 });
   }
@@ -294,27 +300,10 @@ function NurseMissions() {
                 ))}
               </SelectField>
             )}
-            {!publicOffers && (
-              <SelectField
-                label={
-                  "Rayon" +
-                  (p.data?.details?.city
-                    ? " autour de " + p.data.details.city
-                    : " autour de mon profil")
-                }
-                value={draft.radius}
-                onChange={(e) => set("radius", e.target.value)}
-                disabled={p.data?.latitude == null || p.data?.longitude == null}
-              >
-                <option value="">Toutes les distances</option>
-                {[10, 25, 50, 100, 200].map((v) => (
-                  <option key={v} value={v}>
-                    {v} km
-                  </option>
-                ))}
-              </SelectField>
-            )}
+          <SearchPlace value={draft.place} selected={!!validCoordinates(draft.lat,draft.lon)} home={home} onChange={(place,location)=>{setFormError("");setDraft(d=>({...d,place,radius:location && !d.radius ? "25" : d.radius,lat:location?String(location.latitude):"",lon:location?String(location.longitude):""}));}} />
+            <SelectField label="Rayon autour du lieu de recherche" value={draft.radius} onChange={e=>set("radius",e.target.value)}><option value="">Toutes les distances</option>{[5,10,25,50,100,200].map(value=><option key={value} value={value}>{value} km</option>)}</SelectField>
           </div>
+          <p className={s.help}>Distance géographique directe, pas un temps de trajet. Avec un rayon, les offres externes sans coordonnées connues ne sont pas incluses.</p>
           {!publicOffers && (
             <>
               <div className={s.advanced}>
@@ -407,15 +396,6 @@ function NurseMissions() {
                   ))}
                 </SelectField>
               </div>
-              {(p.data?.latitude == null || p.data?.longitude == null) && (
-                <p className={s.help}>
-                  Pour rechercher dans un rayon,{" "}
-                  <Link to="/calendrier">
-                    renseignez votre zone de mobilité
-                  </Link>
-                  .
-                </p>
-              )}
               {facilities.error && (
                 <p className={s.help}>
                   La liste des établissements est indisponible.{" "}
@@ -453,7 +433,7 @@ function NurseMissions() {
       ) : (
         <div className={u.notice}>
           Les recommandations concernent les missions internes compatibles avec
-          votre profil, vos disponibilités et votre mobilité.{" "}
+          votre profil, vos disponibilités et votre mobilité. Le lieu de recherche libre ne modifie pas ce matching strict.{" "}
           <Link to="/profil">Mettre à jour mon profil</Link>
         </div>
       )}
@@ -464,7 +444,7 @@ function NurseMissions() {
       ) : error ? (
         <section className={u.empty} role="alert">
           <h2>Le chargement des offres a échoué</h2>
-          <p>Réessayez dans un instant.</p>
+          <p>{error}</p>
           <Button onClick={() => (p.error ? p.reload() : result.reload())}>
             Réessayer
           </Button>

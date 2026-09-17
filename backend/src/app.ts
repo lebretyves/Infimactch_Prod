@@ -163,6 +163,7 @@ export async function createApp() {
   });
   app.use(idleSession);
   app.use("/api/v1/auth", authRateLimit());
+  app.use("/api/v1/listings/locations",rateLimit({windowMs:60000,limit:30,standardHeaders:"draft-8",legacyHeaders:false}));
   app.use("/api/v1/auth/activity", rateLimit({windowMs: 60_000, limit: 20, keyGenerator: req => req.sessionID, standardHeaders: "draft-8", legacyHeaders: false}));
   app.use(
     "/api/v1/profile/rpps",

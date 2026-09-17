@@ -16,6 +16,8 @@ export const additionalSchemas={Profile:profile,Organization:organization,Sessio
  ExternalCorrespondence:obj({mode:str,score:nullable(num),eligibilityVerified:bool,criteria:{type:"object",additionalProperties:obj({status:str,reason:str,offerValue:{},profileValue:{},value:{}})},warnings:array(str),missingForFullMatching:array(str)}),
 };
 export const additionalResponses:Record<string,any>={
+ "GET /api/v1/listings/locations":obj({provider:str,items:array(obj({label:str,latitude:num,longitude:num}))}),
+
  "PUT /api/v1/me/bank-document":obj({id:uuid,status:str}),
  "GET /api/v1/me/bank-document":{type:'string',format:'binary'},
 

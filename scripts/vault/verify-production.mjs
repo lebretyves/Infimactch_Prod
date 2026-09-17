@@ -25,6 +25,10 @@ try{
  assert.deepEqual(Buffer.from(await (await call('/me/bank-document')).arrayBuffer()),content);await call('/me/documents/'+bank.id,'GET',undefined,404);console.log('Private bank file upload and download PASS');
  for(const origine of ['partenaires','externes','toutes']){const page=await (await call('/listings/search','POST',{qualifications:['IDE'],origine,limit:5},201)).json();assert.ok(Array.isArray(page.items));if(origine==='partenaires')assert.ok(page.items.every(x=>x.kind==='INTERNAL_MISSION'));if(origine==='externes')assert.ok(page.items.every(x=>x.kind==='EXTERNAL_OFFER'));if(origine==='toutes'){let external=false;for(const item of page.items){if(item.kind==='EXTERNAL_OFFER')external=true;else assert.equal(external,false);}}}
  console.log('Partner-first origin filtering PASS');
+ const locations=await (await call('/listings/locations?q=Lyon')).json();assert.equal(locations.provider,'IGN');assert.ok(locations.items.length>0);const lyon=locations.items.find(p=>p.label==='Lyon');assert.ok(lyon);
+ const nearby=await (await call('/listings/search','POST',{qualifications:['IDE'],latitude:lyon.latitude,longitude:lyon.longitude,radiusKm:25,limit:5},201)).json();assert.equal(nearby.externalDistance.unknownCoordinatesExcluded,true);
+ const profileAfterSearch=await (await call('/profile')).json();assert.equal(Number(profileAfterSearch.latitude),48.85);assert.equal(Number(profileAfterSearch.longitude),2.35);console.log('Live location lookup, independent search center and unchanged profile PASS');
+
  const recommendations=await (await call('/me/recommendations')).json();assert.equal(recommendations.mode,'MIXED');assert.ok(Array.isArray(recommendations.internal.items));assert.ok(Array.isArray(recommendations.external.items));console.log('Mixed recommendations contract PASS');
  if(process.argv.includes('--with-backup-probe')){
   const backup=spawnSync(process.execPath,['--use-system-ca','scripts/vault/backup-production.mjs'],{encoding:'utf8',timeout:180000});assert.equal(backup.status,0,'Encrypted backup');
