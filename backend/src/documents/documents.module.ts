@@ -26,7 +26,10 @@ import {
   IsBoolean,
   Equals,
   Length,
-  Matches,
+  IsIBAN,
+  IsBIC,
+  IsOptional,
+  MaxLength,
 } from "class-validator";
 import { Request, Response } from "express";
 import { randomUUID } from "node:crypto";
@@ -62,13 +65,23 @@ class UploadDto {
   fictional!: boolean;
 }
 class BankDto {
-  @ApiProperty({ type: () => String, required: true })
-  @Matches(/^FR\d{12}DEMO\d{8}$/)
-  iban!: string;
-  @ApiProperty({ type: () => Boolean, required: true })
-  @Equals(true)
-  fictional!: boolean;
+  @ApiProperty() @IsIBAN() iban!: string;
+  @ApiProperty() @IsBIC() bic!: string;
+  @ApiProperty() @IsString() @Length(2, 150) holder!: string;
+  @ApiProperty({ required: false }) @IsOptional() @IsString() @MaxLength(150) bankName?: string;
+  @ApiProperty() @Equals(true) reviewed!: boolean;
+  @IsOptional() @IsBoolean() fictional?: boolean;
 }
+class BankFileDto extends BankDto {
+  @ApiProperty({ enum: ['application/pdf', 'image/png', 'image/jpeg'] })
+  @IsIn(['application/pdf', 'image/png', 'image/jpeg']) mime!: string;
+  @ApiProperty() @IsString() @Length(4, 4200000) contentBase64!: string;
+}
+function bankFields(b: BankDto) {
+  if (b.holder.trim().length < 2) throw new BadRequestException('Titulaire requis.');
+  return { iban: b.iban.replace(/\s/g, '').toUpperCase(), bic: b.bic.toUpperCase(), holder: b.holder.trim(), bankName: b.bankName?.trim() || '' };
+}
+
 type StoredDocument = { id: string; status: "READY" };
 @Injectable()
 export class DocumentsService {
@@ -379,25 +392,30 @@ class DocumentsController {
       user(r),
       "BANK",
       "application/json",
-      Buffer.from(JSON.stringify({ iban: b.iban, fictional: true })),
+      Buffer.from(JSON.stringify({ version: 2, details: bankFields(b) })),
       null,
       { operation: "bank-details.replace", key, content: b },
       true,
     );
   }
   @Put("bank-document") async bankDocument(
-    @Req() r:Request,@Headers("idempotency-key") key:string|undefined,@Body() b:UploadDto,
+    @Req() r:Request,@Headers("idempotency-key") key:string|undefined,@Body() b:BankFileDto,
   ) {
     const data=Buffer.from(b.contentBase64,'base64');
     if(!data.length || data.length>3*1024*1024 || fileMime(data)!==b.mime)
       throw new BadRequestException('PDF, JPEG ou PNG requis, 3 Mo maximum, avec un contenu conforme au format.');
     await this.db.transaction(em=>nurse(em,user(r)));
-    return this.documents.store(user(r),'BANK',b.mime,data,null,{operation:'bank-document.replace',key,content:b},true);
+    return this.documents.store(user(r),'BANK','application/json',Buffer.from(JSON.stringify({version:2,details:bankFields(b),file:{mime:b.mime,contentBase64:data.toString('base64')}})),null,{operation:'bank-document.replace',key,content:b},true);
   }
   @Get("bank-document") async downloadBank(@Req() r:Request,@Res() res:Response){
-    const [doc]=await this.db.query("SELECT id FROM document WHERE owner_id=$1 AND kind='BANK' AND status='READY' AND superseded_at IS NULL AND mime IN('application/pdf','image/jpeg','image/png') ORDER BY created_at DESC,id LIMIT 1",[user(r)]);
+    const [doc]=await this.db.query("SELECT id FROM document WHERE owner_id=$1 AND kind='BANK' AND status='READY' AND superseded_at IS NULL ORDER BY created_at DESC,id LIMIT 1",[user(r)]);
     if(!doc)throw new NotFoundException();
-    const data=await this.documents.read(user(r),doc.id);
+    let data=await this.documents.read(user(r),doc.id);
+    if(data.mime==='application/json'){
+      const envelope=JSON.parse(data.data.toString());
+      if(envelope.version!==2 || !envelope.file)throw new NotFoundException();
+      data={...data,mime:envelope.file.mime,data:Buffer.from(envelope.file.contentBase64,'base64')};
+    }
     const ext=data.mime==='application/pdf'?'pdf':data.mime==='image/png'?'png':'jpg';
     res.set({'Content-Type':data.mime,'Content-Disposition':'attachment; filename="infimatch-rib.'+ext+'"','Cache-Control':'no-store'}).send(data.data);
   }
@@ -407,10 +425,14 @@ class DocumentsController {
       [user(r)],
     );
     const [assignment]=await this.db.query("SELECT 1 FROM assignment WHERE nurse_id=$1 AND status IN('ACTIVE','COMPLETED') LIMIT 1",[user(r)]);
-    if(!d)return {iban:null,document:null,required:!!assignment};
-    if(d.mime!=='application/json')return {iban:null,document:d,required:false,fictional:true};
+    if(!d)return {iban:null,details:null,document:null,required:!!assignment};
+    if(d.mime!=='application/json')return {iban:null,details:null,document:d,required:false};
     const data=await this.documents.read(user(r),d.id),b=JSON.parse(data.data.toString());
-    return {iban:'FR** **** **** **** **** **'+b.iban.slice(-4),document:null,required:false,fictional:true};
+    if(b.version===2){
+      const document=b.file?{...d,mime:b.file.mime,size_bytes:Buffer.byteLength(b.file.contentBase64,'base64')}:null;
+      return {iban:b.details.iban.slice(0,2)+'** **** '+b.details.iban.slice(-4),details:b.details,document,required:false};
+    }
+    return {iban:'FR** **** **** **** **** **'+b.iban.slice(-4),details:null,document:null,required:false};
   }
 
 }

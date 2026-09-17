@@ -1,0 +1,22 @@
+{
+  "date": "2026-09-17T14:02:14.213329+00:00",
+  "status": "PASS",
+  "applicationCommit": "961a40b7e68426bef90465c161c3ee51fe80b56e",
+  "frontend": "https://infimactch-prod-backend-l5bc.vercel.app",
+  "frontendDeployment": "infimactch-prod-backend-l5bc-47mgw3w09-neotravel.vercel.app",
+  "backendDeployment": "infimactch-prod-backend-ljs00om5v-neotravel.vercel.app",
+  "backendIsolatedTests": 211,
+  "frontendApiSessionTests": 13,
+  "pwaTests": 3,
+  "realLocalOcr": [
+    "synthetic-image",
+    "text-pdf",
+    "scanned-pdf"
+  ],
+  "publicBrowserTest": "PASS with API intercepted; actual public OCR assets",
+  "publicApiTest": "PASS synthetic account, encrypted file/details, ownership, download, CSRF, cleanup",
+  "hardwareCamera": "not tested; simulated lifecycle passed",
+  "independentEvaluation": "PASS",
+  "npmAudit": "0 vulnerabilities reported",
+  "franceTravail": "Audit only; ingestion unchanged"
+}
