@@ -30,4 +30,6 @@ Ouvrir une camera reconnue sur PC ou la camera du telephone, importer un PDF/JPE
 L'OCR peut manquer des caracteres ou champs : verification manuelle obligatoire. BIC et titulaire manquants doivent etre completes, jamais inventes. Limites 3 MiB, 3 pages PDF, reconnaissance des deux premieres pages scannees, 45 secondes par analyse. Camera materielle de l'utilisateur non testee ; un telephone branche au PC doit etre reconnu comme webcam par le systeme. Les nouvelles saisies de RIB ne sont plus limitees aux donnees fictives ; les justificatifs generaux conservent leur regle existante.
 
 ## Publication
-Recette publique a effectuer apres deploiement de ce lot ; les validations ci-dessus portent sur la version locale construite pour production.
+Commit applicatif publie : 961a40b7e68426bef90465c161c3ee51fe80b56e. Frontend et backend Vercel READY.
+Recette du site public reussie : OCR image et PDF texte avec les vrais assets heberges, bascule manuelle apres deux echecs, relecture, absence de transmission externe pendant analyse et affichage mobile/desktop. Les API du test navigateur sont interceptees ; une recette serveur distincte a cree un compte synthetique en production, enregistre les champs et le fichier chiffres, verifie restitution et telechargement, puis supprime ce compte et ses documents.
+Protections CSRF et routes internes, session, profil, recherche independante, recommandations, accueil et configuration Discord egalement verifies. Aucun compte utilisateur existant modifie. Voir RECETTE_RIB_PRODUCTION_2026-09-17.json.
