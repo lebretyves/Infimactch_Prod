@@ -23,3 +23,15 @@ export async function analyzeBankFile(file:File,signal:AbortSignal,onProgress:(v
   return text;
  }catch(cause){if(file.type==='application/pdf'){const name=cause instanceof Error?cause.name:'';if(name==='PasswordException')throw new Error('Ce PDF est protégé par un mot de passe. Importez une copie non protégée ou saisissez les champs manuellement.');if(name==='InvalidPDFException'||name==='UnknownErrorException')throw new Error('Ce PDF est illisible ou invalide. Importez un autre fichier ou saisissez les champs manuellement.');}throw cause;}finally{signal.removeEventListener('abort',stop);await worker?.terminate().catch(()=>{});await loading?.destroy().catch(()=>{});}
 }
+
+/** One local OCR worker per camera session; never upload preview frames. */
+export async function createBankCameraReader(signal:AbortSignal){
+ const {createWorker}=await import('tesseract.js');
+ if(signal.aborted)throw new Error('Analyse annulée.');
+ const worker=await createWorker('eng',1,{workerPath:'/ocr/worker.min.js',corePath:'/ocr/core',langPath:'/ocr/lang',cacheMethod:'none',workerBlobURL:false,logger:()=>{},errorHandler:()=>{}});
+ let stopped=false;
+ const close=()=>{if(stopped)return;stopped=true;signal.removeEventListener('abort',close);void worker.terminate().catch(()=>{});};
+ if(signal.aborted){close();throw new Error('Analyse annulée.');}
+ signal.addEventListener('abort',close,{once:true});
+ return {close,async read(canvas:HTMLCanvasElement){if(stopped)throw new Error('Analyse annulée.');const result=await worker.recognize(canvas);if(stopped)throw new Error('Analyse annulée.');return result.data.text;}};
+}

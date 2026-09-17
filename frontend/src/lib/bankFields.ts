@@ -10,7 +10,7 @@ export function parseBankText(text:string):BankFields {
  // Never repair OCR digits by guessing. Only retain candidates with a valid checksum.
  for(const candidate of upper.matchAll(/[A-Z]{2}\s*\d{2}(?:[ \t\r\n-]*[A-Z0-9]){11,32}/g)){const compact=candidate[0].replace(/[\s-]/g,'');const expected=lengths[compact.slice(0,2)];const candidates=expected?[compact.slice(0,expected)]:Array.from({length:20},(_,i)=>compact.slice(0,15+i));const found=candidates.find(validIban);if(found){result.iban=found;break;}}
  const bic=upper.match(/(?:BIC(?:\s*\/\s*SWIFT)?|SWIFT)(?:\s+CODE)?\s*[:\-]?\s*([A-Z]{6}[A-Z0-9]{2}(?:[A-Z0-9]{3})?)\b/);if(bic&&validBic(bic[1]))result.bic=bic[1];
- const labeled=(pattern:RegExp)=>{const match=text.match(pattern);const value=match?match[1].trim():'';return /^(?:IBAN|BIC|SWIFT|titulaire|banque|account holder|bank name)(?:\s*[:\-]|\s*$)/i.test(value)?'':value.slice(0,150);};
+ const labeled=(pattern:RegExp)=>{const match=text.match(pattern);const value=match?match[1].split(/\s+(?=(?:IBAN|BIC|SWIFT|titulaire(?:\s+du\s+compte)?|banque|account\s*holder|bank\s*name)\s*[:\-])/i)[0].trim():'';return /^(?:IBAN|BIC|SWIFT|titulaire|banque|account holder|bank name)(?:\s*[:\-]|\s*$)/i.test(value)?'':value.slice(0,150);};
  result.holder=labeled(/(?:titulaire(?:\s+du\s+compte)?|account\s*holder)[ \t]*(?:[:\-][ \t]*|\r?\n[ \t]*)([^\r\n]+)/i);
  result.bankName=labeled(/(?:banque|bank\s*name)[ \t]*(?:[:\-][ \t]*|\r?\n[ \t]*)([^\r\n]+)/i);
  return result;
