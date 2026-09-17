@@ -10,6 +10,7 @@ import {
   saveProfile,
   type ProfessionalProfile,
   type ProfileDetails,
+  type Experience,
 } from "@/services/profile";
 import { dateInput } from "@/services/nurse";
 import { wholeDayPeriod } from "@/lib/datePeriods";
@@ -29,6 +30,8 @@ import s from "./Profil.module.css";
 function Editor({ initial }: { initial: ProfessionalProfile }) {
   const { user, refreshIdentity } = useAuth();
   const baseline = useRef(initial.details);
+  const [experienceEdit, setExperienceEdit] = useState<{ index: number; draft: Experience } | null>(null);
+  const [experienceError, setExperienceError] = useState("");
   const [p, setP] = useState(initial),
     [busy, setBusy] = useState(false),
     [error, setError] = useState(""),
@@ -69,6 +72,10 @@ function Editor({ initial }: { initial: ProfessionalProfile }) {
   async function submit(e: FormEvent) {
     e.preventDefault();
     if (busy) return;
+    if (experienceEdit) {
+      setExperienceError("Enregistrez ou annulez cette expérience avant de sauvegarder le profil.");
+      return;
+    }
     setBusy(true);
     setError("");
     setMessage("");
@@ -242,7 +249,7 @@ function Editor({ initial }: { initial: ProfessionalProfile }) {
               </details>
               <PersonalCorrectionRequest />
             </section>
-            <section className={u.card}>
+            <section className={`${u.card} ${s.qualifications}`}>
               <h2 className={u.cardHeading}>
                 <Icon name="graduation" />
                 Qualifications et expérience
@@ -280,6 +287,7 @@ function Editor({ initial }: { initial: ProfessionalProfile }) {
                   return key ? (
                     <TextField
                       key={q}
+                      data-filled={Boolean(d[key] ?? (p.qualifications.length === 1 ? d.diplomaYear : undefined))}
                       label={"Année du diplôme " + q}
                       type="number"
                       min={1900}
@@ -300,7 +308,9 @@ function Editor({ initial }: { initial: ProfessionalProfile }) {
                 })}
               </div>
               <h3>Expérience par service</h3>
+              <fieldset className={s.cvImport} disabled={Boolean(experienceEdit)}>
               <CvImport services={ref.data?.ideServices||[]} existing={p.experience} onAdd={values=>change({experience:[...p.experience,...values]})}/>
+              </fieldset>
               {!p.experience.length && (
                 <p className={u.muted}>
                   Ajoutez les services dans lesquels vous avez exercé.
@@ -314,13 +324,12 @@ function Editor({ initial }: { initial: ProfessionalProfile }) {
                   </Button>
                 </p>
               )}
-              {p.experience.map((exp, i) => {
+              {[...p.experience, ...(experienceEdit?.index === p.experience.length ? [experienceEdit.draft] : [])].map((savedExp, i) => {
+                const editing = experienceEdit?.index === i;
+                const exp = editing ? experienceEdit.draft : savedExp;
                 function update(v: Partial<typeof exp>) {
-                  change({
-                    experience: p.experience.map((e, n) =>
-                      n === i ? { ...e, ...v } : e,
-                    ),
-                  });
+                  setExperienceEdit({ index: i, draft: { ...exp, ...v } });
+                  setExperienceError("");
                 }
                 const end = new Date(exp.end);
                 if (
@@ -329,26 +338,37 @@ function Editor({ initial }: { initial: ProfessionalProfile }) {
                   end.getSeconds() === 0
                 )
                   end.setDate(end.getDate() - 1);
+                if (!editing) return (
+                  <article key={i} className={s.experienceCard} aria-label={"Expérience " + (i + 1)}>
+                    <div className={s.experienceSummary}>
+                      <strong>{labelCode(exp.service) || "Service à compléter"}</strong>
+                      <span>{exp.establishment || "Établissement non renseigné"}</span>
+                      <span className={s.experienceDates}>
+                        {dateInput(exp.start) ? new Date(exp.start).toLocaleDateString("fr-FR") : "Début à compléter"}
+                        {" — "}
+                        {dateInput(end) ? end.toLocaleDateString("fr-FR") : "Fin à compléter"}
+                      </span>
+                    </div>
+                    <div className={s.experienceActions}>
+                      <Button type="button" variant="outline" size="sm" disabled={Boolean(experienceEdit)}
+                        aria-label={"Modifier l’expérience " + (i + 1)}
+                        onClick={() => { setExperienceEdit({index:i,draft:{...exp}}); setExperienceError(""); }}>Modifier</Button>
+                      <Button type="button" variant="ghost" size="sm" disabled={Boolean(experienceEdit)}
+                        aria-label={"Supprimer l’expérience " + (i + 1)}
+                        onClick={() => change({experience:p.experience.filter((_,n)=>n!==i)})}>Supprimer</Button>
+                    </div>
+                  </article>
+                );
                 return (
                   <div key={i} className={s.experience}>
                     <div className={u.row}>
                       <strong>Expérience {i + 1}</strong>
-                      <Button
-                        type="button"
-                        variant="ghost"
-                        size="sm"
-                        onClick={() =>
-                          change({
-                            experience: p.experience.filter((_, n) => n !== i),
-                          })
-                        }
-                      >
-                        Retirer l’expérience {i + 1}
-                      </Button>
+
                     </div>
                     <TextField
                       label={"Établissement " + (i + 1)}
                       maxLength={150}
+                      data-filled={Boolean(exp.establishment?.trim())}
                       value={exp.establishment || ""}
                       onChange={(e) =>
                         update({ establishment: e.target.value || undefined })
@@ -357,6 +377,7 @@ function Editor({ initial }: { initial: ProfessionalProfile }) {
                     <SelectField
                       label={"Service " + (i + 1)}
                       required
+                      data-filled={Boolean(exp.service)}
                       value={exp.service}
                       onChange={(e) => update({ service: e.target.value })}
                     >
@@ -378,6 +399,7 @@ function Editor({ initial }: { initial: ProfessionalProfile }) {
                         label={"Début de l’expérience " + (i + 1)}
                         type="date"
                         required
+                        data-filled={Boolean(dateInput(exp.start))}
                         value={dateInput(exp.start)}
                         onChange={(e) =>
                           update({
@@ -395,6 +417,7 @@ function Editor({ initial }: { initial: ProfessionalProfile }) {
                         required
                         min={dateInput(exp.start) || undefined}
                         max={dateInput(new Date(Date.now() - 86400000))}
+                        data-filled={Boolean(dateInput(end))}
                         value={dateInput(end)}
                         onChange={(e) =>
                           update({
@@ -405,21 +428,29 @@ function Editor({ initial }: { initial: ProfessionalProfile }) {
                         }
                       />
                     </div>
+                    {experienceError && <p className={s.experienceError} role="alert">{experienceError}</p>}
+                    <div className={s.experienceActions}>
+                      <Button type="button" size="sm" onClick={() => {
+                        if (!exp.service || !Number.isFinite(Date.parse(exp.start)) || !Number.isFinite(Date.parse(exp.end)) || Date.parse(exp.end) <= Date.parse(exp.start) || dateInput(end) > dateInput(new Date(Date.now() - 86400000))) {
+                          setExperienceError("Choisissez un service et des dates cohérentes dans le passé."); return;
+                        }
+                        change({experience: i === p.experience.length ? [...p.experience, exp] : p.experience.map((e,n)=>n===i?exp:e)});
+                        setExperienceEdit(null); setExperienceError("");
+                      }}>Enregistrer l’expérience</Button>
+                      <Button type="button" variant="ghost" size="sm" onClick={() => { setExperienceEdit(null); setExperienceError(""); }}>Annuler</Button>
+                    </div>
+                    <p className={s.help}>Enregistrez ensuite les modifications du profil pour les conserver.</p>
                   </div>
                 );
               })}
               <Button
                 type="button"
                 variant="outline"
-                disabled={p.experience.length >= 100}
-                onClick={() =>
-                  change({
-                    experience: [
-                      ...p.experience,
-                      { service: "", start: "", end: "" },
-                    ],
-                  })
-                }
+                disabled={p.experience.length >= 100 || Boolean(experienceEdit)}
+                onClick={() => {
+                  setExperienceEdit({index:p.experience.length,draft:{service:"",start:"",end:""}});
+                  setExperienceError("");
+                }}
               >
                 + Ajouter une expérience
               </Button>

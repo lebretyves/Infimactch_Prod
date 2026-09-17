@@ -64,3 +64,28 @@
     padding: 14px;
   }
 }
+
+/* Completed profile fields stay editable; their content keeps its normal contrast. */
+.qualifications input[data-filled="true"],
+.qualifications select[data-filled="true"] {
+  background-color: #f1f3f5;
+}
+.qualifications .choices > label {
+  padding: 10px 12px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: #fff;
+}
+.qualifications .choices > label:has(input:checked) {
+  background-color: #f1f3f5;
+}
+
+.cvImport { border: 0; padding: 0; margin: 0; min-width: 0; }
+.experienceCard { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 16px; border: 1px solid var(--line); border-radius: 8px; background: #f1f3f5; }
+.experienceSummary { display: grid; gap: 5px; min-width: 0; overflow-wrap: anywhere; }
+.experienceSummary strong { font-size: 15px; }
+.experienceSummary span { font-size: 13px; }
+.experienceDates { color: var(--ink-600); }
+.experienceActions { display: flex; gap: 8px; flex-wrap: wrap; flex-shrink: 0; }
+.experienceError { color: #9f2431; font-size: 13px; }
+@media(max-width:600px) { .experienceCard { align-items: stretch; flex-direction: column; } }

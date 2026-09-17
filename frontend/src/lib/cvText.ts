@@ -1,3 +1,4 @@
+import {cvPdfText} from './cvPdfText';
 ﻿import {createBankCameraReader} from './bankOcr';
 export async function extractCvText(file:File,signal:AbortSignal,progress:(message:string)=>void){
  if(file.size>5*1024*1024||!['application/pdf','image/jpeg','image/png'].includes(file.type))throw Error('Choisissez un CV PDF, JPEG ou PNG de 5 Mo maximum.');
@@ -14,7 +15,7 @@ export async function extractCvText(file:File,signal:AbortSignal,progress:(messa
   if(pdf.numPages>5)throw Error('L’import est limité à 5 pages. Choisissez une version plus courte de votre CV.');
   const pages:string[]=[];
   for(let n=1;n<=pdf.numPages;n++){
-   check();progress(`Lecture de la page ${n} sur ${pdf.numPages}…`);const page=await pdf.getPage(n);const content=await page.getTextContent();check();let text=content.items.map(item=>'str'in item?item.str+('hasEOL'in item&&item.hasEOL?'\n':' '):'').join('');
+   check();progress(`Lecture de la page ${n} sur ${pdf.numPages}…`);const page=await pdf.getPage(n);const content=await page.getTextContent();check();let text=cvPdfText(content.items.filter((item):item is import('pdfjs-dist/types/src/display/api').TextItem=>'str' in item),page.getViewport({scale:1}).width);
    if(text.replace(/\s/g,'').length<40){const basic=page.getViewport({scale:1}),viewport=page.getViewport({scale:Math.min(2,2000/Math.max(basic.width,basic.height))});const canvas=document.createElement('canvas');canvas.width=Math.ceil(viewport.width);canvas.height=Math.ceil(viewport.height);await page.render({canvas,viewport}).promise;text=await recognize(canvas);}
    pages.push(text);page.cleanup();if(pages.join('\n').length>60000)throw Error('Le CV contient trop de texte. Limitez-le aux expériences professionnelles.');
   }

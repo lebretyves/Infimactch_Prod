@@ -106,3 +106,15 @@ Validation : builds frontend/backend ; 208 tests unitaires backend ; 6 tests SQL
 Audit des anciennes missions : 49 missions fictives retrouvées dans deux sauvegardes, FINESS fictif 000000001. Leur nettoyage est documenté le 16 septembre. Aucune preuve d'un lot utilisant de vrais FINESS. PDF d'inventaire produit dans docs/quality ; cet inventaire historique ne constitue pas une lecture actuelle de la production.
 
 Publication sur Main (Infimactch_Prod) et Backend (Epitech), conformément à l'autorisation utilisateur persistante.
+
+## 2026-09-18 — CV et expériences en fiches
+
+Demande utilisateur : champs qualifications renseignés en gris clair après inscription ; expériences en lecture avec Modifier/Supprimer ; corriger un import CV ne reconnaissant aucune période. L'interface conserve l'édition des qualifications. Une expérience se modifie dans un brouillon avec Enregistrer/Annuler ; le bouton global persiste le profil et reste bloqué pendant un brouillon ouvert.
+
+Le parseur reconnaît les dates coupées sur plusieurs lignes, MM-YYYY, espaces OCR, tirets typographiques et titres professionnels étendus. Lecture PDF reconstruite selon les positions x/y ; séparation des colonnes lorsque des titres de sections distincts le permettent, conservation de dates et postes alignés. Si zéro résultat, aperçu du texte lu replié, non stocké, effacé au prochain import/annulation. Les expériences en cours restent signalées séparément sans inventer de fin ; les mises en page complexes nécessitent une vérification. Le CV réel de l'utilisateur n'a pas été reçu ni certifié : le fichier initial n'est pas conservé.
+
+Recherche de solutions : Affinda propose un essai limité, Eden AI facture les analyses réelles ; Docling est libre mais nécessite hébergement et structuration métier. La solution existante PDF.js/Tesseract et parseur InfiMatch reste sans transmission à un service tiers et sans nouveau coût d'API.
+
+Validation : builds frontend/backend ; 211 tests backend dont 10 CV ; 2 tests géométriques ; navigateur avec vrai PDF multicolonnes, périodes multilignes, image OCR, vrai parseur, propositions éditables, ajout explicite, sauvegarde, doublons, diagnostic sans stockage. Profil évalué indépendamment PASS 375/768/1440 : gris lisible, Annuler, suppression, persistance. Aucun changement en production des données utilisateur pendant ces tests. Publication Main et Backend autorisée dans la session.
+
+Question notification : l'action PERSONAL_CORRECTION_REQUESTED est auditée et visible dans l'administration, mais n'est pas reliée au routeur de notifications actuellement. Aucun envoi de notification affirmé ni déclenché lors du contrôle.
