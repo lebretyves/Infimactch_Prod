@@ -4,12 +4,12 @@ import { Icon } from '@/ui/Icon';
 import u from '@/components/NurseUI.module.css';
 import s from './UpcomingMissions.module.css';
 type UpcomingAssignment = Assignment & { address?: string | null; organization_name?: string | null; establishment_name?: string | null };
-export function UpcomingMissions({ assignments }: { assignments: UpcomingAssignment[] }) {
+export function UpcomingMissions({ assignments, limit = 3 }: { assignments: UpcomingAssignment[]; limit?: number }) {
  const now=Date.now();
  const missions=assignments.filter(m=>m.status==='ACTIVE' && Number.isFinite(Date.parse(m.start_at)) && Date.parse(m.end_at)>now).sort((a,b)=>Date.parse(a.start_at)-Date.parse(b.start_at));
  return <section className={u.card} aria-labelledby="upcoming-missions-title">
   <h2 id="upcoming-missions-title" className={u.cardHeading}><Icon name="calendar"/>Missions à venir</h2>
-  {missions.length ? <ul className={s.list}>{missions.slice(0,3).map(m=>{
+  {missions.length ? <ul className={s.list}>{missions.slice(0,limit).map(m=>{
    let zone=m.timezone||'Europe/Paris';try{new Intl.DateTimeFormat('fr-FR',{timeZone:zone});}catch{zone='Europe/Paris';}
    const format=(v:string,options:Intl.DateTimeFormatOptions)=>new Intl.DateTimeFormat('fr-FR',{...options,timeZone:zone}).format(new Date(v));
    const sameDay=format(m.start_at,{dateStyle:'short'})===format(m.end_at,{dateStyle:'short'});

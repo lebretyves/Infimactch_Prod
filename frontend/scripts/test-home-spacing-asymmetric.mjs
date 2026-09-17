@@ -91,12 +91,12 @@ try {
         internal: {
           status: "READY",
           personalization: "COMPATIBLE",
-          items: [internal],
+          items: process.env.SCENARIO==='external-only'?[]:Array.from({length:3},(_,i)=>({...internal,id:internal.id+i})),
         },
         external: {
           status: "READY",
           personalization: "PARTIAL",
-          items: [external],
+          items: process.env.SCENARIO==='internal-only'?[]:Array.from({length:3},(_,i)=>({...external,id:external.id+i})),
           sources: [{ provider: "FRANCE_TRAVAIL", status: "SUCCESS" }],
         },
       };
@@ -128,7 +128,7 @@ try {
     0,
   );
   assert.equal(await page.getByRole("heading", {name:"Notifications de mission",exact:true}).count(),0);
-  await mkdir("artifacts/home-redesign", { recursive: true });
+  await mkdir("artifacts/home-spacing-audit", { recursive: true });
   for (const width of [1440, 768, 375]) {
     await page.setViewportSize({ width, height: 1100 });
     assert.equal(
@@ -152,7 +152,7 @@ try {
         positions["Missions à venir"] < positions["Vos pistes de mission"],
       );
     await page.screenshot({
-      path: `artifacts/home-redesign/home-${width}.png`,
+      path: `artifacts/home-spacing-audit/${process.env.SCENARIO}-${width}.png`,
       fullPage: true,
     });
   }
@@ -163,6 +163,19 @@ try {
       .getAttribute("href"),
     "/calendrier",
   );
+  await page.setViewportSize({width:1440,height:1100});
+  await page.setViewportSize({width:375,height:1100});console.log('TARGETS',await page.getByRole('button').evaluateAll(es=>es.filter(e=>/favorite|favoris|Toutes|Partenaires|Externes/.test(e.getAttribute('aria-label')||e.textContent)).map(e=>({name:e.getAttribute('aria-label')||e.textContent,height:e.getBoundingClientRect().height,width:e.getBoundingClientRect().width}))));await page.setViewportSize({width:1440,height:1100});
+  console.log('LAYOUT',process.env.SCENARIO,await page.getByRole('heading',{name:'Offres partenaires InfiMatch',exact:true}).evaluate(el=>({internal:el.closest('section').getBoundingClientRect().width,container:el.closest('section').parentElement.getBoundingClientRect().width})));
+  const fullGroupName=process.env.SCENARIO==='external-only'?'Offres externes à explorer':'Offres partenaires InfiMatch';
+  const fullGroup=page.getByRole('heading',{name:fullGroupName,exact:true});
+  assert.ok(await fullGroup.evaluate(el=>el.closest('section').getBoundingClientRect().width/el.closest('section').parentElement.getBoundingClientRect().width>.98));
+  const chosenOrigin=process.env.SCENARIO==='external-only'?'Externes':'Partenaires';
+  await page.getByRole('button',{name:chosenOrigin,exact:true}).click();
+  await page.waitForTimeout(250);await fullGroup.waitFor();
+  assert.ok(await fullGroup.evaluate(el=>el.closest('section').getBoundingClientRect().width/el.closest('section').parentElement.getBoundingClientRect().width>.98));
+  assert.equal(await page.getByRole('heading',{name:process.env.SCENARIO==='external-only'?'Offres partenaires InfiMatch':'Offres externes à explorer',exact:true}).count(),0);
+  assert.equal(await page.getByRole('heading',{name:'Notifications de mission',exact:true}).count(),0);
+  await page.getByRole('button',{name:'Toutes',exact:true}).click();await fullGroup.waitFor();
   confirmed = true;
   bank = true;
   await page.reload();
@@ -181,7 +194,7 @@ try {
   });
   assert.match(await confirmedCard.innerText(), /\d{2}:\d{2}/);
   await page.screenshot({
-    path: "artifacts/home-redesign/home-confirmed-375.png",
+    path: "artifacts/home-spacing-audit/home-confirmed-375.png",
     fullPage: true,
   });
   assert.deepEqual(
