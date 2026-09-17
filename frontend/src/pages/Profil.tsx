@@ -1,3 +1,4 @@
+import {CvImport} from '@/components/CvImport';
 import {PersonalCorrectionRequest} from '@/components/PersonalCorrectionRequest';
 import { ProSanteConnect } from "@/components/ProSanteConnect";
 import { useRef, useState, type FormEvent } from "react";
@@ -299,6 +300,7 @@ function Editor({ initial }: { initial: ProfessionalProfile }) {
                 })}
               </div>
               <h3>Expérience par service</h3>
+              <CvImport services={ref.data?.ideServices||[]} existing={p.experience} onAdd={values=>change({experience:[...p.experience,...values]})}/>
               {!p.experience.length && (
                 <p className={u.muted}>
                   Ajoutez les services dans lesquels vous avez exercé.

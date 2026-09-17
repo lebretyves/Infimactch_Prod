@@ -215,6 +215,7 @@ export async function createApp() {
       legacyHeaders: false,
     }),
   );
+  app.use("/api/v1/profile/cv/parse",rateLimit({windowMs:60000,limit:10,standardHeaders:"draft-8",legacyHeaders:false}));
   app.useGlobalPipes(
     new ValidationPipe({
       whitelist: true,
