@@ -12,8 +12,8 @@ export async function api<T = Record<string, unknown>>(path: string, body?: unkn
   const data = await response.json().catch(() => ({}));
   if (!response.ok) {
     const code = data.code || data.error?.code || '';
-    if (response.status === 401 && path !== '/login' && path !== '/mfa') window.dispatchEvent(new Event('admin-session-expired'));
-    throw new AdminError(response.status, code, response.status === 401 ? 'La session a expiré. Reconnectez-vous.' : response.status === 403 ? (code === 'ADMIN_REAUTH_REQUIRED' ? 'Confirmez votre identité avec un nouveau code.' : 'Votre rôle ne permet pas cette opération.') : response.status === 429 ? 'Trop de tentatives. Patientez avant de réessayer.' : typeof data.message === 'string' ? data.message : 'Le service ne répond pas. Réessayez.');
+    if (response.status === 401 && path !== '/login' && path !== '/activate' && path !== '/mfa') window.dispatchEvent(new Event('admin-session-expired'));
+    throw new AdminError(response.status, code, response.status === 401 ? (path === '/activate' ? 'Activation impossible. Si vous avez déjà choisi votre mot de passe, revenez à la connexion et utilisez votre invitation pour terminer la configuration.' : path === '/login' ? 'Vérifiez votre email, votre mot de passe et, pour la première connexion, votre invitation.' : path === '/mfa' ? 'Code invalide ou expiré. Revenez à la connexion pour réessayer.' : 'La session a expiré. Reconnectez-vous.') : response.status === 403 ? (code === 'ADMIN_REAUTH_REQUIRED' ? 'Confirmez votre identité avec un nouveau code.' : 'Votre rôle ne permet pas cette opération.') : response.status === 429 ? 'Trop de tentatives. Patientez avant de réessayer.' : typeof data.message === 'string' ? data.message : 'Le service ne répond pas. Réessayez.');
   }
   if (typeof data.csrfToken === 'string') csrf = data.csrfToken;
   return data;
