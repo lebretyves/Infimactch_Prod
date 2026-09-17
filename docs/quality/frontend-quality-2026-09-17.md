@@ -61,7 +61,7 @@ Cadre : [RGESN Arcep 2024, 78 critères](https://www.arcep.fr/mes-demarches-et-s
 
 `scripts/test-pwa.mjs` : non-interception des routes sensibles/écritures, activation sur message explicite seulement, purge des seuls caches de l’application. Le test d’API refuse les mutations hors connexion avant tout appel CSRF/réseau.
 
-Reste à vérifier : installation sur appareils réels, cycle complet de mise à jour avec formulaires sur plusieurs onglets, lecteurs d’écran, audit RGAA complet, engagement hébergeurs/gouvernance RGESN, préproduction hors index, HTTP des inconnues (SPA : soft 404), contenu public sans JavaScript et éventuel pré-rendu ciblé. Les titres, descriptions et URL canoniques des quatre sous-pages publiques sont aussi produits en HTML statique au build; le corps de page reste rendu par React.
+Reste à vérifier : installation sur appareils réels, cycle complet de mise à jour avec formulaires sur plusieurs onglets, lecteurs d’écran, audit RGAA complet, engagement hébergeurs/gouvernance RGESN, préproduction hors index, recette des domaines de préproduction. Les titres, descriptions et URL canoniques des quatre sous-pages publiques sont aussi produits en HTML statique au build; le corps interactif reste rendu par React, avec un résumé public noscript ajouté lors des raffinements ci-dessous.
 
 Documentation installation consultée : [MDN — invitation PWA](https://developer.mozilla.org/en-US/docs/Web/Progressive_web_apps/How_to/Trigger_install_prompt). `beforeinstallprompt` n’est pas disponible dans tous les navigateurs. Aucun lien vers une application homonyme.
 
@@ -76,3 +76,5 @@ Composant facultatif sur connexion et profil infirmier. Configuration absente ou
 Le build produit cinq résumés publics lisibles sans JavaScript, correspondant au contenu existant (accueil, installation, accessibilité, écoconception, mentions). Les parcours de compte et mission nécessitent toujours JavaScript; les résumés ne prétendent pas remplacer les fonctions complètes. Aucun JobPosting ajouté.
 
 `test-quality-refinements.mjs` : cinq pages sans JavaScript PASS; bouton Cookies statique et réouverture du dialogue à 375 et 768 px PASS; espacement Google >=20px PASS. Build et 18 contrôles adaptatifs/PWA repassés avec succès.
+
+Contrôle public final : URL inconnue HTTP 404 confirmée, cinq résumés noscript disponibles. Les 18 contrôles adaptatifs ont aussi passé sur le domaine Vercel publié avec API fictives interceptées ; voir la recette de production.

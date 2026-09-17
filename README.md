@@ -5,6 +5,8 @@
 
 > État consolidé et reste à faire : [bilan V1 pour main](docs/BILAN_V1_MAIN_2026-09-16.md). Les bilans datés plus anciens sont historiques.
 > [Historique de la journée et suivi des travaux](docs/HISTORIQUE_2026-09-16.md).
+> [Recette publique du 17 septembre : versions, tests et blocages](docs/quality/RECETTE_PRODUCTION_2026-09-17.md).
+
 ## Vérification kickoff du 16 septembre 2026
 
 Le [bilan actuel](docs/audits/kickoff-2026-09-16/BILAN_BACKEND_KICKOFF_V1_2026-09-16.md) compare le code et les raccordements aux exigences du sujet : comptes, 62 opérations API, 40 exigences kickoff et limites restantes. 65 tests unitaires backend, 9 tests client API et les compilations ont été relancés ; aucune donnée métier créée. Les états et taux de couverture plus anciens ci-dessous restent historiques.
