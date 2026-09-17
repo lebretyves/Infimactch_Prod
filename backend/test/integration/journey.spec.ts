@@ -1360,3 +1360,17 @@ test('bank file uploads are private, validated, replaceable and satisfy the miss
  await other.agent.put('/api/v1/me/bank-document').set('Origin',process.env.APP_ORIGIN!).set('X-CSRF-Token',other.token).set('Idempotency-Key',randomUUID()).send(body).expect(200);
  expect((await other.agent.get('/api/v1/me/bank-details')).body.required).toBe(false);
 });
+
+test('chosen search place overrides home only for search and filters located external offers',async()=>{
+ const n=await account('NURSE'),label='geo-'+randomUUID();await db.query('UPDATE profile SET latitude=48.85,longitude=2.35,radius_km=10 WHERE user_id=$1',[n.id]);
+ const missionIds:string[]=[];
+ for(const [lat,lon] of [[45.758,4.835],[48.85,2.35]]){const [m]=await db.query("INSERT INTO mission(agency_id,establishment_id,title,description,qualification,service,population,block,start_at,end_at,shift,address,location,hourly_salary,status) SELECT agency_id,establishment_id,$1,'Fixture','IDE','URGENCES','ADULT','NONE','2039-01-01T08:00Z','2039-01-01T16:00Z','DAY','Fixture',ST_SetSRID(ST_MakePoint($2,$3),4326)::geography,30,'OPEN' FROM mission LIMIT 1 RETURNING id",[label,lon,lat]);missionIds.push(m.id);}
+ const {importOffers}=await import('../../src/public-data/offers');
+ for(const [suffix,lieuTravail] of [['lyon',{libelle:'Lyon',latitude:45.758,longitude:4.835}],['paris',{libelle:'Paris',latitude:48.85,longitude:2.35}],['unknown',{libelle:'Lyon'}]] as const)await importOffers(db,[{id:label+'-'+suffix,intitule:'IDE '+label,description:'Mission interim',typeContrat:'MIS',lieuTravail}],false);
+ const body={qualifications:[],q:label,latitude:45.758,longitude:4.835,radiusKm:10};
+ const result=await post(n,'listings/search',body).expect(201);expect(result.body.total).toBe(2);expect(result.body.items[0].id).toBe('m_'+missionIds[0]);expect(result.body.items[1].kind).toBe('EXTERNAL_OFFER');expect(result.body.externalDistance.unknownCoordinatesExcluded).toBe(true);
+ const back=await post(n,'listings/search',{...body,latitude:48.85,longitude:2.35}).expect(201);expect(back.body.total).toBe(2);expect(back.body.items[0].id).toBe('m_'+missionIds[1]);
+ const [profile]=await db.query('SELECT latitude,longitude,radius_km FROM profile WHERE user_id=$1',[n.id]);expect(Number(profile.latitude)).toBe(48.85);expect(Number(profile.longitude)).toBe(2.35);expect(Number(profile.radius_km)).toBe(10);
+ await post(n,'listings/search',{...body,latitude:undefined}).expect(400);
+ await request(app.getHttpServer()).get('/api/v1/listings/locations?q=Lyon').expect(401);await n.agent.get('/api/v1/listings/locations?q=a').expect(400);
+});

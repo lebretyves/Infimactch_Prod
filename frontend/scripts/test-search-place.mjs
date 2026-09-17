@@ -1,0 +1,31 @@
+import assert from 'node:assert/strict';
+import { mkdir } from 'node:fs/promises';
+import { chromium } from 'playwright';
+const browser=await chromium.launch({channel:'msedge',headless:true});
+const base=process.env.BASE_URL||'http://127.0.0.1:4193';
+try {
+  const page=await browser.newPage();let home=true;let failure=false;let slow=false;const searches=[];const writes=[];const errors=[];page.on('pageerror',e=>errors.push(e.message));
+  await page.route('**/api/**',async route=>{const url=new URL(route.request().url());const path=url.pathname;let json=[];
+    if(path.endsWith('/auth/me'))json={id:'fixture-nurse',email:'fixture@example.invalid',family:'NURSE',organizations:[]};
+    else if(path.endsWith('/profile')){if(route.request().method()!=='GET')writes.push(path);json={display_name:'Test fictif',qualifications:[],available:[],latitude:home?48.8566:null,longitude:home?2.3522:null,details:{city:home?'Paris':''}};}
+    else if(path.endsWith('/reference-data'))json={ideServices:[],blockSpecialties:[]};
+    else if(path.endsWith('/auth/csrf'))json={csrfToken:'fixture'};
+    else if(path.endsWith('/listings/locations')){if(slow)await new Promise(r=>setTimeout(r,350));if(failure)return route.fulfill({status:503,json:{message:'Geocoder unavailable'}});json={provider:'IGN',items:[{label:'Lyon, Rhône, France',latitude:45.764,longitude:4.8357}]};}
+    else if(path.endsWith('/listings/search')){const body=route.request().postDataJSON();searches.push(body);json={items:Array.from({length:Math.min(20,25-body.offset)},(_,i)=>({id:'m_fixture'+(body.offset+i),title:'Mission fictive '+(body.offset+i),qualification:'IDE',address:'Lieu fictif',hourly_salary:25})),total:25,offset:body.offset,limit:20};}
+    await route.fulfill({status:200,json});
+  });
+  await page.goto(base+'/missions');await page.getByRole('button',{name:'Tout refuser',exact:true}).click();await page.getByRole('heading',{name:'25 offres disponibles',exact:true}).waitFor();
+  const place=page.getByLabel('Lieu de recherche (ville ou adresse)',{exact:true});const radius=page.getByLabel('Rayon autour du lieu de recherche',{exact:true});
+  async function apply(){const old=searches.length;await page.getByRole('button',{name:'Rechercher',exact:true}).click();await page.waitForFunction(()=>!document.body.textContent.includes('Chargement des offres…'));await new Promise(r=>setTimeout(r,80));assert.ok(searches.length>old);}
+  await place.fill('Lyon');await radius.selectOption('25');const before=searches.length;await page.getByRole('button',{name:'Rechercher',exact:true}).click();await page.getByText('Choisissez explicitement un lieu parmi les propositions ou votre domicile avant de rechercher par rayon.').waitFor();assert.equal(searches.length,before);
+  await radius.selectOption('');await page.getByRole('button',{name:'Rechercher un lieu',exact:true}).click();await page.getByRole('button',{name:'Lyon, Rhône, France',exact:true}).click();assert.equal(await radius.inputValue(),'25');await apply();assert.equal(searches.at(-1).latitude,45.764);assert.equal(searches.at(-1).longitude,4.8357);assert.equal(searches.at(-1).radiusKm,25);assert.equal(new URL(page.url()).searchParams.get('place'),'Lyon, Rhône, France');
+  await page.getByRole('button',{name:'Suivant',exact:true}).click();await page.getByRole('heading',{name:'Mission fictive 20',exact:true}).waitFor();assert.equal(searches.at(-1).offset,20);assert.equal(searches.at(-1).latitude,45.764);
+  await page.getByRole('group',{name:'Origine des offres'}).getByRole('button',{name:'Externes',exact:true}).click();await page.getByRole('heading',{name:'Mission fictive 0',exact:true}).waitFor();assert.equal(searches.at(-1).origine,'externes');assert.equal(searches.at(-1).offset,0);assert.equal(searches.at(-1).latitude,45.764);
+  await place.fill('Lyon modifiée');const oldCount=searches.length;await page.getByRole('button',{name:'Rechercher',exact:true}).click();await page.getByText('Choisissez explicitement un lieu parmi les propositions ou votre domicile avant de rechercher par rayon.').waitFor();assert.equal(searches.length,oldCount);
+  await page.getByRole('button',{name:'Utiliser mon domicile',exact:true}).click();await apply();assert.equal(searches.at(-1).latitude,48.8566);assert.equal(searches.at(-1).longitude,2.3522);
+  home=false;await page.goto(base+'/missions');await page.reload();await page.getByRole('heading',{name:'25 offres disponibles',exact:true}).waitFor();assert.equal(await page.getByRole('button',{name:'Utiliser mon domicile',exact:true}).count(),0);await radius.selectOption('25');await place.fill('Lyon');failure=true;await page.getByRole('button',{name:'Rechercher un lieu',exact:true}).click();await page.getByText('La recherche de lieux est indisponible. Réessayez dans un instant.').waitFor();failure=false;
+  slow=true;await page.getByRole('button',{name:'Rechercher un lieu',exact:true}).click();await place.fill('Marseille');await page.waitForTimeout(500);assert.equal(await page.getByRole('button',{name:'Lyon, Rhône, France',exact:true}).count(),0);slow=false;await place.fill('Lyon');await page.getByRole('button',{name:'Rechercher un lieu',exact:true}).click();await page.getByRole('button',{name:'Lyon, Rhône, France',exact:true}).click();await apply();assert.equal(searches.at(-1).latitude,45.764);assert.equal(writes.length,0);
+  await mkdir('../InfiMatch/docs/quality',{recursive:true});for(const width of [375,1440]){await page.setViewportSize({width,height:1000});assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth+1),false);await page.screenshot({path:`../InfiMatch/docs/quality/search-place-${width}.png`,fullPage:true});}
+  await page.getByRole('button',{name:'Réinitialiser',exact:true}).click();await page.waitForTimeout(150);assert.equal(new URL(page.url()).searchParams.has('place'),false);assert.equal(searches.at(-1).radiusKm,undefined);assert.deepEqual(errors,[]);
+  console.log('PASS fictional place search: Lyon25 independent of Paris home, explicit selection, editing invalidates, home return, no home, source failure, late-response cancellation, origin/page preserve, reset, no profile writes,375/1440.');
+}finally{await browser.close();}

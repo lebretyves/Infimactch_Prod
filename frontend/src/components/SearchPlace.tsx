@@ -1,0 +1,17 @@
+import { useEffect, useRef, useState } from 'react';
+import { api } from '@/services/api';
+import { TextField } from '@/ui/Field';
+import { Button } from '@/ui/Button';
+import u from './NurseUI.module.css';
+export type SearchLocation = { label: string; latitude: number; longitude: number };
+export function validCoordinates(latitude: unknown, longitude: unknown): { latitude: number; longitude: number } | null {
+  if (latitude == null || longitude == null || String(latitude).trim() === '' || String(longitude).trim() === '') return null;
+  const lat = Number(latitude), lon = Number(longitude);
+  return Number.isFinite(lat) && Number.isFinite(lon) && lat >= -90 && lat <= 90 && lon >= -180 && lon <= 180 ? {latitude:lat,longitude:lon} : null;
+}
+export function SearchPlace({value,selected,home,onChange}: {value:string;selected:boolean;home:SearchLocation|null;onChange:(value:string,location:SearchLocation|null)=>void}) {
+  const [items,setItems]=useState<SearchLocation[]>([]);const [error,setError]=useState('');const [busy,setBusy]=useState(false);const [searched,setSearched]=useState(false);const request=useRef<AbortController|null>(null);
+  useEffect(()=>{request.current?.abort();setItems([]);setBusy(false);setSearched(false);setError('');return()=>request.current?.abort();},[value]);
+  async function search(){request.current?.abort();const controller=new AbortController();request.current=controller;setItems([]);setError('');setSearched(false);if(value.trim().length<3){setError('Saisissez au moins trois caractères pour rechercher une ville ou une adresse.');return;}setBusy(true);try{const result=await api<{items:SearchLocation[];provider:string}>('/listings/locations?q='+encodeURIComponent(value.trim()),{signal:controller.signal});if(!controller.signal.aborted){setItems(result.items.filter(item=>!!validCoordinates(item.latitude,item.longitude)));setSearched(true);}}catch{if(!controller.signal.aborted)setError(home ? 'La recherche de lieux est indisponible. Réessayez ou utilisez votre domicile.' : 'La recherche de lieux est indisponible. Réessayez dans un instant.');}finally{if(!controller.signal.aborted)setBusy(false);}}
+  return <div><TextField label="Lieu de recherche (ville ou adresse)" value={value} placeholder={home?`Par défaut : ${home.label}`:'Ex. Lyon ou une adresse'} maxLength={150} onChange={e=>onChange(e.target.value,null)}/><div className={u.actions}><Button type="button" variant="outline" size="sm" loading={busy} onClick={()=>void search()}>Rechercher un lieu</Button>{home&&<Button type="button" variant="ghost" size="sm" onClick={()=>onChange(home.label,home)}>Utiliser mon domicile</Button>}</div><p className={u.muted}>{selected?'Lieu sélectionné pour cette recherche.':value?'Choisissez une proposition avant de lancer une recherche par rayon.':home?`Centre par défaut : ${home.label}.`:'Aucun centre sélectionné.'} Votre domicile et votre profil ne seront pas modifiés.</p>{error&&<p className={u.feedback} role="alert">{error}</p>}{items.length>0&&<ul aria-label="Lieux proposés">{items.map((item,index)=><li key={`${item.latitude}-${item.longitude}-${index}`}><Button type="button" variant="outline" size="sm" onClick={()=>{request.current?.abort();setItems([]);onChange(item.label,item);}}>{item.label}</Button></li>)}</ul>}{searched&&!items.length&&!selected&&<p role="status">Aucun lieu trouvé. Précisez la ville ou l’adresse.</p>}</div>;
+}

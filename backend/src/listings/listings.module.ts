@@ -1,3 +1,4 @@
+import {LocationsController} from './locations';
 import {RecommendationsController} from './recommendations';
 import {MatchingModule} from '../matching/matching.module';
 import { partialOfferMatch } from "../public-data/partial-matching";
@@ -75,7 +76,6 @@ class ListingsController {
     const strictUnknown = Boolean(
       b.start ||
       b.end ||
-      b.radiusKm !== undefined ||
       b.shifts?.length ||
       b.establishmentId,
     );
@@ -89,11 +89,18 @@ class ListingsController {
               : externalQualifications,
           ) +
           ")" + (generalBrowse ? " OR e.qualification IS NULL)" : ")");
+    let externalRadius='';
+    if(b.radiusKm!==undefined){
+      const lat="e.provenance#>'{facts,location,coordinates,latitude}'",lon="e.provenance#>'{facts,location,coordinates,longitude}'";
+      const latValue="(e.provenance#>>'{facts,location,coordinates,latitude}')::double precision",lonValue="(e.provenance#>>'{facts,location,coordinates,longitude}')::double precision";
+      // CASE prevents casts of untrusted text; unknown coordinates never prove distance.
+      externalRadius=" AND CASE WHEN jsonb_typeof("+lat+")='number' AND jsonb_typeof("+lon+")='number' THEN CASE WHEN "+latValue.replace("::double precision","::numeric")+" BETWEEN -90 AND 90 AND "+lonValue.replace("::double precision","::numeric")+" BETWEEN -180 AND 180 THEN ST_DWithin(ST_SetSRID(ST_MakePoint("+lonValue+","+latValue+"),4326)::geography,ST_SetSRID(ST_MakePoint("+bind(b.longitude)+","+bind(b.latitude)+"),4326)::geography,"+bind(b.radiusKm*1000)+") ELSE false END ELSE false END";
+    }
     const sourceSql =
       "SELECT 'm_'||m.id AS listing_id,m.created_at AS listed_at,(to_jsonb(m)-'location')||jsonb_build_object('id','m_'||m.id,'kind','INTERNAL_MISSION','latitude',ST_Y(m.location::geometry),'longitude',ST_X(m.location::geometry),'salary',jsonb_build_object('amount',m.hourly_salary,'currency','EUR','unit','HOUR','gross',true)) AS data FROM mission m WHERE " +
       (q.where + (b.origine==='externes' ? ' AND false' : '')) +
       " UNION ALL SELECT 'e_'||e.id,e.imported_at,(to_jsonb(e)-'raw_hash')||jsonb_build_object('id','e_'||e.id,'kind','EXTERNAL_OFFER','applicationMode','REDIRECT','eligibility','INCOMPLETE') FROM external_offer e WHERE " +
-      (externalWhere + (b.origine==='partenaires' ? ' AND false' : ''));
+      (externalWhere + externalRadius + (b.origine==='partenaires' ? ' AND false' : ''));
     const pageQuery = listingPageQuery(sourceSql, parameters, b);
     const [pageResult] = await this.db.query(pageQuery.sql, pageQuery.parameters);
     const unverifiedSearchFilters = [
@@ -132,9 +139,10 @@ class ListingsController {
       ),
       limit: b.limit ?? 20,
       offset: b.offset ?? 0,
+      externalDistance: b.radiusKm===undefined ? null : {basis:'PROVIDER_COORDINATES',unknownCoordinatesExcluded:true},
       unknownExternalFieldsExcluded:
         !b.includeUncertainExternal &&
-        (strictUnknown ||
+        (strictUnknown || b.radiusKm !== undefined ||
           externalQualifications.length !== b.qualifications.length),
     };
   }
@@ -356,5 +364,5 @@ class ListingsController {
     return { ok: true };
   }
 }
-@Module({ imports:[MatchingModule], controllers: [ListingsController,RecommendationsController] })
+@Module({ imports:[MatchingModule], controllers: [LocationsController,ListingsController,RecommendationsController] })
 export class ListingsModule {}
