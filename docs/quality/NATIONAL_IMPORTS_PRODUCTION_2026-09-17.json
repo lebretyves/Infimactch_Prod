@@ -1,0 +1,167 @@
+{
+  "at": "2026-09-17T20:02:16.238Z",
+  "counts": [
+    {
+      "source": "JOBSPIPE",
+      "total": 80,
+      "active": 70,
+      "located": 66,
+      "parsed": 70
+    },
+    {
+      "source": "FRANCE_TRAVAIL",
+      "total": 4792,
+      "active": 4773,
+      "located": 4626,
+      "parsed": 4773
+    }
+  ],
+  "categories": [
+    {
+      "source": "FRANCE_TRAVAIL",
+      "qualification": null,
+      "count": 218
+    },
+    {
+      "source": "JOBSPIPE",
+      "qualification": "IADE",
+      "count": 16
+    },
+    {
+      "source": "JOBSPIPE",
+      "qualification": "IDE",
+      "count": 43
+    },
+    {
+      "source": "FRANCE_TRAVAIL",
+      "qualification": "IADE",
+      "count": 131
+    },
+    {
+      "source": "JOBSPIPE",
+      "qualification": "IBODE",
+      "count": 11
+    },
+    {
+      "source": "FRANCE_TRAVAIL",
+      "qualification": "IDE",
+      "count": 4402
+    },
+    {
+      "source": "FRANCE_TRAVAIL",
+      "qualification": "IBODE",
+      "count": 22
+    }
+  ],
+  "unknown": [
+    {
+      "title": "Infirmier / Infirmière de bloc opératoire Diplômé(e) d'Etat (IBOD (H/F)",
+      "rome": null
+    },
+    {
+      "title": "INFIRMIER DE BLOC OPERATOIRE (H/F)",
+      "rome": "J1504"
+    },
+    {
+      "title": "INFIRMIER DE (F/H) EXERÇANT AU BLOC OPÉRATOIRE",
+      "rome": null
+    },
+    {
+      "title": "Infirmier / Infirmière de bloc opératoire Diplômé(e) d'Etat (IBOD (H/F)",
+      "rome": null
+    },
+    {
+      "title": "AIDE OPÉRATOIRE - MISSIONS D'INTÉRIM (H/F)",
+      "rome": null
+    },
+    {
+      "title": "INFIRMIER DE BLOC OPERATOIRE (H/F)",
+      "rome": "J1504"
+    },
+    {
+      "title": "INFIRMIER DE AU BLOC OPÉRATOIRE (H/F)",
+      "rome": null
+    },
+    {
+      "title": "INFIRMIER DE BLOC OPÉRATOIRE DE (F/H)",
+      "rome": null
+    },
+    {
+      "title": "INFIRMIER DE BLOC OPERATOIRE (H/F)",
+      "rome": null
+    },
+    {
+      "title": "INFIRMIER DE AU BLOC OPÉRATOIRE (H/F)",
+      "rome": null
+    },
+    {
+      "title": "INFIRMIER DE (F/H) EXPÉRIMENTÉ AU BLOC OPÉRATOIRE",
+      "rome": null
+    },
+    {
+      "title": "INFIRMIER DE BLOC OPERATOIRE (H/F)",
+      "rome": null
+    },
+    {
+      "title": "INFIRMIER DE BLOC OPERATOIRE (H/F)",
+      "rome": null
+    },
+    {
+      "title": "INFIRMIER DE EXERÇANT AU BLOC OPÉRATOIRE (H/F)",
+      "rome": null
+    },
+    {
+      "title": "INFIRMIER DE BLOC OPÉRATOIRE DE (F/H)",
+      "rome": null
+    }
+  ],
+  "sources": [
+    {
+      "provider": "FRANCE_TRAVAIL",
+      "enabled": true,
+      "last_started_at": "2026-09-17T20:00:55.356Z",
+      "state": {
+        "id": "54c84389-f01d-40f8-b4ca-d4e25a266ecb",
+        "day": "2026-09-17",
+        "pages": 127,
+        "phase": "COMPLETE",
+        "queue": [],
+        "version": 1,
+        "accepted": 4788,
+        "rejected": 35,
+        "startedAt": "2026-09-17T19:39:14.333Z",
+        "partitions": 3,
+        "completedAt": "2026-09-17T19:56:10.513Z"
+      },
+      "received": 4823
+    },
+    {
+      "provider": "JOBSPIPE",
+      "enabled": true,
+      "last_started_at": "2026-09-17T20:00:55.922Z",
+      "state": {
+        "cursor": null,
+        "cycleId": "2026-09-17:e5636822d1342371",
+        "version": 1,
+        "startedAt": "2026-09-17T19:50:42.478Z",
+        "lastFullAt": "2026-09-17T19:50:42.478Z",
+        "queryIndex": 1,
+        "completedAt": "2026-09-17T19:53:40.248Z",
+        "filtersVersion": 2
+      },
+      "received": 353
+    }
+  ],
+  "duplicates": [
+    {
+      "count": 0
+    }
+  ],
+  "budget": [
+    {
+      "budget_month": "2026-08-31T22:00:00.000Z",
+      "charged": 652,
+      "requests": 33
+    }
+  ]
+}
