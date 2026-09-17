@@ -130,3 +130,9 @@ La capture automatique après IBAN stable lance désormais une lecture complète
 Validation : build frontend, suite réelle PDF.js/Tesseract/caméra et test dédié aperçu IBAN seul puis vraie analyse de la photo, sans clic Analyser ni écriture bancaire.
 
 Audit indépendant du lot de démonstration : 1000 demandes / 3092 vacations ; 666 demandes / 2067 vacations avec GPS et champs métier valides sous réserve des UUID établissements et droits ; 334 demandes / 1025 vacations sans GPS. 2067 cas positifs, 16251 négatifs et 4 créations DRAFT en PostGIS jetable. Aucun import production. Défaut fuseau DOM identifié (115 vacations) : Europe/Paris persisté par défaut ; non corrigé dans cette livraison RIB. Rapport local livrables/missions-500/AUDIT_IMPORT_MATCHING.md.
+
+## 2026-09-18 — Lecture automatique des notifications
+
+Demande utilisateur : aucune validation manuelle après consultation. Bouton Marquer comme lue retiré ; les liens Consulter et les nouveaux liens envoyés via Discord portent l’identifiant de notification. Sur page authentifiée visible, lecture enregistrée automatiquement via POST protégé existant, lié au destinataire et idempotent. Paramètres et ancre préservés, marqueur retiré après succès. Échecs réseau non bloquants avec reprises limitées, aucun faux statut lu. La simple ouverture du message dans Discord n’est pas observable via les événements publics du bot (documentation officielle Discord Gateway Events). Les anciens messages Discord ne sont pas réécrits.
+
+Validation : builds frontend/backend ; navigateur avec API simulée, consultation/direct link, absence de bouton, paramètres/ancre, identifiant invalide et échec réseau. Aucun message Discord ni donnée réelle envoyés pendant les tests.

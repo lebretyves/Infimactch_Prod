@@ -4,6 +4,7 @@ import { Button } from "@/ui/Button";
 import { Icon, type IconName } from "@/ui/Icon";
 import { Logo } from "@/ui/Logo";
 import { useAuth } from "@/context/AuthContext";
+import { NotificationRead } from "@/components/NotificationRead";
 import s from "./AppLayout.module.css";
 const nurseNavigation: { to: string; label: string; icon: IconName }[] = [
   { to: "/accueil", label: "Vue d’ensemble", icon: "nav-home" },
@@ -55,6 +56,7 @@ export function AppLayout() {
     [user?.prenom, user?.nom].filter(Boolean).join(" ") || "Mon compte";
   return (
     <div className={s.shell}>
+      <NotificationRead />
       <a className="skipLink" href="#contenu">
         Aller au contenu principal
       </a>
