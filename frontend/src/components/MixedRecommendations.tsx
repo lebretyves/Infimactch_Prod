@@ -143,7 +143,7 @@ export function MixedRecommendations({
     );
   }
   return (
-    <section className={u.card} aria-labelledby="recommendations-heading">
+    <section className={`${u.card} ${s.recommendations}`} aria-labelledby="recommendations-heading">
       <div className={u.row}>
         <h2 id="recommendations-heading">Vos pistes de mission</h2>
         <Link to={`/missions?origine=${origin}`}>Toutes les offres →</Link>
@@ -172,9 +172,9 @@ export function MixedRecommendations({
         </div>
       ) : (
         data && (
-          <>
+          <div className={`${s.groups} ${!data.internal.items.length || !data.external.items.length ? s.singleGroup : ""}`}>
             {origin !== "externes" && (
-              <section className={s.group} aria-labelledby="compatible-heading">
+              <section className={s.group} data-empty={!data.internal.items.length} aria-labelledby="compatible-heading">
                 <h3 id="compatible-heading">Offres partenaires InfiMatch</h3>
                 {data.internal.personalization ===
                 "GENERAL_PROFILE_INCOMPLETE" ? (
@@ -210,7 +210,7 @@ export function MixedRecommendations({
               </section>
             )}
             {origin !== "partenaires" && (
-              <section className={s.group} aria-labelledby="external-heading">
+              <section className={s.group} data-empty={!data.external.items.length} aria-labelledby="external-heading">
                 <h3 id="external-heading">Offres externes à explorer</h3>
                 {data.external.personalization ===
                 "GENERAL_PROFILE_INCOMPLETE" ? (
@@ -257,7 +257,7 @@ export function MixedRecommendations({
                     )}
               </section>
             )}
-          </>
+          </div>
         )
       )}
     </section>

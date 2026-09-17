@@ -2,7 +2,7 @@ import { BankReminder } from "@/components/BankReminder";
 import { MixedRecommendations } from "@/components/MixedRecommendations";
 import { UpcomingMissions } from "@/components/UpcomingMissions";
 import { notificationHref } from "@/lib/notificationHref";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link } from "react-router";
 import { useAuth } from "@/context/AuthContext";
 import { useRemote } from "@/lib/useRemote";
@@ -61,6 +61,8 @@ export default function Accueil() {
   const [error, setError] = useState(""),
     [busy, setBusy] = useState("");
   const nurse = user?.role === "interimaire";
+  const [preparationOpen,setPreparationOpen] = useState(() => window.matchMedia("(min-width: 768px)").matches);
+  useEffect(() => { const media=window.matchMedia("(min-width: 768px)"); const sync=()=>setPreparationOpen(media.matches); media.addEventListener("change",sync); return ()=>media.removeEventListener("change",sync); }, []);
   const r = useRemote(async (signal) => {
     const [dashboard, notifications] = await Promise.all([
       api<Dashboard>("/dashboards", { signal }),
@@ -151,16 +153,6 @@ export default function Accueil() {
         <>
           {data ? (
             <>
-              <div className={s.dashboard}>
-                <div className={u.stack}>
-                  <MixedRecommendations
-                    userId={user!.id}
-                    isSaved={isSaved}
-                    busy={!!busy}
-                    onFavorite={(m) =>
-                      void act(m.id, () => favorite(m, isSaved(m)))
-                    }
-                  />
                   <div className={s.stats}>
                     <Link to="/candidatures" className={s.stat}>
                       <span className={s.icon}>
@@ -207,8 +199,11 @@ export default function Accueil() {
                       <Icon name="chevron" size={17} />
                     </Link>
                   </div>
-                </div>
-                <div className={u.stack}>
+              <div className={s.preparation}>
+                <UpcomingMissions assignments={data.history} limit={1}/>
+                <details className={`${u.card} ${s.preparationTools}`} open={preparationOpen} onToggle={e=>setPreparationOpen(e.currentTarget.open)}>
+                  <summary>Disponibilités, profil et dossier</summary>
+                  <div className={s.toolsContent}>
                   <section className={u.card}>
                     <h2 className={u.cardHeading}>
                       <Icon name="calendar" />
@@ -256,25 +251,20 @@ export default function Accueil() {
                       </ButtonLink>
                       <Link to="/calendrier">Ma mobilité</Link>
                     </div>
+                    <Link to="/dossier" className={s.dossierLink}><Icon name="folder" size={17}/>Votre dossier professionnel →</Link>
                   </section>
-                  <UpcomingMissions assignments={data.history} />
-                </div>
+                  </div>
+                </details>
               </div>
               <BankReminder />
-              <section className={`${u.card} ${s.dossier}`}>
-                <span className={`${s.icon} ${s.teal}`}>
-                  <Icon name="folder" />
-                </span>
-                <div>
-                  <h2>Votre dossier professionnel</h2>
-                  <p className={u.muted}>
-                    Retrouvez vos informations et vos justificatifs.
-                  </p>
-                </div>
-                <ButtonLink to="/dossier" variant="ghost">
-                  Ouvrir mon dossier →
-                </ButtonLink>
-              </section>
+                  <MixedRecommendations
+                    userId={user!.id}
+                    isSaved={isSaved}
+                    busy={!!busy}
+                    onFavorite={(m) =>
+                      void act(m.id, () => favorite(m, isSaved(m)))
+                    }
+                  />
             </>
           ) : (
             <>

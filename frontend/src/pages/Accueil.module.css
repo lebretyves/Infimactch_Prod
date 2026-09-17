@@ -267,3 +267,34 @@
     margin-left: 0;
   }
 }
+/* Keep preparation short; let recommendation groups use the full content width. */
+.preparation { display: grid; grid-template-columns: minmax(0,1fr) minmax(0,1.2fr); gap: 20px; align-items: start; }
+.preparationTools { padding: 18px !important; }
+.preparationTools>summary { cursor: pointer; color: var(--ink-900); font-weight: 700; font-size: 15px; min-height: 44px; display: flex; align-items: center; gap: 8px; list-style: none; }
+.preparationTools>summary::before { content: '›'; font-size: 21px; }
+.preparationTools[open]>summary::before { transform: rotate(90deg); }
+.preparationTools>summary::-webkit-details-marker { display: none; }
+.preparationTools>summary:focus-visible { outline: 2px solid var(--brand-600); outline-offset: 3px; }
+.toolsContent { display: grid; grid-template-columns: minmax(0,1fr) minmax(0,1fr); gap: 18px; padding-top: 12px; }
+.toolsContent>section { padding: 0 !important; border: 0; box-shadow: none; border-radius: 0; background: transparent; }
+.toolsContent>section h2 { font-size: 14px; }
+.toolsContent>section h2 svg { width: 18px; }
+.toolsContent>section p { font-size: 12px; }
+.toolsContent>section a { min-height: 44px; display: inline-flex; align-items: center; }
+.toolsContent>section a[class*="button"] { font-size: 12px; height: auto; white-space: normal; }
+.dossierLink { display: inline-flex; gap: 7px; font-size: 12px; font-weight: 600; min-height: 44px; align-items: center; }
+.stats { gap: 14px; }
+.stat { padding: 14px 16px; gap: 12px; }
+.stat strong { font-size: 24px; }
+.stat .icon { width: 36px; height: 36px; }
+@media(max-width:900px) { .toolsContent { grid-template-columns: 1fr; } }
+@media(max-width:600px) {
+ .preparation { grid-template-columns: 1fr; gap: 12px; }
+ .preparationTools { padding: 12px 16px !important; }
+ .stats { grid-template-columns: repeat(3,minmax(0,1fr)); gap: 7px; }
+ .stat { padding: 12px 8px; display: block; }
+ .stat .icon,.stat>svg { display: none; }
+ .stat strong { font-size: 23px; }
+ .stat small { font-size: 11px; line-height: 1.45; }
+ .toolsContent { grid-template-columns: 1fr; gap: 20px; }
+}

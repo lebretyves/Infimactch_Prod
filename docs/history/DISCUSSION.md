@@ -162,3 +162,7 @@ Le panneau de recherche regroupe les champs principaux et les filtres complémen
 Les informations extraites affichent le passage source exact à la place des libellés générés en gras. Les passages répétés sont regroupés. Les mentions d'urgences AVC, de transport SAMU et de présentation générale d'un établissement ne créent plus de faux services pour le matching. Les correspondances utiles restent normalisées en interne. Les annonces anciennes sont analysées à la lecture avec le parseur 4.1.0, sans réimport ni écriture en base ; les recommandations n'effectuent cette présentation que sur les trois résultats retenus.
 
 Validation : compilation frontend et backend, 224 tests serveur, tests de déduplication et tests navigateur avec API simulée. Le CV, le RIB et les offres privées du compte utilisateur ne sont pas accessibles dans ces tests.
+
+## 2026-09-18 — Espaces de la vue d’ensemble infirmier
+
+Réorganisation de la page d’accueil pour supprimer la longue colonne vide à côté des recommandations. Compteurs remontés, informations de suivi et accès au dossier regroupés, offres présentées sur une largeur adaptée avec des espacements réduits. Notifications toujours absentes de cette vue. Données, favoris, filtres d’origine et règles de matching conservés. Contrôles navigateur sur mobile, tablette et ordinateur, états vide et mission confirmée, puis compilation frontend.
