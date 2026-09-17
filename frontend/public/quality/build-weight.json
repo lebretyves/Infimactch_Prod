@@ -1,0 +1,91 @@
+{
+  "measuredAt": "2026-09-17T13:50:31.842Z",
+  "totalBytes": 21286004,
+  "jsBytes": 686940,
+  "cssBytes": 97947,
+  "imageBytes": 20184522,
+  "fontBytes": 176288,
+  "topAssets": [
+    {
+      "path": "images/maquette-accueil-source.png",
+      "bytes": 1508007
+    },
+    {
+      "path": "images/maquette-connexion-source.png",
+      "bytes": 1497575
+    },
+    {
+      "path": "catalogue/captures/accueil-public-desktop.png",
+      "bytes": 1286665
+    },
+    {
+      "path": "catalogue/captures/accueil-public-mobile.png",
+      "bytes": 541005
+    },
+    {
+      "path": "catalogue/captures/inscription-finess-desktop.png",
+      "bytes": 455297
+    },
+    {
+      "path": "catalogue/captures/inscription-etablissement-desktop.png",
+      "bytes": 423413
+    },
+    {
+      "path": "catalogue/captures/calendrier-mois-mobile.png",
+      "bytes": 422985
+    },
+    {
+      "path": "catalogue/captures/calendrier-mois-desktop.png",
+      "bytes": 416341
+    },
+    {
+      "path": "catalogue/captures/cookies-personnalisation-desktop.png",
+      "bytes": 415047
+    },
+    {
+      "path": "assets/index-CjFOsBD2.js",
+      "bytes": 408939
+    },
+    {
+      "path": "catalogue/captures/cookies-desktop.png",
+      "bytes": 402641
+    },
+    {
+      "path": "catalogue/captures/inscription-agence-desktop.png",
+      "bytes": 399119
+    },
+    {
+      "path": "catalogue/captures/connexion-candidat-desktop.png",
+      "bytes": 384507
+    },
+    {
+      "path": "catalogue/captures/inscription-google-desktop.png",
+      "bytes": 351613
+    },
+    {
+      "path": "catalogue/captures/failure-inscription-google-desktop.png",
+      "bytes": 349282
+    },
+    {
+      "path": "catalogue/captures/inscription-compte-desktop.png",
+      "bytes": 344022
+    },
+    {
+      "path": "catalogue/captures/mentions-desktop.png",
+      "bytes": 312042
+    },
+    {
+      "path": "catalogue/captures/inscription-finess-mobile.png",
+      "bytes": 302928
+    },
+    {
+      "path": "catalogue/captures/inscription-etablissement-mobile.png",
+      "bytes": 276502
+    },
+    {
+      "path": "catalogue/captures/calendrier-desktop.png",
+      "bytes": 261332
+    }
+  ],
+  "note": "Poids des fichiers du build Vite (dist/). Ce n’est pas une mesure énergétique, ni un score RGESN, ni un gain de CO₂."
+}

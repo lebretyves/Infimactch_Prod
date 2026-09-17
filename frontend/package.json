@@ -11,6 +11,8 @@
     "icons": "node scripts/build-icon-sprite.mjs",
     "screenshots": "node scripts/screenshots.mjs",
     "audit:a11y": "node scripts/audit-a11y.mjs",
+    "measure:build": "node scripts/measure-build.mjs",
+    "build:quality": "npm run build && npm run measure:build",
     "build:demo": "tsc -b && vite build --base ./ --outDir dist-demo --mode demo",
     "test": "node --test scripts/test-api.mjs && node --experimental-strip-types --test scripts/test-idle-session.mjs",
     "test:integration": "node scripts/test-integration.mjs",
