@@ -11,3 +11,16 @@ Salaires : repères horaires bruts d'offres publiques d'agences, pas salaires r�
 Livrables dans E:/Interimatch/livrables/missions-500 : Missions_1000_controle.pdf (93pages), .xlsx (filtresdontDémo18–27septembre), .csv, missions.json, audit-lot.md/json, sources et Dossier_1000_missions_controle.zip. Le dossier précédent des49missionshistoriques reste séparé ; celles-ci avaient un FINESS fictif000000001 et n'ont pas été rétablies.
 
 Avant toute utilisation applicative, une demande multivacations doit être représentée par des créneaux distincts, avec organisation autorisée résolue parFINESS et statut de démonstration explicite. Le présent travail n'a créé aucun compte, aucune organisation ni annonce publique.
+
+
+## Révision vérifiée après géolocalisation et contrôle d’import
+
+Version actuelle : SHA-256 C56BAE2DCFA9DECA89BF07AB3AB1144D5BFFF126B7D48B08F5C74ABE19F9AA40. Les 1000 demandes/3092 vacations, 400 demandes18–27septembre, métiers, lieux métier, prix et horaires sont conservés. 99 sites géolocalisés supplémentaires (90 adresses,9points hospitaliers identifiés) ;129sites/180demandes/490vacations restent sans GPS. Les sources plus anciennes Atlasanté sont recoupées par FINESS et adresse actuelle, sans prétendre à un relevé GPS récent. 228critères pansements complexes SMR et63triage urgences horsIOA passent de requis à souhaités, faute de poste spécialisé décrit. Diplômes/compétences de sécurité inchangés.
+
+Import complet PostGIS jetable :2602DRAFT, même résultat et mêmesIDs au rejeu,0doublon ;94vacationsDOM avec fuseau exact et UTC inchangés. Référentiel1moismax, droits,ambiguïtés et refusDBdistante contrôlés. 15profils fictifs régionaux donnent87vacations compatibles/52demandes ; aucunprofilréel modifié et aucuneannonce au catalogue réel.
+
+646FINESS retrouvés danssnapshotANS17sept etAPIpublique(snapshot1sept). La résolution des organisations de production et des droits reste nonvérifiée : récupération envproduction refuséeparcontrôleautomatique enattented’accordexplicite. La lecture locale development ne constituepasunelectureproduction.
+
+Livrables actualisés : Missions_1000_controle.pdf (94pages), Missions_1000_controle.xlsx, Audit_import_matching_corrige_2026-09-18.xlsx, Dossier_1000_missions_controle.zip, Dossier_audit_import_matching_corrige_2026-09-18.zip, AUDIT_IMPORT_MATCHING.md. L’ancienExcel audit ouvert est conservé, nepasleconfondreavecversioncorrigée.
+
+Code reproductible : scripts/safe-demo-mission-import.cjs, scripts/test-safe-demo-mission-import.cjs et scripts/SAFE_DEMO_IMPORT.md. Donnéesvolumineusesetpreuvessource restentdanslivrableshorsdépôt. L’importeur écrit seulement enbasejetabletest, necréeaucuneorganisationréelle et nepublieaucuneannonce.

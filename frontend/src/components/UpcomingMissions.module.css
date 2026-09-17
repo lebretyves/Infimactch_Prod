@@ -1,0 +1,14 @@
+.list { list-style: none; padding: 0; margin: 0; display: grid; gap: 12px; }
+.mission { background: #f5f9fd; border: 1px solid #dce7f2; border-radius: 9px; padding: 14px; min-width: 0; }
+.top { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: baseline; gap: 6px; }
+.top time { color: var(--ink-900); font-size: 14px; font-weight: 700; }
+.status { font-size: 11px; color: #21674f; font-weight: 600; }
+.title { display: block; margin: 10px 0 8px; font-size: 14px; overflow-wrap: anywhere; }
+.hours { display: flex; gap: 6px; align-items: center; font-size: 13px; margin: 0; color: var(--ink-900); }
+.zone { font-size: 10px; margin: 3px 0 12px; color: var(--ink-600); }
+.place { display: flex; align-items: flex-start; gap: 7px; font-size: 12px; color: var(--ink-700); }
+.place svg { flex-shrink: 0; margin-top: 2px; }
+.place strong,.place span { display: block; overflow-wrap: anywhere; }
+.mission>a { display: inline-flex; align-items: center; min-height: 36px; margin-top: 6px; font-size: 12px; font-weight: 600; }
+.all { display: inline-flex; align-items: center; min-height: 44px; font-size: 12px; font-weight: 600; margin-top: 8px; }
+@media(max-width:600px) { .mission>a { min-height:44px; } }

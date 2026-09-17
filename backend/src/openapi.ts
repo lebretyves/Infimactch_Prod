@@ -160,6 +160,9 @@ export function configureOpenApi(doc: OpenAPIObject) {
       properties: {
         ...assignment.properties,
         title: text,
+        timezone: text,
+        address: text,
+        establishment_name: text,
         temporal_position: {
           type: "string",
           enum: ["upcoming", "in_progress", "past"],

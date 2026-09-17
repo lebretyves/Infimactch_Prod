@@ -322,3 +322,11 @@ MissionDto/persistance conservent un fuseau IANA, Europe/Paris par défaut histo
 Validation : builds frontend/admin/backend, 219 tests backend PASS, conversions 5 DOM et 3 fuseaux navigateur, cas DST, navigateur édition Guadeloupe, tableau admin 5 états et mobile375/desktop1440. Contrôle FINESS :646/646 sites du lot présents dans snapshot téléchargé17sept et APIpublique(snapshot1sept). Importeur vérifié séparément en PostGIS jetable, aucune publication des annonces de démonstration. Compléments GPS et révision des critères du lot en cours, suivis dans les livrables.
 
 Accèsproduction : téléchargement envproduction refusé par contrôleautomatique pourrisquesecrets ; noncontourné. Correspondances organisationsproduction etdroits d’import restentàvérifier.
+
+## 2026-09-18 — Missions à venir et lot de démonstration corrigé
+
+Vue d’ensemble infirmier : bloc complet Notifications de mission, messages, lien et préférences remplacés par Missions à venir. Jusqu’à trois affectations ACTIVE, triées, dates/heures locales, établissement et adresse ; missions en cours explicitement signalées, annulations/passées exclues. L’API historique renvoie adresse et nom établissement. Ancienne carte prochaine mission doublon retirée ; rubrique Notifications reste dans navigation. Ancienne validation manuelle résiduelle des notifications entreprise remplacée par lien à lecture automatique.
+
+Validation navigateur 375/768/1440, nuit à cheval deuxjours, missionMartinique avec navigateuraméricain, étatsvide/encours, liensclavier ; évaluationindépendantePASS.
+
+Lot corrigé SHA C56BAE…F9AA40 :99GPSsupplémentaires,129sitesrestants ;820demandes/2602vacationsavecGPS,180/490sansGPS. Importeur versionné,2602créationsDRAFTpuisrejeuidempotent enPostGISjetable ;94DOMfuseauxconservés.15profilsrégionauxfictifs donnent87vacationscompatibles/52demandes.129sitesnullnoninventés,orgproductiondroitsnonrésolus. Rapport/Excel/PDF/ZIPactualisés,ancienneversionauditExcelouverteconservée. Aucuneannonceaucatalogueréel. Détailsdansquality/MISSIONS_DEMONSTRATION_2026-09-18.md.

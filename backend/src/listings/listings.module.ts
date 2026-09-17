@@ -308,7 +308,7 @@ export class ListingsController {
   @UseGuards(SessionGuard)
   async history(@Req() r: Request, @Query() page: PageDto) {
     return this.db.query(
-      `SELECT a.*,m.title,m.timezone,CASE WHEN now()<a.start_at THEN 'upcoming' WHEN now()<a.end_at THEN 'in_progress' ELSE 'past' END AS temporal_position FROM assignment a JOIN mission m ON m.id=a.mission_id WHERE a.nurse_id=$1 ORDER BY a.start_at DESC,a.id LIMIT $2 OFFSET $3`,
+      `SELECT a.*,m.title,m.timezone,m.address,e.name AS establishment_name,CASE WHEN now()<a.start_at THEN 'upcoming' WHEN now()<a.end_at THEN 'in_progress' ELSE 'past' END AS temporal_position FROM assignment a JOIN mission m ON m.id=a.mission_id JOIN organization e ON e.id=m.establishment_id WHERE a.nurse_id=$1 ORDER BY a.start_at DESC,a.id LIMIT $2 OFFSET $3`,
       [user(r), page.limit, page.offset],
     );
   }
