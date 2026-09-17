@@ -166,3 +166,5 @@
   .footerBas { flex-direction: column; gap: 8px; font-size: 10px; }
   .footerBas a { display: inline-flex; align-items: center; min-height: 44px; }
 }
+.installation { margin-top: 20px; }
+.installation a { white-space: normal; }
