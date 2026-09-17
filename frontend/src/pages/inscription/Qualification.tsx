@@ -26,6 +26,9 @@ export default function Qualification() {
         : [...v.qualifications, q],
     });
   }
+  const ideManquant =
+    v.qualifications.some((q) => q !== "IDE") &&
+    !v.qualifications.includes("IDE");
   function exp(i: number, key: string, value: string) {
     modifier({
       experiences: v.experiences.map((e, n) =>
@@ -41,12 +44,9 @@ export default function Qualification() {
       onValider={() => {
         if (!v.qualifications.length)
           throw new Error("Sélectionnez au moins un diplôme.");
-        if (
-          v.qualifications.some((q) => q !== "IDE") &&
-          !v.qualifications.includes("IDE")
-        )
+        if (ideManquant)
           throw new Error(
-            "Confirmez explicitement votre diplôme IDE pour une spécialité.",
+            "Cochez aussi « IDE — Infirmier diplômé d’État » : une spécialité IADE ou IBODE suppose ce diplôme.",
           );
         if (
           v.experiences.some(
@@ -74,6 +74,12 @@ export default function Qualification() {
         <p>
           Cochez chaque diplôme obtenu, y compris IDE si vous êtes spécialisé.
         </p>
+        {ideManquant && (
+          <p role="status" className={s.rappel}>
+            Une spécialité suppose le diplôme IDE : cochez « IDE — Infirmier
+            diplômé d’État » pour pouvoir continuer.
+          </p>
+        )}
       </fieldset>
       <div className={s.paire}>
         <TextField

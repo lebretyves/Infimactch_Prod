@@ -11,7 +11,9 @@ export function registrationProfile(v: Inscription): ProfessionalProfile {
     v.qualifications.some((q) => q !== "IDE") &&
     !v.qualifications.includes("IDE")
   )
-    throw new Error("Confirmez aussi votre diplôme IDE dans la qualification.");
+    throw new Error(
+      "Retournez à l’étape Qualification et cochez aussi « IDE — Infirmier diplômé d’État » : une spécialité suppose ce diplôme.",
+    );
   const slot =
     v.disponibleDes || v.disponibleFin
       ? wholeDayPeriod(v.disponibleDes, v.disponibleFin)

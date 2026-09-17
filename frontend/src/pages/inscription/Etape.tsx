@@ -1,4 +1,4 @@
-import { useState, type FormEvent, type ReactNode } from 'react';
+import { useEffect, useRef, useState, type FormEvent, type ReactNode } from 'react';
 import { useNavigate, useLocation } from 'react-router';
 import { Button, ButtonLink } from '@/ui/Button';
 import { usePageTitle } from '@/lib/usePageTitle';
@@ -32,6 +32,14 @@ export function Etape({
 
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState('');
+  // Le bouton est en bas d'une étape longue : sans cela, le refus reste hors écran.
+  const [refus, setRefus] = useState(0);
+  const alerte = useRef<HTMLParagraphElement>(null);
+  useEffect(() => {
+    if (!refus) return;
+    alerte.current?.scrollIntoView({ block: 'center' });
+    alerte.current?.focus({ preventScroll: true });
+  }, [refus]);
   async function soumettre(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     if (busy || bloqueSuivant || !event.currentTarget.reportValidity()) return;
@@ -42,6 +50,7 @@ export function Etape({
       navigate(suivant);
     } catch (e) {
       setError((e as Error).message);
+      setRefus((n) => n + 1);
     } finally {
       setBusy(false);
     }
@@ -60,7 +69,11 @@ export function Etape({
         obligatoires.
       </p>
 
-      {error && <p role="alert">{error}</p>}
+      {error && (
+        <p role="alert" tabIndex={-1} ref={alerte} className={s.alerte}>
+          {error}
+        </p>
+      )}
       <div className={s.champs}>{children}</div>
 
       <div className={s.actions}>
