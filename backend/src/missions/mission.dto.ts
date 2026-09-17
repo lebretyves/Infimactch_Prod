@@ -14,9 +14,14 @@ import {
   Matches,
 } from "class-validator";
 export class MissionDto {
-  @ApiProperty({ type: () => String, required: true })
+  @ApiProperty({ type: () => String, required: false, nullable: true })
+  @IsOptional()
   @IsUUID()
-  agencyId!: string;
+  agencyId?: string | null;
+  @ApiProperty({ type: () => String, required: false })
+  @IsOptional()
+  @IsUUID()
+  staffingRequestId?: string;
   @ApiProperty({ type: () => String, required: true })
   @IsUUID()
   establishmentId!: string;

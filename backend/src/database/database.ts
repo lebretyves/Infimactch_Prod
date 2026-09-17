@@ -1,3 +1,4 @@
+import { EnterpriseFollowUp1789381600000 } from "./enterprise-follow-up";
 import { CloudStorage1789381500000 } from "./cloud-storage";
 import { NotificationCenter1789381400000 } from "./notification-center";
 import { notifyAudit } from "../notifications/events";
@@ -40,6 +41,7 @@ export class Database implements OnModuleDestroy {
       DiscordNotifications1789381300000,
       NotificationCenter1789381400000,
       CloudStorage1789381500000,
+      EnterpriseFollowUp1789381600000,
     ],
     logging: false,
     extra: { max: 12 },

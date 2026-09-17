@@ -1,4 +1,4 @@
-﻿import { useRef, useState, type FormEvent } from "react";
+import { useRef, useState, type FormEvent } from "react";
 import { useNavigate, useParams, useSearchParams } from "react-router";
 import { useRemote } from "@/lib/useRemote";
 import { api } from "@/services/api";
@@ -38,7 +38,8 @@ type Draft = {
 };
 type Stored = {
   id: string;
-  agency_id: string;
+  agency_id: string | null;
+  staffing_request_id?: string | null;
   establishment_id: string;
   title: string;
   description: string;
@@ -80,11 +81,13 @@ function Form({
             link.agency_id === o.id && link.id === need.establishment_id,
         )),
   );
+  const directEstablishments = context.organizations.filter(o => o.kind === "ESTABLISHMENT" && (!need || o.id === need.establishment_id));
   const first = agencies[0]?.id || "";
+  const initialEstablishment = need ? [...directEstablishments,...context.links].find(o=>o.id===need.establishment_id) : !first ? directEstablishments[0] : undefined;
   const [v, setV] = useState<Draft>(
     mission
       ? {
-          agencyId: mission.agency_id,
+          agencyId: mission.agency_id || "",
           establishmentId: mission.establishment_id,
           title: mission.title,
           description: mission.description,
@@ -106,7 +109,7 @@ function Form({
         }
       : {
           agencyId: first,
-          establishmentId: need?.establishment_id || "",
+          establishmentId: need?.establishment_id || (!first ? directEstablishments[0]?.id : "") || "",
           title: need?.title || "",
           description: need?.description || "",
           qualification: need?.details?.qualification || "IDE",
@@ -120,9 +123,9 @@ function Form({
           start: need?.details ? parisDateTimeInput(need.details.start) : "",
           end: need?.details ? parisDateTimeInput(need.details.end) : "",
           shift: need?.details?.shift || "DAY",
-          address: need?.details?.address || need?.establishment_address || "",
-          latitude: null,
-          longitude: null,
+          address: need?.details?.address || need?.establishment_address || initialEstablishment?.address || "",
+          latitude: initialEstablishment?.latitude ?? null,
+          longitude: initialEstablishment?.longitude ?? null,
           hourlySalary: null,
         },
   );
@@ -130,10 +133,9 @@ function Form({
     [error, setError] = useState("");
   const key = useRef({ body: "", id: crypto.randomUUID() });
   const locked = useRef(false);
-  const linked = context.links.filter(
-    (o) =>
-      o.agency_id === v.agencyId && (!need || o.id === need.establishment_id),
-  );
+  const linked = v.agencyId ? context.links.filter(
+    (o) => o.agency_id === v.agencyId && (!need || o.id === need.establishment_id),
+  ) : directEstablishments;
   const set = (values: Partial<Draft>) => setV((v) => ({ ...v, ...values }));
   async function submit(e: FormEvent) {
     e.preventDefault();
@@ -148,7 +150,7 @@ function Form({
         throw new Error("Complétez la rémunération brute par heure.");
       if (!linked.some((link) => link.id === v.establishmentId))
         throw new Error(
-          "Choisissez un établissement réellement rattaché à l’agence.",
+          "Choisissez votre établissement ou un établissement rattaché à votre agence.",
         );
       const start = parisDateTimeToISO(
         v.start,
@@ -166,6 +168,8 @@ function Form({
         );
       const body = {
         ...v,
+        agencyId: v.agencyId || undefined,
+        staffingRequestId: need?.id || mission?.staffing_request_id || undefined,
         start,
         end,
         specialty: v.block === "SPECIALIZED" ? v.specialty : undefined,
@@ -185,13 +189,13 @@ function Form({
       setBusy(false);
     }
   }
-  if (!agencies.length)
+  if (!agencies.length && !directEstablishments.length)
     return (
       <section className={u.card}>
         <p>
           {need
             ? "Aucune de vos agences actives n’est rattachée à l’établissement de ce besoin. La préparation de la mission est indisponible."
-            : "La création de missions est réservée aux agences autorisées."}
+            : "Votre compte doit être rattaché à une entreprise pour créer une mission."}
         </p>
         <ButtonLink to="/besoins" variant="outline">
           Retour aux besoins
@@ -220,8 +224,7 @@ function Form({
           )}
           <p>
             Vérifiez les informations préremplies et complétez le salaire et la
-            position du lieu de travail. La création reste un brouillon, sans
-            publication automatique.
+            position du lieu de travail. Vous pourrez ensuite publier la mission pour la rendre visible aux intérimaires.
           </p>
           <ButtonLink to="/besoins" variant="ghost">
             Retour aux besoins
@@ -240,17 +243,18 @@ function Form({
       >
         <div className={s.paire}>
           <SelectField
-            label="Agence"
-            required
+            label="Publication"
+            required={!directEstablishments.length}
             disabled={!!mission}
             value={v.agencyId}
             onChange={(e) =>
               set({
                 agencyId: e.target.value,
-                establishmentId: need?.establishment_id || "",
+                establishmentId: need?.establishment_id || (!e.target.value ? directEstablishments[0]?.id : "") || "",
               })
             }
           >
+            {!!directEstablishments.length && <option value="">Directement par mon établissement</option>}
             {agencies.map((o) => (
               <option key={o.id} value={o.id}>
                 {o.name}
@@ -267,10 +271,12 @@ function Form({
                 establishmentId: e.target.value,
                 address:
                   linked.find((l) => l.id === e.target.value)?.address || "",
+                latitude: linked.find(l=>l.id===e.target.value)?.latitude ?? null,
+                longitude: linked.find(l=>l.id===e.target.value)?.longitude ?? null,
               })
             }
           >
-            <option value="">Choisir un établissement rattaché</option>
+            <option value="">Choisir un établissement</option>
             {linked.map((o) => (
               <option key={o.id} value={o.id}>
                 {o.name}

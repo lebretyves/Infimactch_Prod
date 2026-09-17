@@ -63,11 +63,11 @@ class OrganizationsController {
   constructor(private readonly db: Database) {}
   @Get("me/organizations") async own(@Req() r: Request) {
     const organizations = await this.db.query(
-      "SELECT o.* FROM organization o JOIN membership m ON m.organization_id=o.id WHERE m.user_id=$1 AND m.active ORDER BY o.name,o.id",
+      "SELECT o.*,f.latitude,f.longitude FROM organization o JOIN membership m ON m.organization_id=o.id LEFT JOIN finess_establishment f ON f.finess=o.finess WHERE m.user_id=$1 AND m.active ORDER BY o.name,o.id",
       [user(r)],
     );
     const links = await this.db.query(
-      "SELECT l.agency_id,o.id,o.name,o.address,o.finess FROM agency_link l JOIN organization o ON o.id=l.establishment_id WHERE EXISTS(SELECT 1 FROM membership m WHERE m.user_id=$1 AND m.active AND m.organization_id=l.agency_id) ORDER BY o.name,o.id",
+      "SELECT l.agency_id,o.id,o.name,o.address,o.finess,f.latitude,f.longitude FROM agency_link l JOIN organization o ON o.id=l.establishment_id LEFT JOIN finess_establishment f ON f.finess=o.finess WHERE EXISTS(SELECT 1 FROM membership m WHERE m.user_id=$1 AND m.active AND m.organization_id=l.agency_id) ORDER BY o.name,o.id",
       [user(r)],
     );
     return { organizations, links };
@@ -124,7 +124,7 @@ class OrganizationsController {
   }
   @Get("staffing-requests") list(@Req() r: Request, @Query() page: PageDto) {
     return this.db.query(
-      "SELECT s.*,o.name AS establishment_name,o.address AS establishment_address FROM staffing_request s JOIN organization o ON o.id=s.establishment_id WHERE EXISTS(SELECT 1 FROM membership m WHERE m.user_id=$1 AND m.active AND (m.organization_id=s.establishment_id OR EXISTS(SELECT 1 FROM agency_link l WHERE l.agency_id=m.organization_id AND l.establishment_id=s.establishment_id))) ORDER BY s.created_at DESC,s.id LIMIT $2 OFFSET $3",
+      "SELECT s.*,o.name AS establishment_name,o.address AS establishment_address,COALESCE((SELECT jsonb_agg(jsonb_build_object('id',m.id,'title',m.title,'status',m.status,'start_at',m.start_at,'end_at',m.end_at,'application_count',(SELECT count(*) FROM application a WHERE a.mission_id=m.id)) ORDER BY m.created_at DESC) FROM mission m WHERE m.staffing_request_id=s.id AND EXISTS(SELECT 1 FROM membership z WHERE z.user_id=$1 AND z.active AND z.organization_id IN(m.agency_id,m.establishment_id))),'[]'::jsonb) AS missions FROM staffing_request s JOIN organization o ON o.id=s.establishment_id WHERE EXISTS(SELECT 1 FROM membership m WHERE m.user_id=$1 AND m.active AND (m.organization_id=s.establishment_id OR EXISTS(SELECT 1 FROM agency_link l WHERE l.agency_id=m.organization_id AND l.establishment_id=s.establishment_id))) ORDER BY s.created_at DESC,s.id LIMIT $2 OFFSET $3",
       [user(r), page.limit, page.offset],
     );
   }
@@ -133,7 +133,7 @@ class OrganizationsController {
     @Param("id", ParseUUIDPipe) id: string,
   ) {
     const [need] = await this.db.query(
-      "SELECT s.*,o.name AS establishment_name,o.address AS establishment_address FROM staffing_request s JOIN organization o ON o.id=s.establishment_id WHERE s.id=$2 AND EXISTS(SELECT 1 FROM membership m WHERE m.user_id=$1 AND m.active AND (m.organization_id=s.establishment_id OR EXISTS(SELECT 1 FROM agency_link l WHERE l.agency_id=m.organization_id AND l.establishment_id=s.establishment_id)))",
+      "SELECT s.*,o.name AS establishment_name,o.address AS establishment_address,COALESCE((SELECT jsonb_agg(jsonb_build_object('id',m.id,'title',m.title,'status',m.status,'start_at',m.start_at,'end_at',m.end_at,'application_count',(SELECT count(*) FROM application a WHERE a.mission_id=m.id)) ORDER BY m.created_at DESC) FROM mission m WHERE m.staffing_request_id=s.id AND EXISTS(SELECT 1 FROM membership z WHERE z.user_id=$1 AND z.active AND z.organization_id IN(m.agency_id,m.establishment_id))),'[]'::jsonb) AS missions FROM staffing_request s JOIN organization o ON o.id=s.establishment_id WHERE s.id=$2 AND EXISTS(SELECT 1 FROM membership m WHERE m.user_id=$1 AND m.active AND (m.organization_id=s.establishment_id OR EXISTS(SELECT 1 FROM agency_link l WHERE l.agency_id=m.organization_id AND l.establishment_id=s.establishment_id)))",
       [user(r), id],
     );
     if (!need) throw new NotFoundException();

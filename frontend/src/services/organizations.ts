@@ -1,4 +1,4 @@
-﻿import { api } from "./api";
+import { api } from "./api";
 export type Organization = {
   id: string;
   kind: "AGENCY" | "ESTABLISHMENT";
@@ -6,6 +6,8 @@ export type Organization = {
   address: string;
   referent: string;
   finess: string | null;
+  latitude?: number | null;
+  longitude?: number | null;
   siret: string | null;
 };
 export type OrganizationContext = {
@@ -16,6 +18,8 @@ export type OrganizationContext = {
     name: string;
     address: string;
     finess: string | null;
+  latitude?: number | null;
+  longitude?: number | null;
   }[];
 };
 export const organizations = (signal?: AbortSignal) =>

@@ -17,7 +17,7 @@ const nurseNavigation: { to: string; label: string; icon: IconName }[] = [
 const enterpriseNavigation: { to: string; label: string; icon: IconName }[] = [
   { to: "/accueil", label: "Mon espace", icon: "nav-home" },
   { to: "/notifications", label: "Notifications", icon: "bell" },
-  { to: "/missions", label: "Missions", icon: "search" },
+  { to: "/missions", label: "Offres et suivi", icon: "search" },
   { to: "/besoins", label: "Besoins", icon: "briefcase" },
   { to: "/organisation", label: "Organisation", icon: "building" },
 ];

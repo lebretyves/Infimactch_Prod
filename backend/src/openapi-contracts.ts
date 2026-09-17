@@ -38,7 +38,7 @@ export const additionalResponses:Record<string,any>={
  "GET /api/v1/profile":profile,"PUT /api/v1/profile":ok,
  "PATCH /api/v1/profile/availability":obj({available:array(interval),unavailable:array(interval)},["available","unavailable"]),
  "PUT /api/v1/profile/rpps":obj({status:str,reason:str},["status"]),"POST /api/v1/profile/rpps/retry":obj({status:str,reason:str},["status"]),
- "GET /api/v1/missions/{id}":{allOf:[ref("Mission"),obj({assignments:array(ref("Assignment")),application_count:int})]},
+ "GET /api/v1/missions/{id}":{allOf:[ref("Mission"),obj({assignments:array(ref("Assignment")),application_count:int,can_manage:bool,events:array(obj({event:str,created_at:date}))})]},
  "GET /api/v1/applications/{id}":ref("Application"),
  "GET /api/v1/me/matches":{...page(match),properties:{...page(match).properties,rppsStatus:str}},
  "GET /api/v1/missions/{id}/candidates":page(match),

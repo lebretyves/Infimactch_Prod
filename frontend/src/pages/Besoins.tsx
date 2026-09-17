@@ -2,6 +2,7 @@ import { useRef, useState, type FormEvent } from "react";
 import { useAuth } from "@/context/AuthContext";
 import { useRemote } from "@/lib/useRemote";
 import { api } from "@/services/api";
+import {statusLabels} from "@/services/market";
 import {
   organizations,
   type OrganizationContext,
@@ -512,7 +513,7 @@ function NeedCard({
 }) {
   const d = need.details;
   return (
-    <article className={u.card}>
+    <article id={"besoin-"+need.id} className={u.card}>
       <div className={u.row}>
         <div>
           <p className={s.eyebrow}>
@@ -586,20 +587,24 @@ function NeedCard({
           </p>
         </div>
       </details>
+      <section aria-label="Suivi du besoin">
+        <h4>Suivi et visibilité</h4>
+        {!need.missions?.length ? <p>À compléter : aucune offre publiée pour ce besoin. Préparez une mission pour renseigner la rémunération et le lieu, puis publiez-la.</p> : <ul>{need.missions.map(m=><li key={m.id}><ButtonLink variant="ghost" to={"/gestion/missions/"+m.id}>{m.title} — {statusLabels[m.status] || m.status}</ButtonLink><span> · {m.application_count} candidature(s)</span></li>)}</ul>}
+      </section>
       <div className={u.actions}>
         {editable && (
           <Button variant="outline" size="sm" disabled={busy} onClick={onEdit}>
             Modifier le besoin
           </Button>
         )}
-        {agency && (
+        {(agency || editable) && (
           <ButtonLink
             to={
               "/gestion/missions/nouvelle?besoin=" + encodeURIComponent(need.id)
             }
             size="sm"
           >
-            Préparer une mission
+            {need.missions?.length ? "Préparer une autre mission" : "Compléter et préparer la publication"}
           </ButtonLink>
         )}
       </div>
@@ -718,8 +723,8 @@ export default function Besoins() {
                   r.reload();
                   setMessage(
                     edited
-                      ? "Besoin mis à jour. Les agences rattachées peuvent consulter les nouveaux critères."
-                      : "Besoin enregistré. Il est consultable par les agences rattachées à votre établissement.",
+                      ? "Besoin mis à jour. Les missions déjà créées conservent leurs conditions : modifiez-les séparément si nécessaire."
+                      : "Besoin enregistré et visible dans votre tableau de bord. Complétez une mission ci-dessous puis publiez-la pour la proposer aux intérimaires.",
                   );
                 }}
               />

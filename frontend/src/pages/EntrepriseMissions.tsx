@@ -14,14 +14,15 @@ export default function EntrepriseMissions() {
   );
   return (
     <div className={page.page}>
-      <h1>Missions de mon organisation</h1>
-      {user?.role === "entreprise" && (
+      <h1>Mes offres et leur suivi</h1>
+      <p>Retrouvez les brouillons, les offres publiées, les candidatures et les affectations. Un besoin enregistré doit être complété puis publié pour devenir visible aux intérimaires.</p>
+      {user?.role !== "interimaire" && (
         <ButtonLink to="/gestion/missions/nouvelle">
-          Créer une mission
+          Créer une offre
         </ButtonLink>
       )}
       <ButtonLink to="/besoins" variant="outline">
-        Besoins de personnel
+        Mes besoins à compléter
       </ButtonLink>
       <ButtonLink to="/organisation" variant="outline">
         Mon organisation

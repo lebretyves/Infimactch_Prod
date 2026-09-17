@@ -45,7 +45,7 @@ export async function scope(
   m: any,
   agencyOnly = false,
 ) {
-  if (agencyOnly) return member(em, actor, m.agency_id, "AGENCY");
+  if (agencyOnly) return m.agency_id ? member(em, actor, m.agency_id, "AGENCY") : member(em, actor, m.establishment_id, "ESTABLISHMENT");
   const rows = await em.query(
     "SELECT organization_id FROM membership WHERE user_id=$1 AND active AND organization_id IN($2,$3) FOR SHARE",
     [actor, m.agency_id, m.establishment_id],
@@ -90,19 +90,23 @@ export class MissionsService {
   async create(actor: string, b: MissionDto, key?: string) {
     this.validate(b);
     return this.db.transaction(async (em) => {
-      await member(em, actor, b.agencyId, "AGENCY");
-      const linked = await em.query(
-        "SELECT * FROM agency_link WHERE agency_id=$1 AND establishment_id=$2 FOR SHARE",
-        [b.agencyId, b.establishmentId],
-      );
-      if (!linked.length)
-        throw new NotFoundException("Authorized establishment link required");
+      if (b.agencyId) {
+        await member(em, actor, b.agencyId, "AGENCY");
+        const linked = await em.query("SELECT 1 FROM agency_link WHERE agency_id=$1 AND establishment_id=$2 FOR SHARE", [b.agencyId,b.establishmentId]);
+        if (!linked.length) throw new NotFoundException("Authorized establishment link required");
+      } else {
+        await member(em, actor, b.establishmentId, "ESTABLISHMENT");
+      }
+      if (b.staffingRequestId) {
+        const [need] = await em.query("SELECT establishment_id FROM staffing_request WHERE id=$1 FOR SHARE",[b.staffingRequestId]);
+        if (!need || need.establishment_id !== b.establishmentId) throw new NotFoundException("Staffing request not available for this organization");
+      }
       const receipt = await commandReceipt(em, actor, "mission:create", key, b);
       if (receipt.replay) return receipt.response;
       const [m] = await em.query(
-        `INSERT INTO mission(agency_id,establishment_id,title,description,qualification,service,population,block,specialty,required_skills,desired_skills,min_experience_months,start_at,end_at,shift,address,location,hourly_salary) VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,ST_SetSRID(ST_MakePoint($17,$18),4326)::geography,$19) RETURNING id,version,status`,
+        `INSERT INTO mission(agency_id,establishment_id,title,description,qualification,service,population,block,specialty,required_skills,desired_skills,min_experience_months,start_at,end_at,shift,address,location,hourly_salary,staffing_request_id) VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,ST_SetSRID(ST_MakePoint($17,$18),4326)::geography,$19,$20) RETURNING id,version,status`,
         [
-          b.agencyId,
+          b.agencyId ?? null,
           b.establishmentId,
           b.title,
           b.description,
@@ -121,6 +125,7 @@ export class MissionsService {
           b.longitude,
           b.latitude,
           b.hourlySalary,
+          b.staffingRequestId ?? null,
         ],
       );
       await audit(em, actor, "MISSION_CREATED", m.id);
@@ -145,10 +150,11 @@ export class MissionsService {
           "Cancel and republish assigned missions before changing them",
         );
       if (
-        b.agencyId !== m.agency_id ||
+        (b.agencyId ?? null) !== m.agency_id ||
         b.establishmentId !== m.establishment_id
       )
         throw new BadRequestException("Organization cannot be reassigned");
+      if (b.staffingRequestId && b.staffingRequestId !== m.staffing_request_id) throw new BadRequestException("Staffing request cannot be reassigned");
       const oldTerms = [
         m.qualification,
         m.service,

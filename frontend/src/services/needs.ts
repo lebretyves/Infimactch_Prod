@@ -13,7 +13,9 @@ export type NeedDetails = {
   minExperienceMonths: number;
   address: string;
 };
+export type NeedMission = {id:string;title:string;status:string;start_at:string;end_at:string;application_count:number};
 export type StaffingNeed = {
+  missions?: NeedMission[];
   id: string;
   establishment_id: string;
   title: string;

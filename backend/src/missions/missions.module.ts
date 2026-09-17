@@ -151,7 +151,9 @@ class MissionsController {
         "SELECT a.id,a.status,a.nurse_id,p.display_name FROM assignment a JOIN profile p ON p.user_id=a.nurse_id WHERE a.mission_id=$1 ORDER BY a.created_at DESC",
         [id],
       );
-      return { ...m, application_count: applications[0].count, assignments };
+      const [permission] = await em.query("SELECT EXISTS(SELECT 1 FROM membership WHERE user_id=$1 AND active AND organization_id=COALESCE($2::uuid,$3::uuid)) AS can_manage",[user(r),m.agency_id,m.establishment_id]);
+      const events = await em.query("SELECT event,created_at FROM audit WHERE resource_id=$1 ORDER BY created_at DESC,id DESC LIMIT 50",[id]);
+      return { ...m, can_manage:permission.can_manage, application_count: applications[0].count, assignments, events };
     });
   }
   @Get("applications/:id") async applicationDetail(

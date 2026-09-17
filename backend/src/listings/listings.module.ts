@@ -313,8 +313,14 @@ class ListingsController {
       "SELECT m.status,count(*) FROM mission m WHERE EXISTS(SELECT 1 FROM membership o WHERE o.user_id=$1 AND o.active AND o.organization_id IN(m.agency_id,m.establishment_id)) GROUP BY m.status",
       [user(r)],
     );
+    const [activity] = await this.db.query(`SELECT
+      (SELECT count(*) FROM staffing_request s WHERE EXISTS(SELECT 1 FROM membership o WHERE o.user_id=$1 AND o.active AND (o.organization_id=s.establishment_id OR EXISTS(SELECT 1 FROM agency_link l WHERE l.agency_id=o.organization_id AND l.establishment_id=s.establishment_id))))::int AS needs,
+      (SELECT count(*) FROM application a JOIN mission m ON m.id=a.mission_id WHERE a.status IN('SUBMITTED','SELECTED') AND EXISTS(SELECT 1 FROM membership o WHERE o.user_id=$1 AND o.active AND o.organization_id IN(m.agency_id,m.establishment_id)))::int AS applications`,[user(r)]);
+    const recentNeeds=await this.db.query("SELECT s.id,s.title,s.created_at,(SELECT count(*)::int FROM mission m WHERE m.staffing_request_id=s.id AND EXISTS(SELECT 1 FROM membership z WHERE z.user_id=$1 AND z.active AND z.organization_id IN(m.agency_id,m.establishment_id))) AS mission_count FROM staffing_request s WHERE EXISTS(SELECT 1 FROM membership o WHERE o.user_id=$1 AND o.active AND (o.organization_id=s.establishment_id OR EXISTS(SELECT 1 FROM agency_link l WHERE l.agency_id=o.organization_id AND l.establishment_id=s.establishment_id))) ORDER BY s.created_at DESC,s.id LIMIT 5",[user(r)]);
+    const recentMissions=await this.db.query("SELECT m.id,m.title,m.status,m.start_at,m.end_at,(SELECT count(*)::int FROM application a WHERE a.mission_id=m.id AND a.status IN('SUBMITTED','SELECTED')) AS application_count FROM mission m WHERE EXISTS(SELECT 1 FROM membership o WHERE o.user_id=$1 AND o.active AND o.organization_id IN(m.agency_id,m.establishment_id)) ORDER BY m.created_at DESC,m.id LIMIT 5",[user(r)]);
     return {
       family: "ENTERPRISE",
+      activity,recentNeeds,recentMissions,
       counts: Object.fromEntries(
         ["DRAFT", "OPEN", "FILLED", "COMPLETED", "CANCELLED"].map((s) => [
           s,

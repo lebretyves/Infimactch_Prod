@@ -18,7 +18,8 @@ const missionStatus = {
 const mission = object(
   {
     id: uuid,
-    agency_id: uuid,
+    agency_id: { ...uuid, nullable: true },
+    staffing_request_id: { ...uuid, nullable: true },
     establishment_id: uuid,
     title: text,
     description: text,

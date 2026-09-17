@@ -21,12 +21,13 @@ import { Icon } from "@/ui/Icon";
 import { ConfirmationButton } from "@/components/ConfirmationButton";
 import u from "@/components/NurseUI.module.css";
 import s from "./Accueil.module.css";
-type Dashboard = { family: string; counts: Record<string, number | string> };
+type Dashboard = { family: string; counts: Record<string, number | string>; activity?:{needs:number;applications:number}; recentNeeds?:{id:string;title:string;created_at:string;mission_count:number}[]; recentMissions?:{id:string;title:string;status:string;start_at:string;end_at:string;application_count:number}[] };
 type Notification = {
   id: string;
   title?: string;
   message?: string;
   kind?: string;
+  href?: string;
   read_at: string | null;
 };
 const labels: Record<string, string> = {
@@ -326,7 +327,10 @@ export default function Accueil() {
             <>
               <section className={u.card}>
                 <h2>Mon activité</h2>
+                <div className={u.actions}><ButtonLink to="/gestion/missions/nouvelle">Créer une offre</ButtonLink><ButtonLink to="/besoins" variant="outline">Créer ou compléter un besoin</ButtonLink><Button variant="ghost" onClick={r.reload}>Actualiser</Button></div>
                 <div className={s.stats}>
+                  <Link to="/besoins"><strong>{r.data?.dashboard.activity?.needs ?? 0}</strong><p>Besoins enregistrés</p></Link>
+                  <Link to="/missions"><strong>{r.data?.dashboard.activity?.applications ?? 0}</strong><p>Candidatures à traiter</p></Link>
                   {Object.entries(r.data?.dashboard.counts || {}).map(
                     ([key, value]) => (
                       <div key={key}>
@@ -337,6 +341,14 @@ export default function Accueil() {
                   )}
                 </div>
                 <ButtonLink to="/missions">Consulter les missions</ButtonLink>
+              </section>
+              <section className={u.card}>
+                <h2>Mes derniers besoins</h2>
+                {r.data?.dashboard.recentNeeds?.length ? r.data.dashboard.recentNeeds.map(n=><article key={n.id}><h3>{n.title}</h3><p>{n.mission_count ? `${n.mission_count} mission(s) préparée(s) — consulter leur état` : "À compléter — aucune mission créée"}</p><ButtonLink variant="outline" to={"/besoins#besoin-"+n.id}>Voir le besoin et son suivi</ButtonLink></article>) : <p>Aucun besoin enregistré.</p>}
+              </section>
+              <section className={u.card}>
+                <h2>Mes dernières offres</h2>
+                {r.data?.dashboard.recentMissions?.length ? r.data.dashboard.recentMissions.map(m=><article key={m.id}><h3>{m.title}</h3><p>{labels[m.status] || m.status} · {date(m.start_at)} · {m.application_count} candidature(s) à traiter</p><ButtonLink to={"/gestion/missions/"+m.id}>Gérer l’offre et les candidatures</ButtonLink></article>) : <p>Aucune mission créée. Les besoins ci-dessus doivent être complétés puis publiés pour apparaître dans l’espace intérimaire.</p>}
               </section>
               <section className={u.card}>
                 <h2>Notifications récentes</h2>
@@ -359,7 +371,7 @@ export default function Accueil() {
             <div className={u.actions}>
               <Link
                 className={s.textLink}
-                to={n.kind === "CONFIRMATION" ? "/historique" : "/missions"}
+                to={n.href || (n.kind === "CONFIRMATION" ? "/historique" : "/missions")}
               >
                 {n.kind === "CONFIRMATION"
                   ? "Voir mes confirmations"

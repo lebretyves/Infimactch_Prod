@@ -28,7 +28,7 @@ export async function notifyAudit(em: SqlClient, actor: string | null, action: s
     return;
   }
   if (["STAFFING_REQUEST_CREATED","STAFFING_REQUEST_UPDATED"].includes(action)) {
-    const rows = await em.query("SELECT l.agency_id FROM staffing_request s JOIN agency_link l ON l.establishment_id=s.establishment_id WHERE s.id=$1",[id]);
+    const rows = await em.query("SELECT establishment_id AS agency_id FROM staffing_request WHERE id=$1 UNION SELECT l.agency_id FROM staffing_request s JOIN agency_link l ON l.establishment_id=s.establishment_id WHERE s.id=$1",[id]);
     return notify(em,action === "STAFFING_REQUEST_CREATED" ? "NEED_CREATED" : "NEED_UPDATED",[],rows.map(r=>r.agency_id),{needId:id});
   }
   if (["APPLICATION_SUBMITTED","APPLICATION_SELECTED","APPLICATION_REJECTED","APPLICATION_WITHDRAWN"].includes(action)) {
