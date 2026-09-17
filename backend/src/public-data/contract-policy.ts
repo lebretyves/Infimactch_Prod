@@ -71,4 +71,11 @@ export const offerRetirementReasons = new Set([
   "OFFER_NOT_ACTIVE",
   "OFFER_CLOSED",
   "OFFER_EXPIRED",
+  "OTHER_PROFESSION",
 ]);
+
+/** Explicit other professions must not enter a nursing catalogue via broad keyword search. */
+export function otherProfessionTitle(title:string):boolean {
+ const value=fold(title);
+ return !/\binfirmier|\b(?:ide|iade|ibode|ibo)\b/.test(value) && /\b(?:aide[- ]soignant|auxiliaire de puericulture|auxiliaire puericulteur|medecin|masseur|kinesitherapeute|educateur|sage[- ]femme)/.test(value);
+}

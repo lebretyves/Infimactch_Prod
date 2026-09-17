@@ -14,7 +14,7 @@ test('refresh skips locked, paused and cooling sources before network acquisitio
 });
 
 test('scheduled batches follow pages, retain page checkpoints and stop on provider errors',async()=>{
- const service=new RefreshService({} as any);let calls=0;
+ const service=new RefreshService({query:async()=>[]} as any);let calls=0;
  service.run=(async()=>{calls++;return {provider:'FRANCE_TRAVAIL',status:calls<3?'IN_PROGRESS':'SUCCESS',accepted:10};}) as any;
  const done=await service.runBatch('FRANCE_TRAVAIL');assert.equal(calls,3);assert.equal(done.accepted,30);assert.equal(done.status,'SUCCESS');
  calls=0;service.run=(async()=>{calls++;return {provider:'FRANCE_TRAVAIL',status:'IN_PROGRESS',accepted:1};}) as any;

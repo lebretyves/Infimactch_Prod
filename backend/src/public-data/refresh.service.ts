@@ -1,3 +1,4 @@
+import {repairOfferLocations} from "./repair-geolocation";
 import {BadRequestException,Injectable,Module} from '@nestjs/common';
 import {Database} from '../database/database';
 import {importOffers} from './offers';
@@ -25,7 +26,8 @@ export class RefreshService {
     while(result.status==='IN_PROGRESS' && batches<12 && Date.now()<deadline){
       result=await this.run(provider);accepted+=result.accepted;batches++;
     }
-    return {...result,accepted,batches};
+    const geolocation = result.status === "PAUSED" || result.status === "BUSY" ? null : await repairOfferLocations(this.db,provider);
+    return {...result,accepted,batches,geolocation};
   }
   async run(provider:Provider,manual=false) {
     // The transaction-scoped lock is held across acquisition and import. Another

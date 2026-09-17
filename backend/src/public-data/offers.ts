@@ -4,6 +4,7 @@ import { guardCrossSourceDuplicates } from "./offer-deduplication";
 import {
   offerRetirementReasons,
   permanentContractEvidence,
+  otherProfessionTitle,
 } from "./contract-policy";
 import { createHash } from "node:crypto";
 import { Database } from "../database/database";
@@ -19,6 +20,7 @@ export function normalizeOffer(raw: any, fetchedAt = new Date().toISOString()) {
   const title = clean(raw.intitule, 150),
     description = cleanDescription(raw.description);
   if (!title || !description) throw new Error("MISSING_CONTENT");
+  if (otherProfessionTitle(title)) throw new Error("OTHER_PROFESSION");
   if (permanentContractEvidence(title, description)) throw new Error("PERMANENT_POSITION_EXCLUDED");
   if (raw.typeContrat !== "MIS") throw new Error("NOT_TEMPORARY_EMPLOYMENT");
   const facts = offerFacts(raw);
