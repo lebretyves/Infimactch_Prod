@@ -1,0 +1,117 @@
+:root {
+  --brand-900: #072152;
+  --brand-800: #0b3d9e;
+  --brand-700: #0f51c7;
+  --brand-600: #1466e0;
+  --brand-500: #2e7cec;
+  --brand-200: #bbd4fa;
+  --brand-100: #e4effe;
+  --brand-50: #f1f6fe;
+
+  --teal-700: #0e6c7c;
+  --teal-500: #21a7b8;
+  --teal-400: #3bc1ce;
+
+  --ink-900: #0a2540;
+  --ink-700: #274867;
+  --ink-600: #4f6480;
+  --ink-400: #7c8fa8;
+
+  --line: #dbe4f0;
+  --line-strong: #c3d2e4;
+
+  --white: #ffffff;
+  --sky-50: #f4fbfd;
+  --sky-100: #e3f3f9;
+  --sky-200: #d2ebf4;
+  --page: #e9f6fb;
+
+  /* Noms hérités du premier jeu de maquettes : ils pointent désormais sur la
+     palette InfiMatch pour que les écrans déjà livrés suivent la marque. */
+  --blue-300: var(--brand-200);
+  --blue-400: var(--brand-500);
+  --blue-500: var(--brand-600);
+  --blue-600: var(--brand-700);
+  --blue-700: var(--brand-800);
+  --blue-900: var(--brand-900);
+  --blue: var(--brand-600);
+  --tint: var(--sky-100);
+  --tint-200: var(--sky-200);
+  --grey-50: var(--sky-50);
+  --grey-100: #eef3f9;
+  --grey-300: var(--line);
+  --grey-600: var(--ink-600);
+  --text-strong: var(--ink-900);
+
+  --info-50: var(--brand-50);
+  --info-200: var(--brand-200);
+  --info-700: var(--brand-800);
+  --success-50: #e6f6ef;
+  --success-200: #bce3d2;
+  --success-700: #0b7a55;
+  --warning-50: #fdf3e2;
+  --warning-200: #efd9ae;
+  --warning-700: #8a5300;
+  --danger-50: #fcecea;
+  --danger-200: #f2c4bf;
+  --danger-700: #b3261e;
+
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 20px;
+  --space-6: 24px;
+  --space-8: 32px;
+  --space-10: 40px;
+  --space-12: 48px;
+  --space-16: 64px;
+  --space-20: 80px;
+
+  --radius-sm: 8px;
+  --radius-control: 12px;
+  --radius-md: 13px;
+  --radius-lg: 16px;
+  --radius-xl: 18px;
+  --radius-2xl: 20px;
+  --radius-card: 24px;
+  --radius-3xl: 30px;
+  --radius-pill: 999px;
+
+  /* Angle de coin repris des visuels : trois coins très arrondis, le
+     quatrième presque droit. */
+  --radius-visuel: 128px 128px 128px 20px;
+  --radius-visuel-inverse: 128px 128px 20px 128px;
+
+  --font-hero: clamp(34px, 3.1vw + 16px, 56px);
+  --font-display: clamp(28px, 1.9vw + 16px, 42px);
+  --font-h1: clamp(24px, 1vw + 19px, 30px);
+  --font-h2: clamp(18px, 0.5vw + 16px, 22px);
+  --font-h3: clamp(15px, 0.3vw + 14px, 17px);
+  --font-lead: clamp(15px, 0.4vw + 14px, 18px);
+  --font-body: clamp(14px, 0.15vw + 13px, 15px);
+  --font-body-sm: clamp(13px, 0.15vw + 12px, 14px);
+  --font-label: 14px;
+  --font-caption: 13px;
+
+  --leading-tight: 1.12;
+  --leading-snug: 1.35;
+  --leading-normal: 1.6;
+
+  --shadow-sm: 0 1px 2px rgb(10 37 64 / 6%), 0 1px 3px rgb(10 37 64 / 4%);
+  --shadow-md: 0 6px 18px rgb(10 37 64 / 8%);
+  --shadow-lg: 0 14px 34px rgb(10 37 64 / 12%);
+  --shadow-card: 0 30px 70px rgb(10 37 64 / 12%);
+
+  --duration-fast: 120ms;
+  --duration-base: 200ms;
+  --duration-slow: 320ms;
+  --ease-out: cubic-bezier(0.2, 0.8, 0.3, 1);
+
+  --focus-ring: 2px solid var(--brand-800);
+
+  --shell-nav: 67px;
+  --shell-header: 64px;
+  --shell-rail: 72px;
+  --shell-sidebar: 240px;
+}

@@ -1,0 +1,19 @@
+{
+  "checkedAt": "2026-09-14T22:07:51.596Z",
+  "provider": "ANS_ANNUAIRE_SANTE_FHIR",
+  "configured": true,
+  "endpoint": "https://gateway.api.esante.gouv.fr/fhir/v2/Practitioner",
+  "probe": "Synthetic all-zero identifier; no profile mutation",
+  "http": [
+    {
+      "status": 200,
+      "contentType": "application/fhir+json;charset=UTF-8"
+    }
+  ],
+  "result": {
+    "status": "NOT_FOUND",
+    "reason": "EMPTY_EXACT_SEARCH"
+  },
+  "scope": "Connectivity and response handling only; not a positive verification of a professional",
+  "codeCommit": "05e171167b8e48404beae14bfe94b722f32ada75"
+}

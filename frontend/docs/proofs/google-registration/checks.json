@@ -1,0 +1,14 @@
+{
+  "at": "2026-09-15T23:44:21.444Z",
+  "checks": [
+    "New Google identity leads to signup, locked verified email, no password and no premature account",
+    "Full Google candidate wizard and consent create a session with profile, without email/password in registration payload",
+    "Existing account requires local password only for first Google association",
+    "Expired Google context can be renewed while retaining candidate draft",
+    "Switching back to classic signup restores local password fields",
+    "Classic email/password login remains connected"
+  ],
+  "errors": [],
+  "unknown": [],
+  "scope": "Google SDK and API simulated in isolated browser; no real Google credentials, accounts or business data modified."
+}

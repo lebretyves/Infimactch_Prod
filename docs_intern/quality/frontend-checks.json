@@ -1,0 +1,185 @@
+{
+  "date": "2026-09-17T01:17:01.370Z",
+  "browser": "153.0.4234.32",
+  "fixtures": "unauthenticated API only",
+  "results": [
+    {
+      "path": "/",
+      "width": 320,
+      "h1": 1,
+      "overflow": false,
+      "alt": true,
+      "skip": true,
+      "unnamed": 0
+    },
+    {
+      "path": "/installer",
+      "width": 320,
+      "h1": 1,
+      "overflow": false,
+      "alt": true,
+      "skip": true,
+      "unnamed": 0
+    },
+    {
+      "path": "/accessibilite",
+      "width": 320,
+      "h1": 1,
+      "overflow": false,
+      "alt": true,
+      "skip": true,
+      "unnamed": 0
+    },
+    {
+      "path": "/ecoconception",
+      "width": 320,
+      "h1": 1,
+      "overflow": false,
+      "alt": true,
+      "skip": true,
+      "unnamed": 0
+    },
+    {
+      "path": "/mentions-legales",
+      "width": 320,
+      "h1": 1,
+      "overflow": false,
+      "alt": true,
+      "skip": true,
+      "unnamed": 0
+    },
+    {
+      "path": "/connexion",
+      "width": 320,
+      "h1": 1,
+      "overflow": false,
+      "alt": true,
+      "skip": true,
+      "unnamed": 0
+    },
+    {
+      "path": "/",
+      "width": 768,
+      "h1": 1,
+      "overflow": false,
+      "alt": true,
+      "skip": true,
+      "unnamed": 0
+    },
+    {
+      "path": "/installer",
+      "width": 768,
+      "h1": 1,
+      "overflow": false,
+      "alt": true,
+      "skip": true,
+      "unnamed": 0
+    },
+    {
+      "path": "/accessibilite",
+      "width": 768,
+      "h1": 1,
+      "overflow": false,
+      "alt": true,
+      "skip": true,
+      "unnamed": 0
+    },
+    {
+      "path": "/ecoconception",
+      "width": 768,
+      "h1": 1,
+      "overflow": false,
+      "alt": true,
+      "skip": true,
+      "unnamed": 0
+    },
+    {
+      "path": "/mentions-legales",
+      "width": 768,
+      "h1": 1,
+      "overflow": false,
+      "alt": true,
+      "skip": true,
+      "unnamed": 0
+    },
+    {
+      "path": "/connexion",
+      "width": 768,
+      "h1": 1,
+      "overflow": false,
+      "alt": true,
+      "skip": true,
+      "unnamed": 0
+    },
+    {
+      "path": "/",
+      "width": 1440,
+      "h1": 1,
+      "overflow": false,
+      "alt": true,
+      "skip": true,
+      "unnamed": 0
+    },
+    {
+      "path": "/installer",
+      "width": 1440,
+      "h1": 1,
+      "overflow": false,
+      "alt": true,
+      "skip": true,
+      "unnamed": 0
+    },
+    {
+      "path": "/accessibilite",
+      "width": 1440,
+      "h1": 1,
+      "overflow": false,
+      "alt": true,
+      "skip": true,
+      "unnamed": 0
+    },
+    {
+      "path": "/ecoconception",
+      "width": 1440,
+      "h1": 1,
+      "overflow": false,
+      "alt": true,
+      "skip": true,
+      "unnamed": 0
+    },
+    {
+      "path": "/mentions-legales",
+      "width": 1440,
+      "h1": 1,
+      "overflow": false,
+      "alt": true,
+      "skip": true,
+      "unnamed": 0
+    },
+    {
+      "path": "/connexion",
+      "width": 1440,
+      "h1": 1,
+      "overflow": false,
+      "alt": true,
+      "skip": true,
+      "unnamed": 0
+    }
+  ],
+  "pwa": {
+    "userTriggeredPrompt": true,
+    "dismissal": true,
+    "cacheAllowlist": [
+      "/favicon.svg",
+      "/icons/icon-192.png",
+      "/icons/icon-512.png",
+      "/offline.html"
+    ],
+    "offlineFallback": true
+  },
+  "limitations": [
+    "No real-device installation",
+    "No screen reader audit",
+    "No exhaustive RGAA audit"
+  ]
+}

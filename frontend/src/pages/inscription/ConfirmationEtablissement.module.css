@@ -1,0 +1,39 @@
+.recapitulatif {
+  display: grid;
+  gap: 16px;
+  margin: 28px 0 16px;
+  padding: 22px 24px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: var(--brand-50);
+  text-align: left;
+}
+
+.ligne {
+  display: grid;
+  gap: 4px;
+  min-width: 0;
+}
+
+.ligne dt {
+  color: var(--ink-600);
+  font-size: 12px;
+}
+
+.ligne dd {
+  margin: 0;
+  color: var(--ink-900);
+  font-size: 15px;
+  font-weight: 600;
+  overflow-wrap: anywhere;
+}
+
+.precision {
+  color: var(--ink-600);
+  font-size: 12px;
+  line-height: 1.6;
+}
+
+@media (max-width: 480px) {
+  .recapitulatif { padding: 18px; }
+}

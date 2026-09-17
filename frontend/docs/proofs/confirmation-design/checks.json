@@ -1,0 +1,115 @@
+{
+  "scope": "Visual render with mocked API fixtures; no real account creation or auth validation",
+  "results": [
+    {
+      "role": "nurse",
+      "width": 1440,
+      "overflow": false,
+      "errors": [],
+      "heading": "Votre compte est créé",
+      "links": [
+        {
+          "text": "InfiMatch",
+          "href": "/"
+        },
+        {
+          "text": "Compléter mon profil →",
+          "href": "/profil"
+        },
+        {
+          "text": "Accéder à mon espace",
+          "href": "/accueil"
+        }
+      ]
+    },
+    {
+      "role": "nurse",
+      "width": 375,
+      "overflow": false,
+      "errors": [],
+      "heading": "Votre compte est créé",
+      "links": [
+        {
+          "text": "InfiMatch",
+          "href": "/"
+        },
+        {
+          "text": "Compléter mon profil →",
+          "href": "/profil"
+        },
+        {
+          "text": "Accéder à mon espace",
+          "href": "/accueil"
+        }
+      ]
+    },
+    {
+      "role": "enterprise",
+      "width": 1440,
+      "overflow": false,
+      "errors": [],
+      "heading": "Votre compte établissement est créé",
+      "links": [
+        {
+          "text": "InfiMatch",
+          "href": "/"
+        },
+        {
+          "text": "Accéder à mon espace →",
+          "href": "/accueil"
+        }
+      ]
+    },
+    {
+      "role": "enterprise",
+      "width": 375,
+      "overflow": false,
+      "errors": [],
+      "heading": "Votre compte établissement est créé",
+      "links": [
+        {
+          "text": "InfiMatch",
+          "href": "/"
+        },
+        {
+          "text": "Accéder à mon espace →",
+          "href": "/accueil"
+        }
+      ]
+    },
+    {
+      "role": "expired",
+      "width": 1440,
+      "overflow": false,
+      "errors": [],
+      "heading": "Retrouvons votre compte",
+      "links": [
+        {
+          "text": "InfiMatch",
+          "href": "/"
+        },
+        {
+          "text": "Me connecter",
+          "href": "/connexion"
+        }
+      ]
+    },
+    {
+      "role": "expired",
+      "width": 375,
+      "overflow": false,
+      "errors": [],
+      "heading": "Retrouvons votre compte",
+      "links": [
+        {
+          "text": "InfiMatch",
+          "href": "/"
+        },
+        {
+          "text": "Me connecter",
+          "href": "/connexion"
+        }
+      ]
+    }
+  ]
+}

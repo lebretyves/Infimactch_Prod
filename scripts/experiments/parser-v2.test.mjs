@@ -1,0 +1,13 @@
+﻿import {test} from 'node:test';
+import assert from 'node:assert/strict';
+import {parseOfferV2} from './parser-v2.mjs';
+const parse=description=>parseOfferV2({title:'Infirmier',description});
+test('AFGSU a jour ne signifie pas travail de jour',()=>assert.equal(parse('Votre AFGSU est à jour.').fields.some(f=>f.field==='horaire_type'),false));
+test('recruteur multicontrat ne definit pas le contrat de mission',()=>assert.equal(parse('Notre cabinet accompagne les candidats en recrutement CDI et intérim.').fields.some(f=>f.field==='contrat_texte'),false));
+test('vacations paralleles ne definissent pas le contrat du poste',()=>assert.equal(parse('Vous avez en parallèle de ce nouveau poste des vacations en milieu hospitalier.').fields.some(f=>f.field==='contrat_texte'),false));
+test('experience minimale distincte des domaines souhaites',()=>{const r=parse('Expérience significative minimum 5 ans, idéalement en réanimation.');assert.equal(r.fields.find(f=>f.field==='experience_duree').state,'EXIGENCE_TEXTE');assert.equal(r.fields.find(f=>f.field==='experience_domaine').state,'SOUHAITE');});
+test('certifications alternatives ne sont pas cumulees',()=>assert.ok(parse('Titulaire du DIUST ou de la licence en santé au travail ou AFOMETRA.').fields.some(f=>f.field==='alternatives_professionnelles')));
+test('sans astreinte conserve negation',()=>assert.equal(parse('Poste sans astreinte.').fields.find(f=>f.field==='garde_astreinte').state,'NEGATION'));
+test('salaires avec milliers conserves et repas separe',()=>{const r=parse('Salaire entre 2 220€ et 2 400€ par mois. 16€ de prise en charge pour les repas.');assert.ok(r.fields.some(f=>f.field==='remuneration_texte'&&f.value.includes('2 400')));assert.ok(r.fields.some(f=>f.field==='avantage'&&f.value==='REPAS'));assert.ok(!r.fields.some(f=>f.field==='remuneration_texte'&&f.value.includes('16€')));});
+test('IADE durees alternatives ne deviennent pas des heures de debut',()=>assert.ok(parse('MISSION EN 10H OU 12H').fields.some(f=>f.field==='durees_poste_alternatives')));
+test('surveillance enfant ne verifie pas un diplome',()=>assert.equal(parse('Intervenir auprès des enfants.').fields.some(f=>f.field==='qualification_titre'),false));

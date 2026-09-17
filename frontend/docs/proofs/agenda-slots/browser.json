@@ -1,0 +1,25 @@
+{
+  "at": "2026-09-16T01:13:45.449Z",
+  "checks": [
+    "Three complete green/red/neutral click cycles persist after every reload",
+    "Paris shift hours are correct even when browser is in Los Angeles",
+    "Unavailable afternoon removes only its slice from a week of availability",
+    "Neutral removes the sub-period from both backend lists",
+    "Night applies across midnight through 06:00 next day",
+    "Multi-day form applies morning and night independently from afternoon",
+    "Batch unavailable and neutral states replace previous declarations",
+    "Failed write leaves original state and can be retried",
+    "Immediate repeated clicks submit only one in-flight change",
+    "Confirmed mission remains linked and protected against incompatible unavailability",
+    "Month and week share the same saved slot states",
+    "Week and month render without overflow at 1440/768/375/320px",
+    "Keyboard can change a slot",
+    "Deleting a stored period clears the same exact hours in the grid and database",
+    "Mobility save preserves all slot edits",
+    "No browser runtime errors"
+  ],
+  "errors": [],
+  "writes": 22,
+  "isolated": true,
+  "rollback": true
+}

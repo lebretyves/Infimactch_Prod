@@ -1,0 +1,136 @@
+﻿.carte {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  min-width: 0;
+  background: white;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 0 3px 12px #07215205;
+}
+.haut {
+  display: flex;
+  justify-content: space-between;
+  gap: 6px;
+  align-items: center;
+}
+.type {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 11px;
+  line-height: 1.5;
+  font-weight: 700;
+  color: var(--teal-700);
+  background: var(--sky-100);
+  padding: 6px 8px;
+  border-radius: 6px;
+}
+.type[data-external="true"] {
+  color: var(--brand-700);
+  background: var(--brand-50);
+}
+.favori {
+  flex-shrink: 0;
+  display: grid;
+  place-items: center;
+  border: 0;
+  border-radius: 7px;
+  background: transparent;
+  color: var(--brand-600);
+  width: 34px;
+  height: 34px;
+  cursor: pointer;
+}
+.favori[aria-pressed="true"] {
+  color: var(--teal-700);
+  background: var(--sky-100);
+}
+.favori[aria-pressed="true"] svg {
+  fill: currentColor;
+}
+.favori:disabled {
+  opacity: 0.45;
+  cursor: wait;
+}
+.titre {
+  font-size: 17px;
+  line-height: 1.5;
+  letter-spacing: -0.3px;
+  margin: 0;
+}
+.titre a {
+  text-decoration: none;
+  color: var(--brand-900);
+}
+.titre a:hover {
+  text-decoration: underline;
+}
+.place {
+  color: var(--ink-600);
+  font-size: 13px;
+  line-height: 1.6;
+  margin: 0;
+}
+.meta {
+  display: grid;
+  gap: 8px;
+  margin: 4px 0;
+}
+.meta p {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  font-size: 12px;
+  line-height: 1.65;
+  margin: 0;
+  color: var(--ink-700);
+}
+.meta svg {
+  flex-shrink: 0;
+  color: var(--brand-600);
+  margin-top: 2px;
+}
+.meta .taux {
+  font-size: 14px;
+  color: var(--brand-900);
+  font-weight: 700;
+}
+.population {
+  font-size: 12px;
+  background: var(--sky-100);
+  color: var(--teal-700);
+  padding: 5px 9px;
+  border-radius: 6px;
+  align-self: flex-start;
+}
+.bas {
+  display: grid;
+  gap: 8px;
+  padding-top: 12px;
+  margin-top: auto;
+  border-top: 1px solid var(--line);
+}
+.source {
+  padding: 10px 12px;
+  border: 1px solid var(--brand-600);
+  border-radius: 9px;
+  text-align: center;
+  color: var(--brand-700);
+  font-weight: 700;
+  font-size: 13px;
+  text-decoration: none;
+}
+.source:hover {
+  background: var(--brand-50);
+}
+.details {
+  text-align: center;
+  font-size: 12px;
+  color: var(--ink-600);
+}
+.error {
+  font-size: 12px;
+  color: var(--danger-700);
+}

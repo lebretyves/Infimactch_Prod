@@ -1,0 +1,24 @@
+{
+  "date": "2026-09-14T23:29:16.302Z",
+  "results": [
+    {
+      "command": "npm run typecheck",
+      "exitCode": 0
+    },
+    {
+      "command": "npm run build",
+      "exitCode": 0
+    },
+    {
+      "command": "npm run coverage",
+      "exitCode": 0
+    }
+  ],
+  "testsPassed": 71,
+  "coverage": {
+    "lines": 79.38,
+    "branches": 84.33
+  },
+  "scope": "Unit and HTTP integration including private partial correspondence and explicit uncertain-search option. Live France Travail offers compared to synthetic profiles in external-partial-live.json.",
+  "codeCommit": "5f9db50b26638a03259d37640d1aea8e24c53e18"
+}

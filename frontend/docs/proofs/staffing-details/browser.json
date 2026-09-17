@@ -1,0 +1,23 @@
+{
+  "at": "2026-09-16T01:33:28.428Z",
+  "checks": [
+    "Night preset fills exact next-day period without manual hour typing",
+    "Complete establishment form fits desktop and 375/320px mobile",
+    "Failed request preserves form; retry and double click create exactly one need",
+    "Every criterion survives actual backend persistence using Paris time in a Los Angeles browser",
+    "Saved need reloads with readable detailed criteria",
+    "Three edits retain dates, qualification and clinical criteria after reload",
+    "Cancel edit does not persist unsaved changes",
+    "Reversed period is refused before submitting and stored data stays intact",
+    "Legacy need is visibly incomplete and can be completed without losing its description",
+    "Linked agency sees all saved criteria on desktop/mobile without establishment editing controls",
+    "Agency opens a reloadable server-prefilled draft with matching organization and criteria",
+    "Mission preparation fits desktop and mobile",
+    "Agency saves an actual draft using need criteria without publishing or changing the requested headcount",
+    "No browser runtime errors"
+  ],
+  "errors": [],
+  "mutations": 7,
+  "isolated": true,
+  "rollback": true
+}

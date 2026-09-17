@@ -1,0 +1,99 @@
+{
+  "id": "InfiMatchDiscordDmTest",
+  "name": "InfiMatch - Test Discord message prive (manuel)",
+  "active": false,
+  "nodes": [
+    {
+      "id": "manual",
+      "name": "Test manuel",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        0
+      ],
+      "parameters": {}
+    },
+    {
+      "id": "message",
+      "name": "Message fictif par role",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        250,
+        0
+      ],
+      "parameters": {
+        "jsCode": "const role = \"NURSE\";\nconst event = \"CONFIRMED\";\nconst messages = {\"NURSE\": {\"MATCH\": \"Une nouvelle mission correspond a votre profil. Consultez les conditions avant de candidater.\", \"CONFIRMED\": \"Votre affectation est confirmee. Consultez les details et votre confirmation dans InfiMatch.\", \"CANCELLED\": \"Votre mission a ete annulee. Consultez les informations mises a jour dans votre espace.\"}, \"AGENCY\": {\"CONFIRMED\": \"L affectation est confirmee pour votre mission. Le suivi est disponible dans InfiMatch.\", \"CANCELLED\": \"Une mission geree par votre agence a ete annulee. Consultez le suivi.\", \"UNFILLED\": \"Une mission de votre agence reste non pourvue apres le delai prevu. Consultez les candidatures et profils proposes.\"}, \"ESTABLISHMENT\": {\"CONFIRMED\": \"Un professionnel est affecte a une mission de votre etablissement. Consultez les details dans InfiMatch.\", \"CANCELLED\": \"Une mission de votre etablissement a ete annulee. Consultez le suivi avec votre agence.\", \"UNFILLED\": \"Une mission de votre etablissement reste non pourvue apres le delai prevu. Consultez son suivi avec votre agence.\"}};\nconst text = messages[role]?.[event];\nif (!text) throw new Error(\"Unsupported role or event\");\nreturn [{json:{role,event,content:\"TEST FICTIF InfiMatch - \" + role + \" / \" + event + \"\\n\" + text + \"\\nAucune mission reelle concernee.\"}}];"
+      }
+    },
+    {
+      "id": "discord",
+      "name": "Envoyer le test Discord",
+      "type": "n8n-nodes-base.discord",
+      "typeVersion": 2,
+      "position": [
+        500,
+        0
+      ],
+      "parameters": {
+        "authentication": "botToken",
+        "resource": "message",
+        "operation": "send",
+        "guildId": {
+          "__rl": true,
+          "mode": "id",
+          "value": "1549882096439398422"
+        },
+        "sendTo": "user",
+        "userId": {
+          "__rl": true,
+          "mode": "id",
+          "value": "1357811607564189938"
+        },
+        "content": "={{ $json.content }}",
+        "options": {},
+        "embeds": {},
+        "files": {}
+      },
+      "credentials": {
+        "discordBotApi": {
+          "id": "InfiMatchDiscordBot",
+          "name": "InfiMatch Discord Bot"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Test manuel": {
+      "main": [
+        [
+          {
+            "node": "Message fictif par role",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Message fictif par role": {
+      "main": [
+        [
+          {
+            "node": "Envoyer le test Discord",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "timezone": "Europe/Paris",
+    "saveDataSuccessExecution": "none",
+    "saveDataErrorExecution": "none",
+    "saveManualExecutions": false
+  },
+  "pinData": {}
+}

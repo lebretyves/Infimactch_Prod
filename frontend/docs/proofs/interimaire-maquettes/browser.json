@@ -1,0 +1,6614 @@
+{
+  "at": "2026-09-16T00:35:19.048Z",
+  "checks": [
+    "dashboard 1440px renders from real isolated API",
+    "missions 1440px renders from real isolated API",
+    "detail 1440px renders from real isolated API",
+    "candidater 1440px renders from real isolated API",
+    "candidatures 1440px renders from real isolated API",
+    "suivi 1440px renders from real isolated API",
+    "calendrier 1440px renders from real isolated API",
+    "profil 1440px renders from real isolated API",
+    "dossier 1440px renders from real isolated API",
+    "favoris 1440px renders from real isolated API",
+    "historique 1440px renders from real isolated API",
+    "etablissement 1440px renders from real isolated API",
+    "dashboard 768px renders from real isolated API",
+    "missions 768px renders from real isolated API",
+    "detail 768px renders from real isolated API",
+    "candidater 768px renders from real isolated API",
+    "candidatures 768px renders from real isolated API",
+    "suivi 768px renders from real isolated API",
+    "calendrier 768px renders from real isolated API",
+    "profil 768px renders from real isolated API",
+    "dossier 768px renders from real isolated API",
+    "favoris 768px renders from real isolated API",
+    "historique 768px renders from real isolated API",
+    "etablissement 768px renders from real isolated API",
+    "dashboard 375px renders from real isolated API",
+    "missions 375px renders from real isolated API",
+    "detail 375px renders from real isolated API",
+    "candidater 375px renders from real isolated API",
+    "candidatures 375px renders from real isolated API",
+    "suivi 375px renders from real isolated API",
+    "calendrier 375px renders from real isolated API",
+    "profil 375px renders from real isolated API",
+    "dossier 375px renders from real isolated API",
+    "favoris 375px renders from real isolated API",
+    "historique 375px renders from real isolated API",
+    "etablissement 375px renders from real isolated API",
+    "dashboard 320px renders from real isolated API",
+    "missions 320px renders from real isolated API",
+    "detail 320px renders from real isolated API",
+    "candidater 320px renders from real isolated API",
+    "candidatures 320px renders from real isolated API",
+    "suivi 320px renders from real isolated API",
+    "calendrier 320px renders from real isolated API",
+    "profil 320px renders from real isolated API",
+    "dossier 320px renders from real isolated API",
+    "favoris 320px renders from real isolated API",
+    "historique 320px renders from real isolated API",
+    "etablissement 320px renders from real isolated API",
+    "Profile saves three times, survives reload, and updates header identity",
+    "Calendar week/month/navigation and confirmed mission links",
+    "Calendar add/edit/remove persists real full-day periods",
+    "Advanced search controls send filters and change real results",
+    "Mission favorite toggles persist from detail to favorites after reload",
+    "Apply with explicit consent, follow timeline, then withdraw with confirmation",
+    "History filters and confirmation PDF download work",
+    "Dossier reference saves three times without overwriting profile or planning",
+    "Dossier RPPS retry and bank mask are wired",
+    "Dossier selects, uploads and downloads a real encrypted temporary PDF",
+    "Mobile navigation opens, closes with Escape and follows page links",
+    "Diploma years, practice skills and experience additions/removals persist",
+    "Dashboard notification read state persists",
+    "Temporary API error can be retried and session expiry returns to login",
+    "Logout closes the local session and returns to login"
+  ],
+  "requests": [
+    {
+      "method": "GET",
+      "path": "/auth/me"
+    },
+    {
+      "method": "GET",
+      "path": "/auth/me"
+    },
+    {
+      "method": "GET",
+      "path": "/profile"
+    },
+    {
+      "method": "GET",
+      "path": "/dashboards"
+    },
+    {
+      "method": "GET",
+      "path": "/me/notifications?limit=20"
+    },
+    {
+      "method": "GET",
+      "path": "/dashboards"
+    },
+    {
+      "method": "GET",
+      "path": "/me/notifications?limit=20"
+    },
+    {
+      "method": "GET",
+      "path": "/profile"
+    },
+    {
+      "method": "GET",
+      "path": "/me/history?limit=50&offset=0"
+    },
+    {
+      "method": "GET",
+      "path": "/me/applications?limit=50&offset=0"
+    },
+    {
+      "method": "GET",
+      "path": "/me/favorites?limit=50&offset=0"
+    },
+    {
+      "method": "GET",
+      "path": "/auth/csrf"
+    },
+    {
+      "method": "POST",
+      "path": "/listings/search"
+    },
+    {
+      "method": "GET",
+      "path": "/auth/me"
+    },
+    {
+      "method": "GET",
+      "path": "/profile"
+    },
+    {
+      "method": "GET",
+      "path": "/profile"
+    },
+    {
+      "method": "GET",
+      "path": "/me/favorites?limit=50&offset=0"
+    },
+    {
+      "method": "GET",
+      "path": "/facilities?limit=50&offset=0"
+    },
+    {
+      "method": "GET",
+      "path": "/reference-data"
+    },
+    {
+      "method": "GET",
+      "path": "/profile"
+    },
+    {
+      "method": "GET",
+      "path": "/me/favorites?limit=50&offset=0"
+    },
+    {
+      "method": "GET",
+      "path": "/facilities?limit=50&offset=0"
+    },
+    {
+      "method": "GET",
+      "path": "/reference-data"
+    },
+    {
+      "method": "GET",
+      "path": "/auth/csrf"
+    },
+    {
+      "method": "POST",
+      "path": "/listings/search"
+    },
+    {
+      "method": "GET",
+      "path": "/auth/me"
+    },
+    {
+      "method": "GET",
+      "path": "/auth/me"
+    },
+    {
+      "method": "GET",
+      "path": "/profile"
+    },
+    {
+      "method": "GET",
+      "path": "/listings/m_8d11e15a-b280-4082-baf5-4240e23dc69a"
+    },
+    {
+      "method": "GET",
+      "path": "/me/favorites?limit=50&offset=0"
+    },
+    {
+      "method": "GET",
+      "path": "/listings/m_8d11e15a-b280-4082-baf5-4240e23dc69a"
+    },
+    {
+      "method": "GET",
+      "path": "/me/favorites?limit=50&offset=0"
+    },
+    {
+      "method": "GET",
+      "path": "/auth/me"
+    },
+    {
+      "method": "GET",
+      "path": "/auth/me"
+    },
+    {
+      "method": "GET",
+      "path": "/profile"
+    },
+    {
+      "method": "GET",
+      "path": "/listings/m_8d11e15a-b280-4082-baf5-4240e23dc69a"
+    },
+    {
+      "method": "GET",
+      "path": "/listings/m_8d11e15a-b280-4082-baf5-4240e23dc69a"
+    },
+    {
+      "method": "GET",
+      "path": "/auth/me"
+    },
+    {
+      "method": "GET",
+      "path": "/profile"
+    },
+    {
+      "method": "GET",
+      "path": "/me/applications?limit=20&offset=0"
+    },
+    {
+      "method": "GET",
+      "path": "/me/applications?limit=20&offset=0"
+    },
+    {
+      "method": "GET",
+      "path": "/auth/me"
+    },
+    {
+      "method": "GET",
+      "path": "/auth/me"
+    },
+    {
+      "method": "GET",
+      "path": "/profile"
+    },
+    {
+      "method": "GET",
+      "path": "/applications/943447e8-c17e-451c-a470-0952beac3fd2"
+    },
+    {
+      "method": "GET",
+      "path": "/applications/943447e8-c17e-451c-a470-0952beac3fd2"
+    },
+    {
+      "method": "GET",
+      "path": "/auth/me"
+    },
+    {
+      "method": "GET",
+      "path": "/auth/me"
+    },
+    {
+      "method": "GET",
+      "path": "/profile"
+    },
+    {
+      "method": "GET",
+      "path": "/profile"
+    },
+    {
+      "method": "GET",
+      "path": "/me/history?limit=50&offset=0"
+    },
+    {
+      "method": "GET",
+      "path": "/profile"
+    },
+    {
+      "method": "GET",
+      "path": "/me/history?limit=50&offset=0"
+    },
+    {
+      "method": "GET",
+      "path": "/auth/me"
+    },
+    {
+      "method": "GET",
+      "path": "/auth/me"
+    },
+    {
+      "method": "GET",
+      "path": "/profile"
+    },
+    {
+      "method": "GET",
+      "path": "/profile"
+    },
+    {
+      "method": "GET",
+      "path": "/profile"
+    },
+    {
+      "method": "GET",
+      "path": "/reference-data"
+    },
+    {
+      "method": "GET",
+      "path": "/me/bank-details"
+    },
+    {
+      "method": "GET",
+      "path": "/reference-data"
+    },
+    {
+      "method": "GET",
+      "path": "/me/bank-details"
+    },
+    {
+      "method": "GET",
+      "path": "/auth/me"
+    },
+    {
+      "method": "GET",
+      "path": "/auth/me"
+    },
+    {
+      "method": "GET",
+      "path": "/profile"
+    },
+    {
+      "method": "GET",
+      "path": "/profile"
+    },
+    {
+      "method": "GET",
+      "path": "/me/documents?limit=20&offset=0"
+    },
+    {
+      "method": "GET",
+      "path": "/me/bank-details"
+    },
+    {
+      "method": "GET",
+      "path": "/profile"
+    },
+    {
+      "method": "GET",
+      "path": "/me/documents?limit=20&offset=0"
+    },
+    {
+      "method": "GET",
+      "path": "/me/bank-details"
+    },
+    {
+      "method": "GET",
+      "path": "/auth/me"
+    },
+    {
+      "method": "GET",
+      "path": "/auth/me"
+    },
+    {
+      "method": "GET",
+      "path": "/profile"
+    },
+    {
+      "method": "GET",
+      "path": "/me/favorites?limit=50&offset=0"
+    },
+    {
+      "method": "GET",
+      "path": "/me/favorites?limit=50&offset=0"
+    },
+    {
+      "method": "GET",
+      "path": "/auth/me"
+    },
+    {
+      "method": "GET",
+      "path": "/auth/me"
+    },
+    {
+      "method": "GET",
+      "path": "/profile"
+    },
+    {
+      "method": "GET",
+      "path": "/me/history?limit=50&offset=0"
+    },
+    {
+      "method": "GET",
+      "path": "/me/history?limit=50&offset=0"
+    },
+    {
+      "method": "GET",
+      "path": "/auth/me"
+    },
+    {
+      "method": "GET",
+      "path": "/auth/me"
+    },
+    {
+      "method": "GET",
+      "path": "/profile"
+    },
+    {
+      "method": "GET",
+      "path": "/facilities/852c9032-8c34-4b69-8693-5ff2c8ea7614?limit=20&offset=0"
+    },
+    {
+      "method": "GET",
+      "path": "/me/favorites?limit=50&offset=0"
+    },
+    {
+      "method": "GET",
+      "path": "/facilities/852c9032-8c34-4b69-8693-5ff2c8ea7614?limit=20&offset=0"
+    },
+    {
+      "method": "GET",
+      "path": "/me/favorites?limit=50&offset=0"
+    },
+    {
+      "method": "GET",
+      "path": "/auth/me"
+    },
+    {
+      "method": "GET",
+      "path": "/auth/me"
+    },
+    {
+      "method": "GET",
+      "path": "/profile"
+    },
+    {
+      "method": "GET",
+      "path": "/dashboards"
+    },
+    {
+      "method": "GET",
+      "path": "/me/notifications?limit=20"
+    },
+    {
+      "method": "GET",
+      "path": "/dashboards"
+    },
+    {
+      "method": "GET",
+      "path": "/me/notifications?limit=20"
+    },
+    {
+      "method": "GET",
+      "path": "/profile"
+    },
+    {
+      "method": "GET",
+      "path": "/me/history?limit=50&offset=0"
+    },
+    {
+      "method": "GET",
+      "path": "/me/applications?limit=50&offset=0"
+    },
+    {
+      "method": "GET",
+      "path": "/me/favorites?limit=50&offset=0"
+    },
+    {
+      "method": "GET",
+      "path": "/auth/csrf"
+    },
+    {
+      "method": "POST",
+      "path": "/listings/search"
+    },
+    {
+      "method": "GET",
+      "path": "/auth/me"
+    },
+    {
+      "method": "GET",
+      "path": "/auth/me"
+    },
+    {
+      "method": "GET",
+      "path": "/profile"
+    },
+    {
+      "method": "GET",
+      "path": "/profile"
+    },
+    {
+      "method": "GET",
+      "path": "/me/favorites?limit=50&offset=0"
+    },
+    {
+      "method": "GET",
+      "path": "/facilities?limit=50&offset=0"
+    },
+    {
+      "method": "GET",
+      "path": "/reference-data"
+    },
+    {
+      "method": "GET",
+      "path": "/profile"
+    },
+    {
+      "method": "GET",
+      "path": "/me/favorites?limit=50&offset=0"
+    },
+    {
+      "method": "GET",
+      "path": "/facilities?limit=50&offset=0"
+    },
+    {
+      "method": "GET",
+      "path": "/reference-data"
+    },
+    {
+      "method": "GET",
+      "path": "/auth/csrf"
+    },
+    {
+      "method": "POST",
+      "path": "/listings/search"
+    },
+    {
+      "method": "GET",
+      "path": "/auth/me"
+    },
+    {
+      "method": "GET",
+      "path": "/auth/me"
+    },
+    {
+      "method": "GET",
+      "path": "/profile"
+    },
+    {
+      "method": "GET",
+      "path": "/listings/m_8d11e15a-b280-4082-baf5-4240e23dc69a"
+    },
+    {
+      "method": "GET",
+      "path": "/me/favorites?limit=50&offset=0"
+    },
+    {
+      "method": "GET",
+      "path": "/listings/m_8d11e15a-b280-4082-baf5-4240e23dc69a"
+    },
+    {
+      "method": "GET",
+      "path": "/me/favorites?limit=50&offset=0"
+    },
+    {
+      "method": "GET",
+      "path": "/auth/me"
+    },
+    {
+      "method": "GET",
+      "path": "/auth/me"
+    },
+    {
+      "method": "GET",
+      "path": "/profile"
+    },
+    {
+      "method": "GET",
+      "path": "/listings/m_8d11e15a-b280-4082-baf5-4240e23dc69a"
+    },
+    {
+      "method": "GET",
+      "path": "/listings/m_8d11e15a-b280-4082-baf5-4240e23dc69a"
+    },
+    {
+      "method": "GET",
+      "path": "/auth/me"
+    },
+    {
+      "method": "GET",
+      "path": "/auth/me"
+    },
+    {
+      "method": "GET",
+      "path": "/profile"
+    },
+    {
+      "method": "GET",
+      "path": "/me/applications?limit=20&offset=0"
+    },
+    {
+      "method": "GET",
+      "path": "/me/applications?limit=20&offset=0"
+    },
+    {
+      "method": "GET",
+      "path": "/auth/me"
+    },
+    {
+      "method": "GET",
+      "path": "/auth/me"
+    },
+    {
+      "method": "GET",
+      "path": "/profile"
+    },
+    {
+      "method": "GET",
+      "path": "/applications/943447e8-c17e-451c-a470-0952beac3fd2"
+    },
+    {
+      "method": "GET",
+      "path": "/applications/943447e8-c17e-451c-a470-0952beac3fd2"
+    },
+    {
+      "method": "GET",
+      "path": "/auth/me"
+    },
+    {
+      "method": "GET",
+      "path": "/auth/me"
+    },
+    {
+      "method": "GET",
+      "path": "/profile"
+    },
+    {
+      "method": "GET",
+      "path": "/profile"
+    },
+    {
+      "method": "GET",
+      "path": "/me/history?limit=50&offset=0"
+    },
+    {
+      "method": "GET",
+      "path": "/profile"
+    },
+    {
+      "method": "GET",
+      "path": "/me/history?limit=50&offset=0"
+    },
+    {
+      "method": "GET",
+      "path": "/auth/me"
+    },
+    {
+      "method": "GET",
+      "path": "/auth/me"
+    },
+    {
+      "method": "GET",
+      "path": "/profile"
+    },
+    {
+      "method": "GET",
+      "path": "/profile"
+    },
+    {
+      "method": "GET",
+      "path": "/profile"
+    },
+    {
+      "method": "GET",
+      "path": "/reference-data"
+    },
+    {
+      "method": "GET",
+      "path": "/me/bank-details"
+    },
+    {
+      "method": "GET",
+      "path": "/reference-data"
+    },
+    {
+      "method": "GET",
+      "path": "/me/bank-details"
+    },
+    {
+      "method": "GET",
+      "path": "/auth/me"
+    },
+    {
+      "method": "GET",
+      "path": "/profile"
+    },
+    {
+      "method": "GET",
+      "path": "/profile"
+    },
+    {
+      "method": "GET",
+      "path": "/me/documents?limit=20&offset=0"
+    },
+    {
+      "method": "GET",
+      "path": "/me/bank-details"
+    },
+    {
+      "method": "GET",
+      "path": "/profile"
+    },
+    {
+      "method": "GET",
+      "path": "/me/documents?limit=20&offset=0"
+    },
+    {
+      "method": "GET",
+      "path": "/me/bank-details"
+    },
+    {
+      "method": "GET",
+      "path": "/auth/me"
+    },
+    {
+      "method": "GET",
+      "path": "/auth/me"
+    },
+    {
+      "method": "GET",
+      "path": "/profile"
+    },
+    {
+      "method": "GET",
+      "path": "/me/favorites?limit=50&offset=0"
+    },
+    {
+      "method": "GET",
+      "path": "/me/favorites?limit=50&offset=0"
+    },
+    {
+      "method": "GET",
+      "path": "/auth/me"
+    },
+    {
+      "method": "GET",
+      "path": "/profile"
+    },
+    {
+      "method": "GET",
+      "path": "/me/history?limit=50&offset=0"
+    },
+    {
+      "method": "GET",
+      "path": "/me/history?limit=50&offset=0"
+    },
+    {
+      "method": "GET",
+      "path": "/auth/me"
+    },
+    {
+      "method": "GET",
+      "path": "/auth/me"
+    },
+    {
+      "method": "GET",
+      "path": "/profile"
+    },
+    {
+      "method": "GET",
+      "path": "/facilities/852c9032-8c34-4b69-8693-5ff2c8ea7614?limit=20&offset=0"
+    },
+    {
+      "method": "GET",
+      "path": "/me/favorites?limit=50&offset=0"
+    },
+    {
+      "method": "GET",
+      "path": "/facilities/852c9032-8c34-4b69-8693-5ff2c8ea7614?limit=20&offset=0"
+    },
+    {
+      "method": "GET",
+      "path": "/me/favorites?limit=50&offset=0"
+    },
+    {
+      "method": "GET",
+      "path": "/auth/me"
+    },
+    {
+      "method": "GET",
+      "path": "/auth/me"
+    },
+    {
+      "method": "GET",
+      "path": "/profile"
+    },
+    {
+      "method": "GET",
+      "path": "/dashboards"
+    },
+    {
+      "method": "GET",
+      "path": "/me/notifications?limit=20"
+    },
+    {
+      "method": "GET",
+      "path": "/dashboards"
+    },
+    {
+      "method": "GET",
+      "path": "/me/notifications?limit=20"
+    },
+    {
+      "method": "GET",
+      "path": "/profile"
+    },
+    {
+      "method": "GET",
+      "path": "/me/history?limit=50&offset=0"
+    },
+    {
+      "method": "GET",
+      "path": "/me/applications?limit=50&offset=0"
+    },
+    {
+      "method": "GET",
+      "path": "/me/favorites?limit=50&offset=0"
+    },
+    {
+      "method": "GET",
+      "path": "/auth/csrf"
+    },
+    {
+      "method": "POST",
+      "path": "/listings/search"
+    },
+    {
+      "method": "GET",
+      "path": "/auth/me"
+    },
+    {
+      "method": "GET",
+      "path": "/auth/me"
+    },
+    {
+      "method": "GET",
+      "path": "/profile"
+    },
+    {
+      "method": "GET",
+      "path": "/profile"
+    },
+    {
+      "method": "GET",
+      "path": "/me/favorites?limit=50&offset=0"
+    },
+    {
+      "method": "GET",
+      "path": "/facilities?limit=50&offset=0"
+    },
+    {
+      "method": "GET",
+      "path": "/reference-data"
+    },
+    {
+      "method": "GET",
+      "path": "/profile"
+    },
+    {
+      "method": "GET",
+      "path": "/me/favorites?limit=50&offset=0"
+    },
+    {
+      "method": "GET",
+      "path": "/facilities?limit=50&offset=0"
+    },
+    {
+      "method": "GET",
+      "path": "/reference-data"
+    },
+    {
+      "method": "GET",
+      "path": "/auth/csrf"
+    },
+    {
+      "method": "POST",
+      "path": "/listings/search"
+    },
+    {
+      "method": "GET",
+      "path": "/auth/me"
+    },
+    {
+      "method": "GET",
+      "path": "/auth/me"
+    },
+    {
+      "method": "GET",
+      "path": "/profile"
+    },
+    {
+      "method": "GET",
+      "path": "/listings/m_8d11e15a-b280-4082-baf5-4240e23dc69a"
+    },
+    {
+      "method": "GET",
+      "path": "/me/favorites?limit=50&offset=0"
+    },
+    {
+      "method": "GET",
+      "path": "/listings/m_8d11e15a-b280-4082-baf5-4240e23dc69a"
+    },
+    {
+      "method": "GET",
+      "path": "/me/favorites?limit=50&offset=0"
+    },
+    {
+      "method": "GET",
+      "path": "/auth/me"
+    },
+    {
+      "method": "GET",
+      "path": "/auth/me"
+    },
+    {
+      "method": "GET",
+      "path": "/profile"
+    },
+    {
+      "method": "GET",
+      "path": "/listings/m_8d11e15a-b280-4082-baf5-4240e23dc69a"
+    },
+    {
+      "method": "GET",
+      "path": "/listings/m_8d11e15a-b280-4082-baf5-4240e23dc69a"
+    },
+    {
+      "method": "GET",
+      "path": "/auth/me"
+    },
+    {
+      "method": "GET",
+      "path": "/auth/me"
+    },
+    {
+      "method": "GET",
+      "path": "/profile"
+    },
+    {
+      "method": "GET",
+      "path": "/me/applications?limit=20&offset=0"
+    },
+    {
+      "method": "GET",
+      "path": "/me/applications?limit=20&offset=0"
+    },
+    {
+      "method": "GET",
+      "path": "/auth/me"
+    },
+    {
+      "method": "GET",
+      "path": "/auth/me"
+    },
+    {
+      "method": "GET",
+      "path": "/profile"
+    },
+    {
+      "method": "GET",
+      "path": "/applications/943447e8-c17e-451c-a470-0952beac3fd2"
+    },
+    {
+      "method": "GET",
+      "path": "/applications/943447e8-c17e-451c-a470-0952beac3fd2"
+    },
+    {
+      "method": "GET",
+      "path": "/auth/me"
+    },
+    {
+      "method": "GET",
+      "path": "/auth/me"
+    },
+    {
+      "method": "GET",
+      "path": "/profile"
+    },
+    {
+      "method": "GET",
+      "path": "/profile"
+    },
+    {
+      "method": "GET",
+      "path": "/me/history?limit=50&offset=0"
+    },
+    {
+      "method": "GET",
+      "path": "/profile"
+    },
+    {
+      "method": "GET",
+      "path": "/me/history?limit=50&offset=0"
+    },
+    {
+      "method": "GET",
+      "path": "/auth/me"
+    },
+    {
+      "method": "GET",
+      "path": "/auth/me"
+    },
+    {
+      "method": "GET",
+      "path": "/profile"
+    },
+    {
+      "method": "GET",
+      "path": "/profile"
+    },
+    {
+      "method": "GET",
+      "path": "/profile"
+    },
+    {
+      "method": "GET",
+      "path": "/reference-data"
+    },
+    {
+      "method": "GET",
+      "path": "/me/bank-details"
+    },
+    {
+      "method": "GET",
+      "path": "/reference-data"
+    },
+    {
+      "method": "GET",
+      "path": "/me/bank-details"
+    },
+    {
+      "method": "GET",
+      "path": "/auth/me"
+    },
+    {
+      "method": "GET",
+      "path": "/auth/me"
+    },
+    {
+      "method": "GET",
+      "path": "/profile"
+    },
+    {
+      "method": "GET",
+      "path": "/profile"
+    },
+    {
+      "method": "GET",
+      "path": "/me/documents?limit=20&offset=0"
+    },
+    {
+      "method": "GET",
+      "path": "/me/bank-details"
+    },
+    {
+      "method": "GET",
+      "path": "/profile"
+    },
+    {
+      "method": "GET",
+      "path": "/me/documents?limit=20&offset=0"
+    },
+    {
+      "method": "GET",
+      "path": "/me/bank-details"
+    },
+    {
+      "method": "GET",
+      "path": "/auth/me"
+    },
+    {
+      "method": "GET",
+      "path": "/auth/me"
+    },
+    {
+      "method": "GET",
+      "path": "/profile"
+    },
+    {
+      "method": "GET",
+      "path": "/me/favorites?limit=50&offset=0"
+    },
+    {
+      "method": "GET",
+      "path": "/me/favorites?limit=50&offset=0"
+    },
+    {
+      "method": "GET",
+      "path": "/auth/me"
+    },
+    {
+      "method": "GET",
+      "path": "/auth/me"
+    },
+    {
+      "method": "GET",
+      "path": "/profile"
+    },
+    {
+      "method": "GET",
+      "path": "/me/history?limit=50&offset=0"
+    },
+    {
+      "method": "GET",
+      "path": "/me/history?limit=50&offset=0"
+    },
+    {
+      "method": "GET",
+      "path": "/auth/me"
+    },
+    {
+      "method": "GET",
+      "path": "/profile"
+    },
+    {
+      "method": "GET",
+      "path": "/facilities/852c9032-8c34-4b69-8693-5ff2c8ea7614?limit=20&offset=0"
+    },
+    {
+      "method": "GET",
+      "path": "/me/favorites?limit=50&offset=0"
+    },
+    {
+      "method": "GET",
+      "path": "/facilities/852c9032-8c34-4b69-8693-5ff2c8ea7614?limit=20&offset=0"
+    },
+    {
+      "method": "GET",
+      "path": "/me/favorites?limit=50&offset=0"
+    },
+    {
+      "method": "GET",
+      "path": "/auth/me"
+    },
+    {
+      "method": "GET",
+      "path": "/auth/me"
+    },
+    {
+      "method": "GET",
+      "path": "/profile"
+    },
+    {
+      "method": "GET",
+      "path": "/dashboards"
+    },
+    {
+      "method": "GET",
+      "path": "/me/notifications?limit=20"
+    },
+    {
+      "method": "GET",
+      "path": "/dashboards"
+    },
+    {
+      "method": "GET",
+      "path": "/me/notifications?limit=20"
+    },
+    {
+      "method": "GET",
+      "path": "/profile"
+    },
+    {
+      "method": "GET",
+      "path": "/me/history?limit=50&offset=0"
+    },
+    {
+      "method": "GET",
+      "path": "/me/applications?limit=50&offset=0"
+    },
+    {
+      "method": "GET",
+      "path": "/me/favorites?limit=50&offset=0"
+    },
+    {
+      "method": "GET",
+      "path": "/auth/csrf"
+    },
+    {
+      "method": "POST",
+      "path": "/listings/search"
+    },
+    {
+      "method": "GET",
+      "path": "/auth/me"
+    },
+    {
+      "method": "GET",
+      "path": "/auth/me"
+    },
+    {
+      "method": "GET",
+      "path": "/profile"
+    },
+    {
+      "method": "GET",
+      "path": "/profile"
+    },
+    {
+      "method": "GET",
+      "path": "/me/favorites?limit=50&offset=0"
+    },
+    {
+      "method": "GET",
+      "path": "/facilities?limit=50&offset=0"
+    },
+    {
+      "method": "GET",
+      "path": "/reference-data"
+    },
+    {
+      "method": "GET",
+      "path": "/profile"
+    },
+    {
+      "method": "GET",
+      "path": "/me/favorites?limit=50&offset=0"
+    },
+    {
+      "method": "GET",
+      "path": "/facilities?limit=50&offset=0"
+    },
+    {
+      "method": "GET",
+      "path": "/reference-data"
+    },
+    {
+      "method": "GET",
+      "path": "/auth/csrf"
+    },
+    {
+      "method": "POST",
+      "path": "/listings/search"
+    },
+    {
+      "method": "GET",
+      "path": "/auth/me"
+    },
+    {
+      "method": "GET",
+      "path": "/auth/me"
+    },
+    {
+      "method": "GET",
+      "path": "/profile"
+    },
+    {
+      "method": "GET",
+      "path": "/listings/m_8d11e15a-b280-4082-baf5-4240e23dc69a"
+    },
+    {
+      "method": "GET",
+      "path": "/me/favorites?limit=50&offset=0"
+    },
+    {
+      "method": "GET",
+      "path": "/listings/m_8d11e15a-b280-4082-baf5-4240e23dc69a"
+    },
+    {
+      "method": "GET",
+      "path": "/me/favorites?limit=50&offset=0"
+    },
+    {
+      "method": "GET",
+      "path": "/auth/me"
+    },
+    {
+      "method": "GET",
+      "path": "/auth/me"
+    },
+    {
+      "method": "GET",
+      "path": "/profile"
+    },
+    {
+      "method": "GET",
+      "path": "/listings/m_8d11e15a-b280-4082-baf5-4240e23dc69a"
+    },
+    {
+      "method": "GET",
+      "path": "/listings/m_8d11e15a-b280-4082-baf5-4240e23dc69a"
+    },
+    {
+      "method": "GET",
+      "path": "/auth/me"
+    },
+    {
+      "method": "GET",
+      "path": "/auth/me"
+    },
+    {
+      "method": "GET",
+      "path": "/profile"
+    },
+    {
+      "method": "GET",
+      "path": "/me/applications?limit=20&offset=0"
+    },
+    {
+      "method": "GET",
+      "path": "/me/applications?limit=20&offset=0"
+    },
+    {
+      "method": "GET",
+      "path": "/auth/me"
+    },
+    {
+      "method": "GET",
+      "path": "/auth/me"
+    },
+    {
+      "method": "GET",
+      "path": "/profile"
+    },
+    {
+      "method": "GET",
+      "path": "/applications/943447e8-c17e-451c-a470-0952beac3fd2"
+    },
+    {
+      "method": "GET",
+      "path": "/auth/me"
+    },
+    {
+      "method": "GET",
+      "path": "/auth/me"
+    },
+    {
+      "method": "GET",
+      "path": "/profile"
+    },
+    {
+      "method": "GET",
+      "path": "/profile"
+    },
+    {
+      "method": "GET",
+      "path": "/me/history?limit=50&offset=0"
+    },
+    {
+      "method": "GET",
+      "path": "/profile"
+    },
+    {
+      "method": "GET",
+      "path": "/me/history?limit=50&offset=0"
+    },
+    {
+      "method": "GET",
+      "path": "/auth/me"
+    },
+    {
+      "method": "GET",
+      "path": "/auth/me"
+    },
+    {
+      "method": "GET",
+      "path": "/profile"
+    },
+    {
+      "method": "GET",
+      "path": "/profile"
+    },
+    {
+      "method": "GET",
+      "path": "/profile"
+    },
+    {
+      "method": "GET",
+      "path": "/reference-data"
+    },
+    {
+      "method": "GET",
+      "path": "/me/bank-details"
+    },
+    {
+      "method": "GET",
+      "path": "/reference-data"
+    },
+    {
+      "method": "GET",
+      "path": "/me/bank-details"
+    },
+    {
+      "method": "GET",
+      "path": "/auth/me"
+    },
+    {
+      "method": "GET",
+      "path": "/auth/me"
+    },
+    {
+      "method": "GET",
+      "path": "/profile"
+    },
+    {
+      "method": "GET",
+      "path": "/profile"
+    },
+    {
+      "method": "GET",
+      "path": "/me/documents?limit=20&offset=0"
+    },
+    {
+      "method": "GET",
+      "path": "/me/bank-details"
+    },
+    {
+      "method": "GET",
+      "path": "/profile"
+    },
+    {
+      "method": "GET",
+      "path": "/me/documents?limit=20&offset=0"
+    },
+    {
+      "method": "GET",
+      "path": "/me/bank-details"
+    },
+    {
+      "method": "GET",
+      "path": "/auth/me"
+    },
+    {
+      "method": "GET",
+      "path": "/auth/me"
+    },
+    {
+      "method": "GET",
+      "path": "/profile"
+    },
+    {
+      "method": "GET",
+      "path": "/me/favorites?limit=50&offset=0"
+    },
+    {
+      "method": "GET",
+      "path": "/me/favorites?limit=50&offset=0"
+    },
+    {
+      "method": "GET",
+      "path": "/auth/me"
+    },
+    {
+      "method": "GET",
+      "path": "/auth/me"
+    },
+    {
+      "method": "GET",
+      "path": "/profile"
+    },
+    {
+      "method": "GET",
+      "path": "/me/history?limit=50&offset=0"
+    },
+    {
+      "method": "GET",
+      "path": "/me/history?limit=50&offset=0"
+    },
+    {
+      "method": "GET",
+      "path": "/auth/me"
+    },
+    {
+      "method": "GET",
+      "path": "/auth/me"
+    },
+    {
+      "method": "GET",
+      "path": "/profile"
+    },
+    {
+      "method": "GET",
+      "path": "/facilities/852c9032-8c34-4b69-8693-5ff2c8ea7614?limit=20&offset=0"
+    },
+    {
+      "method": "GET",
+      "path": "/me/favorites?limit=50&offset=0"
+    },
+    {
+      "method": "GET",
+      "path": "/facilities/852c9032-8c34-4b69-8693-5ff2c8ea7614?limit=20&offset=0"
+    },
+    {
+      "method": "GET",
+      "path": "/me/favorites?limit=50&offset=0"
+    },
+    {
+      "method": "GET",
+      "path": "/auth/me"
+    },
+    {
+      "method": "GET",
+      "path": "/auth/me"
+    },
+    {
+      "method": "GET",
+      "path": "/profile"
+    },
+    {
+      "method": "GET",
+      "path": "/profile"
+    },
+    {
+      "method": "GET",
+      "path": "/profile"
+    },
+    {
+      "method": "GET",
+      "path": "/reference-data"
+    },
+    {
+      "method": "GET",
+      "path": "/me/bank-details"
+    },
+    {
+      "method": "GET",
+      "path": "/reference-data"
+    },
+    {
+      "method": "GET",
+      "path": "/me/bank-details"
+    },
+    {
+      "method": "GET",
+      "path": "/profile"
+    },
+    {
+      "method": "GET",
+      "path": "/auth/csrf"
+    },
+    {
+      "method": "PUT",
+      "path": "/profile"
+    },
+    {
+      "method": "GET",
+      "path": "/profile"
+    },
+    {
+      "method": "GET",
+      "path": "/auth/me"
+    },
+    {
+      "method": "GET",
+      "path": "/profile"
+    },
+    {
+      "method": "GET",
+      "path": "/auth/me"
+    },
+    {
+      "method": "GET",
+      "path": "/auth/me"
+    },
+    {
+      "method": "GET",
+      "path": "/profile"
+    },
+    {
+      "method": "GET",
+      "path": "/profile"
+    },
+    {
+      "method": "GET",
+      "path": "/profile"
+    },
+    {
+      "method": "GET",
+      "path": "/reference-data"
+    },
+    {
+      "method": "GET",
+      "path": "/me/bank-details"
+    },
+    {
+      "method": "GET",
+      "path": "/reference-data"
+    },
+    {
+      "method": "GET",
+      "path": "/me/bank-details"
+    },
+    {
+      "method": "GET",
+      "path": "/profile"
+    },
+    {
+      "method": "GET",
+      "path": "/auth/csrf"
+    },
+    {
+      "method": "PUT",
+      "path": "/profile"
+    },
+    {
+      "method": "GET",
+      "path": "/profile"
+    },
+    {
+      "method": "GET",
+      "path": "/auth/me"
+    },
+    {
+      "method": "GET",
+      "path": "/profile"
+    },
+    {
+      "method": "GET",
+      "path": "/auth/me"
+    },
+    {
+      "method": "GET",
+      "path": "/auth/me"
+    },
+    {
+      "method": "GET",
+      "path": "/profile"
+    },
+    {
+      "method": "GET",
+      "path": "/profile"
+    },
+    {
+      "method": "GET",
+      "path": "/profile"
+    },
+    {
+      "method": "GET",
+      "path": "/reference-data"
+    },
+    {
+      "method": "GET",
+      "path": "/me/bank-details"
+    },
+    {
+      "method": "GET",
+      "path": "/reference-data"
+    },
+    {
+      "method": "GET",
+      "path": "/me/bank-details"
+    },
+    {
+      "method": "GET",
+      "path": "/profile"
+    },
+    {
+      "method": "GET",
+      "path": "/auth/csrf"
+    },
+    {
+      "method": "PUT",
+      "path": "/profile"
+    },
+    {
+      "method": "GET",
+      "path": "/profile"
+    },
+    {
+      "method": "GET",
+      "path": "/auth/me"
+    },
+    {
+      "method": "GET",
+      "path": "/profile"
+    },
+    {
+      "method": "GET",
+      "path": "/auth/me"
+    },
+    {
+      "method": "GET",
+      "path": "/profile"
+    },
+    {
+      "method": "GET",
+      "path": "/profile"
+    },
+    {
+      "method": "GET",
+      "path": "/profile"
+    },
+    {
+      "method": "GET",
+      "path": "/reference-data"
+    },
+    {
+      "method": "GET",
+      "path": "/me/bank-details"
+    },
+    {
+      "method": "GET",
+      "path": "/reference-data"
+    },
+    {
+      "method": "GET",
+      "path": "/me/bank-details"
+    },
+    {
+      "method": "GET",
+      "path": "/auth/me"
+    },
+    {
+      "method": "GET",
+      "path": "/auth/me"
+    },
+    {
+      "method": "GET",
+      "path": "/profile"
+    },
+    {
+      "method": "GET",
+      "path": "/profile"
+    },
+    {
+      "method": "GET",
+      "path": "/me/history?limit=50&offset=0"
+    },
+    {
+      "method": "GET",
+      "path": "/profile"
+    },
+    {
+      "method": "GET",
+      "path": "/me/history?limit=50&offset=0"
+    },
+    {
+      "method": "GET",
+      "path": "/profile"
+    },
+    {
+      "method": "GET",
+      "path": "/auth/csrf"
+    },
+    {
+      "method": "PUT",
+      "path": "/profile"
+    },
+    {
+      "method": "GET",
+      "path": "/profile"
+    },
+    {
+      "method": "GET",
+      "path": "/profile"
+    },
+    {
+      "method": "PUT",
+      "path": "/profile"
+    },
+    {
+      "method": "GET",
+      "path": "/profile"
+    },
+    {
+      "method": "GET",
+      "path": "/profile"
+    },
+    {
+      "method": "PUT",
+      "path": "/profile"
+    },
+    {
+      "method": "GET",
+      "path": "/profile"
+    },
+    {
+      "method": "GET",
+      "path": "/auth/me"
+    },
+    {
+      "method": "GET",
+      "path": "/auth/me"
+    },
+    {
+      "method": "GET",
+      "path": "/profile"
+    },
+    {
+      "method": "GET",
+      "path": "/profile"
+    },
+    {
+      "method": "GET",
+      "path": "/me/history?limit=50&offset=0"
+    },
+    {
+      "method": "GET",
+      "path": "/profile"
+    },
+    {
+      "method": "GET",
+      "path": "/me/history?limit=50&offset=0"
+    },
+    {
+      "method": "GET",
+      "path": "/profile"
+    },
+    {
+      "method": "GET",
+      "path": "/auth/csrf"
+    },
+    {
+      "method": "PUT",
+      "path": "/profile"
+    },
+    {
+      "method": "GET",
+      "path": "/profile"
+    },
+    {
+      "method": "GET",
+      "path": "/profile"
+    },
+    {
+      "method": "PUT",
+      "path": "/profile"
+    },
+    {
+      "method": "GET",
+      "path": "/profile"
+    },
+    {
+      "method": "GET",
+      "path": "/profile"
+    },
+    {
+      "method": "PUT",
+      "path": "/profile"
+    },
+    {
+      "method": "GET",
+      "path": "/profile"
+    },
+    {
+      "method": "GET",
+      "path": "/auth/me"
+    },
+    {
+      "method": "GET",
+      "path": "/auth/me"
+    },
+    {
+      "method": "GET",
+      "path": "/profile"
+    },
+    {
+      "method": "GET",
+      "path": "/profile"
+    },
+    {
+      "method": "GET",
+      "path": "/me/favorites?limit=50&offset=0"
+    },
+    {
+      "method": "GET",
+      "path": "/facilities?limit=50&offset=0"
+    },
+    {
+      "method": "GET",
+      "path": "/reference-data"
+    },
+    {
+      "method": "GET",
+      "path": "/profile"
+    },
+    {
+      "method": "GET",
+      "path": "/me/favorites?limit=50&offset=0"
+    },
+    {
+      "method": "GET",
+      "path": "/facilities?limit=50&offset=0"
+    },
+    {
+      "method": "GET",
+      "path": "/reference-data"
+    },
+    {
+      "method": "GET",
+      "path": "/auth/csrf"
+    },
+    {
+      "method": "POST",
+      "path": "/listings/search"
+    },
+    {
+      "method": "POST",
+      "path": "/listings/search"
+    },
+    {
+      "method": "POST",
+      "path": "/listings/search"
+    },
+    {
+      "method": "POST",
+      "path": "/listings/search"
+    },
+    {
+      "method": "GET",
+      "path": "/me/matches?limit=20&offset=0"
+    },
+    {
+      "method": "GET",
+      "path": "/listings/m_8d11e15a-b280-4082-baf5-4240e23dc69a"
+    },
+    {
+      "method": "GET",
+      "path": "/auth/me"
+    },
+    {
+      "method": "GET",
+      "path": "/auth/me"
+    },
+    {
+      "method": "GET",
+      "path": "/profile"
+    },
+    {
+      "method": "GET",
+      "path": "/listings/m_8d11e15a-b280-4082-baf5-4240e23dc69a"
+    },
+    {
+      "method": "GET",
+      "path": "/me/favorites?limit=50&offset=0"
+    },
+    {
+      "method": "GET",
+      "path": "/listings/m_8d11e15a-b280-4082-baf5-4240e23dc69a"
+    },
+    {
+      "method": "GET",
+      "path": "/me/favorites?limit=50&offset=0"
+    },
+    {
+      "method": "GET",
+      "path": "/auth/csrf"
+    },
+    {
+      "method": "POST",
+      "path": "/me/favorites"
+    },
+    {
+      "method": "GET",
+      "path": "/auth/me"
+    },
+    {
+      "method": "GET",
+      "path": "/auth/me"
+    },
+    {
+      "method": "GET",
+      "path": "/profile"
+    },
+    {
+      "method": "GET",
+      "path": "/me/favorites?limit=50&offset=0"
+    },
+    {
+      "method": "GET",
+      "path": "/me/favorites?limit=50&offset=0"
+    },
+    {
+      "method": "GET",
+      "path": "/auth/csrf"
+    },
+    {
+      "method": "DELETE",
+      "path": "/me/favorites/MISSION/8d11e15a-b280-4082-baf5-4240e23dc69a"
+    },
+    {
+      "method": "GET",
+      "path": "/me/favorites?limit=50&offset=0"
+    },
+    {
+      "method": "GET",
+      "path": "/auth/me"
+    },
+    {
+      "method": "GET",
+      "path": "/auth/me"
+    },
+    {
+      "method": "GET",
+      "path": "/profile"
+    },
+    {
+      "method": "GET",
+      "path": "/facilities/852c9032-8c34-4b69-8693-5ff2c8ea7614?limit=20&offset=0"
+    },
+    {
+      "method": "GET",
+      "path": "/me/favorites?limit=50&offset=0"
+    },
+    {
+      "method": "GET",
+      "path": "/facilities/852c9032-8c34-4b69-8693-5ff2c8ea7614?limit=20&offset=0"
+    },
+    {
+      "method": "GET",
+      "path": "/me/favorites?limit=50&offset=0"
+    },
+    {
+      "method": "GET",
+      "path": "/auth/csrf"
+    },
+    {
+      "method": "POST",
+      "path": "/me/favorites"
+    },
+    {
+      "method": "GET",
+      "path": "/auth/me"
+    },
+    {
+      "method": "GET",
+      "path": "/auth/me"
+    },
+    {
+      "method": "GET",
+      "path": "/profile"
+    },
+    {
+      "method": "GET",
+      "path": "/facilities/852c9032-8c34-4b69-8693-5ff2c8ea7614?limit=20&offset=0"
+    },
+    {
+      "method": "GET",
+      "path": "/me/favorites?limit=50&offset=0"
+    },
+    {
+      "method": "GET",
+      "path": "/facilities/852c9032-8c34-4b69-8693-5ff2c8ea7614?limit=20&offset=0"
+    },
+    {
+      "method": "GET",
+      "path": "/me/favorites?limit=50&offset=0"
+    },
+    {
+      "method": "GET",
+      "path": "/auth/csrf"
+    },
+    {
+      "method": "DELETE",
+      "path": "/me/favorites/ESTABLISHMENT/852c9032-8c34-4b69-8693-5ff2c8ea7614"
+    },
+    {
+      "method": "GET",
+      "path": "/auth/me"
+    },
+    {
+      "method": "GET",
+      "path": "/auth/me"
+    },
+    {
+      "method": "GET",
+      "path": "/profile"
+    },
+    {
+      "method": "GET",
+      "path": "/listings/m_8d11e15a-b280-4082-baf5-4240e23dc69a"
+    },
+    {
+      "method": "GET",
+      "path": "/listings/m_8d11e15a-b280-4082-baf5-4240e23dc69a"
+    },
+    {
+      "method": "GET",
+      "path": "/auth/csrf"
+    },
+    {
+      "method": "POST",
+      "path": "/missions/8d11e15a-b280-4082-baf5-4240e23dc69a/applications"
+    },
+    {
+      "method": "GET",
+      "path": "/me/applications?limit=20&offset=0"
+    },
+    {
+      "method": "GET",
+      "path": "/me/applications?limit=20&offset=0"
+    },
+    {
+      "method": "GET",
+      "path": "/auth/me"
+    },
+    {
+      "method": "GET",
+      "path": "/auth/me"
+    },
+    {
+      "method": "GET",
+      "path": "/profile"
+    },
+    {
+      "method": "GET",
+      "path": "/applications/555f60c1-d146-4698-a405-0200ed504b5c"
+    },
+    {
+      "method": "GET",
+      "path": "/applications/555f60c1-d146-4698-a405-0200ed504b5c"
+    },
+    {
+      "method": "GET",
+      "path": "/listings/m_8d11e15a-b280-4082-baf5-4240e23dc69a"
+    },
+    {
+      "method": "GET",
+      "path": "/listings/m_8d11e15a-b280-4082-baf5-4240e23dc69a"
+    },
+    {
+      "method": "GET",
+      "path": "/auth/csrf"
+    },
+    {
+      "method": "POST",
+      "path": "/missions/8d11e15a-b280-4082-baf5-4240e23dc69a/applications"
+    },
+    {
+      "method": "GET",
+      "path": "/auth/me"
+    },
+    {
+      "method": "GET",
+      "path": "/auth/me"
+    },
+    {
+      "method": "GET",
+      "path": "/profile"
+    },
+    {
+      "method": "GET",
+      "path": "/applications/555f60c1-d146-4698-a405-0200ed504b5c"
+    },
+    {
+      "method": "GET",
+      "path": "/applications/555f60c1-d146-4698-a405-0200ed504b5c"
+    },
+    {
+      "method": "GET",
+      "path": "/auth/me"
+    },
+    {
+      "method": "GET",
+      "path": "/auth/me"
+    },
+    {
+      "method": "GET",
+      "path": "/profile"
+    },
+    {
+      "method": "GET",
+      "path": "/me/applications?limit=20&offset=0"
+    },
+    {
+      "method": "GET",
+      "path": "/me/applications?limit=20&offset=0"
+    },
+    {
+      "method": "GET",
+      "path": "/auth/csrf"
+    },
+    {
+      "method": "POST",
+      "path": "/applications/555f60c1-d146-4698-a405-0200ed504b5c/withdrawal"
+    },
+    {
+      "method": "GET",
+      "path": "/me/applications?limit=20&offset=0"
+    },
+    {
+      "method": "GET",
+      "path": "/auth/me"
+    },
+    {
+      "method": "GET",
+      "path": "/auth/me"
+    },
+    {
+      "method": "GET",
+      "path": "/profile"
+    },
+    {
+      "method": "GET",
+      "path": "/me/history?limit=50&offset=0"
+    },
+    {
+      "method": "GET",
+      "path": "/me/history?limit=50&offset=0"
+    },
+    {
+      "method": "GET",
+      "path": "/applications/943447e8-c17e-451c-a470-0952beac3fd2"
+    },
+    {
+      "method": "GET",
+      "path": "/assignments/0da8ef0e-2bfd-4e66-8bf3-4575caf6e53e/confirmation"
+    },
+    {
+      "method": "GET",
+      "path": "/me/documents/ed53f6bb-4596-4e9c-b369-5e427670c055"
+    },
+    {
+      "method": "GET",
+      "path": "/auth/me"
+    },
+    {
+      "method": "GET",
+      "path": "/auth/me"
+    },
+    {
+      "method": "GET",
+      "path": "/profile"
+    },
+    {
+      "method": "GET",
+      "path": "/profile"
+    },
+    {
+      "method": "GET",
+      "path": "/me/documents?limit=20&offset=0"
+    },
+    {
+      "method": "GET",
+      "path": "/me/bank-details"
+    },
+    {
+      "method": "GET",
+      "path": "/profile"
+    },
+    {
+      "method": "GET",
+      "path": "/me/documents?limit=20&offset=0"
+    },
+    {
+      "method": "GET",
+      "path": "/me/bank-details"
+    },
+    {
+      "method": "GET",
+      "path": "/profile"
+    },
+    {
+      "method": "GET",
+      "path": "/auth/csrf"
+    },
+    {
+      "method": "PUT",
+      "path": "/profile"
+    },
+    {
+      "method": "GET",
+      "path": "/profile"
+    },
+    {
+      "method": "GET",
+      "path": "/me/documents?limit=20&offset=0"
+    },
+    {
+      "method": "GET",
+      "path": "/me/bank-details"
+    },
+    {
+      "method": "GET",
+      "path": "/auth/me"
+    },
+    {
+      "method": "GET",
+      "path": "/auth/me"
+    },
+    {
+      "method": "GET",
+      "path": "/profile"
+    },
+    {
+      "method": "GET",
+      "path": "/profile"
+    },
+    {
+      "method": "GET",
+      "path": "/me/documents?limit=20&offset=0"
+    },
+    {
+      "method": "GET",
+      "path": "/me/bank-details"
+    },
+    {
+      "method": "GET",
+      "path": "/profile"
+    },
+    {
+      "method": "GET",
+      "path": "/me/documents?limit=20&offset=0"
+    },
+    {
+      "method": "GET",
+      "path": "/me/bank-details"
+    },
+    {
+      "method": "GET",
+      "path": "/profile"
+    },
+    {
+      "method": "GET",
+      "path": "/auth/csrf"
+    },
+    {
+      "method": "PUT",
+      "path": "/profile"
+    },
+    {
+      "method": "GET",
+      "path": "/profile"
+    },
+    {
+      "method": "GET",
+      "path": "/me/documents?limit=20&offset=0"
+    },
+    {
+      "method": "GET",
+      "path": "/me/bank-details"
+    },
+    {
+      "method": "GET",
+      "path": "/auth/me"
+    },
+    {
+      "method": "GET",
+      "path": "/auth/me"
+    },
+    {
+      "method": "GET",
+      "path": "/profile"
+    },
+    {
+      "method": "GET",
+      "path": "/profile"
+    },
+    {
+      "method": "GET",
+      "path": "/me/documents?limit=20&offset=0"
+    },
+    {
+      "method": "GET",
+      "path": "/me/bank-details"
+    },
+    {
+      "method": "GET",
+      "path": "/profile"
+    },
+    {
+      "method": "GET",
+      "path": "/me/documents?limit=20&offset=0"
+    },
+    {
+      "method": "GET",
+      "path": "/me/bank-details"
+    },
+    {
+      "method": "GET",
+      "path": "/profile"
+    },
+    {
+      "method": "GET",
+      "path": "/auth/csrf"
+    },
+    {
+      "method": "PUT",
+      "path": "/profile"
+    },
+    {
+      "method": "GET",
+      "path": "/profile"
+    },
+    {
+      "method": "GET",
+      "path": "/me/documents?limit=20&offset=0"
+    },
+    {
+      "method": "GET",
+      "path": "/me/bank-details"
+    },
+    {
+      "method": "GET",
+      "path": "/auth/me"
+    },
+    {
+      "method": "GET",
+      "path": "/auth/me"
+    },
+    {
+      "method": "GET",
+      "path": "/profile"
+    },
+    {
+      "method": "GET",
+      "path": "/profile"
+    },
+    {
+      "method": "GET",
+      "path": "/me/documents?limit=20&offset=0"
+    },
+    {
+      "method": "GET",
+      "path": "/me/bank-details"
+    },
+    {
+      "method": "GET",
+      "path": "/profile"
+    },
+    {
+      "method": "GET",
+      "path": "/me/documents?limit=20&offset=0"
+    },
+    {
+      "method": "GET",
+      "path": "/me/bank-details"
+    },
+    {
+      "method": "GET",
+      "path": "/auth/csrf"
+    },
+    {
+      "method": "PUT",
+      "path": "/profile/rpps"
+    },
+    {
+      "method": "GET",
+      "path": "/profile"
+    },
+    {
+      "method": "GET",
+      "path": "/me/documents?limit=20&offset=0"
+    },
+    {
+      "method": "GET",
+      "path": "/me/bank-details"
+    },
+    {
+      "method": "POST",
+      "path": "/profile/rpps/retry"
+    },
+    {
+      "method": "GET",
+      "path": "/profile"
+    },
+    {
+      "method": "GET",
+      "path": "/me/documents?limit=20&offset=0"
+    },
+    {
+      "method": "GET",
+      "path": "/me/bank-details"
+    },
+    {
+      "method": "PUT",
+      "path": "/me/bank-details"
+    },
+    {
+      "method": "GET",
+      "path": "/profile"
+    },
+    {
+      "method": "GET",
+      "path": "/me/documents?limit=20&offset=0"
+    },
+    {
+      "method": "GET",
+      "path": "/me/bank-details"
+    },
+    {
+      "method": "GET",
+      "path": "/auth/me"
+    },
+    {
+      "method": "GET",
+      "path": "/auth/me"
+    },
+    {
+      "method": "GET",
+      "path": "/profile"
+    },
+    {
+      "method": "GET",
+      "path": "/profile"
+    },
+    {
+      "method": "GET",
+      "path": "/me/documents?limit=20&offset=0"
+    },
+    {
+      "method": "GET",
+      "path": "/me/bank-details"
+    },
+    {
+      "method": "GET",
+      "path": "/profile"
+    },
+    {
+      "method": "GET",
+      "path": "/me/documents?limit=20&offset=0"
+    },
+    {
+      "method": "GET",
+      "path": "/me/bank-details"
+    },
+    {
+      "method": "GET",
+      "path": "/auth/csrf"
+    },
+    {
+      "method": "POST",
+      "path": "/me/documents"
+    },
+    {
+      "method": "GET",
+      "path": "/profile"
+    },
+    {
+      "method": "GET",
+      "path": "/me/documents?limit=20&offset=0"
+    },
+    {
+      "method": "GET",
+      "path": "/me/bank-details"
+    },
+    {
+      "method": "GET",
+      "path": "/me/documents/eca20a01-96d3-4d30-8bc5-f8ad92eb25d7"
+    },
+    {
+      "method": "GET",
+      "path": "/profile"
+    },
+    {
+      "method": "GET",
+      "path": "/me/documents?limit=20&offset=0"
+    },
+    {
+      "method": "GET",
+      "path": "/me/bank-details"
+    },
+    {
+      "method": "GET",
+      "path": "/auth/me"
+    },
+    {
+      "method": "GET",
+      "path": "/auth/me"
+    },
+    {
+      "method": "GET",
+      "path": "/profile"
+    },
+    {
+      "method": "GET",
+      "path": "/dashboards"
+    },
+    {
+      "method": "GET",
+      "path": "/me/notifications?limit=20"
+    },
+    {
+      "method": "GET",
+      "path": "/dashboards"
+    },
+    {
+      "method": "GET",
+      "path": "/me/notifications?limit=20"
+    },
+    {
+      "method": "GET",
+      "path": "/profile"
+    },
+    {
+      "method": "GET",
+      "path": "/me/history?limit=50&offset=0"
+    },
+    {
+      "method": "GET",
+      "path": "/me/applications?limit=50&offset=0"
+    },
+    {
+      "method": "GET",
+      "path": "/me/favorites?limit=50&offset=0"
+    },
+    {
+      "method": "GET",
+      "path": "/auth/csrf"
+    },
+    {
+      "method": "POST",
+      "path": "/listings/search"
+    },
+    {
+      "method": "GET",
+      "path": "/profile"
+    },
+    {
+      "method": "GET",
+      "path": "/me/documents?limit=20&offset=0"
+    },
+    {
+      "method": "GET",
+      "path": "/me/bank-details"
+    },
+    {
+      "method": "GET",
+      "path": "/auth/me"
+    },
+    {
+      "method": "GET",
+      "path": "/auth/me"
+    },
+    {
+      "method": "GET",
+      "path": "/profile"
+    },
+    {
+      "method": "GET",
+      "path": "/profile"
+    },
+    {
+      "method": "GET",
+      "path": "/profile"
+    },
+    {
+      "method": "GET",
+      "path": "/reference-data"
+    },
+    {
+      "method": "GET",
+      "path": "/me/bank-details"
+    },
+    {
+      "method": "GET",
+      "path": "/reference-data"
+    },
+    {
+      "method": "GET",
+      "path": "/me/bank-details"
+    },
+    {
+      "method": "GET",
+      "path": "/profile"
+    },
+    {
+      "method": "GET",
+      "path": "/auth/csrf"
+    },
+    {
+      "method": "PUT",
+      "path": "/profile"
+    },
+    {
+      "method": "GET",
+      "path": "/profile"
+    },
+    {
+      "method": "GET",
+      "path": "/auth/me"
+    },
+    {
+      "method": "GET",
+      "path": "/profile"
+    },
+    {
+      "method": "GET",
+      "path": "/auth/me"
+    },
+    {
+      "method": "GET",
+      "path": "/auth/me"
+    },
+    {
+      "method": "GET",
+      "path": "/profile"
+    },
+    {
+      "method": "GET",
+      "path": "/profile"
+    },
+    {
+      "method": "GET",
+      "path": "/profile"
+    },
+    {
+      "method": "GET",
+      "path": "/reference-data"
+    },
+    {
+      "method": "GET",
+      "path": "/me/bank-details"
+    },
+    {
+      "method": "GET",
+      "path": "/reference-data"
+    },
+    {
+      "method": "GET",
+      "path": "/me/bank-details"
+    },
+    {
+      "method": "GET",
+      "path": "/profile"
+    },
+    {
+      "method": "GET",
+      "path": "/auth/csrf"
+    },
+    {
+      "method": "PUT",
+      "path": "/profile"
+    },
+    {
+      "method": "GET",
+      "path": "/profile"
+    },
+    {
+      "method": "GET",
+      "path": "/auth/me"
+    },
+    {
+      "method": "GET",
+      "path": "/profile"
+    },
+    {
+      "method": "GET",
+      "path": "/auth/me"
+    },
+    {
+      "method": "GET",
+      "path": "/auth/me"
+    },
+    {
+      "method": "GET",
+      "path": "/profile"
+    },
+    {
+      "method": "GET",
+      "path": "/dashboards"
+    },
+    {
+      "method": "GET",
+      "path": "/me/notifications?limit=20"
+    },
+    {
+      "method": "GET",
+      "path": "/dashboards"
+    },
+    {
+      "method": "GET",
+      "path": "/me/notifications?limit=20"
+    },
+    {
+      "method": "GET",
+      "path": "/profile"
+    },
+    {
+      "method": "GET",
+      "path": "/me/history?limit=50&offset=0"
+    },
+    {
+      "method": "GET",
+      "path": "/me/applications?limit=50&offset=0"
+    },
+    {
+      "method": "GET",
+      "path": "/me/favorites?limit=50&offset=0"
+    },
+    {
+      "method": "GET",
+      "path": "/auth/csrf"
+    },
+    {
+      "method": "POST",
+      "path": "/listings/search"
+    },
+    {
+      "method": "POST",
+      "path": "/me/notifications/79ba0492-c09d-452a-b6a6-7f38d947b71d/read"
+    },
+    {
+      "method": "GET",
+      "path": "/dashboards"
+    },
+    {
+      "method": "GET",
+      "path": "/me/notifications?limit=20"
+    },
+    {
+      "method": "GET",
+      "path": "/profile"
+    },
+    {
+      "method": "GET",
+      "path": "/me/history?limit=50&offset=0"
+    },
+    {
+      "method": "GET",
+      "path": "/me/applications?limit=50&offset=0"
+    },
+    {
+      "method": "GET",
+      "path": "/me/favorites?limit=50&offset=0"
+    },
+    {
+      "method": "GET",
+      "path": "/auth/me"
+    },
+    {
+      "method": "GET",
+      "path": "/auth/me"
+    },
+    {
+      "method": "GET",
+      "path": "/profile"
+    },
+    {
+      "method": "GET",
+      "path": "/listings/m_8d11e15a-b280-4082-baf5-4240e23dc69a"
+    },
+    {
+      "method": "GET",
+      "path": "/me/favorites?limit=50&offset=0"
+    },
+    {
+      "method": "GET",
+      "path": "/listings/m_8d11e15a-b280-4082-baf5-4240e23dc69a"
+    },
+    {
+      "method": "GET",
+      "path": "/me/favorites?limit=50&offset=0"
+    },
+    {
+      "method": "GET",
+      "path": "/listings/m_8d11e15a-b280-4082-baf5-4240e23dc69a"
+    },
+    {
+      "method": "GET",
+      "path": "/auth/me"
+    },
+    {
+      "method": "GET",
+      "path": "/auth/me"
+    },
+    {
+      "method": "GET",
+      "path": "/auth/google/config"
+    },
+    {
+      "method": "GET",
+      "path": "/auth/google/config"
+    },
+    {
+      "method": "GET",
+      "path": "/auth/me"
+    },
+    {
+      "method": "GET",
+      "path": "/auth/me"
+    },
+    {
+      "method": "GET",
+      "path": "/profile"
+    },
+    {
+      "method": "GET",
+      "path": "/dashboards"
+    },
+    {
+      "method": "GET",
+      "path": "/me/notifications?limit=20"
+    },
+    {
+      "method": "GET",
+      "path": "/dashboards"
+    },
+    {
+      "method": "GET",
+      "path": "/me/notifications?limit=20"
+    },
+    {
+      "method": "GET",
+      "path": "/profile"
+    },
+    {
+      "method": "GET",
+      "path": "/me/history?limit=50&offset=0"
+    },
+    {
+      "method": "GET",
+      "path": "/me/applications?limit=50&offset=0"
+    },
+    {
+      "method": "GET",
+      "path": "/me/favorites?limit=50&offset=0"
+    },
+    {
+      "method": "GET",
+      "path": "/auth/csrf"
+    },
+    {
+      "method": "POST",
+      "path": "/listings/search"
+    },
+    {
+      "method": "POST",
+      "path": "/auth/logout"
+    }
+  ],
+  "errors": [],
+  "inventories": [
+    {
+      "page": "dashboard",
+      "width": 1440,
+      "controls": [
+        {
+          "tag": "A",
+          "text": "0\ncandidatures en cours",
+          "href": "/candidatures",
+          "type": null,
+          "disabled": false
+        },
+        {
+          "tag": "A",
+          "text": "1\nmissions à venir ou en cours",
+          "href": "/historique",
+          "type": null,
+          "disabled": false
+        },
+        {
+          "tag": "A",
+          "text": "0\nfavoris enregistrés",
+          "href": "/favoris",
+          "type": null,
+          "disabled": false
+        },
+        {
+          "tag": "A",
+          "text": "Voir la mission",
+          "href": "/missions/m_26c1107b-9415-485b-bac4-b5d4299d3954",
+          "type": null,
+          "disabled": false
+        },
+        {
+          "tag": "BUTTON",
+          "text": "Voir la confirmation",
+          "href": null,
+          "type": null,
+          "disabled": false
+        },
+        {
+          "tag": "A",
+          "text": "Toutes les missions →",
+          "href": "/missions",
+          "type": null,
+          "disabled": false
+        },
+        {
+          "tag": "A",
+          "text": "Voir",
+          "href": "/missions/e_ff595e5a-fb17-4823-b6c4-907c78b3fdbe",
+          "type": null,
+          "disabled": false
+        },
+        {
+          "tag": "BUTTON",
+          "text": "Ajouter Offre IDE fictive aux favoris",
+          "href": null,
+          "type": null,
+          "disabled": false
+        },
+        {
+          "tag": "A",
+          "text": "Voir",
+          "href": "/missions/m_8d11e15a-b280-4082-baf5-4240e23dc69a",
+          "type": null,
+          "disabled": false
+        },
+        {
+          "tag": "BUTTON",
+          "text": "Ajouter Mission infirmiere FICTIVE b6e0eb8f-693e-4ce3-8163-5828dde5ac4a aux favoris",
+          "href": null,
+          "type": null,
+          "disabled": false
+        },
+        {
+          "tag": "A",
+          "text": "Voir",
+          "href": "/missions/e_0025de76-1999-47d2-a303-135e828a502d",
+          "type": null,
+          "disabled": false
+        },
+        {
+          "tag": "BUTTON",
+          "text": "Ajouter Infirmier Spécialisé en Hémodialyse (H/F) aux favoris",
+          "href": null,
+          "type": null,
+          "disabled": false
+        },
+        {
+          "tag": "A",
+          "text": "Mettre à jour",
+          "href": "/calendrier",
+          "type": null,
+          "disabled": false
+        },
+        {
+          "tag": "A",
+          "text": "Voir mes confirmations",
+          "href": "/historique",
+          "type": null,
+          "disabled": false
+        },
+        {
+          "tag": "BUTTON",
+          "text": "Marquer comme lue",
+          "href": null,
+          "type": null,
+          "disabled": false
+        },
+        {
+          "tag": "A",
+          "text": "Ouvrir mon dossier →",
+          "href": "/dossier",
+          "type": null,
+          "disabled": false
+        },
+        {
+          "tag": "A",
+          "text": "Mentions légales",
+          "href": "/mentions-legales",
+          "type": null,
+          "disabled": false
+        }
+      ]
+    },
+    {
+      "page": "missions",
+      "width": 1440,
+      "controls": [
+        {
+          "tag": "A",
+          "text": "Mon profil IDE · IADE",
+          "href": "/profil",
+          "type": null,
+          "disabled": false
+        },
+        {
+          "tag": "A",
+          "text": "Pour vous",
+          "href": "/missions",
+          "type": null,
+          "disabled": false
+        },
+        {
+          "tag": "A",
+          "text": "Favoris",
+          "href": "/favoris",
+          "type": null,
+          "disabled": false
+        },
+        {
+          "tag": "BUTTON",
+          "text": "Toutes les offres",
+          "href": null,
+          "type": "button",
+          "disabled": false
+        },
+        {
+          "tag": "BUTTON",
+          "text": "Recommandées pour moi",
+          "href": null,
+          "type": "button",
+          "disabled": false
+        },
+        {
+          "tag": "INPUT",
+          "text": "",
+          "href": null,
+          "type": "search",
+          "disabled": false
+        },
+        {
+          "tag": "SELECT",
+          "text": "Toutes mes qualifications\nIDE\nIADE",
+          "href": null,
+          "type": null,
+          "disabled": false
+        },
+        {
+          "tag": "SELECT",
+          "text": "Toutes les distances\n10 km\n25 km\n50 km\n100 km\n200 km",
+          "href": null,
+          "type": null,
+          "disabled": false
+        },
+        {
+          "tag": "SELECT",
+          "text": "Tous les services\nCardiologie\nPneumologie\nNeurologie\nGastro enterologie\nNephrologie\nEndocrinologie\nInfectiologie\nDermatologie\nRhumatologie\nChirurgie\nUrgences\nReanimation\nSoins intensifs\nSurveillance en salle de réveil\nPediatrie\nNeonatologie\nGynecologie\nMaternite\nOncologie\nHematologie\nDialyse\nPsychiatrie\nPedopsychiatrie\nAddictologie\nGeriatrie\nSoins longue duree\nEhpad\nSmr\nSoins palliatifs\nDouleur\nConsultations\nHopital jour\nChirurgie ambulatoire\nEndoscopie\nExplorations\nInterventionnel\nMas\nFam\nHad\nDomicile salarie\nSante travail\nPrevention\nCentre sante\nSuppleance\nAutre",
+          "href": null,
+          "type": null,
+          "disabled": false
+        },
+        {
+          "tag": "SELECT",
+          "text": "Toutes les populations\nAdultes\nPédiatrie\nAdultes et pédiatrie",
+          "href": null,
+          "type": null,
+          "disabled": false
+        },
+        {
+          "tag": "SELECT",
+          "text": "Tous les blocs\nPolyvalent\nSpécialisé",
+          "href": null,
+          "type": null,
+          "disabled": false
+        },
+        {
+          "tag": "INPUT",
+          "text": "",
+          "href": null,
+          "type": "date",
+          "disabled": false
+        },
+        {
+          "tag": "INPUT",
+          "text": "",
+          "href": null,
+          "type": "date",
+          "disabled": false
+        },
+        {
+          "tag": "SELECT",
+          "text": "Tous les horaires\nJour\nNuit\nAlternance jour et nuit",
+          "href": null,
+          "type": null,
+          "disabled": false
+        },
+        {
+          "tag": "SELECT",
+          "text": "Tous les établissements\nFICTIF ESTABLISHMENT",
+          "href": null,
+          "type": null,
+          "disabled": false
+        },
+        {
+          "tag": "BUTTON",
+          "text": "Réinitialiser",
+          "href": null,
+          "type": "button",
+          "disabled": false
+        },
+        {
+          "tag": "BUTTON",
+          "text": "Rechercher",
+          "href": null,
+          "type": "submit",
+          "disabled": false
+        },
+        {
+          "tag": "BUTTON",
+          "text": "Ajouter aux favoris",
+          "href": null,
+          "type": "button",
+          "disabled": false
+        },
+        {
+          "tag": "A",
+          "text": "Offre IDE fictive",
+          "href": "/missions/e_ff595e5a-fb17-4823-b6c4-907c78b3fdbe",
+          "type": null,
+          "disabled": false
+        },
+        {
+          "tag": "A",
+          "text": "Voir l’offre source ↗",
+          "href": "https://example.invalid/offre",
+          "type": null,
+          "disabled": false
+        },
+        {
+          "tag": "A",
+          "text": "Détails de l’annonce",
+          "href": "/missions/e_ff595e5a-fb17-4823-b6c4-907c78b3fdbe",
+          "type": null,
+          "disabled": false
+        },
+        {
+          "tag": "BUTTON",
+          "text": "Ajouter aux favoris",
+          "href": null,
+          "type": "button",
+          "disabled": false
+        },
+        {
+          "tag": "A",
+          "text": "Mission infirmiere FICTIVE b6e0eb8f-693e-4ce3-8163-5828dde5ac4a",
+          "href": "/missions/m_8d11e15a-b280-4082-baf5-4240e23dc69a",
+          "type": null,
+          "disabled": false
+        },
+        {
+          "tag": "A",
+          "text": "Voir la mission",
+          "href": "/missions/m_8d11e15a-b280-4082-baf5-4240e23dc69a",
+          "type": null,
+          "disabled": false
+        },
+        {
+          "tag": "BUTTON",
+          "text": "Ajouter aux favoris",
+          "href": null,
+          "type": "button",
+          "disabled": false
+        },
+        {
+          "tag": "A",
+          "text": "Infirmier Spécialisé en Hémodialyse (H/F)",
+          "href": "/missions/e_0025de76-1999-47d2-a303-135e828a502d",
+          "type": null,
+          "disabled": false
+        },
+        {
+          "tag": "A",
+          "text": "Voir l’offre source ↗",
+          "href": "https://candidat.francetravail.fr/offres/recherche/detail/6593249",
+          "type": null,
+          "disabled": false
+        },
+        {
+          "tag": "A",
+          "text": "Détails de l’annonce",
+          "href": "/missions/e_0025de76-1999-47d2-a303-135e828a502d",
+          "type": null,
+          "disabled": false
+        },
+        {
+          "tag": "BUTTON",
+          "text": "Ajouter aux favoris",
+          "href": null,
+          "type": "button",
+          "disabled": false
+        },
+        {
+          "tag": "A",
+          "text": "Infirmier / Infirmière de soins généraux (H/F)",
+          "href": "/missions/e_023a610e-9795-4901-8c5e-6c914e294d35",
+          "type": null,
+          "disabled": false
+        },
+        {
+          "tag": "A",
+          "text": "Voir l’offre source ↗",
+          "href": "https://candidat.francetravail.fr/offres/recherche/detail/6592954",
+          "type": null,
+          "disabled": false
+        },
+        {
+          "tag": "A",
+          "text": "Détails de l’annonce",
+          "href": "/missions/e_023a610e-9795-4901-8c5e-6c914e294d35",
+          "type": null,
+          "disabled": false
+        },
+        {
+          "tag": "BUTTON",
+          "text": "Ajouter aux favoris",
+          "href": null,
+          "type": "button",
+          "disabled": false
+        },
+        {
+          "tag": "A",
+          "text": "Infirmier / Infirmière de soins généraux (H/F)",
+          "href": "/missions/e_0329a34c-707a-48c7-a791-893df7981c4f",
+          "type": null,
+          "disabled": false
+        },
+        {
+          "tag": "A",
+          "text": "Voir l’offre source ↗",
+          "href": "https://candidat.francetravail.fr/offres/recherche/detail/6592950",
+          "type": null,
+          "disabled": false
+        },
+        {
+          "tag": "A",
+          "text": "Détails de l’annonce",
+          "href": "/missions/e_0329a34c-707a-48c7-a791-893df7981c4f",
+          "type": null,
+          "disabled": false
+        },
+        {
+          "tag": "BUTTON",
+          "text": "Ajouter aux favoris",
+          "href": null,
+          "type": "button",
+          "disabled": false
+        },
+        {
+          "tag": "A",
+          "text": "INFIRMIER DIALYSE (F/H)",
+          "href": "/missions/e_04adeac2-2307-428a-9a17-20058aaa03b4",
+          "type": null,
+          "disabled": false
+        },
+        {
+          "tag": "A",
+          "text": "Voir l’offre source ↗",
+          "href": "https://candidat.francetravail.fr/offres/recherche/detail/6172400",
+          "type": null,
+          "disabled": false
+        },
+        {
+          "tag": "A",
+          "text": "Détails de l’annonce",
+          "href": "/missions/e_04adeac2-2307-428a-9a17-20058aaa03b4",
+          "type": null,
+          "disabled": false
+        },
+        {
+          "tag": "BUTTON",
+          "text": "Ajouter aux favoris",
+          "href": null,
+          "type": "button",
+          "disabled": false
+        },
+        {
+          "tag": "A",
+          "text": "Mission intérim en laboratoire Infirmier D.E H/F : rejoignez Paris Ouest !",
+          "href": "/missions/e_073cae03-5cc1-4803-ac1d-12e53b2b9055",
+          "type": null,
+          "disabled": false
+        },
+        {
+          "tag": "A",
+          "text": "Voir l’offre source ↗",
+          "href": "https://candidat.francetravail.fr/offres/recherche/detail/6801826",
+          "type": null,
+          "disabled": false
+        },
+        {
+          "tag": "A",
+          "text": "Détails de l’annonce",
+          "href": "/missions/e_073cae03-5cc1-4803-ac1d-12e53b2b9055",
+          "type": null,
+          "disabled": false
+        },
+        {
+          "tag": "BUTTON",
+          "text": "Ajouter aux favoris",
+          "href": null,
+          "type": "button",
+          "disabled": false
+        },
+        {
+          "tag": "A",
+          "text": "Infirmier / Infirmière de soins généraux (H/F)",
+          "href": "/missions/e_08abdbcf-c4af-41fb-8d88-f533e2909746",
+          "type": null,
+          "disabled": false
+        },
+        {
+          "tag": "A",
+          "text": "Voir l’offre source ↗",
+          "href": "https://candidat.francetravail.fr/offres/recherche/detail/6593241",
+          "type": null,
+          "disabled": false
+        },
+        {
+          "tag": "A",
+          "text": "Détails de l’annonce",
+          "href": "/missions/e_08abdbcf-c4af-41fb-8d88-f533e2909746",
+          "type": null,
+          "disabled": false
+        },
+        {
+          "tag": "BUTTON",
+          "text": "Ajouter aux favoris",
+          "href": null,
+          "type": "button",
+          "disabled": false
+        },
+        {
+          "tag": "A",
+          "text": "Infirmier D.E H/F",
+          "href": "/missions/e_095c9450-e76f-46e6-8556-1ba283174185",
+          "type": null,
+          "disabled": false
+        },
+        {
+          "tag": "A",
+          "text": "Voir l’offre source ↗",
+          "href": "https://candidat.francetravail.fr/offres/recherche/detail/6829477",
+          "type": null,
+          "disabled": false
+        },
+        {
+          "tag": "A",
+          "text": "Détails de l’annonce",
+          "href": "/missions/e_095c9450-e76f-46e6-8556-1ba283174185",
+          "type": null,
+          "disabled": false
+        },
+        {
+          "tag": "BUTTON",
+          "text": "Ajouter aux favoris",
+          "href": null,
+          "type": "button",
+          "disabled": false
+        },
+        {
+          "tag": "A",
+          "text": "Infirmier H/f Hematologie",
+          "href": "/missions/e_0c3c3264-7486-4395-bc6e-1b40510bbf6f",
+          "type": null,
+          "disabled": false
+        },
+        {
+          "tag": "A",
+          "text": "Voir l’offre source ↗",
+          "href": "https://candidat.francetravail.fr/offres/recherche/detail/3973261",
+          "type": null,
+          "disabled": false
+        },
+        {
+          "tag": "A",
+          "text": "Détails de l’annonce",
+          "href": "/missions/e_0c3c3264-7486-4395-bc6e-1b40510bbf6f",
+          "type": null,
+          "disabled": false
+        },
+        {
+          "tag": "BUTTON",
+          "text": "Ajouter aux favoris",
+          "href": null,
+          "type": "button",
+          "disabled": false
+        },
+        {
+          "tag": "A",
+          "text": "Infirmier / Infirmière de soins généraux (H/F)",
+          "href": "/missions/e_0f0edf77-ae55-47c4-8220-05e2b4411a85",
+          "type": null,
+          "disabled": false
+        },
+        {
+          "tag": "A",
+          "text": "Voir l’offre source ↗",
+          "href": "https://candidat.francetravail.fr/offres/recherche/detail/6592924",
+          "type": null,
+          "disabled": false
+        },
+        {
+          "tag": "A",
+          "text": "Détails de l’annonce",
+          "href": "/missions/e_0f0edf77-ae55-47c4-8220-05e2b4411a85",
+          "type": null,
+          "disabled": false
+        },
+        {
+          "tag": "BUTTON",
+          "text": "Ajouter aux favoris",
+          "href": null,
+          "type": "button",
+          "disabled": false
+        },
+        {
+          "tag": "A",
+          "text": "Infirmier de santé au travail (F/H)",
+          "href": "/missions/e_112f6dfe-eaa0-4a40-a75e-146aed733497",
+          "type": null,
+          "disabled": false
+        },
+        {
+          "tag": "A",
+          "text": "Voir l’offre source ↗",
+          "href": "https://candidat.francetravail.fr/offres/recherche/detail/6534477",
+          "type": null,
+          "disabled": false
+        },
+        {
+          "tag": "A",
+          "text": "Détails de l’annonce",
+          "href": "/missions/e_112f6dfe-eaa0-4a40-a75e-146aed733497",
+          "type": null,
+          "disabled": false
+        },
+        {
+          "tag": "BUTTON",
+          "text": "Ajouter aux favoris",
+          "href": null,
+          "type": "button",
+          "disabled": false
+        },
+        {
+          "tag": "A",
+          "text": "INFIRMIER DE EN SOINS DE SUITE ONCOLOGIE (F/H)",
+          "href": "/missions/e_1238a505-f135-4e04-a6f9-9d772c95ba19",
+          "type": null,
+          "disabled": false
+        },
+        {
+          "tag": "A",
+          "text": "Voir l’offre source ↗",
+          "href": "https://candidat.francetravail.fr/offres/recherche/detail/5344939",
+          "type": null,
+          "disabled": false
+        },
+        {
+          "tag": "A",
+          "text": "Détails de l’annonce",
+          "href": "/missions/e_1238a505-f135-4e04-a6f9-9d772c95ba19",
+          "type": null,
+          "disabled": false
+        },
+        {
+          "tag": "BUTTON",
+          "text": "Ajouter aux favoris",
+          "href": null,
+          "type": "button",
+          "disabled": false
+        },
+        {
+          "tag": "A",
+          "text": "Infirmier / Infirmière de soins généraux (H/F)",
+          "href": "/missions/e_1393ddaf-07e5-482b-9060-9493b353ff0c",
+          "type": null,
+          "disabled": false
+        },
+        {
+          "tag": "A",
+          "text": "Voir l’offre source ↗",
+          "href": "https://candidat.francetravail.fr/offres/recherche/detail/6592867",
+          "type": null,
+          "disabled": false
+        },
+        {
+          "tag": "A",
+          "text": "Détails de l’annonce",
+          "href": "/missions/e_1393ddaf-07e5-482b-9060-9493b353ff0c",
+          "type": null,
+          "disabled": false
+        },
+        {
+          "tag": "BUTTON",
+          "text": "Ajouter aux favoris",
+          "href": null,
+          "type": "button",
+          "disabled": false
+        },
+        {
+          "tag": "A",
+          "text": "Infirmier D.e (h/f) Reanimation Pediatrique",
+          "href": "/missions/e_15a940c1-a68d-4f8c-ab95-9d319050d5f4",
+          "type": null,
+          "disabled": false
+        },
+        {
+          "tag": "A",
+          "text": "Voir l’offre source ↗",
+          "href": "https://candidat.francetravail.fr/offres/recherche/detail/3973590",
+          "type": null,
+          "disabled": false
+        },
+        {
+          "tag": "A",
+          "text": "Détails de l’annonce",
+          "href": "/missions/e_15a940c1-a68d-4f8c-ab95-9d319050d5f4",
+          "type": null,
+          "disabled": false
+        },
+        {
+          "tag": "BUTTON",
+          "text": "Ajouter aux favoris",
+          "href": null,
+          "type": "button",
+          "disabled": false
+        },
+        {
+          "tag": "A",
+          "text": "Infirmier H/F Spécialisez votre pratique au sein d'un service de chirurgie",
+          "href": "/missions/e_17452b47-d940-4fdf-bc0a-cb52e0d179f4",
+          "type": null,
+          "disabled": false
+        },
+        {
+          "tag": "A",
+          "text": "Voir l’offre source ↗",
+          "href": "https://candidat.francetravail.fr/offres/recherche/detail/6850252",
+          "type": null,
+          "disabled": false
+        },
+        {
+          "tag": "A",
+          "text": "Détails de l’annonce",
+          "href": "/missions/e_17452b47-d940-4fdf-bc0a-cb52e0d179f4",
+          "type": null,
+          "disabled": false
+        },
+        {
+          "tag": "BUTTON",
+          "text": "Ajouter aux favoris",
+          "href": null,
+          "type": "button",
+          "disabled": false
+        },
+        {
+          "tag": "A",
+          "text": "Infirmier/Infirmière - USIP / HDJ ONCO - Vacations / Paris 16ème (H/F)",
+          "href": "/missions/e_18ea82dc-0d5d-44cb-8446-b8a1b8588aca",
+          "type": null,
+          "disabled": false
+        },
+        {
+          "tag": "A",
+          "text": "Voir l’offre source ↗",
+          "href": "https://candidat.francetravail.fr/offres/recherche/detail/213MQQB",
+          "type": null,
+          "disabled": false
+        },
+        {
+          "tag": "A",
+          "text": "Détails de l’annonce",
+          "href": "/missions/e_18ea82dc-0d5d-44cb-8446-b8a1b8588aca",
+          "type": null,
+          "disabled": false
+        },
+        {
+          "tag": "BUTTON",
+          "text": "Ajouter aux favoris",
+          "href": null,
+          "type": "button",
+          "disabled": false
+        },
+        {
+          "tag": "A",
+          "text": "INFIRMIER DE EN PSYCHIATRIE (F/H)",
+          "href": "/missions/e_1926610d-96de-4c46-951c-37057b8c3578",
+          "type": null,
+          "disabled": false
+        },
+        {
+          "tag": "A",
+          "text": "Voir l’offre source ↗",
+          "href": "https://candidat.francetravail.fr/offres/recherche/detail/6525086",
+          "type": null,
+          "disabled": false
+        },
+        {
+          "tag": "A",
+          "text": "Détails de l’annonce",
+          "href": "/missions/e_1926610d-96de-4c46-951c-37057b8c3578",
+          "type": null,
+          "disabled": false
+        },
+        {
+          "tag": "BUTTON",
+          "text": "Ajouter aux favoris",
+          "href": null,
+          "type": "button",
+          "disabled": false
+        },
+        {
+          "tag": "A",
+          "text": "Infirmier / Infirmière de soins généraux (H/F)",
+          "href": "/missions/e_1a868607-97f7-4045-96ab-be66c26f01a9",
+          "type": null,
+          "disabled": false
+        },
+        {
+          "tag": "A",
+          "text": "Voir l’offre source ↗",
+          "href": "https://candidat.francetravail.fr/offres/recherche/detail/6744344",
+          "type": null,
+          "disabled": false
+        },
+        {
+          "tag": "A",
+          "text": "Détails de l’annonce",
+          "href": "/missions/e_1a868607-97f7-4045-96ab-be66c26f01a9",
+          "type": null,
+          "disabled": false
+        },
+        {
+          "tag": "BUTTON",
+          "text": "Ajouter aux favoris",
+          "href": null,
+          "type": "button",
+          "disabled": false
+        },
+        {
+          "tag": "A",
+          "text": "Infirmier D.E H/F Rejoignez un SSR dynamique à Paris",
+          "href": "/missions/e_1b219624-ed0f-412a-b947-484a58055a36",
+          "type": null,
+          "disabled": false
+        },
+        {
+          "tag": "A",
+          "text": "Voir l’offre source ↗",
+          "href": "https://candidat.francetravail.fr/offres/recherche/detail/6850711",
+          "type": null,
+          "disabled": false
+        },
+        {
+          "tag": "A",
+          "text": "Détails de l’annonce",
+          "href": "/missions/e_1b219624-ed0f-412a-b947-484a58055a36",
+          "type": null,
+          "disabled": false
+        },
+        {
+          "tag": "BUTTON",
+          "text": "Précédent",
+          "href": null,
+          "type": null,
+          "disabled": true
+        },
+        {
+          "tag": "BUTTON",
+          "text": "Page 1",
+          "href": null,
+          "type": "button",
+          "disabled": false
+        },
+        {
+          "tag": "BUTTON",
+          "text": "Page 2",
+          "href": null,
+          "type": "button",
+          "disabled": false
+        },
+        {
+          "tag": "BUTTON",
+          "text": "Page 3",
+          "href": null,
+          "type": "button",
+          "disabled": false
+        },
+        {
+          "tag": "BUTTON",
+          "text": "Page 4",
+          "href": null,
+          "type": "button",
+          "disabled": false
+        },
+        {
+          "tag": "BUTTON",
+          "text": "Page 9",
+          "href": null,
+          "type": "button",
+          "disabled": false
+        },
+        {
+          "tag": "BUTTON",
+          "text": "Suivant",
+          "href": null,
+          "type": null,
+          "disabled": false
+        },
+        {
+          "tag": "A",
+          "text": "Mentions légales",
+          "href": "/mentions-legales",
+          "type": null,
+          "disabled": false
+        }
+      ]
+    },
+    {
+      "page": "detail",
+      "width": 1440,
+      "controls": [
+        {
+          "tag": "A",
+          "text": "Retour aux missions",
+          "href": "/missions",
+          "type": null,
+          "disabled": false
+        },
+        {
+          "tag": "A",
+          "text": "Voir l’établissement",
+          "href": "/etablissements/852c9032-8c34-4b69-8693-5ff2c8ea7614",
+          "type": null,
+          "disabled": false
+        },
+        {
+          "tag": "BUTTON",
+          "text": "Ajouter l’établissement aux favoris",
+          "href": null,
+          "type": null,
+          "disabled": false
+        },
+        {
+          "tag": "A",
+          "text": "Envoyer ma candidature",
+          "href": "/missions/m_8d11e15a-b280-4082-baf5-4240e23dc69a/candidater",
+          "type": null,
+          "disabled": false
+        },
+        {
+          "tag": "BUTTON",
+          "text": "Enregistrer la mission",
+          "href": null,
+          "type": null,
+          "disabled": false
+        },
+        {
+          "tag": "A",
+          "text": "Mentions légales",
+          "href": "/mentions-legales",
+          "type": null,
+          "disabled": false
+        }
+      ]
+    },
+    {
+      "page": "candidater",
+      "width": 1440,
+      "controls": [
+        {
+          "tag": "A",
+          "text": "Vérifier mon profil",
+          "href": "/profil",
+          "type": null,
+          "disabled": false
+        },
+        {
+          "tag": "A",
+          "text": "Mon dossier professionnel",
+          "href": "/dossier",
+          "type": null,
+          "disabled": false
+        },
+        {
+          "tag": "INPUT",
+          "text": "",
+          "href": null,
+          "type": "checkbox",
+          "disabled": false
+        },
+        {
+          "tag": "A",
+          "text": "Retour",
+          "href": "/missions/m_8d11e15a-b280-4082-baf5-4240e23dc69a",
+          "type": null,
+          "disabled": false
+        },
+        {
+          "tag": "BUTTON",
+          "text": "Confirmer ma candidature",
+          "href": null,
+          "type": null,
+          "disabled": true
+        },
+        {
+          "tag": "A",
+          "text": "Mentions légales",
+          "href": "/mentions-legales",
+          "type": null,
+          "disabled": false
+        }
+      ]
+    },
+    {
+      "page": "candidatures",
+      "width": 1440,
+      "controls": [
+        {
+          "tag": "A",
+          "text": "Rechercher une mission",
+          "href": "/missions",
+          "type": null,
+          "disabled": false
+        },
+        {
+          "tag": "BUTTON",
+          "text": "En cours (0)",
+          "href": null,
+          "type": null,
+          "disabled": false
+        },
+        {
+          "tag": "BUTTON",
+          "text": "Confirmées (1)",
+          "href": null,
+          "type": null,
+          "disabled": false
+        },
+        {
+          "tag": "BUTTON",
+          "text": "Historique (0)",
+          "href": null,
+          "type": null,
+          "disabled": false
+        },
+        {
+          "tag": "A",
+          "text": "Voir les missions",
+          "href": "/missions",
+          "type": null,
+          "disabled": false
+        },
+        {
+          "tag": "A",
+          "text": "Mentions légales",
+          "href": "/mentions-legales",
+          "type": null,
+          "disabled": false
+        }
+      ]
+    },
+    {
+      "page": "suivi",
+      "width": 1440,
+      "controls": [
+        {
+          "tag": "A",
+          "text": "← Retour aux candidatures",
+          "href": "/candidatures",
+          "type": null,
+          "disabled": false
+        },
+        {
+          "tag": "BUTTON",
+          "text": "Voir la confirmation",
+          "href": null,
+          "type": null,
+          "disabled": false
+        },
+        {
+          "tag": "A",
+          "text": "Voir la mission",
+          "href": "/missions/m_26c1107b-9415-485b-bac4-b5d4299d3954",
+          "type": null,
+          "disabled": false
+        },
+        {
+          "tag": "A",
+          "text": "Mentions légales",
+          "href": "/mentions-legales",
+          "type": null,
+          "disabled": false
+        }
+      ]
+    },
+    {
+      "page": "calendrier",
+      "width": 1440,
+      "controls": [
+        {
+          "tag": "BUTTON",
+          "text": "+ Ajouter une période",
+          "href": null,
+          "type": null,
+          "disabled": false
+        },
+        {
+          "tag": "A",
+          "text": "Disponibilités",
+          "href": "/calendrier",
+          "type": null,
+          "disabled": false
+        },
+        {
+          "tag": "A",
+          "text": "Historique des missions",
+          "href": "/historique",
+          "type": null,
+          "disabled": false
+        },
+        {
+          "tag": "BUTTON",
+          "text": "Semaine précédente",
+          "href": null,
+          "type": null,
+          "disabled": false
+        },
+        {
+          "tag": "BUTTON",
+          "text": "Semaine suivante",
+          "href": null,
+          "type": null,
+          "disabled": false
+        },
+        {
+          "tag": "BUTTON",
+          "text": "Aujourd’hui",
+          "href": null,
+          "type": null,
+          "disabled": false
+        },
+        {
+          "tag": "SELECT",
+          "text": "Semaine\nMois",
+          "href": null,
+          "type": null,
+          "disabled": false
+        },
+        {
+          "tag": "INPUT",
+          "text": "",
+          "href": null,
+          "type": "date",
+          "disabled": false
+        },
+        {
+          "tag": "INPUT",
+          "text": "disponibilite",
+          "href": null,
+          "type": "radio",
+          "disabled": false
+        },
+        {
+          "tag": "INPUT",
+          "text": "disponibilite",
+          "href": null,
+          "type": "radio",
+          "disabled": false
+        },
+        {
+          "tag": "INPUT",
+          "text": "",
+          "href": null,
+          "type": "date",
+          "disabled": false
+        },
+        {
+          "tag": "INPUT",
+          "text": "",
+          "href": null,
+          "type": "date",
+          "disabled": false
+        },
+        {
+          "tag": "BUTTON",
+          "text": "Enregistrer",
+          "href": null,
+          "type": "submit",
+          "disabled": false
+        },
+        {
+          "tag": "BUTTON",
+          "text": "Modifier 01/01/2030 01:00:00 → 01/02/2030 01:00:00",
+          "href": null,
+          "type": null,
+          "disabled": false
+        },
+        {
+          "tag": "BUTTON",
+          "text": "Supprimer 01/01/2030 01:00:00 → 01/02/2030 01:00:00",
+          "href": null,
+          "type": null,
+          "disabled": false
+        },
+        {
+          "tag": "INPUT",
+          "text": "",
+          "href": null,
+          "type": null,
+          "disabled": false
+        },
+        {
+          "tag": "INPUT",
+          "text": "",
+          "href": null,
+          "type": "number",
+          "disabled": false
+        },
+        {
+          "tag": "BUTTON",
+          "text": "Enregistrer ma mobilité",
+          "href": null,
+          "type": "submit",
+          "disabled": false
+        },
+        {
+          "tag": "SELECT",
+          "text": "Non renseigné\nVéhicule personnel\nTransports en commun\nDeux-roues",
+          "href": null,
+          "type": null,
+          "disabled": false
+        },
+        {
+          "tag": "BUTTON",
+          "text": "Utiliser ma position",
+          "href": null,
+          "type": "button",
+          "disabled": false
+        },
+        {
+          "tag": "INPUT",
+          "text": "",
+          "href": null,
+          "type": "number",
+          "disabled": false
+        },
+        {
+          "tag": "INPUT",
+          "text": "",
+          "href": null,
+          "type": "number",
+          "disabled": false
+        },
+        {
+          "tag": "A",
+          "text": "Retour à mon profil",
+          "href": "/profil",
+          "type": null,
+          "disabled": false
+        },
+        {
+          "tag": "A",
+          "text": "Mentions légales",
+          "href": "/mentions-legales",
+          "type": null,
+          "disabled": false
+        }
+      ]
+    },
+    {
+      "page": "profil",
+      "width": 1440,
+      "controls": [
+        {
+          "tag": "BUTTON",
+          "text": "Enregistrer les modifications",
+          "href": null,
+          "type": "submit",
+          "disabled": false
+        },
+        {
+          "tag": "INPUT",
+          "text": "",
+          "href": null,
+          "type": null,
+          "disabled": false
+        },
+        {
+          "tag": "INPUT",
+          "text": "",
+          "href": null,
+          "type": null,
+          "disabled": false
+        },
+        {
+          "tag": "INPUT",
+          "text": "",
+          "href": null,
+          "type": "email",
+          "disabled": false
+        },
+        {
+          "tag": "INPUT",
+          "text": "",
+          "href": null,
+          "type": null,
+          "disabled": false
+        },
+        {
+          "tag": "INPUT",
+          "text": "",
+          "href": null,
+          "type": "tel",
+          "disabled": false
+        },
+        {
+          "tag": "INPUT",
+          "text": "",
+          "href": null,
+          "type": "date",
+          "disabled": false
+        },
+        {
+          "tag": "INPUT",
+          "text": "",
+          "href": null,
+          "type": null,
+          "disabled": false
+        },
+        {
+          "tag": "INPUT",
+          "text": "",
+          "href": null,
+          "type": null,
+          "disabled": false
+        },
+        {
+          "tag": "INPUT",
+          "text": "",
+          "href": null,
+          "type": "checkbox",
+          "disabled": false
+        },
+        {
+          "tag": "INPUT",
+          "text": "",
+          "href": null,
+          "type": "checkbox",
+          "disabled": false
+        },
+        {
+          "tag": "INPUT",
+          "text": "",
+          "href": null,
+          "type": "checkbox",
+          "disabled": false
+        },
+        {
+          "tag": "INPUT",
+          "text": "",
+          "href": null,
+          "type": "number",
+          "disabled": false
+        },
+        {
+          "tag": "INPUT",
+          "text": "",
+          "href": null,
+          "type": "number",
+          "disabled": false
+        },
+        {
+          "tag": "BUTTON",
+          "text": "Retirer l’expérience 1",
+          "href": null,
+          "type": "button",
+          "disabled": false
+        },
+        {
+          "tag": "INPUT",
+          "text": "",
+          "href": null,
+          "type": null,
+          "disabled": false
+        },
+        {
+          "tag": "SELECT",
+          "text": "Sélectionner un service\nCardiologie\nPneumologie\nNeurologie\nGastro enterologie\nNephrologie\nEndocrinologie\nInfectiologie\nDermatologie\nRhumatologie\nChirurgie\nUrgences\nReanimation\nSoins intensifs\nSurveillance en salle de réveil\nPediatrie\nNeonatologie\nGynecologie\nMaternite\nOncologie\nHematologie\nDialyse\nPsychiatrie\nPedopsychiatrie\nAddictologie\nGeriatrie\nSoins longue duree\nEhpad\nSmr\nSoins palliatifs\nDouleur\nConsultations\nHopital jour\nChirurgie ambulatoire\nEndoscopie\nExplorations\nInterventionnel\nMas\nFam\nHad\nDomicile salarie\nSante travail\nPrevention\nCentre sante\nSuppleance\nAutre",
+          "href": null,
+          "type": null,
+          "disabled": false
+        },
+        {
+          "tag": "INPUT",
+          "text": "",
+          "href": null,
+          "type": "date",
+          "disabled": false
+        },
+        {
+          "tag": "INPUT",
+          "text": "",
+          "href": null,
+          "type": "date",
+          "disabled": false
+        },
+        {
+          "tag": "BUTTON",
+          "text": "+ Ajouter une expérience",
+          "href": null,
+          "type": "button",
+          "disabled": false
+        },
+        {
+          "tag": "SELECT",
+          "text": "Non renseignée\nAdulte\nPédiatrique\nAdulte et pédiatrique",
+          "href": null,
+          "type": null,
+          "disabled": false
+        },
+        {
+          "tag": "INPUT",
+          "text": "",
+          "href": null,
+          "type": "checkbox",
+          "disabled": false
+        },
+        {
+          "tag": "INPUT",
+          "text": "",
+          "href": null,
+          "type": "checkbox",
+          "disabled": false
+        },
+        {
+          "tag": "INPUT",
+          "text": "",
+          "href": null,
+          "type": "checkbox",
+          "disabled": false
+        },
+        {
+          "tag": "INPUT",
+          "text": "",
+          "href": null,
+          "type": "checkbox",
+          "disabled": false
+        },
+        {
+          "tag": "INPUT",
+          "text": "",
+          "href": null,
+          "type": "checkbox",
+          "disabled": false
+        },
+        {
+          "tag": "INPUT",
+          "text": "",
+          "href": null,
+          "type": "checkbox",
+          "disabled": false
+        },
+        {
+          "tag": "INPUT",
+          "text": "",
+          "href": null,
+          "type": "checkbox",
+          "disabled": false
+        },
+        {
+          "tag": "INPUT",
+          "text": "",
+          "href": null,
+          "type": "checkbox",
+          "disabled": false
+        },
+        {
+          "tag": "INPUT",
+          "text": "",
+          "href": null,
+          "type": "checkbox",
+          "disabled": false
+        },
+        {
+          "tag": "INPUT",
+          "text": "",
+          "href": null,
+          "type": "checkbox",
+          "disabled": false
+        },
+        {
+          "tag": "INPUT",
+          "text": "",
+          "href": null,
+          "type": "checkbox",
+          "disabled": false
+        },
+        {
+          "tag": "INPUT",
+          "text": "",
+          "href": null,
+          "type": "checkbox",
+          "disabled": false
+        },
+        {
+          "tag": "INPUT",
+          "text": "",
+          "href": null,
+          "type": "checkbox",
+          "disabled": false
+        },
+        {
+          "tag": "INPUT",
+          "text": "",
+          "href": null,
+          "type": "checkbox",
+          "disabled": false
+        },
+        {
+          "tag": "INPUT",
+          "text": "",
+          "href": null,
+          "type": "checkbox",
+          "disabled": false
+        },
+        {
+          "tag": "INPUT",
+          "text": "",
+          "href": null,
+          "type": "checkbox",
+          "disabled": false
+        },
+        {
+          "tag": "INPUT",
+          "text": "",
+          "href": null,
+          "type": "checkbox",
+          "disabled": false
+        },
+        {
+          "tag": "INPUT",
+          "text": "",
+          "href": null,
+          "type": "checkbox",
+          "disabled": false
+        },
+        {
+          "tag": "INPUT",
+          "text": "",
+          "href": null,
+          "type": "checkbox",
+          "disabled": false
+        },
+        {
+          "tag": "INPUT",
+          "text": "",
+          "href": null,
+          "type": "checkbox",
+          "disabled": false
+        },
+        {
+          "tag": "INPUT",
+          "text": "",
+          "href": null,
+          "type": "checkbox",
+          "disabled": false
+        },
+        {
+          "tag": "INPUT",
+          "text": "",
+          "href": null,
+          "type": "checkbox",
+          "disabled": false
+        },
+        {
+          "tag": "INPUT",
+          "text": "",
+          "href": null,
+          "type": "checkbox",
+          "disabled": false
+        },
+        {
+          "tag": "INPUT",
+          "text": "",
+          "href": null,
+          "type": "checkbox",
+          "disabled": false
+        },
+        {
+          "tag": "INPUT",
+          "text": "",
+          "href": null,
+          "type": "checkbox",
+          "disabled": false
+        },
+        {
+          "tag": "INPUT",
+          "text": "horaires-acceptes",
+          "href": null,
+          "type": "radio",
+          "disabled": false
+        },
+        {
+          "tag": "INPUT",
+          "text": "horaires-acceptes",
+          "href": null,
+          "type": "radio",
+          "disabled": false
+        },
+        {
+          "tag": "INPUT",
+          "text": "horaires-acceptes",
+          "href": null,
+          "type": "radio",
+          "disabled": false
+        },
+        {
+          "tag": "INPUT",
+          "text": "",
+          "href": null,
+          "type": "checkbox",
+          "disabled": false
+        },
+        {
+          "tag": "A",
+          "text": "Gérer mon planning",
+          "href": "/calendrier",
+          "type": null,
+          "disabled": false
+        },
+        {
+          "tag": "A",
+          "text": "Modifier",
+          "href": "/dossier#coordonnees-bancaires",
+          "type": null,
+          "disabled": false
+        },
+        {
+          "tag": "BUTTON",
+          "text": "Enregistrer les modifications",
+          "href": null,
+          "type": "submit",
+          "disabled": false
+        },
+        {
+          "tag": "A",
+          "text": "Mentions légales",
+          "href": "/mentions-legales",
+          "type": null,
+          "disabled": false
+        }
+      ]
+    },
+    {
+      "page": "dossier",
+      "width": 1440,
+      "controls": [
+        {
+          "tag": "INPUT",
+          "text": "",
+          "href": null,
+          "type": null,
+          "disabled": false
+        },
+        {
+          "tag": "BUTTON",
+          "text": "Vérifier mon numéro",
+          "href": null,
+          "type": "submit",
+          "disabled": false
+        },
+        {
+          "tag": "A",
+          "text": "Modifier mon profil →",
+          "href": "/profil",
+          "type": null,
+          "disabled": false
+        },
+        {
+          "tag": "INPUT",
+          "text": "",
+          "href": null,
+          "type": null,
+          "disabled": false
+        },
+        {
+          "tag": "INPUT",
+          "text": "",
+          "href": null,
+          "type": null,
+          "disabled": false
+        },
+        {
+          "tag": "INPUT",
+          "text": "",
+          "href": null,
+          "type": null,
+          "disabled": false
+        },
+        {
+          "tag": "INPUT",
+          "text": "",
+          "href": null,
+          "type": "email",
+          "disabled": false
+        },
+        {
+          "tag": "BUTTON",
+          "text": "Enregistrer la référence",
+          "href": null,
+          "type": "submit",
+          "disabled": false
+        },
+        {
+          "tag": "INPUT",
+          "text": "Document fictif",
+          "href": null,
+          "type": "file",
+          "disabled": false
+        },
+        {
+          "tag": "INPUT",
+          "text": "",
+          "href": null,
+          "type": "checkbox",
+          "disabled": false
+        },
+        {
+          "tag": "BUTTON",
+          "text": "Enregistrer le document",
+          "href": null,
+          "type": "submit",
+          "disabled": true
+        },
+        {
+          "tag": "BUTTON",
+          "text": "Télécharger",
+          "href": null,
+          "type": null,
+          "disabled": false
+        },
+        {
+          "tag": "INPUT",
+          "text": "",
+          "href": null,
+          "type": null,
+          "disabled": false
+        },
+        {
+          "tag": "BUTTON",
+          "text": "Enregistrer le RIB fictif",
+          "href": null,
+          "type": "submit",
+          "disabled": false
+        },
+        {
+          "tag": "A",
+          "text": "Retour à mon profil",
+          "href": "/profil",
+          "type": null,
+          "disabled": false
+        },
+        {
+          "tag": "A",
+          "text": "Mentions légales",
+          "href": "/mentions-legales",
+          "type": null,
+          "disabled": false
+        }
+      ]
+    },
+    {
+      "page": "favoris",
+      "width": 1440,
+      "controls": [
+        {
+          "tag": "A",
+          "text": "Pour vous",
+          "href": "/missions",
+          "type": null,
+          "disabled": false
+        },
+        {
+          "tag": "A",
+          "text": "Favoris",
+          "href": "/favoris",
+          "type": null,
+          "disabled": false
+        },
+        {
+          "tag": "A",
+          "text": "Rechercher une mission",
+          "href": "/missions",
+          "type": null,
+          "disabled": false
+        },
+        {
+          "tag": "A",
+          "text": "Rechercher une mission",
+          "href": "/missions",
+          "type": null,
+          "disabled": false
+        },
+        {
+          "tag": "A",
+          "text": "Mentions légales",
+          "href": "/mentions-legales",
+          "type": null,
+          "disabled": false
+        }
+      ]
+    },
+    {
+      "page": "historique",
+      "width": 1440,
+      "controls": [
+        {
+          "tag": "A",
+          "text": "Disponibilités",
+          "href": "/calendrier",
+          "type": null,
+          "disabled": false
+        },
+        {
+          "tag": "A",
+          "text": "Historique des missions",
+          "href": "/historique",
+          "type": null,
+          "disabled": false
+        },
+        {
+          "tag": "SELECT",
+          "text": "Toutes les périodes\njanvier 2030",
+          "href": null,
+          "type": null,
+          "disabled": false
+        },
+        {
+          "tag": "SELECT",
+          "text": "Tous les statuts\nÀ venir\nEn cours\nPassée\nAnnulée",
+          "href": null,
+          "type": null,
+          "disabled": false
+        },
+        {
+          "tag": "BUTTON",
+          "text": "Voir",
+          "href": null,
+          "type": null,
+          "disabled": false
+        },
+        {
+          "tag": "A",
+          "text": "Mentions légales",
+          "href": "/mentions-legales",
+          "type": null,
+          "disabled": false
+        }
+      ]
+    },
+    {
+      "page": "etablissement",
+      "width": 1440,
+      "controls": [
+        {
+          "tag": "A",
+          "text": "← Retour aux missions",
+          "href": "/missions",
+          "type": null,
+          "disabled": false
+        },
+        {
+          "tag": "BUTTON",
+          "text": "Ajouter aux favoris",
+          "href": null,
+          "type": null,
+          "disabled": false
+        },
+        {
+          "tag": "BUTTON",
+          "text": "Ajouter aux favoris",
+          "href": null,
+          "type": "button",
+          "disabled": false
+        },
+        {
+          "tag": "A",
+          "text": "Mission infirmiere FICTIVE b6e0eb8f-693e-4ce3-8163-5828dde5ac4a",
+          "href": "/missions/m_8d11e15a-b280-4082-baf5-4240e23dc69a",
+          "type": null,
+          "disabled": false
+        },
+        {
+          "tag": "A",
+          "text": "Voir la mission",
+          "href": "/missions/m_8d11e15a-b280-4082-baf5-4240e23dc69a",
+          "type": null,
+          "disabled": false
+        },
+        {
+          "tag": "A",
+          "text": "Mentions légales",
+          "href": "/mentions-legales",
+          "type": null,
+          "disabled": false
+        }
+      ]
+    },
+    {
+      "page": "dashboard",
+      "width": 375,
+      "controls": [
+        {
+          "tag": "A",
+          "text": "0\ncandidatures en cours",
+          "href": "/candidatures",
+          "type": null,
+          "disabled": false
+        },
+        {
+          "tag": "A",
+          "text": "1\nmissions à venir ou en cours",
+          "href": "/historique",
+          "type": null,
+          "disabled": false
+        },
+        {
+          "tag": "A",
+          "text": "0\nfavoris enregistrés",
+          "href": "/favoris",
+          "type": null,
+          "disabled": false
+        },
+        {
+          "tag": "A",
+          "text": "Voir la mission",
+          "href": "/missions/m_26c1107b-9415-485b-bac4-b5d4299d3954",
+          "type": null,
+          "disabled": false
+        },
+        {
+          "tag": "BUTTON",
+          "text": "Voir la confirmation",
+          "href": null,
+          "type": null,
+          "disabled": false
+        },
+        {
+          "tag": "A",
+          "text": "Toutes les missions →",
+          "href": "/missions",
+          "type": null,
+          "disabled": false
+        },
+        {
+          "tag": "A",
+          "text": "Voir",
+          "href": "/missions/e_ff595e5a-fb17-4823-b6c4-907c78b3fdbe",
+          "type": null,
+          "disabled": false
+        },
+        {
+          "tag": "BUTTON",
+          "text": "Ajouter Offre IDE fictive aux favoris",
+          "href": null,
+          "type": null,
+          "disabled": false
+        },
+        {
+          "tag": "A",
+          "text": "Voir",
+          "href": "/missions/m_8d11e15a-b280-4082-baf5-4240e23dc69a",
+          "type": null,
+          "disabled": false
+        },
+        {
+          "tag": "BUTTON",
+          "text": "Ajouter Mission infirmiere FICTIVE b6e0eb8f-693e-4ce3-8163-5828dde5ac4a aux favoris",
+          "href": null,
+          "type": null,
+          "disabled": false
+        },
+        {
+          "tag": "A",
+          "text": "Voir",
+          "href": "/missions/e_0025de76-1999-47d2-a303-135e828a502d",
+          "type": null,
+          "disabled": false
+        },
+        {
+          "tag": "BUTTON",
+          "text": "Ajouter Infirmier Spécialisé en Hémodialyse (H/F) aux favoris",
+          "href": null,
+          "type": null,
+          "disabled": false
+        },
+        {
+          "tag": "A",
+          "text": "Mettre à jour",
+          "href": "/calendrier",
+          "type": null,
+          "disabled": false
+        },
+        {
+          "tag": "A",
+          "text": "Voir mes confirmations",
+          "href": "/historique",
+          "type": null,
+          "disabled": false
+        },
+        {
+          "tag": "BUTTON",
+          "text": "Marquer comme lue",
+          "href": null,
+          "type": null,
+          "disabled": false
+        },
+        {
+          "tag": "A",
+          "text": "Ouvrir mon dossier →",
+          "href": "/dossier",
+          "type": null,
+          "disabled": false
+        },
+        {
+          "tag": "A",
+          "text": "Mentions légales",
+          "href": "/mentions-legales",
+          "type": null,
+          "disabled": false
+        }
+      ]
+    },
+    {
+      "page": "missions",
+      "width": 375,
+      "controls": [
+        {
+          "tag": "A",
+          "text": "Mon profil IDE · IADE",
+          "href": "/profil",
+          "type": null,
+          "disabled": false
+        },
+        {
+          "tag": "A",
+          "text": "Pour vous",
+          "href": "/missions",
+          "type": null,
+          "disabled": false
+        },
+        {
+          "tag": "A",
+          "text": "Favoris",
+          "href": "/favoris",
+          "type": null,
+          "disabled": false
+        },
+        {
+          "tag": "BUTTON",
+          "text": "Toutes les offres",
+          "href": null,
+          "type": "button",
+          "disabled": false
+        },
+        {
+          "tag": "BUTTON",
+          "text": "Recommandées pour moi",
+          "href": null,
+          "type": "button",
+          "disabled": false
+        },
+        {
+          "tag": "INPUT",
+          "text": "",
+          "href": null,
+          "type": "search",
+          "disabled": false
+        },
+        {
+          "tag": "SELECT",
+          "text": "Toutes mes qualifications\nIDE\nIADE",
+          "href": null,
+          "type": null,
+          "disabled": false
+        },
+        {
+          "tag": "SELECT",
+          "text": "Toutes les distances\n10 km\n25 km\n50 km\n100 km\n200 km",
+          "href": null,
+          "type": null,
+          "disabled": false
+        },
+        {
+          "tag": "SELECT",
+          "text": "Tous les services\nCardiologie\nPneumologie\nNeurologie\nGastro enterologie\nNephrologie\nEndocrinologie\nInfectiologie\nDermatologie\nRhumatologie\nChirurgie\nUrgences\nReanimation\nSoins intensifs\nSurveillance en salle de réveil\nPediatrie\nNeonatologie\nGynecologie\nMaternite\nOncologie\nHematologie\nDialyse\nPsychiatrie\nPedopsychiatrie\nAddictologie\nGeriatrie\nSoins longue duree\nEhpad\nSmr\nSoins palliatifs\nDouleur\nConsultations\nHopital jour\nChirurgie ambulatoire\nEndoscopie\nExplorations\nInterventionnel\nMas\nFam\nHad\nDomicile salarie\nSante travail\nPrevention\nCentre sante\nSuppleance\nAutre",
+          "href": null,
+          "type": null,
+          "disabled": false
+        },
+        {
+          "tag": "SELECT",
+          "text": "Toutes les populations\nAdultes\nPédiatrie\nAdultes et pédiatrie",
+          "href": null,
+          "type": null,
+          "disabled": false
+        },
+        {
+          "tag": "SELECT",
+          "text": "Tous les blocs\nPolyvalent\nSpécialisé",
+          "href": null,
+          "type": null,
+          "disabled": false
+        },
+        {
+          "tag": "INPUT",
+          "text": "",
+          "href": null,
+          "type": "date",
+          "disabled": false
+        },
+        {
+          "tag": "INPUT",
+          "text": "",
+          "href": null,
+          "type": "date",
+          "disabled": false
+        },
+        {
+          "tag": "SELECT",
+          "text": "Tous les horaires\nJour\nNuit\nAlternance jour et nuit",
+          "href": null,
+          "type": null,
+          "disabled": false
+        },
+        {
+          "tag": "SELECT",
+          "text": "Tous les établissements\nFICTIF ESTABLISHMENT",
+          "href": null,
+          "type": null,
+          "disabled": false
+        },
+        {
+          "tag": "BUTTON",
+          "text": "Réinitialiser",
+          "href": null,
+          "type": "button",
+          "disabled": false
+        },
+        {
+          "tag": "BUTTON",
+          "text": "Rechercher",
+          "href": null,
+          "type": "submit",
+          "disabled": false
+        },
+        {
+          "tag": "BUTTON",
+          "text": "Ajouter aux favoris",
+          "href": null,
+          "type": "button",
+          "disabled": false
+        },
+        {
+          "tag": "A",
+          "text": "Offre IDE fictive",
+          "href": "/missions/e_ff595e5a-fb17-4823-b6c4-907c78b3fdbe",
+          "type": null,
+          "disabled": false
+        },
+        {
+          "tag": "A",
+          "text": "Voir l’offre source ↗",
+          "href": "https://example.invalid/offre",
+          "type": null,
+          "disabled": false
+        },
+        {
+          "tag": "A",
+          "text": "Détails de l’annonce",
+          "href": "/missions/e_ff595e5a-fb17-4823-b6c4-907c78b3fdbe",
+          "type": null,
+          "disabled": false
+        },
+        {
+          "tag": "BUTTON",
+          "text": "Ajouter aux favoris",
+          "href": null,
+          "type": "button",
+          "disabled": false
+        },
+        {
+          "tag": "A",
+          "text": "Mission infirmiere FICTIVE b6e0eb8f-693e-4ce3-8163-5828dde5ac4a",
+          "href": "/missions/m_8d11e15a-b280-4082-baf5-4240e23dc69a",
+          "type": null,
+          "disabled": false
+        },
+        {
+          "tag": "A",
+          "text": "Voir la mission",
+          "href": "/missions/m_8d11e15a-b280-4082-baf5-4240e23dc69a",
+          "type": null,
+          "disabled": false
+        },
+        {
+          "tag": "BUTTON",
+          "text": "Ajouter aux favoris",
+          "href": null,
+          "type": "button",
+          "disabled": false
+        },
+        {
+          "tag": "A",
+          "text": "Infirmier Spécialisé en Hémodialyse (H/F)",
+          "href": "/missions/e_0025de76-1999-47d2-a303-135e828a502d",
+          "type": null,
+          "disabled": false
+        },
+        {
+          "tag": "A",
+          "text": "Voir l’offre source ↗",
+          "href": "https://candidat.francetravail.fr/offres/recherche/detail/6593249",
+          "type": null,
+          "disabled": false
+        },
+        {
+          "tag": "A",
+          "text": "Détails de l’annonce",
+          "href": "/missions/e_0025de76-1999-47d2-a303-135e828a502d",
+          "type": null,
+          "disabled": false
+        },
+        {
+          "tag": "BUTTON",
+          "text": "Ajouter aux favoris",
+          "href": null,
+          "type": "button",
+          "disabled": false
+        },
+        {
+          "tag": "A",
+          "text": "Infirmier / Infirmière de soins généraux (H/F)",
+          "href": "/missions/e_023a610e-9795-4901-8c5e-6c914e294d35",
+          "type": null,
+          "disabled": false
+        },
+        {
+          "tag": "A",
+          "text": "Voir l’offre source ↗",
+          "href": "https://candidat.francetravail.fr/offres/recherche/detail/6592954",
+          "type": null,
+          "disabled": false
+        },
+        {
+          "tag": "A",
+          "text": "Détails de l’annonce",
+          "href": "/missions/e_023a610e-9795-4901-8c5e-6c914e294d35",
+          "type": null,
+          "disabled": false
+        },
+        {
+          "tag": "BUTTON",
+          "text": "Ajouter aux favoris",
+          "href": null,
+          "type": "button",
+          "disabled": false
+        },
+        {
+          "tag": "A",
+          "text": "Infirmier / Infirmière de soins généraux (H/F)",
+          "href": "/missions/e_0329a34c-707a-48c7-a791-893df7981c4f",
+          "type": null,
+          "disabled": false
+        },
+        {
+          "tag": "A",
+          "text": "Voir l’offre source ↗",
+          "href": "https://candidat.francetravail.fr/offres/recherche/detail/6592950",
+          "type": null,
+          "disabled": false
+        },
+        {
+          "tag": "A",
+          "text": "Détails de l’annonce",
+          "href": "/missions/e_0329a34c-707a-48c7-a791-893df7981c4f",
+          "type": null,
+          "disabled": false
+        },
+        {
+          "tag": "BUTTON",
+          "text": "Ajouter aux favoris",
+          "href": null,
+          "type": "button",
+          "disabled": false
+        },
+        {
+          "tag": "A",
+          "text": "INFIRMIER DIALYSE (F/H)",
+          "href": "/missions/e_04adeac2-2307-428a-9a17-20058aaa03b4",
+          "type": null,
+          "disabled": false
+        },
+        {
+          "tag": "A",
+          "text": "Voir l’offre source ↗",
+          "href": "https://candidat.francetravail.fr/offres/recherche/detail/6172400",
+          "type": null,
+          "disabled": false
+        },
+        {
+          "tag": "A",
+          "text": "Détails de l’annonce",
+          "href": "/missions/e_04adeac2-2307-428a-9a17-20058aaa03b4",
+          "type": null,
+          "disabled": false
+        },
+        {
+          "tag": "BUTTON",
+          "text": "Ajouter aux favoris",
+          "href": null,
+          "type": "button",
+          "disabled": false
+        },
+        {
+          "tag": "A",
+          "text": "Mission intérim en laboratoire Infirmier D.E H/F : rejoignez Paris Ouest !",
+          "href": "/missions/e_073cae03-5cc1-4803-ac1d-12e53b2b9055",
+          "type": null,
+          "disabled": false
+        },
+        {
+          "tag": "A",
+          "text": "Voir l’offre source ↗",
+          "href": "https://candidat.francetravail.fr/offres/recherche/detail/6801826",
+          "type": null,
+          "disabled": false
+        },
+        {
+          "tag": "A",
+          "text": "Détails de l’annonce",
+          "href": "/missions/e_073cae03-5cc1-4803-ac1d-12e53b2b9055",
+          "type": null,
+          "disabled": false
+        },
+        {
+          "tag": "BUTTON",
+          "text": "Ajouter aux favoris",
+          "href": null,
+          "type": "button",
+          "disabled": false
+        },
+        {
+          "tag": "A",
+          "text": "Infirmier / Infirmière de soins généraux (H/F)",
+          "href": "/missions/e_08abdbcf-c4af-41fb-8d88-f533e2909746",
+          "type": null,
+          "disabled": false
+        },
+        {
+          "tag": "A",
+          "text": "Voir l’offre source ↗",
+          "href": "https://candidat.francetravail.fr/offres/recherche/detail/6593241",
+          "type": null,
+          "disabled": false
+        },
+        {
+          "tag": "A",
+          "text": "Détails de l’annonce",
+          "href": "/missions/e_08abdbcf-c4af-41fb-8d88-f533e2909746",
+          "type": null,
+          "disabled": false
+        },
+        {
+          "tag": "BUTTON",
+          "text": "Ajouter aux favoris",
+          "href": null,
+          "type": "button",
+          "disabled": false
+        },
+        {
+          "tag": "A",
+          "text": "Infirmier D.E H/F",
+          "href": "/missions/e_095c9450-e76f-46e6-8556-1ba283174185",
+          "type": null,
+          "disabled": false
+        },
+        {
+          "tag": "A",
+          "text": "Voir l’offre source ↗",
+          "href": "https://candidat.francetravail.fr/offres/recherche/detail/6829477",
+          "type": null,
+          "disabled": false
+        },
+        {
+          "tag": "A",
+          "text": "Détails de l’annonce",
+          "href": "/missions/e_095c9450-e76f-46e6-8556-1ba283174185",
+          "type": null,
+          "disabled": false
+        },
+        {
+          "tag": "BUTTON",
+          "text": "Ajouter aux favoris",
+          "href": null,
+          "type": "button",
+          "disabled": false
+        },
+        {
+          "tag": "A",
+          "text": "Infirmier H/f Hematologie",
+          "href": "/missions/e_0c3c3264-7486-4395-bc6e-1b40510bbf6f",
+          "type": null,
+          "disabled": false
+        },
+        {
+          "tag": "A",
+          "text": "Voir l’offre source ↗",
+          "href": "https://candidat.francetravail.fr/offres/recherche/detail/3973261",
+          "type": null,
+          "disabled": false
+        },
+        {
+          "tag": "A",
+          "text": "Détails de l’annonce",
+          "href": "/missions/e_0c3c3264-7486-4395-bc6e-1b40510bbf6f",
+          "type": null,
+          "disabled": false
+        },
+        {
+          "tag": "BUTTON",
+          "text": "Ajouter aux favoris",
+          "href": null,
+          "type": "button",
+          "disabled": false
+        },
+        {
+          "tag": "A",
+          "text": "Infirmier / Infirmière de soins généraux (H/F)",
+          "href": "/missions/e_0f0edf77-ae55-47c4-8220-05e2b4411a85",
+          "type": null,
+          "disabled": false
+        },
+        {
+          "tag": "A",
+          "text": "Voir l’offre source ↗",
+          "href": "https://candidat.francetravail.fr/offres/recherche/detail/6592924",
+          "type": null,
+          "disabled": false
+        },
+        {
+          "tag": "A",
+          "text": "Détails de l’annonce",
+          "href": "/missions/e_0f0edf77-ae55-47c4-8220-05e2b4411a85",
+          "type": null,
+          "disabled": false
+        },
+        {
+          "tag": "BUTTON",
+          "text": "Ajouter aux favoris",
+          "href": null,
+          "type": "button",
+          "disabled": false
+        },
+        {
+          "tag": "A",
+          "text": "Infirmier de santé au travail (F/H)",
+          "href": "/missions/e_112f6dfe-eaa0-4a40-a75e-146aed733497",
+          "type": null,
+          "disabled": false
+        },
+        {
+          "tag": "A",
+          "text": "Voir l’offre source ↗",
+          "href": "https://candidat.francetravail.fr/offres/recherche/detail/6534477",
+          "type": null,
+          "disabled": false
+        },
+        {
+          "tag": "A",
+          "text": "Détails de l’annonce",
+          "href": "/missions/e_112f6dfe-eaa0-4a40-a75e-146aed733497",
+          "type": null,
+          "disabled": false
+        },
+        {
+          "tag": "BUTTON",
+          "text": "Ajouter aux favoris",
+          "href": null,
+          "type": "button",
+          "disabled": false
+        },
+        {
+          "tag": "A",
+          "text": "INFIRMIER DE EN SOINS DE SUITE ONCOLOGIE (F/H)",
+          "href": "/missions/e_1238a505-f135-4e04-a6f9-9d772c95ba19",
+          "type": null,
+          "disabled": false
+        },
+        {
+          "tag": "A",
+          "text": "Voir l’offre source ↗",
+          "href": "https://candidat.francetravail.fr/offres/recherche/detail/5344939",
+          "type": null,
+          "disabled": false
+        },
+        {
+          "tag": "A",
+          "text": "Détails de l’annonce",
+          "href": "/missions/e_1238a505-f135-4e04-a6f9-9d772c95ba19",
+          "type": null,
+          "disabled": false
+        },
+        {
+          "tag": "BUTTON",
+          "text": "Ajouter aux favoris",
+          "href": null,
+          "type": "button",
+          "disabled": false
+        },
+        {
+          "tag": "A",
+          "text": "Infirmier / Infirmière de soins généraux (H/F)",
+          "href": "/missions/e_1393ddaf-07e5-482b-9060-9493b353ff0c",
+          "type": null,
+          "disabled": false
+        },
+        {
+          "tag": "A",
+          "text": "Voir l’offre source ↗",
+          "href": "https://candidat.francetravail.fr/offres/recherche/detail/6592867",
+          "type": null,
+          "disabled": false
+        },
+        {
+          "tag": "A",
+          "text": "Détails de l’annonce",
+          "href": "/missions/e_1393ddaf-07e5-482b-9060-9493b353ff0c",
+          "type": null,
+          "disabled": false
+        },
+        {
+          "tag": "BUTTON",
+          "text": "Ajouter aux favoris",
+          "href": null,
+          "type": "button",
+          "disabled": false
+        },
+        {
+          "tag": "A",
+          "text": "Infirmier D.e (h/f) Reanimation Pediatrique",
+          "href": "/missions/e_15a940c1-a68d-4f8c-ab95-9d319050d5f4",
+          "type": null,
+          "disabled": false
+        },
+        {
+          "tag": "A",
+          "text": "Voir l’offre source ↗",
+          "href": "https://candidat.francetravail.fr/offres/recherche/detail/3973590",
+          "type": null,
+          "disabled": false
+        },
+        {
+          "tag": "A",
+          "text": "Détails de l’annonce",
+          "href": "/missions/e_15a940c1-a68d-4f8c-ab95-9d319050d5f4",
+          "type": null,
+          "disabled": false
+        },
+        {
+          "tag": "BUTTON",
+          "text": "Ajouter aux favoris",
+          "href": null,
+          "type": "button",
+          "disabled": false
+        },
+        {
+          "tag": "A",
+          "text": "Infirmier H/F Spécialisez votre pratique au sein d'un service de chirurgie",
+          "href": "/missions/e_17452b47-d940-4fdf-bc0a-cb52e0d179f4",
+          "type": null,
+          "disabled": false
+        },
+        {
+          "tag": "A",
+          "text": "Voir l’offre source ↗",
+          "href": "https://candidat.francetravail.fr/offres/recherche/detail/6850252",
+          "type": null,
+          "disabled": false
+        },
+        {
+          "tag": "A",
+          "text": "Détails de l’annonce",
+          "href": "/missions/e_17452b47-d940-4fdf-bc0a-cb52e0d179f4",
+          "type": null,
+          "disabled": false
+        },
+        {
+          "tag": "BUTTON",
+          "text": "Ajouter aux favoris",
+          "href": null,
+          "type": "button",
+          "disabled": false
+        },
+        {
+          "tag": "A",
+          "text": "Infirmier/Infirmière - USIP / HDJ ONCO - Vacations / Paris 16ème (H/F)",
+          "href": "/missions/e_18ea82dc-0d5d-44cb-8446-b8a1b8588aca",
+          "type": null,
+          "disabled": false
+        },
+        {
+          "tag": "A",
+          "text": "Voir l’offre source ↗",
+          "href": "https://candidat.francetravail.fr/offres/recherche/detail/213MQQB",
+          "type": null,
+          "disabled": false
+        },
+        {
+          "tag": "A",
+          "text": "Détails de l’annonce",
+          "href": "/missions/e_18ea82dc-0d5d-44cb-8446-b8a1b8588aca",
+          "type": null,
+          "disabled": false
+        },
+        {
+          "tag": "BUTTON",
+          "text": "Ajouter aux favoris",
+          "href": null,
+          "type": "button",
+          "disabled": false
+        },
+        {
+          "tag": "A",
+          "text": "INFIRMIER DE EN PSYCHIATRIE (F/H)",
+          "href": "/missions/e_1926610d-96de-4c46-951c-37057b8c3578",
+          "type": null,
+          "disabled": false
+        },
+        {
+          "tag": "A",
+          "text": "Voir l’offre source ↗",
+          "href": "https://candidat.francetravail.fr/offres/recherche/detail/6525086",
+          "type": null,
+          "disabled": false
+        },
+        {
+          "tag": "A",
+          "text": "Détails de l’annonce",
+          "href": "/missions/e_1926610d-96de-4c46-951c-37057b8c3578",
+          "type": null,
+          "disabled": false
+        },
+        {
+          "tag": "BUTTON",
+          "text": "Ajouter aux favoris",
+          "href": null,
+          "type": "button",
+          "disabled": false
+        },
+        {
+          "tag": "A",
+          "text": "Infirmier / Infirmière de soins généraux (H/F)",
+          "href": "/missions/e_1a868607-97f7-4045-96ab-be66c26f01a9",
+          "type": null,
+          "disabled": false
+        },
+        {
+          "tag": "A",
+          "text": "Voir l’offre source ↗",
+          "href": "https://candidat.francetravail.fr/offres/recherche/detail/6744344",
+          "type": null,
+          "disabled": false
+        },
+        {
+          "tag": "A",
+          "text": "Détails de l’annonce",
+          "href": "/missions/e_1a868607-97f7-4045-96ab-be66c26f01a9",
+          "type": null,
+          "disabled": false
+        },
+        {
+          "tag": "BUTTON",
+          "text": "Ajouter aux favoris",
+          "href": null,
+          "type": "button",
+          "disabled": false
+        },
+        {
+          "tag": "A",
+          "text": "Infirmier D.E H/F Rejoignez un SSR dynamique à Paris",
+          "href": "/missions/e_1b219624-ed0f-412a-b947-484a58055a36",
+          "type": null,
+          "disabled": false
+        },
+        {
+          "tag": "A",
+          "text": "Voir l’offre source ↗",
+          "href": "https://candidat.francetravail.fr/offres/recherche/detail/6850711",
+          "type": null,
+          "disabled": false
+        },
+        {
+          "tag": "A",
+          "text": "Détails de l’annonce",
+          "href": "/missions/e_1b219624-ed0f-412a-b947-484a58055a36",
+          "type": null,
+          "disabled": false
+        },
+        {
+          "tag": "BUTTON",
+          "text": "Précédent",
+          "href": null,
+          "type": null,
+          "disabled": true
+        },
+        {
+          "tag": "BUTTON",
+          "text": "Page 1",
+          "href": null,
+          "type": "button",
+          "disabled": false
+        },
+        {
+          "tag": "BUTTON",
+          "text": "Page 2",
+          "href": null,
+          "type": "button",
+          "disabled": false
+        },
+        {
+          "tag": "BUTTON",
+          "text": "Page 3",
+          "href": null,
+          "type": "button",
+          "disabled": false
+        },
+        {
+          "tag": "BUTTON",
+          "text": "Page 4",
+          "href": null,
+          "type": "button",
+          "disabled": false
+        },
+        {
+          "tag": "BUTTON",
+          "text": "Page 9",
+          "href": null,
+          "type": "button",
+          "disabled": false
+        },
+        {
+          "tag": "BUTTON",
+          "text": "Suivant",
+          "href": null,
+          "type": null,
+          "disabled": false
+        },
+        {
+          "tag": "A",
+          "text": "Mentions légales",
+          "href": "/mentions-legales",
+          "type": null,
+          "disabled": false
+        }
+      ]
+    },
+    {
+      "page": "detail",
+      "width": 375,
+      "controls": [
+        {
+          "tag": "A",
+          "text": "Retour aux missions",
+          "href": "/missions",
+          "type": null,
+          "disabled": false
+        },
+        {
+          "tag": "A",
+          "text": "Voir l’établissement",
+          "href": "/etablissements/852c9032-8c34-4b69-8693-5ff2c8ea7614",
+          "type": null,
+          "disabled": false
+        },
+        {
+          "tag": "BUTTON",
+          "text": "Ajouter l’établissement aux favoris",
+          "href": null,
+          "type": null,
+          "disabled": false
+        },
+        {
+          "tag": "A",
+          "text": "Envoyer ma candidature",
+          "href": "/missions/m_8d11e15a-b280-4082-baf5-4240e23dc69a/candidater",
+          "type": null,
+          "disabled": false
+        },
+        {
+          "tag": "BUTTON",
+          "text": "Enregistrer la mission",
+          "href": null,
+          "type": null,
+          "disabled": false
+        },
+        {
+          "tag": "A",
+          "text": "Mentions légales",
+          "href": "/mentions-legales",
+          "type": null,
+          "disabled": false
+        }
+      ]
+    },
+    {
+      "page": "candidater",
+      "width": 375,
+      "controls": [
+        {
+          "tag": "A",
+          "text": "Vérifier mon profil",
+          "href": "/profil",
+          "type": null,
+          "disabled": false
+        },
+        {
+          "tag": "A",
+          "text": "Mon dossier professionnel",
+          "href": "/dossier",
+          "type": null,
+          "disabled": false
+        },
+        {
+          "tag": "INPUT",
+          "text": "",
+          "href": null,
+          "type": "checkbox",
+          "disabled": false
+        },
+        {
+          "tag": "A",
+          "text": "Retour",
+          "href": "/missions/m_8d11e15a-b280-4082-baf5-4240e23dc69a",
+          "type": null,
+          "disabled": false
+        },
+        {
+          "tag": "BUTTON",
+          "text": "Confirmer ma candidature",
+          "href": null,
+          "type": null,
+          "disabled": true
+        },
+        {
+          "tag": "A",
+          "text": "Mentions légales",
+          "href": "/mentions-legales",
+          "type": null,
+          "disabled": false
+        }
+      ]
+    },
+    {
+      "page": "candidatures",
+      "width": 375,
+      "controls": [
+        {
+          "tag": "A",
+          "text": "Rechercher une mission",
+          "href": "/missions",
+          "type": null,
+          "disabled": false
+        },
+        {
+          "tag": "BUTTON",
+          "text": "En cours (0)",
+          "href": null,
+          "type": null,
+          "disabled": false
+        },
+        {
+          "tag": "BUTTON",
+          "text": "Confirmées (1)",
+          "href": null,
+          "type": null,
+          "disabled": false
+        },
+        {
+          "tag": "BUTTON",
+          "text": "Historique (0)",
+          "href": null,
+          "type": null,
+          "disabled": false
+        },
+        {
+          "tag": "A",
+          "text": "Voir les missions",
+          "href": "/missions",
+          "type": null,
+          "disabled": false
+        },
+        {
+          "tag": "A",
+          "text": "Mentions légales",
+          "href": "/mentions-legales",
+          "type": null,
+          "disabled": false
+        }
+      ]
+    },
+    {
+      "page": "suivi",
+      "width": 375,
+      "controls": [
+        {
+          "tag": "A",
+          "text": "← Retour aux candidatures",
+          "href": "/candidatures",
+          "type": null,
+          "disabled": false
+        },
+        {
+          "tag": "BUTTON",
+          "text": "Voir la confirmation",
+          "href": null,
+          "type": null,
+          "disabled": false
+        },
+        {
+          "tag": "A",
+          "text": "Voir la mission",
+          "href": "/missions/m_26c1107b-9415-485b-bac4-b5d4299d3954",
+          "type": null,
+          "disabled": false
+        },
+        {
+          "tag": "A",
+          "text": "Mentions légales",
+          "href": "/mentions-legales",
+          "type": null,
+          "disabled": false
+        }
+      ]
+    },
+    {
+      "page": "calendrier",
+      "width": 375,
+      "controls": [
+        {
+          "tag": "BUTTON",
+          "text": "+ Ajouter une période",
+          "href": null,
+          "type": null,
+          "disabled": false
+        },
+        {
+          "tag": "A",
+          "text": "Disponibilités",
+          "href": "/calendrier",
+          "type": null,
+          "disabled": false
+        },
+        {
+          "tag": "A",
+          "text": "Historique des missions",
+          "href": "/historique",
+          "type": null,
+          "disabled": false
+        },
+        {
+          "tag": "BUTTON",
+          "text": "Semaine précédente",
+          "href": null,
+          "type": null,
+          "disabled": false
+        },
+        {
+          "tag": "BUTTON",
+          "text": "Semaine suivante",
+          "href": null,
+          "type": null,
+          "disabled": false
+        },
+        {
+          "tag": "BUTTON",
+          "text": "Aujourd’hui",
+          "href": null,
+          "type": null,
+          "disabled": false
+        },
+        {
+          "tag": "SELECT",
+          "text": "Semaine\nMois",
+          "href": null,
+          "type": null,
+          "disabled": false
+        },
+        {
+          "tag": "INPUT",
+          "text": "",
+          "href": null,
+          "type": "date",
+          "disabled": false
+        },
+        {
+          "tag": "INPUT",
+          "text": "disponibilite",
+          "href": null,
+          "type": "radio",
+          "disabled": false
+        },
+        {
+          "tag": "INPUT",
+          "text": "disponibilite",
+          "href": null,
+          "type": "radio",
+          "disabled": false
+        },
+        {
+          "tag": "INPUT",
+          "text": "",
+          "href": null,
+          "type": "date",
+          "disabled": false
+        },
+        {
+          "tag": "INPUT",
+          "text": "",
+          "href": null,
+          "type": "date",
+          "disabled": false
+        },
+        {
+          "tag": "BUTTON",
+          "text": "Enregistrer",
+          "href": null,
+          "type": "submit",
+          "disabled": false
+        },
+        {
+          "tag": "BUTTON",
+          "text": "Modifier 01/01/2030 01:00:00 → 01/02/2030 01:00:00",
+          "href": null,
+          "type": null,
+          "disabled": false
+        },
+        {
+          "tag": "BUTTON",
+          "text": "Supprimer 01/01/2030 01:00:00 → 01/02/2030 01:00:00",
+          "href": null,
+          "type": null,
+          "disabled": false
+        },
+        {
+          "tag": "INPUT",
+          "text": "",
+          "href": null,
+          "type": null,
+          "disabled": false
+        },
+        {
+          "tag": "INPUT",
+          "text": "",
+          "href": null,
+          "type": "number",
+          "disabled": false
+        },
+        {
+          "tag": "BUTTON",
+          "text": "Enregistrer ma mobilité",
+          "href": null,
+          "type": "submit",
+          "disabled": false
+        },
+        {
+          "tag": "SELECT",
+          "text": "Non renseigné\nVéhicule personnel\nTransports en commun\nDeux-roues",
+          "href": null,
+          "type": null,
+          "disabled": false
+        },
+        {
+          "tag": "BUTTON",
+          "text": "Utiliser ma position",
+          "href": null,
+          "type": "button",
+          "disabled": false
+        },
+        {
+          "tag": "INPUT",
+          "text": "",
+          "href": null,
+          "type": "number",
+          "disabled": false
+        },
+        {
+          "tag": "INPUT",
+          "text": "",
+          "href": null,
+          "type": "number",
+          "disabled": false
+        },
+        {
+          "tag": "A",
+          "text": "Retour à mon profil",
+          "href": "/profil",
+          "type": null,
+          "disabled": false
+        },
+        {
+          "tag": "A",
+          "text": "Mentions légales",
+          "href": "/mentions-legales",
+          "type": null,
+          "disabled": false
+        }
+      ]
+    },
+    {
+      "page": "profil",
+      "width": 375,
+      "controls": [
+        {
+          "tag": "BUTTON",
+          "text": "Enregistrer les modifications",
+          "href": null,
+          "type": "submit",
+          "disabled": false
+        },
+        {
+          "tag": "INPUT",
+          "text": "",
+          "href": null,
+          "type": null,
+          "disabled": false
+        },
+        {
+          "tag": "INPUT",
+          "text": "",
+          "href": null,
+          "type": null,
+          "disabled": false
+        },
+        {
+          "tag": "INPUT",
+          "text": "",
+          "href": null,
+          "type": "email",
+          "disabled": false
+        },
+        {
+          "tag": "INPUT",
+          "text": "",
+          "href": null,
+          "type": null,
+          "disabled": false
+        },
+        {
+          "tag": "INPUT",
+          "text": "",
+          "href": null,
+          "type": "tel",
+          "disabled": false
+        },
+        {
+          "tag": "INPUT",
+          "text": "",
+          "href": null,
+          "type": "date",
+          "disabled": false
+        },
+        {
+          "tag": "INPUT",
+          "text": "",
+          "href": null,
+          "type": null,
+          "disabled": false
+        },
+        {
+          "tag": "INPUT",
+          "text": "",
+          "href": null,
+          "type": null,
+          "disabled": false
+        },
+        {
+          "tag": "INPUT",
+          "text": "",
+          "href": null,
+          "type": "checkbox",
+          "disabled": false
+        },
+        {
+          "tag": "INPUT",
+          "text": "",
+          "href": null,
+          "type": "checkbox",
+          "disabled": false
+        },
+        {
+          "tag": "INPUT",
+          "text": "",
+          "href": null,
+          "type": "checkbox",
+          "disabled": false
+        },
+        {
+          "tag": "INPUT",
+          "text": "",
+          "href": null,
+          "type": "number",
+          "disabled": false
+        },
+        {
+          "tag": "INPUT",
+          "text": "",
+          "href": null,
+          "type": "number",
+          "disabled": false
+        },
+        {
+          "tag": "BUTTON",
+          "text": "Retirer l’expérience 1",
+          "href": null,
+          "type": "button",
+          "disabled": false
+        },
+        {
+          "tag": "INPUT",
+          "text": "",
+          "href": null,
+          "type": null,
+          "disabled": false
+        },
+        {
+          "tag": "SELECT",
+          "text": "Sélectionner un service\nCardiologie\nPneumologie\nNeurologie\nGastro enterologie\nNephrologie\nEndocrinologie\nInfectiologie\nDermatologie\nRhumatologie\nChirurgie\nUrgences\nReanimation\nSoins intensifs\nSurveillance en salle de réveil\nPediatrie\nNeonatologie\nGynecologie\nMaternite\nOncologie\nHematologie\nDialyse\nPsychiatrie\nPedopsychiatrie\nAddictologie\nGeriatrie\nSoins longue duree\nEhpad\nSmr\nSoins palliatifs\nDouleur\nConsultations\nHopital jour\nChirurgie ambulatoire\nEndoscopie\nExplorations\nInterventionnel\nMas\nFam\nHad\nDomicile salarie\nSante travail\nPrevention\nCentre sante\nSuppleance\nAutre",
+          "href": null,
+          "type": null,
+          "disabled": false
+        },
+        {
+          "tag": "INPUT",
+          "text": "",
+          "href": null,
+          "type": "date",
+          "disabled": false
+        },
+        {
+          "tag": "INPUT",
+          "text": "",
+          "href": null,
+          "type": "date",
+          "disabled": false
+        },
+        {
+          "tag": "BUTTON",
+          "text": "+ Ajouter une expérience",
+          "href": null,
+          "type": "button",
+          "disabled": false
+        },
+        {
+          "tag": "SELECT",
+          "text": "Non renseignée\nAdulte\nPédiatrique\nAdulte et pédiatrique",
+          "href": null,
+          "type": null,
+          "disabled": false
+        },
+        {
+          "tag": "INPUT",
+          "text": "",
+          "href": null,
+          "type": "checkbox",
+          "disabled": false
+        },
+        {
+          "tag": "INPUT",
+          "text": "",
+          "href": null,
+          "type": "checkbox",
+          "disabled": false
+        },
+        {
+          "tag": "INPUT",
+          "text": "",
+          "href": null,
+          "type": "checkbox",
+          "disabled": false
+        },
+        {
+          "tag": "INPUT",
+          "text": "",
+          "href": null,
+          "type": "checkbox",
+          "disabled": false
+        },
+        {
+          "tag": "INPUT",
+          "text": "",
+          "href": null,
+          "type": "checkbox",
+          "disabled": false
+        },
+        {
+          "tag": "INPUT",
+          "text": "",
+          "href": null,
+          "type": "checkbox",
+          "disabled": false
+        },
+        {
+          "tag": "INPUT",
+          "text": "",
+          "href": null,
+          "type": "checkbox",
+          "disabled": false
+        },
+        {
+          "tag": "INPUT",
+          "text": "",
+          "href": null,
+          "type": "checkbox",
+          "disabled": false
+        },
+        {
+          "tag": "INPUT",
+          "text": "",
+          "href": null,
+          "type": "checkbox",
+          "disabled": false
+        },
+        {
+          "tag": "INPUT",
+          "text": "",
+          "href": null,
+          "type": "checkbox",
+          "disabled": false
+        },
+        {
+          "tag": "INPUT",
+          "text": "",
+          "href": null,
+          "type": "checkbox",
+          "disabled": false
+        },
+        {
+          "tag": "INPUT",
+          "text": "",
+          "href": null,
+          "type": "checkbox",
+          "disabled": false
+        },
+        {
+          "tag": "INPUT",
+          "text": "",
+          "href": null,
+          "type": "checkbox",
+          "disabled": false
+        },
+        {
+          "tag": "INPUT",
+          "text": "",
+          "href": null,
+          "type": "checkbox",
+          "disabled": false
+        },
+        {
+          "tag": "INPUT",
+          "text": "",
+          "href": null,
+          "type": "checkbox",
+          "disabled": false
+        },
+        {
+          "tag": "INPUT",
+          "text": "",
+          "href": null,
+          "type": "checkbox",
+          "disabled": false
+        },
+        {
+          "tag": "INPUT",
+          "text": "",
+          "href": null,
+          "type": "checkbox",
+          "disabled": false
+        },
+        {
+          "tag": "INPUT",
+          "text": "",
+          "href": null,
+          "type": "checkbox",
+          "disabled": false
+        },
+        {
+          "tag": "INPUT",
+          "text": "",
+          "href": null,
+          "type": "checkbox",
+          "disabled": false
+        },
+        {
+          "tag": "INPUT",
+          "text": "",
+          "href": null,
+          "type": "checkbox",
+          "disabled": false
+        },
+        {
+          "tag": "INPUT",
+          "text": "",
+          "href": null,
+          "type": "checkbox",
+          "disabled": false
+        },
+        {
+          "tag": "INPUT",
+          "text": "",
+          "href": null,
+          "type": "checkbox",
+          "disabled": false
+        },
+        {
+          "tag": "INPUT",
+          "text": "",
+          "href": null,
+          "type": "checkbox",
+          "disabled": false
+        },
+        {
+          "tag": "INPUT",
+          "text": "",
+          "href": null,
+          "type": "checkbox",
+          "disabled": false
+        },
+        {
+          "tag": "INPUT",
+          "text": "",
+          "href": null,
+          "type": "checkbox",
+          "disabled": false
+        },
+        {
+          "tag": "INPUT",
+          "text": "horaires-acceptes",
+          "href": null,
+          "type": "radio",
+          "disabled": false
+        },
+        {
+          "tag": "INPUT",
+          "text": "horaires-acceptes",
+          "href": null,
+          "type": "radio",
+          "disabled": false
+        },
+        {
+          "tag": "INPUT",
+          "text": "horaires-acceptes",
+          "href": null,
+          "type": "radio",
+          "disabled": false
+        },
+        {
+          "tag": "INPUT",
+          "text": "",
+          "href": null,
+          "type": "checkbox",
+          "disabled": false
+        },
+        {
+          "tag": "A",
+          "text": "Gérer mon planning",
+          "href": "/calendrier",
+          "type": null,
+          "disabled": false
+        },
+        {
+          "tag": "A",
+          "text": "Modifier",
+          "href": "/dossier#coordonnees-bancaires",
+          "type": null,
+          "disabled": false
+        },
+        {
+          "tag": "BUTTON",
+          "text": "Enregistrer les modifications",
+          "href": null,
+          "type": "submit",
+          "disabled": false
+        },
+        {
+          "tag": "A",
+          "text": "Mentions légales",
+          "href": "/mentions-legales",
+          "type": null,
+          "disabled": false
+        }
+      ]
+    },
+    {
+      "page": "dossier",
+      "width": 375,
+      "controls": [
+        {
+          "tag": "INPUT",
+          "text": "",
+          "href": null,
+          "type": null,
+          "disabled": false
+        },
+        {
+          "tag": "BUTTON",
+          "text": "Vérifier mon numéro",
+          "href": null,
+          "type": "submit",
+          "disabled": false
+        },
+        {
+          "tag": "A",
+          "text": "Modifier mon profil →",
+          "href": "/profil",
+          "type": null,
+          "disabled": false
+        },
+        {
+          "tag": "INPUT",
+          "text": "",
+          "href": null,
+          "type": null,
+          "disabled": false
+        },
+        {
+          "tag": "INPUT",
+          "text": "",
+          "href": null,
+          "type": null,
+          "disabled": false
+        },
+        {
+          "tag": "INPUT",
+          "text": "",
+          "href": null,
+          "type": null,
+          "disabled": false
+        },
+        {
+          "tag": "INPUT",
+          "text": "",
+          "href": null,
+          "type": "email",
+          "disabled": false
+        },
+        {
+          "tag": "BUTTON",
+          "text": "Enregistrer la référence",
+          "href": null,
+          "type": "submit",
+          "disabled": false
+        },
+        {
+          "tag": "INPUT",
+          "text": "Document fictif",
+          "href": null,
+          "type": "file",
+          "disabled": false
+        },
+        {
+          "tag": "INPUT",
+          "text": "",
+          "href": null,
+          "type": "checkbox",
+          "disabled": false
+        },
+        {
+          "tag": "BUTTON",
+          "text": "Enregistrer le document",
+          "href": null,
+          "type": "submit",
+          "disabled": true
+        },
+        {
+          "tag": "BUTTON",
+          "text": "Télécharger",
+          "href": null,
+          "type": null,
+          "disabled": false
+        },
+        {
+          "tag": "INPUT",
+          "text": "",
+          "href": null,
+          "type": null,
+          "disabled": false
+        },
+        {
+          "tag": "BUTTON",
+          "text": "Enregistrer le RIB fictif",
+          "href": null,
+          "type": "submit",
+          "disabled": false
+        },
+        {
+          "tag": "A",
+          "text": "Retour à mon profil",
+          "href": "/profil",
+          "type": null,
+          "disabled": false
+        },
+        {
+          "tag": "A",
+          "text": "Mentions légales",
+          "href": "/mentions-legales",
+          "type": null,
+          "disabled": false
+        }
+      ]
+    },
+    {
+      "page": "favoris",
+      "width": 375,
+      "controls": [
+        {
+          "tag": "A",
+          "text": "Pour vous",
+          "href": "/missions",
+          "type": null,
+          "disabled": false
+        },
+        {
+          "tag": "A",
+          "text": "Favoris",
+          "href": "/favoris",
+          "type": null,
+          "disabled": false
+        },
+        {
+          "tag": "A",
+          "text": "Rechercher une mission",
+          "href": "/missions",
+          "type": null,
+          "disabled": false
+        },
+        {
+          "tag": "A",
+          "text": "Rechercher une mission",
+          "href": "/missions",
+          "type": null,
+          "disabled": false
+        },
+        {
+          "tag": "A",
+          "text": "Mentions légales",
+          "href": "/mentions-legales",
+          "type": null,
+          "disabled": false
+        }
+      ]
+    },
+    {
+      "page": "historique",
+      "width": 375,
+      "controls": [
+        {
+          "tag": "A",
+          "text": "Disponibilités",
+          "href": "/calendrier",
+          "type": null,
+          "disabled": false
+        },
+        {
+          "tag": "A",
+          "text": "Historique des missions",
+          "href": "/historique",
+          "type": null,
+          "disabled": false
+        },
+        {
+          "tag": "SELECT",
+          "text": "Toutes les périodes\njanvier 2030",
+          "href": null,
+          "type": null,
+          "disabled": false
+        },
+        {
+          "tag": "SELECT",
+          "text": "Tous les statuts\nÀ venir\nEn cours\nPassée\nAnnulée",
+          "href": null,
+          "type": null,
+          "disabled": false
+        },
+        {
+          "tag": "BUTTON",
+          "text": "Voir",
+          "href": null,
+          "type": null,
+          "disabled": false
+        },
+        {
+          "tag": "A",
+          "text": "Mentions légales",
+          "href": "/mentions-legales",
+          "type": null,
+          "disabled": false
+        }
+      ]
+    },
+    {
+      "page": "etablissement",
+      "width": 375,
+      "controls": [
+        {
+          "tag": "A",
+          "text": "← Retour aux missions",
+          "href": "/missions",
+          "type": null,
+          "disabled": false
+        },
+        {
+          "tag": "BUTTON",
+          "text": "Ajouter aux favoris",
+          "href": null,
+          "type": null,
+          "disabled": false
+        },
+        {
+          "tag": "BUTTON",
+          "text": "Ajouter aux favoris",
+          "href": null,
+          "type": "button",
+          "disabled": false
+        },
+        {
+          "tag": "A",
+          "text": "Mission infirmiere FICTIVE b6e0eb8f-693e-4ce3-8163-5828dde5ac4a",
+          "href": "/missions/m_8d11e15a-b280-4082-baf5-4240e23dc69a",
+          "type": null,
+          "disabled": false
+        },
+        {
+          "tag": "A",
+          "text": "Voir la mission",
+          "href": "/missions/m_8d11e15a-b280-4082-baf5-4240e23dc69a",
+          "type": null,
+          "disabled": false
+        },
+        {
+          "tag": "A",
+          "text": "Mentions légales",
+          "href": "/mentions-legales",
+          "type": null,
+          "disabled": false
+        }
+      ]
+    }
+  ],
+  "scope": "Real React pages and Nest endpoints via isolated browser transport. Real SQL writes rolled back after tests; no persistent accounts. RPPS lookup fixture only; downloads encrypted in temporary directory."
+}

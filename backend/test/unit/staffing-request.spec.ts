@@ -1,0 +1,15 @@
+﻿import {test} from 'node:test';
+import assert from 'node:assert/strict';
+import {plainToInstance} from 'class-transformer';
+import {validateSync} from 'class-validator';
+import {NeedDto,normalizeNeedDetails} from '../../src/organizations/need.dto';
+const details={qualification:'IDE' as const,service:'URGENCES',start:'2035-01-10T06:00:00+01:00',end:'2035-01-10T14:00:00+01:00',shift:'DAY' as const,headcount:2,population:'ADULT' as const,block:'NONE' as const,requiredSkills:['TRIAGE'],minExperienceMonths:6,address:'1 rue fictive Paris'};
+const body={establishmentId:'00000000-0000-4000-8000-000000000001',title:'Besoin infirmier',description:'Renfort du service pour deux professionnels.',details};
+const validate=(value:unknown)=>validateSync(plainToInstance(NeedDto,value),{whitelist:true,forbidNonWhitelisted:true});
+test('structured need requires details and accepts complete nursing criteria',()=>{assert.equal(validate(body).length,0);assert.ok(validate({...body,details:undefined}).length);assert.ok(validate({...body,details:null}).length);});
+test('need rejects invented qualifications, services, blocks and specialties',()=>{for(const overrides of [{qualification:'DOCTOR'},{service:'UNKNOWN'},{block:'ANY'},{specialty:'UNKNOWN'}])assert.ok(validate({...body,details:{...details,...overrides}}).length);});
+test('need headcount and experience have explicit integer bounds',()=>{for(const overrides of [{headcount:0},{headcount:101},{headcount:1.5},{minExperienceMonths:-1},{minExperienceMonths:601},{minExperienceMonths:1.5}])assert.ok(validate({...body,details:{...details,...overrides}}).length);});
+test('need rejects duplicate competencies and non-object details',()=>{assert.ok(validate({...body,details:{...details,requiredSkills:['TRIAGE','TRIAGE']}}).length);assert.ok(validate({...body,details:'text'}).length);});
+test('need period is normalized to exact UTC instants',()=>{const normalized=normalizeNeedDetails(details,0);assert.equal(normalized.start,'2035-01-10T05:00:00.000Z');assert.equal(normalized.end,'2035-01-10T13:00:00.000Z');assert.equal(normalized.headcount,2);});
+test('need rejects backwards, missing-timezone and past periods',()=>{for(const overrides of [{end:details.start},{end:'2030-01-01T00:00:00Z'},{start:'2035-01-10T06:00:00'},{start:'2020-01-10T06:00:00Z'}])assert.throws(()=>normalizeNeedDetails({...details,...overrides},Date.parse('2030-01-01T00:00:00Z')));});
+test('specialty is required only for specialized blocks',()=>{assert.throws(()=>normalizeNeedDetails({...details,block:'SPECIALIZED'},0));assert.throws(()=>normalizeNeedDetails({...details,specialty:'DIGESTIF'},0));assert.equal(normalizeNeedDetails({...details,block:'SPECIALIZED',specialty:'DIGESTIF'},0).specialty,'DIGESTIF');});

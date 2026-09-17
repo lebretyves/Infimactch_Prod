@@ -1,0 +1,20 @@
+node_modules/
+dist/
+.env
+.env.*
+!.env.example
+data/
+*.log
+docs/proofs/coverage/
+backups/
+
+.test-build/
+
+# Temporary Word lock files (not document content)
+**/~$*.docx
+
+!.env.vault.example
+
+!.env.vault.example
+!frontend/src/data/
+!frontend/src/data/**

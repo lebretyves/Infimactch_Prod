@@ -1,0 +1,19 @@
+{
+  admin 127.0.0.1:2019
+  auto_https disable_redirects
+}
+https://localhost:8443 {
+  bind 127.0.0.1 ::1
+  tls {$INFIMATCH_TLS_CERT} {$INFIMATCH_TLS_KEY}
+  encode zstd gzip
+  header Strict-Transport-Security "max-age=31536000"
+  @api path /api/*
+  handle @api {
+    reverse_proxy 127.0.0.1:3101
+  }
+  handle {
+    root * {$INFIMATCH_FRONTEND_DIST}
+    try_files {path} /index.html
+    file_server
+  }
+}

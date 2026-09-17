@@ -1,0 +1,326 @@
+{
+  "checkedAt": "2026-09-14T23:30:05.963Z",
+  "realProviderAcquisition": true,
+  "uniqueOffers": 134,
+  "syntheticProfiles": true,
+  "profileAssumptions": {
+    "qualifications": [],
+    "skills": [],
+    "experience": [
+      {
+        "service": "URGENCES",
+        "start": "2022-01-01T00:00:00Z",
+        "end": "2025-01-01T00:00:00Z"
+      }
+    ],
+    "available": [],
+    "unavailable": [],
+    "conflicts": [],
+    "rppsStatus": "FOUND",
+    "latitude": 48.8566,
+    "longitude": 2.3522,
+    "radiusKm": 20,
+    "acceptedShifts": [
+      "DAY"
+    ],
+    "preferredShifts": []
+  },
+  "results": [
+    {
+      "qualification": "IDE",
+      "compared": 120,
+      "outcomes": {
+        "TO_CONFIRM": 25,
+        "POSSIBLE_MATCH": 95
+      },
+      "examples": [
+        {
+          "sourceId": "213MTBB",
+          "url": "https://candidat.francetravail.fr/offres/recherche/detail/213MTBB",
+          "title": "Vacations Infirmiers - SIC - Paris 15\u00c3\u00a8me (H/F)",
+          "result": "TO_CONFIRM",
+          "criteria": {
+            "qualification": {
+              "status": "MATCH",
+              "reason": "DECLARED_QUALIFICATION_COMPARISON",
+              "value": "IDE"
+            },
+            "service": {
+              "status": "OFFER_MISSING",
+              "reason": "SERVICE_NOT_UNAMBIGUOUS"
+            },
+            "experience": {
+              "status": "INDICATIVE_MATCH",
+              "reason": "TOTAL_DECLARED_EXPERIENCE_NOT_SERVICE_ELIGIBILITY",
+              "value": {
+                "minimumMonths": 6,
+                "declaredMonths": 36.01
+              }
+            },
+            "location": {
+              "status": "INDICATIVE_MATCH",
+              "reason": "UNVERIFIED_PROVIDER_COORDINATES",
+              "value": {
+                "approximateDistanceKm": 4.16
+              }
+            },
+            "shift": {
+              "status": "INDICATIVE_MATCH",
+              "reason": "PROVIDER_SHIFT_NOT_EXACT_SCHEDULE",
+              "value": "DAY"
+            },
+            "availability": {
+              "status": "OFFER_MISSING",
+              "reason": "EXACT_DATES_REQUIRED"
+            },
+            "assignmentConflicts": {
+              "status": "OFFER_MISSING",
+              "reason": "EXACT_DATES_REQUIRED"
+            },
+            "requiredSkills": {
+              "status": "OFFER_MISSING",
+              "reason": "PROVIDER_REQUIREMENTS_NOT_MAPPED"
+            },
+            "contract": {
+              "status": "REVIEW_REQUIRED",
+              "reason": "PROVIDER_CONTRACT_CONFLICT"
+            },
+            "rpps": {
+              "status": "MATCH",
+              "reason": "RPPS_FOUND_NOT_FULL_ELIGIBILITY"
+            }
+          }
+        },
+        {
+          "sourceId": "213MSHC",
+          "url": "https://candidat.francetravail.fr/offres/recherche/detail/213MSHC",
+          "title": "Infirmier/Infirmi\u00c3\u00a8re - Autodialyse (H/F) - Vacations - Paris 7\u00c3\u00a8me",
+          "result": "TO_CONFIRM",
+          "criteria": {
+            "qualification": {
+              "status": "MATCH",
+              "reason": "DECLARED_QUALIFICATION_COMPARISON",
+              "value": "IDE"
+            },
+            "service": {
+              "status": "PROFILE_MISSING",
+              "reason": "SERVICE_EXPERIENCE_NOT_RECORDED",
+              "value": "DIALYSE"
+            },
+            "experience": {
+              "status": "REVIEW_REQUIRED",
+              "reason": "PROVIDER_EXPERIENCE_CONFLICT"
+            },
+            "location": {
+              "status": "INDICATIVE_MATCH",
+              "reason": "UNVERIFIED_PROVIDER_COORDINATES",
+              "value": {
+                "approximateDistanceKm": 2.34
+              }
+            },
+            "shift": {
+              "status": "INDICATIVE_MATCH",
+              "reason": "PROVIDER_SHIFT_NOT_EXACT_SCHEDULE",
+              "value": "DAY"
+            },
+            "availability": {
+              "status": "OFFER_MISSING",
+              "reason": "EXACT_DATES_REQUIRED"
+            },
+            "assignmentConflicts": {
+              "status": "OFFER_MISSING",
+              "reason": "EXACT_DATES_REQUIRED"
+            },
+            "requiredSkills": {
+              "status": "OFFER_MISSING",
+              "reason": "PROVIDER_REQUIREMENTS_NOT_MAPPED"
+            },
+            "contract": {
+              "status": "REVIEW_REQUIRED",
+              "reason": "PROVIDER_CONTRACT_CONFLICT"
+            },
+            "rpps": {
+              "status": "MATCH",
+              "reason": "RPPS_FOUND_NOT_FULL_ELIGIBILITY"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "qualification": "IADE",
+      "compared": 7,
+      "outcomes": {
+        "POSSIBLE_MATCH": 7
+      },
+      "examples": [
+        {
+          "sourceId": "6592779",
+          "url": "https://candidat.francetravail.fr/offres/recherche/detail/6592779",
+          "title": "Infirmier / Infirmi\u00c3\u00a8re anesth\u00c3\u00a9siste (H/F)",
+          "result": "POSSIBLE_MATCH",
+          "criteria": {
+            "qualification": {
+              "status": "MATCH",
+              "reason": "DECLARED_QUALIFICATION_COMPARISON",
+              "value": "IADE"
+            },
+            "service": {
+              "status": "OFFER_MISSING",
+              "reason": "SERVICE_NOT_UNAMBIGUOUS"
+            },
+            "experience": {
+              "status": "INDICATIVE_MATCH",
+              "reason": "TOTAL_DECLARED_EXPERIENCE_NOT_SERVICE_ELIGIBILITY",
+              "value": {
+                "minimumMonths": 12,
+                "declaredMonths": 36.01
+              }
+            },
+            "location": {
+              "status": "OFFER_MISSING",
+              "reason": "EXACT_WORKPLACE_NOT_PROVIDED"
+            },
+            "shift": {
+              "status": "OFFER_MISSING",
+              "reason": "SHIFT_NOT_UNAMBIGUOUS"
+            },
+            "availability": {
+              "status": "OFFER_MISSING",
+              "reason": "EXACT_DATES_REQUIRED"
+            },
+            "assignmentConflicts": {
+              "status": "OFFER_MISSING",
+              "reason": "EXACT_DATES_REQUIRED"
+            },
+            "requiredSkills": {
+              "status": "OFFER_MISSING",
+              "reason": "PROVIDER_REQUIREMENTS_NOT_MAPPED"
+            },
+            "contract": {
+              "status": "REVIEW_REQUIRED",
+              "reason": "NO_CONTRACT_PREFERENCE_IN_PROFILE"
+            },
+            "rpps": {
+              "status": "MATCH",
+              "reason": "RPPS_FOUND_NOT_FULL_ELIGIBILITY"
+            }
+          }
+        },
+        {
+          "sourceId": "6592723",
+          "url": "https://candidat.francetravail.fr/offres/recherche/detail/6592723",
+          "title": "Infirmier / Infirmi\u00c3\u00a8re anesth\u00c3\u00a9siste (H/F)",
+          "result": "POSSIBLE_MATCH",
+          "criteria": {
+            "qualification": {
+              "status": "MATCH",
+              "reason": "DECLARED_QUALIFICATION_COMPARISON",
+              "value": "IADE"
+            },
+            "service": {
+              "status": "OFFER_MISSING",
+              "reason": "SERVICE_NOT_UNAMBIGUOUS"
+            },
+            "experience": {
+              "status": "INDICATIVE_MATCH",
+              "reason": "TOTAL_DECLARED_EXPERIENCE_NOT_SERVICE_ELIGIBILITY",
+              "value": {
+                "minimumMonths": 12,
+                "declaredMonths": 36.01
+              }
+            },
+            "location": {
+              "status": "OFFER_MISSING",
+              "reason": "EXACT_WORKPLACE_NOT_PROVIDED"
+            },
+            "shift": {
+              "status": "OFFER_MISSING",
+              "reason": "SHIFT_NOT_UNAMBIGUOUS"
+            },
+            "availability": {
+              "status": "OFFER_MISSING",
+              "reason": "EXACT_DATES_REQUIRED"
+            },
+            "assignmentConflicts": {
+              "status": "OFFER_MISSING",
+              "reason": "EXACT_DATES_REQUIRED"
+            },
+            "requiredSkills": {
+              "status": "OFFER_MISSING",
+              "reason": "PROVIDER_REQUIREMENTS_NOT_MAPPED"
+            },
+            "contract": {
+              "status": "REVIEW_REQUIRED",
+              "reason": "NO_CONTRACT_PREFERENCE_IN_PROFILE"
+            },
+            "rpps": {
+              "status": "MATCH",
+              "reason": "RPPS_FOUND_NOT_FULL_ELIGIBILITY"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "qualification": "IBODE",
+      "compared": 1,
+      "outcomes": {
+        "POSSIBLE_MATCH": 1
+      },
+      "examples": [
+        {
+          "sourceId": "5778620",
+          "url": "https://candidat.francetravail.fr/offres/recherche/detail/5778620",
+          "title": "Ibode H/f - Chir Gynecologique (H/F)",
+          "result": "POSSIBLE_MATCH",
+          "criteria": {
+            "qualification": {
+              "status": "MATCH",
+              "reason": "DECLARED_QUALIFICATION_COMPARISON",
+              "value": "IBODE"
+            },
+            "service": {
+              "status": "OFFER_MISSING",
+              "reason": "SERVICE_NOT_UNAMBIGUOUS"
+            },
+            "experience": {
+              "status": "OFFER_MISSING",
+              "reason": "EXPERIENCE_THRESHOLD_NOT_UNAMBIGUOUS"
+            },
+            "location": {
+              "status": "OFFER_MISSING",
+              "reason": "EXACT_WORKPLACE_NOT_PROVIDED"
+            },
+            "shift": {
+              "status": "OFFER_MISSING",
+              "reason": "SHIFT_NOT_UNAMBIGUOUS"
+            },
+            "availability": {
+              "status": "OFFER_MISSING",
+              "reason": "EXACT_DATES_REQUIRED"
+            },
+            "assignmentConflicts": {
+              "status": "OFFER_MISSING",
+              "reason": "EXACT_DATES_REQUIRED"
+            },
+            "requiredSkills": {
+              "status": "OFFER_MISSING",
+              "reason": "PROVIDER_REQUIREMENTS_NOT_MAPPED"
+            },
+            "contract": {
+              "status": "REVIEW_REQUIRED",
+              "reason": "NO_CONTRACT_PREFERENCE_IN_PROFILE"
+            },
+            "rpps": {
+              "status": "MATCH",
+              "reason": "RPPS_FOUND_NOT_FULL_ELIGIBILITY"
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "scope": "Fresh public France Travail offers compared in memory to three fictional profiles. RPPS FOUND is a fixture only; no real profile or database mutated, no full eligibility or score.",
+  "codeCommit": "5f9db50b26638a03259d37640d1aea8e24c53e18"
+}

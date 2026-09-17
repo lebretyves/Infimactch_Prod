@@ -1,0 +1,15 @@
+{
+  "createdAt": "2026-09-15T13:34:05.503Z",
+  "username": "lebre",
+  "method": "userpass",
+  "scope": "V1 read only",
+  "accountCreated": true,
+  "loginAndPermissionsVerified": true,
+  "temporaryRootRevoked": true,
+  "recoveryConfigurationRestored": true,
+  "unauthenticatedRecoveryDenied": true,
+  "browserLoginVerified": true,
+  "existingVaultTestsPassed": 10,
+  "credentialFileAcl": "current Windows user and SYSTEM only",
+  "kvSecretsModified": false
+}

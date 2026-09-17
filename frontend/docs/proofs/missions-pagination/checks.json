@@ -1,0 +1,18 @@
+{
+  "at": "2026-09-15T23:27:06.892Z",
+  "checks": [
+    "184 results, pages 1/2/10, API offsets, last page four offers and disabled boundaries",
+    "Global search finds offer originally on last page and resets pagination",
+    "Qualification filter updates total and pages",
+    "Out-of-range URL recovers last page within API offset limit",
+    "Zero results show no misleading pagination",
+    "No overflow and pagination usable at 1440/768/375/320px",
+    "Failed search can be retried",
+    "Profile has no duplicate diploma field; three simulated saves retain legacy diploma",
+    "Registration continues with chosen diploma and year, no repeated free-text diploma",
+    "Real public API through frontend proxy: exact 184 total and direct page 2, isolated profile fixture"
+  ],
+  "errors": [],
+  "unknown": [],
+  "scope": "Isolated browser fixtures; three profile writes intercepted in memory. Real public GET listing exercised; no real account or business-data writes."
+}

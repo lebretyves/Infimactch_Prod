@@ -1,0 +1,14 @@
+# Personal UI access: read V1 only.
+path "kv/metadata" { capabilities = ["list"] }
+path "kv/metadata/infimatch" { capabilities = ["list"] }
+path "kv/metadata/infimatch/v1" { capabilities = ["list"] }
+path "kv/metadata/infimatch/v1/backend" { capabilities = ["read"] }
+path "kv/metadata/infimatch/v1/infra" { capabilities = ["read"] }
+path "kv/data/infimatch/v1/backend" { capabilities = ["read"] }
+path "kv/data/infimatch/v1/infra" { capabilities = ["read"] }
+path "auth/token/lookup-self" { capabilities = ["read"] }
+path "auth/token/renew-self" { capabilities = ["update"] }
+path "auth/token/revoke-self" { capabilities = ["update"] }
+path "sys/capabilities-self" { capabilities = ["update"] }
+path "sys/internal/ui/resultant-acl" { capabilities = ["read"] }
+path "auth/userpass/users/lebre/password" { capabilities = ["update"] }

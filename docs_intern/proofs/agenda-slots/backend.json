@@ -1,0 +1,21 @@
+{
+  "at": "2026-09-16T01:07:15.197Z",
+  "checks": [
+    "Unavailable afternoon splits broad availability while morning stays available",
+    "Third state clears both availability and unavailability",
+    "Three complete click cycles persist without accumulating contradictory periods",
+    "Night spans midnight and blocks full-night matching",
+    "Availability-only API preserves identity, qualifications, RPPS and mobility",
+    "Confirmed mission conflict rejected atomically with no persisted change",
+    "Invalid states, empty requests and invalid or unzoned periods rejected",
+    "Independent simultaneous changes both survive",
+    "Legacy full-profile writes also remove overlapping availability",
+    "Excessive fragmented storage is rejected atomically without truncation",
+    "Legacy overlaps render without conflict on GET while stored history stays untouched until save",
+    "Another account is unaffected",
+    "Anonymous change is rejected",
+    "Rollback verified: isolated accounts and SQL data do not persist"
+  ],
+  "isolated": true,
+  "rollback": true
+}

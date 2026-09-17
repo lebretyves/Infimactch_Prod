@@ -1,0 +1,13 @@
+* text=auto
+*.ts text eol=lf
+*.js text eol=lf
+*.mjs text eol=lf
+*.cjs text eol=lf
+*.json text eol=lf
+*.md text eol=lf
+*.yaml text eol=lf
+*.pdf binary
+*.docx binary
+*.txt text eol=lf
+*.csv text eol=lf
+docs/references/** binary

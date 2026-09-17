@@ -1,0 +1,23 @@
+{
+  "date": "2026-09-16T18:47:35.394Z",
+  "status": "PASS",
+  "checks": [
+    "all backup file checksums",
+    "PostgreSQL restore and snapshot row counts",
+    "representative missions and documents",
+    "security migrations on restored existing database",
+    "MongoDB archive restored",
+    "restored document decryption: 1",
+    "n8n SQLite restored and three workflows exported",
+    "Vault Raft restored, original unseal keys and backend AppRole verified",
+    "current erasure ledger replayed on restored databases",
+    "restored account erasure verified; source backup and live databases untouched"
+  ],
+  "sqlCounts": {
+    "accounts": 2,
+    "missions": 1,
+    "assignments": 1,
+    "documents": 1
+  },
+  "representative": true
+}

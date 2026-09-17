@@ -1,0 +1,19 @@
+{
+  "date": "2026-09-14",
+  "backup": "backups/infimatch-checkpoint.dump",
+  "restoredDatabase": "infimatch_restore_20260914",
+  "commands": [
+    "pg_dump -Fc",
+    "createdb infimatch_restore_20260914",
+    "pg_restore --exit-on-error",
+    "SELECT counts, PostGIS version and FILLED consistency"
+  ],
+  "result": {
+    "accounts": 39,
+    "missions": 8,
+    "assignments": 5,
+    "postgis": "3.5.2",
+    "invalidFilled": 0
+  },
+  "scope": "PostgreSQL only; not a full application restore"
+}

@@ -1,0 +1,544 @@
+{
+  "createdAt": "2026-09-16T08:04:32.763Z",
+  "mode": "READ_ONLY_NO_API_NO_LLM",
+  "offers": [
+    {
+      "id": "1c6d75c4-bfef-4838-a228-6d4d07a6e05f",
+      "title": "Infirmier préleveur en laboratoire H/F",
+      "source": "JOBSPIPE",
+      "url": "https://fr.linkedin.com/jobs/view/infirmier-pr%C3%A9leveur-en-laboratoire-h-f-at-optima-groupe-piment-4467222226",
+      "location": "Limoges, Nouvelle-Aquitaine, France",
+      "extractions": [
+        {
+          "field": "qualification",
+          "value": "IDE probable",
+          "state": "A_CONFIRMER",
+          "evidence": "Infirmier préleveur en laboratoire H/F"
+        },
+        {
+          "field": "service",
+          "value": "laboratoire",
+          "state": "MENTION_A_CONFIRMER",
+          "evidence": "Infirmier préleveur en laboratoire H/F"
+        },
+        {
+          "field": "contrat",
+          "value": "CDI mentionne",
+          "state": "ALERTE_PERIMETRE_INTERIM",
+          "evidence": "Présentation de la société Le Groupe PIMENT et ses marques spécialisées, PIMENT, au savoir-faire reconnu dans l’aéronautique et OPTIMA, cabinet de recrutement multi-sectoriel, vous accompagnent tout au long de votre évolution professionnelle, en vous proposant des contrats en intérim, CDD, CDI et freelance dans de nombreux secteurs d’activité"
+        },
+        {
+          "field": "service",
+          "value": "laboratoire",
+          "state": "MENTION_A_CONFIRMER",
+          "evidence": "Description Nous recherchons un Infirmier préleveur en laboratoire H/F passionné par son métier et désireux de rejoindre une équipe dynamique dédiée à la santé"
+        },
+        {
+          "field": "montant_mentionne",
+          "value": "2 221,95€ brut",
+          "state": "UNITE_ET_NATURE_A_CONFIRMER",
+          "evidence": "Rémunération à partir de 2 221,95€ brut"
+        },
+        {
+          "field": "service",
+          "value": "laboratoire",
+          "state": "MENTION_A_CONFIRMER",
+          "evidence": "Avantage : prime de participation, mutuelle entreprise, CSE (chèque vacances, carte cadeau) En tant qu'infirmier préleveur H/F, vous serez responsable de la réalisation des prélèvements sanguins et autres analyses biologiques nécessaires au bon fonctionnement de notre laboratoire"
+        },
+        {
+          "field": "service",
+          "value": "laboratoire",
+          "state": "MENTION_A_CONFIRMER",
+          "evidence": "- Participer à l'amélioration continue des pratiques au sein du laboratoire"
+        },
+        {
+          "field": "contrat",
+          "value": "CDI mentionne",
+          "state": "ALERTE_PERIMETRE_INTERIM",
+          "evidence": "Informations complémentaires Ce poste est proposé en CDI 35 Heures"
+        },
+        {
+          "field": "montant_mentionne",
+          "value": "2 220€",
+          "state": "UNITE_ET_NATURE_A_CONFIRMER",
+          "evidence": "Le salaire se situe entre 2 220€ et 2 400€ par mois, en fonction de l'expérience et des compétences"
+        },
+        {
+          "field": "montant_mentionne",
+          "value": "2 400€ par mois",
+          "state": "UNITE_ET_NATURE_A_CONFIRMER",
+          "evidence": "Le salaire se situe entre 2 220€ et 2 400€ par mois, en fonction de l'expérience et des compétences"
+        }
+      ],
+      "unknown": [
+        "dates_mission",
+        "experience_minimale_validee",
+        "salaire_normalise",
+        "competences_obligatoires_validees"
+      ],
+      "note": "Prototype : mentions descriptives, non utilisees pour filtrer ou affecter un candidat."
+    },
+    {
+      "id": "2ceed9ad-b0e6-49eb-b40f-fab2a81d58b4",
+      "title": "Infirmier-e en pool h/f",
+      "source": "JOBSPIPE",
+      "url": "https://fr.linkedin.com/jobs/view/infirmier-e-en-pool-h-f-at-talents-sant%C3%A9-4464884250",
+      "location": "Thionville, Grand Est, France",
+      "extractions": [
+        {
+          "field": "qualification",
+          "value": "IDE probable",
+          "state": "A_CONFIRMER",
+          "evidence": "Infirmier-e en pool h/f"
+        },
+        {
+          "field": "montant_mentionne",
+          "value": "2750€ brut",
+          "state": "UNITE_ET_NATURE_A_CONFIRMER",
+          "evidence": "Rémunération Et Avantages À partir de 2750€ bruts/ mois, + ancienneté"
+        }
+      ],
+      "unknown": [
+        "dates_mission",
+        "experience_minimale_validee",
+        "salaire_normalise",
+        "competences_obligatoires_validees"
+      ],
+      "note": "Prototype : mentions descriptives, non utilisees pour filtrer ou affecter un candidat."
+    },
+    {
+      "id": "4e435168-a3c1-43e5-8bb9-2354620d8b25",
+      "title": "Infirmier de régulation médicale - Poste à 50% H/F",
+      "source": "JOBSPIPE",
+      "url": "https://fr.linkedin.com/jobs/view/infirmier-de-r%C3%A9gulation-m%C3%A9dicale-poste-%C3%A0-50%25-h-f-at-talents-sant%C3%A9-4465913537",
+      "location": "St.-Denis, Île-de-France, France",
+      "extractions": [
+        {
+          "field": "qualification",
+          "value": "IDE probable",
+          "state": "A_CONFIRMER",
+          "evidence": "Infirmier de régulation médicale - Poste à 50% H/F"
+        },
+        {
+          "field": "service",
+          "value": "regulation_medicale",
+          "state": "MENTION_A_CONFIRMER",
+          "evidence": "Infirmier de régulation médicale"
+        },
+        {
+          "field": "temps_travail",
+          "value": "50 %",
+          "state": "EXPLICITE_TEXTE",
+          "evidence": "Poste à 50% H/F"
+        },
+        {
+          "field": "temps_travail",
+          "value": "50 %",
+          "state": "EXPLICITE_TEXTE",
+          "evidence": "Rattaché(e) à Un Manager IDE, Vous Exercez Votre Activité à Temps Partiel (50%) Au Sein D’une Plateforme De Régulation Médicale Fonctionnant En Continu (24h/24 – 7j/7) Vous analysez et traitez les demandes médicales des patients, en priorisant les situations et en assurant la gestion des dossiers d’assistance (aspects médicaux, administratifs et logistiques)"
+        },
+        {
+          "field": "service",
+          "value": "regulation_medicale",
+          "state": "MENTION_A_CONFIRMER",
+          "evidence": "Rattaché(e) à Un Manager IDE, Vous Exercez Votre Activité à Temps Partiel (50%) Au Sein D’une Plateforme De Régulation Médicale Fonctionnant En Continu (24h/24 – 7j/7) Vous analysez et traitez les demandes médicales des patients, en priorisant les situations et en assurant la gestion des dossiers d’assistance (aspects médicaux, administratifs et logistiques)"
+        },
+        {
+          "field": "organisation",
+          "value": "nuit",
+          "state": "MENTION_A_CONFIRMER",
+          "evidence": "Les horaires ne sont pas fixes et oscillent par équité entre : 8h-17h/ 10h-19h/ 11h-20h/ nuit 19h-7h Profil"
+        },
+        {
+          "field": "service",
+          "value": "reanimation",
+          "state": "MENTION_A_CONFIRMER",
+          "evidence": "Expérience significative (minimum 5 ans) en milieu hospitalier, idéalement en urgences, réanimation, SAMU ou services de médecine/chirurgie"
+        },
+        {
+          "field": "service",
+          "value": "urgences",
+          "state": "MENTION_A_CONFIRMER",
+          "evidence": "Expérience significative (minimum 5 ans) en milieu hospitalier, idéalement en urgences, réanimation, SAMU ou services de médecine/chirurgie"
+        }
+      ],
+      "unknown": [
+        "dates_mission",
+        "experience_minimale_validee",
+        "salaire_normalise",
+        "competences_obligatoires_validees"
+      ],
+      "note": "Prototype : mentions descriptives, non utilisees pour filtrer ou affecter un candidat."
+    },
+    {
+      "id": "71a3522b-0618-4d42-a3d6-14f34ee2c0cd",
+      "title": "Infirmier(e) en SMR de nuit h/f",
+      "source": "JOBSPIPE",
+      "url": "https://fr.linkedin.com/jobs/view/infirmier-e-en-smr-de-nuit-h-f-at-talents-sant%C3%A9-4464583499",
+      "location": "Mulhouse, Grand Est, France",
+      "extractions": [
+        {
+          "field": "qualification",
+          "value": "IDE probable",
+          "state": "A_CONFIRMER",
+          "evidence": "Infirmier(e) en SMR de nuit h/f"
+        },
+        {
+          "field": "service",
+          "value": "SMR",
+          "state": "MENTION_A_CONFIRMER",
+          "evidence": "Infirmier(e) en SMR de nuit h/f"
+        },
+        {
+          "field": "organisation",
+          "value": "nuit",
+          "state": "MENTION_A_CONFIRMER",
+          "evidence": "Infirmier(e) en SMR de nuit h/f"
+        },
+        {
+          "field": "organisation",
+          "value": "nuit",
+          "state": "MENTION_A_CONFIRMER",
+          "evidence": "Nous recrutons, pour l'un de nos partenaires, un établissement de réadaptation privé situé sur Mulhouse, un infirmier h/f de nuit"
+        },
+        {
+          "field": "contrat",
+          "value": "CDI mentionne",
+          "state": "ALERTE_PERIMETRE_INTERIM",
+          "evidence": "Contrat CDD long ou CDI"
+        }
+      ],
+      "unknown": [
+        "dates_mission",
+        "experience_minimale_validee",
+        "salaire_normalise",
+        "competences_obligatoires_validees"
+      ],
+      "note": "Prototype : mentions descriptives, non utilisees pour filtrer ou affecter un candidat."
+    },
+    {
+      "id": "76cb935f-81e8-4a0b-9f71-d8f0cb64d47a",
+      "title": "Infirmier(e)/ Technicien Préleveur(se) H/F - (69)",
+      "source": "JOBSPIPE",
+      "url": "https://fr.linkedin.com/jobs/view/infirmier-e-technicien-pr%C3%A9leveur-se-h-f-69-at-talents-sant%C3%A9-4437549763",
+      "location": "Lyon, Auvergne-Rhône-Alpes, France",
+      "extractions": [
+        {
+          "field": "qualification",
+          "value": "IDE probable",
+          "state": "A_CONFIRMER",
+          "evidence": "Infirmier(e)/ Technicien Préleveur(se) H/F - (69)"
+        },
+        {
+          "field": "contrat",
+          "value": "CDI mentionne",
+          "state": "ALERTE_PERIMETRE_INTERIM",
+          "evidence": "Le cabinet TALENTS SANTE accompagne les entreprises et les candidats au travers de prestations de Recrutement CDI / CDD & Intérim spécialisé sur les métiers liés au secteur médical, paramédical et social : Centres de Soins, Santé à Domicile, Santé au Travail, Petite Enfance, Laboratoires"
+        },
+        {
+          "field": "service",
+          "value": "laboratoire",
+          "state": "MENTION_A_CONFIRMER",
+          "evidence": "Le cabinet TALENTS SANTE accompagne les entreprises et les candidats au travers de prestations de Recrutement CDI / CDD & Intérim spécialisé sur les métiers liés au secteur médical, paramédical et social : Centres de Soins, Santé à Domicile, Santé au Travail, Petite Enfance, Laboratoires"
+        },
+        {
+          "field": "contrat",
+          "value": "CDI mentionne",
+          "state": "ALERTE_PERIMETRE_INTERIM",
+          "evidence": "Nous recherchons pour l'un de nos partenaires, un Laboratoire d'analyses médicales, un(e) Infirmier(e) ou Technicien(ne) de prélèvement en CDI à temps plein, pour un poste situé à proximité du 3ᵉ arrondissement de Lyon (69"
+        },
+        {
+          "field": "service",
+          "value": "laboratoire",
+          "state": "MENTION_A_CONFIRMER",
+          "evidence": "Nous recherchons pour l'un de nos partenaires, un Laboratoire d'analyses médicales, un(e) Infirmier(e) ou Technicien(ne) de prélèvement en CDI à temps plein, pour un poste situé à proximité du 3ᵉ arrondissement de Lyon (69"
+        },
+        {
+          "field": "contrat",
+          "value": "CDI mentionne",
+          "state": "ALERTE_PERIMETRE_INTERIM",
+          "evidence": "Nous recherchons pour l'un de nos partenaires, un Laboratoire d'analyses médicales,un(e) Infirmier(e) ou Technicien(ne) de prélèvement en CDI à temps plein, pour un poste situé à proximité du 3ᵉ arrondissement de Lyon (69"
+        },
+        {
+          "field": "service",
+          "value": "laboratoire",
+          "state": "MENTION_A_CONFIRMER",
+          "evidence": "Nous recherchons pour l'un de nos partenaires, un Laboratoire d'analyses médicales,un(e) Infirmier(e) ou Technicien(ne) de prélèvement en CDI à temps plein, pour un poste situé à proximité du 3ᵉ arrondissement de Lyon (69"
+        },
+        {
+          "field": "service",
+          "value": "laboratoire",
+          "state": "MENTION_A_CONFIRMER",
+          "evidence": "Assurer l'accueil des patients et leur prise en charge au laboratoire"
+        },
+        {
+          "field": "service",
+          "value": "laboratoire",
+          "state": "MENTION_A_CONFIRMER",
+          "evidence": "Horaires : Amplitude horaire d’ouverture du laboratoire 7 h"
+        },
+        {
+          "field": "montant_mentionne",
+          "value": "2100 €",
+          "state": "UNITE_ET_NATURE_A_CONFIRMER",
+          "evidence": "Rémunération comprise entre 25k et 28k bruts annuels, soit entre 2100 € et 2400 € brut mensuel"
+        },
+        {
+          "field": "montant_mentionne",
+          "value": "2400 € brut",
+          "state": "UNITE_ET_NATURE_A_CONFIRMER",
+          "evidence": "Rémunération comprise entre 25k et 28k bruts annuels, soit entre 2100 € et 2400 € brut mensuel"
+        }
+      ],
+      "unknown": [
+        "dates_mission",
+        "experience_minimale_validee",
+        "salaire_normalise",
+        "competences_obligatoires_validees"
+      ],
+      "note": "Prototype : mentions descriptives, non utilisees pour filtrer ou affecter un candidat."
+    },
+    {
+      "id": "8908373d-428e-4cec-a02f-1b5e60e99f29",
+      "title": "Infirmier(ère) de jour - SMR (H/F)",
+      "source": "JOBSPIPE",
+      "url": "https://fr.linkedin.com/jobs/view/infirmier-%C3%A8re-de-jour-smr-h-f-at-talents-sant%C3%A9-4465924483",
+      "location": "Guyancourt, Île-de-France, France",
+      "extractions": [
+        {
+          "field": "qualification",
+          "value": "IDE probable",
+          "state": "A_CONFIRMER",
+          "evidence": "Infirmier(ère) de jour - SMR (H/F)"
+        },
+        {
+          "field": "organisation",
+          "value": "jour",
+          "state": "MENTION_A_CONFIRMER",
+          "evidence": "Infirmier(ère) de jour"
+        },
+        {
+          "field": "service",
+          "value": "SMR",
+          "state": "MENTION_A_CONFIRMER",
+          "evidence": "SMR (H/F)"
+        },
+        {
+          "field": "contrat",
+          "value": "CDI mentionne",
+          "state": "ALERTE_PERIMETRE_INTERIM",
+          "evidence": "Notre cabinet accompagne un établissement privé de Soins Médicaux et de Réadaptation (SMR) appartenant à un groupe reconnu dans le secteur de la santé, dans le recrutement d’un(e) Infirmier(ère) de jour en CDI"
+        },
+        {
+          "field": "service",
+          "value": "SMR",
+          "state": "MENTION_A_CONFIRMER",
+          "evidence": "Notre cabinet accompagne un établissement privé de Soins Médicaux et de Réadaptation (SMR) appartenant à un groupe reconnu dans le secteur de la santé, dans le recrutement d’un(e) Infirmier(ère) de jour en CDI"
+        },
+        {
+          "field": "organisation",
+          "value": "jour",
+          "state": "MENTION_A_CONFIRMER",
+          "evidence": "Notre cabinet accompagne un établissement privé de Soins Médicaux et de Réadaptation (SMR) appartenant à un groupe reconnu dans le secteur de la santé, dans le recrutement d’un(e) Infirmier(ère) de jour en CDI"
+        },
+        {
+          "field": "service",
+          "value": "geriatrie",
+          "state": "MENTION_A_CONFIRMER",
+          "evidence": "L’établissement prend principalement en charge des patients âgés, dans un environnement à la fois gériatrique et polyvalent, avec une activité comprenant de nombreux soins techniques"
+        },
+        {
+          "field": "service",
+          "value": "SMR",
+          "state": "SOUHAITE",
+          "evidence": "Vous appréciez particulièrement la prise en charge des personnes âgées et souhaitez évoluer dans un environnement SMR"
+        },
+        {
+          "field": "service",
+          "value": "SMR",
+          "state": "MENTION_A_CONFIRMER",
+          "evidence": "- Ayant idéalement une première expérience en gériatrie, médecine ou SMR"
+        },
+        {
+          "field": "service",
+          "value": "geriatrie",
+          "state": "MENTION_A_CONFIRMER",
+          "evidence": "- Ayant idéalement une première expérience en gériatrie, médecine ou SMR"
+        },
+        {
+          "field": "contrat",
+          "value": "CDI mentionne",
+          "state": "ALERTE_PERIMETRE_INTERIM",
+          "evidence": "CDI – Temps plein"
+        },
+        {
+          "field": "organisation",
+          "value": "jour",
+          "state": "MENTION_A_CONFIRMER",
+          "evidence": "Poste de jour"
+        },
+        {
+          "field": "montant_mentionne",
+          "value": "33 600 € brut annuel",
+          "state": "UNITE_ET_NATURE_A_CONFIRMER",
+          "evidence": "Rémunération : 31 200 à 33 600 € brut annuel, selon l'ancienneté / année de diplôme"
+        }
+      ],
+      "unknown": [
+        "dates_mission",
+        "experience_minimale_validee",
+        "salaire_normalise",
+        "competences_obligatoires_validees"
+      ],
+      "note": "Prototype : mentions descriptives, non utilisees pour filtrer ou affecter un candidat."
+    },
+    {
+      "id": "971e454d-f267-4d02-b1cd-5c9aa1e386fb",
+      "title": "Infirmier préleveur en laboratoire h/f",
+      "source": "JOBSPIPE",
+      "url": "https://fr.linkedin.com/jobs/view/infirmier-pr%C3%A9leveur-en-laboratoire-h-f-at-talents-sant%C3%A9-4464598468",
+      "location": "Épernon, Centre-Val de Loire, France",
+      "extractions": [
+        {
+          "field": "qualification",
+          "value": "IDE probable",
+          "state": "A_CONFIRMER",
+          "evidence": "Infirmier préleveur en laboratoire h/f"
+        },
+        {
+          "field": "service",
+          "value": "laboratoire",
+          "state": "MENTION_A_CONFIRMER",
+          "evidence": "Infirmier préleveur en laboratoire h/f"
+        },
+        {
+          "field": "contrat",
+          "value": "CDI mentionne",
+          "state": "ALERTE_PERIMETRE_INTERIM",
+          "evidence": "Effectuer les compte rendu et transmissions si besoin Poste en CDI temps plein, Salaire à partir de 26k, horaires de journée amplitude 7h30-17h, et environ un samedi matin sur deux travaillé (8h-12h)"
+        }
+      ],
+      "unknown": [
+        "dates_mission",
+        "experience_minimale_validee",
+        "salaire_normalise",
+        "competences_obligatoires_validees"
+      ],
+      "note": "Prototype : mentions descriptives, non utilisees pour filtrer ou affecter un candidat."
+    },
+    {
+      "id": "af7ca4ec-c76f-4b80-8f0b-4bdafcb6198f",
+      "title": "Infirmier(e) Conseiller(e) Clinique H/F Secteur 92 / 95",
+      "source": "JOBSPIPE",
+      "url": "https://fr.linkedin.com/jobs/view/infirmier-e-conseiller-e-clinique-h-f-secteur-92-95-at-talents-sant%C3%A9-4466523192",
+      "location": "Nanterre, Île-de-France, France",
+      "extractions": [
+        {
+          "field": "qualification",
+          "value": "IDE probable",
+          "state": "A_CONFIRMER",
+          "evidence": "Infirmier(e) Conseiller(e) Clinique H/F Secteur 92 / 95"
+        },
+        {
+          "field": "montant_mentionne",
+          "value": "16€",
+          "state": "UNITE_ET_NATURE_A_CONFIRMER",
+          "evidence": "VL de fonction, carte essence, PC, téléphone, 16€ de prise en charge pour les repas, mutuelle remboursée à 100%, participation aux frais d'électricité et à la box internet, CSE"
+        }
+      ],
+      "unknown": [
+        "dates_mission",
+        "experience_minimale_validee",
+        "salaire_normalise",
+        "competences_obligatoires_validees"
+      ],
+      "note": "Prototype : mentions descriptives, non utilisees pour filtrer ou affecter un candidat."
+    },
+    {
+      "id": "b14b0433-34bd-447a-b27e-d39ef89eee0c",
+      "title": "Infirmier de bloc opératoire (IBODE) F/H",
+      "source": "JOBSPIPE",
+      "url": "https://fr.linkedin.com/jobs/view/infirmier-de-bloc-op%C3%A9ratoire-ibode-f-h-at-synergie-france-4465224715",
+      "location": "Avranches, Normandy, France",
+      "extractions": [
+        {
+          "field": "qualification",
+          "value": "IBODE",
+          "state": "EXPLICITE_TITRE",
+          "evidence": "Infirmier de bloc opératoire (IBODE) F/H"
+        },
+        {
+          "field": "service",
+          "value": "psychiatrie",
+          "state": "MENTION_A_CONFIRMER",
+          "evidence": "Profil recherché Intervenir auprès de malades psychiatriques"
+        },
+        {
+          "field": "population",
+          "value": "enfant",
+          "state": "MENTION_A_CONFIRMER",
+          "evidence": "Intervenir auprès d’enfants malades"
+        },
+        {
+          "field": "contrat",
+          "value": "CDI mentionne",
+          "state": "ALERTE_PERIMETRE_INTERIM",
+          "evidence": "Capacité à gérer des situations stressantes Vaccinations prévues par le Code de Santé Publique à jour Description Société Synergie Care, réseau spécialisé dans l’emploi médical, paramédical et social vous accompagne dans l’évolution de votre carrière professionnelle : recrutement CDD-CDI, intérim médical, formation et conseil dans le secteur de la santé"
+        }
+      ],
+      "unknown": [
+        "dates_mission",
+        "experience_minimale_validee",
+        "salaire_normalise",
+        "competences_obligatoires_validees"
+      ],
+      "note": "Prototype : mentions descriptives, non utilisees pour filtrer ou affecter un candidat."
+    },
+    {
+      "id": "e2bc247f-21a1-4dc9-906b-1ae863a7a6b1",
+      "title": "Infirmier H/F",
+      "source": "JOBSPIPE",
+      "url": "https://www.indeed.com/viewjob?jk=a0a48d3fce29cb95",
+      "location": "33210 Langon",
+      "extractions": [
+        {
+          "field": "qualification",
+          "value": "IDE probable",
+          "state": "A_CONFIRMER",
+          "evidence": "Infirmier H/F"
+        },
+        {
+          "field": "contrat",
+          "value": "CDI mentionne",
+          "state": "ALERTE_PERIMETRE_INTERIM",
+          "evidence": "Que vous recherchiez des missions d'intérim ou des postes en CDD ou CDI, nous avons certainement l'offre qui correspond à vos attentes, n'hésitez pas à postuler pour rejoindre nos équipes"
+        },
+        {
+          "field": "service",
+          "value": "geriatrie",
+          "state": "MENTION_A_CONFIRMER",
+          "evidence": "Team Staffing Médical est à la recherche d'un Infirmier H/F pour un des missions en vacation de jour dans un EHPAD situé à LANGON pour le mois de septembre"
+        },
+        {
+          "field": "service",
+          "value": "geriatrie",
+          "state": "MENTION_A_CONFIRMER",
+          "evidence": "Il s'agit d'un EHPAD composé de 83 chambres"
+        },
+        {
+          "field": "service",
+          "value": "geriatrie",
+          "state": "MENTION_A_CONFIRMER",
+          "evidence": "Présent en France et à l’international, le groupe gère des EHPAD, cliniques, résidences services seniors et structures spécialisées, avec une ambition forte : proposer un accompagnement humain, personnalisé et de qualité"
+        }
+      ],
+      "unknown": [
+        "dates_mission",
+        "experience_minimale_validee",
+        "salaire_normalise",
+        "competences_obligatoires_validees"
+      ],
+      "note": "Prototype : mentions descriptives, non utilisees pour filtrer ou affecter un candidat."
+    }
+  ]
+}

@@ -1,0 +1,149 @@
+.button {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  border: 1px solid transparent;
+  border-radius: var(--radius-control);
+  font-weight: 700;
+  text-decoration: none;
+  white-space: nowrap;
+  cursor: pointer;
+  transition:
+    background-color var(--duration-fast) var(--ease-out),
+    color var(--duration-fast) var(--ease-out),
+    transform var(--duration-fast) var(--ease-out);
+}
+
+.button:active:not(:disabled) {
+  transform: translateY(1px);
+}
+
+.button:disabled {
+  background: var(--grey-100);
+  background-image: none;
+  border-color: transparent;
+  color: var(--grey-600);
+  cursor: not-allowed;
+  transform: none;
+}
+
+.sm {
+  height: 36px;
+  padding: 0 var(--space-4);
+  font-size: var(--font-body-sm);
+}
+
+.md {
+  height: 44px;
+  padding: 0 var(--space-6);
+  font-size: 16px;
+}
+
+.lg {
+  height: 52px;
+  padding: 0 var(--space-8);
+  font-size: 18px;
+}
+
+.block {
+  display: flex;
+  width: 100%;
+}
+
+.primary {
+  background: var(--blue);
+  color: var(--white);
+}
+
+.primary:hover:not(:disabled) {
+  background: var(--blue-600);
+}
+
+.primary:active:not(:disabled) {
+  background: var(--blue-700);
+}
+
+.secondary {
+  background: var(--tint);
+  color: var(--blue-700);
+}
+
+.secondary:hover:not(:disabled) {
+  background: var(--tint-200);
+  color: var(--blue-900);
+}
+
+.outline {
+  background: transparent;
+  border-color: var(--blue-500);
+  color: var(--blue-700);
+}
+
+.outline:hover:not(:disabled) {
+  background: var(--tint);
+  color: var(--blue-900);
+}
+
+.ghost {
+  background: transparent;
+  color: var(--blue-700);
+}
+
+.ghost:hover:not(:disabled) {
+  background: var(--grey-100);
+  color: var(--blue-900);
+}
+
+.danger {
+  background: var(--danger-700);
+  color: var(--white);
+}
+
+.danger:hover:not(:disabled) {
+  background: #8f1e17;
+}
+
+.icon {
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  border-radius: 50%;
+  background: var(--tint);
+  color: var(--blue-700);
+}
+
+.icon:hover:not(:disabled) {
+  background: var(--tint-200);
+  color: var(--blue-900);
+}
+
+.spinner {
+  width: 16px;
+  height: 16px;
+  border: 2px solid currentColor;
+  border-top-color: transparent;
+  border-radius: 50%;
+  animation: spin 600ms linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Plus Jakarta Sans est plus large que la police précédente : sur les
+   petits écrans, un libellé long débordait du conteneur. */
+@media (max-width: 400px) {
+  .lg {
+    height: 48px;
+    padding: 0 var(--space-4);
+    font-size: 16px;
+  }
+
+  .md {
+    padding: 0 var(--space-4);
+  }
+}

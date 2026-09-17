@@ -1,0 +1,11 @@
+<svg preserveAspectRatio="none" overflow="visible" style="display: block;" width="21" height="19.4123" viewBox="0 0 21 19.4123" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g id="Icon / Record">
+<path id="Icono / Record" fill-rule="evenodd" clip-rule="evenodd" d="M1.96447 2.05975C3.91709 -0.0199178 7.08291 -0.0199178 9.03553 2.05975L10.5 3.61951L11.9645 2.05975C13.9171 -0.0199178 17.0829 -0.0199178 19.0355 2.05975C20.9882 4.13942 20.9882 7.51124 19.0355 9.59091L10.5 18.6818L1.96447 9.59091C0.0118446 7.51124 0.0118446 4.13942 1.96447 2.05975Z" stroke="url(#paint0_linear_0_147)" stroke-linecap="round"/>
+</g>
+<defs>
+<linearGradient id="paint0_linear_0_147" x1="10.5" y1="0.5" x2="10.5" y2="18.6818" gradientUnits="userSpaceOnUse">
+<stop stop-color="#33E4DB"/>
+<stop offset="1" stop-color="#00BBD3"/>
+</linearGradient>
+</defs>
+</svg>

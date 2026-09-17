@@ -1,0 +1,20 @@
+{
+  "at": "2026-09-15T23:19:08.950Z",
+  "checks": [
+    "Exact total, 20 first items and stable unique ordering",
+    "Out-of-range page retains exact total",
+    "Global case-insensitive location search before pagination",
+    "No result returns zero and empty array",
+    "Empty query does not filter",
+    "Percent and underscore are literal text",
+    "SQL-like input cannot alter query",
+    "Existing parameter positions are preserved",
+    "HTTP query DTO accepts numeric strings and search",
+    "Invalid search and offsets rejected by DTOs",
+    "Real external route returns matching count and page",
+    "Real external route search and empty distant page",
+    "Real qualified search union count respects qualifications",
+    "Real qualified search retains total beyond last page"
+  ],
+  "scope": "Real PostgreSQL READ ONLY transaction, synthetic SELECT values and existing catalogue; qualified profile fixture only in memory, no persisted fixtures, no account/session changes."
+}

@@ -1,0 +1,145 @@
+.page {
+  display: grid;
+  place-items: center;
+  min-height: 100dvh;
+  padding: 48px 24px;
+  background: var(--brand-50);
+}
+
+.contenu {
+  width: 100%;
+  max-width: 580px;
+  min-width: 0;
+  text-align: center;
+}
+
+.marque {
+  display: inline-flex;
+  margin-bottom: 28px;
+  text-decoration: none;
+  border-radius: 4px;
+}
+
+.carte {
+  width: 100%;
+  padding: 44px 44px 32px;
+  border: 1px solid var(--line);
+  border-radius: 24px;
+  background: var(--white);
+  box-shadow: 0 14px 44px rgb(10 37 64 / 6%);
+}
+
+.succes {
+  display: grid;
+  place-items: center;
+  width: 60px;
+  height: 60px;
+  margin: 0 auto 24px;
+  color: var(--success-700);
+  background: var(--success-50);
+  border: 1px solid var(--success-200);
+  border-radius: 50%;
+}
+
+.repere {
+  margin-bottom: 10px;
+  color: var(--brand-800);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.titre {
+  margin: 0 0 16px;
+  color: var(--ink-900);
+  font-size: clamp(26px, 3vw, 34px);
+  line-height: 1.2;
+  letter-spacing: -0.04em;
+}
+
+.chapeau {
+  color: var(--ink-600);
+  font-size: 15px;
+  line-height: 1.7;
+  overflow-wrap: anywhere;
+}
+
+.email {
+  display: block;
+  margin-top: 2px;
+  color: var(--ink-700);
+  font-weight: 600;
+  overflow-wrap: anywhere;
+}
+
+.prochaineEtape {
+  margin: 28px 0;
+  padding: 22px 24px;
+  border-left: 3px solid var(--brand-600);
+  border-radius: 0 12px 12px 0;
+  background: var(--brand-50);
+  text-align: left;
+}
+
+.etapeLabel {
+  margin-bottom: 8px;
+  color: var(--brand-800);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.etapeTitre {
+  margin-bottom: 8px;
+  font-size: 17px;
+  line-height: 1.45;
+  font-weight: 700;
+}
+
+.prochaineEtape > p:last-child {
+  color: var(--ink-600);
+  font-size: 14px;
+  line-height: 1.65;
+}
+
+.actions {
+  display: grid;
+  gap: 8px;
+  margin-top: 24px;
+}
+
+.actions a,
+.actions button {
+  min-width: 0;
+  height: auto;
+  min-height: 48px;
+  padding: 12px 16px;
+  white-space: normal;
+  overflow-wrap: anywhere;
+  font-size: 15px;
+  line-height: 1.45;
+}
+
+.actions a:focus-visible,
+.actions button:focus-visible,
+.marque:focus-visible {
+  outline: var(--focus-ring);
+  outline-offset: 4px;
+}
+
+.signature {
+  margin-top: 24px;
+  color: var(--ink-600);
+  font-size: 12px;
+}
+
+@media (max-width: 480px) {
+  .page { padding: 28px 16px; }
+  .marque { margin-bottom: 22px; }
+  .carte { padding: 28px 22px 20px; border-radius: 20px; }
+  .succes { width: 52px; height: 52px; margin-bottom: 20px; }
+  .prochaineEtape { padding: 18px; margin: 24px 0; }
+  .chapeau { font-size: 14px; }
+}

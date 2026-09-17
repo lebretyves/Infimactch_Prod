@@ -1,0 +1,15 @@
+import 'reflect-metadata';
+import {test} from 'node:test';
+import assert from 'node:assert/strict';
+import {createServer} from 'node:http';
+import {generateKeyPairSync,sign} from 'node:crypto';
+import * as oidc from 'openid-client';
+import {PscProvider,pscConfiguration,pscIdentity} from '../../src/auth/psc';
+test('PSC absent configuration stays disabled, identity is not inferred from sub or email',()=>{assert.equal(pscConfiguration(),null);assert.throws(()=>pscIdentity({sub:'technical-uuid',email:'nurse@example.invalid'}));assert.deepEqual(pscIdentity({sub:'technical-uuid',SubjectNameID:'ANS-FICTITIOUS-IDENTIFIER'}),{subject:'technical-uuid',subjectNameId:'ANS-FICTITIOUS-IDENTIFIER'});});
+test('PSC library rejects invalid signature, issuer, audience, expiry, nonce and state',async()=>{
+ const pair=generateKeyPairSync('rsa',{modulusLength:2048}),other=generateKeyPairSync('rsa',{modulusLength:2048});const jwk={...pair.publicKey.export({format:'jwk'}),kid:'test-key',use:'sig',alg:'RS256'};
+ let base='',mode='valid';const encode=(x:unknown)=>Buffer.from(JSON.stringify(x)).toString('base64url');
+ const server=createServer((req,res)=>{res.setHeader('Content-Type','application/json');if(req.url==='/jwks'){res.end(JSON.stringify({keys:[jwk]}));return;}if(req.url==='/userinfo'){res.end(JSON.stringify({sub:'fixture-sub',SubjectNameID:'ANS-FICTITIOUS'}));return;}if(req.url==='/token'){const now=Math.floor(Date.now()/1000),claims={iss:mode==='issuer'?'https://wrong.invalid':base,sub:'fixture-sub',aud:mode==='audience'?'wrong-client':'fixture-client',iat:now,exp:mode==='expiry'?now-3600:now+300,nonce:mode==='nonce'?'wrong-nonce':'fixture-nonce'};const payload=encode({alg:'RS256',kid:'test-key'})+'.'+encode(claims);const signature=sign('RSA-SHA256',Buffer.from(payload),mode==='signature'?other.privateKey:pair.privateKey).toString('base64url');res.end(JSON.stringify({access_token:'fixture-access-token',token_type:'Bearer',expires_in:300,id_token:payload+'.'+signature}));return;}res.statusCode=404;res.end('{}');});
+ await new Promise<void>(resolve=>server.listen(0,'127.0.0.1',resolve));base='http://127.0.0.1:'+(server.address() as any).port;
+ try{const config=new oidc.Configuration({issuer:base,token_endpoint:base+'/token',userinfo_endpoint:base+'/userinfo',jwks_uri:base+'/jwks'},'fixture-client',{},oidc.ClientSecretPost('fixture-secret'));oidc.allowInsecureRequests(config);oidc.enableNonRepudiationChecks(config);class Fixture extends PscProvider {override async client(){return config;}}const provider=new Fixture();const url=new URL(base+'/callback?code=fixture-code&state=fixture-state');const expected={state:'fixture-state',nonce:'fixture-nonce',verifier:''};assert.equal((await provider.complete(url,expected)).subjectNameId,'ANS-FICTITIOUS');for(mode of ['signature','issuer','audience','expiry','nonce'])await assert.rejects(()=>provider.complete(url,expected));mode='valid';await assert.rejects(()=>provider.complete(url,{...expected,state:'wrong-state'}));}finally{await new Promise<void>(resolve=>server.close(()=>resolve()));}
+});

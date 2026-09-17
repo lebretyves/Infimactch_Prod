@@ -1,0 +1,12 @@
+{
+  "generated_at": "2026-09-15T20:49:11.223548+00:00",
+  "pages": 18,
+  "absent": 6,
+  "partial": 11,
+  "covered_drawn_scope": 1,
+  "api_groups": 19,
+  "front_paths": 21,
+  "hashes_verified": true,
+  "docx_valid": true,
+  "new_application_tests": false
+}

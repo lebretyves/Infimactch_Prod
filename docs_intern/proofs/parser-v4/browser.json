@@ -1,0 +1,14 @@
+{
+  "at": "2026-09-16T10:16:06.720Z",
+  "status": "PASS",
+  "scope": "Real stored parsed offer via HTTPS API; synthetic browser-only identity, correspondence, recommendations, preferences and 21 candidates. No account or mission written.",
+  "checks": [
+    "real non-demo offer parsing",
+    "source evidence visible",
+    "missing dates label",
+    "mobile no overflow",
+    "home uses recommendations",
+    "notification toggle",
+    "candidate 21 and page 2"
+  ]
+}

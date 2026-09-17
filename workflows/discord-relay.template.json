@@ -1,0 +1,97 @@
+{
+  "name": "InfiMatch — notifications Discord sécurisées",
+  "nodes": [
+    {
+      "id": "90ba1b8b-75a5-4c10-abb6-59aa417c023f",
+      "name": "Réception backend",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        0,
+        0
+      ],
+      "webhookId": "141d3951-650b-4738-baba-0cfe960ab1dc",
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "infimatch-discord-relay",
+        "authentication": "headerAuth",
+        "responseMode": "lastNode",
+        "options": {}
+      }
+    },
+    {
+      "id": "16b0e2fc-683c-4d24-a5ac-18d2a1b4355e",
+      "name": "Valider la demande",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        240,
+        0
+      ],
+      "parameters": {
+        "jsCode": "const b=$json.body||{};const id='[0-9]{17,20}';\n const read=new RegExp('^/(users/@me(/guilds)?|guilds/'+id+'(/roles|/channels|/members/'+id+')?|channels/'+id+')$');\n const write=new RegExp('^/channels/'+id+'/messages$');\n if(b.method==='GET'&&read.test(b.path))return [{json:{method:'GET',path:b.path,body:{}}}];\n if(b.method==='POST'&&b.path==='/users/@me/channels'&&new RegExp('^'+id+'$').test(b.body?.recipient_id))return [{json:{method:'POST',path:b.path,body:{recipient_id:b.body.recipient_id}}}];\n if(b.method==='POST'&&write.test(b.path)&&typeof b.body?.content==='string'&&b.body.content.length>0&&b.body.content.length<=2000&&/^[a-zA-Z0-9]{1,25}$/.test(b.body.nonce||''))return [{json:{method:'POST',path:b.path,body:{content:b.body.content,nonce:b.body.nonce,enforce_nonce:true,allowed_mentions:{parse:[]}}}}];\n throw new Error('Unsupported Discord operation');"
+      }
+    },
+    {
+      "id": "bd66140e-5519-4cd2-9569-3041176c85b3",
+      "name": "API Discord",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        480,
+        0
+      ],
+      "parameters": {
+        "method": "={{ $json.method }}",
+        "url": "={{ \"https://discord.com/api/v10\" + $json.path }}",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "discordBotApi",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify($json.body) }}",
+        "options": {
+          "timeout": 15000,
+          "response": {
+            "response": {
+              "fullResponse": true,
+              "neverError": true,
+              "responseFormat": "json"
+            }
+          }
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Réception backend": {
+      "main": [
+        [
+          {
+            "node": "Valider la demande",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Valider la demande": {
+      "main": [
+        [
+          {
+            "node": "API Discord",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "saveDataErrorExecution": "none",
+    "saveDataSuccessExecution": "none",
+    "saveManualExecutions": false,
+    "saveExecutionProgress": false
+  },
+  "active": false
+}

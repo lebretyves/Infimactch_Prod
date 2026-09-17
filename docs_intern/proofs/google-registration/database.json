@@ -1,0 +1,12 @@
+{
+  "at": "2026-09-15T23:42:29.562Z",
+  "checks": [
+    "Google nurse account, profile and identity persist together inside transaction",
+    "Duplicate Google registration rolls back completely without duplicate account",
+    "Subject conflict with different email does not leave a partial account",
+    "Google agency signup creates organization and membership atomically",
+    "Classic password registration and login still work",
+    "Outer rollback verified: original account/identity/profile/organization counts unchanged"
+  ],
+  "scope": "Real PostgreSQL writes enclosed in an outer rollback; no persisted test accounts or organizations."
+}

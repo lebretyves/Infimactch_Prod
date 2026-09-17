@@ -1,0 +1,89 @@
+{
+  "at": "2026-09-16T00:02:12.849Z",
+  "checks": [
+    {
+      "width": 1440,
+      "visibleWords": 237,
+      "photos": 3,
+      "height": 2549.802978515625
+    },
+    "Accueil 1440px: header, anchors, menu, FAQ, image, no overflow",
+    {
+      "width": 1024,
+      "visibleWords": 237,
+      "photos": 3,
+      "height": 2355.94677734375
+    },
+    "Accueil 1024px: header, anchors, menu, FAQ, image, no overflow",
+    {
+      "width": 768,
+      "visibleWords": 237,
+      "photos": 3,
+      "height": 3027.56396484375
+    },
+    "Accueil 768px: header, anchors, menu, FAQ, image, no overflow",
+    {
+      "width": 375,
+      "visibleWords": 237,
+      "photos": 3,
+      "height": 3249.6513671875
+    },
+    "Accueil 375px: header, anchors, menu, FAQ, image, no overflow",
+    {
+      "width": 320,
+      "visibleWords": 237,
+      "photos": 3,
+      "height": 3347.770263671875
+    },
+    "Accueil 320px: header, anchors, menu, FAQ, image, no overflow",
+    "Inscription preselected candidat",
+    "Inscription preselected etablissement",
+    "Inscription preselected agence",
+    "Unknown registration query keeps default"
+  ],
+  "pages": [
+    {
+      "href": "/",
+      "destination": "/"
+    },
+    {
+      "href": "/connexion",
+      "destination": "/connexion"
+    },
+    {
+      "href": "/inscription",
+      "destination": "/inscription"
+    },
+    {
+      "href": "/inscription?espace=candidat",
+      "destination": "/inscription"
+    },
+    {
+      "href": "/inscription?espace=etablissement",
+      "destination": "/inscription"
+    },
+    {
+      "href": "/inscription?espace=agence",
+      "destination": "/inscription"
+    },
+    {
+      "href": "/mentions-legales",
+      "destination": "/mentions-legales"
+    },
+    {
+      "href": "/mentions-legales#confidentialite",
+      "destination": "/mentions-legales"
+    },
+    {
+      "href": "/mentions-legales#conditions",
+      "destination": "/mentions-legales"
+    },
+    {
+      "href": "/catalogue",
+      "destination": "/catalogue"
+    }
+  ],
+  "errors": [],
+  "writes": [],
+  "scope": "Real local pages, isolated browser, no form submission; API writes blocked. Google disabled only in the isolated test context; OAuth outside scope."
+}

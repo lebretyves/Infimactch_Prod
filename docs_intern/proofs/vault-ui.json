@@ -1,0 +1,11 @@
+{
+  "checkedAt": "2026-09-15T13:21:26.496438+00:00",
+  "loginPageVisible": true,
+  "url": "https://127.0.0.1:58200/ui/vault/auth",
+  "cause": "ERR_SSL_CLIENT_AUTH_CERT_NEEDED",
+  "fix": "tls_disable_client_certs=true",
+  "httpsVerified": true,
+  "vaultTestsPassed": 10,
+  "authenticatedInBrowser": false,
+  "kvSecretsModified": false
+}

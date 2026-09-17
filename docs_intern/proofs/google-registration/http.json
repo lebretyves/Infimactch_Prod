@@ -1,0 +1,11 @@
+{
+  "at": "2026-09-15T23:46:03Z",
+  "checks": [
+    "Configured public Client ID enabled",
+    "Real running backend retrieved Google certificates and rejected forged signature with TOKEN_INVALID, not a TLS service failure",
+    "Missing verified identity cannot access or submit registration",
+    "Challenge replay rejected",
+    "Isolated test session destroyed"
+  ],
+  "scope": "Negative security HTTP checks only; no actual Google user token or account creation"
+}

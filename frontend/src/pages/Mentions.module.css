@@ -1,0 +1,65 @@
+.marque {
+  display: inline-flex;
+  border-radius: var(--radius-sm);
+  text-decoration: none;
+}
+
+.retour {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-size: var(--font-body);
+  font-weight: 600;
+  color: var(--ink-700);
+  text-decoration: none;
+}
+
+.retour:hover {
+  color: var(--brand-800);
+}
+
+.page {
+  display: grid;
+  gap: var(--space-8);
+  width: 100%;
+  max-width: 82ch;
+  margin-inline: auto;
+  padding: clamp(var(--space-8), 4vw, var(--space-16)) clamp(var(--space-4), 4vw, var(--space-10));
+}
+
+.page h1 {
+  font-size: var(--font-display);
+}
+
+.page h2 {
+  margin-bottom: var(--space-3);
+  color: var(--brand-800);
+}
+
+.page h3 {
+  margin: var(--space-5) 0 var(--space-2);
+}
+
+.page section {
+  display: grid;
+  gap: var(--space-3);
+}
+
+.page p {
+  color: var(--ink-700);
+}
+
+.chapeau {
+  font-size: var(--font-lead);
+}
+
+.liste {
+  display: grid;
+  gap: var(--space-2);
+  color: var(--ink-700);
+}
+
+.liste li {
+  padding-left: var(--space-4);
+  border-left: 2px solid var(--sky-200);
+}

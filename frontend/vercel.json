@@ -1,0 +1,66 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "framework": "vite",
+  "installCommand": "npm ci",
+  "buildCommand": "npm run build",
+  "outputDirectory": "dist",
+  "rewrites": [
+    {
+      "source": "/installer",
+      "destination": "/installer.html"
+    },
+    {
+      "source": "/accessibilite",
+      "destination": "/accessibilite.html"
+    },
+    {
+      "source": "/ecoconception",
+      "destination": "/ecoconception.html"
+    },
+    {
+      "source": "/mentions-legales",
+      "destination": "/mentions-legales.html"
+    },
+    {
+      "source": "/api/:path*",
+      "destination": "https://infimactch-prod-backend.vercel.app/api/:path*"
+    },
+    {
+      "source": "/:path(accueil|catalogue|apercu-annonces|connexion|mot-de-passe-oublie|inscription(?:/.*)?|notifications|missions(?:/.*)?|candidatures(?:/.*)?|calendrier|profil|dossier|favoris|etablissements/[^/]+|historique|organisation|besoins|gestion/missions/[^/]+(?:/modifier)?)",
+      "destination": "/index.html"
+    }
+  ],
+  "headers": [
+    {
+      "source": "/sw.js",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "no-cache"
+        },
+        {
+          "key": "Service-Worker-Allowed",
+          "value": "/"
+        }
+      ]
+    },
+    {
+      "source": "/manifest.webmanifest",
+      "headers": [
+        {
+          "key": "Content-Type",
+          "value": "application/manifest+json"
+        }
+      ]
+    },
+    {
+      "source": "/:path((?!installer$|accessibilite$|ecoconception$|mentions-legales$).+)",
+      "headers": [
+        {
+          "key": "X-Robots-Tag",
+          "value": "noindex, follow"
+        }
+      ]
+    }
+  ]
+}

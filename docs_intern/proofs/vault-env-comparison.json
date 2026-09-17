@@ -1,0 +1,21 @@
+{
+  "checkedAt": "2026-09-15T13:11:53.668Z",
+  "initialized": true,
+  "sealed": false,
+  "groups": {
+    "backend": {
+      "count": 8,
+      "missing": [],
+      "different": [],
+      "extra": [],
+      "version": 1
+    },
+    "infra": {
+      "count": 4,
+      "missing": [],
+      "different": [],
+      "extra": [],
+      "version": 1
+    }
+  }
+}

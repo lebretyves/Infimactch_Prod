@@ -1,0 +1,20 @@
+{
+  "date": "2026-09-15T21:55:12.386Z",
+  "checks": [
+    "enterprise_ui_registration_ESTABLISHMENT",
+    "protected_return_and_password_toggle_ESTABLISHMENT",
+    "enterprise_ui_registration_AGENCY",
+    "protected_return_and_password_toggle_AGENCY",
+    "photo_and_responsive_/_375",
+    "photo_and_responsive_/connexion_375",
+    "photo_and_responsive_/inscription_375",
+    "photo_and_responsive_/_768",
+    "photo_and_responsive_/connexion_768",
+    "photo_and_responsive_/inscription_768",
+    "photo_and_responsive_/_1440",
+    "photo_and_responsive_/connexion_1440",
+    "photo_and_responsive_/inscription_1440",
+    "mobile_menu_and_legal_anchor",
+    "404_recovery"
+  ]
+}

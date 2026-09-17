@@ -1,0 +1,22 @@
+{
+  "scope": "documentary only",
+  "checks": {
+    "F12_three_workflows": true,
+    "RPPS_states": true,
+    "no_old_workflow_rule": true,
+    "no_blocked_equals_done": true,
+    "TLS_and_cancellation": true,
+    "source_numbering": true,
+    "matrix_counts": true,
+    "no_invented_tests": true,
+    "estimates": true,
+    "docx_zip": true,
+    "docx_xml": true,
+    "docx_F18_api": true,
+    "docx_no_F27": true,
+    "docx_other_components_preserved": true,
+    "local_links": true,
+    "hashes": true
+  },
+  "passed": true
+}

@@ -1,0 +1,14 @@
+{
+  "archiveSha256": "f07ed12d27a5bc7ea6f8a0c0b745b10547970171dde14c588801aada2c4ab72e",
+  "rows": 78390,
+  "uniqueFiness": 78390,
+  "coordinatesValidRange": 58011,
+  "coordinatesMissing": 0,
+  "provenance": "USER_SUPPLIED_ARCHIVE; official source URL and extraction date not established",
+  "numericOnlyFinessRejected": 176,
+  "corsicanFinessWith2Aor2B": 176,
+  "invalidFinessFormat": 0,
+  "coordinatesOutsideLongitudeLatitudeRange": 20379,
+  "coordinateReferenceSystem": "Not retained by supplied extractor; range-valid coordinates are not yet certified WGS84",
+  "officialFinessFormatReference": "https://esante.gouv.fr/produits-services/repertoire-finess"
+}

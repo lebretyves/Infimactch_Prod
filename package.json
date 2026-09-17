@@ -1,0 +1,42 @@
+{
+  "name": "infimatch",
+  "private": true,
+  "version": "0.1.0",
+  "workspaces": [
+    "backend"
+  ],
+  "scripts": {
+    "build": "npm run build -w backend",
+    "typecheck": "npm run typecheck -w backend",
+    "test": "npm run test -w backend",
+    "test:integration": "npm run test:integration -w backend",
+    "coverage": "npm run coverage -w backend",
+    "dev": "npm run dev -w backend",
+    "db:migrate": "npm run db:migrate -w backend",
+    "snapshot": "node scripts/snapshot.mjs",
+    "infra:up": "docker compose --env-file .env -f infra/compose.yaml up -d",
+    "infra:down": "docker compose --env-file .env -f infra/compose.yaml down",
+    "setup": "node scripts/setup-env.mjs",
+    "verify": "node scripts/verify.mjs",
+    "check:secrets": "node scripts/check-secrets.mjs",
+    "worker": "npm run worker -w backend",
+    "vault:setup": "node scripts/vault/setup.mjs",
+    "vault:status": "node scripts/vault/manage.mjs status",
+    "vault:unseal": "node scripts/vault/manage.mjs unseal",
+    "vault:rotate": "node scripts/vault/manage.mjs rotate",
+    "vault:sync": "node scripts/vault/manage.mjs sync",
+    "vault:snapshot": "node scripts/vault/manage.mjs snapshot",
+    "vault:check": "node scripts/vault/run.mjs check",
+    "start:vault": "node scripts/vault/run.mjs api",
+    "worker:vault": "node scripts/vault/run.mjs worker",
+    "cli:vault": "node scripts/vault/run.mjs cli",
+    "vault:infra": "node scripts/vault/run.mjs infra",
+    "test:vault": "node --test scripts/vault/vault.test.mjs",
+    "vault:trust": "node scripts/vault/trust.mjs",
+    "test:isolated": "node scripts/security/isolated.mjs",
+    "backup:full": "node scripts/security/backup.mjs",
+    "restore:verify": "node scripts/security/restore-test.mjs",
+    "db:migrate:vault": "node scripts/security/migrate.mjs",
+    "start:https": "node scripts/security/start-https.mjs"
+  }
+}

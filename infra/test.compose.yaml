@@ -1,0 +1,42 @@
+name: infimatch-v1-test
+services:
+  postgres:
+    image: postgis/postgis:17-3.5@sha256:01a6a70e41e6c4467c8f55f6063555ed72db2d6662cd0d571040d42eadaeb6f6
+    environment:
+      POSTGRES_DB: infimatch_test
+      POSTGRES_USER: test_admin
+      POSTGRES_PASSWORD: ${TEST_PASSWORD:?required}
+    ports: ["127.0.0.1:55433:5432"]
+    tmpfs: [/var/lib/postgresql/data]
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -h 127.0.0.1 -U test_admin -d infimatch_test"]
+      interval: 2s
+      timeout: 2s
+      retries: 60
+  mongo:
+    image: mongo:8.0.5@sha256:7bd28e5eea1c5766a084d5818254046f3ebe3b8f20a65e3a274640189e296667
+    ports: ["127.0.0.1:57018:27017"]
+    tmpfs: [/data/db]
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: test_admin
+      MONGO_INITDB_ROOT_PASSWORD: ${TEST_PASSWORD:?required}
+    healthcheck:
+      test: ["CMD", "mongosh", "--quiet", "--eval", "db.adminCommand('ping')"]
+      interval: 2s
+      timeout: 2s
+      retries: 60
+  n8n:
+    image: docker.n8n.io/n8nio/n8n:2.38.7@sha256:a8c95f75c6fdf65f5f2b7a7b354744eaa1c62bb911b5c00af6499c3f38e4cd32
+    ports: ["127.0.0.1:55679:5678"]
+    extra_hosts: ["host.docker.internal:host-gateway"]
+    environment:
+      N8N_ENCRYPTION_KEY: ${TEST_PASSWORD:?required}
+      N8N_SECURE_COOKIE: "false"
+      N8N_BLOCK_ENV_ACCESS_IN_NODE: "false"
+      INFIMATCH_SERVICE_TOKEN: ${TEST_SERVICE_TOKEN:?required}
+      INFIMATCH_API: http://host.docker.internal:3210/api/v1
+      N8N_DIAGNOSTICS_ENABLED: "false"
+      N8N_VERSION_NOTIFICATIONS_ENABLED: "false"
+      N8N_ENFORCE_SETTINGS_FILE_PERMISSIONS: "true"
+    volumes:
+      - ../workflows:/workflows:ro

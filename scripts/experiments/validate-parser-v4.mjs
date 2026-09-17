@@ -1,0 +1,7 @@
+﻿import fs from 'node:fs';import {createRequire} from 'node:module';
+const require=createRequire(import.meta.url);const {parseOffer}=require('../../backend/dist/public-data/offer-parser.js');
+const rows=JSON.parse(fs.readFileSync('data/parser-pilot/validation-v4-unseen.json'));
+const specs=[ [['duree_mission'],['experience_duree'],['competence','SURVEILLANCE'],['salaire_structure']], [['population','HANDICAP'],['competence','MEDICAMENTS']], [['service','BLOC'],['competence','HYGIENE']], [['service','DIALYSE'],['certification','ORDRE_INFIRMIER'],['logiciel'],['competence','TRACABILITE']] ];
+const offers=rows.map((row,i)=>{const p=parseOffer(row);return{id:row.id,title:row.title,targets:specs[i].map(([key,value])=>({key,value,found:p.fields.some(f=>f.key===key&&(value===undefined||f.value===value))})),proofErrors:p.fields.filter(f=>(f.evidence.origin==='TITLE'?row.title:row.description).slice(f.evidence.start,f.evidence.end)!==f.evidence.text).length,fields:p.fields};});
+const report={at:new Date().toISOString(),scope:'Four unseen France Travail offers, no rule changes after evaluation; targeted checks only',targets:offers.flatMap(r=>r.targets).length,found:offers.flatMap(r=>r.targets).filter(t=>t.found).length,offers};
+fs.writeFileSync('docs/proofs/parser-v4/validation-unseen.json',JSON.stringify(report,null,2));console.log(JSON.stringify({targets:report.targets,found:report.found,checks:offers.map(({fields,...r})=>r)},null,2));

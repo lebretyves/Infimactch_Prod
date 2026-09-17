@@ -1,0 +1,7 @@
+
+> infimatch@0.1.0 build
+> npm run build -w backend
+
+
+> @infimatch/backend@0.1.0 build
+> tsc -p tsconfig.build.json

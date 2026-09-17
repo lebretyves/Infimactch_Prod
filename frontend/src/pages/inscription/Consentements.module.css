@@ -1,0 +1,29 @@
+.liste {
+  display: grid;
+  gap: var(--space-5);
+  padding: var(--space-5);
+  border: 1px solid var(--grey-300);
+  border-radius: var(--radius-lg);
+}
+
+.separateur {
+  border: 0;
+  border-top: 1px solid var(--grey-300);
+  margin: 0;
+}
+
+.rgpd {
+  padding: var(--space-5);
+  border-radius: var(--radius-lg);
+  background: var(--tint);
+}
+
+.rgpdTitre {
+  margin-bottom: var(--space-2);
+  color: var(--blue-700);
+}
+
+.rgpd p {
+  font-size: var(--font-body-sm);
+  line-height: var(--leading-normal);
+}

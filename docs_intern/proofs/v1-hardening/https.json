@@ -1,0 +1,14 @@
+{
+  "date": "2026-09-16T06:58:09.930Z",
+  "status": "PASS",
+  "checks": [
+    "trusted local TLS certificate",
+    "Secure HttpOnly SameSite=Lax cookie",
+    "private no-store",
+    "HSTS",
+    "proxy normalizes forwarded protocol",
+    "foreign Origin rejected 403",
+    "anonymous profile rejected 401",
+    "health and frontend return 200"
+  ]
+}
