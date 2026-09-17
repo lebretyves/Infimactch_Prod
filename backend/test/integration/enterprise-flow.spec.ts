@@ -77,6 +77,6 @@ test('mixed recommendations keep eligible internal missions distinct from active
  assert.ok(mix.external.items.every((x:any)=>x.profileCorrespondence.score===null&&x.profileCorrespondence.eligibilityVerified===false));
  await db.query("UPDATE profile SET qualifications='{}',rpps_status='NOT_CHECKED' WHERE user_id=$1",[nurse.id]);
  const incomplete=(await nurse.agent.get('/api/v1/me/recommendations').expect(200)).body;
- assert.equal(incomplete.internal.items.length,0);assert.equal(incomplete.external.personalization,'GENERAL_PROFILE_INCOMPLETE');assert.ok(incomplete.external.items.length>0);
+ assert.equal(incomplete.internal.personalization,'GENERAL_PROFILE_INCOMPLETE');assert.ok(incomplete.internal.items.length>0);assert.ok(incomplete.internal.items.every((m:any)=>m.matching_score===undefined&&m.match_explanation_id===undefined));assert.equal(incomplete.external.personalization,'GENERAL_PROFILE_INCOMPLETE');assert.ok(incomplete.external.items.length>0);
  await owner.agent.get('/api/v1/me/recommendations').expect(404);
 });

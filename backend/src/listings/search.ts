@@ -26,6 +26,8 @@ export class ExternalListingsDto extends PageDto {
   q?: string;
 }
 export class SearchDto {
+  @ApiProperty({type:String,required:false,enum:['toutes','partenaires','externes'],default:'toutes'})
+  @IsOptional() @IsIn(['toutes','partenaires','externes']) origine?: 'toutes'|'partenaires'|'externes';
   @ApiProperty({ type: String, required: false, maxLength: 150, description: "Search across title, service and location, before pagination." })
   @IsOptional()
   @IsString()

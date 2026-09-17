@@ -1,4 +1,5 @@
-import {Controller,Get,Req,UseGuards,NotFoundException} from '@nestjs/common';
+import {IsOptional,IsIn} from 'class-validator';
+import {Controller,Get,Query,Req,UseGuards,NotFoundException} from '@nestjs/common';
 import {Request} from 'express';
 import {Database} from '../database/database';
 import {SessionGuard,user} from '../common/access';
@@ -20,24 +21,29 @@ export function compareRecentExternal(a:any,b:any) {
   return (Date.parse(b.publicationDate??'')||0)-(Date.parse(a.publicationDate??'')||0)||a.id.localeCompare(b.id);
 }
 
+class OriginQuery {@IsOptional() @IsIn(['toutes','partenaires','externes']) origine?:'toutes'|'partenaires'|'externes';}
 @Controller('me/recommendations') @UseGuards(SessionGuard)
 export class RecommendationsController {
   constructor(private readonly db:Database,private readonly matching:MatchingService){}
-  @Get() async recommendations(@Req() r:Request) {
+  @Get() async recommendations(@Req() r:Request,@Query() query:OriginQuery) {
     const actor=user(r),now=Date.now(),generatedAt=new Date(now).toISOString();
     const [profile]=await this.db.query('SELECT p.* FROM profile p JOIN account a ON a.id=p.user_id WHERE p.user_id=$1 AND a.active',[actor]);
     if(!profile)throw new NotFoundException();
-    const results=await Promise.allSettled([this.internal(actor),this.external(profile,generatedAt)]);
+    const results=await Promise.allSettled([query.origine==='externes'?Promise.resolve({status:'HIDDEN',items:[]}):this.internal(actor,profile),query.origine==='partenaires'?Promise.resolve({status:'HIDDEN',items:[],sources:[]}):this.external(profile,generatedAt)]);
     return {mode:'MIXED',generatedAt,
       internal:results[0].status==='fulfilled'?results[0].value:{status:'UNAVAILABLE',rppsStatus:profile.rpps_status,items:[]},
       external:results[1].status==='fulfilled'?results[1].value:{status:'UNAVAILABLE',personalization:profile.qualifications.length?'PARTIAL':'GENERAL_PROFILE_INCOMPLETE',items:[],sources:[]},
     };
   }
-  private async internal(actor:string) {
+  private async internal(actor:string,profile:any) {
+    if(!profile.qualifications.length || profile.rpps_status!=='FOUND'){
+      const rows=await this.db.query("SELECT id,title,qualification,service,shift,address,start_at,end_at,hourly_salary,status,version,created_at FROM mission WHERE status='OPEN' AND start_at>now() ORDER BY created_at DESC,id LIMIT 3");
+      return {status:'READY',personalization:'GENERAL_PROFILE_INCOMPLETE',rppsStatus:profile.rpps_status,items:rows.map(m=>({...m,id:'m_'+m.id,kind:'INTERNAL_MISSION',publicationDate:m.created_at,importedAt:null,sourceUpdatedAt:null,salary:{amount:Number(m.hourly_salary),currency:'EUR',unit:'HOUR',gross:true}}))};
+    }
     const selected=await this.matching.forNurse(actor,{limit:3,offset:0},'recent');
-    if(!selected.items.length)return {status:'READY',rppsStatus:selected.rppsStatus,items:[]};
+    if(!selected.items.length)return {status:'READY',personalization:'COMPATIBLE',rppsStatus:selected.rppsStatus,items:[]};
     const rows=await this.db.query("SELECT id,title,qualification,service,shift,address,start_at,end_at,hourly_salary,status,version FROM mission WHERE id=ANY($1::uuid[]) AND status='OPEN' AND start_at>now()",[selected.items.map(x=>x.missionId)]);
-    return {status:'READY',rppsStatus:selected.rppsStatus,items:selected.items.flatMap((x:any)=>{
+    return {status:'READY',personalization:'COMPATIBLE',rppsStatus:selected.rppsStatus,items:selected.items.flatMap((x:any)=>{
       const m=rows.find(r=>r.id===x.missionId);if(!m||m.version!==x.missionVersion)return [];
       return [{...m,id:'m_'+m.id,kind:'INTERNAL_MISSION',matching_score:x.score,match_explanation_id:x.explanationId,publicationDate:x.publishedAt??null,importedAt:null,sourceUpdatedAt:null,salary:{amount:Number(m.hourly_salary),currency:'EUR',unit:'HOUR',gross:true}}];
     })};

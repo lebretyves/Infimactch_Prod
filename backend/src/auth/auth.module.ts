@@ -1,3 +1,4 @@
+import { RecoveryController, RecoveryService } from "./recovery";
 import { sessionTiming } from "./idle-session";
 import { ProfileDto, validateProfile } from "../profiles/profiles.module";
 import { Type } from "class-transformer";
@@ -380,5 +381,5 @@ export class AuthController {
     return { ok: true };
   }
 }
-@Module({ controllers: [AuthController], providers: [AuthService, GoogleAuth] })
+@Module({ controllers: [AuthController, RecoveryController], providers: [AuthService, GoogleAuth, RecoveryService] })
 export class AuthModule {}

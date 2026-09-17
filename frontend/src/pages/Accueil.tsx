@@ -1,3 +1,4 @@
+import { BankReminder } from "@/components/BankReminder";
 import { MixedRecommendations } from "@/components/MixedRecommendations";
 import { NotificationPreferences } from "@/components/NotificationPreferences";
 import { useState } from "react";
@@ -109,6 +110,7 @@ export default function Accueil() {
           </ButtonLink>
         )}
       </header>
+      {nurse && <BankReminder />}
       {error && (
         <p role="alert" className={u.feedback}>
           {error}

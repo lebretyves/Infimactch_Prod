@@ -1,4 +1,7 @@
-import { useRef, useState, type FormEvent } from "react";
+import { useLocation } from "react-router";
+import { BankDocument } from "@/components/BankDocument";
+import { BankReminder } from "@/components/BankReminder";
+import { useEffect, useRef, useState, type FormEvent } from "react";
 import { useAuth } from "@/context/AuthContext";
 import { useRemote } from "@/lib/useRemote";
 import { api, downloadDocument } from "@/services/api";
@@ -37,6 +40,7 @@ const rppsLabels: Record<string, string> = {
 };
 export default function Dossier() {
   const { user } = useAuth();
+  const { hash } = useLocation();
   const [offset, setOffset] = useState(0),
     [number, setNumber] = useState<string | null>(null),
     [iban, setIban] = useState(""),
@@ -59,12 +63,18 @@ export default function Dossier() {
       const [profile, documents, bank] = await Promise.all([
         getProfile(signal),
         api<Document[]>("/me/documents?limit=20&offset=" + offset, { signal }),
-        api<{ iban: string | null }>("/me/bank-details", { signal }),
+        api<{ iban: string | null; required: boolean; document: {id:string;mime:string;size_bytes:number;created_at:string}|null }>("/me/bank-details", { signal }),
       ]);
       return { profile, documents, bank };
     },
     user?.id + ":" + offset,
   );
+  useEffect(() => {
+    if(hash !== "#rib" || r.loading || r.error) return;
+    const target=window.document.getElementById("rib");
+    target?.focus({preventScroll:true});
+    target?.scrollIntoView({block:"start"});
+  }, [hash, r.loading, r.error]);
   async function act(key: string, fn: () => Promise<unknown>, success: string) {
     if (busy) return;
     setBusy(key);
@@ -151,6 +161,7 @@ export default function Dossier() {
           Retrouvez vos informations de vérification et vos justificatifs.
         </p>
       </header>
+      <BankReminder key={r.data?.bank.document?.id||r.data?.bank.iban||"empty"} />
       {error && (
         <p role="alert" className={u.feedback}>
           {error}
@@ -248,7 +259,7 @@ export default function Dossier() {
                     )}
                   </div>
                   <ButtonLink to="/profil" variant="ghost" size="sm">
-                    Modifier mon profil â†’
+                    Modifier mon profil →
                   </ButtonLink>
                 </div>
               </div>
@@ -360,6 +371,8 @@ export default function Dossier() {
                     <p>{file ? file.name : "Ou déposez votre fichier ici"}</p>
                     <small>PDF, PNG ou JPEG · {uploadLimitMiB} Mo maximum</small>
                   </div>
+                  <label className={s.fileLabel}>Prendre une photo du justificatif<input type="file" accept="image/jpeg,image/png" capture="environment" onChange={e=>choose(e.target.files?.[0]||null)}/></label>
+                  <p>Selon votre navigateur, l’appareil photo ou le choix d’une image sera proposé. Aucune lecture automatique du contenu.</p>
                   <Checkbox
                     required
                     checked={fictional}
@@ -442,6 +455,7 @@ export default function Dossier() {
                 Vos documents sont accessibles aux personnes autorisées.
               </p>
             </section>
+            <BankDocument document={r.data?.bank.document||null} onSaved={r.reload} />
             <form
               id="coordonnees-bancaires"
               className={u.card}
@@ -470,7 +484,7 @@ export default function Dossier() {
                 Coordonnées bancaires
               </h2>
               <p className={s.help}>
-                RIB enregistré : {r.data?.bank.iban || "Aucun"}
+                IBAN enregistré : {r.data?.bank.iban || "Aucun"}. La saisie ci-dessous est une alternative au fichier et remplace le RIB précédent.
               </p>
               <fieldset className={s.fields} disabled={!!busy}>
                 <TextField

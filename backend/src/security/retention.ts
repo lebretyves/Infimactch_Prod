@@ -179,8 +179,8 @@ export async function applyRetention(em: SqlClient): Promise<RetentionSummary> {
 
 export async function requireOwnerTransfer(em:SqlClient,accountId:string){
   await em.query("SELECT pg_advisory_xact_lock(1789381700)");
-  const [owner]=await em.query("SELECT 1 FROM platform_admin WHERE user_id=$1 AND role='OWNER' AND active AND totp_secret IS NOT NULL",[accountId]);
-  if(owner){const [remaining]=await em.query("SELECT count(*)::int n FROM platform_admin p JOIN account a ON a.id=p.user_id WHERE p.user_id<>$1 AND p.role='OWNER' AND p.active AND a.active AND p.totp_secret IS NOT NULL",[accountId]);if(!remaining?.n)throw Error('Transfer platform ownership before account closure');}
+  const [owner]=await em.query("SELECT 1 FROM platform_admin WHERE user_id=$1 AND role='OWNER' AND active",[accountId]);
+  if(owner){const [remaining]=await em.query("SELECT count(*)::int n FROM platform_admin p JOIN account a ON a.id=p.user_id WHERE p.user_id<>$1 AND p.role='OWNER' AND p.active AND a.active AND a.password_hash<>'ADMIN_ACTIVATION_PENDING' AND p.invitation_hash IS NULL",[accountId]);if(!remaining?.n)throw Error('Transfer platform ownership before account closure');}
 }
 export async function anonymizeAccount(em: SqlClient, accountId: string) {
   await requireOwnerTransfer(em,accountId);
@@ -199,6 +199,7 @@ export async function anonymizeAccount(em: SqlClient, accountId: string) {
   await em.query("DELETE FROM professional_identity WHERE user_id=$1",[accountId]);
   await em.query("DELETE FROM professional_review WHERE user_id=$1",[accountId]);
   await em.query("DELETE FROM platform_admin WHERE user_id=$1",[accountId]);
+  await em.query("DELETE FROM recovery_request WHERE account_id=$1", [accountId]);
   await em.query("DELETE FROM google_identity WHERE account_id=$1", [accountId]);
   await em.query("DELETE FROM discord_link WHERE account_id=$1", [accountId]);
   await em.query("DELETE FROM discord_challenge WHERE account_id=$1", [accountId]);

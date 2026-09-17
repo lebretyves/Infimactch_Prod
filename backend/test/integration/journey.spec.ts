@@ -1217,14 +1217,14 @@ test("closure CLI removes Mongo history and can be retried",async()=>{
 test("closure requests are private, replayable, cancellable and require operator approval",async()=>{
  const c=await account('NURSE'),other=await account('NURSE');
  await request(app.getHttpServer()).get('/api/v1/me/closure-request').expect(401);
- const first=await post(c,'me/closure-request').expect(201),again=await post(c,'me/closure-request').expect(201);
+ const first=await post(c,'me/closure-request',{password:c.password}).expect(201),again=await post(c,'me/closure-request',{password:c.password}).expect(201);
  expect(first.body.id).toBe(again.body.id);
  expect((await other.agent.get('/api/v1/me/closure-request').expect(200)).body.request).toBeNull();
  const {processClosures}=await import('../../src/security/closure');
  expect((await processClosures(db)).processed).toBe(0);
  await c.agent.delete('/api/v1/me/closure-request').set('Origin',process.env.APP_ORIGIN!).set('X-CSRF-Token',c.token).expect(200);
  expect((await c.agent.get('/api/v1/me/closure-request')).body.request.status).toBe('CANCELLED');
- const next=await post(c,'me/closure-request').expect(201);expect(next.body.id).not.toBe(first.body.id);
+ const next=await post(c,'me/closure-request',{password:c.password}).expect(201);expect(next.body.id).not.toBe(first.body.id);
  await db.query("UPDATE closure_request SET status='CANCELLED' WHERE id=$1",[next.body.id]);
 });
 
@@ -1310,15 +1310,53 @@ test("a failed closure does not block the next request and approval is audited",
  const first=await account('NURSE'),second=await account('NURSE');
  const doc=await app.get(DocumentsService).store(first.id,'BANK','application/pdf',Buffer.from('%PDF-1.4 fictif'));
  const path=resolve(process.env.DOCUMENT_DIRECTORY!,doc.id+'.bin');await rm(path);await mkdir(path);await writeFile(resolve(path,'block'),'fixture');
- const r1=(await post(first,'me/closure-request').expect(201)).body;
- const r2=(await post(second,'me/closure-request').expect(201)).body;
+ const r1=(await post(first,'me/closure-request',{password:first.password}).expect(201)).body;
+ const r2=(await post(second,'me/closure-request',{password:second.password}).expect(201)).body;
  await approveClosure(db,r1.id);await approveClosure(db,r2.id);
  try{
   const result=await processClosures(db);expect(result.failed).toBe(1);expect(result.processed).toBe(1);
-  expect((await db.query('SELECT status FROM closure_request WHERE id=$1',[r1.id]))[0].status).toBe('APPROVED');
+  expect((await db.query('SELECT status FROM closure_request WHERE id=$1',[r1.id]))[0].status).toBe('PROCESSING');
   expect((await db.query('SELECT status FROM closure_request WHERE id=$1',[r2.id]))[0].status).toBe('COMPLETED');
   expect((await db.query("SELECT id FROM audit WHERE event='CLOSURE_APPROVED' AND resource_id=$1",[r2.id])).length).toBe(1);
  }finally{await rm(path,{recursive:true});}
  expect((await processClosures(db)).processed).toBe(1);
  await cleanupRemovedDocuments(db);
+});
+
+test('partner origin filtering is applied before pagination even with an incomplete profile',async()=>{
+ const n=await account('NURSE'),label='partner-order-'+randomUUID();
+ const [m]=await db.query("INSERT INTO mission(agency_id,establishment_id,title,description,qualification,service,population,block,start_at,end_at,shift,address,location,hourly_salary,status,created_at) SELECT agency_id,establishment_id,$1,'Fixture','IDE','URGENCES','ADULT','NONE','2037-01-01T08:00Z','2037-01-01T16:00Z','DAY',address,location,30,'OPEN','2020-01-01T00:00Z' FROM mission LIMIT 1 RETURNING id",[label]);
+ const {importOffers}=await import('../../src/public-data/offers');await importOffers(db,[{id:label,intitule:label,description:'Mission infirmier IDE en interim',typeContrat:'MIS'}],false);
+ const body={qualifications:[],q:label,limit:1,offset:0};
+ const first=await post(n,'listings/search',body).expect(201);expect(first.body.total).toBe(2);expect(first.body.items[0].id).toBe('m_'+m.id);
+ const second=await post(n,'listings/search',{...body,offset:1}).expect(201);expect(second.body.items[0].kind).toBe('EXTERNAL_OFFER');
+ const partners=await post(n,'listings/search',{...body,origine:'partenaires'}).expect(201);expect(partners.body.total).toBe(1);expect(partners.body.items[0].kind).toBe('INTERNAL_MISSION');
+ const external=await post(n,'listings/search',{...body,origine:'externes'}).expect(201);expect(external.body.total).toBe(1);expect(external.body.items[0].kind).toBe('EXTERNAL_OFFER');
+ await post(n,'listings/search',{...body,origine:'invalid'}).expect(400);
+ const recommended=await n.agent.get('/api/v1/me/recommendations?origine=partenaires').expect(200);expect(recommended.body.external.status).toBe('HIDDEN');expect(recommended.body.internal.personalization).toBe('GENERAL_PROFILE_INCOMPLETE');expect(recommended.body.internal.items.length).toBeGreaterThan(0);
+ const externalOnly=await n.agent.get('/api/v1/me/recommendations?origine=externes').expect(200);expect(externalOnly.body.internal.status).toBe('HIDDEN');
+});
+test('bank file uploads are private, validated, replaceable and satisfy the mission reminder',async()=>{
+ const n=await account('NURSE'),other=await account('NURSE');
+ const send=(body:any,key=randomUUID())=>n.agent.put('/api/v1/me/bank-document').set('Origin',process.env.APP_ORIGIN!).set('X-CSRF-Token',n.token).set('Idempotency-Key',key).send(body);
+ const content=Buffer.from('%PDF-1.4 fictional bank fixture');const body={mime:'application/pdf',contentBase64:content.toString('base64'),fictional:true},key=randomUUID();
+ await send({...body,mime:'image/png'}).expect(400);await send({...body,fictional:false}).expect(400);
+ await send({...body,contentBase64:Buffer.concat([content,Buffer.alloc(3*1024*1024)]).toString('base64')}).expect(400);
+ expect((await n.agent.get('/api/v1/me/bank-details')).body.required).toBe(false);
+ const saved=await send(body,key).expect(200),replay=await send(body,key).expect(200);expect(replay.body.id).toBe(saved.body.id);
+ const status=(await n.agent.get('/api/v1/me/bank-details').expect(200)).body;expect(status.document.id).toBe(saved.body.id);expect(status.iban).toBeNull();expect(status.required).toBe(false);
+ await other.agent.get('/api/v1/me/bank-document').expect(404);await other.agent.get('/api/v1/me/documents/'+saved.body.id).expect(404);await n.agent.get('/api/v1/me/documents/'+saved.body.id).expect(404);
+ const file=await n.agent.get('/api/v1/me/bank-document').expect(200);expect(file.headers['cache-control']).toBe('no-store');expect(file.headers['content-type']).toContain('application/pdf');
+ expect((await n.agent.get('/api/v1/me/documents')).body.some((d:any)=>d.id===saved.body.id)).toBe(false);
+ const jpeg={mime:'image/jpeg',contentBase64:Buffer.from([255,216,255,224,0,1,2,3]).toString('base64'),fictional:true};await send(jpeg).expect(200);
+ expect((await n.agent.get('/api/v1/me/bank-details')).body.document.mime).toBe('image/jpeg');
+ expect((await db.query("SELECT id FROM document WHERE owner_id=$1 AND kind='BANK' AND superseded_at IS NULL",[n.id])).length).toBe(1);
+ await db.transaction(async em=>{
+ const [m]=await em.query("INSERT INTO mission(agency_id,establishment_id,title,description,qualification,service,population,block,start_at,end_at,shift,address,location,hourly_salary,status) SELECT agency_id,establishment_id,'BANK REMINDER FIXTURE','Fixture','IDE','URGENCES','ADULT','NONE','2038-01-01T08:00Z','2038-01-01T16:00Z','DAY',address,location,30,'FILLED' FROM mission LIMIT 1 RETURNING id");
+ const [application]=await em.query("INSERT INTO application(mission_id,nurse_id,status,consent_version) VALUES($1,$2,'ACCEPTED',1) RETURNING id",[m.id,other.id]);
+ await em.query("INSERT INTO assignment(mission_id,nurse_id,application_id,start_at,end_at) VALUES($1,$2,$3,'2038-01-01T08:00Z','2038-01-01T16:00Z')",[m.id,other.id,application.id]);
+ });
+ expect((await other.agent.get('/api/v1/me/bank-details')).body.required).toBe(true);
+ await other.agent.put('/api/v1/me/bank-document').set('Origin',process.env.APP_ORIGIN!).set('X-CSRF-Token',other.token).set('Idempotency-Key',randomUUID()).send(body).expect(200);
+ expect((await other.agent.get('/api/v1/me/bank-details')).body.required).toBe(false);
 });

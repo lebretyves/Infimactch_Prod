@@ -1,5 +1,7 @@
 import { lazy } from "react";
 import { QualityRoot } from "./components/QualityRoot";
+const Compte = lazy(() => import("./pages/Compte"));
+const ReinitialiserMotDePasse = lazy(() => import("./pages/ReinitialiserMotDePasse"));
 const Installer = lazy(() => import("./pages/Installer"));
 const Accessibilite = lazy(() => import("./pages/Qualite").then(m => ({ default: m.Accessibilite })));
 const Ecoconception = lazy(() => import("./pages/Qualite").then(m => ({ default: m.Ecoconception })));
@@ -16,7 +18,7 @@ const GestionMission = lazy(() => import("./pages/GestionMission"));
 const MissionForm = lazy(() => import("./pages/MissionForm"));
 const CandidatureDetail = lazy(() => import("./pages/CandidatureDetail"));
 import { ButtonLink } from "./ui/Button";
-import { createBrowserRouter, createHashRouter } from "react-router";
+import { Navigate, createBrowserRouter, createHashRouter } from "react-router";
 import { AppLayout } from "./layouts/AppLayout";
 import { InscriptionLayout } from "./pages/inscription/InscriptionLayout";
 import { ProtectedRoute } from "./components/ProtectedRoute";
@@ -30,7 +32,6 @@ const Localisation = lazy(() => import("./pages/inscription/Localisation"));
 const Qualification = lazy(() => import("./pages/inscription/Qualification"));
 const Mobilite = lazy(() => import("./pages/inscription/Mobilite"));
 const Disponibilites = lazy(() => import("./pages/inscription/Disponibilites"));
-const Rib = lazy(() => import("./pages/inscription/Rib"));
 const Consentements = lazy(() => import("./pages/inscription/Consentements"));
 const Confirmation = lazy(() => import("./pages/inscription/Confirmation"));
 const ConfirmationEtablissement = lazy(() => import("./pages/inscription/ConfirmationEtablissement"));
@@ -65,6 +66,7 @@ export const router = creerRouteur([{ element: <QualityRoot />, children: [
   { path: "/apercu-annonces", element: <ApercuAnnonces /> },
   { path: "/connexion", element: <Connexion /> },
   { path: "/mot-de-passe-oublie", element: <MotDePasseOublie /> },
+  { path: "/reinitialiser-mot-de-passe", element: <ReinitialiserMotDePasse /> },
   { path: "/inscription", element: <Inscription /> },
   { path: "/mentions-legales", element: <Mentions /> },
   {
@@ -75,7 +77,7 @@ export const router = creerRouteur([{ element: <QualityRoot />, children: [
       { path: "/inscription/qualification", element: <Qualification /> },
       { path: "/inscription/mobilite", element: <Mobilite /> },
       { path: "/inscription/disponibilites", element: <Disponibilites /> },
-      { path: "/inscription/rib", element: <Rib /> },
+      { path: "/inscription/rib", element: <Navigate to="/inscription/consentements" replace /> },
       { path: "/inscription/consentements", element: <Consentements /> },
     ],
   },
@@ -92,6 +94,7 @@ export const router = creerRouteur([{ element: <QualityRoot />, children: [
         children: [
           { path: "/accueil", element: <Accueil /> },
           { path: "/notifications", element: <Notifications /> },
+          { path: "/compte", element: <Compte /> },
           { path: "/missions", element: <Missions /> },
           { path: "/missions/:id", element: <MissionDetail /> },
           { path: "/missions/:id/candidater", element: <Candidater /> },

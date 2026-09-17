@@ -10,7 +10,7 @@ export default function Disponibilites() {
     <Etape
       titre="Disponibilités"
       chapeau="Choisissez vos horaires et, si vous les connaissez, vos premières dates de disponibilité."
-      suivant="/inscription/rib"
+      suivant="/inscription/consentements"
       onValider={() => {
         if (
           (v.disponibleDes || v.disponibleFin) &&

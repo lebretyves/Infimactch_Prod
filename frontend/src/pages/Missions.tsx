@@ -1,3 +1,4 @@
+import { OfferOriginChoices, readOfferOrigin } from '@/components/OfferOrigin';
 ﻿import EntrepriseMissions from "./EntrepriseMissions";
 import { useEffect, useRef, useState, type FormEvent } from "react";
 import { Link, useSearchParams } from "react-router";
@@ -5,7 +6,6 @@ import { useAuth } from "@/context/AuthContext";
 import { useRemote } from "@/lib/useRemote";
 import {
   list,
-  externalListings,
   favorites,
   allFacilities,
   matches,
@@ -71,7 +71,8 @@ function NurseMissions() {
   );
   const offset = (currentPage - 1) * PAGE_SIZE;
   const view =
-    params.get("vue") === "recommandees" ? "recommandees" : "catalogue";
+    params.get("vue") === "recommandees" && params.get("origine") !== "externes" ? "recommandees" : "catalogue";
+  const origin = view === "recommandees" ? "partenaires" : readOfferOrigin(params.get("origine"));
   const values = fromParams(params);
   const [draft, setDraft] = useState<Draft>(values),
     [formError, setFormError] = useState("");
@@ -97,7 +98,7 @@ function NurseMissions() {
     ? [selectedQualification]
     : qualifications;
   const filtered = filterKeys.some((k) => !!values[k]);
-  const requestKey = JSON.stringify([user?.id, p.data, view, values, offset]);
+  const requestKey = JSON.stringify([user?.id, p.data, view, origin, values, offset]);
   const result = useRemote<(ListingPage & { requestKey: string }) | null>(
     async (signal) => {
       if (!p.data) return null;
@@ -141,9 +142,7 @@ function NurseMissions() {
         filters.latitude = Number(p.data.latitude);
         filters.longitude = Number(p.data.longitude);
       }
-      const response = publicOffers
-        ? await externalListings(offset, signal, values.q)
-        : await list(selected, offset, signal, values.q, filters);
+      const response = await list(selected, offset, signal, values.q, filters, origin);
       if (!Number.isSafeInteger(response.total) || response.total < 0)
         throw new Error("Nombre de résultats indisponible.");
       return { ...response, requestKey };
@@ -244,6 +243,7 @@ function NurseMissions() {
           <Link to="/profil">Compléter mon profil</Link>
         </div>
       )}
+      <OfferOriginChoices value={origin} onChange={origine => update({ origine, vue: "", page: 1 })} />
       <div
         className={s.mode}
         role="group"
@@ -259,7 +259,7 @@ function NurseMissions() {
         <button
           type="button"
           aria-pressed={view === "recommandees"}
-          onClick={() => update({ vue: "recommandees", page: 1 })}
+          onClick={() => update({ vue: "recommandees", origine: "partenaires", page: 1 })}
         >
           Recommandées pour moi
         </button>
@@ -499,13 +499,13 @@ function NurseMissions() {
             <p className={s.help}>
               {view === "recommandees"
                 ? "Par correspondance avec votre profil"
-                : "Les plus récentes d’abord"}
+                : origin === "toutes" ? "Partenaires en premier, puis offres externes" : "Les plus récentes d’abord"}
             </p>
           </div>
           {view === "catalogue" && (
             <p className={s.help}>
               {publicOffers
-                ? "Annonces publiques sans filtre de qualification."
+                ? "Offres consultables sans filtre de qualification. Votre éligibilité reste à vérifier avant une candidature partenaire."
                 : "Les annonces dont les critères ne sont pas renseignés sont exclues lorsqu’un filtre avancé est utilisé."}{" "}
               Les offres externes se candidatent sur le site source.
             </p>

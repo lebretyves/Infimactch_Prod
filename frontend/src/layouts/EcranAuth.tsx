@@ -9,11 +9,12 @@ type Props = {
   lien: ReactNode;
   promo: ReactNode;
   formulaireLarge?: boolean;
+  compactMobile?: boolean;
   photoMaquette?: 'connexion' | 'inscription';
   children: ReactNode;
 };
 
-export function EcranAuth({ lien, promo, formulaireLarge, photoMaquette, children }: Props) {
+export function EcranAuth({ lien, promo, formulaireLarge, compactMobile, photoMaquette, children }: Props) {
   return (
     <EcranPublic
       entete={
@@ -25,7 +26,7 @@ export function EcranAuth({ lien, promo, formulaireLarge, photoMaquette, childre
         </>
       }
     >
-      <div className={[s.split, formulaireLarge && s.large, photoMaquette && s.avecPhoto].filter(Boolean).join(' ')}>
+      <div className={[s.split, compactMobile && s.compactMobile, formulaireLarge && s.large, photoMaquette && s.avecPhoto].filter(Boolean).join(' ')}>
         <aside className={s.promo}>
           <div className={s.promoInterieur}>
             {promo}

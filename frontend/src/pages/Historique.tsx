@@ -1,4 +1,5 @@
-﻿import { useState } from "react";
+import { BankReminder } from "@/components/BankReminder";
+import { useState } from "react";
 import { Link } from "react-router";
 import { useRemote } from "@/lib/useRemote";
 import { api } from "@/services/api";
@@ -97,6 +98,7 @@ export default function Historique() {
           </p>
         </div>
       </header>
+      <BankReminder />
       <nav className={s.tabs} aria-label="Mon planning">
         <Link to="/calendrier">
           <Icon name="calendar" size={18} />

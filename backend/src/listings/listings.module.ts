@@ -55,6 +55,10 @@ class ListingsController {
     if (!p) throw new NotFoundException();
     if (b.qualifications.some((q) => !p.qualifications.includes(q)))
       throw new BadRequestException("Qualification not held");
+    b.origine ??= 'toutes';
+    // Browsing a public mission does not grant eligibility or the right to apply.
+    const generalBrowse=!p.qualifications.length && !b.qualifications.length;
+    if(generalBrowse) b.qualifications=['IDE','IADE','IBODE'];
     const q = searchSql(b);
     const parameters = [...q.parameters];
     const bind = (value: unknown) => {
@@ -78,18 +82,18 @@ class ListingsController {
     const externalWhere =
       strictUnknown && !b.includeUncertainExternal
         ? "false"
-        : "e.active AND (e.expires_at IS NULL OR e.expires_at>now()) AND e.qualification=ANY(" +
+        : "e.active AND (e.expires_at IS NULL OR e.expires_at>now()) AND (e.qualification=ANY(" +
           bind(
             b.includeUncertainExternal
               ? b.qualifications
               : externalQualifications,
           ) +
-          ")";
+          ")" + (generalBrowse ? " OR e.qualification IS NULL)" : ")");
     const sourceSql =
       "SELECT 'm_'||m.id AS listing_id,m.created_at AS listed_at,(to_jsonb(m)-'location')||jsonb_build_object('id','m_'||m.id,'kind','INTERNAL_MISSION','latitude',ST_Y(m.location::geometry),'longitude',ST_X(m.location::geometry),'salary',jsonb_build_object('amount',m.hourly_salary,'currency','EUR','unit','HOUR','gross',true)) AS data FROM mission m WHERE " +
-      q.where +
+      (q.where + (b.origine==='externes' ? ' AND false' : '')) +
       " UNION ALL SELECT 'e_'||e.id,e.imported_at,(to_jsonb(e)-'raw_hash')||jsonb_build_object('id','e_'||e.id,'kind','EXTERNAL_OFFER','applicationMode','REDIRECT','eligibility','INCOMPLETE') FROM external_offer e WHERE " +
-      externalWhere;
+      (externalWhere + (b.origine==='partenaires' ? ' AND false' : ''));
     const pageQuery = listingPageQuery(sourceSql, parameters, b);
     const [pageResult] = await this.db.query(pageQuery.sql, pageQuery.parameters);
     const unverifiedSearchFilters = [

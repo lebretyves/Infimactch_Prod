@@ -173,6 +173,5 @@ export const etapes = [
   { path: '/inscription/qualification', titre: 'Qualification' },
   { path: '/inscription/mobilite', titre: 'Mobilité' },
   { path: '/inscription/disponibilites', titre: 'Disponibilités' },
-  { path: '/inscription/rib', titre: 'RIB' },
   { path: '/inscription/consentements', titre: 'Consentements' },
 ];
