@@ -1,3 +1,4 @@
+import { offerLocationCoordinates } from "./offer-geolocation";
 import { currentParsedOffer } from "./offer-parser";
 import type { Qualification } from "../domain/matching";
 
@@ -9,6 +10,18 @@ export function clean(value: unknown, max: number): string {
         .trim()
         .slice(0, max)
     : "";
+}
+/** Keep clause boundaries: a contract label on its own line is meaningful. */
+export function cleanDescription(value: unknown, max = 32000): string {
+  return typeof value === "string" ? value
+    .replace(/<\s*(?:br\s*\/?|\/?(?:p|div|li|ul|ol|h[1-6]))\s*>/gi, "\n")
+    .replace(/<[^>]*>/g, " ")
+    .replace(/&nbsp;|&#160;/gi, " ")
+    .replace(/\r\n?/g, "\n")
+    .replace(/[^\S\n]+/g, " ")
+    .replace(/ *\n */g, "\n")
+    .replace(/\n{3,}/g, "\n\n")
+    .trim().slice(0, max) : "";
 }
 const folded = (s: string) =>
   s
@@ -50,15 +63,7 @@ export function offerFacts(raw: any) {
     )
   )
     warnings.push("EXPERIENCE_TEXT_REVIEW_REQUIRED");
-  const lat = raw.lieuTravail?.latitude,
-    lon = raw.lieuTravail?.longitude;
-  const coordinates =
-    Number.isFinite(lat) &&
-    Number.isFinite(lon) &&
-    Math.abs(lat) <= 90 &&
-    Math.abs(lon) <= 180
-      ? { latitude: lat as number, longitude: lon as number }
-      : null;
+  const locationCoordinates = offerLocationCoordinates(raw);
   const locationLabel = clean(raw.lieuTravail?.libelle, 200) || null;
   // Report potentially conflicting Paris arrondissement indications without guessing an address.
   const arr = (s: string) =>
@@ -69,6 +74,7 @@ export function offerFacts(raw: any) {
   if (places.size > 1) warnings.push("LOCATION_TEXT_REVIEW_REQUIRED");
   return {
     qualification,
+    providerClassification: { code: clean(raw.romeCode, 20) || null, label: clean(raw.romeLibelle, 200) || null, reference: raw.romeCode ? "ROME" : null },
     qualificationBasis: qualification
       ? "PROVIDER_TEXT_CLASSIFICATION"
       : "UNCONFIRMED",
@@ -76,10 +82,7 @@ export function offerFacts(raw: any) {
       label: locationLabel,
       commune: clean(raw.lieuTravail?.commune, 10) || null,
       postalCode: clean(raw.lieuTravail?.codePostal, 10) || null,
-      coordinates,
-      precision: coordinates
-        ? "PROVIDER_COORDINATES_UNVERIFIED"
-        : "PROVIDER_LABEL",
+      ...locationCoordinates,
     },
     contract: {
       code: clean(raw.typeContrat, 10),
@@ -123,7 +126,17 @@ export function externalPresentation(e: any) {
   return {
     ...safe,
     parsedOffer: currentParsedOffer(e),
-    freshness: {lastSeenAt:e.imported_at??null,staleAfterDays:30,state:e.expires_at && new Date(e.expires_at).getTime()<=Date.now()?"EXPIRED":!e.imported_at || new Date(e.imported_at).getTime()<Date.now()-30*86400000?"STALE_UNVERIFIED":"RECENTLY_SEEN"},
+    freshness: {
+      lastSeenAt: e.imported_at ?? null,
+      staleAfterDays: 30,
+      state:
+        e.expires_at && new Date(e.expires_at).getTime() <= Date.now()
+          ? "EXPIRED"
+          : !e.imported_at ||
+              new Date(e.imported_at).getTime() < Date.now() - 30 * 86400000
+            ? "STALE_UNVERIFIED"
+            : "RECENTLY_SEEN",
+    },
     kind: "EXTERNAL_OFFER",
     applicationMode: "REDIRECT",
     eligibility: "INCOMPLETE",

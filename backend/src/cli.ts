@@ -1,3 +1,5 @@
+import {RefreshService} from "./public-data/refresh.service";
+import {enrichFranceTravailLocations} from "./public-data/offer-geolocation";
 import { executeClosure, processClosures, approveClosure } from "./security/closure";
 import { retireStaleOffers } from "./public-data/freshness";
 import { reparseOffers } from "./public-data/reparse-offers";
@@ -73,7 +75,7 @@ cli
   .command("import-offers")
   .option(
     "--limit <number>",
-    "Maximum offers per keyword (4 queries, up to 150 each)",
+    "Page size (1-150); follow all pages for the four keyword searches",
     "50",
   )
   .option("--department <code>", "Department, e.g. 75; commune checked locally")
@@ -83,7 +85,7 @@ cli
     const db = await new Database().connect();
     try {
       console.log(
-        JSON.stringify(await importOffers(db, raw, opts.dryRun), null, 2),
+        JSON.stringify(await importOffers(db, await enrichFranceTravailLocations(raw), opts.dryRun), null, 2),
       );
     } finally {
       await db.onModuleDestroy();
@@ -91,17 +93,13 @@ cli
   });
 cli
   .command("import-jobspipe")
-  .option("--limit <number>", "Bounded single request (1-100)", "10")
-  .option("--dry-run", "Acquire and normalize without database writes", false)
+  .option("--limit <number>", "Compatibility option: resumable free-tier pages contain at most 25 offers", "25")
+  .option("--dry-run", "Read collection state only; no paid provider request", false)
   .action(async (opts) => {
-    const raw = await fetchJobsPipe(Number(opts.limit));
-    if (opts.dryRun) {
-      console.log(JSON.stringify(await importOffers(null as unknown as Database, raw, true, normalizeJobsPipe, "JOBSPIPE"), null, 2));
-      return;
-    }
-    const db = await new Database().connect();
-    try { console.log(JSON.stringify(await importOffers(db, raw, false, normalizeJobsPipe, "JOBSPIPE"), null, 2)); }
-    finally { await db.onModuleDestroy(); }
+    if(!Number.isInteger(Number(opts.limit))||Number(opts.limit)<1||Number(opts.limit)>25)throw Error('JobsPipe free page maximum is 25');
+    const db=await new Database().connect();
+    try{console.log(JSON.stringify(opts.dryRun?await db.query("SELECT provider,enabled,collection_state FROM source_control WHERE provider='JOBSPIPE'"):await new RefreshService(db).run('JOBSPIPE',true),null,2));}
+    finally{await db.onModuleDestroy();}
   });
 cli
   .command("seed")

@@ -126,11 +126,11 @@ test("empty keyword does not stop subsequent searches and failure is not partial
         return new Response(JSON.stringify({ access_token: "fixture" }));
       count++;
       if (count === 1) return new Response(null, { status: 204 });
-      if (count === 4) return new Response(null, { status: 503 });
+      if (count >= 4) return new Response(null, { status: 503 });
       return new Response(JSON.stringify({ resultats: [base] }));
     }) as typeof fetch;
     await expect(fetchOffers(2, transport)).rejects.toThrow("HTTP 503");
-    expect(count).toBe(4);
+    expect(count).toBe(6);
   }));
 test("invalid import bounds and department fail before network access", async () => {
   const transport = (async () => {

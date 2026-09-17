@@ -53,10 +53,10 @@ export function interimContractEvidence(
     )
       continue;
     if (
-      /\b(?:poste|mission|contrat|recrutons|recherchons|vacataire|vacation|remplacement)\b.{0,260}interim/.test(
+      /\b(?:postes?|missions?|contrats?|recrutons|recherchons|vacataires?|vacations?|remplacements?)\b.{0,260}interim/.test(
         s,
       ) ||
-      /interim.{0,80}\b(?:poste|mission|contrat|vacataire|vacation)\b/.test(s) ||
+      /interim.{0,80}\b(?:postes?|missions?|contrats?|vacataires?|vacations?)\b/.test(s) ||
       /^\s*interim(?:aire)?s?\b/.test(s)
     )
       return part.trim();

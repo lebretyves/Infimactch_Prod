@@ -139,7 +139,7 @@ class ListingsController {
       ),
       limit: b.limit ?? 20,
       offset: b.offset ?? 0,
-      externalDistance: b.radiusKm===undefined ? null : {basis:'PROVIDER_COORDINATES',unknownCoordinatesExcluded:true},
+      externalDistance: b.radiusKm===undefined ? null : {basis:'PROVIDER_COORDINATES_OR_COMMUNE_CENTRE',approximate:true,unknownCoordinatesExcluded:true},
       unknownExternalFieldsExcluded:
         !b.includeUncertainExternal &&
         (strictUnknown || b.radiusKm !== undefined ||
