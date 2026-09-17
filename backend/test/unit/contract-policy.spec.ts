@@ -1,6 +1,6 @@
 ﻿import {test} from 'node:test';
 import assert from 'node:assert/strict';
-import {interimContractEvidence,permanentContractEvidence} from '../../src/public-data/contract-policy';
+import {interimContractEvidence,permanentContractEvidence,otherProfessionTitle} from '../../src/public-data/contract-policy';
 import {importOffers} from '../../src/public-data/offers';
 import {normalizeJobsPipe} from '../../src/public-data/jobspipe';
 test('CDI du poste et alternatives CDI exclus',()=>{for(const text of ['Ce poste est proposé en CDI 35 Heures.','Contrat CDD long ou CDI','Nous recrutons un infirmier en Contrat à Durée Indéterminée à temps plein.','CDI – Temps plein'])assert.ok(permanentContractEvidence('Infirmier',text));assert.ok(permanentContractEvidence('IDE CDI','Description'));});
@@ -8,3 +8,8 @@ test('presentation recruteur et evolution future ne sont pas un CDI actuel',()=>
 test('interim du poste accepte, presentation agence refusee',()=>{assert.ok(interimContractEvidence('IDE intérim','Recrutement pour un service hospitalier.'));assert.ok(interimContractEvidence('Infirmier','Mission intérim dans un service hospitalier.'));assert.equal(interimContractEvidence('Infirmier','Notre cabinet d’intérim accompagne les établissements de santé. Recrutement d’un infirmier.' ),null);assert.equal(interimContractEvidence('IDE','Agence d’intérim spécialisée dans le sanitaire.' ),null);});
 test('reimport CDI desactive une annonce existante sans supprimer les favoris',async()=>{const queries:any[]=[];const raw={id:'test-123',job_title:'Infirmier CDI',description:'Poste en CDI. Intérim.',country_code:'FR'};const db={transaction:async(fn:any)=>fn({query:async(...args:any[])=>{queries.push(args);return [];}})};const r=await importOffers(db as any,[raw],false,normalizeJobsPipe,'JOBSPIPE');assert.equal(r.accepted,0);assert.equal(r.rejected[0]?.reason,'PERMANENT_POSITION_EXCLUDED');assert.ok(queries.some(q=>q[0].startsWith('UPDATE external_offer SET active=false')&&q[1][1]==='test-123'&&q[1][2]==='PERMANENT_POSITION_EXCLUDED'));assert.ok(!queries.some(q=>q[0].startsWith('DELETE')));});
 test('reimport ferme ou expire desactive sans conclure a une disparition hors lot',async()=>{const queries:any[]=[];const db={transaction:async(fn:any)=>fn({query:async(...args:any[])=>{queries.push(args);return [];}})};await importOffers(db as any,[{id:'closed-1',job_title:'IDE',description:'Mission interim.',country_code:'FR',url:'https://jobs.example.org/1',status:'closed'}],false,normalizeJobsPipe,'JOBSPIPE');assert.ok(queries.some(q=>q[0].startsWith('UPDATE external_offer SET active=false')&&q[1][1]==='closed-1'&&q[1][2]==='OFFER_NOT_ACTIVE'));await importOffers(db as any,[{id:'exp-1',job_title:'IDE',description:'Mission interim.',country_code:'FR',url:'https://jobs.example.org/2',expires_at:'2020-01-01'}],false,normalizeJobsPipe,'JOBSPIPE');assert.ok(queries.some(q=>q[1]?.[1]==='exp-1'&&q[1][2]==='OFFER_EXPIRED'));});
+
+test('other health professions are distinct from nursing roles',()=>{
+ for(const title of ['Auxiliaire Puériculteur(trice) (H/F/D)','Médecin anesthésiste','Aide-soignant intérim'])assert.equal(otherProfessionTitle(title),true);
+ for(const title of ['Infirmier anesthésiste','IBODE','Infirmier de bloc opératoire','IADE / IBODE'])assert.equal(otherProfessionTitle(title),false);
+});
