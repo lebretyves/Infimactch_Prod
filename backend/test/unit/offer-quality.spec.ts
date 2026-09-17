@@ -141,3 +141,11 @@ test("invalid import bounds and department fail before network access", async ()
     "Invalid department",
   );
 });
+
+test("existing cached offers are re-extracted at read without provider import or database mutation",()=>{
+ const source={title:'IDE',description:'Transport en urgences des patients victimes d’AVC avec le SAMU.',parsed_offer:{parserVersion:'4.0.0',inputHash:'legacy',fields:[]}};
+ const original=JSON.stringify(source),view=externalPresentation(source);
+ expect(view.parsedOffer.parserVersion).toBe('4.1.0');
+ expect(view.parsedOffer.fields.some((f:{key:string;value:unknown})=>f.key==='service'&&f.value==='URGENCES')).toBe(false);
+ expect(JSON.stringify(source)).toBe(original);
+});

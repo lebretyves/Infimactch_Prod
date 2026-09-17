@@ -52,3 +52,18 @@ test("JSONB key ordering preserves the parser input fingerprint",()=>{
  const parsed_offer=parseOffer(row);
  assert.ok(currentParsedOffer({...row,provenance:{facts:{skills:[],contract:{label:"Interim",code:"MIS"}}},parsed_offer}));
 });
+
+test("display is the exact source, never a generated code label",()=>{
+ const row={title:"Infirmier IDE en cardiologie",description:"Vous assurez la surveillance des patients en cardiologie."};
+ for(const f of parseOffer(row).fields)assert.equal(f.display,f.evidence.text);
+});
+test("clinical emergency and facility catalog do not create job services",()=>{
+ const r=parseOffer({title:"Infirmier IDE",description:"Transport des patients victimes d’AVC en urgences avec le SAMU. Notre établissement propose des activités de cardiologie et de réanimation."});
+ assert.ok(!r.fields.some(f=>['service','specialite'].includes(f.key)));
+});
+test("an explicit service assignment remains and nearby diploma requirement is not inherited",()=>{
+ const r=parseOffer({title:"IDE aux urgences",description:"Vous travaillerez en service de cardiologie ; diplôme infirmier obligatoire. Surveillance des patients, diplôme infirmier requis."});
+ assert.ok(r.fields.some(f=>f.key==='service'&&f.value==='URGENCES'));
+ assert.ok(r.fields.some(f=>f.key==='specialite'&&f.value==='CARDIOLOGIE'));
+ assert.ok(r.fields.filter(f=>['service','specialite','competence'].includes(f.key)).every(f=>f.state!=='REQUIRED'));
+});

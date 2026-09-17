@@ -1,7 +1,8 @@
+import {isJobServiceEvidence} from './service-evidence';
 import { createHash } from "node:crypto";
 import { parseOfferV3 } from "./parser/legacy-v3";
 import { fold } from "./parser/legacy-v2";
-export const PARSER_VERSION = "4.0.0";
+export const PARSER_VERSION = "4.1.0";
 export type ParsedField = { key: string; label: string; value: unknown; display: string; state: "REPORTED" | "MENTION" | "DESIRED" | "REQUIRED" | "NEGATED" | "REVIEW_REQUIRED"; evidence: { origin: "TITLE" | "DESCRIPTION"; text: string; start: number; end: number } };
 export type ParsedOffer = { schemaVersion: 1; parserVersion: string; inputHash: string; parsedAt: string; fields: ParsedField[]; warnings: string[]; reviewQueue: string[] };
 export type ParserInput = { title?: string; description?: string; location_label?: string; qualification?: string | null; source?: string; provenance?: any };
@@ -35,7 +36,7 @@ export function parseOffer(row: ParserInput, at = new Date().toISOString()): Par
   const start = source.indexOf(text);
   if(start < 0 || !text.trim()) return;
   if(result.fields.some(f=>f.key===key && JSON.stringify(f.value)===JSON.stringify(value) && f.evidence.text===text)) return;
-  result.fields.push({key,label:labels[key] || "Information mentionnée",value,display:display || displayValue(key,value,text),state,evidence:{origin,text,start,end:start+text.length}});
+  result.fields.push({key,label:labels[key] || "Information mentionnée",value,display:text,state,evidence:{origin,text,start,end:start+text.length}});
  };
  for(const f of legacy.fields) {
   if(!["TITLE","DESCRIPTION"].includes(f.origin) || f.field === "contexte_recruteur") continue;
@@ -46,13 +47,17 @@ export function parseOffer(row: ParserInput, at = new Date().toISOString()): Par
   if(f.field === "certification" && /\bou\b/.test(s)) state="REVIEW_REQUIRED";
   if(f.field === "service" && /urgence[s]? vitale|materiel.{0,30}reanimation|chariot.{0,30}reanimation/.test(s)) continue;
   if(f.field === "avantage" && /sans logement|pas de logement|aucun logement/.test(s) && f.value === "LOGEMENT") state="NEGATED";
+  if(["service","specialite"].includes(f.field)&&!isJobServiceEvidence(f.evidence,String(f.value)))continue;
+  // A service/population label is not a mandatory skill inferred from nearby diploma wording.
+  if(["service","specialite","population","equipement"].includes(f.field)&&state==="REQUIRED")state="MENTION";
+  if(f.field==="competence"&&state==="REQUIRED"&&/diplome|certification|rpps/.test(s)&&!/maitrise|competences? (?:requises?|obligatoires?)/.test(s))state="MENTION";
   add(f.field,f.value,f.evidence,f.origin,state);
  }
  for(const text of clauses(row.description || "")) {
   const s=fold(text);
   if(/donnees personnelles|cnil|chiffre d.affaires/.test(s)) continue;
-  if(/medecine (?:generale|polyvalente)/.test(s)) add(/experience/.test(s)?"experience_domaine":"service","MEDECINE_POLYVALENTE",text,"DESCRIPTION","MENTION","Médecine générale / polyvalente");
-  if(/maternite/.test(s)) add("specialite","MATERNITE",text,"DESCRIPTION","MENTION","Maternité");
+  if(/medecine (?:generale|polyvalente)/.test(s)&&isJobServiceEvidence(text,"MEDECINE_POLYVALENTE")) add(/experience/.test(s)?"experience_domaine":"service","MEDECINE_POLYVALENTE",text,"DESCRIPTION","MENTION","Médecine générale / polyvalente");
+  if(/maternite/.test(s)&&isJobServiceEvidence(text,"MATERNITE")) add("specialite","MATERNITE",text,"DESCRIPTION","MENTION","Maternité");
   if(/diplome.e?\s+d.etat|diplome.{0,30}infirmier/.test(s) && /infirmier/.test(s) && !result.fields.some(f=>f.key==="certification" && text.includes(f.evidence.text)))
    add("certification","DIPLOME_INFIRMIER",text,"DESCRIPTION",/souhait|apprecie/.test(s) && /exige|obligatoire|requis/.test(s)?"REVIEW_REQUIRED":/exige|obligatoire|vous etes/.test(s)?"REQUIRED":"MENTION");
   const days=[...s.matchAll(/\b(lundi|mardi|mercredi|jeudi|vendredi|samedi|dimanche)\b/g)].map(m=>m[1]);
@@ -74,7 +79,7 @@ export function parseOffer(row: ParserInput, at = new Date().toISOString()): Par
   }
  }
  result.warnings=[...new Set<string>(legacy.alerts)];
- if(new Set(result.fields.filter(f=>f.key==="service").map(f=>f.display)).size>1) result.warnings.push("MULTIPLE_SERVICES_MENTIONNES");
+ if(new Set(result.fields.filter(f=>f.key==="service").map(f=>JSON.stringify(f.value))).size>1) result.warnings.push("MULTIPLE_SERVICES_MENTIONNES");
  result.reviewQueue=clauses(row.description || "").filter(text=>! /donnees personnelles|cnil|votre cv/.test(fold(text)) && (/\d|permis|logiciel|diplome|experience|horaire|logement|vaccin|contrat/i.test(fold(text)) || !result.fields.some(f=>f.evidence.text.includes(text))));
  return result;
 }

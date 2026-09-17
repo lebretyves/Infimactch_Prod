@@ -1,3 +1,4 @@
+import {isJobServiceEvidence} from './service-evidence';
 import { Professional, distanceKm, experienceMonths } from "../domain/matching";
 
 type State =
@@ -56,7 +57,7 @@ export function partialOfferMatch(
   // Service labels are hints from an unambiguous title, not verified mandatory skills.
   const title = fold(offer.title ?? "");
   const services = servicePatterns
-    .filter(([, pattern]) => pattern.test(title))
+    .filter(([code, pattern]) => pattern.test(title)&&isJobServiceEvidence(offer.title??"",code))
     .map(([s]) => s);
   if (services.length !== 1)
     c("service", "OFFER_MISSING", "SERVICE_NOT_UNAMBIGUOUS");

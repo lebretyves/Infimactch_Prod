@@ -1,3 +1,4 @@
+import {previewContextOnly} from '@/lib/parsedOfferSource';
 ﻿import { useEffect, useState } from "react";
 import s from "./ParsedOfferPreview.module.css";
 
@@ -35,10 +36,12 @@ export function parsedSidebar(offer: ParsedOffer | null) {
 }
 
 export function ParsedOfferPreview({ offer }: { offer: ParsedOffer }) {
+  const seen=new Set<string>();
+  const groups=offer.groups.map(group=>({...group,items:group.items.filter(item=>{const key=item.evidence?.trim().replace(/\s+/g,' ').toLocaleLowerCase('fr-FR');if(!key||previewContextOnly(item)||seen.has(key))return false;seen.add(key);return true;})})).filter(group=>group.items.length);
   return <section className={s.panel} aria-label="Informations extraites de l’annonce">
     <header className={s.heading}><p>Aperçu de test — extraits relus</p><h2>L’essentiel de l’annonce</h2><span>Les informations du texte, classées pour préparer votre candidature.</span></header>
     {(offer.alerts.length > 0 || offer.missing.length > 0) && <div className={s.alert}><h3>À confirmer</h3>{offer.alerts.length > 0 && <ul>{offer.alerts.map((text, i) => <li key={i}>{text}</li>)}</ul>}{offer.missing.length > 0 && <p><strong>Non renseigné ou non extrait :</strong> {offer.missing.join(" · ")}</p>}</div>}
-    {offer.groups.map(group => <section className={s.group} key={group.title}><h3>{group.title}</h3><dl>{group.items.map((item, i) => <div className={s.field} key={`${item.label}-${i}`}><dt>{item.label}</dt><dd><strong>{item.value}</strong><span className={s.status} data-status={item.status}>{statuses[item.status]}</span>{item.evidence && <details><summary>Voir le passage source</summary><blockquote>{item.evidence}</blockquote></details>}</dd></div>)}</dl></section>)}
+    {groups.map(group => <section className={s.group} key={group.title}><h3>{group.title}</h3><dl>{group.items.map((item, i) => <div className={s.field} key={`${item.label}-${i}`}><dt>{item.label}</dt><dd><strong style={{whiteSpace:"pre-wrap",overflowWrap:"anywhere"}}>{item.evidence}</strong><span className={s.status} data-status={item.status}>{statuses[item.status]}</span></dd></div>)}</dl></section>)}
     <p className={s.note}>Une préférence n’est pas une obligation. Les informations absentes restent inconnues ; l’affectation reste humaine.</p>
   </section>;
 }
