@@ -1,4 +1,4 @@
-﻿import {test} from 'node:test';
+import {test} from 'node:test';
 import assert from 'node:assert/strict';
 import {parseCvExperience} from '../../src/profiles/cv-parser';
 const now=new Date('2026-09-17T12:00:00Z');
@@ -36,4 +36,34 @@ test('CV distinguishes ongoing typographic periods and never fabricates an end d
 test('CV does not join dates across employers or manufacture a range from isolated years',()=>{
  const r=parseCvExperience('Expériences\n2019\nCHU Premier\n2020\nClinique Deuxième',now);
  assert.equal(r.experiences.length,0);
+});
+
+
+test('CV recognises French abbreviations and preserves months instead of matching only years',()=>{
+ for(const [period,start,end] of [
+  ['janv. 2020 - juil. 2021','2020-01-01','2021-07-31'],
+  ['févr. 2020 - déc. 2021','2020-02-01','2021-12-31'],
+  ['aoû. 2020 au sept. 2021','2020-08-01','2021-09-30'],
+  ['juill.\n2020\n–\njanv.\n2021','2020-07-01','2021-01-31']
+ ]){
+  const r=parseCvExperience('Expériences professionnelles\n'+period+' | CHU Exemple | Cardiologie',now);
+  assert.equal(r.experiences.length,1,period);assert.equal(r.experiences[0]!.startDate,start,period);assert.equal(r.experiences[0]!.endDate,end,period);
+ }
+});
+test('CV preserves full written dates, hyphen dates and year-month boundaries',()=>{
+ for(const [period,start,end] of [
+  ['01-02-2020 - 31-03-2021','2020-02-01','2021-03-31'],
+  ['1 février 2020 - 15 mars 2021','2020-02-01','2021-03-15'],
+  ['1er janvier 2020 au 30 juin 2021','2020-01-01','2021-06-30'],
+  ['2020/02 - 2021/03','2020-02-01','2021-03-31'],
+  ['2020-02 - 2021-03','2020-02-01','2021-03-31'],
+  ['2020/02/15 - 2021/03/12','2020-02-15','2021-03-12']
+ ]){
+  const r=parseCvExperience('Expériences professionnelles\n'+period+' | CHU Exemple | Urgences',now);
+  assert.equal(r.experiences.length,1,period);assert.equal(r.experiences[0]!.startDate,start,period);assert.equal(r.experiences[0]!.endDate,end,period);
+ }
+});
+test('expanded CV date formats still reject impossible dates and non-work sections',()=>{
+ for(const period of ['31 février 2020 - 15 mars 2021','00-02-2020 - 31-03-2021','2020/13 - 2021/03','janv. 2020 - présent'])assert.equal(parseCvExperience('Expériences\n'+period+' | CHU Exemple | Urgences',now).experiences.length,0,period);
+ assert.equal(parseCvExperience('Formation\njanv. 2015 - juil. 2018 | École infirmière\nExpériences\njanv. 2020 - juil. 2021 | CHU Exemple | Urgences',now).experiences.length,1);
 });

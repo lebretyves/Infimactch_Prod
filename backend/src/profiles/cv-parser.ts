@@ -1,19 +1,21 @@
-﻿import {ideServices} from '../reference-data/reference-data.module';
+import {ideServices} from '../reference-data/reference-data.module';
 export type CvExperience={establishment:string;service:string;startDate:string;endDate:string;periodLabel:string;evidence:string;warnings:string[]};
 const fold=(s:string)=>s.replace(/[’‘]/g,"'").normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase();
 const monthNames=['janvier','fevrier','mars','avril','mai','juin','juillet','aout','septembre','octobre','novembre','decembre'];
-const monthAliases=[['jan','january'],['fev','feb','february'],['mar','march'],['avr','apr','april'],['may'],['jun','june'],['jul','july'],['aug','august'],['sep','sept','september'],['oct','october'],['nov','november'],['dec','december']];
+const monthAliases=[['jan','janv','january'],['fev','fevr','feb','february'],['mar','march'],['avr','apr','april'],['may'],['jun','june'],['jul','juil','juill','july'],['aou','aug','august'],['sep','sept','september'],['oct','october'],['nov','november'],['dec','december']];
 const months=monthNames.flatMap((m,i)=>[m,...monthAliases[i]!]).sort((a,b)=>b.length-a.length).join('|');
-const dateToken=`(?:\\d{1,2}[/.]\\d{1,2}[/.-](?:19|20)\\d{2}|(?:19|20)\\d{2}-\\d{2}-\\d{2}|\\d{1,2}[/.-](?:19|20)\\d{2}|(?:${months})\\.?\\s+(?:19|20)\\d{2}|(?:19|20)\\d{2})`;
+const dateToken=String.raw`(?:\d{1,2}[/.-]\d{1,2}[/.-](?:19|20)\d{2}|(?:19|20)\d{2}[-/]\d{2}[-/]\d{2}|(?:19|20)\d{2}[-/]\d{2}|\d{1,2}[/.-](?:19|20)\d{2}|(?:\d{1,2}(?:er)?\s+)?(?:${months})\.?\s+(?:19|20)\d{2}|(?:19|20)\d{2})`;
 const range=new RegExp(`(?<![\\d/.-])(${dateToken})\\s*(?:-|–|—|→|−|‑|\\bau\\b|\\ba\\b|\\bto\\b|\\bjusqu'au\\b)\\s*(${dateToken}|aujourd'hui|present|actuel(?:lement)?|en cours|a ce jour|current)(?![\\d/.-])`,'i');
 function parsedDate(raw:string,last:boolean){
  let year=0,month=0,day=0,precision='day';const text=fold(raw).replace(/\.$/,'');let m;
- if((m=text.match(/^(\d{4})-(\d{2})-(\d{2})$/))){year=+m[1]!;month=+m[2]!;day=+m[3]!;}
- else if((m=text.match(/^(\d{1,2})[/.](\d{1,2})[/.](\d{4})$/))){year=+m[3]!;month=+m[2]!;day=+m[1]!;}
+ if((m=text.match(/^(\d{4})[-/](\d{2})[-/](\d{2})$/))){year=+m[1]!;month=+m[2]!;day=+m[3]!;}
+ else if((m=text.match(/^(\d{1,2})[/.-](\d{1,2})[/.-](\d{4})$/))){year=+m[3]!;month=+m[2]!;day=+m[1]!;}
  else if((m=text.match(/^(\d{1,2})[/.-](\d{4})$/))){year=+m[2]!;month=+m[1]!;precision='month';}
- else if((m=text.match(/^([a-z]+)\.?\s+(\d{4})$/))){year=+m[2]!;month=monthNames.findIndex((name,i)=>name===m![1]||monthAliases[i]!.includes(m![1]!))+1;precision='month';}
+ else if((m=text.match(/^(\d{4})[-/](\d{2})$/))){year=+m[1]!;month=+m[2]!;precision='month';}
+ else if((m=text.match(/^(?:(\d{1,2})(?:er)?\s+)?([a-z]+)\.?\s+(\d{4})$/))){year=+m[3]!;month=monthNames.findIndex((name,i)=>name===m![2]||monthAliases[i]!.includes(m![2]!))+1;day=m[1]?+m[1]:0;precision=m[1]?'day':'month';}
  else if(/^\d{4}$/.test(text)){year=+text;month=last?12:1;precision='year';}
  else return {date:'',precision:'unknown'};
+ if(precision==='day'&&day===0)return {date:'',precision:'unknown'};
  if(!day)day=last?new Date(Date.UTC(year,month,0)).getUTCDate():1;
  const d=new Date(Date.UTC(year,month-1,day));if(year<1900||month<1||month>12||d.getUTCFullYear()!==year||d.getUTCMonth()!==month-1||d.getUTCDate()!==day)return {date:'',precision:'unknown'};
  return {date:d.toISOString().slice(0,10),precision};
@@ -31,7 +33,7 @@ export function parseCvExperience(text:string,now=new Date()){
  // Join only date-shaped fragments; never jump across employer/section text.
  const normalizedText=text.replace(/\r/g,'').replace(/[\u00a0\u202f]/g,' ').replace(/(\d)\s*([/.])\s*(?=\d)/g,'$1$2');
  const rawLines=normalizedText.split('\n').map(s=>s.trim()).filter(Boolean);
- const dateFragment=new RegExp(`^(?:(?:du|de|depuis)\\s+)?(?:${dateToken}|${months}\\.?)(?:\\s*(?:-|–|—|−|‑|a|au|to))?$`,'i');
+ const dateFragment=new RegExp(`^(?:(?:du|de|depuis)\\s+)?(?:${dateToken}|(?:${months})\\.?)(?:\\s*(?:-|–|—|−|‑|a|au|to))?$`,'i');
  const connector=/^(?:-|–|—|−|‑|a|au|to)$/i;
  const lines:string[]=[];
  for(let i=0;i<rawLines.length;i++){

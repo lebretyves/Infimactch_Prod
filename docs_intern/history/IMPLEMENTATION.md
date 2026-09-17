@@ -342,3 +342,7 @@ Validation : compilation frontend et backend, 224 tests serveur, tests de dédup
 ## 2026-09-18 — Espaces de la vue d’ensemble infirmier
 
 Réorganisation de la page d’accueil pour supprimer la longue colonne vide à côté des recommandations. Compteurs remontés, informations de suivi et accès au dossier regroupés, offres présentées sur une largeur adaptée avec des espacements réduits. Notifications toujours absentes de cette vue. Données, favoris, filtres d’origine et règles de matching conservés. Contrôles navigateur sur mobile, tablette et ordinateur, états vide et mission confirmée, puis compilation frontend.
+
+## 2026-09-18 — Formats de dates du CV
+
+Correction de défauts reproduits dans la reconnaissance des expériences : dates françaises avec tirets, jours et mois écrits, abréviations janv./févr./juil./juill./aoû., formats année/mois et mois abrégés répartis sur plusieurs lignes. Les limites exactes jour/mois sont conservées ; une abréviation ne doit plus faire perdre le mois au profit d’une période annuelle. Les dates impossibles, futures et les périodes en cours ne deviennent pas des expériences terminées. Aucun fichier CV utilisateur n’a été reçu ; son cas exact reste à vérifier sur un extrait. Validation : 13 tests CV et compilation backend réussis.
