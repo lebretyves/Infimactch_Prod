@@ -1,3 +1,4 @@
+import {CvController} from './cv.controller';
 import {assertPersonalInformationUnchanged} from './personal-information';
 import {
   changeAvailability,
@@ -384,7 +385,7 @@ class ProfilesController {
   }
 }
 @Module({
-  controllers: [ProfilesController],
+  controllers: [ProfilesController,CvController],
   providers: [ProfilesService, RppsService],
   exports: [RppsService, ProfilesService],
 })

@@ -25,10 +25,10 @@ export async function analyzeBankFile(file:File,signal:AbortSignal,onProgress:(v
 }
 
 /** One local OCR worker per camera session; never upload preview frames. */
-export async function createBankCameraReader(signal:AbortSignal){
+export async function createBankCameraReader(signal:AbortSignal,language='eng'){
  const {createWorker}=await import('tesseract.js');
  if(signal.aborted)throw new Error('Analyse annulée.');
- const worker=await createWorker('eng',1,{workerPath:'/ocr/worker.min.js',corePath:'/ocr/core',langPath:'/ocr/lang',cacheMethod:'none',workerBlobURL:false,logger:()=>{},errorHandler:()=>{}});
+ const worker=await createWorker(language,1,{workerPath:'/ocr/worker.min.js',corePath:'/ocr/core',langPath:'/ocr/lang',cacheMethod:'none',workerBlobURL:false,logger:()=>{},errorHandler:()=>{}});
  let stopped=false;
  const close=()=>{if(stopped)return;stopped=true;signal.removeEventListener('abort',close);void worker.terminate().catch(()=>{});};
  if(signal.aborted){close();throw new Error('Analyse annulée.');}

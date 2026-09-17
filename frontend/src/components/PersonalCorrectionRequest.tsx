@@ -10,10 +10,10 @@ export function PersonalCorrectionRequest(){
  const [open,setOpen]=useState(false),[field,setField]=useState('firstName'),[value,setValue]=useState(''),[busy,setBusy]=useState(false),[error,setError]=useState(''),[message,setMessage]=useState('');const pending=useRef(false);
  async function send(){if(pending.current)return;pending.current=true;setBusy(true);setError('');setMessage('');try{await api('/me/personal-corrections',{method:'POST',body:{field,value}});setValue('');setOpen(false);setMessage('Votre demande a été envoyée à l’administration. Vos informations restent inchangées jusqu’à sa validation.');remote.reload();}catch(e){setError(e instanceof Error?e.message:'La demande n’a pas pu être envoyée.');}finally{pending.current=false;setBusy(false);}}
  const request=remote.data?.request;
- return <div style={{display:'grid',gap:12,marginTop:16}} aria-label="Correction de mes informations personnelles">
+ return <div style={{display:'grid',gridTemplateColumns:'minmax(0,1fr)',minWidth:0,gap:12,marginTop:16}} aria-label="Correction de mes informations personnelles">
  {remote.loading?<p role="status">Chargement des demandes…</p>:remote.error?<><p role="alert">{remote.error}</p><Button type="button" variant="outline" onClick={remote.reload}>Réessayer</Button></>:<>
  {request&&<p>{request.status==='REQUESTED'?'Demande en cours':request.status==='COMPLETED'?'Correction validée — actualisez votre profil':'Demande refusée'} : {personalFieldLabels[request.field]}. {request.decision_reason}</p>}
- {request?.status!=='REQUESTED'&&<Button type="button" variant="outline" onClick={()=>setOpen(!open)}>Demander une correction à l’administrateur</Button>}
+ {request?.status!=='REQUESTED'&&<Button type="button" style={{whiteSpace:'normal'}} variant="outline" onClick={()=>setOpen(!open)}>Demander une correction à l’administrateur</Button>}
  {open&&request?.status!=='REQUESTED'&&<div style={{display:'grid',gap:12}} onKeyDown={e=>{if(e.key==='Enter'){e.preventDefault();void send();}}}>
  <SelectField label="Information à corriger" value={field} disabled={busy} onChange={e=>{setField(e.target.value);setValue('');}}>{Object.entries(personalFieldLabels).map(([key,label])=><option key={key} value={key}>{label}</option>)}</SelectField>
  <TextField label="Nouvelle valeur demandée" type={field==='birthDate'?'date':'text'} value={value} maxLength={500} disabled={busy} onChange={e=>setValue(e.target.value)}/>
