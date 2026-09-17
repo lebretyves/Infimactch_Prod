@@ -107,3 +107,14 @@ test('activated dedicated administrator signs in with password alone and can rec
  await owner.agent.get('/api/v1/admin/overview').expect(200);
  await post(owner.agent,'mfa',login.body.csrfToken,{code:'000000'}).expect(404);
 });
+
+test('Discord infrastructure reports a checked bot identity without claiming message delivery',async()=>{
+ const owner=await enroll(),oldToken=process.env.DISCORD_BOT_TOKEN,originalFetch=globalThis.fetch;
+ process.env.DISCORD_BOT_TOKEN='fictional-test-token';
+ try{
+ globalThis.fetch=async(input:any)=>{assert.equal(String(input),'https://discord.com/api/v10/users/@me');return new Response(JSON.stringify({id:'123456789012345678',bot:true}),{status:200});};
+ let response=await owner.agent.get('/api/v1/admin/infrastructure').expect(200);assert.equal(response.body.services.find((x:any)=>x.name==='n8n / Discord').state,'ready');
+ globalThis.fetch=async()=>new Response('{}',{status:401});
+ response=await owner.agent.get('/api/v1/admin/infrastructure').expect(200);assert.equal(response.body.services.find((x:any)=>x.name==='n8n / Discord').state,'unavailable');
+ }finally{globalThis.fetch=originalFetch;if(oldToken===undefined)delete process.env.DISCORD_BOT_TOKEN;else process.env.DISCORD_BOT_TOKEN=oldToken;}
+});

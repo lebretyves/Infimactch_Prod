@@ -28,6 +28,7 @@ export default function Notifications() {
   usePageTitle("Notifications");
   const {user}=useAuth();
   const [offset,setOffset]=useState(0),[discordId,setDiscordId]=useState(""),[code,setCode]=useState(""),[busy,setBusy]=useState(false),[error,setError]=useState(""),[message,setMessage]=useState("");
+  const [discordIdError,setDiscordIdError]=useState("");
   const settings=useRemote(signal=>api<Settings>(base,{signal}),user?.id??"anonymous");
   const notices=useRemote(signal=>api<Notice[]>("/me/notifications?limit=20&offset="+offset,{signal}),"notices:"+offset);
   const orgs=useRemote(async signal=>user?.role==="interimaire"?null:organizations(signal),user?.id??"anonymous");
@@ -45,7 +46,18 @@ export default function Notifications() {
     <section className={s.card} aria-labelledby="discord-settings"><h2 id="discord-settings">Notifications Discord</h2>
       {settings.loading?<p role="status">Chargement…</p>:settings.error?<p role="alert">{settings.error} <Button onClick={settings.reload}>Réessayer</Button></p>:data&&!data.configured?<p>Discord n’est pas encore disponible. Vos notifications restent consultables dans cette page.</p>:data&&<>
         {!data.link?<><p>Rejoignez le serveur du bot InfiMatch et autorisez les messages privés. Dans Discord, activez le mode développeur dans Paramètres → Avancés, puis copiez votre identifiant utilisateur depuis votre profil.</p>
-          <form onSubmit={e=>{e.preventDefault();void action(()=>api(base+"/discord/challenge",{method:"POST",body:{discordUserId:discordId}}),"Code envoyé en message privé Discord. Il expire dans 10 minutes.");}}><TextField label="Votre identifiant utilisateur Discord" value={discordId} onChange={e=>setDiscordId(e.target.value)} pattern="[0-9]{17,20}" required/><Button type="submit" disabled={busy}>Recevoir mon code privé</Button></form>
+          <form noValidate onSubmit={e=>{
+            e.preventDefault();
+            if(busy) return;
+            const discordUserId=discordId.trim();
+            setDiscordId(discordUserId);setError("");setMessage("");
+            if(!/^[0-9]{17,20}$/.test(discordUserId)) {
+              setDiscordIdError("Saisissez votre identifiant utilisateur Discord : 17 à 20 chiffres. Ce n’est ni votre pseudo ni l’identifiant du serveur ou du salon.");
+              return;
+            }
+            setDiscordIdError("");
+            void action(()=>api(base+"/discord/challenge",{method:"POST",body:{discordUserId}}),"Code envoyé en message privé Discord. Il expire dans 10 minutes.");
+          }}><TextField label="Votre identifiant utilisateur Discord" hint="17 à 20 chiffres : copiez l’identifiant de votre utilisateur, pas votre pseudo ni celui du serveur ou du salon." error={discordIdError} value={discordId} onChange={e=>{setDiscordId(e.target.value.trim());setDiscordIdError("");}} pattern="[0-9]{17,20}" inputMode="numeric" autoComplete="off" required/><Button type="submit" disabled={busy}>Recevoir mon code privé</Button></form>
           <form onSubmit={e=>{e.preventDefault();void action(()=>api(base+"/discord/verify",{method:"POST",body:{code}}),"Compte Discord associé. Choisissez maintenant les événements à recevoir.");}}><TextField label="Code reçu sur Discord" value={code} onChange={e=>setCode(e.target.value)} pattern="[0-9]{6}" inputMode="numeric" autoComplete="one-time-code" required/><Button type="submit" disabled={busy}>Associer mon compte</Button></form>
         </>:<><p>Compte Discord associé : {data.link.discord_user_id}</p><Button variant="outline" disabled={busy} onClick={()=>void action(()=>api(base+"/discord",{method:"DELETE"}),"Discord déconnecté. Les envois liés à cette connexion sont arrêtés.")}>Déconnecter Discord</Button>
           <h3>Mes messages privés</h3><DestinationEditor key={JSON.stringify(data.destinations.find(d=>d.user_id))} destination={data.destinations.find(d=>d.user_id)} catalog={Object.fromEntries(Object.entries(data.catalog).filter(([k])=>!["NEED_CREATED","NEED_UPDATED","MISSION_PUBLISHED","REMINDER"].includes(k)))} save={(_,body)=>action(()=>api(base+"/discord",{method:"PUT",body}),"Préférences enregistrées.")}/>
