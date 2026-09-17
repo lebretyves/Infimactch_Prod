@@ -1,6 +1,6 @@
 import {withRole,request} from './common.mjs';import {spawnSync} from 'node:child_process';
 const project='infimactch-prod-backend';
-const keys=['DATABASE_URL','MONGODB_URI','SESSION_SECRET','DOCUMENT_KEY','SERVICE_TOKEN','APP_ORIGIN','NOTIFICATION_APP_ORIGIN','TRUST_PROXY','DOCUMENT_STORAGE','NODE_OPTIONS','GOOGLE_CLIENT_ID','FT_CLIENT_ID','FT_CLIENT_SECRET','RPPS_API_KEY','JOBSPIPE_API_KEY','N8N_WEBHOOK_BASE','DISCORD_RELAY_URL','DISCORD_RELAY_TOKEN','INFIMATCH_SECRET_SOURCE'];
+const keys=['DATABASE_URL','MONGODB_URI','SESSION_SECRET','DOCUMENT_KEY','SERVICE_TOKEN','APP_ORIGIN','NOTIFICATION_APP_ORIGIN','TRUST_PROXY','DOCUMENT_STORAGE','NODE_OPTIONS','GOOGLE_CLIENT_ID','FT_CLIENT_ID','FT_CLIENT_SECRET','RPPS_API_KEY','JOBSPIPE_API_KEY','N8N_WEBHOOK_BASE','DISCORD_RELAY_URL','DISCORD_RELAY_TOKEN','INFIMATCH_SECRET_SOURCE','ADMIN_ORIGIN','PSC_ENABLED','PSC_ENVIRONMENT','PSC_CLIENT_ID','PSC_CLIENT_SECRET','RPPS_ENABLED'];
 try{await withRole('operator',async token=>{const values=(await request('kv/data/infimatch/v1/production',{token})).data.data;
 for(const key of keys.slice(0,10))if(!values[key])throw Error('Missing required production key');
 if(new URL(values.DATABASE_URL).username!=='infimatch_app'||new URL(values.MONGODB_URI).username!=='infimatch_app')throw Error('Expected restricted database users');

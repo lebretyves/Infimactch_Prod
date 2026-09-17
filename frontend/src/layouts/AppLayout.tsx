@@ -133,6 +133,7 @@ export function AppLayout() {
           </div>
         )}
         <div className={s.bottom}>
+          <Link to="/installer" className={s.catalogue}>Installer l’application</Link>
           <Link to="/catalogue" className={s.catalogue}>
             Catalogue des pages
           </Link>
@@ -142,12 +143,12 @@ export function AppLayout() {
           </Button>
         </div>
       </nav>
-      <main className={s.main} id="contenu">
+      <main className={s.main} id="contenu" tabIndex={-1}>
         {error && <p role="alert">{error}</p>}
         <Outlet />
         <footer className={s.footer}>
           InfiMatch © {new Date().getFullYear()}
-          <Link to="/mentions-legales">Mentions légales</Link>
+          <Link to="/mentions-legales">Mentions légales</Link><Link to="/accessibilite">Accessibilité</Link><Link to="/ecoconception">Écoconception</Link>
         </footer>
       </main>
     </div>

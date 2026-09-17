@@ -1,3 +1,5 @@
+import { ProfessionalIdentity1789381800000 } from "./professional-identity";
+import { PlatformAdmin1789381700000 } from "./platform-admin";
 import { EnterpriseFollowUp1789381600000 } from "./enterprise-follow-up";
 import { CloudStorage1789381500000 } from "./cloud-storage";
 import { NotificationCenter1789381400000 } from "./notification-center";
@@ -42,6 +44,8 @@ export class Database implements OnModuleDestroy {
       NotificationCenter1789381400000,
       CloudStorage1789381500000,
       EnterpriseFollowUp1789381600000,
+      PlatformAdmin1789381700000,
+      ProfessionalIdentity1789381800000,
     ],
     logging: false,
     extra: { max: 12 },

@@ -1,3 +1,5 @@
+import {UseInterceptors} from "@nestjs/common";
+import {ExecutionTrace} from "./execution-trace";
 import { geodesicKm } from "../database/distance";
 import {
   Injectable,
@@ -354,6 +356,7 @@ export class AutomationService {
   }
 }
 @Controller("internal/automation")
+@UseInterceptors(ExecutionTrace)
 class AutomationController {
   constructor(private readonly service: AutomationService) {}
   private authorize(token: string) {
@@ -394,7 +397,7 @@ class AutomationController {
 @Module({
   imports: [DocumentsModule],
   controllers: [AutomationController],
-  providers: [AutomationService],
+  providers: [AutomationService,ExecutionTrace],
   exports: [AutomationService],
 })
 export class AutomationModule {}

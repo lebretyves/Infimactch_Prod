@@ -1,3 +1,4 @@
+import { ProSanteConnect } from "@/components/ProSanteConnect";
 import { GoogleConnexion } from "@/components/GoogleConnexion";
 import { useState, type FormEvent } from "react";
 import { Link, useNavigate, useLocation } from "react-router";
@@ -134,6 +135,7 @@ export default function Connexion() {
         </Button>
       </form>
       <GoogleConnexion password={motDePasse} />
+      <ProSanteConnect />
 
       <p className={s.bascule}>
         Pas encore de compte ? <Link to="/inscription">Créer mon compte</Link>

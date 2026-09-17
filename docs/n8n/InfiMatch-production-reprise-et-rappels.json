@@ -2,7 +2,7 @@
   "name": "InfiMatch production - reprise et rappels",
   "nodes": [
     {
-      "id": "f72ce3b6-3b1d-4ce3-99dd-b59760469285",
+      "id": "6d628cb8-6894-42b1-81a6-9bf6bbf7de3b",
       "name": "Toutes les 30 minutes",
       "type": "n8n-nodes-base.scheduleTrigger",
       "typeVersion": 1.2,
@@ -22,7 +22,24 @@
       }
     },
     {
-      "id": "ba17631e-45b2-4648-acf7-e59c63534296",
+      "id": "904ea682-917c-4463-a030-650d96c516cd",
+      "name": "Verifier disponibilite API",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        120,
+        -160
+      ],
+      "parameters": {
+        "method": "GET",
+        "url": "https://infimactch-prod-backend.vercel.app/api/v1/health",
+        "options": {
+          "timeout": 30000
+        }
+      }
+    },
+    {
+      "id": "1faf3d50-0b45-49c5-9190-7feca1872fd8",
       "name": "Traiter la file",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
@@ -35,13 +52,26 @@
         "url": "https://infimactch-prod-backend.vercel.app/api/v1/internal/automation/jobs/dispatch",
         "authentication": "genericCredentialType",
         "genericAuthType": "httpHeaderAuth",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "X-N8N-Execution-Id",
+              "value": "={{ $execution.id }}"
+            },
+            {
+              "name": "X-N8N-Workflow-Id",
+              "value": "={{ $workflow.id }}"
+            }
+          ]
+        },
         "options": {
           "timeout": 240000
         }
       }
     },
     {
-      "id": "69c7f627-a31b-47b1-b7b3-e195e8c4d641",
+      "id": "2c75e8e6-94f6-47d4-a973-e127ccf024c1",
       "name": "Rappels",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
@@ -54,6 +84,19 @@
         "url": "https://infimactch-prod-backend.vercel.app/api/v1/internal/automation/reminders",
         "authentication": "genericCredentialType",
         "genericAuthType": "httpHeaderAuth",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "X-N8N-Execution-Id",
+              "value": "={{ $execution.id }}"
+            },
+            {
+              "name": "X-N8N-Workflow-Id",
+              "value": "={{ $workflow.id }}"
+            }
+          ]
+        },
         "options": {
           "timeout": 240000
         }
@@ -65,7 +108,7 @@
       "main": [
         [
           {
-            "node": "Traiter la file",
+            "node": "Verifier disponibilite API",
             "type": "main",
             "index": 0
           }
@@ -77,6 +120,17 @@
         [
           {
             "node": "Rappels",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Verifier disponibilite API": {
+      "main": [
+        [
+          {
+            "node": "Traiter la file",
             "type": "main",
             "index": 0
           }

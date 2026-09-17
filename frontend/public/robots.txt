@@ -1,9 +1,3 @@
 User-agent: *
 Allow: /
-Disallow: /accueil
-Disallow: /candidatures
-Disallow: /calendrier
-Disallow: /profil
-Disallow: /inscription
-
-Sitemap: https://infimatch.fr/sitemap.xml
+Sitemap: https://infimactch-prod-backend-l5bc.vercel.app/sitemap.xml

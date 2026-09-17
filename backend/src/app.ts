@@ -1,3 +1,5 @@
+import {PscModule} from "./auth/psc.module";
+import {AdminModule} from "./admin/admin.module";
 import {CloudJobsModule} from "./automation/cloud-jobs.module";
 import {waitUntil} from "@vercel/functions";
 import type { IncomingMessage, ServerResponse } from "node:http";
@@ -50,9 +52,11 @@ class HealthController {
 @Module({
   imports: [
     DatabaseModule,
+    AdminModule,
     PrivacyModule,
     NotificationsModule,
     AuthModule,
+    PscModule,
     ProfilesModule,
     MissionsModule,
     MatchingModule,
@@ -131,12 +135,11 @@ export async function createApp() {
     next();
   });
   app.use(helmet());
-  app.enableCors({ origin: required("APP_ORIGIN"), credentials: true });
+  app.enableCors({ origin: [required("APP_ORIGIN"), ...(process.env.ADMIN_ORIGIN ? [process.env.ADMIN_ORIGIN] : [])], credentials: true });
   const pool = new Pool({ connectionString: required("DATABASE_URL"), max: 4 });
   const Store = connectPgSimple(session);
   const sessionStore = new Store({ pool, tableName: "session" });
-  app.use(
-    session({
+  const clientSession = session({
       name: "infimatch.sid",
       secret: required("SESSION_SECRET"),
       store: sessionStore,
@@ -148,10 +151,13 @@ export async function createApp() {
         sameSite: "lax",
         maxAge: 8 * 60 * 60 * 1000,
       },
-    }),
-  );
+    });
+  const adminStore = new Store({pool,tableName:"admin_session"});
+  const adminSession = session({name:"infimatch.admin.sid",secret:required("SESSION_SECRET")+":admin",store:adminStore,resave:false,saveUninitialized:false,cookie:{path:"/api/v1/admin",httpOnly:true,secure:process.env.NODE_ENV==="production",sameSite:"strict",maxAge:8*3600000}});
+  app.use((req:any,res:any,next:any)=>(req.path.startsWith("/api/v1/admin/")?adminSession:clientSession)(req,res,next));
+  app.use("/api/v1/admin", authRateLimit());
   app.use((req: any, res: any, next: any) => {
-    if (req.session?.userId || req.path.startsWith("/api/v1/auth"))
+    if (req.path.startsWith("/api/v1/admin") || req.session?.userId || req.path.startsWith("/api/v1/auth"))
       res.setHeader("Cache-Control", "no-store");
     next();
   });
@@ -177,7 +183,7 @@ export async function createApp() {
       provided = req.get("x-csrf-token"),
       expected = req.session?.csrf;
     if (
-      origin !== required("APP_ORIGIN") ||
+      origin !== (req.path.startsWith("/api/v1/admin/") ? process.env.ADMIN_ORIGIN : required("APP_ORIGIN")) ||
       typeof provided !== "string" ||
       !expected ||
       Buffer.byteLength(provided) !== Buffer.byteLength(expected) ||
@@ -232,6 +238,7 @@ export async function createApp() {
   app.close = async () => {
     await close();
     await sessionStore.close();
+    await adminStore.close();
     await pool.end();
   };
   await app.init();

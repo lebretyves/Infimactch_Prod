@@ -1,3 +1,4 @@
+import { ProSanteConnect } from "@/components/ProSanteConnect";
 import { useRef, useState, type FormEvent } from "react";
 import { useAuth } from "@/context/AuthContext";
 import { useRemote } from "@/lib/useRemote";
@@ -153,6 +154,7 @@ function Editor({ initial }: { initial: ProfessionalProfile }) {
           Enregistrer les modifications
         </Button>
       </header>
+      <ProSanteConnect purpose="link" />
       {error && (
         <p className={u.feedback} role="alert">
           {error}

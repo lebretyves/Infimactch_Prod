@@ -3,11 +3,12 @@ import {resolve} from "node:path";
 import mongoose from "mongoose";
 import {Database,audit} from "../database/database";
 import {projectRoot} from "../config";
-import {anonymizeAccount,cleanupRemovedDocuments} from "./retention";
+import {anonymizeAccount,cleanupRemovedDocuments,requireOwnerTransfer} from "./retention";
 /** Keep this ledger outside rotated backups, and replay it before reopening a restore. */
 export async function executeClosure(db:Database,accountId:string,requestId?:string){
  if(!/^[0-9a-f-]{36}$/i.test(accountId))throw Error("Invalid account id");
  const result=await db.transaction(async em=>{
+  await requireOwnerTransfer(em,accountId);
   const [account]=await em.query("SELECT id FROM account WHERE id=$1 FOR UPDATE",[accountId]);if(!account)throw Error("Account not found");
   if(requestId){const [request]=await em.query("SELECT status FROM closure_request WHERE id=$1 AND account_id=$2 FOR UPDATE",[requestId,accountId]);if(request?.status!=='APPROVED')return null;}
   if(process.env.DOCUMENT_STORAGE==='postgres'){

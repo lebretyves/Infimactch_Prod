@@ -1,5 +1,8 @@
 # InfiMatch — backend V1
 
+> Mise a jour du 17 septembre 2026 : [correctifs, administration et deploiement](docs/quality/PLAN_CORRECTIFS_DEPLOIEMENT.md), [configuration](docs/quality/CONFIGURATION.md), [preuves qualite frontend](docs/quality/frontend-quality-2026-09-17.md). Les bilans ci-dessous sont historiques ; ils ne remplacent pas cet inventaire.
+
+
 > État consolidé et reste à faire : [bilan V1 pour main](docs/BILAN_V1_MAIN_2026-09-16.md). Les bilans datés plus anciens sont historiques.
 > [Historique de la journée et suivi des travaux](docs/HISTORIQUE_2026-09-16.md).
 ## Vérification kickoff du 16 septembre 2026

@@ -1,3 +1,4 @@
+import { clearAppCaches } from '../lib/pwa';
 import { profilePayload,type ProfessionalProfile,type ProfileDetails } from './profile';
 import { api, ApiError, resetCsrf } from './api';
 export type Role = 'interimaire' | 'entreprise' | 'etablissement';
@@ -181,6 +182,7 @@ export async function register(data: RegisterData): Promise<AuthResponse> {
 }
 export async function logout() {
   await api('/auth/logout', { method: 'POST' });
+  await clearAppCaches().catch(() => undefined);
   clearAuth();
   resetCsrf();
 }

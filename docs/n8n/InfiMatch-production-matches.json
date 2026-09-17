@@ -2,7 +2,7 @@
   "name": "InfiMatch production - matches",
   "nodes": [
     {
-      "id": "0cf2a88d-b7a3-4f91-85e8-e3f84fabd35e",
+      "id": "393a82f0-f9ec-44f1-8d79-abcdff08471e",
       "name": "Reception",
       "type": "n8n-nodes-base.webhook",
       "typeVersion": 2,
@@ -10,7 +10,7 @@
         0,
         0
       ],
-      "webhookId": "cdfb4b5c-6659-47bd-9f31-53243de188ce",
+      "webhookId": "1b38af88-74e5-4629-8083-c4eebe553a81",
       "parameters": {
         "httpMethod": "POST",
         "path": "infimatch-prod/matches",
@@ -20,7 +20,7 @@
       }
     },
     {
-      "id": "ca980152-ac3c-4f95-8bc2-9374b1b2b099",
+      "id": "6f73de9b-352b-42a9-a185-fad5b87161b4",
       "name": "Valider evenement",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
@@ -33,7 +33,7 @@
       }
     },
     {
-      "id": "a10aa1c5-1f15-43ca-a226-253aee78bac4",
+      "id": "f2016a5a-0fef-4728-9c70-091f52290243",
       "name": "Backend",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
@@ -46,6 +46,19 @@
         "url": "={{ \"https://infimactch-prod-backend.vercel.app/api/v1/internal/automation/matches/\" + $json.eventId }}",
         "authentication": "genericCredentialType",
         "genericAuthType": "httpHeaderAuth",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "X-N8N-Execution-Id",
+              "value": "={{ $execution.id }}"
+            },
+            {
+              "name": "X-N8N-Workflow-Id",
+              "value": "={{ $workflow.id }}"
+            }
+          ]
+        },
         "options": {
           "timeout": 240000
         }

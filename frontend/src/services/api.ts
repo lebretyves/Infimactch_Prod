@@ -57,6 +57,7 @@ export async function api<T>(
 ): Promise<T> {
   const method = options.method || "GET";
   const write = !["GET", "HEAD"].includes(method);
+  if (write && navigator.onLine === false) throw new ApiError(0, "OFFLINE", "Connexion nécessaire. Aucune modification n’a été envoyée ; réessayez une fois connecté.");
   if (write && !csrf) await getCsrf();
   for (let attempt = 0; attempt < 2; attempt++) {
     let r: Response;
@@ -130,7 +131,7 @@ export async function api<T>(
           : data.code === "AVAILABILITY_LIMIT"
             ? "Votre planning dépasse 200 périodes distinctes par état. Réduisez la période sélectionnée ou regroupez vos créneaux."
           : r.status === 413
-            ? "La limite de stockage ou la taille maximale du fichier est d?pass?e."
+            ? "La limite de stockage ou la taille maximale du fichier est dépassée."
           : r.status === 429
             ? "Trop de tentatives. Réessayez dans quelques minutes."
             : r.status === 401

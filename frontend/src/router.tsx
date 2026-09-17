@@ -1,47 +1,52 @@
-import Notifications from "./pages/Notifications";
-import ApercuAnnonces from "./pages/ApercuAnnonces";
-import Catalogue from "./pages/Catalogue";
-import Besoins from "./pages/Besoins";
-import Etablissement from "./pages/Etablissement";
-import Dossier from "./pages/Dossier";
-import Favoris from "./pages/Favoris";
-import Historique from "./pages/Historique";
-import Organisation from "./pages/Organisation";
-import GestionMission from "./pages/GestionMission";
-import MissionForm from "./pages/MissionForm";
-import CandidatureDetail from "./pages/CandidatureDetail";
+import { lazy } from "react";
+import { QualityRoot } from "./components/QualityRoot";
+const Installer = lazy(() => import("./pages/Installer"));
+const Accessibilite = lazy(() => import("./pages/Qualite").then(m => ({ default: m.Accessibilite })));
+const Ecoconception = lazy(() => import("./pages/Qualite").then(m => ({ default: m.Ecoconception })));
+const Notifications = lazy(() => import("./pages/Notifications"));
+const ApercuAnnonces = lazy(() => import("./pages/ApercuAnnonces"));
+const Catalogue = lazy(() => import("./pages/Catalogue"));
+const Besoins = lazy(() => import("./pages/Besoins"));
+const Etablissement = lazy(() => import("./pages/Etablissement"));
+const Dossier = lazy(() => import("./pages/Dossier"));
+const Favoris = lazy(() => import("./pages/Favoris"));
+const Historique = lazy(() => import("./pages/Historique"));
+const Organisation = lazy(() => import("./pages/Organisation"));
+const GestionMission = lazy(() => import("./pages/GestionMission"));
+const MissionForm = lazy(() => import("./pages/MissionForm"));
+const CandidatureDetail = lazy(() => import("./pages/CandidatureDetail"));
 import { ButtonLink } from "./ui/Button";
 import { createBrowserRouter, createHashRouter } from "react-router";
 import { AppLayout } from "./layouts/AppLayout";
 import { InscriptionLayout } from "./pages/inscription/InscriptionLayout";
 import { ProtectedRoute } from "./components/ProtectedRoute";
-import AccueilPublic from "./pages/AccueilPublic";
-import Connexion from "./pages/Connexion";
-import MotDePasseOublie from "./pages/MotDePasseOublie";
-import Inscription from "./pages/Inscription";
-import Mentions from "./pages/Mentions";
-import Identite from "./pages/inscription/Identite";
-import Localisation from "./pages/inscription/Localisation";
-import Qualification from "./pages/inscription/Qualification";
-import Mobilite from "./pages/inscription/Mobilite";
-import Disponibilites from "./pages/inscription/Disponibilites";
-import Rib from "./pages/inscription/Rib";
-import Consentements from "./pages/inscription/Consentements";
-import Confirmation from "./pages/inscription/Confirmation";
-import ConfirmationEtablissement from "./pages/inscription/ConfirmationEtablissement";
-import Accueil from "./pages/Accueil";
-import Missions from "./pages/Missions";
-import MissionDetail from "./pages/MissionDetail";
-import Candidater from "./pages/Candidater";
-import Candidatures from "./pages/Candidatures";
-import Profil from "./pages/Profil";
+const AccueilPublic = lazy(() => import("./pages/AccueilPublic"));
+const Connexion = lazy(() => import("./pages/Connexion"));
+const MotDePasseOublie = lazy(() => import("./pages/MotDePasseOublie"));
+const Inscription = lazy(() => import("./pages/Inscription"));
+const Mentions = lazy(() => import("./pages/Mentions"));
+const Identite = lazy(() => import("./pages/inscription/Identite"));
+const Localisation = lazy(() => import("./pages/inscription/Localisation"));
+const Qualification = lazy(() => import("./pages/inscription/Qualification"));
+const Mobilite = lazy(() => import("./pages/inscription/Mobilite"));
+const Disponibilites = lazy(() => import("./pages/inscription/Disponibilites"));
+const Rib = lazy(() => import("./pages/inscription/Rib"));
+const Consentements = lazy(() => import("./pages/inscription/Consentements"));
+const Confirmation = lazy(() => import("./pages/inscription/Confirmation"));
+const ConfirmationEtablissement = lazy(() => import("./pages/inscription/ConfirmationEtablissement"));
+const Accueil = lazy(() => import("./pages/Accueil"));
+const Missions = lazy(() => import("./pages/Missions"));
+const MissionDetail = lazy(() => import("./pages/MissionDetail"));
+const Candidater = lazy(() => import("./pages/Candidater"));
+const Candidatures = lazy(() => import("./pages/Candidatures"));
+const Profil = lazy(() => import("./pages/Profil"));
 
 const creerRouteur =
   import.meta.env.VITE_ROUTER === "hash"
     ? createHashRouter
     : createBrowserRouter;
 
-export const router = creerRouteur([
+export const router = creerRouteur([{ element: <QualityRoot />, children: [
   {
     path: "*",
     element: (
@@ -53,6 +58,9 @@ export const router = creerRouteur([
     ),
   },
   { path: "/", element: <AccueilPublic /> },
+  { path: "/installer", element: <Installer /> },
+  { path: "/accessibilite", element: <Accessibilite /> },
+  { path: "/ecoconception", element: <Ecoconception /> },
   { path: "/catalogue", element: <Catalogue /> },
   { path: "/apercu-annonces", element: <ApercuAnnonces /> },
   { path: "/connexion", element: <Connexion /> },
@@ -104,4 +112,4 @@ export const router = creerRouteur([
       },
     ],
   },
-]);
+]}]);

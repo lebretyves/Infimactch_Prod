@@ -145,3 +145,5 @@ svg {
 fieldset { min-inline-size: 0; }
 input, select, textarea { min-width: 0; max-width: 100%; }
 [id] { scroll-margin-top: 100px; }
+
+.qualityNotice { padding: 1rem clamp(1rem, 4vw, 3rem); background: var(--sky-100); color: var(--ink-900); display: flex; flex-wrap: wrap; align-items: center; gap: 1rem; }

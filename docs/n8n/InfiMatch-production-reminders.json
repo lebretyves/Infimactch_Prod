@@ -2,7 +2,7 @@
   "name": "InfiMatch production - reminders",
   "nodes": [
     {
-      "id": "37b5a304-521d-47f1-ac70-ec8f75d5c152",
+      "id": "ab40e613-a3e0-4f00-947d-eace20c8490e",
       "name": "Reception",
       "type": "n8n-nodes-base.webhook",
       "typeVersion": 2,
@@ -10,7 +10,7 @@
         0,
         0
       ],
-      "webhookId": "20f7783f-dbab-42b4-b2ca-9ed9c185f88d",
+      "webhookId": "9f97c1ac-3be1-40d9-83db-35427365fc7a",
       "parameters": {
         "httpMethod": "POST",
         "path": "infimatch-prod/reminders",
@@ -20,7 +20,7 @@
       }
     },
     {
-      "id": "d725159a-3cc6-496f-9f3e-3055d0738a67",
+      "id": "8d3f938d-42fb-4d40-a529-079d0bc91252",
       "name": "Backend",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
@@ -33,6 +33,19 @@
         "url": "https://infimactch-prod-backend.vercel.app/api/v1/internal/automation/reminders",
         "authentication": "genericCredentialType",
         "genericAuthType": "httpHeaderAuth",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "X-N8N-Execution-Id",
+              "value": "={{ $execution.id }}"
+            },
+            {
+              "name": "X-N8N-Workflow-Id",
+              "value": "={{ $workflow.id }}"
+            }
+          ]
+        },
         "options": {
           "timeout": 240000
         }

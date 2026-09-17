@@ -60,6 +60,8 @@ export function documentQuotaBytes(
   return quota;
 }
 export function validateConfiguration(): void {
+  if(process.env.ADMIN_ORIGIN){const origin=new URL(process.env.ADMIN_ORIGIN);if(origin.origin!==process.env.ADMIN_ORIGIN||origin.username||origin.password||(process.env.NODE_ENV==='production'&&origin.protocol!=='https:')||process.env.ADMIN_ORIGIN===process.env.APP_ORIGIN)throw Error('ADMIN_ORIGIN must be a distinct trusted origin');}
+
   if (process.env.DOCUMENT_STORAGE && !["filesystem", "postgres"].includes(process.env.DOCUMENT_STORAGE)) throw new Error("Invalid DOCUMENT_STORAGE");
   if (process.env.VERCEL && process.env.DOCUMENT_STORAGE !== "postgres") throw new Error("Persistent DOCUMENT_STORAGE required on Vercel");
   for (const n of [

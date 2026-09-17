@@ -1,3 +1,5 @@
+import {UseInterceptors} from "@nestjs/common";
+import {ExecutionTrace} from "./execution-trace";
 import {processClosures} from "../security/closure";
 import {Controller,Headers,Module,Post,UnauthorizedException} from "@nestjs/common";
 import {timingSafeEqual} from "node:crypto";
@@ -11,6 +13,7 @@ import {applyRetention,cleanupRemovedDocuments} from "../security/retention";
 import {AutomationModule,AutomationService} from "./automation.module";
 import {NotificationsModule,NotificationsService} from "../notifications/notifications.module";
 @Controller("internal/automation/jobs")
+@UseInterceptors(ExecutionTrace)
 export class CloudJobsController {
  constructor(private readonly automation:AutomationService,private readonly notifications:NotificationsService,private readonly db:Database,private readonly documents:DocumentsService){}
  private authorize(token:string){
@@ -21,6 +24,7 @@ export class CloudJobsController {
   this.authorize(token);
   const events=await this.automation.dispatch(1);
   await this.notifications.dispatch(5);
+  await this.db.query("INSERT INTO operational_check(service,state,summary) VALUES('cloud-dispatch','ready',$1)",[JSON.stringify({processed:events.length})]);
   return {processed:events.length};
  }
  @Post("refresh-offers") async refresh(@Headers("x-infimatch-token") token:string){
@@ -44,5 +48,5 @@ export class CloudJobsController {
   return {ok:true};
  }
 }
-@Module({imports:[AutomationModule,NotificationsModule,DocumentsModule],controllers:[CloudJobsController]})
+@Module({imports:[AutomationModule,NotificationsModule,DocumentsModule],controllers:[CloudJobsController],providers:[ExecutionTrace]})
 export class CloudJobsModule {}

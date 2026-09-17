@@ -1,0 +1,80 @@
+{
+  "name": "InfiMatch production - actualisation quotidienne",
+  "nodes": [
+    {
+      "id": "9b1f903b-61c0-4cbd-aac2-2797208fcc82",
+      "name": "Chaque jour",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        0,
+        0
+      ],
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "days",
+              "daysInterval": 1,
+              "triggerAtHour": 4,
+              "triggerAtMinute": 15
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "6be59912-76fb-4f76-9f72-97656bf5dbd3",
+      "name": "Actualiser les offres",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        240,
+        0
+      ],
+      "parameters": {
+        "method": "POST",
+        "url": "https://infimactch-prod-backend.vercel.app/api/v1/internal/automation/jobs/refresh-offers",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "X-N8N-Execution-Id",
+              "value": "={{ $execution.id }}"
+            },
+            {
+              "name": "X-N8N-Workflow-Id",
+              "value": "={{ $workflow.id }}"
+            }
+          ]
+        },
+        "options": {
+          "timeout": 240000
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Chaque jour": {
+      "main": [
+        [
+          {
+            "node": "Actualiser les offres",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "saveDataErrorExecution": "none",
+    "saveDataSuccessExecution": "none",
+    "saveManualExecutions": false,
+    "saveExecutionProgress": false,
+    "timezone": "Europe/Paris"
+  }
+}

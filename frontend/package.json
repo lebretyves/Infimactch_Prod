@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "tsc -b && vite build",
+    "build": "tsc -b && vite build && node scripts/public-pages.mjs",
     "preview": "vite preview",
     "typecheck": "tsc -b",
     "icons": "node scripts/build-icon-sprite.mjs",
@@ -16,7 +16,10 @@
     "test:integration": "node scripts/test-integration.mjs",
     "test:signup": "node scripts/test-signup.mjs",
     "test:availability": "node --experimental-strip-types scripts/test-availability-slots.mjs",
-    "test:datetime": "node --experimental-strip-types scripts/test-paris-datetime.mjs"
+    "test:datetime": "node --experimental-strip-types scripts/test-paris-datetime.mjs",
+    "test:pwa": "node --test scripts/test-pwa.mjs",
+    "test:quality": "node scripts/test-quality.mjs",
+    "build:admin": "tsc -b && vite build --config vite.admin.config.ts"
   },
   "dependencies": {
     "react": "^19.2.0",

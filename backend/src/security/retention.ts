@@ -126,6 +126,8 @@ export async function applyRetention(em: SqlClient): Promise<RetentionSummary> {
     [retentionPolicy.completedOutboxDays],
   );
   await em.query("DELETE FROM session WHERE expire<now()");
+  await em.query("DELETE FROM admin_session WHERE expire<now()");
+  await em.query("DELETE FROM psc_challenge WHERE expires_at<now()");
   await em.query("DELETE FROM discord_oauth_state WHERE expires_at<now()");
   await em.query(
     "DELETE FROM idempotency WHERE created_at<now()-make_interval(days=>$1)",
@@ -175,7 +177,13 @@ export async function applyRetention(em: SqlClient): Promise<RetentionSummary> {
   return { dryRun: false, ...before, documentIds, businessMissions:missionIds.length };
 }
 
+export async function requireOwnerTransfer(em:SqlClient,accountId:string){
+  await em.query("SELECT pg_advisory_xact_lock(1789381700)");
+  const [owner]=await em.query("SELECT 1 FROM platform_admin WHERE user_id=$1 AND role='OWNER' AND active AND totp_secret IS NOT NULL",[accountId]);
+  if(owner){const [remaining]=await em.query("SELECT count(*)::int n FROM platform_admin p JOIN account a ON a.id=p.user_id WHERE p.user_id<>$1 AND p.role='OWNER' AND p.active AND a.active AND p.totp_secret IS NOT NULL",[accountId]);if(!remaining?.n)throw Error('Transfer platform ownership before account closure');}
+}
 export async function anonymizeAccount(em: SqlClient, accountId: string) {
+  await requireOwnerTransfer(em,accountId);
   const [account] = await em.query(
     "SELECT id FROM account WHERE id=$1::uuid FOR UPDATE",
     [accountId],
@@ -186,6 +194,10 @@ export async function anonymizeAccount(em: SqlClient, accountId: string) {
     [accountId],
   );
   await em.query("DELETE FROM session WHERE sess->>'userId'=$1", [accountId]);
+  await em.query("DELETE FROM admin_session WHERE sess->>'adminId'=$1 OR sess->'adminChallenge'->>'userId'=$1",[accountId]);
+  await em.query("DELETE FROM psc_challenge WHERE user_id=$1",[accountId]);
+  await em.query("DELETE FROM professional_identity WHERE user_id=$1",[accountId]);
+  await em.query("DELETE FROM platform_admin WHERE user_id=$1",[accountId]);
   await em.query("DELETE FROM google_identity WHERE account_id=$1", [accountId]);
   await em.query("DELETE FROM discord_link WHERE account_id=$1", [accountId]);
   await em.query("DELETE FROM discord_challenge WHERE account_id=$1", [accountId]);
@@ -202,7 +214,7 @@ export async function anonymizeAccount(em: SqlClient, accountId: string) {
   if (ids.length)
     await em.query("DELETE FROM document WHERE id=ANY($1::uuid[])", [ids]);
   await em.query(
-    "UPDATE profile SET display_name='Compte clôturé',rpps_number=NULL,rpps_status='NOT_CHECKED',latitude=NULL,longitude=NULL,visible=false,notifications_enabled=false,qualifications='{}',skills='{}',experience='[]'::jsonb,available='[]'::jsonb,unavailable='[]'::jsonb,radius_km=NULL,accepted_shifts='{}',preferred_shifts='{}',rpps_version=rpps_version+1,rpps_checked_at=NULL,details='{}'::jsonb,updated_at=now() WHERE user_id=$1",
+    "UPDATE profile SET display_name='Compte clôturé',rpps_number=NULL,rpps_reason=NULL,rpps_identity_review='NOT_CHECKED',rpps_status='NOT_CHECKED',latitude=NULL,longitude=NULL,visible=false,notifications_enabled=false,qualifications='{}',skills='{}',experience='[]'::jsonb,available='[]'::jsonb,unavailable='[]'::jsonb,radius_km=NULL,accepted_shifts='{}',preferred_shifts='{}',rpps_version=rpps_version+1,rpps_checked_at=NULL,details='{}'::jsonb,updated_at=now() WHERE user_id=$1",
     [accountId],
   );
   await em.query(

@@ -69,3 +69,9 @@ test("a different practitioner does not count as found", async () =>
       }),
     ),
   ).toMatchObject({ status: "PENDING" }));
+
+test("name discrepancy remains pending for manual review, punctuation is normalized", async()=>{
+ const provider=response({resourceType:'Bundle',type:'searchset',total:1,entry:[{resource:{resourceType:'Practitioner',identifier:[{system:'https://rpps.esante.gouv.fr',value:num}],name:[{family:'DUPONT',given:['\u00c9lo\u00efse']} ]}}]});
+ expect(await lookupRpps(num,'test',provider,{firstName:'Eloise',lastName:'Dupont'})).toMatchObject({status:'FOUND',identityReview:'CONSISTENT_NAMES'});
+ expect(await lookupRpps(num,'test',provider,{firstName:'Autre',lastName:'Dupont'})).toMatchObject({status:'PENDING',identityReview:'REVIEW_REQUIRED'});
+});

@@ -2,7 +2,7 @@
   "name": "InfiMatch production - cancellation",
   "nodes": [
     {
-      "id": "3df98571-3459-498c-8a80-433e5e2a968a",
+      "id": "ceeedeaa-fd0e-4860-8e07-fb5227415db8",
       "name": "Reception",
       "type": "n8n-nodes-base.webhook",
       "typeVersion": 2,
@@ -10,7 +10,7 @@
         0,
         0
       ],
-      "webhookId": "ee06cc89-fe1f-455c-ac76-3b02a4a9e2da",
+      "webhookId": "6ef22020-863a-4e69-bd60-02fb5a240f26",
       "parameters": {
         "httpMethod": "POST",
         "path": "infimatch-prod/cancellation",
@@ -20,7 +20,7 @@
       }
     },
     {
-      "id": "e392689a-5cdd-45c3-bf93-74ebc381c8a2",
+      "id": "9c982842-0c34-47bf-9170-2b8d4c87b62a",
       "name": "Valider evenement",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
@@ -33,7 +33,7 @@
       }
     },
     {
-      "id": "cb98779c-0255-4aa2-90ae-e79453e34724",
+      "id": "a2a69603-341a-4a56-8e38-fe9986f2a144",
       "name": "Backend",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
@@ -46,6 +46,19 @@
         "url": "={{ \"https://infimactch-prod-backend.vercel.app/api/v1/internal/automation/cancellation/\" + $json.eventId }}",
         "authentication": "genericCredentialType",
         "genericAuthType": "httpHeaderAuth",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "X-N8N-Execution-Id",
+              "value": "={{ $execution.id }}"
+            },
+            {
+              "name": "X-N8N-Workflow-Id",
+              "value": "={{ $workflow.id }}"
+            }
+          ]
+        },
         "options": {
           "timeout": 240000
         }

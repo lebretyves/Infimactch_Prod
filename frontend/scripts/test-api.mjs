@@ -176,3 +176,11 @@ test('Google registration expiration preserves the current authentication state'
   assert.equal(expired,0);
  } finally {window.removeEventListener('infimatch:session-expired',listener);}
 });
+
+test('An offline mutation is refused before CSRF or any network request', async () => {
+  let calls = 0;
+  Object.defineProperty(navigator, 'onLine', { configurable: true, value: false });
+  globalThis.fetch = async () => { calls++; throw new Error('must not fetch'); };
+  try { const { api } = await load(); await assert.rejects(api('/missions', { method: 'POST', body: {} }), e => e.code === 'OFFLINE'); assert.equal(calls, 0); }
+  finally { delete navigator.onLine; globalThis.fetch = original; }
+});
