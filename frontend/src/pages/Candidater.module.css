@@ -107,3 +107,17 @@
 .page p {
   overflow-wrap: anywhere;
 }
+
+.warning {
+  padding: 20px;
+  border: 1px solid #e5ba59;
+  background: #fff8e8;
+  color: #654311;
+  border-radius: 10px;
+  line-height: 1.7;
+  text-align: left;
+}
+.warning h2 { font-size: 18px; margin: 0 0 10px; }
+.warning p { color: inherit; margin: 10px 0 0; }
+.warning ul { padding-left: 22px; margin: 0; }
+.warning li { overflow-wrap: anywhere; }

@@ -13,6 +13,7 @@
     "Ces horaires ne figurent pas parmi vos horaires acceptés.",
   MOBILITY_INCOMPLETE: "Complétez votre position et votre rayon de mobilité.",
   OUTSIDE_RADIUS: "La mission est située hors de votre rayon de déplacement.",
+  MISSION_ALREADY_STARTED: "Cette mission a déjà commencé.",
   MISSION_NOT_OPEN: "Cette mission n’est plus ouverte.",
 };
 export function explainReasons(fields: unknown): string {

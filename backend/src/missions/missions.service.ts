@@ -1,3 +1,4 @@
+import { assessApplication } from "./application-assessment";
 import { requireActiveAccount } from "../common/access";
 import { commandReceipt } from "../common/idempotency";
 import { geodesicKm } from "../database/distance";
@@ -70,6 +71,13 @@ export async function eligible(em: SqlClient, p: any, m: any) {
       reasons: result.reasons,
     });
   return result;
+}
+async function applicationAssessment(em: SqlClient, p: any, m: any) {
+  const conflicts = await em.query(
+    "SELECT start_at,end_at FROM assignment WHERE nurse_id=$1 AND status='ACTIVE'",
+    [p.user_id],
+  );
+  return assessApplication(professional(p, conflicts), matchingMission(m), await geodesicKm(em, p, m));
 }
 @Injectable()
 export class MissionsService {
@@ -295,6 +303,14 @@ export class MissionsService {
       return receipt.save(updated);
     });
   }
+  async applicationCheck(actor: string, id: string) {
+    return this.db.transaction(async (em) => {
+      const m = await lockMission(em, id);
+      await requireActiveAccount(em, actor);
+      const p = await nurse(em, actor);
+      return applicationAssessment(em, p, m);
+    });
+  }
   async apply(actor: string, id: string, version: number, key?: string) {
     return this.db.transaction(async (em) => {
       const m = await lockMission(em, id);
@@ -316,7 +332,9 @@ export class MissionsService {
         throw new ConflictException("Assigned application");
       if (m.version !== version)
         throw new ConflictException("Mission version changed");
-      await eligible(em, p, m);
+      const assessment = await applicationAssessment(em, p, m);
+      if (assessment.blockingReasons.length)
+        throw new ConflictException({code: "INELIGIBLE", reasons: assessment.blockingReasons});
       const [a] = await em.query(
         `INSERT INTO application(mission_id,nurse_id,consent_version) VALUES($1,$2,$3) ON CONFLICT(mission_id,nurse_id) DO UPDATE SET status='SUBMITTED',consent_version=$3,updated_at=now() RETURNING *`,
         [id, actor, version],
@@ -325,8 +343,9 @@ export class MissionsService {
         missionId: id,
         version,
         previousStatus: previous?.status ?? null,
+        warnings: assessment.warnings,
       });
-      return receipt.save(a);
+      return receipt.save({...a, warnings: assessment.warnings});
     });
   }
   async applicationAction(
