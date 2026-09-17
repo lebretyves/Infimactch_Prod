@@ -18,3 +18,8 @@ Thumbs.db
 dist-demo
 
 *.tsbuildinfo
+
+.vercel
+
+# Generated local OCR/PDF assets (npm run build)
+/public/ocr/

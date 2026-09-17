@@ -1,3 +1,4 @@
+import type { BankFields } from "@/lib/bankFields";
 import { useLocation } from "react-router";
 import { BankDocument } from "@/components/BankDocument";
 import { BankReminder } from "@/components/BankReminder";
@@ -43,7 +44,6 @@ export default function Dossier() {
   const { hash } = useLocation();
   const [offset, setOffset] = useState(0),
     [number, setNumber] = useState<string | null>(null),
-    [iban, setIban] = useState(""),
     [fictional, setFictional] = useState(false),
     [file, setFile] = useState<File | null>(null),
     [busy, setBusy] = useState(""),
@@ -63,7 +63,7 @@ export default function Dossier() {
       const [profile, documents, bank] = await Promise.all([
         getProfile(signal),
         api<Document[]>("/me/documents?limit=20&offset=" + offset, { signal }),
-        api<{ iban: string | null; required: boolean; document: {id:string;mime:string;size_bytes:number;created_at:string}|null }>("/me/bank-details", { signal }),
+        api<{ details: BankFields|null; iban: string | null; required: boolean; document: {id:string;mime:string;size_bytes:number;created_at:string}|null }>("/me/bank-details", { signal }),
       ]);
       return { profile, documents, bank };
     },
@@ -191,7 +191,7 @@ export default function Dossier() {
                   async () => {
                     await api("/profile/rpps", {
                       method: "PUT",
-                      key: operationKey("bank", iban.replace(/\s/g, "").toUpperCase()),
+                      key: operationKey("rpps", number || ""),
                       body: {
                         number: number ?? r.data?.profile.rpps_number ?? "",
                       },
@@ -455,53 +455,8 @@ export default function Dossier() {
                 Vos documents sont accessibles aux personnes autorisées.
               </p>
             </section>
-            <BankDocument document={r.data?.bank.document||null} onSaved={r.reload} />
-            <form
-              id="coordonnees-bancaires"
-              className={u.card}
-              onSubmit={(e) => {
-                e.preventDefault();
-                void act(
-                  "bank",
-                  async () => {
-                    await api("/me/bank-details", {
-                      method: "PUT",
-                      key: operationKey("bank", iban.replace(/\s/g, "").toUpperCase()),
-                      body: {
-                        iban: iban.replace(/\s/g, "").toUpperCase(),
-                        fictional: true,
-                      },
-                    });
-                    operationKeys.current.delete(JSON.stringify([user?.id, "bank", iban.replace(/\s/g, "").toUpperCase()]));
-                    setIban("");
-                  },
-                  "RIB de démonstration enregistré.",
-                );
-              }}
-            >
-              <h2 className={u.cardHeading}>
-                <Icon name="file-text" />
-                Coordonnées bancaires
-              </h2>
-              <p className={s.help}>
-                IBAN enregistré : {r.data?.bank.iban || "Aucun"}. La saisie ci-dessous est une alternative au fichier et remplace le RIB précédent.
-              </p>
-              <fieldset className={s.fields} disabled={!!busy}>
-                <TextField
-                  label="IBAN fictif"
-                  required
-                  pattern="FR[0-9]{12}DEMO[0-9]{8}"
-                  maxLength={26}
-                  placeholder="FR000000000000DEMO00000000"
-                  hint="Format de démonstration : FR, 12 chiffres, DEMO, 8 chiffres. N’utilisez pas un compte bancaire réel."
-                  value={iban}
-                  onChange={(e) => setIban(e.target.value.toUpperCase())}
-                />
-                <Button type="submit" loading={busy === "bank"}>
-                  Enregistrer le RIB fictif
-                </Button>
-              </fieldset>
-            </form>
+            <BankDocument document={r.data?.bank.document||null} details={r.data?.bank.details||null} onSaved={r.reload} />
+
           </div>
         </div>
       )}

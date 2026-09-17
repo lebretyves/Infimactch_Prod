@@ -40,7 +40,7 @@ function Editor({ initial }: { initial: ProfessionalProfile }) {
     "reference-data",
   );
   const bank = useRemote(
-    (signal) => api<{ iban: string | null }>("/me/bank-details", { signal }),
+    (signal) => api<{ iban: string | null; document: {id:string}|null }>("/me/bank-details", { signal }),
     "bank",
   );
   function change(v: Partial<ProfessionalProfile>) {
@@ -569,9 +569,9 @@ function Editor({ initial }: { initial: ProfessionalProfile }) {
                     ? "Chargement…"
                     : bank.error
                       ? "Coordonnées indisponibles"
-                      : bank.data?.iban || "Aucun RIB de démonstration"}
+                      : bank.data?.iban || (bank.data?.document ? "RIB enregistré" : "Aucun RIB")}
                 </p>
-                <ButtonLink to="/dossier#coordonnees-bancaires" variant="ghost">
+                <ButtonLink to="/dossier#rib" variant="ghost">
                   Modifier
                 </ButtonLink>
               </div>

@@ -20,8 +20,8 @@ try{
  const content=Buffer.from('%PDF-1.4\n% FICTITIOUS InfiMatch deployment test\n%%EOF\n');
  const doc=await (await call('/me/documents','POST',{mime:'application/pdf',contentBase64:content.toString('base64'),fictional:true},201)).json();
  const downloaded=Buffer.from(await (await call('/me/documents/'+doc.id)).arrayBuffer());assert.deepEqual(downloaded,content);console.log('Encrypted document upload and download PASS');
- const bank=await (await call('/me/bank-document','PUT',{mime:'application/pdf',contentBase64:content.toString('base64'),fictional:true})).json();
- const bankState=await (await call('/me/bank-details')).json();assert.equal(bankState.document.id,bank.id);assert.equal(bankState.required,false);
+ const bank=await (await call('/me/bank-document','PUT',{mime:'application/pdf',contentBase64:content.toString('base64'),iban:'FR1420041010050500013M02606',bic:'BNPAFRPPXXX',holder:'Titulaire QA fictif',bankName:'Banque exemple',reviewed:true})).json();
+ const bankState=await (await call('/me/bank-details')).json();assert.equal(bankState.document.id,bank.id);assert.equal(bankState.required,false);assert.equal(bankState.details.iban,'FR1420041010050500013M02606');assert.equal(bankState.details.bic,'BNPAFRPPXXX');assert.equal(bankState.details.holder,'Titulaire QA fictif');
  assert.deepEqual(Buffer.from(await (await call('/me/bank-document')).arrayBuffer()),content);await call('/me/documents/'+bank.id,'GET',undefined,404);console.log('Private bank file upload and download PASS');
  for(const origine of ['partenaires','externes','toutes']){const page=await (await call('/listings/search','POST',{qualifications:['IDE'],origine,limit:5},201)).json();assert.ok(Array.isArray(page.items));if(origine==='partenaires')assert.ok(page.items.every(x=>x.kind==='INTERNAL_MISSION'));if(origine==='externes')assert.ok(page.items.every(x=>x.kind==='EXTERNAL_OFFER'));if(origine==='toutes'){let external=false;for(const item of page.items){if(item.kind==='EXTERNAL_OFFER')external=true;else assert.equal(external,false);}}}
  console.log('Partner-first origin filtering PASS');

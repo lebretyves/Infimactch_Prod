@@ -422,14 +422,14 @@ test("full internal journey and concurrency, with isolated fixture RPPS", async 
     .set("Origin", process.env.APP_ORIGIN!)
     .set("X-CSRF-Token", n.token)
     .set("Idempotency-Key", bankKey)
-    .send({ iban: "FR001234567890DEMO12345678", fictional: true })
+    .send({ iban: "FR1420041010050500013M02606", bic: "BNPAFRPPXXX", holder: "Titulaire de test", bankName: "Banque exemple", reviewed: true })
     .expect(200);
   const bankReplay = await n.agent
     .put("/api/v1/me/bank-details")
     .set("Origin", process.env.APP_ORIGIN!)
     .set("X-CSRF-Token", n.token)
     .set("Idempotency-Key", bankKey)
-    .send({ iban: "FR001234567890DEMO12345678", fictional: true })
+    .send({ iban: "FR1420041010050500013M02606", bic: "BNPAFRPPXXX", holder: "Titulaire de test", bankName: "Banque exemple", reviewed: true })
     .expect(200);
   expect(bankReplay.body.id).toBe(bank.body.id);
   await n.agent
@@ -437,14 +437,14 @@ test("full internal journey and concurrency, with isolated fixture RPPS", async 
     .set("Origin", process.env.APP_ORIGIN!)
     .set("X-CSRF-Token", n.token)
     .set("Idempotency-Key", bankKey)
-    .send({ iban: "FR991234567890DEMO87654321", fictional: true })
+    .send({ iban: "GB82WEST12345698765432", bic: "BNPAFRPPXXX", holder: "Titulaire de test", bankName: "Banque exemple", reviewed: true })
     .expect(409);
   const replacementBank = await n.agent
     .put("/api/v1/me/bank-details")
     .set("Origin", process.env.APP_ORIGIN!)
     .set("X-CSRF-Token", n.token)
     .set("Idempotency-Key", randomUUID())
-    .send({ iban: "FR111111111111DEMO11111111", fictional: true })
+    .send({ iban: "DE89370400440532013000", bic: "BNPAFRPPXXX", holder: "Titulaire de test", bankName: "Banque exemple", reviewed: true })
     .expect(200);
   expect(replacementBank.body.id).not.toBe(bank.body.id);
   const [supersededBank] = await db.query(
@@ -455,7 +455,7 @@ test("full internal journey and concurrency, with isolated fixture RPPS", async 
   await n.agent.get("/api/v1/me/documents/" + bank.body.id).expect(404);
   const bankRead = await n.agent.get("/api/v1/me/bank-details").expect(200);
   expect(bankRead.body.iban).not.toContain("DEMO");
-  expect(bankRead.body.iban.endsWith("1111")).toBe(true);
+  expect(bankRead.body.iban.endsWith("3000")).toBe(true);
   await post(agency, "missions/" + id + "/cancel").expect(201);
   const cancelledConfirmation = await agency.agent
     .get("/api/v1/assignments/" + winner.body.id + "/confirmation")
@@ -1339,16 +1339,16 @@ test('partner origin filtering is applied before pagination even with an incompl
 test('bank file uploads are private, validated, replaceable and satisfy the mission reminder',async()=>{
  const n=await account('NURSE'),other=await account('NURSE');
  const send=(body:any,key=randomUUID())=>n.agent.put('/api/v1/me/bank-document').set('Origin',process.env.APP_ORIGIN!).set('X-CSRF-Token',n.token).set('Idempotency-Key',key).send(body);
- const content=Buffer.from('%PDF-1.4 fictional bank fixture');const body={mime:'application/pdf',contentBase64:content.toString('base64'),fictional:true},key=randomUUID();
- await send({...body,mime:'image/png'}).expect(400);await send({...body,fictional:false}).expect(400);
+ const content=Buffer.from('%PDF-1.4 fictional bank fixture');const body={mime:'application/pdf',contentBase64:content.toString('base64'),iban:'FR1420041010050500013M02606',bic:'BNPAFRPPXXX',holder:'Titulaire de test',bankName:'Banque exemple',reviewed:true},key=randomUUID();
+ await send({...body,iban:'FR1420041010050500013M02607'}).expect(400);await send({...body,bic:'INVALID'}).expect(400);await send({...body,holder:'  '}).expect(400);await send({...body,holder:' A '}).expect(400);await send({...body,mime:'image/png'}).expect(400);await send({...body,reviewed:false}).expect(400);
  await send({...body,contentBase64:Buffer.concat([content,Buffer.alloc(3*1024*1024)]).toString('base64')}).expect(400);
  expect((await n.agent.get('/api/v1/me/bank-details')).body.required).toBe(false);
  const saved=await send(body,key).expect(200),replay=await send(body,key).expect(200);expect(replay.body.id).toBe(saved.body.id);
- const status=(await n.agent.get('/api/v1/me/bank-details').expect(200)).body;expect(status.document.id).toBe(saved.body.id);expect(status.iban).toBeNull();expect(status.required).toBe(false);
+ const status=(await n.agent.get('/api/v1/me/bank-details').expect(200)).body;expect(status.document.id).toBe(saved.body.id);expect(status.iban).toContain('2606');expect(status.details).toEqual({iban:body.iban,bic:body.bic,holder:body.holder,bankName:body.bankName});expect(status.required).toBe(false);
  await other.agent.get('/api/v1/me/bank-document').expect(404);await other.agent.get('/api/v1/me/documents/'+saved.body.id).expect(404);await n.agent.get('/api/v1/me/documents/'+saved.body.id).expect(404);
  const file=await n.agent.get('/api/v1/me/bank-document').expect(200);expect(file.headers['cache-control']).toBe('no-store');expect(file.headers['content-type']).toContain('application/pdf');
  expect((await n.agent.get('/api/v1/me/documents')).body.some((d:any)=>d.id===saved.body.id)).toBe(false);
- const jpeg={mime:'image/jpeg',contentBase64:Buffer.from([255,216,255,224,0,1,2,3]).toString('base64'),fictional:true};await send(jpeg).expect(200);
+ const jpeg={...body,mime:'image/jpeg',contentBase64:Buffer.from([255,216,255,224,0,1,2,3]).toString('base64'),fictional:true};await send(jpeg).expect(200);
  expect((await n.agent.get('/api/v1/me/bank-details')).body.document.mime).toBe('image/jpeg');
  expect((await db.query("SELECT id FROM document WHERE owner_id=$1 AND kind='BANK' AND superseded_at IS NULL",[n.id])).length).toBe(1);
  await db.transaction(async em=>{

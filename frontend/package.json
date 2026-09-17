@@ -4,14 +4,14 @@
   "version": "0.1.0",
   "type": "module",
   "scripts": {
-    "dev": "vite",
-    "build": "tsc -b && vite build && node scripts/public-pages.mjs",
+    "dev": "node scripts/prepare-ocr-assets.mjs && vite",
+    "build": "node scripts/prepare-ocr-assets.mjs && tsc -b && vite build && node scripts/public-pages.mjs",
     "preview": "vite preview",
     "typecheck": "tsc -b",
     "icons": "node scripts/build-icon-sprite.mjs",
     "screenshots": "node scripts/screenshots.mjs",
     "audit:a11y": "node scripts/audit-a11y.mjs",
-    "build:demo": "tsc -b && vite build --base ./ --outDir dist-demo --mode demo",
+    "build:demo": "node scripts/prepare-ocr-assets.mjs && tsc -b && vite build --base ./ --outDir dist-demo --mode demo",
     "test": "node --test scripts/test-api.mjs && node --experimental-strip-types --test scripts/test-idle-session.mjs",
     "test:integration": "node scripts/test-integration.mjs",
     "test:signup": "node scripts/test-signup.mjs",
@@ -22,11 +22,14 @@
     "build:admin": "tsc -b && vite build --config vite.admin.config.ts"
   },
   "dependencies": {
+    "pdfjs-dist": "^6.3.289",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
-    "react-router": "^7.9.4"
+    "react-router": "^7.9.4",
+    "tesseract.js": "^7.0.0"
   },
   "devDependencies": {
+    "@tesseract.js-data/eng": "^1.0.0",
     "@types/node": "^26.5.1",
     "@types/react": "^19.2.0",
     "@types/react-dom": "^19.2.0",

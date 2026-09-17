@@ -1,0 +1,9 @@
+import fs from 'node:fs';
+import path from 'node:path';
+const dest='public/ocr';fs.mkdirSync(path.join(dest,'core'),{recursive:true});fs.mkdirSync(path.join(dest,'lang'),{recursive:true});
+fs.copyFileSync('node_modules/tesseract.js/dist/worker.min.js',path.join(dest,'worker.min.js'));
+for(const name of fs.readdirSync('node_modules/tesseract.js-core'))if(name.endsWith('.wasm.js')||name.endsWith('.wasm'))fs.copyFileSync(path.join('node_modules/tesseract.js-core',name),path.join(dest,'core',name));
+fs.copyFileSync('node_modules/@tesseract.js-data/eng/4.0.0_best_int/eng.traineddata.gz',path.join(dest,'lang/eng.traineddata.gz'));
+fs.copyFileSync('node_modules/pdfjs-dist/build/pdf.worker.min.mjs',path.join(dest,'pdf.worker.min.mjs'));
+for(const [module,name] of [['tesseract.js','TESSERACT-LICENSE'],['tesseract.js-core','CORE-LICENSE'],['pdfjs-dist','PDFJS-LICENSE']])fs.copyFileSync(`node_modules/${module}/${module==='tesseract.js'?'LICENSE.md':'LICENSE'}`,path.join(dest,name));
+console.log('OCR/PDF worker, core and language assets prepared locally.');
