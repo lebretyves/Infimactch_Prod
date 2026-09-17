@@ -3,3 +3,14 @@
 .admin-match header{display:flex;flex-wrap:wrap;gap:16px;align-items:center;justify-content:space-between}.admin-match h2{overflow-wrap:anywhere}.admin-reasons{list-style:disc;padding-left:22px;margin:16px 0;line-height:1.9;font-size:13px}.admin-panel>button{margin:14px 0}.admin-panel details{margin-top:18px;font-size:13px}.admin-panel summary{cursor:pointer;font-weight:700}.admin-panel>h3{font-size:15px}
 
 .admin-table-scroll table{min-width:640px}.admin-table-scroll th,.admin-table-scroll td{min-width:115px}.admin-table-scroll td:last-child{min-width:145px}.admin-organization-reference{display:flex;flex-wrap:wrap;gap:12px;align-items:end;margin:20px 0}.admin-organization-reference label{flex:1;min-width:200px}.admin-organization-reference p{flex-basis:100%;font-size:12px}@media(max-width:760px){.admin-table-scroll::before{content:"Faites défiler horizontalement pour lire toutes les colonnes.";display:block;position:sticky;left:0;padding:10px 12px;font-size:11px;color:#586275;max-width:calc(100vw - 72px)}.admin-table-scroll td{overflow-wrap:normal;word-break:normal}}
+.admin-finess { border-left: 4px solid #267350; }
+.admin-finess[data-state="DUE"] { border-left-color: #9a6100; }
+.admin-finess[data-state="EXPIRED"], .admin-finess[data-state="INVALID"], .admin-finess[data-state="MISSING"] { border-left-color: #aa3340; }
+.admin-finess-heading { display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; }
+.admin-finess-heading h2 { margin: 0; }
+.admin-finess-status { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; font-size: 13px; font-weight: 600; }
+.admin-finess-status strong { padding: 5px 9px; border-radius: 6px; background: #edf2f5; font-variant-numeric: tabular-nums; }
+.admin-finess-dates { display: grid; grid-template-columns: repeat(auto-fit, minmax(175px, 1fr)); gap: 16px; margin: 18px 0; }
+.admin-finess-dates dt { font-size: 12px; color: #4b5f75; margin-bottom: 5px; }
+.admin-finess-dates dd { margin: 0; font-size: 14px; overflow-wrap: anywhere; }
+.admin-finess > a { font-size: 13px; }

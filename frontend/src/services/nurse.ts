@@ -4,6 +4,7 @@ export type Assignment = {
   mission_id: string;
   title: string;
   status: string;
+  timezone?: string;
   start_at: string;
   end_at: string;
   temporal_position: string;

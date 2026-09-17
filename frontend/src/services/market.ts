@@ -13,6 +13,7 @@ export type Listing = {
   description?: string;
   qualification: string;
   start_at?: string;
+  timezone?: string;
   end_at?: string;
   hourly_salary?: number | string;
   service?: string;
@@ -174,9 +175,10 @@ export function safeUrl(value?: string) {
     return null;
   }
 }
-export function date(value?: string | null) {
+export function date(value?: string | null, timeZone = "Europe/Paris") {
   if (!value || !Number.isFinite(Date.parse(value))) return "Non précisée";
   return new Intl.DateTimeFormat("fr-FR", {
+    timeZone,
     dateStyle: "medium",
     timeStyle: "short",
   }).format(new Date(value));

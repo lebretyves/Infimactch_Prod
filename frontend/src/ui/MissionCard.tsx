@@ -92,7 +92,7 @@ export function MissionCard({
         <p>
           <Icon name="calendar" size={17} />
           {mission.start_at
-            ? date(mission.start_at)
+            ? date(mission.start_at, mission.timezone)
             : "Dates à consulter dans l’annonce"}
         </p>
         <p className={s.taux}>{salary(mission)}</p>

@@ -15,6 +15,7 @@ type Item = {
   application_id?: string;
   title: string;
   status: string;
+  timezone?: string;
   start_at: string;
   end_at: string;
   created_at?: string;
@@ -174,9 +175,9 @@ export default function Historique() {
                     <tr key={m.id}>
                       <td data-label="Mission">{m.title}</td>
                       <td data-label="Dates">
-                        {date(m.start_at)}
+                        {date(m.start_at, m.timezone)}
                         <br />
-                        {date(m.end_at)}
+                        {date(m.end_at, m.timezone)}
                       </td>
                       <td data-label="Statut">
                         <span
@@ -231,7 +232,7 @@ export default function Historique() {
                 </span>
               </div>
               <p>
-                {date(selectedItem.start_at)} → {date(selectedItem.end_at)}
+                {date(selectedItem.start_at, selectedItem.timezone)} → {date(selectedItem.end_at, selectedItem.timezone)}
               </p>
               {events.loading ? (
                 <p role="status">Chargement des événements…</p>

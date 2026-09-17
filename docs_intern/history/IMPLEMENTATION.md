@@ -312,3 +312,13 @@ Audit indépendant du lot de démonstration : 1000 demandes / 3092 vacations ; 6
 Demande utilisateur : aucune validation manuelle après consultation. Bouton Marquer comme lue retiré ; les liens Consulter et les nouveaux liens envoyés via Discord portent l’identifiant de notification. Sur page authentifiée visible, lecture enregistrée automatiquement via POST protégé existant, lié au destinataire et idempotent. Paramètres et ancre préservés, marqueur retiré après succès. Échecs réseau non bloquants avec reprises limitées, aucun faux statut lu. La simple ouverture du message dans Discord n’est pas observable via les événements publics du bot (documentation officielle Discord Gateway Events). Les anciens messages Discord ne sont pas réécrits.
 
 Validation : builds frontend/backend ; navigateur avec API simulée, consultation/direct link, absence de bouton, paramètres/ancre, identifiant invalide et échec réseau. Aucun message Discord ni donnée réelle envoyés pendant les tests.
+
+## 2026-09-18 — FINESS mensuel et fuseau des missions
+
+Demande utilisateur : vérifier le référentiel téléchargé, rappeler son actualisation au maximum chaque mois et corriger les missions outre-mer. Tableau de bord et page Sources affichent génération, import, échéance, compteur J-xx et alerte à J-7 ; calcul depuis génération officielle, un mois calendaire Europe/Paris, sans prolongation par réimport. Aucun renouvellement automatique prétendu.
+
+MissionDto/persistance conservent un fuseau IANA, Europe/Paris par défaut historique ; édition sans fuseau garde celui stocké. UTC inchangés, formulaires et affichages métier/admin utilisent le fuseau mission. Calendrier personnel et besoins restent en Europe/Paris, pas de migration arbitraire des lignes historiques.
+
+Validation : builds frontend/admin/backend, 219 tests backend PASS, conversions 5 DOM et 3 fuseaux navigateur, cas DST, navigateur édition Guadeloupe, tableau admin 5 états et mobile375/desktop1440. Contrôle FINESS :646/646 sites du lot présents dans snapshot téléchargé17sept et APIpublique(snapshot1sept). Importeur vérifié séparément en PostGIS jetable, aucune publication des annonces de démonstration. Compléments GPS et révision des critères du lot en cours, suivis dans les livrables.
+
+Accèsproduction : téléchargement envproduction refusé par contrôleautomatique pourrisquesecrets ; noncontourné. Correspondances organisationsproduction etdroits d’import restentàvérifier.

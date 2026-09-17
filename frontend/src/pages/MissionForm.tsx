@@ -7,7 +7,7 @@ import {
   type OrganizationContext,
 } from "@/services/organizations";
 import { staffingNeed, type StaffingNeed } from "@/services/needs";
-import { parisDateTimeInput, parisDateTimeToISO } from "@/lib/parisDateTime";
+import { parisDateTimeInput, zonedDateTimeInput, zonedDateTimeToISO } from "@/lib/parisDateTime";
 import u from "@/components/NurseUI.module.css";
 import { SKILLS, labelCode } from "@/data/professional";
 import { Button, ButtonLink } from "@/ui/Button";
@@ -28,6 +28,7 @@ type Draft = {
   requiredSkills: string[];
   desiredSkills: string[];
   minExperienceMonths: number;
+  timezone: string;
   start: string;
   end: string;
   shift: string;
@@ -51,6 +52,7 @@ type Stored = {
   required_skills: string[];
   desired_skills: string[];
   min_experience_months: number;
+  timezone?: string;
   start_at: string;
   end_at: string;
   shift: string;
@@ -99,8 +101,9 @@ function Form({
           requiredSkills: mission.required_skills,
           desiredSkills: mission.desired_skills,
           minExperienceMonths: Number(mission.min_experience_months),
-          start: parisDateTimeInput(mission.start_at),
-          end: parisDateTimeInput(mission.end_at),
+          timezone: mission.timezone || "Europe/Paris",
+          start: zonedDateTimeInput(mission.start_at, mission.timezone),
+          end: zonedDateTimeInput(mission.end_at, mission.timezone),
           shift: mission.shift,
           address: mission.address,
           latitude: mission.latitude,
@@ -120,6 +123,7 @@ function Form({
           requiredSkills: need?.details?.requiredSkills || [],
           desiredSkills: [],
           minExperienceMonths: need?.details?.minExperienceMonths || 0,
+          timezone: "Europe/Paris",
           start: need?.details ? parisDateTimeInput(need.details.start) : "",
           end: need?.details ? parisDateTimeInput(need.details.end) : "",
           shift: need?.details?.shift || "DAY",
@@ -152,13 +156,15 @@ function Form({
         throw new Error(
           "Choisissez votre établissement ou un établissement rattaché à votre agence.",
         );
-      const start = parisDateTimeToISO(
+      const start = zonedDateTimeToISO(
         v.start,
         mission?.start_at || need?.details?.start,
+        v.timezone,
       );
-      const end = parisDateTimeToISO(
+      const end = zonedDateTimeToISO(
         v.end,
         mission?.end_at || need?.details?.end,
+        v.timezone,
       );
       if (Date.parse(end) <= Date.parse(start))
         throw new Error("La fin doit être après le début.");
@@ -416,8 +422,11 @@ function Form({
           value={v.minExperienceMonths}
           onChange={(e) => set({ minExperienceMonths: Number(e.target.value) })}
         />
+        <SelectField label="Fuseau horaire de la mission" value={v.timezone} onChange={(e) => set({ timezone: e.target.value })}>
+          {Array.from(new Set(["Europe/Paris", "America/Guadeloupe", "America/Martinique", "America/Cayenne", "Indian/Reunion", "Indian/Mayotte", v.timezone])).map(zone => <option key={zone} value={zone}>{zone}</option>)}
+        </SelectField>
         <p>
-          La période est une plage exacte en heure de Paris (Europe/Paris), sans
+          La période est une plage exacte dans le fuseau sélectionné, sans
           répétition quotidienne automatique.
         </p>
         <div className={s.paire}>

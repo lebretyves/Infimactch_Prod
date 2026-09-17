@@ -34,6 +34,7 @@ export const serverMessages: Record<string, string> = {
     "Renseignez au moins une qualification dans votre profil.",
   "Complete the IDE qualification explicitly":
     "Confirmez explicitement votre diplôme IDE pour une spécialité.",
+  "Invalid mission timezone": "Choisissez un fuseau horaire valide pour la mission.",
   "Invalid interval or missing timezone": "Vérifiez les dates de vos périodes.",
   "Experience must describe completed periods":
     "Les expériences doivent porter sur des périodes passées.",
