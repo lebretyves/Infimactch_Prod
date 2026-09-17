@@ -1,0 +1,17 @@
+{
+  "NURSE": {
+    "MATCH": "Une nouvelle mission correspond a votre profil. Consultez les conditions avant de candidater.",
+    "CONFIRMED": "Votre affectation est confirmee. Consultez les details et votre confirmation dans InfiMatch.",
+    "CANCELLED": "Votre mission a ete annulee. Consultez les informations mises a jour dans votre espace."
+  },
+  "AGENCY": {
+    "CONFIRMED": "L affectation est confirmee pour votre mission. Le suivi est disponible dans InfiMatch.",
+    "CANCELLED": "Une mission geree par votre agence a ete annulee. Consultez le suivi.",
+    "UNFILLED": "Une mission de votre agence reste non pourvue apres le delai prevu. Consultez les candidatures et profils proposes."
+  },
+  "ESTABLISHMENT": {
+    "CONFIRMED": "Un professionnel est affecte a une mission de votre etablissement. Consultez les details dans InfiMatch.",
+    "CANCELLED": "Une mission de votre etablissement a ete annulee. Consultez le suivi avec votre agence.",
+    "UNFILLED": "Une mission de votre etablissement reste non pourvue apres le delai prevu. Consultez son suivi avec votre agence."
+  }
+}

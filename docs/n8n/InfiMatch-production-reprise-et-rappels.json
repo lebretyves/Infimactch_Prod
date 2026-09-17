@@ -1,0 +1,94 @@
+{
+  "name": "InfiMatch production - reprise et rappels",
+  "nodes": [
+    {
+      "id": "f72ce3b6-3b1d-4ce3-99dd-b59760469285",
+      "name": "Toutes les 30 minutes",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        0,
+        0
+      ],
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "minutes",
+              "minutesInterval": 30
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "ba17631e-45b2-4648-acf7-e59c63534296",
+      "name": "Traiter la file",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        240,
+        0
+      ],
+      "parameters": {
+        "method": "POST",
+        "url": "https://infimactch-prod-backend.vercel.app/api/v1/internal/automation/jobs/dispatch",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "options": {
+          "timeout": 240000
+        }
+      }
+    },
+    {
+      "id": "69c7f627-a31b-47b1-b7b3-e195e8c4d641",
+      "name": "Rappels",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        480,
+        0
+      ],
+      "parameters": {
+        "method": "POST",
+        "url": "https://infimactch-prod-backend.vercel.app/api/v1/internal/automation/reminders",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "options": {
+          "timeout": 240000
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Toutes les 30 minutes": {
+      "main": [
+        [
+          {
+            "node": "Traiter la file",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Traiter la file": {
+      "main": [
+        [
+          {
+            "node": "Rappels",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "saveDataErrorExecution": "none",
+    "saveDataSuccessExecution": "none",
+    "saveManualExecutions": false,
+    "saveExecutionProgress": false
+  }
+}

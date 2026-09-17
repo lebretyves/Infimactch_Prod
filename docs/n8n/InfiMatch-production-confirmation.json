@@ -1,0 +1,86 @@
+{
+  "name": "InfiMatch production - confirmation",
+  "nodes": [
+    {
+      "id": "b3f30bf4-df8e-4ee9-9422-fa12914be6e5",
+      "name": "Reception",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        0,
+        0
+      ],
+      "webhookId": "db6be10a-c99d-4b8d-9218-bf0b2c7ebdbf",
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "infimatch-prod/confirmation",
+        "authentication": "headerAuth",
+        "responseMode": "lastNode",
+        "options": {}
+      }
+    },
+    {
+      "id": "a71e7bb6-5eea-473f-93b0-5296f02e61d2",
+      "name": "Valider evenement",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        220,
+        0
+      ],
+      "parameters": {
+        "jsCode": "const id=$json.body?.eventId;if(typeof id!=='string'||!/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(id))throw new Error('Invalid event');return [{json:{eventId:id}}];"
+      }
+    },
+    {
+      "id": "61afc756-9f83-45ab-b9e0-0cf858cbaff1",
+      "name": "Backend",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        440,
+        0
+      ],
+      "parameters": {
+        "method": "POST",
+        "url": "={{ \"https://infimactch-prod-backend.vercel.app/api/v1/internal/automation/confirmation/\" + $json.eventId }}",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "options": {
+          "timeout": 240000
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Reception": {
+      "main": [
+        [
+          {
+            "node": "Valider evenement",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Valider evenement": {
+      "main": [
+        [
+          {
+            "node": "Backend",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "saveDataErrorExecution": "none",
+    "saveDataSuccessExecution": "none",
+    "saveManualExecutions": false,
+    "saveExecutionProgress": false
+  }
+}

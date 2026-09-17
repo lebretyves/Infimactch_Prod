@@ -1,0 +1,68 @@
+{
+  "name": "InfiMatch - Test connexion Teams (manuel)",
+  "active": false,
+  "nodes": [
+    {
+      "id": "manual-teams",
+      "name": "Lancer le test manuellement",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        0
+      ],
+      "parameters": {}
+    },
+    {
+      "id": "send-teams",
+      "name": "Teams - canal de test uniquement",
+      "type": "n8n-nodes-base.microsoftTeams",
+      "typeVersion": 2,
+      "position": [
+        280,
+        0
+      ],
+      "parameters": {
+        "resource": "channelMessage",
+        "operation": "create",
+        "teamId": {
+          "__rl": true,
+          "mode": "id",
+          "value": ""
+        },
+        "channelId": {
+          "__rl": true,
+          "mode": "id",
+          "value": ""
+        },
+        "contentType": "text",
+        "message": "TEST InfiMatch : connexion n8n vers Teams. Message fictif, aucune mission ni affectation reelle.",
+        "options": {
+          "includeLinkToWorkflow": false
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Lancer le test manuellement": {
+      "main": [
+        [
+          {
+            "node": "Teams - canal de test uniquement",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "timezone": "Europe/Paris",
+    "saveDataSuccessExecution": "none",
+    "saveDataErrorExecution": "none",
+    "saveManualExecutions": false
+  },
+  "pinData": {},
+  "id": "InfiMatchTeamsTest"
+}

@@ -1,0 +1,86 @@
+{
+  "name": "InfiMatch production - matches",
+  "nodes": [
+    {
+      "id": "0cf2a88d-b7a3-4f91-85e8-e3f84fabd35e",
+      "name": "Reception",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        0,
+        0
+      ],
+      "webhookId": "cdfb4b5c-6659-47bd-9f31-53243de188ce",
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "infimatch-prod/matches",
+        "authentication": "headerAuth",
+        "responseMode": "lastNode",
+        "options": {}
+      }
+    },
+    {
+      "id": "ca980152-ac3c-4f95-8bc2-9374b1b2b099",
+      "name": "Valider evenement",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        220,
+        0
+      ],
+      "parameters": {
+        "jsCode": "const id=$json.body?.eventId;if(typeof id!=='string'||!/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(id))throw new Error('Invalid event');return [{json:{eventId:id}}];"
+      }
+    },
+    {
+      "id": "a10aa1c5-1f15-43ca-a226-253aee78bac4",
+      "name": "Backend",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        440,
+        0
+      ],
+      "parameters": {
+        "method": "POST",
+        "url": "={{ \"https://infimactch-prod-backend.vercel.app/api/v1/internal/automation/matches/\" + $json.eventId }}",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "options": {
+          "timeout": 240000
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Reception": {
+      "main": [
+        [
+          {
+            "node": "Valider evenement",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Valider evenement": {
+      "main": [
+        [
+          {
+            "node": "Backend",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "saveDataErrorExecution": "none",
+    "saveDataSuccessExecution": "none",
+    "saveManualExecutions": false,
+    "saveExecutionProgress": false
+  }
+}
