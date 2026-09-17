@@ -201,3 +201,12 @@ Les deux branches s?curit? sont int?gr?es au code local avec adaptations Google,
 ## S?curit? V1 activ?e ? 16 septembre 2026
 
 Quota/confirmations, nettoyage concurrent et suspension corrig?s et test?s sur bases isol?es. Sauvegarde/restauration SQL, MongoDB, Vault et n8n v?rifi?e ; migrations locales appliqu?es avec compte distinct ; comptes applicatifs restreints ; HTTPS local https://localhost:8443. 118 tests backend et 10 tests Vault passent. Voir le [bilan actuel](../BILAN_SECURITE_LIVRAISON_V1_2026-09-16.md) pour les preuves, les commandes et les limites de livraison publique. Les anciens ?tats ? bugs ouverts ?, ? migrations non appliqu?es ? ou ? Docker indisponible ? sont historiques.
+
+
+## 2026-09-17 — Collecte nationale publiée et vérifiée
+
+Les corrections nationales sont en production (Main 2ebb08c ; Epitech Backend 73a9cd0). À 22:03 : 4 843 offres externes actives (4 773 France Travail, 70 JobsPipe), dont 4 692 localisées. Cycles complets : 4 823 identifiants uniques France Travail examinés sur 127 pages ; 353 JobsPipe examinés. Aucun doublon d'identifiant ni doublon exact entre sources détecté. Les 18 annonces hors métier infirmier ont été retirées du catalogue après accord explicite, avec conservation des lignes source. 151 offres restent sans coordonnées exploitables. 188 tests unitaires et 4 tests PostgreSQL réussis ; pagination publique vérifiée jusqu'à la dernière page.
+
+Préférence de livraison explicitement autorisée par l'utilisateur : publier les corrections sur lebretyves/Infimactch_Prod, branche Main, et également EpitechMscProPromo2027/D-WEB-901-PAR-9-1-InteriMatch-1, branche Backend, comme précédemment et pour les prochaines livraisons. Cette préférence ne justifie pas d'écraser les modifications étrangères au travail.
+
+Bilan détaillé : quality/COLLECTE_NATIONALE_PRODUCTION_2026-09-17.md (chemin relatif à la racine documentaire).
