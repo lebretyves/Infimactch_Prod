@@ -1,6 +1,9 @@
 import type { ParsedOffer } from "./parsed-offer";
 import { api } from "./api";
 export type Listing = {
+  publicationDate?: string | null;
+  distanceKm?: number | null;
+  availabilityCompatible?: boolean | null;
   parsedOffer?: ParsedOffer | null;
   id: string;
   kind?: "INTERNAL_MISSION" | "EXTERNAL_OFFER";
@@ -152,7 +155,9 @@ export type ApplicationCheck = {
   distanceKm: number | null;
 };
 export const applicationCheck = (id: string, signal?: AbortSignal) =>
-  api<ApplicationCheck>("/missions/" + id.slice(2) + "/application-check", { signal });
+  api<ApplicationCheck>("/missions/" + id.slice(2) + "/application-check", {
+    signal,
+  });
 export const apply = (m: Listing, key: string) =>
   api<{ warnings?: string[] }>("/missions/" + m.id.slice(2) + "/applications", {
     method: "POST",
@@ -198,6 +203,9 @@ export const statusLabels: Record<string, string> = {
 };
 
 export type SearchFilters = {
+  sort?: "recent" | "relevance" | "distance" | "start";
+  publishedWithinDays?: 1 | 7 | 30;
+  availableOnly?: boolean;
   ideServices?: string[];
   iadePopulation?: string[];
   iadeBlocks?: string[];

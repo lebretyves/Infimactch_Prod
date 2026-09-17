@@ -32,6 +32,10 @@ Installation Vault locale et dossier V2 autoris?s. TLS, Raft, KV v2, audit et Ap
 
 Les deux branches s?curit? sont int?gr?es au code local avec adaptations Google, Vault, migrations et frontend documents/RIB. 101 tests unitaires backend et 10 tests API frontend passent ; les deux compilations passent. Migrations et activation non effectu?es : Docker/Vault indisponibles. Les deux bugs documentaires et la recette compl?te restent ? traiter. Voir le [bilan apr?s r?cup?ration](../BILAN_RECUPERATION_SECURITE_2026-09-16.md). Les ?tats ant?rieurs sont historiques.
 
+## 17 septembre 2026 — Reprise des imports externes et continuité de l'historique
+
+L'utilisateur demande de vérifier pourquoi les deux API fournissent si peu d'offres, puis rappelle que ce travail a déjà été effectué et doit être retrouvé/documenté dans l'historique. Imports, dédoublonnage et commit e9bf037 retrouvés. Diagnostic réel terminé : 108 JobsPipe parcourues, 54 candidates acceptées ; France Travail environ 4 800 résultats sur certaines recherches MIS ; nouveau cycle non enregistré en production au contrôle. Voir IMPLEMENTATION.md et ../quality/DIAGNOSTIC_VOLUME_API_2026-09-17.md. Ne pas confondre correction du code, déploiement et rattrapage réel.
+
 
 ## 2026-09-17 — Collecte nationale publiée et vérifiée
 
@@ -88,3 +92,17 @@ GET /missions/:id/application-check fournit les avertissements actualisés et le
 Le changement porte uniquement sur l’envoi : les contrôles qualification/RPPS, compte actif, conflit d’affectation, état et début de mission, version du consentement restent effectifs, ainsi que l’éligibilité stricte lors de l’affectation. Aucun changement des scores ou recommandations et aucune migration.
 
 Validation : builds frontend/backend ; 203 tests unitaires backend ; deux tests SQL sur PostgreSQL/PostGIS isolé (avertissements, audit, envoi, absence de doublon, rejeu idempotent, blocages conservés et affectation stricte) ; test Playwright avec API fictives interceptées sur 375/1440 px, libellés détaillés, consentement, envoi malgré trois écarts, confirmation, indisponibilité du précontrôle et version obsolète. Publication sur Main et Backend conformément à l’autorisation permanente.
+
+## 2026-09-17 — Recherche, accueil et calendrier compact
+
+Recherche regroupée : poste, lieu, rayon ; critères métier, disponibilités et autres critères repliables. Tri global par publication, correspondance, distance ou début, filtres de publication et compatibilité des disponibilités avant pagination. Parcours complet par lots de 500 dans une transaction cohérente ; les dates externes inconnues ne sont pas inventées et la date d'import ne remplace pas celle de publication. Aucun pourcentage de correspondance fabriqué pour les offres externes.
+
+Accueil : offres prioritaires, suivi puis paramètres secondaires ; disponibilités en dates françaises, fuseau Paris, sans heures et dédupliquées avant limitation. Les horaires des missions confirmées restent présents.
+
+Calendrier : mois compact sur sept colonnes et nombre réel de semaines. Trois traits matin/après-midi/nuit ; vert disponible, rouge indisponible, bleu mission confirmée. Inspiration : photos Appel Médical fournies localement, non publiées. Éditeur au choix du jour avec navigation clavier ; mobilité et gestion des nuits conservées.
+
+Validation : builds frontend/backend ; 208 tests unitaires backend ; 6 tests SQL PostGIS isolés incluant 5 006 offres pour vérifier le tri au-delà du premier lot ; tests navigateur 375/768/1440 px, recherche, accueil, disponibilité, changement d'heure et mobilité. Évaluations visuelles indépendantes. Aucune migration ni création de données de production.
+
+Audit des anciennes missions : 49 missions fictives retrouvées dans deux sauvegardes, FINESS fictif 000000001. Leur nettoyage est documenté le 16 septembre. Aucune preuve d'un lot utilisant de vrais FINESS. PDF d'inventaire produit dans docs/quality ; cet inventaire historique ne constitue pas une lecture actuelle de la production.
+
+Publication sur Main (Infimactch_Prod) et Backend (Epitech), conformément à l'autorisation utilisateur persistante.

@@ -1,3 +1,4 @@
+import {rankedListingPage} from './listing-order';
 import {LocationsController} from './locations';
 import {RecommendationsController} from './recommendations';
 import {MatchingModule} from '../matching/matching.module';
@@ -41,7 +42,7 @@ class FavoriteDto {
   targetId!: string;
 }
 @Controller()
-class ListingsController {
+export class ListingsController {
   constructor(private readonly db: Database) {}
   @ApiOperation({
     description:
@@ -97,12 +98,14 @@ class ListingsController {
       externalRadius=" AND CASE WHEN jsonb_typeof("+lat+")='number' AND jsonb_typeof("+lon+")='number' THEN CASE WHEN "+latValue.replace("::double precision","::numeric")+" BETWEEN -90 AND 90 AND "+lonValue.replace("::double precision","::numeric")+" BETWEEN -180 AND 180 THEN ST_DWithin(ST_SetSRID(ST_MakePoint("+lonValue+","+latValue+"),4326)::geography,ST_SetSRID(ST_MakePoint("+bind(b.longitude)+","+bind(b.latitude)+"),4326)::geography,"+bind(b.radiusKm*1000)+") ELSE false END ELSE false END";
     }
     const sourceSql =
-      "SELECT 'm_'||m.id AS listing_id,m.created_at AS listed_at,(to_jsonb(m)-'location')||jsonb_build_object('id','m_'||m.id,'kind','INTERNAL_MISSION','latitude',ST_Y(m.location::geometry),'longitude',ST_X(m.location::geometry),'salary',jsonb_build_object('amount',m.hourly_salary,'currency','EUR','unit','HOUR','gross',true)) AS data FROM mission m WHERE " +
+      "SELECT 'm_'||m.id AS listing_id,m.created_at AS listed_at,(to_jsonb(m)-'location')||jsonb_build_object('id','m_'||m.id,'kind','INTERNAL_MISSION','publicationDate',COALESCE((SELECT min(a.created_at) FROM audit a WHERE a.resource_id=m.id AND a.event='MISSION_OPEN'),m.created_at),'latitude',ST_Y(m.location::geometry),'longitude',ST_X(m.location::geometry),'salary',jsonb_build_object('amount',m.hourly_salary,'currency','EUR','unit','HOUR','gross',true)) AS data FROM mission m WHERE " +
       (q.where + (b.origine==='externes' ? ' AND false' : '')) +
       " UNION ALL SELECT 'e_'||e.id,e.imported_at,(to_jsonb(e)-'raw_hash')||jsonb_build_object('id','e_'||e.id,'kind','EXTERNAL_OFFER','applicationMode','REDIRECT','eligibility','INCOMPLETE') FROM external_offer e WHERE " +
       (externalWhere + externalRadius + (b.origine==='partenaires' ? ' AND false' : ''));
     const pageQuery = listingPageQuery(sourceSql, parameters, b);
-    const [pageResult] = await this.db.query(pageQuery.sql, pageQuery.parameters);
+    const pageResult = b.sort || b.availableOnly || b.publishedWithinDays
+      ? await rankedListingPage(this.db, sourceSql, parameters, b, p)
+      : (await this.db.query(pageQuery.sql, pageQuery.parameters))[0];
     const unverifiedSearchFilters = [
       "start",
       "end",

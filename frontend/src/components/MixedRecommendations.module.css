@@ -1,13 +1,92 @@
-.group { display: grid; gap: 12px; padding-top: 20px; margin-top: 8px; border-top: 1px solid var(--line); min-width: 0; }
-.group h3 { font-size: 17px; }
-.group h4 { font-size: 15px; line-height: 1.5; overflow-wrap: anywhere; }
-.group p { font-size: 13px; line-height: 1.6; }
-.item { display: grid; gap: 10px; padding-block: 16px; border-top: 1px solid var(--line); min-width: 0; }
-.item:first-child { border-top: 0; }
-.metadata { display: flex; flex-wrap: wrap; gap: 6px 14px; color: var(--ink-700); font-size: 12px; line-height: 1.6; }
-.actions { display: flex; align-items: center; flex-wrap: wrap; gap: 10px; }
-.source { font-size: 12px; font-weight: 700; color: var(--teal-700); }
-.notice { padding: 12px; background: var(--sky-50); border-left: 3px solid var(--teal-700); color: var(--ink-700); }
+.group {
+  display: grid;
+  gap: 12px;
+  padding-top: 20px;
+  margin-top: 8px;
+  border-top: 1px solid var(--line);
+  min-width: 0;
+}
+.group h3 {
+  font-size: 17px;
+}
+.group h4 {
+  font-size: 15px;
+  line-height: 1.5;
+  overflow-wrap: anywhere;
+}
+.group p {
+  font-size: 13px;
+  line-height: 1.6;
+}
+.item {
+  display: grid;
+  gap: 10px;
+  padding-block: 16px;
+  border-top: 1px solid var(--line);
+  min-width: 0;
+}
+.item:first-child {
+  border-top: 0;
+}
+.metadata {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 14px;
+  color: var(--ink-700);
+  font-size: 12px;
+  line-height: 1.6;
+}
+.actions {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+.source {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--teal-700);
+}
+.notice {
+  padding: 12px;
+  background: var(--sky-50);
+  border-left: 3px solid var(--teal-700);
+  color: var(--ink-700);
+}
 
-.favorite[aria-pressed="true"] { background: var(--brand-800); color: var(--white); border: 2px solid var(--brand-800); }
-.favorite[aria-pressed="true"]:hover { background: var(--brand-900); color: var(--white); }
+.favorite[aria-pressed="true"] {
+  background: var(--brand-800);
+  color: var(--white);
+  border: 2px solid var(--brand-800);
+}
+.favorite[aria-pressed="true"]:hover {
+  background: var(--brand-900);
+  color: var(--white);
+}
+.sourceDetails {
+  font-size: 12px;
+  color: var(--ink-600);
+}
+.sourceDetails summary {
+  cursor: pointer;
+  padding: 4px 0;
+}
+.sourceDetails summary:focus-visible {
+  outline: 2px solid var(--brand-600);
+  outline-offset: 2px;
+}
+@media (max-width: 600px) {
+  .group {
+    gap: 8px;
+    padding-top: 14px;
+  }
+  .item {
+    gap: 8px;
+  }
+  .actions > a {
+    height: auto;
+    min-height: 36px;
+    white-space: normal;
+    padding: 8px 12px;
+  }
+}

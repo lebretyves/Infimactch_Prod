@@ -202,6 +202,16 @@ Les deux branches s?curit? sont int?gr?es au code local avec adaptations Google,
 
 Quota/confirmations, nettoyage concurrent et suspension corrig?s et test?s sur bases isol?es. Sauvegarde/restauration SQL, MongoDB, Vault et n8n v?rifi?e ; migrations locales appliqu?es avec compte distinct ; comptes applicatifs restreints ; HTTPS local https://localhost:8443. 118 tests backend et 10 tests Vault passent. Voir le [bilan actuel](../BILAN_SECURITE_LIVRAISON_V1_2026-09-16.md) pour les preuves, les commandes et les limites de livraison publique. Les anciens ?tats ? bugs ouverts ?, ? migrations non appliqu?es ? ou ? Docker indisponible ? sont historiques.
 
+## 17 septembre 2026, 21 h 34 — Reprise du diagnostic France Travail et JobsPipe
+
+Demande : retrouver les travaux déjà effectués, expliquer le faible volume et mettre à jour l'historique. Travaux retrouvés : imports réels du 15 septembre, dédoublonnage du 16, audit du 17 et correction pagination/reprise/localisation/actualisation au commit e9bf037 (21 h 24). Il ne faut pas refaire ces collecteurs comme s'ils étaient absents.
+
+Vérification réelle : France Travail annonce 4 802 résultats pour infirmier/MIS (recherches non additionnables), contre 254 actives en production. JobsPipe : 108 résultats parcourus sur 5 pages, 54 acceptées par le normaliseur existant, 25 rejets CDI et 29 intérim non confirmé, contre 1 active en production. Première page : 1 seule acceptée ; ancien import limité à 10. Douze rejets perdent une ligne « Intérim » lors du nettoyage et doivent être réexaminés.
+
+À 21 h 32, last_started_at et collection_state sont NULL pour les deux sources : aucun cycle du nouveau collecteur enregistré. Coordonnées présentes : 40/254 France Travail, 0/1 JobsPipe. L'export local de reprise ne contient pas l'appel refresh-offers ; l'état cloud reste à vérifier. Diagnostic sans import/modification d'annonces, 109 résultats JobsPipe acquis dans le budget existant. Rattrapage et validation de production restent à faire.
+
+Rapport et preuves : docs/quality/DIAGNOSTIC_VOLUME_API_2026-09-17.md, DIAGNOSTIC_VOLUME_API_2026-09-17.json et DIAGNOSTIC_JOBSPIPE_PAGES_2026-09-17.json. Aucun nouveau lot fictif FINESS ni PDF de missions généré dans ce diagnostic.
+
 
 ## 2026-09-17 — Collecte nationale publiée et vérifiée
 
@@ -258,3 +268,17 @@ GET /missions/:id/application-check fournit les avertissements actualisés et le
 Le changement porte uniquement sur l’envoi : les contrôles qualification/RPPS, compte actif, conflit d’affectation, état et début de mission, version du consentement restent effectifs, ainsi que l’éligibilité stricte lors de l’affectation. Aucun changement des scores ou recommandations et aucune migration.
 
 Validation : builds frontend/backend ; 203 tests unitaires backend ; deux tests SQL sur PostgreSQL/PostGIS isolé (avertissements, audit, envoi, absence de doublon, rejeu idempotent, blocages conservés et affectation stricte) ; test Playwright avec API fictives interceptées sur 375/1440 px, libellés détaillés, consentement, envoi malgré trois écarts, confirmation, indisponibilité du précontrôle et version obsolète. Publication sur Main et Backend conformément à l’autorisation permanente.
+
+## 2026-09-17 — Recherche, accueil et calendrier compact
+
+Recherche regroupée : poste, lieu, rayon ; critères métier, disponibilités et autres critères repliables. Tri global par publication, correspondance, distance ou début, filtres de publication et compatibilité des disponibilités avant pagination. Parcours complet par lots de 500 dans une transaction cohérente ; les dates externes inconnues ne sont pas inventées et la date d'import ne remplace pas celle de publication. Aucun pourcentage de correspondance fabriqué pour les offres externes.
+
+Accueil : offres prioritaires, suivi puis paramètres secondaires ; disponibilités en dates françaises, fuseau Paris, sans heures et dédupliquées avant limitation. Les horaires des missions confirmées restent présents.
+
+Calendrier : mois compact sur sept colonnes et nombre réel de semaines. Trois traits matin/après-midi/nuit ; vert disponible, rouge indisponible, bleu mission confirmée. Inspiration : photos Appel Médical fournies localement, non publiées. Éditeur au choix du jour avec navigation clavier ; mobilité et gestion des nuits conservées.
+
+Validation : builds frontend/backend ; 208 tests unitaires backend ; 6 tests SQL PostGIS isolés incluant 5 006 offres pour vérifier le tri au-delà du premier lot ; tests navigateur 375/768/1440 px, recherche, accueil, disponibilité, changement d'heure et mobilité. Évaluations visuelles indépendantes. Aucune migration ni création de données de production.
+
+Audit des anciennes missions : 49 missions fictives retrouvées dans deux sauvegardes, FINESS fictif 000000001. Leur nettoyage est documenté le 16 septembre. Aucune preuve d'un lot utilisant de vrais FINESS. PDF d'inventaire produit dans docs/quality ; cet inventaire historique ne constitue pas une lecture actuelle de la production.
+
+Publication sur Main (Infimactch_Prod) et Backend (Epitech), conformément à l'autorisation utilisateur persistante.
