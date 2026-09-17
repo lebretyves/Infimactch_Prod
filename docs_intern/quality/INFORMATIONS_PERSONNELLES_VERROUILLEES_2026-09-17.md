@@ -1,0 +1,10 @@
+# Informations personnelles et demandes de correction
+
+
+## 2026-09-17 — Informations personnelles verrouillées après inscription
+
+Demande utilisateur : prénom, nom, e-mail, ville, téléphone, date de naissance et adresse postale modifiables uniquement après demande administrateur. Les champs du profil sont désormais en lecture seule, code postal inclus ; le serveur refuse les changements et suppressions de ces valeurs, ainsi que le changement de display_name, par PUT /profile. La création atomique du profil à l'inscription conserve les valeurs initiales. Les qualifications, expériences et disponibilités restent modifiables.
+
+Une demande structurée peut être créée depuis le profil : un champ, sa nouvelle valeur, une seule demande en attente. Aucun changement n'est appliqué à l'envoi. L'administration dispose d'une page Corrections personnelles pour consulter, valider ou refuser. La validation exige accounts:write, une authentification administrateur récente et la confirmation d'une vérification d'identité. Les décisions sont journalisées et visibles par le demandeur. Les requêtes concurrentes, doubles décisions et valeurs devenues obsolètes sont contrôlées en transaction. Le changement d'e-mail contrôle l'unicité, ferme les sessions et invalide les demandes de récupération existantes ; les associations Google existantes restent liées au même compte. La correction du nom/prénom réinitialise la vérification RPPS. L'anonymisation supprime les demandes contenant des données personnelles.
+
+Migration additive PersonalCorrections1789382300000 appliquée, sans modification des profils existants. Validation : 191 tests unitaires, 5 tests PostgreSQL sur base jetable et recette navigateur utilisateur/administrateur réussis ; TypeScript, build utilisateur et build administrateur réussis. La recette vérifie le refus des modifications, l'enregistrement professionnel, l'absence de modification lors d'une demande et la confirmation administrateur.

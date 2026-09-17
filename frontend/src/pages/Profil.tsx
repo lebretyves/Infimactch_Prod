@@ -1,3 +1,4 @@
+import {PersonalCorrectionRequest} from '@/components/PersonalCorrectionRequest';
 import { ProSanteConnect } from "@/components/ProSanteConnect";
 import { useRef, useState, type FormEvent } from "react";
 import { useAuth } from "@/context/AuthContext";
@@ -173,6 +174,7 @@ function Editor({ initial }: { initial: ProfessionalProfile }) {
                 <Icon name="user" />
                 Informations personnelles
               </h2>
+              <p>Ces informations sont verrouillées après votre inscription. Pour les corriger, envoyez une demande à un administrateur.</p>
               <div className={u.grid}>
                 <div id="prenom">
                   <TextField
@@ -182,7 +184,7 @@ function Editor({ initial }: { initial: ProfessionalProfile }) {
                     maxLength={100}
                     autoComplete="given-name"
                     value={d.firstName ?? p.display_name}
-                    onChange={(e) => detail("firstName", e.target.value)}
+                    readOnly
                   />
                 </div>
                 <TextField
@@ -190,7 +192,7 @@ function Editor({ initial }: { initial: ProfessionalProfile }) {
                   maxLength={100}
                   autoComplete="family-name"
                   value={d.lastName || ""}
-                  onChange={(e) => detail("lastName", e.target.value)}
+                  readOnly
                 />
                 <TextField
                   label="E-mail"
@@ -202,21 +204,21 @@ function Editor({ initial }: { initial: ProfessionalProfile }) {
                   label="Ville"
                   maxLength={150}
                   value={d.city || ""}
-                  onChange={(e) => detail("city", e.target.value)}
+                  readOnly
                 />
                 <TextField
                   label="Téléphone"
                   type="tel"
                   maxLength={40}
                   value={d.phone || ""}
-                  onChange={(e) => detail("phone", e.target.value)}
+                  readOnly
                 />
                 <TextField
                   label="Date de naissance"
                   type="date"
                   max={dateInput(new Date())}
                   value={d.birthDate || ""}
-                  onChange={(e) => detail("birthDate", e.target.value)}
+                  readOnly
                 />
               </div>
               <details className={s.details}>
@@ -226,17 +228,18 @@ function Editor({ initial }: { initial: ProfessionalProfile }) {
                     label="Adresse"
                     maxLength={500}
                     value={d.address || ""}
-                    onChange={(e) => detail("address", e.target.value)}
+                    readOnly
                   />
                   <TextField
                     label="Code postal"
                     pattern="[0-9]{5}"
                     maxLength={5}
                     value={d.postalCode || ""}
-                    onChange={(e) => detail("postalCode", e.target.value)}
+                    readOnly
                   />
                 </div>
               </details>
+              <PersonalCorrectionRequest />
             </section>
             <section className={u.card}>
               <h2 className={u.cardHeading}>

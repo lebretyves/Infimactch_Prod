@@ -1,3 +1,4 @@
+import {assertPersonalInformationUnchanged} from './personal-information';
 import {
   changeAvailability,
   normalizeAvailability,
@@ -286,6 +287,7 @@ export class ProfilesService {
     validateProfile(b);
     return this.db.transaction(async (em) => {
       const previous = await nurse(em, actor);
+      assertPersonalInformationUnchanged(previous,b);
       const active = await em.query(
         missionSelect +
           " JOIN assignment a ON a.mission_id=m.id WHERE a.nurse_id=$1 AND a.status='ACTIVE'",
