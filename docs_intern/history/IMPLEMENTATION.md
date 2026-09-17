@@ -294,3 +294,15 @@ Recherche de solutions : Affinda propose un essai limité, Eden AI facture les a
 Validation : builds frontend/backend ; 211 tests backend dont 10 CV ; 2 tests géométriques ; navigateur avec vrai PDF multicolonnes, périodes multilignes, image OCR, vrai parseur, propositions éditables, ajout explicite, sauvegarde, doublons, diagnostic sans stockage. Profil évalué indépendamment PASS 375/768/1440 : gris lisible, Annuler, suppression, persistance. Aucun changement en production des données utilisateur pendant ces tests. Publication Main et Backend autorisée dans la session.
 
 Question notification : l'action PERSONAL_CORRECTION_REQUESTED est auditée et visible dans l'administration, mais n'est pas reliée au routeur de notifications actuellement. Aucun envoi de notification affirmé ni déclenché lors du contrôle.
+
+## 2026-09-18 — Dossier de contrôle de 1 000 demandes de démonstration
+
+Voir docs/quality/MISSIONS_DEMONSTRATION_2026-09-18.md : 646FINESSréels,101départements,400demandesdu18au27septembre,PDF/Excel/JSONlivréslocalementetrevusparunsecondagent. Aucunimportenproduction. Les correctionsCV/profil sont publiées Main ead96b1 et Backend d5e2aff ; déploiements frontend/backend READY et recetteCV/profil rejouée sur interfacepublique avecAPIfictives, sansécrituredeproduction.
+
+## 2026-09-18 — RIB : analyse automatique complète et audit import matching
+
+La capture automatique après IBAN stable lance désormais une lecture complète du fichier si le texte caméra est partiel. OCR français/anglais avec seconde segmentation automatique si champs requis manquants ; libellés titulaire/BIC/banque multilignes reconnus. Import de fichier immédiatement analysé, bouton fichier natif redondant masqué, relance disponible après échec. Aucune correction de chiffres inventée ; confirmation explicite avant enregistrement conservée.
+
+Validation : build frontend, suite réelle PDF.js/Tesseract/caméra et test dédié aperçu IBAN seul puis vraie analyse de la photo, sans clic Analyser ni écriture bancaire.
+
+Audit indépendant du lot de démonstration : 1000 demandes / 3092 vacations ; 666 demandes / 2067 vacations avec GPS et champs métier valides sous réserve des UUID établissements et droits ; 334 demandes / 1025 vacations sans GPS. 2067 cas positifs, 16251 négatifs et 4 créations DRAFT en PostGIS jetable. Aucun import production. Défaut fuseau DOM identifié (115 vacations) : Europe/Paris persisté par défaut ; non corrigé dans cette livraison RIB. Rapport local livrables/missions-500/AUDIT_IMPORT_MATCHING.md.
