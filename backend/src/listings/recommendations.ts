@@ -56,12 +56,12 @@ export class RecommendationsController {
       if(!batch.length)break;
       for(const row of batch){
         const comparison=partialOfferMatch(row,p,generatedAt);
-        const item={...externalPresentation({...row,id:'e_'+row.id,kind:'EXTERNAL_OFFER',applicationMode:'REDIRECT',eligibility:'INCOMPLETE'}),profileCorrespondence:comparison,publicationDate:publicationDate(row.provenance?.publishedAt,Date.parse(generatedAt)),importedAt:row.imported_at,sourceUpdatedAt:publicationDate(row.provenance?.sourceUpdatedAt,Date.parse(generatedAt)),relevance:externalRelevance(comparison)};
+        const item={...row,id:'e_'+row.id,kind:'EXTERNAL_OFFER',applicationMode:'REDIRECT',eligibility:'INCOMPLETE',profileCorrespondence:comparison,publicationDate:publicationDate(row.provenance?.publishedAt,Date.parse(generatedAt)),importedAt:row.imported_at,sourceUpdatedAt:publicationDate(row.provenance?.sourceUpdatedAt,Date.parse(generatedAt)),relevance:externalRelevance(comparison)};
         top.push(item);top.sort(compareRecentExternal);if(top.length>3)top.pop();
       }
       cursor=batch[batch.length-1].id;
     }
     const sources=await this.db.query("SELECT DISTINCT ON(provider) provider,status,created_at FROM import_run WHERE provider IN('FRANCE_TRAVAIL','JOBSPIPE') ORDER BY provider,created_at DESC");
-    return {status:'READY',personalization:profile.qualifications.length?'PARTIAL':'GENERAL_PROFILE_INCOMPLETE',items:top.map(({relevance,...item})=>item),sources};
+    return {status:'READY',personalization:profile.qualifications.length?'PARTIAL':'GENERAL_PROFILE_INCOMPLETE',items:top.map(({relevance,...item})=>externalPresentation(item)),sources};
   }
 }

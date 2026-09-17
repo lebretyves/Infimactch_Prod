@@ -141,3 +141,10 @@ test("conflicting and ambiguous provider facts are not made into matches", () =>
   expect(r.criteria.contract?.reason).toBe("PROVIDER_CONTRACT_CONFLICT");
   expect(r.result).toBe("TO_CONFIRM");
 });
+
+test("transport emergency words do not imply emergency department experience",()=>{
+ const result=partialOfferMatch({title:'IDE transport SAMU urgences AVC',provenance:{facts:{qualification:'IDE',warnings:[]}}},profile,now);
+ expect(result.criteria.service!.status).toBe('OFFER_MISSING');
+ const explicit=partialOfferMatch({title:'IDE aux urgences',provenance:{facts:{qualification:'IDE',warnings:[]}}},profile,now);
+ expect(explicit.criteria.service!.status).toBe('INDICATIVE_MATCH');
+});

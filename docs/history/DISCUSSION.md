@@ -154,3 +154,11 @@ Vue d’ensemble infirmier : bloc complet Notifications de mission, messages, li
 Validation navigateur 375/768/1440, nuit à cheval deuxjours, missionMartinique avec navigateuraméricain, étatsvide/encours, liensclavier ; évaluationindépendantePASS.
 
 Lot corrigé SHA C56BAE…F9AA40 :99GPSsupplémentaires,129sitesrestants ;820demandes/2602vacationsavecGPS,180/490sansGPS. Importeur versionné,2602créationsDRAFTpuisrejeuidempotent enPostGISjetable ;94DOMfuseauxconservés.15profilsrégionauxfictifs donnent87vacationscompatibles/52demandes.129sitesnullnoninventés,orgproductiondroitsnonrésolus. Rapport/Excel/PDF/ZIPactualisés,ancienneversionauditExcelouverteconservée. Aucuneannonceaucatalogueréel. Détailsdansquality/MISSIONS_DEMONSTRATION_2026-09-18.md.
+
+## 2026-09-18 — Recherche compacte et extraits sources des offres
+
+Le panneau de recherche regroupe les champs principaux et les filtres complémentaires repliables avec compteurs actifs. La localisation conserve son autocomplétion, les paramètres de recherche et les tris sont conservés. Contrôles de largeur à 375, 768 et 1440 pixels.
+
+Les informations extraites affichent le passage source exact à la place des libellés générés en gras. Les passages répétés sont regroupés. Les mentions d'urgences AVC, de transport SAMU et de présentation générale d'un établissement ne créent plus de faux services pour le matching. Les correspondances utiles restent normalisées en interne. Les annonces anciennes sont analysées à la lecture avec le parseur 4.1.0, sans réimport ni écriture en base ; les recommandations n'effectuent cette présentation que sur les trois résultats retenus.
+
+Validation : compilation frontend et backend, 224 tests serveur, tests de déduplication et tests navigateur avec API simulée. Le CV, le RIB et les offres privées du compte utilisateur ne sont pas accessibles dans ces tests.

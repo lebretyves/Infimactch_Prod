@@ -1,4 +1,4 @@
-﻿import assert from "node:assert/strict";
+import assert from "node:assert/strict";
 import { mkdir } from "node:fs/promises";
 import { chromium } from "playwright";
 const browser = await chromium.launch({ channel: "msedge", headless: true });
@@ -124,7 +124,7 @@ try {
   await page
     .getByLabel("Date de publication", { exact: true })
     .selectOption("7");
-  await page.locator("summary").filter({ hasText: "Disponibilités" }).click();
+  await page.locator("summary").filter({ hasText: "Dates et horaires" }).click();
   await page.getByLabel("Compatibles avec mes disponibilités").check();
   await apply();
   assert.equal(searches.at(-1).publishedWithinDays, 7);
@@ -179,7 +179,8 @@ try {
   await page.getByLabel("Trier par", { exact: true }).selectOption("recent");
   await page.waitForTimeout(200);
   await mkdir("artifacts/offers-redesign", { recursive: true });
-  for (const width of [1440, 375]) {
+  for (const summary of await page.locator("form details[open] > summary").all()) await summary.click();
+  for (const width of [1440, 768, 375]) {
     await page.setViewportSize({ width, height: 1100 });
     assert.equal(
       await page.evaluate(
@@ -187,6 +188,9 @@ try {
       ),
       false,
     );
+    const panel=page.getByRole("search",{name:"Rechercher une offre"});
+    if(width===1440) assert.ok((await panel.boundingBox()).height<=330,"closed desktop search panel <=330px");
+    await panel.screenshot({path:`artifacts/offers-redesign/panel-${width}.png`});
     await page.screenshot({
       path: `artifacts/offers-redesign/search-${width}.png`,
       fullPage: true,

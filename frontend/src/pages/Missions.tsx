@@ -358,6 +358,7 @@ function NurseMissions() {
           <details className={s.filterGroup}>
             <summary>
               Métier <span>{draft.qualification || "Mes qualifications"}</span>
+              {[draft.qualification,draft.service,draft.population,draft.block,draft.specialty].filter(Boolean).length > 0 && <b className={s.filterCount} aria-label="critères métier sélectionnés">{[draft.qualification,draft.service,draft.population,draft.block,draft.specialty].filter(Boolean).length}</b>}
             </summary>
             <div className={s.filterContent}>
               <SelectField
@@ -455,13 +456,14 @@ function NurseMissions() {
           </details>
           <details className={s.filterGroup}>
             <summary>
-              Disponibilités{" "}
+              Dates et horaires{" "}
+              {[draft.available,draft.start,draft.end,draft.shift].filter(Boolean).length > 0 && <b className={s.filterCount} aria-label="critères de disponibilité sélectionnés">{[draft.available,draft.start,draft.end,draft.shift].filter(Boolean).length}</b>}
               <span>
                 {draft.available
                   ? "Mon calendrier"
                   : draft.start
                     ? "Période choisie"
-                    : "Dates et horaires"}
+                    : "Calendrier, période"}
               </span>
             </summary>
             <div className={s.filterContent}>
@@ -514,6 +516,7 @@ function NurseMissions() {
           <details className={s.filterGroup}>
             <summary>
               Autres critères <span>Publication, établissement</span>
+              {[draft.published,draft.establishment].filter(Boolean).length > 0 && <b className={s.filterCount} aria-label="autres critères sélectionnés">{[draft.published,draft.establishment].filter(Boolean).length}</b>}
             </summary>
             <div className={s.filterContent}>
               <SelectField
@@ -549,12 +552,10 @@ function NurseMissions() {
             </div>
           </details>
         </div>
-        {draft.radius && (
-          <p className={s.help}>
-            Distance à vol d’oiseau. Les offres sans localisation connue sont
-            exclues du rayon.
-          </p>
-        )}
+        <details className={s.searchHelp}>
+          <summary>Comment fonctionne la localisation ?</summary>
+          <p>Choisissez une ville, un code postal ou une adresse dans les suggestions. La distance est mesurée à vol d’oiseau ; les offres sans coordonnées connues sont exclues lorsqu’un rayon est choisi. La recherche ne modifie pas votre zone de mobilité.</p>
+        </details>
         {formError && (
           <p className={u.error} role="alert">
             {formError}

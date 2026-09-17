@@ -1,4 +1,4 @@
-﻿.searchPanel {
+.searchPanel {
   padding: 22px !important;
 }
 .topFilters {
@@ -299,4 +299,33 @@
     padding-left: 10px;
     padding-right: 25px;
   }
+}
+/* Compact search: essentials first, then optional criteria and contextual help. */
+.searchPanel { padding: 18px !important; }
+.topFilters { gap: 12px; }
+.searchPanel input:not([type="checkbox"]), .searchPanel select { min-height: 48px; height: 48px; }
+.topFilters > button { min-height: 48px; height: 48px; }
+.refinements { margin-top: 12px; padding-top: 12px; }
+.filterGroup summary { min-height: 44px; display: flex; align-items: center; gap: 7px; padding: 10px; list-style: none; }
+.filterGroup summary::-webkit-details-marker { display: none; }
+.filterGroup summary::before { content: '›'; display: inline-block; flex: 0 0 6px; font-size: 17px; line-height: 1; }
+.filterGroup[open] summary::before { transform: rotate(90deg); }
+.filterGroup summary span { margin-left: 0; }
+.filterCount { display: inline-flex; justify-content: center; align-items: center; min-width: 20px; height: 20px; padding: 0 4px; margin-left: auto; background: #dceafd; color: #124d96; border-radius: 5px; font-size: 11px; font-weight: 700; }
+.filterContent { padding-top: 14px; gap: 12px; }
+.searchHelp { margin-top: 8px; font-size: 12px; color: var(--ink-600); }
+.searchHelp summary { cursor: pointer; width: fit-content; min-height: 36px; display: flex; align-items: center; gap: 6px; list-style: none; }
+.searchHelp summary::-webkit-details-marker { display: none; }
+.searchHelp summary::before { content: '+'; font-size: 17px; color: var(--brand-700); }
+.searchHelp[open] summary::before { content: '−'; }
+.searchHelp summary:focus-visible { outline: 2px solid var(--brand-600); outline-offset: 2px; }
+.searchHelp p { margin: 0 0 6px; max-width: 80ch; line-height: 1.6; }
+@media(max-width:600px) {
+ .searchPanel { padding: 14px !important; }
+ .topFilters { gap: 10px; }
+ .refinements { gap: 5px; }
+ .filterGroup summary { min-height: 54px; padding: 8px 5px; gap: 3px; font-size: 11px; }
+ .filterCount { min-width: 17px; height: 18px; padding: 0 3px; font-size: 10px; }
+ .searchHelp summary { min-height: 44px; font-size: 11px; }
+ .activeFilters button { min-height: 44px; }
 }

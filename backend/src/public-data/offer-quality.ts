@@ -1,5 +1,5 @@
 import { offerLocationCoordinates } from "./offer-geolocation";
-import { currentParsedOffer } from "./offer-parser";
+import { currentParsedOffer, parseOffer } from "./offer-parser";
 import type { Qualification } from "../domain/matching";
 
 export function clean(value: unknown, max: number): string {
@@ -125,7 +125,7 @@ export function externalPresentation(e: any) {
         : "UNKNOWN";
   return {
     ...safe,
-    parsedOffer: currentParsedOffer(e),
+    parsedOffer: currentParsedOffer(e) ?? parseOffer(e),
     freshness: {
       lastSeenAt: e.imported_at ?? null,
       staleAfterDays: 30,
