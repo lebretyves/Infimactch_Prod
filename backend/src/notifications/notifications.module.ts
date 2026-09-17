@@ -128,7 +128,9 @@ export class NotificationsService {
       try {
         const origin=process.env.NOTIFICATION_APP_ORIGIN || process.env.APP_ORIGIN!;
         const reference=item.context.missionId ? "\nRéférence mission : "+item.context.missionId : "";
-        const content=item.message+reference+"\n"+new URL(item.href,origin).href;
+        const link=new URL(item.href,origin);
+        link.searchParams.set("notification",item.notification_id);
+        const content=item.message+reference+"\n"+link.href;
         const result=await sendDiscord(item.target_type,item.target_id,content,item.id.replace(/-/g,"").slice(0,25));
         if(!/^\d{17,20}$/.test(result?.id || "")) throw new Error("INVALID_SEND_RECEIPT");
         await this.db.query("UPDATE notification_delivery SET status='SENT',message_id=$3,sent_at=now(),lease_until=NULL WHERE id=$1 AND lease_token=$2",[item.id,item.token,result.id]);sent++;

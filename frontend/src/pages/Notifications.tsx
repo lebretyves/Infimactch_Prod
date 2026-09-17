@@ -8,6 +8,7 @@ import { usePageTitle } from "@/lib/usePageTitle";
 import { Button } from "@/ui/Button";
 import { TextField } from "@/ui/Field";
 import s from "./MarketPages.module.css";
+import { notificationHref } from "@/lib/notificationHref";
 import buttonStyles from "@/ui/Button.module.css";
 
 type Destination={id:string;user_id:string|null;organization_id:string|null;enabled:boolean;events:string[];channel_name:string|null;target_id:string};
@@ -54,7 +55,7 @@ export default function Notifications() {
     {error&&<p role="alert">{error}</p>}{message&&<p role="status">{message}</p>}
     <section className={s.card} aria-labelledby="notice-list"><h2 id="notice-list">Votre activité</h2>
       {notices.loading?<p role="status">Chargement…</p>:notices.error?<p role="alert">{notices.error} <Button onClick={notices.reload}>Réessayer</Button></p>:<>
-      {notices.data?.length?<ul>{notices.data.map(n=><li key={n.id} style={{paddingBlock:14}}><strong>{data?.catalog[n.kind]||"Notification"}{!n.read_at?" — Non lue":""}</strong><p>{n.message}</p><time dateTime={n.created_at}>{new Date(n.created_at).toLocaleString("fr-FR")}</time><div className={s.actions}><Link to={n.href||"/accueil"}>Consulter</Link>{!n.read_at&&<Button disabled={busy} variant="outline" onClick={()=>void action(()=>api("/me/notifications/"+n.id+"/read",{method:"POST"}),"Notification marquée comme lue.")}>Marquer comme lue</Button>}</div></li>)}</ul>:<p>Aucune notification pour cette page.</p>}
+      {notices.data?.length?<ul>{notices.data.map(n=><li key={n.id} style={{paddingBlock:14}}><strong>{data?.catalog[n.kind]||"Notification"}{!n.read_at?" — Non lue":""}</strong><p>{n.message}</p><time dateTime={n.created_at}>{new Date(n.created_at).toLocaleString("fr-FR")}</time><div className={s.actions}><Link to={notificationHref(n.href,n.id)}>Consulter</Link></div></li>)}</ul>:<p>Aucune notification pour cette page.</p>}
       <div className={s.actions}><Button variant="outline" disabled={offset===0} onClick={()=>setOffset(v=>Math.max(0,v-20))}>Précédent</Button><Button variant="outline" disabled={(notices.data?.length??0)<20} onClick={()=>setOffset(v=>v+20)}>Suivant</Button></div></>}
     </section>
     <section className={s.card} aria-labelledby="discord-settings"><h2 id="discord-settings">Notifications Discord</h2>
