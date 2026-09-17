@@ -20,3 +20,20 @@ test('empty and unstructured CVs return a manual completion warning; proposals a
  assert.equal(parseCvExperience('No periods',now).experiences.length,0);
  assert.ok(parseCvExperience(Array.from({length:100},(_,i)=>`2019 - 2020 | CHU ${i} | Urgences`).join('\n'),now).experiences.length<=50);
 });
+
+test('CV recognises periods split by PDF line boundaries and spaced numeric dates',()=>{
+ for(const period of ['Janvier\n2020 –\nMars\n2021','01 / 2020\n–\n02 / 2021','2019\nau\n2020','01-2020 - 02-2021','01 / 02 / 2020 − 31 / 03 / 2021']){
+  const r=parseCvExperience('EXPÉRIENCES PROFESSIONNELLES ET STAGES\n'+period+' | CHU Exemple | Urgences\nFORMATION\n2017 - 2018 école',now);
+  assert.equal(r.experiences.length,1,period);assert.equal(r.experiences[0]!.service,'URGENCES');
+ }
+});
+test('CV distinguishes ongoing typographic periods and never fabricates an end date',()=>{
+ for(const period of ['2020 - aujourd’hui','Depuis janvier 2020','2020 - en cours']){
+  const r=parseCvExperience('Expériences professionnelles\n'+period+' | CHU Exemple | Urgences',now);
+  assert.equal(r.experiences.length,0);assert.ok(r.warnings.some(w=>/en cours|depuis/.test(w)),period);
+ }
+});
+test('CV does not join dates across employers or manufacture a range from isolated years',()=>{
+ const r=parseCvExperience('Expériences\n2019\nCHU Premier\n2020\nClinique Deuxième',now);
+ assert.equal(r.experiences.length,0);
+});
