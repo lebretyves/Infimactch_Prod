@@ -44,8 +44,9 @@ export default function Notifications() {
       <div className={s.actions}><Button variant="outline" disabled={offset===0} onClick={()=>setOffset(v=>Math.max(0,v-20))}>Précédent</Button><Button variant="outline" disabled={(notices.data?.length??0)<20} onClick={()=>setOffset(v=>v+20)}>Suivant</Button></div></>}
     </section>
     <section className={s.card} aria-labelledby="discord-settings"><h2 id="discord-settings">Notifications Discord</h2>
+      <p>Besoin d’aide pour trouver votre identifiant ? <a href="/aide/discord/retrouver-identifiant-discord.pdf" target="_blank" rel="noopener noreferrer">Ouvrir le guide illustré (PDF, 2 pages)</a> · <a href="/aide/discord/retrouver-identifiant-discord.pdf" download>Télécharger le PDF</a></p>
       {settings.loading?<p role="status">Chargement…</p>:settings.error?<p role="alert">{settings.error} <Button onClick={settings.reload}>Réessayer</Button></p>:data&&!data.configured?<p>Discord n’est pas encore disponible. Vos notifications restent consultables dans cette page.</p>:data&&<>
-        {!data.link?<><p>Rejoignez le serveur du bot InfiMatch et autorisez les messages privés. Dans Discord, activez le mode développeur dans Paramètres → Avancés, puis copiez votre identifiant utilisateur depuis votre profil.</p>
+        {!data.link?<><p>Rejoignez le serveur du bot InfiMatch et autorisez les messages privés. Dans Discord, activez le mode développeur dans Paramètres → Développeur (ou Avancés selon votre version), puis copiez votre identifiant utilisateur depuis votre profil.</p>
           <form noValidate onSubmit={e=>{
             e.preventDefault();
             if(busy) return;
