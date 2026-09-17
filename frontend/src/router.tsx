@@ -7,7 +7,6 @@ const Accessibilite = lazy(() => import("./pages/Qualite").then(m => ({ default:
 const Ecoconception = lazy(() => import("./pages/Qualite").then(m => ({ default: m.Ecoconception })));
 const Notifications = lazy(() => import("./pages/Notifications"));
 const ApercuAnnonces = lazy(() => import("./pages/ApercuAnnonces"));
-const Catalogue = lazy(() => import("./pages/Catalogue"));
 const Besoins = lazy(() => import("./pages/Besoins"));
 const Etablissement = lazy(() => import("./pages/Etablissement"));
 const Dossier = lazy(() => import("./pages/Dossier"));
@@ -62,7 +61,7 @@ export const router = creerRouteur([{ element: <QualityRoot />, children: [
   { path: "/installer", element: <Installer /> },
   { path: "/accessibilite", element: <Accessibilite /> },
   { path: "/ecoconception", element: <Ecoconception /> },
-  { path: "/catalogue", element: <Catalogue /> },
+  { path: "/catalogue", element: <Navigate to="/" replace /> },
   { path: "/apercu-annonces", element: <ApercuAnnonces /> },
   { path: "/connexion", element: <Connexion /> },
   { path: "/mot-de-passe-oublie", element: <MotDePasseOublie /> },

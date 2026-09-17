@@ -63,3 +63,8 @@ Migration additive PersonalCorrections1789382300000 appliquée, sans modificatio
 ## 2026-09-17 — Import de CV pour les expériences passées
 
 Ajout d'un import PDF/JPEG/PNG dans Qualifications et expérience. Extraction PDF/OCR français-anglais et API interne de structuration des périodes, établissements et services, sans fournisseur payant ni transfert à une API tierce. Vérification explicite avant ajout au formulaire, sauvegarde du profil séparée, doublons exacts écartés. Les dates approximatives sont signalées ; périodes en cours et invalides restent à compléter manuellement. Aucun changement des informations personnelles verrouillées ou des diplômes. Le parseur à règles ne garantit pas une lecture exhaustive des CV complexes ; DOCX à exporter en PDF. Limites : 5 Mo, cinq pages, une minute. 198 tests serveur et recette navigateur PDF/image/OCR réussis, ainsi que la régression RIB. Comparatif des API et détails : quality/IMPORT_CV_EXPERIENCES_2026-09-17.md.
+
+
+## 2026-09-17 — Installation sur l’accueil et retrait du catalogue
+
+Le bouton Installer l’application est proposé dans le premier bloc de l’accueil public, avec accès au parcours d’installation existant. Le lien d’installation est retiré de la navigation connectée. Les liens Catalogue des pages sont retirés de l’accueil et de l’espace connecté ; /catalogue redirige vers /. Compilation frontend et trois contrôles PWA réussis, vérification navigateur mobile/bureau et navigation connectée effectuée.
