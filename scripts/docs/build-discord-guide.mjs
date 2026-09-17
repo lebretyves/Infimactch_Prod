@@ -28,7 +28,7 @@ shot('04-copier-identifiant.png',80,607,360);
 text('Autre accès possible : clic droit sur votre nom dans un message ou dans la liste des membres, puis Copier l’identifiant utilisateur.',80,667,10,470,muted);
 text('Ne copiez pas le nom d’utilisateur, ni l’identifiant du serveur, du salon ou du bot.',80,719,11,470,blue);
 
-header(2,'Associer Discord à InfiMatch','Gardez Discord ouvert pour recevoir le message privé du bot InfiMatch.');
+header(2,'Associer Discord à InfiMatch','Avant de demander le code : dans Notifications, cliquez sur Rejoindre le serveur InfiMatch et autorisez les messages privés de ses membres.');
 step(4,'Coller le nombre dans InfiMatch',157);
 text('Ouvrez Notifications, puis Notifications Discord. Collez le nombre dans Votre identifiant utilisateur Discord et cliquez sur Recevoir mon code privé.',80,184,11,470);
 doc.image(resolve(dir,'05-formulaire-infimatch.png'),44,244,{fit:[507,212],align:'center'});

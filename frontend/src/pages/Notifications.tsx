@@ -8,12 +8,15 @@ import { usePageTitle } from "@/lib/usePageTitle";
 import { Button } from "@/ui/Button";
 import { TextField } from "@/ui/Field";
 import s from "./MarketPages.module.css";
+import buttonStyles from "@/ui/Button.module.css";
 
 type Destination={id:string;user_id:string|null;organization_id:string|null;enabled:boolean;events:string[];channel_name:string|null;target_id:string};
 type Settings={configured:boolean;link:{discord_user_id:string}|null;destinations:Destination[];catalog:Record<string,string>;organizationKinds:string[];preferences:{kind:string;discord:boolean}[]};
 type Notice={id:string;kind:string;message:string;href:string;read_at:string|null;created_at:string};
 type Delivery={id:string;kind:string;status:string;created_at:string};
 const base="/me/notifications-settings";
+// Public invite. Root must confirm the approved URL before publishing this change.
+const discordInvite=import.meta.env.VITE_DISCORD_INVITE_URL || "https://discord.gg/5V7AZZjAET";
 const deliveryLabels:Record<string,string>={PENDING:"En attente",SENDING:"Envoi en cours",SENT:"Envoyé",FAILED:"Échec — notification disponible ici",CANCELLED:"Envoi annulé : événement ou préférences modifiés",UNCERTAIN:"Réception non confirmée — notification disponible ici"};
 function DestinationEditor({destination,org,catalog,save}:{destination?:Destination;org?:string;catalog:Record<string,string>;save:(org:string|undefined,body:unknown)=>Promise<void>}) {
   const [enabled,setEnabled]=useState(destination?.enabled??false),[events,setEvents]=useState(destination?.events??Object.keys(catalog)),[channelId,setChannelId]=useState(destination?.target_id??""),[busy,setBusy]=useState(false);
@@ -46,7 +49,15 @@ export default function Notifications() {
     <section className={s.card} aria-labelledby="discord-settings"><h2 id="discord-settings">Notifications Discord</h2>
       <p>Besoin d’aide pour trouver votre identifiant ? <a href="/aide/discord/retrouver-identifiant-discord.pdf" target="_blank" rel="noopener noreferrer">Ouvrir le guide illustré (PDF, 2 pages)</a> · <a href="/aide/discord/retrouver-identifiant-discord.pdf" download>Télécharger le PDF</a></p>
       {settings.loading?<p role="status">Chargement…</p>:settings.error?<p role="alert">{settings.error} <Button onClick={settings.reload}>Réessayer</Button></p>:data&&!data.configured?<p>Discord n’est pas encore disponible. Vos notifications restent consultables dans cette page.</p>:data&&<>
-        {!data.link?<><p>Rejoignez le serveur du bot InfiMatch et autorisez les messages privés. Dans Discord, activez le mode développeur dans Paramètres → Développeur (ou Avancés selon votre version), puis copiez votre identifiant utilisateur depuis votre profil.</p>
+        {!data.link?<>
+          <ol aria-label="Associer Discord en trois étapes" style={{listStyle:"decimal",paddingLeft:"1.5rem",display:"grid",gap:16}}>
+            <li><strong>Rejoindre le serveur InfiMatch</strong><p>Acceptez l’invitation et autorisez les messages privés des membres de ce serveur. Votre identifiant seul ne suffit pas pour que le bot puisse vous écrire.</p>
+              <a href={discordInvite} target="_blank" rel="noopener noreferrer" className={`${buttonStyles.button} ${buttonStyles.primary} ${buttonStyles.md}`} style={{marginTop:10,height:"auto",paddingBlock:12,whiteSpace:"normal",maxWidth:"100%"}}>Rejoindre le serveur InfiMatch</a><p>Discord s’ouvre dans un nouvel onglet. Revenez ensuite sur cette page.</p>
+            </li>
+            <li><strong>Demander votre code privé</strong><p>Dans Discord, activez le mode développeur dans Paramètres → Développeur (ou Avancés), puis copiez l’identifiant de votre utilisateur. Collez ses 17 à 20 chiffres ci-dessous et demandez votre code.</p></li>
+            <li><strong>Confirmer et choisir vos notifications</strong><p>Saisissez le code reçu en message privé, associez votre compte, puis activez les événements que vous souhaitez recevoir.</p></li>
+          </ol>
+
           <form noValidate onSubmit={e=>{
             e.preventDefault();
             if(busy) return;
