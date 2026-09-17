@@ -26,6 +26,14 @@ export class ExternalListingsDto extends PageDto {
   q?: string;
 }
 export class SearchDto {
+  @ApiProperty({required:false,enum:['recent','relevance','distance','start']})
+  @IsOptional() @IsIn(['recent','relevance','distance','start'])
+  sort?: 'recent'|'relevance'|'distance'|'start';
+  @ApiProperty({required:false,enum:[1,7,30]})
+  @IsOptional() @IsInt() @IsIn([1,7,30]) publishedWithinDays?: number;
+  @ApiProperty({required:false,type:Boolean})
+  @IsOptional() @IsBoolean() availableOnly?: boolean;
+
   @ApiProperty({type:String,required:false,enum:['toutes','partenaires','externes'],default:'toutes'})
   @IsOptional() @IsIn(['toutes','partenaires','externes']) origine?: 'toutes'|'partenaires'|'externes';
   @ApiProperty({ type: String, required: false, maxLength: 150, description: "Search across title, service and location, before pagination." })
@@ -227,25 +235,17 @@ export function searchSql(b: SearchDto) {
       "m.start_at<" + bind(b.end) + " AND m.end_at>" + bind(b.start),
     );
   }
-  if (
-    b.radiusKm !== undefined ||
-    b.latitude !== undefined ||
-    b.longitude !== undefined
-  ) {
-    if (
-      b.radiusKm === undefined ||
-      b.latitude === undefined ||
-      b.longitude === undefined
-    )
+  if ((b.latitude === undefined) !== (b.longitude === undefined))
+    throw new BadRequestException("Coordinates required together");
+  if (b.sort === 'distance' && (b.latitude === undefined || b.longitude === undefined))
+    throw new BadRequestException("Choose a location to sort by distance");
+  if (b.radiusKm !== undefined) {
+    if (b.latitude === undefined || b.longitude === undefined)
       throw new BadRequestException("Coordinates and radius required together");
     filters.push(
       "ST_DWithin(m.location,ST_SetSRID(ST_MakePoint(" +
-        bind(b.longitude) +
-        "," +
-        bind(b.latitude) +
-        "),4326)::geography," +
-        bind(b.radiusKm * 1000) +
-        ")",
+        bind(b.longitude) + "," + bind(b.latitude) + "),4326)::geography," +
+        bind(b.radiusKm * 1000) + ")",
     );
   }
   const sql =

@@ -395,3 +395,36 @@
     white-space: nowrap;
   }
 }
+/* Monthly overview: a full day is the touch target; the three strokes are summaries. */
+.calendar.month { grid-template-columns: repeat(7, minmax(0, 1fr)); border: 0; border-radius: 0; gap: 5px 3px; }
+.weekday { text-align: center; padding: 8px 0 10px; font-size: 11px; color: #526579; }
+.monthDay { min-width: 0; min-height: 66px; display: flex; flex-direction: column; justify-content: center; align-items: center; gap: 9px; padding: 7px 3px; border: 1px solid transparent; border-radius: 8px; background: transparent; color: #20344b; font: inherit; cursor: pointer; }
+.dayNumber { display: grid; place-items: center; width: 31px; height: 31px; background: #f3f5f6; border-radius: 50%; font-size: 15px; font-weight: 600; }
+.monthDay:hover { background: #f0f6fc; }
+.monthDay:focus-visible { outline: 2px solid #145bb8; outline-offset: -2px; }
+.monthOutside .dayNumber { background: transparent; color: #627386; }
+.monthToday .dayNumber { color: #145bb8; background: #e1efff; box-shadow: inset 0 0 0 1px #1466e0; }
+.monthSelected { border-color: #1466e0; background: #f0f6ff; }
+.dayStrokes { display: flex; width: 100%; max-width: 43px; gap: 3px; }
+.stroke { display: block; height: 5px; min-width: 0; flex: 1; border-radius: 3px; }
+.stroke.available { background: #29945b; }
+.stroke.unavailable { background: #c45149; }
+.stroke.unset { background: #b2bfcb; }
+.stroke.partialAvailable { background: repeating-linear-gradient(90deg,#29945b 0 3px,#e6f4ed 3px 5px); }
+.stroke.partialUnavailable { background: repeating-linear-gradient(90deg,#c45149 0 3px,#fff0ee 3px 5px); }
+.confirmedSlot { background: #1466e0; color: white; border-color: #1466e0; }
+.slot.confirmedSlot:disabled { opacity: 1; cursor: default; }
+.monthHint { font-size: 12px; line-height: 1.6; color: #526579; }
+.dayDetail { border: 1px solid #c8dbee; border-radius: 8px; overflow: hidden; background: #f8fbff; }
+.detailHeading { display: flex; align-items: center; justify-content: space-between; padding: 8px 12px; gap: 10px; font-size: 13px; }
+.dayDetail .day { border: 0; }
+.dayDetail .day h3 { min-height: 0; padding: 9px 12px; text-align: left; }
+.dayDetail .slots { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.legend i { width: 16px; height: 5px; }
+@media (max-width: 600px) {
+ .calendar.month { gap: 3px 0; }
+ .monthDay { min-height: 63px; padding-inline: 2px; }
+ .dayNumber { width: 28px; height: 28px; font-size: 14px; }
+ .dayStrokes { max-width: 33px; gap: 2px; }
+ .weekday { font-size: 10px; }
+}

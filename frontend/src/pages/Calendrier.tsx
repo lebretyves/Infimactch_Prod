@@ -1,6 +1,6 @@
 import { MobilityLocation } from "@/components/MobilityLocation";
 import { validCoordinates } from "@/components/SearchPlace";
-import { useRef, useState, type FormEvent } from "react";
+import { useEffect, useRef, useState, type FormEvent } from "react";
 import { NavLink, Link } from "react-router";
 import { useRemote } from "@/lib/useRemote";
 import { useAuth } from "@/context/AuthContext";
@@ -45,6 +45,7 @@ function Editor({
   const [p, setP] = useState(initial),
     [anchor, setAnchor] = useState(parisDateInput()),
     [view, setView] = useState("week"),
+    [detailDate, setDetailDate] = useState<string | null>(null),
     [kind, setKind] = useState<AvailabilityState>("available"),
     [start, setStart] = useState(""),
     [end, setEnd] = useState(""),
@@ -60,10 +61,16 @@ function Editor({
     [longitude, setLongitude] = useState(initial.longitude?.toString() || "");
   const form = useRef<HTMLFormElement>(null);
   const locked = useRef(false);
+  const detailPanel = useRef<HTMLElement>(null);
+  useEffect(() => {
+    if (detailDate) {detailPanel.current?.focus({preventScroll: true});detailPanel.current?.scrollIntoView({block: "nearest", behavior: "auto"});}
+  }, [detailDate]);
   const monthStart = view === "month" ? anchor.slice(0, 8) + "01" : anchor;
   const weekday = new Date(monthStart + "T12:00:00Z").getUTCDay();
   const first = addCalendarDays(monthStart, -((weekday + 6) % 7));
-  const days = Array.from({ length: view === "month" ? 42 : 7 }, (_, i) =>
+  const monthLength = new Date(Number(anchor.slice(0, 4)), Number(anchor.slice(5, 7)), 0).getDate();
+  const monthCells = Math.ceil((((weekday + 6) % 7) + monthLength) / 7) * 7;
+  const days = Array.from({ length: view === "month" ? monthCells : 7 }, (_, i) =>
     addCalendarDays(first, i),
   );
   const title =
@@ -71,6 +78,7 @@ function Editor({
       ? calendarDateLabel(anchor, { month: "long", year: "numeric" })
       : `${calendarDateLabel(days[0], { day: "numeric", month: "short" })} — ${calendarDateLabel(days[6], { day: "numeric", month: "long", year: "numeric" })}`;
   function move(direction: number) {
+    setDetailDate(null);
     if (view === "month") {
       const d = new Date(anchor.slice(0, 8) + "01T12:00:00Z");
       d.setUTCMonth(d.getUTCMonth() + direction);
@@ -137,6 +145,7 @@ function Editor({
   async function toggle(date: string, slot: SlotKey) {
     if (locked.current) return;
     const period = slotPeriod(date, slot);
+    if (committed(period)) return;
     const current = slotStatus(period, p.available, p.unavailable);
     const next = nextSlotState(current);
     const definition = AVAILABILITY_SLOTS.find((s) => s.key === slot)!;
@@ -176,6 +185,127 @@ function Editor({
       Date.parse(a.start) < Date.parse(b.end) &&
       Date.parse(a.end) > Date.parse(b.start)
     );
+  }
+  function committed(period: Period) {
+    return history.some(m => m.status === "ACTIVE" && overlaps({start: m.start_at, end: m.end_at}, period));
+  }
+  function stateClass(status: string) {
+    return status === "confirmed" ? s.confirmedSlot : status === "available" ? s.available : status === "unavailable" ? s.unavailable : status === "partial-available" ? s.partialAvailable : status === "partial-unavailable" ? s.partialUnavailable : s.unset;
+  }
+  function renderDay(date: string, compact = false) {
+              const day = parisDayPeriod(date);
+              if (compact) {
+                const statuses = AVAILABILITY_SLOTS.map(slot => {
+                  const period = slotPeriod(date, slot.key);
+                  return {slot, state: committed(period) ? "confirmed" : slotStatus(period, p.available, p.unavailable)};
+                });
+                const label = calendarDateLabel(date, {weekday: "long", day: "numeric", month: "long", year: "numeric"});
+                return <button key={date} type="button" data-day={date}
+                  className={`${s.monthDay} ${date === parisDateInput() ? s.monthToday : ""} ${date.slice(0, 7) !== anchor.slice(0, 7) ? s.monthOutside : ""} ${detailDate === date ? s.monthSelected : ""}`}
+                  aria-label={`${label}. ${statuses.map(({slot,state}) => `${slot.label} : ${state === "confirmed" ? "Mission confirmée" : SLOT_STATUS_LABELS[state as keyof typeof SLOT_STATUS_LABELS]}`).join(". ")}. Modifier les créneaux.`}
+                  aria-pressed={detailDate === date} aria-expanded={detailDate === date} aria-controls="calendar-day-detail"
+                  onClick={() => setDetailDate(date)}>
+                  <span className={s.dayNumber}>{Number(date.slice(-2))}</span>
+                  <span className={s.dayStrokes} aria-hidden="true">{statuses.map(({slot,state}) => <i key={slot.key} data-indicator-slot={slot.key} data-state={state} className={`${s.stroke} ${stateClass(state)}`} />)}</span>
+                </button>;
+              }
+              return (
+                <div
+                  key={date}
+                  className={`${s.day} ${date === parisDateInput() ? s.today : ""} ${view === "month" && date.slice(0, 7) !== anchor.slice(0, 7) ? s.outsideMonth : ""}`}
+                >
+                  <h3>
+                    {calendarDateLabel(date, {
+                      weekday: "short",
+                      day: "numeric",
+                      month: "short",
+                    })}
+                  </h3>
+                  <div className={s.events}>
+                    <div className={s.slots}>
+                      {AVAILABILITY_SLOTS.map((slot) => {
+                        const period = slotPeriod(date, slot.key);
+                        const status = slotStatus(
+                          period,
+                          p.available,
+                          p.unavailable,
+                        );
+                        const partial = status.startsWith("partial-");
+                        const isCommitted = committed(period);
+                        return (
+                          <button
+                            key={slot.key}
+                            type="button"
+                            className={`${s.slot} ${isCommitted ? s.confirmedSlot : stateClass(status)}`}
+                            data-date={date}
+                            data-slot={slot.key}
+                            data-state={status}
+                            aria-label={`${calendarDateLabel(date, { weekday: "long", day: "numeric", month: "long", year: "numeric" })} — ${slot.label} — ${isCommitted ? "Mission confirmée, créneau réservé" : SLOT_STATUS_LABELS[status]}`}
+                            aria-busy={busy === `${date}:${slot.key}`}
+                            disabled={!!busy || isCommitted}
+                            onClick={() => void toggle(date, slot.key)}
+                          >
+                            <strong>
+                              <span className={s.fullLabel}>{slot.label}</span>
+                              <span className={s.shortLabel} aria-hidden="true">
+                                {slot.key === "afternoon" ? (
+                                  <>
+                                    Après-
+                                    <br />
+                                    midi
+                                  </>
+                                ) : (
+                                  slot.label
+                                )}
+                              </span>
+                            </strong>
+                            <span className={s.fullStatus}>
+                              {isCommitted ? "Mission confirmée" : partial ? "Partiel · " : ""}
+                              {!isCommitted && (status === "partial-available"
+                                ? "disponible"
+                                : status === "partial-unavailable"
+                                  ? "indisponible"
+                                  : SLOT_STATUS_LABELS[status])}
+                            </span>
+                            <span className={s.shortStatus} aria-hidden="true">
+                              {partial && (
+                                <>
+                                  Partiel
+                                  <br />
+                                </>
+                              )}
+                              {isCommitted ? "Mission" : status === "available" ||
+                              status === "partial-available"
+                                ? "Dispo."
+                                : status === "unavailable" ||
+                                    status === "partial-unavailable"
+                                  ? "Indispo."
+                                  : "Non défini"}
+                            </span>
+                          </button>
+                        );
+                      })}
+                    </div>
+                    {history
+                      .filter(
+                        (m) =>
+                          m.status === "ACTIVE" &&
+                          overlaps({ start: m.start_at, end: m.end_at }, day),
+                      )
+                      .map((m) => (
+                        <Link
+                          key={m.id}
+                          className={s.assignment}
+                          to={"/missions/m_" + m.mission_id}
+                        >
+                          <strong>Mission confirmée</strong>
+                          <span>{m.title}</span>
+                        </Link>
+                      ))}
+                  </div>
+                </div>
+              );
+
   }
   return (
     <div className={u.page}>
@@ -249,7 +379,7 @@ function Editor({
             <SelectField
               label="Vue du calendrier"
               value={view}
-              onChange={(e) => setView(e.target.value)}
+              onChange={(e) => {setView(e.target.value);setDetailDate(null);}}
             >
               <option value="week">Semaine</option>
               <option value="month">Mois</option>
@@ -261,12 +391,12 @@ function Editor({
             required
             value={anchor}
             onChange={(e) => {
-              if (e.target.value) setAnchor(e.target.value);
+              if (e.target.value) {setAnchor(e.target.value);setDetailDate(null);}
             }}
           />
           <div className={s.instructions}>
             <p>
-              <strong>Un clic suffit.</strong> Non renseigné → Disponible →
+              <strong>{view === "month" ? "Choisissez un jour, puis un créneau." : "Un clic suffit."}</strong> Non renseigné → Disponible →
               Indisponible → Non renseigné.
             </p>
             <span>
@@ -284,105 +414,14 @@ function Editor({
             className={`${s.calendar} ${view === "month" ? s.month : ""}`}
             aria-busy={!!busy}
           >
-            {days.map((date) => {
-              const day = parisDayPeriod(date);
-              return (
-                <div
-                  key={date}
-                  className={`${s.day} ${date === parisDateInput() ? s.today : ""} ${view === "month" && date.slice(0, 7) !== anchor.slice(0, 7) ? s.outsideMonth : ""}`}
-                >
-                  <h3>
-                    {calendarDateLabel(date, {
-                      weekday: "short",
-                      day: "numeric",
-                      month: "short",
-                    })}
-                  </h3>
-                  <div className={s.events}>
-                    <div className={s.slots}>
-                      {AVAILABILITY_SLOTS.map((slot) => {
-                        const period = slotPeriod(date, slot.key);
-                        const status = slotStatus(
-                          period,
-                          p.available,
-                          p.unavailable,
-                        );
-                        const partial = status.startsWith("partial-");
-                        return (
-                          <button
-                            key={slot.key}
-                            type="button"
-                            className={`${s.slot} ${status === "available" ? s.available : status === "unavailable" ? s.unavailable : status === "partial-available" ? s.partialAvailable : status === "partial-unavailable" ? s.partialUnavailable : s.unset}`}
-                            data-date={date}
-                            data-slot={slot.key}
-                            data-state={status}
-                            aria-label={`${calendarDateLabel(date, { weekday: "long", day: "numeric", month: "long", year: "numeric" })} — ${slot.label} — ${SLOT_STATUS_LABELS[status]}`}
-                            aria-busy={busy === `${date}:${slot.key}`}
-                            disabled={!!busy}
-                            onClick={() => void toggle(date, slot.key)}
-                          >
-                            <strong>
-                              <span className={s.fullLabel}>{slot.label}</span>
-                              <span className={s.shortLabel} aria-hidden="true">
-                                {slot.key === "afternoon" ? (
-                                  <>
-                                    Après-
-                                    <br />
-                                    midi
-                                  </>
-                                ) : (
-                                  slot.label
-                                )}
-                              </span>
-                            </strong>
-                            <span className={s.fullStatus}>
-                              {partial ? "Partiel · " : ""}
-                              {status === "partial-available"
-                                ? "disponible"
-                                : status === "partial-unavailable"
-                                  ? "indisponible"
-                                  : SLOT_STATUS_LABELS[status]}
-                            </span>
-                            <span className={s.shortStatus} aria-hidden="true">
-                              {partial && (
-                                <>
-                                  Partiel
-                                  <br />
-                                </>
-                              )}
-                              {status === "available" ||
-                              status === "partial-available"
-                                ? "Dispo."
-                                : status === "unavailable" ||
-                                    status === "partial-unavailable"
-                                  ? "Indispo."
-                                  : "Non défini"}
-                            </span>
-                          </button>
-                        );
-                      })}
-                    </div>
-                    {history
-                      .filter(
-                        (m) =>
-                          m.status === "ACTIVE" &&
-                          overlaps({ start: m.start_at, end: m.end_at }, day),
-                      )
-                      .map((m) => (
-                        <Link
-                          key={m.id}
-                          className={s.assignment}
-                          to={"/missions/m_" + m.mission_id}
-                        >
-                          <strong>Mission confirmée</strong>
-                          <span>{m.title}</span>
-                        </Link>
-                      ))}
-                  </div>
-                </div>
-              );
-            })}
+            {view === "month" && ["Lun", "Mar", "Mer", "Jeu", "Ven", "Sam", "Dim"].map(day => <span key={day} className={s.weekday} aria-hidden="true">{day}</span>)}
+            {days.map(date => renderDay(date, view === "month"))}
           </div>
+          {view === "month" && <p className={s.monthHint}>De gauche à droite : matin · après-midi · nuit. Sélectionnez un jour pour modifier ses créneaux.</p>}
+          {view === "month" && detailDate && <section ref={detailPanel} tabIndex={-1} id="calendar-day-detail" className={s.dayDetail} aria-label="Créneaux du jour sélectionné">
+            <div className={s.detailHeading}><strong>Modifier mes créneaux</strong><Button variant="ghost" size="sm" onClick={() => {const date=detailDate;setDetailDate(null);requestAnimationFrame(() => document.querySelector<HTMLButtonElement>(`[data-day="${date}"]`)?.focus());}}>Fermer</Button></div>
+            {renderDay(detailDate)}
+          </section>}
           <div className={s.legend}>
             <span>
               <i className={s.blue} />

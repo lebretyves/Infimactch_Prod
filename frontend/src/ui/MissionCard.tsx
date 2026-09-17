@@ -106,7 +106,24 @@ export function MissionCard({
           }[mission.population] || "Population à préciser"}
         </span>
       )}
-      {mission.matching_score != null && (
+      {(mission.publicationDate ||
+        mission.distanceKm != null ||
+        mission.availabilityCompatible === true) && (
+        <p className={s.place}>
+          {[
+            mission.publicationDate &&
+              Number.isFinite(Date.parse(mission.publicationDate)) &&
+              `Publiée le ${new Intl.DateTimeFormat("fr-FR", { day: "numeric", month: "short" }).format(new Date(mission.publicationDate))}`,
+            mission.distanceKm != null &&
+              `≈ ${Math.round(mission.distanceKm)} km`,
+            mission.availabilityCompatible === true &&
+              "Compatible avec vos disponibilités",
+          ]
+            .filter(Boolean)
+            .join(" · ")}
+        </p>
+      )}
+      {!external && mission.matching_score != null && (
         <span className={s.population}>
           Correspondance : {Math.round(mission.matching_score)}/100
         </span>

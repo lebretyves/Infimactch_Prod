@@ -1,6 +1,6 @@
-import { SearchPlace, validCoordinates } from '@/components/SearchPlace';
-import { OfferOriginChoices, readOfferOrigin } from '@/components/OfferOrigin';
-﻿import EntrepriseMissions from "./EntrepriseMissions";
+import { SearchPlace, validCoordinates } from "@/components/SearchPlace";
+import { OfferOriginChoices, readOfferOrigin } from "@/components/OfferOrigin";
+import EntrepriseMissions from "./EntrepriseMissions";
 import { useEffect, useRef, useState, type FormEvent } from "react";
 import { Link, useSearchParams } from "react-router";
 import { useAuth } from "@/context/AuthContext";
@@ -9,8 +9,6 @@ import {
   list,
   favorites,
   allFacilities,
-  matches,
-  detail,
   type ListingPage,
   type SearchFilters,
 } from "@/services/market";
@@ -52,6 +50,8 @@ const filterKeys = [
   "lon",
   "start",
   "end",
+  "published",
+  "available",
 ] as const;
 type Draft = Record<(typeof filterKeys)[number], string>;
 const fromParams = (p: URLSearchParams) =>
@@ -74,9 +74,19 @@ function NurseMissions() {
     Math.min(501, Math.floor(Number(params.get("page")) || 1)),
   );
   const offset = (currentPage - 1) * PAGE_SIZE;
-  const view =
-    params.get("vue") === "recommandees" && params.get("origine") !== "externes" ? "recommandees" : "catalogue";
-  const origin = view === "recommandees" ? "partenaires" : readOfferOrigin(params.get("origine"));
+  const legacyRecommended = params.get("vue") === "recommandees";
+  const sort = (
+    ["recent", "relevance", "distance", "start"].includes(
+      params.get("sort") || "",
+    )
+      ? params.get("sort")
+      : legacyRecommended
+        ? "relevance"
+        : "recent"
+  ) as NonNullable<SearchFilters["sort"]>;
+  const origin = readOfferOrigin(
+    params.get("origine") || (legacyRecommended ? "partenaires" : null),
+  );
   const values = fromParams(params);
   const [draft, setDraft] = useState<Draft>(values),
     [formError, setFormError] = useState("");
@@ -93,8 +103,13 @@ function NurseMissions() {
       ),
     "search-reference",
   );
-  const homeCoordinates = validCoordinates(p.data?.latitude,p.data?.longitude);
-  const home = homeCoordinates ? {...homeCoordinates,label:p.data?.details?.mobilityCity || "Ma zone de mobilité"} : null;
+  const homeCoordinates = validCoordinates(p.data?.latitude, p.data?.longitude);
+  const home = homeCoordinates
+    ? {
+        ...homeCoordinates,
+        label: p.data?.details?.mobilityCity || "Ma zone de mobilité",
+      }
+    : null;
   const qualifications = p.data?.qualifications || [];
   const selectedQualification = qualifications.includes(values.qualification)
     ? values.qualification
@@ -104,22 +119,21 @@ function NurseMissions() {
     ? [selectedQualification]
     : qualifications;
   const filtered = filterKeys.some((k) => !!values[k]);
-  const requestKey = JSON.stringify([user?.id, p.data, view, origin, values, offset]);
+  const requestKey = JSON.stringify([
+    user?.id,
+    p.data,
+    sort,
+    origin,
+    values,
+    offset,
+  ]);
   const result = useRemote<(ListingPage & { requestKey: string }) | null>(
     async (signal) => {
       if (!p.data) return null;
-      if (view === "recommandees") {
-        const page = await matches(offset, signal);
-        const items = await Promise.all(
-          page.items.map(async (match) => ({
-            ...(await detail("m_" + match.missionId, signal)),
-            matching_score: match.score,
-            match_explanation_id: match.explanationId,
-          })),
-        );
-        return { ...page, items, requestKey };
-      }
-      const filters: SearchFilters = {};
+      const filters: SearchFilters = { sort };
+      if ([1, 7, 30].includes(Number(values.published)))
+        filters.publishedWithinDays = Number(values.published) as 1 | 7 | 30;
+      if (values.available === "1") filters.availableOnly = true;
       if (selected.includes("IDE") && values.service)
         filters.ideServices = [values.service];
       for (const q of ["IADE", "IBODE"])
@@ -139,12 +153,36 @@ function NurseMissions() {
         end.setDate(end.getDate() + 1);
         filters.end = end.toISOString();
       }
-      if (values.radius) {
-        const center = values.place || values.lat || values.lon ? validCoordinates(values.lat,values.lon) : homeCoordinates;
-        if (!center || ![5,10,25,50,100,200].includes(Number(values.radius))) throw new Error("Choisissez un lieu valide et une distance avant de rechercher.");
-        filters.radiusKm=Number(values.radius);filters.latitude=center.latitude;filters.longitude=center.longitude;
+      const requestedCenter = validCoordinates(values.lat, values.lon);
+      if (requestedCenter) {
+        filters.latitude = requestedCenter.latitude;
+        filters.longitude = requestedCenter.longitude;
       }
-      const response = await list(selected, offset, signal, values.q, filters, origin);
+      if (values.radius || sort === "distance") {
+        const center =
+          values.place || values.lat || values.lon
+            ? validCoordinates(values.lat, values.lon)
+            : homeCoordinates;
+        if (
+          !center ||
+          (values.radius &&
+            ![5, 10, 25, 50, 100, 200].includes(Number(values.radius)))
+        )
+          throw new Error(
+            "Choisissez un lieu valide pour rechercher par distance.",
+          );
+        if (values.radius) filters.radiusKm = Number(values.radius);
+        filters.latitude = center.latitude;
+        filters.longitude = center.longitude;
+      }
+      const response = await list(
+        selected,
+        offset,
+        signal,
+        values.q,
+        filters,
+        origin,
+      );
       if (!Number.isSafeInteger(response.total) || response.total < 0)
         throw new Error("Nombre de résultats indisponible.");
       return { ...response, requestKey };
@@ -198,15 +236,35 @@ function NurseMissions() {
       setFormError("La fin doit être après le début de la période.");
       return;
     }
-    if (draft.radius) {
-      const center = draft.place || draft.lat || draft.lon ? validCoordinates(draft.lat,draft.lon) : homeCoordinates;
-      if (!center || ![5,10,25,50,100,200].includes(Number(draft.radius))) {setFormError("Choisissez explicitement un lieu parmi les propositions ou votre zone de mobilité avant de rechercher par rayon.");return;}
+    if (draft.radius || sort === "distance") {
+      const center =
+        draft.place || draft.lat || draft.lon
+          ? validCoordinates(draft.lat, draft.lon)
+          : homeCoordinates;
+      if (
+        !center ||
+        (draft.radius &&
+          ![5, 10, 25, 50, 100, 200].includes(Number(draft.radius)))
+      ) {
+        setFormError(
+          "Choisissez explicitement un lieu parmi les propositions ou votre zone de mobilité avant de rechercher par distance.",
+        );
+        return;
+      }
     }
-    update({ ...draft, q: draft.q.trim(), page: 1 });
+    if (draft.place.trim() && !validCoordinates(draft.lat, draft.lon)) {
+      setFormError("Choisissez un lieu proposé pour préciser votre recherche.");
+      return;
+    }
+    update({ ...draft, q: draft.q.trim(), sort, vue: "", page: 1 });
   }
   const reset = () => {
     setFormError("");
-    update({ ...Object.fromEntries(filterKeys.map((k) => [k, ""])), page: 1 });
+    update({
+      ...Object.fromEntries(filterKeys.map((k) => [k, ""])),
+      ...(sort === "distance" && !homeCoordinates ? { sort: "recent" } : {}),
+      page: 1,
+    });
   };
   const busy = loading || outOfRange;
   const set = (k: keyof Draft, v: string) =>
@@ -218,8 +276,8 @@ function NurseMissions() {
     (q) => q === "IADE" || q === "IBODE",
   );
   return (
-    <div className={u.page}>
-      <header className={u.header}>
+    <div className={`${u.page} ${s.page}`}>
+      <header className={`${u.header} ${s.header}`}>
         <div>
           <p className={u.eyebrow}>Recherche de missions</p>
           <h1>Des missions qui vous correspondent</h1>
@@ -227,7 +285,7 @@ function NurseMissions() {
             Votre métier, vos disponibilités et votre prochaine mission.
           </p>
         </div>
-        <ButtonLink to="/profil" variant="outline">
+        <ButtonLink to="/profil" variant="outline" className={s.profileLink}>
           <Icon name="user" size={17} />
           Mon profil {qualifications.join(" · ")}
         </ButtonLink>
@@ -249,193 +307,365 @@ function NurseMissions() {
           <Link to="/profil">Compléter mon profil</Link>
         </div>
       )}
-      <OfferOriginChoices value={origin} onChange={origine => update({ origine, vue: "", page: 1 })} />
-      <div
-        className={s.mode}
-        role="group"
-        aria-label="Catalogue ou recommandations"
+      <form
+        className={`${u.card} ${s.searchPanel}`}
+        onSubmit={search}
+        role="search"
+        aria-label="Rechercher une offre"
       >
-        <button
-          type="button"
-          aria-pressed={view === "catalogue"}
-          onClick={() => update({ vue: "", page: 1 })}
-        >
-          Toutes les offres
-        </button>
-        <button
-          type="button"
-          aria-pressed={view === "recommandees"}
-          onClick={() => update({ vue: "recommandees", origine: "partenaires", page: 1 })}
-        >
-          Recommandées pour moi
-        </button>
-      </div>
-      {view === "catalogue" ? (
-        <form
-          className={u.card}
-          onSubmit={search}
-          role="search"
-          aria-label="Rechercher une offre"
-        >
-          <div className={s.topFilters}>
-            <TextField
-              label="Intitulé, ville ou service"
-              type="search"
-              placeholder="Ex. anesthésie, Paris…"
-              maxLength={150}
-              value={draft.q}
-              onChange={(e) => set("q", e.target.value)}
-            />
-            {!!qualifications.length && (
+        <div className={s.topFilters}>
+          <TextField
+            label="Quel poste ?"
+            type="search"
+            placeholder="Intitulé, service, mot-clé…"
+            maxLength={150}
+            value={draft.q}
+            onChange={(e) => set("q", e.target.value)}
+          />
+          <SearchPlace
+            value={draft.place}
+            selected={!!validCoordinates(draft.lat, draft.lon)}
+            home={home}
+            onChange={(place, location) => {
+              setFormError("");
+              setDraft((d) => ({
+                ...d,
+                place,
+                radius: location && !d.radius ? "25" : d.radius,
+                lat: location ? String(location.latitude) : "",
+                lon: location ? String(location.longitude) : "",
+              }));
+            }}
+          />
+          <SelectField
+            label="Rayon"
+            value={draft.radius}
+            onChange={(e) => set("radius", e.target.value)}
+          >
+            <option value="">Toute la France</option>
+            {[5, 10, 25, 50, 100, 200].map((v) => (
+              <option key={v} value={v}>
+                {v} km
+              </option>
+            ))}
+          </SelectField>
+          <Button type="submit" disabled={busy}>
+            <Icon name="search" size={18} />
+            Rechercher
+          </Button>
+        </div>
+        <div className={s.refinements}>
+          <details className={s.filterGroup}>
+            <summary>
+              Métier <span>{draft.qualification || "Mes qualifications"}</span>
+            </summary>
+            <div className={s.filterContent}>
               <SelectField
-                label="Missions recherchées"
+                label="Qualification"
                 value={draft.qualification}
-                onChange={(e) => set("qualification", e.target.value)}
+                onChange={(e) =>
+                  setDraft((d) => ({
+                    ...d,
+                    qualification: e.target.value,
+                    service: "",
+                    population: "",
+                    block: "",
+                    specialty: "",
+                  }))
+                }
               >
                 <option value="">Toutes mes qualifications</option>
                 {qualifications.map((q) => (
-                  <option key={q} value={q}>
-                    {q}
-                  </option>
+                  <option key={q}>{q}</option>
                 ))}
               </SelectField>
-            )}
-          <SearchPlace value={draft.place} selected={!!validCoordinates(draft.lat,draft.lon)} home={home} onChange={(place,location)=>{setFormError("");setDraft(d=>({...d,place,radius:location && !d.radius ? "25" : d.radius,lat:location?String(location.latitude):"",lon:location?String(location.longitude):""}));}} />
-            <SelectField label="Rayon autour du lieu de recherche" value={draft.radius} onChange={e=>set("radius",e.target.value)}><option value="">Toutes les distances</option>{[5,10,25,50,100,200].map(value=><option key={value} value={value}>{value} km</option>)}</SelectField>
-          </div>
-          <p className={s.help}>Distance géographique directe, pas un temps de trajet. Avec un rayon, les offres externes sans coordonnées connues ne sont pas incluses.</p>
-          {!publicOffers && (
-            <>
-              <div className={s.advanced}>
-                {draftQualifications.includes("IDE") && (
-                  <SelectField
-                    label="Service IDE"
-                    value={draft.service}
-                    onChange={(e) => set("service", e.target.value)}
-                  >
-                    <option value="">Tous les services</option>
-                    {(reference.data?.ideServices || []).map((v) => (
-                      <option key={v} value={v}>
-                        {labelCode(v)}
-                      </option>
-                    ))}
-                  </SelectField>
-                )}
-                {specialist && (
-                  <>
-                    <SelectField
-                      label="Population IADE / IBODE"
-                      value={draft.population}
-                      onChange={(e) => set("population", e.target.value)}
-                    >
-                      <option value="">Toutes les populations</option>
-                      <option value="ADULT">Adultes</option>
-                      <option value="PEDIATRIC">Pédiatrie</option>
-                      <option value="MIXED">Adultes et pédiatrie</option>
-                    </SelectField>
-                    <SelectField
-                      label="Bloc IADE / IBODE"
-                      value={draft.block}
-                      onChange={(e) => set("block", e.target.value)}
-                    >
-                      <option value="">Tous les blocs</option>
-                      <option value="GENERAL">Polyvalent</option>
-                      <option value="SPECIALIZED">Spécialisé</option>
-                    </SelectField>
-                    {draft.block === "SPECIALIZED" && (
-                      <SelectField
-                        label="Spécialité du bloc"
-                        value={draft.specialty}
-                        onChange={(e) => set("specialty", e.target.value)}
-                      >
-                        <option value="">Toutes les spécialités</option>
-                        {(reference.data?.blockSpecialties || []).map((v) => (
-                          <option key={v} value={v}>
-                            {labelCode(v)}
-                          </option>
-                        ))}
-                      </SelectField>
-                    )}
-                  </>
-                )}
-              </div>
-              <div className={s.bottomFilters}>
-                <TextField
-                  label="Du"
-                  type="date"
-                  value={draft.start}
-                  onChange={(e) => set("start", e.target.value)}
-                />
-                <TextField
-                  label="Au inclus"
-                  type="date"
-                  value={draft.end}
-                  min={draft.start || undefined}
-                  onChange={(e) => set("end", e.target.value)}
-                />
+              {draftQualifications.includes("IDE") && (
                 <SelectField
-                  label="Horaires"
-                  value={draft.shift}
-                  onChange={(e) => set("shift", e.target.value)}
+                  label="Service"
+                  value={draft.service}
+                  onChange={(e) => set("service", e.target.value)}
                 >
-                  <option value="">Tous les horaires</option>
-                  <option value="DAY">Jour</option>
-                  <option value="NIGHT">Nuit</option>
-                  <option value="MIXED">Alternance jour et nuit</option>
-                </SelectField>
-                <SelectField
-                  label="Établissement"
-                  value={draft.establishment}
-                  onChange={(e) => set("establishment", e.target.value)}
-                >
-                  <option value="">Tous les établissements</option>
-                  {facilities.data?.map((f) => (
-                    <option key={f.id} value={f.id}>
-                      {f.name}
+                  <option value="">Tous les services</option>
+                  {(reference.data?.ideServices || []).map((v) => (
+                    <option key={v} value={v}>
+                      {labelCode(v)}
                     </option>
                   ))}
                 </SelectField>
-              </div>
+              )}
+              {specialist && (
+                <>
+                  <SelectField
+                    label="Population"
+                    value={draft.population}
+                    onChange={(e) => set("population", e.target.value)}
+                  >
+                    <option value="">Toutes les populations</option>
+                    <option value="ADULT">Adultes</option>
+                    <option value="PEDIATRIC">Pédiatrie</option>
+                    <option value="MIXED">Adultes et pédiatrie</option>
+                  </SelectField>
+                  <SelectField
+                    label="Bloc"
+                    value={draft.block}
+                    onChange={(e) =>
+                      setDraft((d) => ({
+                        ...d,
+                        block: e.target.value,
+                        specialty: "",
+                      }))
+                    }
+                  >
+                    <option value="">Tous les blocs</option>
+                    <option value="GENERAL">Polyvalent</option>
+                    <option value="SPECIALIZED">Spécialisé</option>
+                  </SelectField>
+                  {draft.block === "SPECIALIZED" && (
+                    <SelectField
+                      label="Spécialité du bloc"
+                      value={draft.specialty}
+                      onChange={(e) => set("specialty", e.target.value)}
+                    >
+                      <option value="">Toutes les spécialités</option>
+                      {(reference.data?.blockSpecialties || []).map((v) => (
+                        <option key={v} value={v}>
+                          {labelCode(v)}
+                        </option>
+                      ))}
+                    </SelectField>
+                  )}
+                </>
+              )}
+              {publicOffers && (
+                <p className={s.help}>
+                  Ajoutez votre qualification dans{" "}
+                  <Link to="/profil">votre profil</Link> pour affiner par
+                  métier.
+                </p>
+              )}
+              {reference.error && (
+                <p className={s.help}>
+                  Listes indisponibles.{" "}
+                  <button type="button" onClick={reference.reload}>
+                    Réessayer
+                  </button>
+                </p>
+              )}
+            </div>
+          </details>
+          <details className={s.filterGroup}>
+            <summary>
+              Disponibilités{" "}
+              <span>
+                {draft.available
+                  ? "Mon calendrier"
+                  : draft.start
+                    ? "Période choisie"
+                    : "Dates et horaires"}
+              </span>
+            </summary>
+            <div className={s.filterContent}>
+              <label className={s.check}>
+                <input
+                  type="checkbox"
+                  checked={draft.available === "1"}
+                  onChange={(e) =>
+                    set("available", e.target.checked ? "1" : "")
+                  }
+                />
+                Compatibles avec mes disponibilités
+              </label>
+              <p className={s.groupHint}>
+                {p.data?.available?.length ? (
+                  "Seules les missions aux dates connues et couvertes par votre calendrier sont retenues."
+                ) : (
+                  <>
+                    Aucune disponibilité renseignée.{" "}
+                    <Link to="/calendrier">Compléter mon calendrier</Link> pour
+                    utiliser ce filtre.
+                  </>
+                )}
+              </p>
+              <TextField
+                label="Du"
+                type="date"
+                value={draft.start}
+                onChange={(e) => set("start", e.target.value)}
+              />
+              <TextField
+                label="Au inclus"
+                type="date"
+                min={draft.start || undefined}
+                value={draft.end}
+                onChange={(e) => set("end", e.target.value)}
+              />
+              <SelectField
+                label="Horaires"
+                value={draft.shift}
+                onChange={(e) => set("shift", e.target.value)}
+              >
+                <option value="">Tous les horaires</option>
+                <option value="DAY">Jour</option>
+                <option value="NIGHT">Nuit</option>
+                <option value="MIXED">Alternance jour et nuit</option>
+              </SelectField>
+            </div>
+          </details>
+          <details className={s.filterGroup}>
+            <summary>
+              Autres critères <span>Publication, établissement</span>
+            </summary>
+            <div className={s.filterContent}>
+              <SelectField
+                label="Date de publication"
+                value={draft.published}
+                onChange={(e) => set("published", e.target.value)}
+              >
+                <option value="">Toutes les dates</option>
+                <option value="1">Dernières 24 heures</option>
+                <option value="7">7 derniers jours</option>
+                <option value="30">30 derniers jours</option>
+              </SelectField>
+              <SelectField
+                label="Établissement"
+                value={draft.establishment}
+                onChange={(e) => set("establishment", e.target.value)}
+              >
+                <option value="">Tous les établissements</option>
+                {facilities.data?.map((f) => (
+                  <option key={f.id} value={f.id}>
+                    {f.name}
+                  </option>
+                ))}
+              </SelectField>
               {facilities.error && (
                 <p className={s.help}>
-                  La liste des établissements est indisponible.{" "}
+                  Liste indisponible.{" "}
                   <button type="button" onClick={facilities.reload}>
                     Réessayer
                   </button>
                 </p>
               )}
-            </>
-          )}
-          {reference.error && !publicOffers && (
-            <p className={s.help} role="status">
-              Les listes de services et de spécialités sont indisponibles.
-              <button type="button" onClick={reference.reload}>
-                Réessayer
-              </button>
-            </p>
-          )}
-          {formError && (
-            <p className={u.error} role="alert">
-              {formError}
-            </p>
-          )}
-          <div className={s.formActions}>
-            <p className={s.help}>Les filtres portent sur tout le catalogue.</p>
-            <Button variant="ghost" type="button" onClick={reset}>
-              Réinitialiser
-            </Button>
-            <Button type="submit" disabled={busy}>
-              <Icon name="search" size={18} />
-              Rechercher
-            </Button>
-          </div>
-        </form>
-      ) : (
-        <div className={u.notice}>
-          Les recommandations concernent les missions internes compatibles avec
-          votre profil, vos disponibilités et votre mobilité. Le lieu de recherche libre ne modifie pas ce matching strict.{" "}
-          <Link to="/profil">Mettre à jour mon profil</Link>
+            </div>
+          </details>
         </div>
+        {draft.radius && (
+          <p className={s.help}>
+            Distance à vol d’oiseau. Les offres sans localisation connue sont
+            exclues du rayon.
+          </p>
+        )}
+        {formError && (
+          <p className={u.error} role="alert">
+            {formError}
+          </p>
+        )}
+        {filtered && (
+          <div className={s.activeFilters} aria-label="Filtres appliqués">
+            {filterKeys
+              .filter((k) => values[k] && !["lat", "lon", "end"].includes(k))
+              .map((k) => {
+                const labels: Partial<Record<keyof Draft, string>> = {
+                  q: values.q,
+                  qualification: values.qualification,
+                  service: labelCode(values.service),
+                  population: labelCode(values.population),
+                  block: labelCode(values.block),
+                  specialty: labelCode(values.specialty),
+                  shift: labelCode(values.shift),
+                  establishment:
+                    facilities.data?.find((f) => f.id === values.establishment)
+                      ?.name || "Établissement",
+                  radius: values.radius + " km",
+                  place: values.place,
+                  start: `Du ${values.start} au ${values.end}`,
+                  available: "Mes disponibilités",
+                  published:
+                    values.published === "1"
+                      ? "Dernières 24 h"
+                      : `${values.published} derniers jours`,
+                };
+                return (
+                  <button
+                    type="button"
+                    key={k}
+                    onClick={() =>
+                      update({
+                        [k]: "",
+                        ...(k === "place"
+                          ? {
+                              lat: "",
+                              lon: "",
+                              radius: "",
+                              ...(sort === "distance" && !homeCoordinates
+                                ? { sort: "recent" }
+                                : {}),
+                            }
+                          : {}),
+                        ...(k === "start" ? { end: "" } : {}),
+                        ...(k === "block" ? { specialty: "" } : {}),
+                        ...(k === "qualification"
+                          ? {
+                              service: "",
+                              population: "",
+                              block: "",
+                              specialty: "",
+                            }
+                          : {}),
+                        page: 1,
+                      })
+                    }
+                    aria-label={`Retirer le filtre ${labels[k]}`}
+                  >
+                    {labels[k]} <span aria-hidden="true">×</span>
+                  </button>
+                );
+              })}
+            <button type="button" className={s.reset} onClick={reset}>
+              Réinitialiser
+            </button>
+          </div>
+        )}
+      </form>
+      <div className={s.catalogueControls}>
+        <OfferOriginChoices
+          value={origin}
+          onChange={(origine) => update({ origine, vue: "", page: 1 })}
+        />
+        <SelectField
+          label="Trier par"
+          value={sort}
+          onChange={(e) => {
+            setFormError("");
+            update({ sort: e.target.value, vue: "", page: 1 });
+          }}
+        >
+          <option value="recent">Les plus récentes</option>
+          <option value="relevance">Correspondance avec mon profil</option>
+          <option
+            value="distance"
+            disabled={
+              !validCoordinates(values.lat, values.lon) && !homeCoordinates
+            }
+          >
+            Les plus proches
+          </option>
+          <option value="start">Début de mission</option>
+        </SelectField>
+      </div>
+      {sort === "relevance" && (
+        <p className={s.help}>
+          Correspondance calculée pour les missions partenaires. Les offres
+          externes restent à vérifier avec l’annonceur.
+        </p>
+      )}
+      {(values.available === "1" || values.published) && (
+        <p className={s.help}>
+          {values.available === "1" &&
+            "Les offres sans dates précises ne peuvent pas être vérifiées avec votre calendrier. "}
+          {values.published &&
+            "Les offres sans date de publication connue sont exclues de cette période."}
+        </p>
       )}
       {busy ? (
         <div className={u.empty} role="status">
@@ -461,14 +691,7 @@ function NurseMissions() {
             <div role="status" aria-live="polite">
               <h2 className={s.resultTitle}>
                 {number(total)}{" "}
-                {view === "recommandees"
-                  ? "mission" +
-                    (total === 1 ? "" : "s") +
-                    " recommandée" +
-                    (total === 1 ? "" : "s")
-                  : total === 1
-                    ? "offre disponible"
-                    : "offres disponibles"}
+                {total === 1 ? "offre disponible" : "offres disponibles"}
               </h2>
               <p className={s.help}>
                 {total > 0
@@ -476,20 +699,7 @@ function NurseMissions() {
                   : "Aucun résultat pour le moment."}
               </p>
             </div>
-            <p className={s.help}>
-              {view === "recommandees"
-                ? "Par correspondance avec votre profil"
-                : origin === "toutes" ? "Partenaires en premier, puis offres externes" : "Les plus récentes d’abord"}
-            </p>
           </div>
-          {view === "catalogue" && (
-            <p className={s.help}>
-              {publicOffers
-                ? "Offres consultables sans filtre de qualification. Votre éligibilité reste à vérifier avant une candidature partenaire."
-                : "Les annonces dont les critères ne sont pas renseignés sont exclues lorsqu’un filtre avancé est utilisé."}{" "}
-              Les offres externes se candidatent sur le site source.
-            </p>
-          )}
           <div className={u.grid}>
             {items.map((m) => (
               <MissionCard
@@ -507,28 +717,14 @@ function NurseMissions() {
           {!total && (
             <section className={u.empty}>
               <Icon name="search" size={32} />
-              <h2>
-                {view === "recommandees"
-                  ? "Aucune recommandation pour le moment"
-                  : "Aucune offre pour ces critères"}
-              </h2>
+              <h2>Aucune offre pour ces critères</h2>
               <p>
-                {view === "recommandees"
-                  ? "Complétez votre dossier, vos compétences et vos disponibilités pour trouver des missions compatibles."
+                {values.available === "1" && !p.data?.available?.length
+                  ? "Renseignez vos disponibilités pour retrouver les missions compatibles."
                   : "Élargissez vos critères ou consultez les offres plus tard."}
               </p>
               <div className={s.emptyActions}>
-                {view === "recommandees" ? (
-                  <>
-                    <ButtonLink to="/profil">Compléter mon profil</ButtonLink>
-                    <Button
-                      variant="outline"
-                      onClick={() => update({ vue: "", page: 1 })}
-                    >
-                      Toutes les offres
-                    </Button>
-                  </>
-                ) : filtered ? (
+                {filtered ? (
                   <Button variant="outline" onClick={reset}>
                     Effacer les filtres
                   </Button>
