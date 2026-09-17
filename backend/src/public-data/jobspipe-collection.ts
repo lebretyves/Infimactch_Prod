@@ -3,7 +3,7 @@ import { Database } from "../database/database";
 const PAGE_SIZE = 25;
 export type JobsPipePage = { data: any[]; metadata: { next_cursor: string | null } };
 export type JobsPipeStatus = 'CONTINUE' | 'COMPLETE' | 'INCOMPLETE' | 'RETRY_REQUIRED' | 'QUOTA_EXHAUSTED' | 'AUTH_REQUIRED' | 'BUSY' | 'COOLDOWN';
-export type JobsPipeState = { version: 1; cycleId: string; cursor: string | null; seenIds: string[]; seenCursors: string[]; startedAt: string; completedAt?: string; retryAt?: string; terminal?: JobsPipeStatus; reason?: string };
+export type JobsPipeState = { version: 1; cycleId: string; cursor: string | null; seenIds: string[]; seenCursors: string[]; startedAt: string; completedAt?: string; retryAt?: string; terminal?: JobsPipeStatus; reason?: string; filtersVersion?: 2; queryIndex?: number; querySeenIds?: string[]; lastFullAt?: string; discoveredAfter?: string };
 type Receipt = { status: 'READY' | 'CACHED' | 'BUSY' | 'EXHAUSTED' | 'EXPIRED'; page?: JobsPipePage };
 export interface CreditStore {
   reserve(key: string, now: Date): Promise<Receipt>;
@@ -67,15 +67,27 @@ async function requestPage(db: Database, identity: string, filters: Record<strin
   await store.finish(id, body.data.length, body, res.status);
   return { page: body };
 }
-const filtersBase = { job_title_or: ['infirmier','infirmiere','infirmi\u00e8re','IADE','IBODE'], job_country_code_or: ['FR'], description_or: ['int\u00e9rim','interim'], status: 'active' };
-function initialState(now: Date): JobsPipeState {
-  return { version: 1, cycleId: now.toISOString().slice(0,10) + ':' + hash(JSON.stringify(filtersBase)).slice(0,16), cursor: null, seenIds: [], seenCursors: [], startedAt: now.toISOString() };
+const filtersBase = { job_title_or: ['infirmier','infirmiere','infirmi\u00e8re','IADE','IBODE'], job_country_code_or: ['FR'], status: 'active' };
+const queryFilters = [
+ {description_or: ['int\u00e9rim','interim','int\u00e9rimaire','interimaire']},
+ {employment_type_or: ['temporary','contract']},
+];
+function initialState(now: Date, previous?: JobsPipeState): JobsPipeState {
+  // Full reconciliation monthly; new discoveries daily, with a ten-minute overlap.
+  // A rejected/failed cycle never advances this watermark.
+  const delta = previous?.completedAt && previous.lastFullAt?.slice(0,7) === now.toISOString().slice(0,7);
+  const discoveredAfter = delta ? new Date(Date.parse(previous.startedAt)-600000).toISOString().replace('T',' ').slice(0,19) : undefined;
+  return { version: 1, filtersVersion: 2, queryIndex: 0, querySeenIds: [],
+    cycleId: now.toISOString().slice(0,10) + ':' + hash(JSON.stringify([filtersBase,queryFilters,discoveredAfter])).slice(0,16),
+    cursor: null, seenIds: [], seenCursors: [], startedAt: now.toISOString(),
+    lastFullAt: delta ? previous!.lastFullAt : now.toISOString(), ...(discoveredAfter?{discoveredAfter}:{}),
+  };
 }
 export async function advanceJobsPipeCollection(db: Database, previous: JobsPipeState | null, options: Options = {}) {
   const now = options.now || new Date();
-  let state = previous ? structuredClone(previous) : initialState(now);
-  const result = (status: JobsPipeStatus, rows: any[] = []) => ({ state, rows, status, coverage: { provider: 'JOBSPIPE', complete: status === 'COMPLETE', observed: state.seenIds.length, reason: state.reason || null, scope: 'FR_NURSING_INTERIM_FREE_BUDGET' } });
-  if (options.manual && (state.terminal === 'INCOMPLETE' || state.terminal === 'AUTH_REQUIRED')) {
+  let state = previous?.filtersVersion === 2 ? structuredClone(previous) : initialState(now);
+  const result = (status: JobsPipeStatus, rows: any[] = []) => ({ state, rows, status, coverage: { provider: 'JOBSPIPE', complete: status === 'COMPLETE', observed: state.seenIds.length, reason: state.reason || null, scope: 'FR_NURSING_TEXT_OR_TEMPORARY_WITH_CONTRACT_VALIDATION', queryIndex: state.queryIndex ?? 0, queries: queryFilters.length, mode: state.discoveredAfter ? 'INCREMENTAL' : 'FULL', lastFullAt: state.lastFullAt ?? null } });
+  if (options.manual && (state.terminal === 'INCOMPLETE' || state.terminal === 'AUTH_REQUIRED' || Boolean(state.completedAt))) {
     // Deterministic successor stays distinct from the failed cycle, yet survives a
     // transaction rollback before the new state is persisted.
     const previousId = state.cycleId;
@@ -86,23 +98,27 @@ export async function advanceJobsPipeCollection(db: Database, previous: JobsPipe
   if (state.terminal === 'INCOMPLETE') return result('INCOMPLETE');
   if (state.terminal === 'AUTH_REQUIRED' && !options.manual) return result('AUTH_REQUIRED');
   if (state.completedAt && now.toISOString().slice(0,10) === state.completedAt.slice(0,10)) return result('COOLDOWN');
-  if (state.completedAt || state.terminal === 'QUOTA_EXHAUSTED') state = initialState(now);
-  const response = await requestPage(db, state.cycleId, { ...filtersBase, ...(state.cursor ? {cursor:state.cursor} : {}) }, options);
+  if (state.completedAt || state.terminal === 'QUOTA_EXHAUSTED') state = initialState(now, state);
+  const response = await requestPage(db, state.cycleId, { ...filtersBase, ...queryFilters[state.queryIndex ?? 0], ...(state.discoveredAfter ? {discovered_at_gte:state.discoveredAfter} : {}), ...(state.cursor ? {cursor:state.cursor} : {}) }, options);
   if (!response.page) {
     const status = response.status!; state.reason = response.reason;
     if (['INCOMPLETE','AUTH_REQUIRED','QUOTA_EXHAUSTED'].includes(status)) state.terminal = status;
     state.retryAt = status === 'QUOTA_EXHAUSTED' ? nextMonth(now) : new Date(now.getTime() + 300000).toISOString();
     return result(status);
   }
-  const page = response.page, ids = new Set(state.seenIds);
+  const page = response.page, ids = new Set(state.seenIds), queryIds = new Set(state.querySeenIds ?? []);
+  const queryNew = page.data.filter(row => !queryIds.has(row.id)).length;
   const rows = page.data.filter(row => { if(ids.has(row.id)) return false; ids.add(row.id); return true; });
   const cursor = page.metadata.next_cursor;
-  if ((cursor && (cursor === state.cursor || state.seenCursors.includes(cursor))) || (page.data.length > 0 && rows.length === 0) || (page.data.length === 0 && cursor)) {
+  if ((cursor && (cursor === state.cursor || state.seenCursors.includes(cursor))) || (page.data.length > 0 && queryNew === 0) || (page.data.length === 0 && cursor)) {
     state.terminal = 'INCOMPLETE'; state.reason = 'REPEATED_OR_EMPTY_PAGE'; return result('INCOMPLETE');
   }
-  state.seenIds = [...ids]; if(state.cursor) state.seenCursors.push(state.cursor);
+  state.seenIds = [...ids]; for(const row of page.data)queryIds.add(row.id);state.querySeenIds=[...queryIds]; if(state.cursor) state.seenCursors.push(state.cursor);
   state.cursor = cursor; delete state.retryAt; delete state.reason; delete state.terminal;
-  if(cursor === null) { state.completedAt = now.toISOString(); return result('COMPLETE', rows); }
+  if(cursor === null) {
+    if((state.queryIndex ?? 0) + 1 < queryFilters.length){state.queryIndex=(state.queryIndex ?? 0)+1;state.querySeenIds=[];state.seenCursors=[];return result('CONTINUE',rows);}
+    state.completedAt = now.toISOString(); return result('COMPLETE', rows);
+  }
   return result('CONTINUE', rows);
 }
 export async function verifyJobsPipeOffers(db: Database, ids: string[], options: Options & {requestId: string}) {

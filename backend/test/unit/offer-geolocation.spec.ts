@@ -233,3 +233,13 @@ test("JobsPipe ambiguous postal/town results and broader labels remain unknown",
     "PROVIDER_COORDINATES_UNVERIFIED",
   );
 });
+
+test("JobsPipe without postal code resolves only an exact unique official town", async()=>{
+ const raw={...jp,postal_code:undefined,location:"Saint-Étienne, France",normalized_city:"Saint-Étienne"};
+ for(const [body,known] of [[[stEtienne],true],[[stEtienne,{...stEtienne,code:"99999"}],false]] as const){
+  const rows=await enrichJobsPipeLocations([raw],{cache:new Map(),transport:(async(input:any)=>{
+   const url=new URL(String(input));assert.equal(url.searchParams.get("nom"),"Saint-Étienne");assert.equal(url.searchParams.get("limit"),"100");return response(body);
+  }) as typeof fetch});
+  assert.equal(Boolean(normalizeJobsPipe(rows[0]).provenance.facts.location.coordinates),known);
+ }
+});

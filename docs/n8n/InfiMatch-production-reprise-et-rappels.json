@@ -101,6 +101,38 @@
           "timeout": 240000
         }
       }
+    },
+    {
+      "id": "46aac199-0a8f-4fed-be49-c7adcf15bfa3",
+      "name": "Poursuivre les collectes",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        720,
+        0
+      ],
+      "parameters": {
+        "method": "POST",
+        "url": "https://infimactch-prod-backend.vercel.app/api/v1/internal/automation/jobs/refresh-offers",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "X-N8N-Execution-Id",
+              "value": "={{ $execution.id }}"
+            },
+            {
+              "name": "X-N8N-Workflow-Id",
+              "value": "={{ $workflow.id }}"
+            }
+          ]
+        },
+        "options": {
+          "timeout": 240000
+        }
+      }
     }
   ],
   "connections": {
@@ -131,6 +163,17 @@
         [
           {
             "node": "Traiter la file",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Rappels": {
+      "main": [
+        [
+          {
+            "node": "Poursuivre les collectes",
             "type": "main",
             "index": 0
           }

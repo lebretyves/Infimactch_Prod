@@ -71,3 +71,11 @@ test('a stale search reimport preserves provider closure and availability metada
  await importOffers(db,[{...raw,intitule:'IDE interim fictif republication index'}],false);
  const rows=await sql.query('SELECT active,provenance,title FROM external_offer WHERE source_id=$1',[raw.id]);assert.equal(rows.length,1);assert.equal(rows[0].active,false);assert.equal(rows[0].provenance.retiredReason,'PROVIDER_CLOSED');assert.deepEqual(rows[0].provenance.availabilityCheck,availabilityCheck);assert.equal(rows[0].title,'IDE interim fictif republication index');
 }));
+
+test('national import batches 151 offers and repeated import retains unique IDs',async()=>isolated(async(db,sql)=>{
+ const rows=Array.from({length:151},()=>offer());
+ const first=await importOffers(db,rows,false);assert.equal(first.accepted,151);
+ assert.equal((await sql.query('SELECT count(*)::int AS n FROM external_offer'))[0].n,151);
+ await importOffers(db,rows,false);
+ assert.equal((await sql.query('SELECT count(*)::int AS n FROM external_offer'))[0].n,151);
+}));

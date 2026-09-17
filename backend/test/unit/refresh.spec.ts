@@ -12,3 +12,13 @@ test('refresh skips locked, paused and cooling sources before network acquisitio
  assert.throws(()=>providerName('https://untrusted.invalid'));
  assert.equal(providerName('JOBSPIPE'),'JOBSPIPE');
 });
+
+test('scheduled batches follow pages, retain page checkpoints and stop on provider errors',async()=>{
+ const service=new RefreshService({} as any);let calls=0;
+ service.run=(async()=>{calls++;return {provider:'FRANCE_TRAVAIL',status:calls<3?'IN_PROGRESS':'SUCCESS',accepted:10};}) as any;
+ const done=await service.runBatch('FRANCE_TRAVAIL');assert.equal(calls,3);assert.equal(done.accepted,30);assert.equal(done.status,'SUCCESS');
+ calls=0;service.run=(async()=>{calls++;return {provider:'FRANCE_TRAVAIL',status:'IN_PROGRESS',accepted:1};}) as any;
+ const bounded=await service.runBatch('FRANCE_TRAVAIL');assert.equal(calls,12);assert.equal(bounded.status,'IN_PROGRESS');
+ calls=0;service.run=(async()=>{calls++;return {provider:'FRANCE_TRAVAIL',status:'RETRY_REQUIRED',accepted:0};}) as any;
+ await service.runBatch('FRANCE_TRAVAIL');assert.equal(calls,1);
+});

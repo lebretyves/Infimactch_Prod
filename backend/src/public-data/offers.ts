@@ -7,8 +7,8 @@ import {
 } from "./contract-policy";
 import { createHash } from "node:crypto";
 import { Database } from "../database/database";
-import { clean, offerFacts } from "./offer-quality";
-export { clean } from "./offer-quality";
+import { clean, cleanDescription, offerFacts } from "./offer-quality";
+export { clean, cleanDescription } from "./offer-quality";
 export function normalizeOffer(raw: any, fetchedAt = new Date().toISOString()) {
   if (
     !raw ||
@@ -17,7 +17,7 @@ export function normalizeOffer(raw: any, fetchedAt = new Date().toISOString()) {
   )
     throw new Error("INVALID_ID");
   const title = clean(raw.intitule, 150),
-    description = clean(raw.description, 8000);
+    description = cleanDescription(raw.description);
   if (!title || !description) throw new Error("MISSING_CONTENT");
   if (permanentContractEvidence(title, description)) throw new Error("PERMANENT_POSITION_EXCLUDED");
   if (raw.typeContrat !== "MIS") throw new Error("NOT_TEMPORARY_EMPLOYMENT");
@@ -106,23 +106,17 @@ export async function importOffers(db: Database, raw: any[], dryRun: boolean, no
           [source, sourceId, rejection.reason],
         );
       }
-      for (const o of accepted)
-        await em.query(
-          `INSERT INTO external_offer(source,source_id,title,description,url,location_label,qualification,raw_hash,provenance,expires_at,parsed_offer) VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11) ON CONFLICT(source,source_id) DO UPDATE SET title=EXCLUDED.title,description=EXCLUDED.description,url=EXCLUDED.url,location_label=EXCLUDED.location_label,qualification=EXCLUDED.qualification,raw_hash=EXCLUDED.raw_hash,provenance=EXCLUDED.provenance || CASE WHEN external_offer.provenance ? 'availabilityCheck' THEN jsonb_build_object('availabilityCheck',external_offer.provenance->'availabilityCheck') ELSE '{}'::jsonb END || CASE WHEN external_offer.provenance->>'retiredReason'='PROVIDER_CLOSED' THEN jsonb_build_object('retiredReason','PROVIDER_CLOSED') ELSE '{}'::jsonb END,expires_at=EXCLUDED.expires_at,parsed_offer=CASE WHEN external_offer.parsed_offer->>'inputHash'=EXCLUDED.parsed_offer->>'inputHash' AND external_offer.parsed_offer->>'parserVersion'=EXCLUDED.parsed_offer->>'parserVersion' THEN external_offer.parsed_offer ELSE EXCLUDED.parsed_offer END,imported_at=now(),active=CASE WHEN external_offer.provenance->>'retiredReason'='PROVIDER_CLOSED' THEN false ELSE true END`,
-          [
-            o.source,
-            o.sourceId,
-            o.title,
-            o.description,
-            o.url,
-            o.locationLabel,
-            o.qualification,
-            o.rawHash,
-            JSON.stringify(o.provenance),
-            o.expiresAt ?? null,
-            JSON.stringify(parseOffer({ ...o, location_label: o.locationLabel })),
-          ],
-        );
+      // One round trip per page, retaining the same transaction and unique key.
+      for (let start = 0; start < accepted.length; start += 150) {
+        const batch = accepted.slice(start, start + 150);
+        const parameters = batch.flatMap(o => [
+          o.source, o.sourceId, o.title, o.description, o.url, o.locationLabel,
+          o.qualification, o.rawHash, JSON.stringify(o.provenance), o.expiresAt ?? null,
+          JSON.stringify(parseOffer({ ...o, location_label: o.locationLabel })),
+        ]);
+        const values = batch.map((_, index) => "(" + Array.from({length: 11}, (_, field) => "$" + (index * 11 + field + 1)).join(",") + ")").join(",");
+        await em.query(`INSERT INTO external_offer(source,source_id,title,description,url,location_label,qualification,raw_hash,provenance,expires_at,parsed_offer) VALUES ${values} ON CONFLICT(source,source_id) DO UPDATE SET title=EXCLUDED.title,description=EXCLUDED.description,url=EXCLUDED.url,location_label=EXCLUDED.location_label,qualification=EXCLUDED.qualification,raw_hash=EXCLUDED.raw_hash,provenance=EXCLUDED.provenance || CASE WHEN external_offer.provenance ? 'availabilityCheck' THEN jsonb_build_object('availabilityCheck',external_offer.provenance->'availabilityCheck') ELSE '{}'::jsonb END || CASE WHEN external_offer.provenance->>'retiredReason'='PROVIDER_CLOSED' THEN jsonb_build_object('retiredReason','PROVIDER_CLOSED') ELSE '{}'::jsonb END,expires_at=EXCLUDED.expires_at,parsed_offer=CASE WHEN external_offer.parsed_offer->>'inputHash'=EXCLUDED.parsed_offer->>'inputHash' AND external_offer.parsed_offer->>'parserVersion'=EXCLUDED.parsed_offer->>'parserVersion' THEN external_offer.parsed_offer ELSE EXCLUDED.parsed_offer END,imported_at=now(),active=CASE WHEN external_offer.provenance->>'retiredReason'='PROVIDER_CLOSED' THEN false ELSE true END`, parameters);
+      }
       summary.duplicates = await guardCrossSourceDuplicates(em);
       await em.query(
         "INSERT INTO import_run(provider,status,summary) VALUES($2,'SUCCESS',$1)",

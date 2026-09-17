@@ -8,3 +8,11 @@ test("JobsPipe rejects non interim, non nursing, closed and unsafe offers",()=>{
 test("JobsPipe records contextual interim, not agency wording",()=>{const o=normalizeJobsPipe(fixture);assert.equal(o.provenance.contract,"INTERIM_CONTEXT_CONFIRMED");assert.throws(()=>normalizeJobsPipe({...fixture,description:"Agence d'intérim spécialisée dans le sanitaire."}),/INTERIM_UNCONFIRMED/);});
 test("JobsPipe dry run deduplicates and never writes",async()=>{const r=await importOffers({transaction(){throw Error("unexpected write");}} as any,[fixture,fixture,{...fixture,id:"bad",country_code:"US"}],true,normalizeJobsPipe,"JOBSPIPE");assert.equal(r.accepted,1);assert.equal(r.rejected.length,1);assert.equal(r.source,"JOBSPIPE");});
 test("JobsPipe request is bounded, authenticated and rejects quota errors without response body",async()=>{const previous=process.env.JOBSPIPE_API_KEY;process.env.JOBSPIPE_API_KEY="jp_live_test";try{await fetchJobsPipe(10,(async(url:any,init:any)=>{assert.equal(url,"https://api.jobspipe.dev/v1/jobs/search");assert.equal(init.headers.Authorization,"Bearer jp_live_test");assert.equal(init.redirect,"error");assert.deepEqual(JSON.parse(init.body).job_country_code_or,["FR"]);return new Response(JSON.stringify({data:[fixture]}));}) as typeof fetch);await assert.rejects(()=>fetchJobsPipe(10,(async()=>new Response("secret",{status:402})) as typeof fetch),/quota exhausted/);await assert.rejects(()=>fetchJobsPipe(101),/1-25/);}finally{if(previous===undefined)delete process.env.JOBSPIPE_API_KEY;else process.env.JOBSPIPE_API_KEY=previous;}});
+
+test("JobsPipe retains line and HTML boundaries for explicit contracts",()=>{
+ for(const description of ["Soins au patient.\nIntérim", "<p>Soins au patient.</p><p>Intérim</p>", "Missions d'intérim dans un établissement."]){
+  const o=normalizeJobsPipe({...fixture,description});assert.equal(o.qualification,"IDE");assert.ok(o.description.includes("Intérim")||o.description.includes("intérim"));
+ }
+ assert.throws(()=>normalizeJobsPipe({...fixture,description:"Notre cabinet accompagne le recrutement CDI / CDD et intérim.\nContrat : CDI"}),/PERMANENT_POSITION_EXCLUDED/);
+ assert.throws(()=>normalizeJobsPipe({...fixture,description:"Agence d'intérim spécialisée dans le sanitaire.\nSoins au patient."}),/INTERIM_UNCONFIRMED/);
+});

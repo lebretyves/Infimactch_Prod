@@ -19,6 +19,14 @@ export function providerName(value:string):Provider {
 @Injectable()
 export class RefreshService {
   constructor(private readonly db:Database){}
+  async runBatch(provider:Provider) {
+    const deadline=Date.now()+70000;
+    let result=await this.run(provider), accepted=result.accepted, batches=1;
+    while(result.status==='IN_PROGRESS' && batches<12 && Date.now()<deadline){
+      result=await this.run(provider);accepted+=result.accepted;batches++;
+    }
+    return {...result,accepted,batches};
+  }
   async run(provider:Provider,manual=false) {
     // The transaction-scoped lock is held across acquisition and import. Another
     // trigger returns immediately instead of multiplying network calls.
@@ -50,9 +58,9 @@ export class RefreshService {
             const ids=candidates.map(x=>x.source_id),check=await verifyJobsPipeOffers(this.db,ids,{requestId:new Date().toISOString().slice(0,10)+':'+ids.join('|')});
             if(check.rows.length){
               await importOffers(scoped,await enrichJobsPipeLocations(check.rows),false,normalizeJobsPipe,'JOBSPIPE');
-              await em.query("UPDATE external_offer SET provenance=jsonb_set(provenance,'{availabilityCheck}',jsonb_build_object('status','PROVIDER_RECORD_CHECKED','checkedAtMs',$2::bigint,'nextCheckAtMs',$2::bigint+86400000)) WHERE source='JOBSPIPE' AND source_id=ANY($1::text[])",[check.rows.map(x=>x.id),Date.now()]);
+              await em.query("UPDATE external_offer SET provenance=jsonb_set(provenance,'{availabilityCheck}',jsonb_build_object('status','PROVIDER_RECORD_CHECKED','checkedAtMs',$2::bigint,'nextCheckAtMs',$2::bigint+604800000)) WHERE source='JOBSPIPE' AND source_id=ANY($1::text[])",[check.rows.map(x=>x.id),Date.now()]);
             }
-            if(check.status==='COMPLETE'){const returned=new Set(check.rows.map(x=>x.id));const missing=ids.filter(x=>!returned.has(x));if(missing.length)await em.query("UPDATE external_offer SET provenance=jsonb_set(provenance,'{availabilityCheck}',jsonb_build_object('status','NOT_RETURNED_UNVERIFIED','checkedAtMs',$2::bigint,'nextCheckAtMs',$2::bigint+86400000)) WHERE source='JOBSPIPE' AND source_id=ANY($1::text[])",[missing,Date.now()]);}
+            if(check.status==='COMPLETE'){const returned=new Set(check.rows.map(x=>x.id));const missing=ids.filter(x=>!returned.has(x));if(missing.length)await em.query("UPDATE external_offer SET provenance=jsonb_set(provenance,'{availabilityCheck}',jsonb_build_object('status','NOT_RETURNED_UNVERIFIED','checkedAtMs',$2::bigint,'nextCheckAtMs',$2::bigint+604800000)) WHERE source='JOBSPIPE' AND source_id=ANY($1::text[])",[missing,Date.now()]);}
             availability={status:check.status,checked:check.rows.length,missingMeansClosed:false};
           }
         }

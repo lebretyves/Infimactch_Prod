@@ -28,7 +28,7 @@ export class CloudJobsController {
  }
  @Post("refresh-offers") async refresh(@Headers("x-infimatch-token") token:string){
   this.authorize(token);
-  const providers=await Promise.all(PROVIDERS.map(provider=>this.refreshService.run(provider)));
+  const providers=await Promise.all(PROVIDERS.map(provider=>this.refreshService.runBatch(provider)));
   return {providers};
  }
  @Post("maintenance") async maintenance(@Headers("x-infimatch-token") token:string){

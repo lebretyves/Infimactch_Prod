@@ -11,6 +11,18 @@ export function clean(value: unknown, max: number): string {
         .slice(0, max)
     : "";
 }
+/** Keep clause boundaries: a contract label on its own line is meaningful. */
+export function cleanDescription(value: unknown, max = 32000): string {
+  return typeof value === "string" ? value
+    .replace(/<\s*(?:br\s*\/?|\/?(?:p|div|li|ul|ol|h[1-6]))\s*>/gi, "\n")
+    .replace(/<[^>]*>/g, " ")
+    .replace(/&nbsp;|&#160;/gi, " ")
+    .replace(/\r\n?/g, "\n")
+    .replace(/[^\S\n]+/g, " ")
+    .replace(/ *\n */g, "\n")
+    .replace(/\n{3,}/g, "\n\n")
+    .trim().slice(0, max) : "";
+}
 const folded = (s: string) =>
   s
     .normalize("NFD")
@@ -62,6 +74,7 @@ export function offerFacts(raw: any) {
   if (places.size > 1) warnings.push("LOCATION_TEXT_REVIEW_REQUIRED");
   return {
     qualification,
+    providerClassification: { code: clean(raw.romeCode, 20) || null, label: clean(raw.romeLibelle, 200) || null, reference: raw.romeCode ? "ROME" : null },
     qualificationBasis: qualification
       ? "PROVIDER_TEXT_CLASSIFICATION"
       : "UNCONFIRMED",

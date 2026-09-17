@@ -4,7 +4,7 @@ import {
   permanentContractEvidence,
 } from "./contract-policy";
 import { normalizeOffer } from "./offers";
-import { clean } from "./offer-quality";
+import { clean, cleanDescription } from "./offer-quality";
 import { createHash } from "node:crypto";
 
 export function normalizeJobsPipe(raw: any): ReturnType<typeof normalizeOffer> & { expiresAt: string | null } {
@@ -13,7 +13,7 @@ export function normalizeJobsPipe(raw: any): ReturnType<typeof normalizeOffer> &
   if (raw.status && raw.status !== "active" && raw.status !== "open") throw Error("OFFER_NOT_ACTIVE");
   if (raw.closed_at) throw Error("OFFER_CLOSED");
   if (raw.expires_at && (!Number.isFinite(Date.parse(raw.expires_at)) || Date.parse(raw.expires_at) <= Date.now())) throw Error("OFFER_EXPIRED");
-  const title = clean(raw.job_title, 150), description = clean(raw.description, 8000);
+  const title = clean(raw.job_title, 150), description = cleanDescription(raw.description);
   if (permanentContractEvidence(title, description)) throw Error("PERMANENT_POSITION_EXCLUDED");
   // Temporary/contract also includes CDD: the job itself must be interim, not the recruiting agency.
   if (!interimContractEvidence(title, description)) throw Error("INTERIM_UNCONFIRMED");
@@ -24,7 +24,7 @@ export function normalizeJobsPipe(raw: any): ReturnType<typeof normalizeOffer> &
   if (!offer.qualification) throw Error("NURSING_QUALIFICATION_UNCONFIRMED");
   return { ...offer, expiresAt: raw.expires_at ? new Date(raw.expires_at).toISOString() : null, source: "JOBSPIPE", sourceId: raw.id, url: url.href,
     rawHash: createHash("sha256").update(JSON.stringify(raw)).digest("hex"),
-    provenance: { ...offer.provenance, provider: "JOBSPIPE", externalId: raw.id, sourceUrl: url.href, originalPublisher: "JobsPipe", contract: "INTERIM_CONTEXT_CONFIRMED" } };
+    provenance: { ...offer.provenance, provider: "JOBSPIPE", externalId: raw.id, sourceUrl: url.href, originalPublisher: "JobsPipe", facts: { ...offer.provenance.facts, providerClassification: { code: clean(raw.occupation_code, 20) || null, label: clean(raw.occupation_label, 200) || null, reference: "ISCO-08" } }, contract: "INTERIM_CONTEXT_CONFIRMED" } };
 }
 
 export async function fetchJobsPipe(limit = 10, transport: typeof fetch = fetch) {

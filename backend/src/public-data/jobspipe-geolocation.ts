@@ -17,8 +17,8 @@ const fold = (value: string) =>
     .replace(/\s+/g, " ")
     .trim();
 
-/** Only a postal code is sent to the official API, never a job/address or provider URL.
- * Require a unique exact town match within the official postal-code result. */
+/** Only locality identifiers are sent to the official API, never a job/address or provider URL.
+ * Require a unique exact town match; without a postal code, ambiguous names remain unknown. */
 export async function enrichJobsPipeLocations<T extends Record<string, any>>(
   rows: T[],
   options: {
@@ -41,11 +41,13 @@ export async function enrichJobsPipeLocations<T extends Record<string, any>>(
   for (const row of rows) {
     const postal =
       typeof row.postal_code === "string" ? row.postal_code.trim() : "";
-    const label = typeof row.location === "string" ? row.location.trim() : "";
+    const declaredTown = typeof row.normalized_city === "string" && row.normalized_city.trim()
+      ? row.normalized_city : Array.isArray(row.cities) && row.cities.length === 1 && typeof row.cities[0] === "string"
+      ? row.cities[0] : typeof row.location === "string" ? row.location.split(",")[0] : "";
+    const label = (declaredTown ?? "").trim();
     if (
       row.country_code !== "FR" ||
       franceCoordinates(row.latitude, row.longitude) ||
-      !/^\d{5}$/.test(postal) ||
       !label ||
       label.length > 120
     ) {
@@ -53,7 +55,7 @@ export async function enrichJobsPipeLocations<T extends Record<string, any>>(
       continue;
     }
     const town = fold(label),
-      key = `postal:${postal}:${town}`;
+      key = `town:${/^\d{5}$/.test(postal) ? postal : ""}:${town}`;
     let entry = store.get(key);
     if (!entry || entry.expires <= Date.now()) {
       if (
@@ -75,7 +77,7 @@ export async function enrichJobsPipeLocations<T extends Record<string, any>>(
         );
       try {
         const response = await transport(
-          `https://geo.api.gouv.fr/communes?codePostal=${postal}&fields=code,nom,centre,codesPostaux&format=json`,
+          `https://geo.api.gouv.fr/communes?${/^\d{5}$/.test(postal) ? `codePostal=${postal}` : `nom=${encodeURIComponent(label)}&limit=100`}&fields=code,nom,centre,codesPostaux&format=json`,
           { signal: controller.signal, redirect: "error" },
         );
         if (response.status === 429) {
@@ -106,7 +108,7 @@ export async function enrichJobsPipeLocations<T extends Record<string, any>>(
                   typeof item?.nom === "string" &&
                   fold(item.nom) === town &&
                   Array.isArray(item.codesPostaux) &&
-                  item.codesPostaux.includes(postal),
+                  (!/^\d{5}$/.test(postal) || item.codesPostaux.includes(postal)),
               )
             : [];
           ttl = 3600000;

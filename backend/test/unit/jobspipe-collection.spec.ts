@@ -19,7 +19,8 @@ test('JobsPipe durable pagination, validation and budget',async t=>{
  const replay=await advanceJobsPipeCollection(db,null,{now,creditStore:store,transport:fetcher});
  assert.equal(a.status,'CONTINUE');assert.equal(replay.state.cycleId,a.state.cycleId);assert.equal(calls,1);assert.deepEqual(charges,[1]);
  const b=await advanceJobsPipeCollection(db,a.state,{now,creditStore:store,transport:transport({data:[{id:'a'},{id:'b'}],metadata:{next_cursor:null}})});
- assert.equal(b.status,'COMPLETE');assert.deepEqual(b.rows.map(r=>r.id),['b']);assert.equal(b.state.seenIds.length,2);
+ assert.equal(b.status,'CONTINUE');assert.deepEqual(b.rows.map(r=>r.id),['b']);assert.equal(b.state.seenIds.length,2);
+ const c=await advanceJobsPipeCollection(db,b.state,{now,creditStore:store,transport:transport({data:[{id:'a'},{id:'c'}],metadata:{next_cursor:null}})});assert.equal(c.status,'COMPLETE');assert.deepEqual(c.rows.map(r=>r.id),['c']);
  });
  await t.test('repeated cursor and missing cursor metadata never claim completion',async()=>{
  for(const second of [{data:[{id:'b'}],metadata:{next_cursor:'same'}},{data:[{id:'b'}],metadata:{}}]){
@@ -56,8 +57,18 @@ test('JobsPipe durable pagination, validation and budget',async t=>{
  const later=new Date(now.getTime()+300001);
  const auto=await advanceJobsPipeCollection(db,first.state,{now:later,creditStore:store,transport:async()=>{throw Error('must not call')}});assert.equal(auto.status,'INCOMPLETE');
  const manual=await advanceJobsPipeCollection(db,first.state,{manual:true,now,creditStore:store,transport:transport({data:[{id:'fixed'}],metadata:{next_cursor:null}})});
- assert.equal(manual.status,'COMPLETE');assert.notEqual(manual.state.cycleId,first.state.cycleId);
- const replay=await advanceJobsPipeCollection(db,first.state,{manual:true,now,creditStore:store,transport:async()=>{throw Error('cached')}});assert.equal(replay.status,'COMPLETE');assert.equal(replay.state.cycleId,manual.state.cycleId);
+ assert.equal(manual.status,'CONTINUE');assert.notEqual(manual.state.cycleId,first.state.cycleId);
+ const replay=await advanceJobsPipeCollection(db,first.state,{manual:true,now,creditStore:store,transport:async()=>{throw Error('cached')}});assert.equal(replay.status,'CONTINUE');assert.equal(replay.state.cycleId,manual.state.cycleId);
+ });
+ await t.test('daily discovery watermark advances only after both queries and resets monthly',async()=>{
+ const {store}=memory();const fetcher=transport({data:[],metadata:{next_cursor:null}});
+ const a=await advanceJobsPipeCollection(db,null,{now,creditStore:store,transport:fetcher});
+ const b=await advanceJobsPipeCollection(db,a.state,{now,creditStore:store,transport:fetcher});assert.equal(b.status,'COMPLETE');
+ for(const [date,delta] of [['2026-09-18T12:00:00Z',true],['2026-10-01T12:00:00Z',false]] as const){
+  const c=await advanceJobsPipeCollection(db,b.state,{now:new Date(date),creditStore:memory().store,transport:async(_url,opts)=>{
+   const body=JSON.parse(String(opts?.body));assert.equal(Boolean(body.discovered_at_gte),delta);return new Response(JSON.stringify({data:[],metadata:{next_cursor:null}}));
+  }});assert.equal(Boolean(c.state.discoveredAfter),delta);
+ }
  });
  await t.test('SQL reservation rejects over quota before insert',async()=>{
  let inserts=0;const fake={transaction:async(fn:any)=>fn({query:async(sql:string)=>{if(sql.includes('sum(charged)'))return[{used:990}];if(sql.startsWith('INSERT'))inserts++;return[]}})} as Database;
