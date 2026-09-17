@@ -94,7 +94,7 @@ function NurseMissions() {
     "search-reference",
   );
   const homeCoordinates = validCoordinates(p.data?.latitude,p.data?.longitude);
-  const home = homeCoordinates ? {...homeCoordinates,label:p.data?.details?.city || "Mon domicile"} : null;
+  const home = homeCoordinates ? {...homeCoordinates,label:p.data?.details?.mobilityCity || "Ma zone de mobilité"} : null;
   const qualifications = p.data?.qualifications || [];
   const selectedQualification = qualifications.includes(values.qualification)
     ? values.qualification
@@ -200,7 +200,7 @@ function NurseMissions() {
     }
     if (draft.radius) {
       const center = draft.place || draft.lat || draft.lon ? validCoordinates(draft.lat,draft.lon) : homeCoordinates;
-      if (!center || ![5,10,25,50,100,200].includes(Number(draft.radius))) {setFormError("Choisissez explicitement un lieu parmi les propositions ou votre domicile avant de rechercher par rayon.");return;}
+      if (!center || ![5,10,25,50,100,200].includes(Number(draft.radius))) {setFormError("Choisissez explicitement un lieu parmi les propositions ou votre zone de mobilité avant de rechercher par rayon.");return;}
     }
     update({ ...draft, q: draft.q.trim(), page: 1 });
   }

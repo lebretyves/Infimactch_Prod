@@ -8,6 +8,7 @@ export type ProfileDetails = {
   address?: string;
   postalCode?: string;
   city?: string;
+  mobilityCity?: string;
   diploma?: string;
   diplomaYear?: number;
   ideDiplomaYear?: number;

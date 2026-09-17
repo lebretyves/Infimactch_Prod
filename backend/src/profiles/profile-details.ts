@@ -48,6 +48,11 @@ export class ProfileDetailsDto {
   @IsOptional()
   @IsString()
   @Length(1, 200)
+  mobilityCity?: string;
+  @ApiProperty({ required: false })
+  @IsOptional()
+  @IsString()
+  @Length(1, 200)
   diploma?: string;
   @ApiProperty({ required: false })
   @IsOptional()

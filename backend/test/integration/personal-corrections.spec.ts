@@ -44,3 +44,11 @@ test('email correction checks uniqueness and invalidates sessions; identity corr
  await service.decide(actor,r.id,{reason:'Verified correction',identityVerified:true},true);const [a]=await db.query('SELECT email,session_version FROM account WHERE id=$1',[id]);assert.equal(a.email,requested);assert.equal(a.session_version,version+1);
  const name=await service.request(id,{field:'firstName',value:'Alex'});await db.query("UPDATE profile SET rpps_status='FOUND' WHERE user_id=$1",[id]);await service.decide(actor,name.id,{reason:'Verified correction',identityVerified:true},true);const [p]=await db.query('SELECT display_name,details,rpps_status FROM profile WHERE user_id=$1',[id]);assert.equal(p.display_name,'Alex');assert.equal(p.details.firstName,'Alex');assert.equal(p.rpps_status,'NOT_CHECKED');
 });
+
+
+test('mobility city and real coordinates persist without changing locked personal city',async()=>{
+ const id=await account(),profiles=new ProfilesService(db);
+ await profiles.update(id,{...base,latitude:47.239367,longitude:-1.555335,radiusKm:30,details:{...base.details,mobilityCity:'Nantes (44000)'}});
+ const [p]=await db.query('SELECT details,latitude,longitude,radius_km FROM profile WHERE user_id=$1',[id]);
+ assert.equal(p.details.city,'Paris');assert.equal(p.details.mobilityCity,'Nantes (44000)');assert.equal(Number(p.latitude),47.239367);assert.equal(Number(p.longitude),-1.555335);assert.equal(Number(p.radius_km),30);
+});
