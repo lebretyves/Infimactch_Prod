@@ -1,3 +1,4 @@
+import {queueMissionEmails, generateCancellations, dispatchMissionEmails} from './mission-mail';
 import {UseInterceptors} from "@nestjs/common";
 import {ExecutionTrace} from "./execution-trace";
 import { geodesicKm } from "../database/distance";
@@ -242,6 +243,7 @@ export class AutomationService {
           [c.id, status, stored.id],
         );
         if (status === "READY") {
+          await queueMissionEmails(em,m,a,"CONFIRMATION",stored.id);
           const recipients = await em.query(
             "SELECT a.id AS user_id, CASE WHEN a.id=$3::uuid THEN 'NURSE' WHEN EXISTS(SELECT 1 FROM membership s WHERE s.user_id=a.id AND s.organization_id=$1 AND s.active) THEN 'AGENCY' ELSE 'ESTABLISHMENT' END AS role FROM account a WHERE a.active AND (a.id=$3::uuid OR EXISTS(SELECT 1 FROM membership s WHERE s.user_id=a.id AND s.active AND s.organization_id IN($1,$2))) ORDER BY a.id FOR SHARE OF a",
             [m.agency_id, m.establishment_id, a.nurse_id],
@@ -300,6 +302,8 @@ export class AutomationService {
     transport: typeof fetch = fetch,
     eventId: string | null = null,
   ) {
+    await generateCancellations(this.db,this.documents);
+    await dispatchMissionEmails(this.db,this.documents);
     const events = await this.db.transaction(async (em) => {
       const rows = await em.query(
         "SELECT * FROM outbox WHERE event IN('MissionOPEN','MatchRequested','AssignmentCreated','MissionCANCELLED') AND ($2::uuid IS NULL OR id=$2) AND completed_at IS NULL AND attempts<5 AND available_at<=now() AND (lease_until IS NULL OR lease_until<now()) ORDER BY CASE WHEN event='AssignmentCreated' THEN 0 ELSE 1 END,created_at,id LIMIT $1 FOR UPDATE SKIP LOCKED",

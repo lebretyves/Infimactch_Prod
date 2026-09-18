@@ -32,5 +32,12 @@ const {createConfirmationPdf}=require('../backend/dist/automation/confirmation-p
  long.forEach((page,i)=>{assert.ok(page.includes(`${i+1} / ${long.length}`));assert.ok(page.length>150,'No empty or footer-only page');});
  const zero=await read({...sample,hourlySalary:0});assert.ok(zero.join(' ').includes('0,00'));
  const missing=await read({...sample,hourlySalary:null,professionalName:undefined,establishmentName:undefined});assert.ok(missing.join(' ').includes('Non renseignée'));
+ const cancelled=await read({...sample,cancellation:{initiator:'NURSE',cancelledAt:'2026-09-18T12:00:00Z'}});
+ const cancelledText=cancelled.join(' ');
+ for(const expected of ['ANNULATION DE MISSION','AFFECTATION ANNULÉE','Créneau libéré','initiative de l’intérimaire',sample.assignmentId])assert.ok(cancelledText.includes(expected),expected);
+ assert.ok(!cancelledText.includes('AFFECTATION EST CONFIRMÉE'));
+ assert.ok(!cancelledText.includes('Créneau réservé'));
+ const companyCancellation=(await read({...sample,cancellation:{initiator:'ENTERPRISE',cancelledAt:'2026-09-18T12:00:00Z'}})).join(' ');
+ assert.ok(companyCancellation.includes('initiative de l’entreprise'));
  console.log('PASS: logo text, one-page layout, French accents/euro, local times, long content, margins, pagination and missing/zero rate.');
 })().catch(e=>{console.error(e);process.exitCode=1;});

@@ -137,7 +137,7 @@ export class DocumentsService {
       ]);
       // System confirmations must remain available even when user uploads fill their quota.
       // Replaced bank details remain retained but only the active version consumes user quota.
-      if (kind !== "CONFIRMATION") {
+      if (!["CONFIRMATION","CANCELLATION"].includes(kind)) {
         const [storage] = await em.query(
           "SELECT COALESCE(sum(size_bytes),0)::text AS bytes FROM document WHERE owner_id=$1 AND kind IN('EVIDENCE','BANK') AND superseded_at IS NULL AND status IN('STAGING','READY') AND NOT ($2::boolean AND kind=$3)",
           [actor, replacePrevious, kind],
@@ -296,8 +296,13 @@ export class DocumentsService {
         if (!confirmation) throw new NotFoundException();
         d.confirmationStatus = confirmation.status;
       }
+      if (d.kind === "CANCELLATION") {
+        const [c]=await em.query("SELECT 1 FROM mission_cancellation WHERE document_id=$1 AND status='READY'",[id]);
+        if(!c)throw new NotFoundException();
+        d.confirmationStatus='CANCELLED';
+      }
       if (d.owner_id !== actor) {
-        if (d.kind !== "CONFIRMATION" || !d.assignment_id)
+        if (!["CONFIRMATION","CANCELLATION"].includes(d.kind) || !d.assignment_id)
           throw new NotFoundException();
         const allowed = await em.query(
           "SELECT a.id FROM assignment a JOIN mission m ON m.id=a.mission_id WHERE a.id=$1 AND (a.nurse_id=$2 OR EXISTS(SELECT 1 FROM membership o WHERE o.user_id=$2 AND o.active AND o.organization_id IN(m.agency_id,m.establishment_id)))",

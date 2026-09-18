@@ -132,7 +132,7 @@ export default function GestionMission() {
         <section key={a.id} className={s.bloc}>
           <h2>Confirmation de mission</h2>
           <p>{a.display_name} — {statusLabels[a.status] || a.status}</p>
-          <ConfirmationButton assignmentId={a.id} />
+          <ConfirmationButton assignmentId={a.id} cancelled={a.status === "CANCELLED"} />
         </section>
       ))}
       {error && <p role="alert">{error}</p>}

@@ -16,6 +16,7 @@ export type ConfirmationDetails = {
   agencyName?: string;
   issuedAt?: Date;
   demonstration?: boolean;
+  cancellation?: {initiator: 'NURSE' | 'ENTERPRISE'; cancelledAt: string; reason?: string};
 };
 
 // Same cross and palette as frontend/src/ui/Logo.tsx and styles/tokens.css.
@@ -28,8 +29,10 @@ export function createConfirmationPdf(data: ConfirmationDetails): Promise<Buffer
     // Explicit imports keep both standard fonts in the serverless bundle.
     require.resolve('pdfkit/standard-fonts/Helvetica');
     require.resolve('pdfkit/standard-fonts/HelveticaBold');
+    const cancelled = !!data.cancellation;
+    const documentTitle = cancelled ? 'Attestation d’annulation de mission' : 'Confirmation de mission';
     const doc = new PDFDocument({size:'A4', margin:42, bufferPages:true,
-      info:{Title:'Confirmation de mission — InfiMatch', Author:'InfiMatch', Subject:'Confirmation d’affectation', Creator:'InfiMatch'}});
+      info:{Title:documentTitle+' — InfiMatch', Author:'InfiMatch', Subject:documentTitle, Creator:'InfiMatch'}});
     const chunks: Buffer[] = [];
     doc.on('data', chunk => chunks.push(chunk));
     doc.on('error', reject);
@@ -57,7 +60,7 @@ export function createConfirmationPdf(data: ConfirmationDetails): Promise<Buffer
       text('Infi',left+49,44,100,24,true);
       const wordWidth=doc.font('Helvetica-Bold').fontSize(24).widthOfString('Infi');
       text('Match',left+49+wordWidth,44,130,24,true,color.blue);
-      text(continued?'CONFIRMATION · SUITE':'CONFIRMATION DE MISSION',left+285,43,width-285,9,true,color.muted);
+      text(cancelled ? (continued?'ANNULATION · SUITE':'ANNULATION DE MISSION') : (continued?'CONFIRMATION · SUITE':'CONFIRMATION DE MISSION'),left+285,43,width-285,9,true,color.muted);
       text('Émise le '+date(data.issuedAt || new Date()),left+285,59,width-285,9,false,color.muted);
       y=103;
     }
@@ -86,7 +89,7 @@ export function createConfirmationPdf(data: ConfirmationDetails): Promise<Buffer
     const titleHeight=height(data.title,width-40,21,true);
     const heroHeight=74+titleHeight;
     doc.roundedRect(left,y,width,heroHeight,16).fill(color.blue);
-    text('VOTRE AFFECTATION EST CONFIRMÉE',left+20,y+18,width-40,9,true,'#ffffff');
+    text(cancelled?'AFFECTATION ANNULÉE':'VOTRE AFFECTATION EST CONFIRMÉE',left+20,y+18,width-40,9,true,'#ffffff');
     text(data.title,left+20,y+41,width-40,21,true,'#ffffff');
     text([data.qualification,data.service?.replace(/_/g,' ')].filter(Boolean).join('  /  '),
       left+20,y+heroHeight-25,width-40,10,false,'#ffffff');
@@ -112,11 +115,15 @@ export function createConfirmationPdf(data: ConfirmationDetails): Promise<Buffer
     space(120);
     heading('02','Votre mission en pratique');
     card('Dates et horaires',date(data.start,true)+' au '+date(data.end,true),
-      'Heure locale · '+timezone+' · Créneau réservé dans votre agenda InfiMatch.');
+      'Heure locale · '+timezone+(cancelled?' · Créneau libéré dans votre agenda InfiMatch.':' · Créneau réservé dans votre agenda InfiMatch.'));
     card('Lieu de la mission',data.address);
 
     space(115);
-    heading('03','Rémunération');
+    heading('03',cancelled?'Détails de l’annulation':'Rémunération');
+    if(data.cancellation) {
+      card('Annulation enregistrée',date(data.cancellation.cancelledAt,true),data.cancellation.initiator==='NURSE'?'À l’initiative de l’intérimaire.':'À l’initiative de l’entreprise.');
+      if(data.cancellation.reason) card('Motif communiqué',data.cancellation.reason);
+    } else {
     const amount=data.hourlySalary===null?null:Number(data.hourlySalary);
     const salary=amount!==null && Number.isFinite(amount)
       ? clean(new Intl.NumberFormat('fr-FR',{style:'currency',currency:'EUR'}).format(amount))
@@ -125,8 +132,9 @@ export function createConfirmationPdf(data: ConfirmationDetails): Promise<Buffer
     text(salary,left+18,y+17,width-36,26,true,color.navy);
     text('BRUT / HEURE · TAUX INDIQUÉ POUR LA MISSION',left+18,y+51,width-36,8,true,color.muted);
     y+=84;
+    }
 
-    const note='Cette confirmation récapitule l’affectation enregistrée dans InfiMatch. Elle ne constitue pas un contrat signé. En cas de modification ou d’annulation, consultez le statut actualisé de la mission dans votre espace.';
+    const note=cancelled ? 'Cette attestation constate l’annulation de l’affectation dans InfiMatch. Elle remplace la confirmation pour le statut de cette affectation et ne vaut pas accord sur les éventuelles conséquences contractuelles. Consultez le suivi actualisé dans votre espace.' : 'Cette confirmation récapitule l’affectation enregistrée dans InfiMatch. Elle ne constitue pas un contrat signé. En cas de modification ou d’annulation, consultez le statut actualisé de la mission dans votre espace.';
     space(height(note,width,9)+56);
     doc.moveTo(left,y).lineTo(left+width,y).strokeColor(color.line).stroke();
     y=text(note,left,y+14,width,9,false,color.muted)+12;
@@ -137,7 +145,7 @@ export function createConfirmationPdf(data: ConfirmationDetails): Promise<Buffer
       doc.switchToPage(i);
       doc.moveTo(left,782).lineTo(left+width,782).strokeColor(color.line).stroke();
       doc.font('Helvetica').fontSize(8).fillColor(color.muted)
-        .text('InfiMatch  /  Confirmation de mission',left,795,{lineBreak:false})
+        .text('InfiMatch  /  '+documentTitle,left,795,{lineBreak:false})
         .text(`${i+1} / ${pages.count}`,left+width-30,795,{lineBreak:false});
     }
     doc.end();

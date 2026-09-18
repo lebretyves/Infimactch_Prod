@@ -1,3 +1,4 @@
+import {MissionMail1789722000000} from './mission-mail';
 import {MissionSchedulePrecision1789718400000} from "./mission-schedule-precision";
 import {PersonalCorrections1789382300000} from './personal-corrections';
 import { JobsPipeCredits1789382200000 } from "./jobspipe-credits";
@@ -58,6 +59,7 @@ export class Database implements OnModuleDestroy {
       JobsPipeCredits1789382200000,
       PersonalCorrections1789382300000,
       MissionSchedulePrecision1789718400000,
+      MissionMail1789722000000,
     ],
     logging: false,
     extra: { max: 12 },
