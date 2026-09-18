@@ -1,0 +1,14 @@
+import assert from 'node:assert/strict';
+import {jobSearch,changeJobText} from '../src/lib/jobSearch.ts';
+const draft={q:'',qualification:'',service:'CARDIOLOGY',population:'',block:'',specialty:''};
+for(const term of ['iade','IADE','Infirmière anesthésiste'])assert.equal(jobSearch(term).qualification,'IADE');
+assert.deepEqual(jobSearch('IBODE clinique'),{qualification:'IBODE',keywords:'clinique'});
+assert.equal(jobSearch('aide soignante').qualification,'');
+assert.equal(jobSearch('IADE IDE').qualification,'');
+assert.equal(jobSearch('infirmier de bloc opératoire').qualification,'IBODE');
+const iade=changeJobText(draft,'iade',['IDE','IADE']);assert.equal(iade.qualification,'IADE');assert.equal(iade.service,'');
+assert.equal(changeJobText(iade,'ide',['IDE','IADE']).qualification,'IDE');
+assert.equal(changeJobText(iade,'',['IDE','IADE']).qualification,'');
+assert.equal(changeJobText(draft,'ibode',['IDE']).qualification,'');
+assert.equal(changeJobText({...draft,qualification:'IDE'},'cardiologie',['IDE']).qualification,'IDE');
+console.log('Job search tests passed: recognition, residual keywords, change, clear and profile qualifications.');
