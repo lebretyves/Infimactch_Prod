@@ -9,7 +9,7 @@ const parent = path.join(backend, '.test-build');
 fs.mkdirSync(parent, { recursive: true });
 const temporary = fs.mkdtempSync(path.join(parent, 'pdf-font-regression-'));
 try {
-  const source = "require.resolve('pdfkit/standard-fonts/Helvetica');const PDF=require('pdfkit');const doc=new PDF();const chunks=[];doc.on('data',b=>chunks.push(b));doc.on('end',()=>{const b=Buffer.concat(chunks);if(b.subarray(0,5).toString()!=='%PDF-')throw Error('Invalid PDF');console.log('PDF_OK '+b.length)});doc.text('Confirmation de mission fictive - 21 septembre 2026');doc.end();";
+  const source = "const {createConfirmationPdf}=require('./dist/automation/confirmation-pdf');createConfirmationPdf({assignmentId:'test',missionVersion:1,title:'Mission fictive',qualification:'IDE',address:'Adresse de test',start:'2026-10-12T06:00:00Z',end:'2026-10-12T14:00:00Z',hourlySalary:25}).then(b=>{if(b.subarray(0,5).toString()!=='%PDF-')throw Error('Invalid PDF');console.log('PDF_OK '+b.length)}).catch(e=>{console.error(e);process.exitCode=1});";
   const output = path.join(temporary, 'confirmation.cjs');
   esbuild.buildSync({ stdin: { contents: source, resolveDir: backend }, bundle: true, platform: 'node', format: 'cjs', outfile: output, logLevel: 'silent' });
   fs.writeFileSync(path.join(temporary, 'package.json'), JSON.stringify({ name: 'without-font-imports' }));

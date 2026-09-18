@@ -4,6 +4,7 @@ export type Qualification = "IDE" | "IADE" | "IBODE";
 export type Interval = { start: string; end: string };
 export type Experience = Interval & { service: string };
 export interface Professional {
+  practiceServices?: Partial<Record<Qualification, string[]>>;
   qualifications: Qualification[];
   skills: string[];
   experience: Experience[];
@@ -116,6 +117,9 @@ export function match(
   if (!p.qualifications.includes(m.qualification))
     reasons.push("QUALIFICATION_MISSING");
   if (p.rppsStatus !== "FOUND") reasons.push("RPPS_" + p.rppsStatus);
+  const preferredServices = p.practiceServices?.[m.qualification];
+  if (preferredServices?.length && !preferredServices.includes(m.service))
+    reasons.push("SERVICE_NOT_PREFERRED");
   const required = requiredMissionSkills(m);
   if (required.some((s) => !p.skills.includes(s)))
     reasons.push("REQUIRED_SKILLS_MISSING");

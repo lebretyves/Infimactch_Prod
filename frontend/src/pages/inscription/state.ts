@@ -1,4 +1,5 @@
 import { createContext, use } from 'react';
+import type { PracticeServices } from '@/services/profile';
 
 export type Inscription = {
   google: boolean;
@@ -13,6 +14,7 @@ export type Inscription = {
   ville: string;
   qualification: string;
   qualifications: string[];
+  practiceServices: PracticeServices;
   disponibleFin: string;
   horaire: string;
   latitude: number | null;
@@ -48,6 +50,7 @@ export const vide: Inscription = {
   ville: '',
   qualification: '',
   qualifications: [],
+  practiceServices: {},
   disponibleFin: '',
   horaire: '',
   latitude: null,
@@ -125,7 +128,15 @@ function lireBrouillon(): Inscription {
     for (const key of Object.keys(vide) as (keyof Inscription)[]) {
       if (excluded.includes(key)) continue;
       const item = source[key];
-      if (key === 'experiences') {
+      if (key === 'practiceServices') {
+        if (item && typeof item === 'object' && !Array.isArray(item)) {
+          for (const role of ['IDE', 'IADE', 'IBODE'] as const) {
+            const services = (item as Record<string, unknown>)[role];
+            if (Array.isArray(services) && services.length <= 60 && services.every(value => typeof value === 'string' && /^[A-Z][A-Z0-9_]{0,79}$/.test(value)))
+              restored.practiceServices[role] = [...new Set(services)];
+          }
+        }
+      } else if (key === 'experiences') {
         if (
           Array.isArray(item) &&
           item.every(

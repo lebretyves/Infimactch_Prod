@@ -1,3 +1,4 @@
+import { MatchingReminder } from "@/components/MatchingReminder";
 ﻿import { api, ApiError } from "@/services/api";
 import { GoogleConnexion } from "@/components/GoogleConnexion";
 import { AccountCreatedError } from "@/services/auth";
@@ -513,6 +514,7 @@ export default function Inscription() {
         )}
       </div>
 
+      <MatchingReminder enterprise={role !== "interimaire"} />
       <form className={s.form} onSubmit={soumettre} noValidate>
         <ChoixRole
           legende="Je crée un compte en tant que"

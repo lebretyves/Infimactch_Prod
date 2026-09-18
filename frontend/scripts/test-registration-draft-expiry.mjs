@@ -19,3 +19,13 @@ test('activity cannot extend the two-hour maximum',async()=>{
 test('storage denial does not prevent memory-only draft or its expiry',async()=>{
  const {module:m}=await setup();globalThis.sessionStorage={getItem(){throw Error('Denied')},setItem(){throw Error('Denied')},removeItem(){throw Error('Denied')}};m.enregistrer({email:'memory@example.invalid'});assert.equal(m.charger().email,'memory@example.invalid');m.effacerBrouillon();assert.equal(m.charger().email,'');
 });
+
+test('separate practice choices survive draft reload and malformed choices are ignored',async()=>{
+ const {module:m,values}=await setup();
+ const practiceServices={IDE:['URGENCES','REANIMATION'],IADE:['ANESTHESIE','SMUR'],IBODE:[]};
+ m.enregistrer({practiceServices});
+ const saved=values.get(m.CLE_BROUILLON);
+ assert.deepEqual((await setup(saved)).module.charger().practiceServices,practiceServices);
+ const corrupt=JSON.parse(saved);corrupt.data.practiceServices={IDE:'URGENCES',IADE:['ANESTHESIE',5],IBODE:[],OTHER:['BAD']};
+ assert.deepEqual((await setup(JSON.stringify(corrupt))).module.charger().practiceServices,{IBODE:[]});
+});

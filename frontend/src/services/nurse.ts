@@ -3,6 +3,8 @@ export type Assignment = {
   id: string;
   mission_id: string;
   title: string;
+  address?: string;
+  establishment_name?: string;
   status: string;
   timezone?: string;
   start_at: string;

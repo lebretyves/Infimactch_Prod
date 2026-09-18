@@ -1,5 +1,6 @@
 import {validDateBounds,startsInPast} from "../domain/schedule-period";
 import { assessApplication } from "./application-assessment";
+import { assessAssignment } from "./assignment-assessment";
 import { requireActiveAccount } from "../common/access";
 import { commandReceipt } from "../common/idempotency";
 import { geodesicKm } from "../database/distance";
@@ -14,7 +15,7 @@ import { createHash } from "node:crypto";
 import { Database, audit, event } from "../database/database";
 import { member, nurse } from "../common/access";
 import { MissionDto } from "./mission.dto";
-import { interval, match, MatchMission } from "../domain/matching";
+import { interval, MatchMission } from "../domain/matching";
 import { professional } from "../profiles/profiles.module";
 export const missionSelect =
   "SELECT m.*,ST_Y(m.location::geometry) AS latitude,ST_X(m.location::geometry) AS longitude FROM mission m";
@@ -62,7 +63,7 @@ export async function eligible(em: SqlClient, p: any, m: any) {
     "SELECT start_at,end_at FROM assignment WHERE nurse_id=$1 AND status='ACTIVE'",
     [p.user_id],
   );
-  const result = match(
+  const result = assessAssignment(
     professional(p, conflicts),
     matchingMission(m),
     await geodesicKm(em, p, m),
@@ -70,7 +71,7 @@ export async function eligible(em: SqlClient, p: any, m: any) {
   if (!result.eligible)
     throw new ConflictException({
       code: "INELIGIBLE",
-      reasons: result.reasons,
+      reasons: result.blockingReasons,
     });
   return result;
 }
@@ -460,7 +461,7 @@ export class MissionsService {
           a.consent_version !== m.version
         )
           throw new ConflictException("Fresh application consent required");
-        await eligible(em, p, m);
+        const assessment = await eligible(em, p, m);
         const [assigned] = await em.query(
           "INSERT INTO assignment(mission_id,nurse_id,application_id,start_at,end_at) VALUES($1,$2,$3,$4,$5) RETURNING *",
           [id, p.user_id, a.id, m.start_at, m.end_at],
@@ -475,6 +476,7 @@ export class MissionsService {
         ]);
         await audit(em, actor, "ASSIGNMENT_CREATED", assigned.id, {
           missionId: id,
+          profileWarnings: assessment.warnings,
         });
         await event(em, "AssignmentCreated", {
           assignmentId: assigned.id,

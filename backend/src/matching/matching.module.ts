@@ -111,6 +111,18 @@ export class MatchingService implements OnModuleDestroy {
       };
     }
   }
+  async forPair(actor: string, id: string) {
+    const [p] = await this.db.query("SELECT p.* FROM profile p JOIN account a ON a.id=p.user_id AND a.active WHERE p.user_id=$1", [actor]);
+    if (!p) throw new NotFoundException();
+    const [m] = await this.db.query(missionSelect + " WHERE m.id=$1 AND m.status IN ('OPEN','FILLED','COMPLETED','CANCELLED')", [id]);
+    if (!m) throw new NotFoundException();
+    const conflicts = await this.db.query("SELECT start_at,end_at FROM assignment WHERE nurse_id=$1 AND status='ACTIVE'", [actor]);
+    const result = match(professional(p, conflicts), matchingMission(m), await geodesicKm(this.db, p, m));
+    if (new Date(m.start_at).getTime() <= Date.now()) {
+      return { ...result, eligible: false, score: null, components: null, reasons: [...result.reasons, "MISSION_ALREADY_STARTED"] };
+    }
+    return result;
+  }
   async forNurse(actor: string, page: PageDto = new PageDto(), ranking: "start" | "recent" = "start") {
     const [p] = await this.db.query("SELECT p.* FROM profile p JOIN account a ON a.id=p.user_id AND a.active WHERE p.user_id=$1", [
       actor,
@@ -254,6 +266,10 @@ export class MatchingService implements OnModuleDestroy {
 @UseGuards(SessionGuard)
 class MatchingController {
   constructor(private readonly service: MatchingService) {}
+  @Get("matching/rules") rules() { return MATCH_RULES; }
+  @Get("me/matches/mission/:id") pair(@Req() r: Request, @Param("id", ParseUUIDPipe) id: string) {
+    return this.service.forPair(user(r), id);
+  }
   @Get("me/matches") matches(@Req() r: Request, @Query() page: PageDto) {
     return this.service.forNurse(user(r), page);
   }

@@ -1,4 +1,5 @@
-import { ClinicalSkillsPicker } from "@/components/ClinicalSkillsPicker";
+import { experienceServiceOptions } from "@/data/clinicalSkills";
+import { PracticeChoices } from "@/components/PracticeChoices";
 import {CvImport} from '@/components/CvImport';
 import {PersonalCorrectionRequest} from '@/components/PersonalCorrectionRequest';
 import { ProSanteConnect } from "@/components/ProSanteConnect";
@@ -44,6 +45,7 @@ function Editor({ initial }: { initial: ProfessionalProfile }) {
       ),
     "reference-data",
   );
+  const experienceServices = experienceServiceOptions(ref.data?.ideServices);
   const bank = useRemote(
     (signal) => api<{ iban: string | null; document: {id:string}|null }>("/me/bank-details", { signal }),
     "bank",
@@ -233,7 +235,7 @@ function Editor({ initial }: { initial: ProfessionalProfile }) {
               <fieldset className={s.cvImport}>
               <details open className={s.cvDisclosure} onToggle={event=>{const panel=event.currentTarget;if(!panel.open&&panel.querySelector('[role="alert"],[role="status"]'))panel.open=true;}}>
                 <summary>Importer un CV <span>Préremplir mes expériences</span></summary>
-              <CvImport addBlocked={Boolean(experienceEdit)} services={ref.data?.ideServices||[]} existing={p.experience} onAdd={values=>change({experience:[...p.experience,...values]})}/>
+              <CvImport addBlocked={Boolean(experienceEdit)} services={experienceServices.map(option => option.value)} existing={p.experience} onAdd={values=>change({experience:[...p.experience,...values]})}/>
               </details>
               </fieldset>
               {!p.experience.length && (
@@ -307,13 +309,13 @@ function Editor({ initial }: { initial: ProfessionalProfile }) {
                       onChange={(e) => update({ service: e.target.value })}
                     >
                       <option value="">Sélectionner un service</option>
-                      {ref.data?.ideServices.map((code) => (
+                      {experienceServices.map(({ value: code, label }) => (
                         <option key={code} value={code}>
-                          {labelCode(code)}
+                          {label}
                         </option>
                       ))}
                       {exp.service &&
-                        !ref.data?.ideServices.includes(exp.service) && (
+                        !experienceServices.some(option => option.value === exp.service) && (
                           <option value={exp.service}>
                             {labelCode(exp.service)}
                           </option>
@@ -383,7 +385,7 @@ function Editor({ initial }: { initial: ProfessionalProfile }) {
             <section id="competences" tabIndex={-1} className={`${u.card} ${s.skillSection}`}>
               <h2 className={u.cardHeading}>
                 <Icon name="settings" />
-                {specialized ? "Pratique au bloc" : "Pratique et compétences"}
+                Pratique et choix d’exercice par métier
               </h2>
               <SelectField
                 label="Population prise en charge"
@@ -430,8 +432,8 @@ function Editor({ initial }: { initial: ProfessionalProfile }) {
                   </p>
                 </>
               )}
-              <ClinicalSkillsPicker label="Compétences de soins" qualifications={p.qualifications} value={p.skills}
-                chooseContext onChange={skills => change({ skills })} />
+              <PracticeChoices qualifications={p.qualifications} services={p.details?.practiceServices || {}} skills={p.skills}
+                onChange={(practiceServices, skills) => change({ skills, details: { ...p.details, practiceServices } })} />
             </section>
             <section id="preferences" tabIndex={-1} className={u.card}>
               <h2 className={u.cardHeading}>

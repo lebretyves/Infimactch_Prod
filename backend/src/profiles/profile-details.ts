@@ -1,3 +1,6 @@
+import { Type } from "class-transformer";
+import { IsArray, ArrayMaxSize, ArrayUnique, IsIn, ValidateNested } from "class-validator";
+import clinicalCatalog from "../reference-data/clinical-skills.json";
 import { ApiProperty } from "@nestjs/swagger";
 import {
   IsOptional,
@@ -10,7 +13,25 @@ import {
   Max,
 } from "class-validator";
 
+export class PracticeServicesDto {
+  @ApiProperty({ required: false, type: [String], enum: clinicalCatalog.servicesByQualification.IDE })
+  @IsOptional() @IsArray() @ArrayMaxSize(60) @ArrayUnique()
+  @IsIn(clinicalCatalog.servicesByQualification.IDE, { each: true })
+  IDE?: string[];
+  @ApiProperty({ required: false, type: [String], enum: clinicalCatalog.servicesByQualification.IADE })
+  @IsOptional() @IsArray() @ArrayMaxSize(60) @ArrayUnique()
+  @IsIn(clinicalCatalog.servicesByQualification.IADE, { each: true })
+  IADE?: string[];
+  @ApiProperty({ required: false, type: [String], enum: clinicalCatalog.servicesByQualification.IBODE })
+  @IsOptional() @IsArray() @ArrayMaxSize(60) @ArrayUnique()
+  @IsIn(clinicalCatalog.servicesByQualification.IBODE, { each: true })
+  IBODE?: string[];
+}
+
 export class ProfileDetailsDto {
+  @ApiProperty({ required: false, type: () => PracticeServicesDto })
+  @IsOptional() @ValidateNested() @Type(() => PracticeServicesDto)
+  practiceServices?: PracticeServicesDto;
   @ApiProperty({ required: false })
   @IsOptional()
   @IsString()

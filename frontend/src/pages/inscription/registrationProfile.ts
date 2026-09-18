@@ -33,6 +33,7 @@ export function registrationProfile(v: Inscription): ProfessionalProfile {
       };
     });
   const details: ProfileDetails = {
+    practiceServices: v.practiceServices || {},
     firstName: v.prenom.trim(),
     lastName: v.nom.trim(),
     ...(v.naissance ? { birthDate: v.naissance } : {}),

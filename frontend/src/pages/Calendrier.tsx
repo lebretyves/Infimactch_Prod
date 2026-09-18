@@ -300,6 +300,9 @@ function Editor({
                         >
                           <strong>Mission confirmée</strong>
                           <span>{m.title}</span>
+                          <span>{exactParisPeriodLabel({ start: m.start_at, end: m.end_at })}</span>
+                          {m.establishment_name && <span>{m.establishment_name}</span>}
+                          {m.address && <span>{m.address}</span>}
                         </Link>
                       ))}
                   </div>

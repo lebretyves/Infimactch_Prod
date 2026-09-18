@@ -15,7 +15,7 @@ import {
   ParseUUIDPipe,
 } from "@nestjs/common";
 import { timingSafeEqual, randomUUID } from "node:crypto";
-import PDFDocument from "pdfkit";
+import { createConfirmationPdf } from "./confirmation-pdf";
 import { Database, audit, event } from "../database/database";
 import { required } from "../config";
 import {
@@ -185,38 +185,30 @@ export class AutomationService {
         "UPDATE mission_confirmation SET status='PENDING',lease_until=now()+interval '2 minutes',lease_token=$2 WHERE id=$1",
         [c.id, (c.lease_token = randomUUID())],
       );
-      return { done: false, m, a, c };
+      const [participants] = await em.query(
+        "SELECT p.display_name AS professional_name, e.name AS establishment_name, agency.name AS agency_name FROM profile p LEFT JOIN organization e ON e.id=$2 LEFT JOIN organization agency ON agency.id=$3 WHERE p.user_id=$1",
+        [a.nurse_id, m.establishment_id, m.agency_id],
+      );
+      return { done: false, m, a, c, participants };
     });
     if (reservation.done) return reservation;
-    const { m, a, c } = reservation;
+    const { m, a, c, participants } = reservation;
     let generationStage = "PDF";
     try {
-      const pdf = await new Promise<Buffer>((resolve, reject) => {
-        // PDFKit loads this font dynamically; retain it in serverless file tracing.
-        require.resolve("pdfkit/standard-fonts/Helvetica");
-        const doc = new PDFDocument({ size: "A4", margin: 50 });
-        const chunks: Buffer[] = [];
-        doc.on("data", (b) => chunks.push(b));
-        doc.on("error", reject);
-        doc.on("end", () => resolve(Buffer.concat(chunks)));
-        doc.fontSize(20).text("InfiMatch - Confirmation de mission");
-        doc
-          .moveDown()
-          .fontSize(11)
-          .text(
-            "DEMONSTRATION FICTIVE - Ceci ne constitue pas un contrat signe.",
-          );
-        doc
-          .moveDown()
-          .text("Modele 1 / Version mission " + m.version)
-          .text("Mission : " + m.title)
-          .text("Qualification : " + m.qualification)
-          .text("Lieu : " + m.address)
-          .text("Debut UTC : " + new Date(m.start_at).toISOString())
-          .text("Fin UTC : " + new Date(m.end_at).toISOString())
-          .text("Salaire brut : " + m.hourly_salary + " EUR / heure")
-          .text("Reference affectation : " + a.id);
-        doc.end();
+      const pdf = await createConfirmationPdf({
+        assignmentId: a.id,
+        missionVersion: m.version,
+        title: m.title,
+        qualification: m.qualification,
+        service: m.service,
+        address: m.address,
+        start: m.start_at,
+        end: m.end_at,
+        timezone: m.timezone,
+        hourlySalary: m.hourly_salary,
+        professionalName: participants?.professional_name,
+        establishmentName: participants?.establishment_name,
+        agencyName: participants?.agency_name,
       });
       generationStage = "STORAGE";
       const stored = await this.documents.store(

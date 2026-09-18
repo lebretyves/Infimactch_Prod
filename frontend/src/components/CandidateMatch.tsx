@@ -2,6 +2,7 @@ import type { CandidateMatching } from "@/services/enterpriseApplications";
 import { labelCode } from "@/data/professional";
 import s from "./CandidateMatch.module.css";
 const reasons: Record<string, string> = {
+  SERVICE_NOT_PREFERRED: "Le service de cette mission ne fait pas partie des choix du candidat pour ce métier.",
   SCHEDULE_UNCONFIRMED: "Les horaires précis restent à confirmer.",
   QUALIFICATION_MISSING: "Le diplôme demandé n’est pas déclaré dans le profil.",
   RPPS_NOT_CHECKED: "Le numéro RPPS n’a pas encore été vérifié.",
@@ -29,7 +30,7 @@ export function CandidateMatch({ matching: m, qualification, service }: { matchi
   const scheduleUnknown = m.reasons.includes("SCHEDULE_UNCONFIRMED");
   const availability = scheduleUnknown ? "Horaires à confirmer" : availabilityIssue ? "Écart à vérifier" : m.eligible ? "Vacation couverte" : "À confirmer";
   return <section className={s.match} aria-label="Comparaison du profil avec la mission">
-    <div className={s.heading}><strong>Profil et mission</strong><span className={s.status} data-tone={m.eligible ? "ok" : "review"}>{m.eligible ? "Critères compatibles" : "Points à examiner"}</span><span className={s.score}>{m.score !== null && Number.isFinite(m.score) ? `Correspondance ${Math.round(m.score)}/100` : "Correspondance à confirmer"}</span></div>
+    <div className={s.heading}><strong>Profil et mission</strong><span className={s.status} data-tone={m.eligible ? "ok" : "review"}>{m.eligible ? "Critères compatibles" : "Points à examiner"}</span><span className={s.score}>{m.score !== null && Number.isFinite(m.score) ? `Taux de matching : ${Math.round(m.score)} %` : "Taux de matching non calculable"}</span></div>
     <dl className={s.criteria}>
       <div><dt>Métier demandé</dt><dd>{qualification} · {m.qualificationMatches ? "déclaré" : "à confirmer"}</dd></div>
       <div><dt>RPPS</dt><dd>{m.rppsStatus === "FOUND" ? "Retrouvé dans le répertoire" : m.rppsStatus === "PENDING" ? "Vérification en attente" : "À confirmer"}</dd></div>

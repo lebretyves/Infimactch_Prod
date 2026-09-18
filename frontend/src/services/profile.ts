@@ -1,6 +1,8 @@
 import { api } from "./api";
 export type Period = { start: string; end: string };
+export type PracticeServices = Partial<Record<"IDE" | "IADE" | "IBODE", string[]>>;
 export type ProfileDetails = {
+  practiceServices?: PracticeServices;
   firstName?: string;
   lastName?: string;
   birthDate?: string;
