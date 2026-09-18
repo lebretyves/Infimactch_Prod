@@ -34,10 +34,20 @@ test("establishment directory scopes counts and pages; creation publishes atomic
  assert.equal((await establishmentPage(db,owner,{limit:20,offset:0,q:'000000002'})).items[0].id,b);
  assert.deepEqual((await establishmentPage(db,owner,{limit:20,offset:0,q:'%'})).items,[]);
  assert.equal((await establishmentPage(db,owner,{limit:20,offset:500})).total,2);
- const filtered=await enterpriseMissionPage(db,owner,{limit:20,offset:0,establishmentId:a});assert.equal(filtered.length,1);assert.equal(filtered[0].id,opened.id);assert.equal(filtered[0].establishment_name,'A fixture');
+ const filtered=await enterpriseMissionPage(db,owner,{limit:20,offset:0,establishmentId:a});assert.equal(filtered.length,1);assert.equal(filtered[0].id,opened.id);assert.equal(filtered[0].establishment_name,'A fixture');assert.equal(filtered[0].can_manage,true);
  assert.equal((await enterpriseMissionPage(db,owner,{limit:20,offset:20,establishmentId:b})).length,3);
  assert.equal((await enterpriseMissionPage(db,outsider,{limit:20,offset:0,establishmentId:b})).length,0);
  await db.query('INSERT INTO membership(user_id,organization_id) VALUES($1,$2)',[owner,a]);assert.equal((await establishmentPage(db,owner,{limit:20,offset:0})).total,2);
  assert.ok((await validate(Object.assign(new EnterpriseMissionsPageDto(),{establishmentId:'invalid'}))).length);assert.ok((await validate(Object.assign(new EstablishmentsPageDto(),{q:'x'.repeat(151)}))).length);
+
+ assert.equal((await enterpriseMissionPage(db,owner,{limit:20,offset:20,qualification:'IDE',location:'Paris',date:'2037-01-01',establishmentId:b})).length,3);
+ assert.equal((await enterpriseMissionPage(db,owner,{limit:20,offset:0,qualification:'IBODE'})).length,0);
+ assert.equal((await enterpriseMissionPage(db,owner,{limit:20,offset:0,location:'Unknown city'})).length,0);
+ assert.equal((await enterpriseMissionPage(db,owner,{limit:20,offset:0,date:'2037-01-02'})).length,0);
+ const shared=await enterpriseMissionPage(db,owner,{limit:20,offset:0,establishmentId:a});assert.ok(shared.some((m:any)=>m.title==='Other agency private' && m.can_manage===false));
+ const night=await service.create(owner,{...base,title:'Overnight fixture',start:'2037-01-01T22:00:00Z',end:'2037-01-02T06:00:00Z'},randomUUID(),true);
+ assert.equal((await enterpriseMissionPage(db,owner,{limit:20,offset:0,date:'2037-01-02',establishmentId:a}))[0].id,night.id);
+ assert.ok((await validate(Object.assign(new EnterpriseMissionsPageDto(),{date:'2037-02-31'}))).length);
+ assert.ok((await validate(Object.assign(new EnterpriseMissionsPageDto(),{qualification:'OTHER'}))).length);
 
 });

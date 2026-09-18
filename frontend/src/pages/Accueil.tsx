@@ -274,8 +274,8 @@ export default function Accueil() {
                   <ButtonLink to="/gestion/missions/nouvelle">
                     Créer une offre
                   </ButtonLink>
-                  <ButtonLink to="/besoins" variant="outline">
-                    Créer ou compléter un besoin
+                  <ButtonLink to="/missions?mode=edit" variant="outline">
+                    Modifier une offre
                   </ButtonLink>
                   <Button variant="ghost" onClick={r.reload}>
                     Actualiser
