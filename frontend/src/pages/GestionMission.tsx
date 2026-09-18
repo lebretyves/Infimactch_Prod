@@ -1,8 +1,9 @@
+import { missionReturnTo } from "@/lib/missionNavigation";
 import { CandidateMatch } from "@/components/CandidateMatch";
 import type { CandidateMatching } from "@/services/enterpriseApplications";
 import {missionDate} from "@/services/market";
 import { useRef, useState } from "react";
-import { useParams } from "react-router";
+import { useParams, useSearchParams } from "react-router";
 import { useAuth } from "@/context/AuthContext";
 import { useRemote } from "@/lib/useRemote";
 import { api } from "@/services/api";
@@ -38,6 +39,8 @@ type Mission = Listing & {
   application_count: number;
 };
 export default function GestionMission() {
+  const [params] = useSearchParams();
+  const returnTo = missionReturnTo(params.get("returnTo"));
   const { id = "" } = useParams(),
     { user } = useAuth();
   const [offset, setOffset] = useState(0),
@@ -105,14 +108,14 @@ export default function GestionMission() {
       <div role="alert">
         {r.error}
         <Button onClick={r.reload}>Réessayer</Button>
-        <ButtonLink to="/missions">Retour</ButtonLink>
+        <ButtonLink to={returnTo}>Retour</ButtonLink>
       </div>
     );
   const m = r.data.mission,
     agency = m.can_manage;
   return (
     <div className={page.page}>
-      <ButtonLink to="/missions" variant="ghost">
+      <ButtonLink to={returnTo} variant="ghost">
         Retour aux missions
       </ButtonLink>
       <h1>{m.title}</h1>
@@ -131,7 +134,7 @@ export default function GestionMission() {
           <h2>Gestion de la mission</h2>
           {["DRAFT", "OPEN"].includes(m.status || "") && (
             <ButtonLink
-              to={"/gestion/missions/" + id + "/modifier"}
+              to={"/gestion/missions/" + id + "/modifier?" + new URLSearchParams({ returnTo })}
               variant="outline"
             >
               Modifier la mission

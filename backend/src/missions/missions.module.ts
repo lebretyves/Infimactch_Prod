@@ -1,5 +1,5 @@
 import { ApplicationInboxDto, enterpriseApplicationPage, missionApplicationPage } from "./application-inbox";
-import { enterpriseMissionPage, EnterpriseMissionsPageDto } from "../organizations/establishment-directory";
+import { enterpriseMissionSearch, enterpriseMissionPage, EnterpriseMissionsPageDto } from "../organizations/establishment-directory";
 import { PageDto } from "../common/page.dto";
 import { Query } from "@nestjs/common";
 import { ApiProperty } from "@nestjs/swagger";
@@ -145,6 +145,9 @@ class MissionsController {
       "SELECT a.*,m.title,m.version AS current_version,(a.consent_version!=m.version) AS requires_reconsent,x.id AS assignment_id,x.status AS assignment_status FROM application a JOIN mission m ON m.id=a.mission_id LEFT JOIN LATERAL(SELECT id,status FROM assignment WHERE application_id=a.id ORDER BY created_at DESC LIMIT 1)x ON true WHERE a.nurse_id=$1 ORDER BY a.updated_at DESC,a.id LIMIT $2 OFFSET $3",
       [user(r), page.limit, page.offset],
     );
+  }
+  @Get("enterprise/missions") missionSearch(@Req() r: Request, @Query() page: EnterpriseMissionsPageDto) {
+    return enterpriseMissionSearch(this.db, user(r), page);
   }
   @Get("missions") missions(@Req() r: Request, @Query() page: EnterpriseMissionsPageDto) {
     return enterpriseMissionPage(this.db, user(r), page);
