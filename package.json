@@ -38,5 +38,8 @@
     "restore:verify": "node scripts/security/restore-test.mjs",
     "db:migrate:vault": "node scripts/security/migrate.mjs",
     "start:https": "node scripts/security/start-https.mjs"
+  },
+  "imports": {
+    "#standard-fonts/*": "pdfkit/standard-fonts/*"
   }
 }

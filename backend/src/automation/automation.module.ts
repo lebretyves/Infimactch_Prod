@@ -189,8 +189,11 @@ export class AutomationService {
     });
     if (reservation.done) return reservation;
     const { m, a, c } = reservation;
+    let generationStage = "PDF";
     try {
       const pdf = await new Promise<Buffer>((resolve, reject) => {
+        // PDFKit loads this font dynamically; retain it in serverless file tracing.
+        require.resolve("pdfkit/standard-fonts/Helvetica");
         const doc = new PDFDocument({ size: "A4", margin: 50 });
         const chunks: Buffer[] = [];
         doc.on("data", (b) => chunks.push(b));
@@ -215,6 +218,7 @@ export class AutomationService {
           .text("Reference affectation : " + a.id);
         doc.end();
       });
+      generationStage = "STORAGE";
       const stored = await this.documents.store(
         a.nurse_id,
         "CONFIRMATION",
@@ -261,6 +265,12 @@ export class AutomationService {
         return { status, documentId: stored.id };
       });
     } catch (e) {
+      const failure = e as { name?: string; code?: string; message?: string };
+      console.error(JSON.stringify({ event: "CONFIRMATION_GENERATION_FAILED",
+        stage: generationStage, name: failure.name, code: failure.code,
+        standardFont: /standard-fonts|Helvetica/.test(failure.message ?? ""),
+        constructor: /not a constructor/.test(failure.message ?? ""),
+        moduleResolution: /Cannot find module|not defined|not exported/.test(failure.message ?? "") }));
       await this.db.query(
         "UPDATE mission_confirmation SET status='FAILED',lease_until=NULL WHERE id=$1 AND status='PENDING' AND lease_token=$2",
         [c.id, c.lease_token],
