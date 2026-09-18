@@ -82,8 +82,9 @@ export function Accessibilite() {
           État au 17 septembre 2026. Référence utilisée :{" "}
           <strong>RGAA 4.1.2</strong>. Aucun audit complet n’a établi notre
           niveau de conformité : <strong>aucun pourcentage</strong> n’est
-          annoncé. Les contrôles automatiques et manuels ciblés ne remplacent
-          pas un audit humain.
+          annoncé. Les contrôles automatiques, les aides d’affichage du panneau
+          Accessibilité et les contrôles manuels ciblés ne remplacent pas un
+          audit humain.
         </p>
       </section>
 
@@ -92,7 +93,10 @@ export function Accessibilite() {
         <ul>
           <li>
             Langue du document (<code>lang=&quot;fr&quot;</code>), lien
-            d’évitement « Aller au contenu principal », focus visible.
+            d’évitement, focus visible, et panneau « Accessibilité » (taille du
+            texte, contraste, police lisible Lexend, espacement, liens
+            soulignés, moins d’animations, lecture à voix haute via la synthèse
+            vocale du navigateur) mémorisé sur cet appareil.
           </li>
           <li>
             Respect de <code>prefers-reduced-motion</code> pour limiter les
