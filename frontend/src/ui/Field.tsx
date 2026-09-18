@@ -68,6 +68,34 @@ function shell(icon?: IconName, action?: ReactNode) {
   return [s.shell, icon && s.withIcon, action && s.withAction].filter(Boolean).join(' ');
 }
 
+function ReadOnlyField({ label, value, hint, error, name, disabled, type }: {
+  label: string;
+  value?: InputHTMLAttributes<HTMLInputElement>['value'];
+  hint?: string;
+  error?: string;
+  name?: string;
+  disabled?: boolean;
+  type?: string;
+}) {
+  const raw = Array.isArray(value) ? value.join(', ') : String(value ?? '');
+  const display = type === 'password' && raw
+    ? '••••••••'
+    : type === 'date' && /^\d{4}-\d{2}-\d{2}$/.test(raw)
+      ? raw.split('-').reverse().join('/')
+      : raw;
+  return (
+    <div className={s.field}>
+      <dl className={s.readOnly}>
+        <dt className={s.label}>{label}</dt>
+        <dd>{display || 'Non renseigné'}</dd>
+      </dl>
+      {name && <input type="hidden" name={name} value={raw} disabled={disabled} />}
+      {error && <p className={s.error} role="alert">{error}</p>}
+      {hint && !error && <p className={s.hint}>{hint}</p>}
+    </div>
+  );
+}
+
 export function TextField({
   label,
   hint,
@@ -79,6 +107,8 @@ export function TextField({
   action,
   ...rest
 }: FieldProps & InputHTMLAttributes<HTMLInputElement>) {
+  if (rest.readOnly) return <ReadOnlyField label={label} value={rest.value ?? rest.defaultValue}
+    hint={hint} error={error} name={rest.name} disabled={rest.disabled} type={rest.type} />;
   return (
     <Wrapper label={label} hint={hint} error={error} optional={optional} required={required}>
       {({ id, describedBy, invalid }) => (
@@ -133,6 +163,8 @@ export function TextArea({
   required,
   ...rest
 }: FieldProps & TextareaHTMLAttributes<HTMLTextAreaElement>) {
+  if (rest.readOnly) return <ReadOnlyField label={label} value={rest.value ?? rest.defaultValue}
+    hint={hint} error={error} name={rest.name} disabled={rest.disabled} />;
   return (
     <Wrapper label={label} hint={hint} error={error} optional={optional} required={required}>
       {({ id, describedBy, invalid }) => (
