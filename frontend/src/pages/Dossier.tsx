@@ -6,11 +6,7 @@ import { useEffect, useRef, useState, type FormEvent } from "react";
 import { useAuth } from "@/context/AuthContext";
 import { useRemote } from "@/lib/useRemote";
 import { api, downloadDocument } from "@/services/api";
-import {
-  getProfile,
-  saveProfile,
-  type ProfileDetails,
-} from "@/services/profile";
+import { getProfile } from "@/services/profile";
 import { Button, ButtonLink } from "@/ui/Button";
 import { TextField } from "@/ui/Field";
 import { Checkbox } from "@/ui/Choice";
@@ -26,13 +22,6 @@ type Document = {
   size_bytes: number;
   created_at: string;
 };
-type Reference = Pick<
-  ProfileDetails,
-  | "referenceName"
-  | "referenceRole"
-  | "referenceEstablishment"
-  | "referenceEmail"
->;
 const rppsLabels: Record<string, string> = {
   NOT_CHECKED: "À renseigner ou à vérifier",
   FOUND: "Numéro retrouvé dans le répertoire",
@@ -48,8 +37,7 @@ export default function Dossier() {
     [file, setFile] = useState<File | null>(null),
     [busy, setBusy] = useState(""),
     [error, setError] = useState(""),
-    [message, setMessage] = useState(""),
-    [reference, setReference] = useState<Reference | null>(null);
+    [message, setMessage] = useState("");
   const input = useRef<HTMLInputElement>(null);
   const operationKeys = useRef(new Map<string, string>());
   function operationKey(operation: string, content: string) {
@@ -134,16 +122,6 @@ export default function Dossier() {
       "Document enregistré.",
     );
   }
-  const currentReference: Reference = reference || {
-    referenceName: r.data?.profile.details?.referenceName || "",
-    referenceRole: r.data?.profile.details?.referenceRole || "",
-    referenceEstablishment:
-      r.data?.profile.details?.referenceEstablishment || "",
-    referenceEmail: r.data?.profile.details?.referenceEmail || "",
-  };
-  function changeReference(key: keyof Reference, value: string) {
-    setReference({ ...currentReference, [key]: value });
-  }
   if (user?.role !== "interimaire")
     return (
       <div className={u.page}>
@@ -162,7 +140,7 @@ export default function Dossier() {
         </p>
       </header>
       <nav className={s.sectionNav} aria-label="Rubriques de mon dossier">
-        <a href="#verification">Vérification RPPS</a><a href="#justificatifs">Justificatifs</a><a href="#reference">Référence professionnelle</a><a href="#rib">RIB</a>
+        <a href="#verification">Vérification RPPS</a><a href="#justificatifs">Justificatifs</a><a href="#rib">RIB</a>
       </nav>
       <p className={s.contextNote}>Pour vos diplômes déclarés, compétences et expériences, rendez-vous dans <a href="/profil">Mon profil</a>.</p>
       <BankReminder key={r.data?.bank.document?.id||r.data?.bank.iban||"empty"} />
@@ -267,79 +245,6 @@ export default function Dossier() {
                   </ButtonLink>
                 </div>
               </div>
-            </form>
-            <form id="reference" tabIndex={-1}
-              className={u.card}
-              onSubmit={(e) => {
-                e.preventDefault();
-                void act(
-                  "reference",
-                  async () => {
-                    const latest = await getProfile();
-                    const details = { ...latest.details };
-                    for (const key of [
-                      "referenceName",
-                      "referenceRole",
-                      "referenceEstablishment",
-                      "referenceEmail",
-                    ] as const) {
-                      const value = (currentReference[key] || "").trim();
-                      if (value) details[key] = value;
-                      else delete details[key];
-                    }
-                    await saveProfile({ ...latest, details });
-                    setReference(null);
-                  },
-                  "Référence professionnelle enregistrée.",
-                );
-              }}
-            >
-              <h2 className={u.cardHeading}>
-                <Icon name="user" />
-                Référence professionnelle
-              </h2>
-              <fieldset className={s.fields} disabled={!!busy}>
-                <TextField
-                  label="Nom et prénom de la référence"
-                  maxLength={150}
-                  value={currentReference.referenceName || ""}
-                  onChange={(e) =>
-                    changeReference("referenceName", e.target.value)
-                  }
-                />
-                <TextField
-                  label="Fonction"
-                  maxLength={150}
-                  value={currentReference.referenceRole || ""}
-                  onChange={(e) =>
-                    changeReference("referenceRole", e.target.value)
-                  }
-                />
-                <TextField
-                  label="Établissement de la référence"
-                  maxLength={200}
-                  value={currentReference.referenceEstablishment || ""}
-                  onChange={(e) =>
-                    changeReference("referenceEstablishment", e.target.value)
-                  }
-                />
-                <TextField
-                  label="E-mail professionnel de la référence"
-                  type="email"
-                  maxLength={254}
-                  value={currentReference.referenceEmail || ""}
-                  onChange={(e) =>
-                    changeReference("referenceEmail", e.target.value)
-                  }
-                />
-                <p className={s.help}>
-                  Contact déclaré par vos soins. Son enregistrement ne constitue
-                  pas une vérification et n’envoie aucun message.
-                </p>
-                <Button type="submit" loading={busy === "reference"}>
-                  Enregistrer la référence
-                </Button>
-              </fieldset>
             </form>
           </div>
           <div className={s.documentStack}>
