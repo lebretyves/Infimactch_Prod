@@ -1,9 +1,10 @@
+import {SITE_ORIGIN, PUBLIC_PATHS, setPageMetadata} from '@/lib/pageMetadata';
 import { Suspense, useEffect, useState } from 'react';
 import { Outlet, useLocation } from 'react-router';
 import { Button } from '@/ui/Button';
 import { applyUpdate, updateAvailable } from '@/lib/pwa';
-const origin = 'https://infimactch-prod-backend-l5bc.vercel.app';
-const publicPages = new Set(['/', '/installer', '/accessibilite', '/ecoconception', '/mentions-legales']);
+const origin = SITE_ORIGIN;
+const publicPages = PUBLIC_PATHS;
 export function QualityRoot() {
   const location = useLocation();
   const [online, setOnline] = useState(navigator.onLine);
@@ -14,6 +15,7 @@ export function QualityRoot() {
     return () => { window.removeEventListener('online', network); window.removeEventListener('offline', network); window.removeEventListener('infimatch:pwa', update); };
   }, []);
   useEffect(() => {
+    setPageMetadata(location.pathname);
     let robots = document.querySelector<HTMLMetaElement>('meta[name="robots"]');
     if (!robots) { robots = document.createElement('meta'); robots.name = 'robots'; document.head.append(robots); }
     const indexable = publicPages.has(location.pathname) && !location.search && window.location.origin === origin;

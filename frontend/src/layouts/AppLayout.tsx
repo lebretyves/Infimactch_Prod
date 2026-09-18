@@ -6,15 +6,27 @@ import { Logo } from "@/ui/Logo";
 import { useAuth } from "@/context/AuthContext";
 import { NotificationRead } from "@/components/NotificationRead";
 import s from "./AppLayout.module.css";
-const nurseNavigation: { to: string; label: string; icon: IconName }[] = [
-  { to: "/accueil", label: "Vue d’ensemble", icon: "nav-home" },
-  { to: "/notifications", label: "Notifications", icon: "bell" },
-  { to: "/missions", label: "Rechercher une mission", icon: "search" },
-  { to: "/candidatures", label: "Mes candidatures", icon: "file-text" },
-  { to: "/calendrier", label: "Disponibilités", icon: "calendar" },
-  { to: "/dossier", label: "Mon dossier", icon: "folder" },
-  { to: "/profil", label: "Mon profil", icon: "user" },
+type NavigationItem = { to: string; label: string; icon: IconName };
+const nurseGroups: { label: string; items: NavigationItem[] }[] = [
+  { label: "Découvrir", items: [
+    { to: "/missions", label: "Rechercher une mission", icon: "search" },
+    { to: "/favoris", label: "Mes favoris", icon: "heart-outline" },
+  ] },
+  { label: "Suivi", items: [
+    { to: "/candidatures", label: "Mes candidatures", icon: "file-text" },
+    { to: "/historique", label: "Mes missions", icon: "record" },
+  ] },
+  { label: "Mon dossier", items: [
+    { to: "/profil", label: "Mon profil", icon: "user" },
+    { to: "/calendrier", label: "Disponibilités et mobilité", icon: "calendar" },
+    { to: "/dossier", label: "Documents et vérifications", icon: "folder" },
+  ] },
 ];
+function NavigationLink({ item }: { item: NavigationItem }) {
+  return <NavLink to={item.to} className={({ isActive }) => `${s.link} ${isActive ? s.active : ""}`}>
+    <Icon name={item.icon} size={20} /><span>{item.label}</span>
+  </NavLink>;
+}
 const enterpriseNavigation: { to: string; label: string; icon: IconName }[] = [
   { to: "/accueil", label: "Mon espace", icon: "nav-home" },
   { to: "/notifications", label: "Notifications", icon: "bell" },
@@ -55,7 +67,7 @@ export function AppLayout() {
   const name =
     [user?.prenom, user?.nom].filter(Boolean).join(" ") || "Mon compte";
   return (
-    <div className={s.shell}>
+    <div className={s.shell} data-space={nurse ? "candidate" : "enterprise"}>
       <NotificationRead />
       <a className="skipLink" href="#contenu">
         Aller au contenu principal
@@ -100,41 +112,15 @@ export function AppLayout() {
         className={`${s.nav} ${open ? s.open : ""}`}
         aria-label="Navigation principale"
       >
-        {(nurse ? nurseNavigation : enterpriseNavigation).map((item) => (
-          <NavLink
-            key={item.to}
-            to={item.to}
-            className={({ isActive }) =>
-              `${s.link} ${isActive ? s.active : ""}`
-            }
-          >
-            <Icon name={item.icon} size={21} />
-            <span>{item.label}</span>
-          </NavLink>
-        ))}
-        {nurse && (
-          <div className={s.secondary}>
-            <NavLink
-              to="/favoris"
-              className={({ isActive }) =>
-                `${s.link} ${isActive ? s.active : ""}`
-              }
-            >
-              <Icon name="heart-outline" size={19} />
-              Mes favoris
-            </NavLink>
-            <NavLink
-              to="/historique"
-              className={({ isActive }) =>
-                `${s.link} ${isActive ? s.active : ""}`
-              }
-            >
-              <Icon name="record" size={19} />
-              Historique des missions
-            </NavLink>
-          </div>
-        )}
+        {nurse ? <>
+          <NavigationLink item={{ to: "/accueil", label: "Vue d’ensemble", icon: "nav-home" }} />
+          {nurseGroups.map(group => <div className={s.navGroup} key={group.label} role="group" aria-label={group.label}>
+            <p className={s.groupLabel}>{group.label}</p>
+            {group.items.map(item => <NavigationLink key={item.to} item={item} />)}
+          </div>)}
+        </> : enterpriseNavigation.map(item => <NavigationLink key={item.to} item={item} />)}
         <div className={s.bottom}>
+          {nurse && <NavigationLink item={{ to: "/notifications", label: "Notifications", icon: "bell" }} />}
           <Link to="/compte" className={s.catalogue}>Mon compte</Link>
           <Button variant="ghost" onClick={exit}>
             <Icon name="arrow-left" size={18} />

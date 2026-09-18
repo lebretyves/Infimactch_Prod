@@ -89,3 +89,30 @@
 .experienceActions { display: flex; gap: 8px; flex-wrap: wrap; flex-shrink: 0; }
 .experienceError { color: #9f2431; font-size: 13px; }
 @media(max-width:600px) { .experienceCard { align-items: stretch; flex-direction: column; } }
+
+/* Candidate profile: one reading order, with a compact map of its sections. */
+.profilePage { max-width: 1120px; gap: 20px; }
+.sections { display: grid; gap: 20px; min-width: 0; }
+.sections > section, .related > section { scroll-margin-top: 24px; }
+.sections :is(h3,section):focus-visible { outline: var(--focus-ring); outline-offset: 5px; }
+.sectionNav { display: flex; flex-wrap: wrap; gap: 4px 8px; border-block: 1px solid var(--line); padding-block: 8px; }
+.sectionNav a { display: inline-flex; align-items: center; min-height: 44px; padding: 8px 12px; color: var(--brand-700); font-size: 14px; font-weight: 600; text-decoration: none; border-radius: 6px; }
+.sectionNav a:hover { background: var(--brand-50); }
+.sectionNav a:focus-visible, .cvDisclosure summary:focus-visible { outline: var(--focus-ring); outline-offset: 3px; }
+.profilePage .contextNote { font-size: 14px; color: var(--ink-700); }
+.contextNote a { color: var(--brand-700); font-weight: 600; }
+.qualifications > .choices { grid-template-columns: repeat(3,minmax(0,1fr)); }
+.qualifications > .choices > label { min-height: 60px; }
+.skillSection .choices { grid-template-columns: repeat(3,minmax(0,1fr)); gap: 12px 20px; }
+.skillSection .choices > label { min-height: 44px; align-items: center; }
+.related { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 20px; }
+.cvDisclosure { border: 1px solid var(--line); border-radius: 8px; background: var(--brand-50); min-width: 0; }
+.cvDisclosure > summary { cursor: pointer; padding: 14px 16px; min-height: 48px; color: var(--brand-700); font-size: 15px; font-weight: 700; }
+.cvDisclosure > summary span { margin-left: 12px; font-size: 14px; font-weight: 400; color: var(--ink-700); }
+.cvDisclosure > section { margin: 0 !important; padding: 16px; background: white; border-top: 1px solid var(--line); }
+.profilePage .help { font-size: 14px !important; }
+.profilePage .bottom { padding-block: 16px; }
+@media(max-width:800px) { .qualifications > .choices, .skillSection .choices { grid-template-columns: repeat(2,minmax(0,1fr)); } }
+@media(max-width:560px) { .qualifications > .choices, .skillSection .choices, .related { grid-template-columns: minmax(0,1fr); } .sectionNav { gap: 2px 4px; } .sectionNav a { padding-inline: 8px; } .cvDisclosure > summary span { display: block; margin: 4px 0 0 16px; } }
+
+.profilePage button { min-height: 44px; min-width: 44px; }

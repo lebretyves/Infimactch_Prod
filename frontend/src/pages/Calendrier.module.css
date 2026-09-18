@@ -428,3 +428,13 @@
  .dayStrokes { max-width: 33px; gap: 2px; }
  .weekday { font-size: 10px; }
 }
+
+.calendarPage { gap: 20px; }
+.calendarPage .planning { gap: 20px; }
+.calendarPage .instructions { font-size: 14px; line-height: 1.55; }
+.calendarPage .instructions span { font-size: 13px; }
+.calendarPage .slotHours { font-size: 12px; }
+.calendarPage form[id="zone-mobilite"] { scroll-margin-top: 24px; }
+.calendarPage nav a { min-height: 44px; display: inline-flex; align-items: center; }
+
+.calendarPage button { min-height: 44px; min-width: 44px; }

@@ -82,3 +82,20 @@
 .documents strong {
   font-size: 12px;
 }
+
+.dossierPage { max-width: 1120px; gap: 20px; }
+.sectionNav { display: flex; flex-wrap: wrap; gap: 4px 8px; padding-block: 8px; border-block: 1px solid var(--line); }
+.sectionNav a { min-height: 44px; display: inline-flex; align-items: center; padding: 8px 12px; color: var(--brand-700); font-size: 14px; font-weight: 600; text-decoration: none; border-radius: 6px; }
+.sectionNav a:hover { background: var(--brand-50); }
+.sectionNav a:focus-visible { outline: var(--focus-ring); outline-offset: 3px; }
+.contextNote { font-size: 14px; color: var(--ink-700); }
+.contextNote a { color: var(--brand-700); font-weight: 600; }
+.documentLayout { display: grid; grid-template-columns: minmax(0,.9fr) minmax(0,1.1fr); gap: 20px; align-items: start; }
+.documentStack { display: grid; gap: 20px; min-width: 0; }
+.documentStack > :is(form,section) { scroll-margin-top: 24px; }
+.dossierPage .help, .dossierPage .documents strong { font-size: 14px; }
+.dossierPage .fileLabel { min-height: 44px; }
+@media(max-width:1150px) { .documentLayout { grid-template-columns: minmax(0,1fr); } }
+@media(max-width:560px) { .sectionNav a { padding-inline: 8px; } }
+
+.dossierPage button { min-height: 44px; min-width: 44px; }

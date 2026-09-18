@@ -1,4 +1,4 @@
-﻿import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useParams } from "react-router";
 import { useAuth } from "@/context/AuthContext";
 import { useRemote } from "@/lib/useRemote";
@@ -118,6 +118,7 @@ export default function Candidater() {
         <p>{salary(m)}</p>
         <p>{m.address}</p>
       </section>
+      <div className={s.reviewColumns}>
       <section className={s.bloc}>
         <h2>Conditions de la mission</h2>
         <p style={{ whiteSpace: "pre-wrap" }}>{m.description}</p>
@@ -150,6 +151,7 @@ export default function Candidater() {
           Mon dossier professionnel
         </ButtonLink>
       </section>
+      </div>
       {check.loading && <p role="status">Vérification des critères de la mission…</p>}
       {check.error && <p className={s.warning} role="status">Le détail des écarts est temporairement indisponible. Vous pouvez envoyer votre candidature ; les critères seront revérifiés à l’envoi.</p>}
       {!!check.data?.warnings.length && <section className={s.warning} role="status" aria-labelledby="application-warning-title">

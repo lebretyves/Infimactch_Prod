@@ -24,7 +24,7 @@ export default function Compte() {
     finally{pending.current=false;setBusy(false);}
   }
   async function cancel(){if(pending.current)return;pending.current=true;setBusy(true);setError('');setMessage('');try{await api('/me/closure-request',{method:'DELETE'});setMessage('Votre demande de clôture a été annulée.');remote.reload();}catch(cause){setError(cause instanceof Error?cause.message:'L’annulation n’a pas été confirmée.');}finally{pending.current=false;setBusy(false);}}
-  return <div className={s.page}><header className={s.header}><div><h1>Mon compte</h1><p>Consultez et gérez votre demande de clôture.</p></div></header>
+  return <div className={`${s.page} ${s.focusedPage}`}><header className={s.header}><div><h1>Mon compte</h1><p>Consultez et gérez votre demande de clôture.</p></div></header>
     {error&&<p role="alert">{error}</p>}{message&&<p role="status">{message}</p>}
     <section className={s.card}><h2>Clôturer mon compte</h2><p>La demande est examinée par un administrateur. Des candidatures en cours, des missions ouvertes ou affectées, ou votre rôle de dernier responsable d’une organisation peuvent bloquer la clôture.</p><p>Après exécution, l’accès au compte est retiré et les données de profil sont anonymisées. L’historique métier nécessaire peut être conservé : il ne s’agit pas d’un effacement immédiat de toutes les données.</p>
       {remote.loading?<p role="status">Chargement de votre demande…</p>:remote.error?<div role="alert"><p>{remote.error}</p><Button onClick={remote.reload}>Réessayer</Button></div>:<>

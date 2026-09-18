@@ -308,13 +308,13 @@ function Editor({
 
   }
   return (
-    <div className={u.page}>
+    <div className={`${u.page} ${s.calendarPage}`}>
       <header className={u.header}>
         <div>
           <p className={u.eyebrow}>Disponibilités et mobilité</p>
           <h1>Mon planning</h1>
           <p className={u.subtitle}>
-            Choisissez vos créneaux directement dans l’agenda.
+            Indiquez quand et où vous souhaitez travailler.
           </p>
         </div>
         <Button disabled={!!busy} onClick={focusForm}>
@@ -323,7 +323,8 @@ function Editor({
       </header>
       <nav className={u.tabs} aria-label="Planning">
         <NavLink to="/calendrier">Disponibilités</NavLink>
-        <NavLink to="/historique">Historique des missions</NavLink>
+        <a href="#zone-mobilite">Ma zone de mobilité</a>
+        <NavLink to="/historique">Mes missions</NavLink>
       </nav>
       {error && (
         <p role="alert" className={u.feedback}>
@@ -596,7 +597,7 @@ function Editor({
           </div>
         )}
       </section>
-      <form
+      <form id="zone-mobilite" tabIndex={-1}
         className={u.card}
         onSubmit={(e) => {
           e.preventDefault();

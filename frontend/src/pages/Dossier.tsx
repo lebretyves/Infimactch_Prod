@@ -153,14 +153,18 @@ export default function Dossier() {
       </div>
     );
   return (
-    <div className={u.page}>
+    <div className={`${u.page} ${s.dossierPage}`}>
       <header>
         <p className={u.eyebrow}>Mon dossier</p>
         <h1>Mon dossier professionnel</h1>
         <p className={u.subtitle}>
-          Retrouvez vos informations de vérification et vos justificatifs.
+          Vérifiez votre statut professionnel et gérez vos pièces administratives.
         </p>
       </header>
+      <nav className={s.sectionNav} aria-label="Rubriques de mon dossier">
+        <a href="#verification">Vérification RPPS</a><a href="#justificatifs">Justificatifs</a><a href="#reference">Référence professionnelle</a><a href="#rib">RIB</a>
+      </nav>
+      <p className={s.contextNote}>Pour vos diplômes déclarés, compétences et expériences, rendez-vous dans <a href="/profil">Mon profil</a>.</p>
       <BankReminder key={r.data?.bank.document?.id||r.data?.bank.iban||"empty"} />
       {error && (
         <p role="alert" className={u.feedback}>
@@ -180,9 +184,9 @@ export default function Dossier() {
           <Button onClick={r.reload}>Réessayer</Button>
         </div>
       ) : (
-        <div className={u.twoColumns}>
-          <div className={u.stack}>
-            <form
+        <div className={s.documentLayout}>
+          <div className={s.documentStack}>
+            <form id="verification" tabIndex={-1}
               className={u.card}
               onSubmit={(e) => {
                 e.preventDefault();
@@ -264,7 +268,7 @@ export default function Dossier() {
                 </div>
               </div>
             </form>
-            <form
+            <form id="reference" tabIndex={-1}
               className={u.card}
               onSubmit={(e) => {
                 e.preventDefault();
@@ -338,8 +342,8 @@ export default function Dossier() {
               </fieldset>
             </form>
           </div>
-          <div className={u.stack}>
-            <section className={u.card}>
+          <div className={s.documentStack}>
+            <section id="justificatifs" tabIndex={-1} className={u.card}>
               <h2 className={u.cardHeading}>
                 <Icon name="file-text" />
                 Justificatifs de démonstration

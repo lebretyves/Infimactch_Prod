@@ -1,4 +1,4 @@
-﻿.page {
+.page {
   display: grid;
   gap: 24px;
   max-width: 960px;
@@ -121,3 +121,20 @@
 .warning p { color: inherit; margin: 10px 0 0; }
 .warning ul { padding-left: 22px; margin: 0; }
 .warning li { overflow-wrap: anywhere; }
+
+:global([data-space="candidate"]) .page { gap: 20px; max-width: 1080px; }
+:global([data-space="candidate"]) .rappel,
+:global([data-space="candidate"]) .bloc { padding: 20px; }
+.reviewColumns { display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr); gap: 20px; align-items: start; }
+:global([data-space="candidate"]) .rappel h2,
+:global([data-space="candidate"]) .bloc h2 { font-size: 18px; margin-bottom: 12px; }
+@media (max-width: 1050px) { .reviewColumns { grid-template-columns: 1fr; } }
+@media (max-width: 600px) {
+  :global([data-space="candidate"]) .rappel,
+  :global([data-space="candidate"]) .bloc { padding: 16px; }
+}
+:global([data-space="candidate"]) .actions > * { min-height: 44px; height: auto; padding-block: 12px; }
+@media (max-width: 600px) {
+  :global([data-space="candidate"]) .actions { display: grid; grid-template-columns: 1fr; gap: 8px; }
+  :global([data-space="candidate"]) .actions > button { grid-row: 1; width: 100%; }
+}

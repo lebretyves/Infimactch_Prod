@@ -1,4 +1,4 @@
-﻿import {chromium} from 'playwright';
+import {chromium} from 'playwright';
 import assert from 'node:assert/strict';
 import {createRequire} from 'node:module';
 import {existsSync} from 'node:fs';
@@ -24,7 +24,7 @@ try{
  else if(p.endsWith('/profile/cv/parse')){const b=route.request().postDataJSON();assert.deepEqual(Object.keys(b),['text']);parses++;json=parseCvExperience(b.text);}
  else if(p.includes('psc'))json={enabled:false};
  await route.fulfill({status:200,json});});
- const page=await context.newPage();page.on('pageerror',e=>errors.push(e.message));await page.goto(base+'/profil');await page.getByRole('button',{name:'Tout refuser',exact:true}).click();await page.getByRole('heading',{name:'Préremplir mes expériences avec mon CV'}).waitFor();
+ const page=await context.newPage();page.on('pageerror',e=>errors.push(e.message));await page.goto(base+'/profil');await page.getByRole('button',{name:'Tout refuser',exact:true}).click();await page.locator('summary').filter({hasText:'Importer un CV'}).click();await page.getByRole('heading',{name:'Préremplir mes expériences avec mon CV'}).waitFor();
  const input=page.getByLabel('Importer mon CV (PDF, JPEG ou PNG)');
  await input.setInputFiles({name:'cv.pdf',mimeType:'application/pdf',buffer:bankPdf(lines)});await page.getByLabel('Établissement proposé 1',{exact:true}).waitFor();
  assert.equal(await page.getByLabel('Établissement proposé 1',{exact:true}).inputValue(),'CHU Exemple');assert.equal(await page.getByLabel('Service proposé 1',{exact:true}).inputValue(),'CARDIOLOGIE');assert.equal(await page.getByLabel('Début proposé 1',{exact:true}).inputValue(),'2020-02-01');assert.equal(await page.getByLabel('Fin proposée 2',{exact:true}).inputValue(),'2023-06-30');assert.equal(writes,0);
@@ -45,7 +45,7 @@ try{
  assert.equal(await page.getByLabel('Fin proposée 1',{exact:true}).inputValue(),'2021-03-31');
  await input.setInputFiles({name:'invalid.pdf',mimeType:'application/pdf',buffer:Buffer.from('invalid')});await page.getByRole('alert').filter({hasText:'illisible'}).waitFor();assert.equal(writes,1);
  await input.setInputFiles({name:'cv-no-period.pdf',mimeType:'application/pdf',buffer:bankPdf(['EXPERIENCES PROFESSIONNELLES','CHU Exemple | Cardiologie sans periode precise'])});
- const preview=page.locator('details').filter({has:page.getByText('Voir un aperçu du texte lu dans mon CV',{exact:true})});
+ const preview=page.locator('details').filter({has:page.getByText('Voir un aperçu du texte lu dans mon CV',{exact:true})}).last();
  await preview.waitFor();assert.equal(await preview.getAttribute('open'),null);
  await preview.locator('summary').click();assert.match(await preview.locator('pre').innerText(),/sans periode precise/);
  assert.equal(await page.evaluate(()=>JSON.stringify({...localStorage,...sessionStorage}).includes('sans periode precise')),false);
