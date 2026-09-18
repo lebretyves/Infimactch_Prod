@@ -1,8 +1,9 @@
+import {missionDate} from "@/services/market";
 ﻿import { useEffect, useState } from "react";
 import { useSearchParams } from "react-router";
 import { useAuth } from "@/context/AuthContext";
 import { useRemote } from "@/lib/useRemote";
-import { enterpriseMissions, date, statusLabels } from "@/services/market";
+import { enterpriseMissions, statusLabels } from "@/services/market";
 import { Button, ButtonLink } from "@/ui/Button";
 import s from "./MesEtablissements.module.css";
 export default function EntrepriseMissions() {
@@ -51,7 +52,7 @@ export default function EntrepriseMissions() {
         {r.data?.map(m => <article key={m.id} className={s.mission}>
           <p className={s.site}>{m.establishment_name || (establishmentId ? establishmentName : "Établissement non renseigné")}</p>
           <h2>{m.title}</h2><p>{statusLabels[m.status || ""] || "État à vérifier"} · {m.qualification}</p>
-          <p>{date(m.start_at, m.timezone)} → {date(m.end_at, m.timezone)} · heure locale</p>
+          <p>{missionDate(m)} → {missionDate(m, true)} · {m.schedule_precision === "DATE" ? "Horaires précis à confirmer" : "heure locale"}</p>
           <div className={s.actions}>{editMode && m.can_manage && (m.status === "OPEN" || m.status === "DRAFT") && <ButtonLink to={"/gestion/missions/" + m.id + "/modifier"} size="sm">Modifier cette offre</ButtonLink>}<ButtonLink to={"/gestion/missions/" + m.id} variant="outline" size="sm">Mission et candidatures</ButtonLink></div>
         </article>)}
         {!r.data?.length && <p className={s.empty}>Aucune mission ne correspond à cette recherche sur cette page.</p>}

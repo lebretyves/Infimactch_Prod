@@ -1,3 +1,4 @@
+import {MissionSchedulePrecision1789718400000} from "./mission-schedule-precision";
 import {PersonalCorrections1789382300000} from './personal-corrections';
 import { JobsPipeCredits1789382200000 } from "./jobspipe-credits";
 import { ExternalCollection1789382100000 } from "./external-collection";
@@ -56,6 +57,7 @@ export class Database implements OnModuleDestroy {
       ExternalCollection1789382100000,
       JobsPipeCredits1789382200000,
       PersonalCorrections1789382300000,
+      MissionSchedulePrecision1789718400000,
     ],
     logging: false,
     extra: { max: 12 },

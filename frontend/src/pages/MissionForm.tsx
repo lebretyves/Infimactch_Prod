@@ -7,7 +7,7 @@ import {
   type OrganizationContext,
 } from "@/services/organizations";
 import { staffingNeed, type StaffingNeed } from "@/services/needs";
-import { parisDateTimeInput, zonedDateTimeInput, zonedDateTimeToISO } from "@/lib/parisDateTime";
+import { localDate, inclusiveEndDate, missionDateRange, type SchedulePrecision } from "@/lib/missionDateRange";
 import u from "@/components/NurseUI.module.css";
 import { SKILLS, labelCode } from "@/data/professional";
 import { Button, ButtonLink } from "@/ui/Button";
@@ -53,6 +53,7 @@ type Stored = {
   desired_skills: string[];
   min_experience_months: number;
   timezone?: string;
+  schedule_precision?: SchedulePrecision;
   start_at: string;
   end_at: string;
   shift: string;
@@ -106,8 +107,8 @@ function Form({
           desiredSkills: mission.desired_skills,
           minExperienceMonths: Number(mission.min_experience_months),
           timezone: mission.timezone || "Europe/Paris",
-          start: zonedDateTimeInput(mission.start_at, mission.timezone),
-          end: zonedDateTimeInput(mission.end_at, mission.timezone),
+          start: localDate(mission.start_at, mission.timezone),
+          end: inclusiveEndDate(mission.end_at, mission.timezone),
           shift: mission.shift,
           address: mission.address,
           latitude: mission.latitude,
@@ -127,15 +128,19 @@ function Form({
           requiredSkills: need?.details?.requiredSkills || [],
           desiredSkills: [],
           minExperienceMonths: need?.details?.minExperienceMonths || 0,
-          timezone: "Europe/Paris",
-          start: need?.details ? parisDateTimeInput(need.details.start) : "",
-          end: need?.details ? parisDateTimeInput(need.details.end) : "",
-          shift: need?.details?.shift || "DAY",
+          timezone: need?.details?.timezone || "Europe/Paris",
+          start: need?.details ? localDate(need.details.start, need.details.timezone) : "",
+          end: need?.details ? inclusiveEndDate(need.details.end, need.details.timezone) : "",
+          shift: need?.details?.shift || "UNKNOWN",
           address: need?.details?.address || need?.establishment_address || initialEstablishment?.address || "",
           latitude: initialEstablishment?.latitude ?? null,
           longitude: initialEstablishment?.longitude ?? null,
           hourlySalary: null,
         },
+  );
+  // Keep a string while editing so clearing zero does not immediately restore it.
+  const [experienceYears, setExperienceYears] = useState(() =>
+    String(Number((v.minExperienceMonths / 12).toFixed(4))),
   );
   const [busy, setBusy] = useState(false),
     [error, setError] = useState("");
@@ -152,6 +157,10 @@ function Form({
     setBusy(true);
     setError("");
     try {
+      const years = Number(experienceYears);
+      if (!experienceYears.trim() || !Number.isFinite(years) || years < 0 || years > 50)
+        throw new Error("Renseignez une expérience entre 0 et 50 ans.");
+      const minExperienceMonths = Math.round(years * 12);
       if (v.latitude === null || v.longitude === null)
         throw new Error("Renseignez la position du lieu de mission.");
       if (v.hourlySalary === null || v.hourlySalary <= 0)
@@ -160,24 +169,14 @@ function Form({
         throw new Error(
           "Choisissez votre établissement ou un établissement rattaché à votre agence.",
         );
-      const start = zonedDateTimeToISO(
-        v.start,
-        mission?.start_at || need?.details?.start,
-        v.timezone,
-      );
-      const end = zonedDateTimeToISO(
-        v.end,
-        mission?.end_at || need?.details?.end,
-        v.timezone,
-      );
-      if (Date.parse(end) <= Date.parse(start))
-        throw new Error("La fin doit être après le début.");
-      if (!mission && Date.parse(start) <= Date.now())
-        throw new Error(
-          "La mission doit commencer dans le futur. Ajustez la période du besoin.",
-        );
+      const { start, end, schedulePrecision } = missionDateRange(v.start, v.end, v.timezone,
+        mission ? { start: mission.start_at, end: mission.end_at, timezone: mission.timezone, schedulePrecision: mission.schedule_precision } : undefined);
+      if (!mission && v.start < localDate(new Date().toISOString(), v.timezone))
+        throw new Error("La mission doit commencer aujourd’hui ou à une date ultérieure.");
       const body = {
         ...v,
+        minExperienceMonths,
+        schedulePrecision,
         agencyId: v.agencyId || undefined,
         staffingRequestId: need?.id || mission?.staffing_request_id || undefined,
         start,
@@ -418,34 +417,34 @@ function Form({
           </fieldset>
         ))}
         <TextField
-          label="Expérience minimale dans le service (mois)"
+          label="Expérience minimale dans le service (années)"
           type="number"
           required
           min={0}
-          max={600}
-          value={v.minExperienceMonths}
-          onChange={(e) => set({ minExperienceMonths: Number(e.target.value) })}
+          max={50}
+          step="any"
+          value={experienceYears}
+          onChange={(e) => setExperienceYears(e.target.value)}
+          hint="0 = aucune expérience minimale. Exemple : 1,5 an = 18 mois. Les fractions d’année sont arrondies au mois le plus proche."
         />
         <SelectField label="Fuseau horaire de la mission" value={v.timezone} onChange={(e) => set({ timezone: e.target.value })}>
           {Array.from(new Set(["Europe/Paris", "America/Guadeloupe", "America/Martinique", "America/Cayenne", "Indian/Reunion", "Indian/Mayotte", v.timezone])).map(zone => <option key={zone} value={zone}>{zone}</option>)}
         </SelectField>
         <p>
-          La période est une plage exacte dans le fuseau sélectionné, sans
-          répétition quotidienne automatique.
+          Dates inclusives. Horaires précis à confirmer.
+          {mission && mission.schedule_precision !== "DATE" && " Les horaires déjà enregistrés sont conservés si les dates et le fuseau restent inchangés."}
         </p>
         <div className={s.paire}>
           <TextField
-            label="Début de mission"
-            type="datetime-local"
-            step={60}
+            label="Date de début"
+            type="date"
             required
             value={v.start}
             onChange={(e) => set({ start: e.target.value })}
           />
           <TextField
-            label="Fin de mission"
-            type="datetime-local"
-            step={60}
+            label="Date de fin incluse"
+            type="date"
             required
             min={v.start || undefined}
             value={v.end}
@@ -457,9 +456,10 @@ function Form({
           value={v.shift}
           onChange={(e) => set({ shift: e.target.value })}
         >
+          <option value="UNKNOWN">Non connu</option>
           <option value="DAY">Jour</option>
           <option value="NIGHT">Nuit</option>
-          <option value="MIXED">Alternance jour et nuit</option>
+          {v.shift === "MIXED" && <option value="MIXED">Alternance jour et nuit (déjà enregistrée)</option>}
         </SelectField>
         <TextField
           label="Adresse du lieu de mission"

@@ -125,3 +125,18 @@ test("documented score example is 93.75 and exposes components", () => {
   expect(result.score).toBe(93.75);
   expect(result.components).toEqual({ C: 1, Z: 0.75, D: 1, E: 1 });
 });
+
+test("date-only requests never invent all-day availability or conflicts", () => {
+  expect(match({ ...p, available: [], unavailable: [slot], conflicts: [slot], acceptedShifts: [] }, { ...m, schedulePrecision: "DATE", shift: "UNKNOWN" })).toMatchObject({ eligible: false, score: null, components: null, reasons: ["SCHEDULE_UNCONFIRMED"] });
+});
+test("unconfirmed schedule still checks qualification and RPPS", () => {
+  expect(match({ ...p, qualifications: [], rppsStatus: "PENDING" }, { ...m, schedulePrecision: "DATE", shift: "UNKNOWN" }).reasons).toEqual(["QUALIFICATION_MISSING", "RPPS_PENDING", "SCHEDULE_UNCONFIRMED"]);
+});
+test("unknown shift does not create a shift preference mismatch or score", () => {
+  expect(match(p, { ...m, schedulePrecision: "EXACT", shift: "UNKNOWN" })).toMatchObject({ eligible: false, score: null, reasons: ["SCHEDULE_UNCONFIRMED"] });
+  expect(match({ ...p, conflicts: [slot] }, { ...m, schedulePrecision: "EXACT", shift: "UNKNOWN" }).reasons).toEqual(["SCHEDULE_UNCONFIRMED", "ASSIGNMENT_CONFLICT"]);
+});
+test("explicit exact precision preserves legacy matching results", () => {
+  expect(match(p, { ...m, schedulePrecision: "EXACT" })).toEqual(match(p, m));
+  expect(match({ ...p, available: [], conflicts: [slot] }, { ...m, schedulePrecision: "EXACT" })).toEqual(match({ ...p, available: [], conflicts: [slot] }, m));
+});

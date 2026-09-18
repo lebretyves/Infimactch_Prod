@@ -21,7 +21,7 @@ export const SKILLS: Record<string, string> = {
   SSPI: "Surveillance en salle de réveil",
 };
 export const labelCode = (value: string) =>
-  SKILLS[value] ||
+  (value === "UNKNOWN" ? "Non connu" : SKILLS[value]) ||
   value
     .replace(/^BLOCK_/, "Bloc : ")
     .replaceAll("_", " ")

@@ -1,3 +1,4 @@
+import {missionDate} from "@/services/market";
 import { useRef, useState } from "react";
 import { useParams } from "react-router";
 import { useAuth } from "@/context/AuthContext";
@@ -113,8 +114,8 @@ export default function GestionMission() {
       </ButtonLink>
       <h1>{m.title}</h1>
       <p>
-        {statusLabels[m.status || ""] || "État à vérifier"} · {date(m.start_at, m.timezone)}{" "}
-        → {date(m.end_at, m.timezone)}
+        {statusLabels[m.status || ""] || "État à vérifier"} · {missionDate(m)}{" "}
+        → {missionDate(m, true)}
       </p>
       <p>{m.status === "DRAFT" ? "Brouillon : cette offre n’est pas encore visible aux intérimaires. Complétez-la puis publiez-la." : m.status === "OPEN" ? "Offre publiée : les intérimaires peuvent la consulter et candidater selon leurs critères." : "Cette offre n’est plus ouverte aux nouvelles candidatures."}</p>
       {m.staffing_request_id && <ButtonLink to={"/besoins#besoin-"+m.staffing_request_id} variant="outline">Voir le besoin d’origine</ButtonLink>}

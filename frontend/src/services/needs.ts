@@ -4,7 +4,9 @@ export type NeedDetails = {
   service: string;
   start: string;
   end: string;
-  shift: "DAY" | "NIGHT" | "MIXED";
+  shift: "DAY" | "NIGHT" | "MIXED" | "UNKNOWN";
+  schedulePrecision?: "DATE" | "EXACT";
+  timezone?: string;
   headcount: number;
   population: "ADULT" | "PEDIATRIC" | "MIXED";
   block: "NONE" | "GENERAL" | "SPECIALIZED";

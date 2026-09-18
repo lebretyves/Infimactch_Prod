@@ -9,7 +9,7 @@ const readable: Record<string, string> = {
   TO_REVIEW: 'À examiner', REVIEWED: 'Examen consigné', NEEDS_INFORMATION: 'Informations nécessaires',
   INVESTIGATING: 'En cours d’analyse', RESOLVED: 'Résolu', OPEN: 'Ouvert', FRANCE_TRAVAIL: 'France Travail', JOBSPIPE: 'JobsPipe',
   QUALIFICATION_MISSING: 'Qualification requise absente', REQUIRED_SKILLS_MISSING: 'Compétences obligatoires manquantes', EXPERIENCE_INSUFFICIENT: 'Expérience insuffisante',
-  NOT_FULLY_AVAILABLE: 'Disponibilité incomplète', ASSIGNMENT_CONFLICT: 'Chevauchement avec une affectation', SHIFT_NOT_ACCEPTED: 'Horaire non accepté', MOBILITY_INCOMPLETE: 'Mobilité non renseignée', OUTSIDE_RADIUS: 'Hors du rayon de mobilité', MISSION_NOT_OPEN: 'Mission non ouverte',
+  SCHEDULE_UNCONFIRMED: 'Horaires précis à confirmer', NOT_FULLY_AVAILABLE: 'Disponibilité incomplète', ASSIGNMENT_CONFLICT: 'Chevauchement avec une affectation', SHIFT_NOT_ACCEPTED: 'Horaire non accepté', MOBILITY_INCOMPLETE: 'Mobilité non renseignée', OUTSIDE_RADIUS: 'Hors du rayon de mobilité', MISSION_NOT_OPEN: 'Mission non ouverte',
 };
 const text = (v: unknown) => readable[String(v)] || (String(v).startsWith('RPPS_') ? `Vérification RPPS : ${fmt(String(v).slice(5))}` : fmt(v));
 const permission = (user: User, name: string) => user.permissions.includes(name);

@@ -1,3 +1,4 @@
+import {missionDate} from "@/services/market";
 import { ParsedOfferDetails } from "@/components/ParsedOfferDetails";
 import { extractedSidebar } from "@/services/parsed-offer";
 import { ExternalCorrespondence } from "@/components/ExternalCorrespondence";
@@ -7,7 +8,6 @@ import { labelCode } from "@/data/professional";
 import { useRemote } from "@/lib/useRemote";
 import {
   detail,
-  date,
   salary,
   safeUrl,
   statusLabels,
@@ -273,9 +273,10 @@ export default function MissionDetail() {
         <aside className={s.card}>
           <h2>Votre prochaine mission</h2>
           <p>
-            <Icon name="calendar" size={18} /> {m.start_at || m.end_at ? `Du ${date(m.start_at, m.timezone)} au ${date(m.end_at, m.timezone)} (${m.timezone || "Europe/Paris"})` : "Dates de mission non précisées"}
+            <Icon name="calendar" size={18} /> {m.start_at || m.end_at ? `Du ${missionDate(m)} au ${missionDate(m, true)} (${m.timezone || "Europe/Paris"})` : "Dates de mission non précisées"}
           </p>
           {parsedOffer && <p className={s.muted} style={{ fontSize: 11 }}>Informations extraites du texte, à confirmer</p>}
+          {m.schedule_precision === "DATE" && <p>Horaires précis à confirmer avec l’établissement.</p>}
           {parsedSummary.schedules.length ? parsedSummary.schedules.map(item => <p key={item.key+item.evidence.start}><strong>{item.label} :</strong> {item.display}</p>) : <p>
             {{ DAY: "Jour", NIGHT: "Nuit", MIXED: "Alternance jour et nuit" }[
               m.shift || ""
