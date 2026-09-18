@@ -12,6 +12,7 @@ const Etablissement = lazy(() => import("./pages/Etablissement"));
 const Dossier = lazy(() => import("./pages/Dossier"));
 const Favoris = lazy(() => import("./pages/Favoris"));
 const Historique = lazy(() => import("./pages/Historique"));
+const MesEtablissements = lazy(() => import("./pages/MesEtablissements"));
 const Organisation = lazy(() => import("./pages/Organisation"));
 const GestionMission = lazy(() => import("./pages/GestionMission"));
 const MissionForm = lazy(() => import("./pages/MissionForm"));
@@ -105,6 +106,7 @@ export const router = creerRouteur([{ element: <QualityRoot />, children: [
           { path: "/etablissements/:id", element: <Etablissement /> },
           { path: "/historique", element: <Historique /> },
           { path: "/organisation", element: <Organisation /> },
+          { path: "/mes-etablissements", element: <MesEtablissements /> },
           { path: "/besoins", element: <Besoins /> },
           { path: "/gestion/missions/nouvelle", element: <MissionForm /> },
           { path: "/gestion/missions/:id", element: <GestionMission /> },

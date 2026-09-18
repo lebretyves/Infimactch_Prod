@@ -206,6 +206,7 @@ export function configureOpenApi(doc: OpenAPIObject) {
   };
   const commands: Record<string, string> = {
     "POST /api/v1/missions": "MissionCommand",
+    "POST /api/v1/missions/open": "MissionCommand",
     "PUT /api/v1/missions/{id}": "MissionCommand",
     "POST /api/v1/missions/{id}/publish": "MissionCommand",
     "POST /api/v1/missions/{id}/cancel": "MissionCommand",

@@ -101,7 +101,7 @@ export class MissionsService {
         "Specialty only applies to specialized block",
       );
   }
-  async create(actor: string, b: MissionDto, key?: string) {
+  async create(actor: string, b: MissionDto, key?: string, publish = false) {
     this.validate(b);
     return this.db.transaction(async (em) => {
       if (b.agencyId) {
@@ -115,8 +115,10 @@ export class MissionsService {
         const [need] = await em.query("SELECT establishment_id FROM staffing_request WHERE id=$1 FOR SHARE",[b.staffingRequestId]);
         if (!need || need.establishment_id !== b.establishmentId) throw new NotFoundException("Staffing request not available for this organization");
       }
-      const receipt = await commandReceipt(em, actor, "mission:create", key, b);
+      const receipt = await commandReceipt(em, actor, publish ? "mission:create-open" : "mission:create", key, b);
       if (receipt.replay) return receipt.response;
+      if (publish && new Date(b.start).getTime() <= Date.now())
+        throw new ConflictException("Mission must start in the future");
       const [m] = await em.query(
         `INSERT INTO mission(agency_id,establishment_id,title,description,qualification,service,population,block,specialty,required_skills,desired_skills,min_experience_months,start_at,end_at,shift,address,location,hourly_salary,staffing_request_id,timezone) VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,ST_SetSRID(ST_MakePoint($17,$18),4326)::geography,$19,$20,$21) RETURNING id,version,status`,
         [
@@ -144,6 +146,12 @@ export class MissionsService {
         ],
       );
       await audit(em, actor, "MISSION_CREATED", m.id);
+      if (publish) {
+        const [opened] = await em.query("UPDATE mission SET status='OPEN' WHERE id=$1 RETURNING id,version,status", [m.id]);
+        await audit(em, actor, "MISSION_OPEN", m.id);
+        await event(em, "MissionOPEN", {missionId:m.id,version:opened.version});
+        return receipt.save(opened);
+      }
       return receipt.save(m);
     });
   }

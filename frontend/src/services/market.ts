@@ -112,8 +112,21 @@ export function list(
     signal,
   });
 }
-export const enterpriseMissions = (offset: number, signal?: AbortSignal) =>
-  api<Listing[]>("/missions?limit=20&offset=" + offset, { signal });
+export const enterpriseMissions = (offset: number, signal?: AbortSignal, establishmentId?: string) => {
+  const params = new URLSearchParams({ limit: "20", offset: String(offset) });
+  if (establishmentId) params.set("establishmentId", establishmentId);
+  return api<Listing[]>("/missions?" + params, { signal });
+};
+export type ManagedEstablishment = {
+  id: string; name: string; address: string; finess: string | null;
+  counts: Record<"DRAFT" | "OPEN" | "FILLED" | "COMPLETED" | "CANCELLED", number>;
+  total: number;
+};
+export const managedEstablishments = (offset: number, q: string, signal?: AbortSignal) => {
+  const params = new URLSearchParams({ limit: "20", offset: String(offset) });
+  if (q.trim()) params.set("q", q.trim());
+  return api<{ items: ManagedEstablishment[]; total: number; limit: number; offset: number }>("/me/establishments?" + params, { signal });
+};
 export const applications = (offset: number, signal?: AbortSignal) =>
   api<Application[]>("/me/applications?limit=20&offset=" + offset, { signal });
 export async function favorites(signal?: AbortSignal) {

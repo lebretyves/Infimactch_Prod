@@ -1,3 +1,4 @@
+import { enterpriseMissionPage, EnterpriseMissionsPageDto } from "../organizations/establishment-directory";
 import { PageDto } from "../common/page.dto";
 import { Query } from "@nestjs/common";
 import { ApiProperty } from "@nestjs/swagger";
@@ -45,6 +46,13 @@ class MissionsController {
     @Headers("idempotency-key") key: string,
   ) {
     return this.service.create(user(r), b, key);
+  }
+  @Post("missions/open") createOpen(
+    @Req() r: Request,
+    @Body() b: MissionDto,
+    @Headers("idempotency-key") key: string,
+  ) {
+    return this.service.create(user(r), b, key, true);
   }
   @Put("missions/:id") edit(
     @Req() r: Request,
@@ -134,12 +142,8 @@ class MissionsController {
       [user(r), page.limit, page.offset],
     );
   }
-  @Get("missions") missions(@Req() r: Request, @Query() page: PageDto) {
-    return this.db.query(
-      missionSelect +
-        " WHERE EXISTS(SELECT 1 FROM membership o WHERE o.user_id=$1 AND o.active AND o.organization_id IN(m.agency_id,m.establishment_id)) ORDER BY m.created_at DESC,m.id LIMIT $2 OFFSET $3",
-      [user(r), page.limit, page.offset],
-    );
+  @Get("missions") missions(@Req() r: Request, @Query() page: EnterpriseMissionsPageDto) {
+    return enterpriseMissionPage(this.db, user(r), page);
   }
   @Get("missions/:id") async ownMission(
     @Req() r: Request,

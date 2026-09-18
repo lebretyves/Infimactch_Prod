@@ -67,11 +67,13 @@ function Form({
   reference,
   mission,
   need,
+  requestedEstablishmentId,
 }: {
   context: OrganizationContext;
   reference: Reference;
   mission?: Stored;
   need?: StaffingNeed;
+  requestedEstablishmentId?: string;
 }) {
   const navigate = useNavigate();
   const agencies = context.organizations.filter(
@@ -84,8 +86,10 @@ function Form({
         )),
   );
   const directEstablishments = context.organizations.filter(o => o.kind === "ESTABLISHMENT" && (!need || o.id === need.establishment_id));
-  const first = agencies[0]?.id || "";
-  const initialEstablishment = need ? [...directEstablishments,...context.links].find(o=>o.id===need.establishment_id) : !first ? directEstablishments[0] : undefined;
+  const requestedDirect = directEstablishments.find(o => o.id === requestedEstablishmentId);
+  const requestedLink = context.links.find(o => o.id === requestedEstablishmentId && agencies.some(a => a.id === o.agency_id));
+  const first = requestedDirect ? "" : requestedLink?.agency_id || agencies[0]?.id || "";
+  const initialEstablishment = need ? [...directEstablishments,...context.links].find(o=>o.id===need.establishment_id) : requestedDirect || requestedLink || (!first ? directEstablishments[0] : undefined);
   const [v, setV] = useState<Draft>(
     mission
       ? {
@@ -112,7 +116,7 @@ function Form({
         }
       : {
           agencyId: first,
-          establishmentId: need?.establishment_id || (!first ? directEstablishments[0]?.id : "") || "",
+          establishmentId: initialEstablishment?.id || "",
           title: need?.title || "",
           description: need?.description || "",
           qualification: need?.details?.qualification || "IDE",
@@ -184,7 +188,7 @@ function Form({
       if (key.current.body !== content)
         key.current = { body: content, id: crypto.randomUUID() };
       const result = await api<{ id: string }>(
-        mission ? "/missions/" + mission.id : "/missions",
+        mission ? "/missions/" + mission.id : "/missions/open",
         { method: mission ? "PUT" : "POST", body, key: key.current.id },
       );
       navigate("/gestion/missions/" + (mission?.id || result.id));
@@ -213,14 +217,14 @@ function Form({
       {need && (
         <section
           className={u.card}
-          aria-label="Besoin à l’origine du brouillon"
+          aria-label="Besoin à l’origine de la mission"
         >
           <h2>À partir du besoin : {need.title}</h2>
           {need.details ? (
             <p>
               Besoin de {need.details.headcount} professionnel
-              {need.details.headcount > 1 ? "s" : ""}. Ce brouillon concerne une
-              mission pour un professionnel.
+              {need.details.headcount > 1 ? "s" : ""}. Cette mission concerne une
+              vacation pour un professionnel.
             </p>
           ) : (
             <p>
@@ -230,7 +234,7 @@ function Form({
           )}
           <p>
             Vérifiez les informations préremplies et complétez le salaire et la
-            position du lieu de travail. Vous pourrez ensuite publier la mission pour la rendre visible aux intérimaires.
+            position du lieu de travail. La validation publie directement la mission et la rend visible aux intérimaires.
           </p>
           <ButtonLink to="/besoins" variant="ghost">
             Retour aux besoins
@@ -515,7 +519,7 @@ function Form({
         <Button type="submit" disabled={!linked.length} loading={busy}>
           {mission
             ? "Enregistrer les modifications"
-            : "Enregistrer le brouillon"}
+            : "Créer et publier la mission"}
         </Button>
       </fieldset>
       <ButtonLink
@@ -537,7 +541,8 @@ export default function MissionForm() {
   const { id } = useParams();
   const [params] = useSearchParams();
   const needId = !id ? params.get("besoin") : null;
-  const pageKey = (id || "new") + ":" + (needId || "");
+  const requestedEstablishmentId = !id && !needId ? params.get("establishmentId") || undefined : undefined;
+  const pageKey = (id || "new") + ":" + (needId || "") + ":" + (requestedEstablishmentId || "");
   const r = useRemote(async (signal) => {
     const [context, reference, mission, need] = await Promise.all([
       organizations(signal),
@@ -571,7 +576,7 @@ export default function MissionForm() {
           )}
         </div>
       ) : (
-        r.data && <Form key={pageKey} {...r.data} />
+        r.data && <Form key={pageKey} {...r.data} requestedEstablishmentId={requestedEstablishmentId} />
       )}
     </div>
   );

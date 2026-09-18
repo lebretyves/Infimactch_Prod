@@ -30,7 +30,8 @@ function NavigationLink({ item }: { item: NavigationItem }) {
 const enterpriseNavigation: { to: string; label: string; icon: IconName }[] = [
   { to: "/accueil", label: "Mon espace", icon: "nav-home" },
   { to: "/notifications", label: "Notifications", icon: "bell" },
-  { to: "/missions", label: "Offres et suivi", icon: "search" },
+  { to: "/mes-etablissements", label: "Mes établissements", icon: "building" },
+  { to: "/missions", label: "Missions et suivi", icon: "search" },
   { to: "/besoins", label: "Besoins", icon: "briefcase" },
   { to: "/organisation", label: "Organisation", icon: "building" },
 ];

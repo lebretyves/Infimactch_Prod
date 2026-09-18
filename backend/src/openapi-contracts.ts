@@ -102,6 +102,7 @@ export const additionalResponses:Record<string,any>={
  "POST /api/v1/me/favorites":ok,"DELETE /api/v1/me/favorites/{kind}/{id}":ok,
  "POST /api/v1/me/notifications/{id}/read":ok,
  "GET /api/v1/dashboards":obj({family:{...str,enum:["NURSE","ENTERPRISE"]},profile:obj({display_name:str,rpps_status:str,available:array(interval)}),counts:{type:"object",additionalProperties:{oneOf:[int,{type:"string",pattern:"^[0-9]+$"}]}},organizations:array(organization)},["family","counts"]),
+ "GET /api/v1/me/establishments":page(obj({id:uuid,name:str,address:str,finess:nullable(str),total:int,counts:obj({DRAFT:int,OPEN:int,FILLED:int,COMPLETED:int,CANCELLED:int})})),
  "GET /api/v1/me/organizations":obj({organizations:array(organization),links:array(obj({agency_id:uuid,establishment_id:uuid}))},["organizations","links"]),
  "PUT /api/v1/organizations/{id}":ok,
  "GET /api/v1/assignments/{id}/confirmation":obj({status:str,document_id:nullable(uuid),mission_version:int,template_version:int},["status","document_id"]),
