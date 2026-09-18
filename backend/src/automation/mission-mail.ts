@@ -55,13 +55,13 @@ export async function generateCancellations(db:Database,documents:DocumentsServi
   return generated;
 }
 export async function dispatchMissionEmails(db:Database,documents:DocumentsService,limit=3,transport:typeof fetch=fetch) {
-  if(!process.env.RESEND_API_KEY || !process.env.RESEND_FROM)return {configured:false,sent:0};
+  if(!process.env.SMTP2GO_API_KEY || !process.env.SMTP2GO_FROM)return {configured:false,sent:0};
   let sent=0;
-  // Resend retains idempotency keys for 24 hours. Never automatically resend an ambiguous request outside that window.
-  await db.query("UPDATE mission_email SET status='UNCERTAIN',last_error='IDEMPOTENCY_WINDOW_EXPIRED',lease_until=NULL WHERE status IN('PENDING','SENDING') AND first_attempt_at<now()-interval '23 hours'");
+  // An interrupted SMTP2GO request may already have sent the message: never replay it blindly.
+  await db.query("UPDATE mission_email SET status='UNCERTAIN',last_error='SEND_RESULT_UNKNOWN',lease_until=NULL WHERE status='SENDING' AND lease_until<now()");
   for(let i=0;i<limit;i++) {
     const item=await db.transaction(async em=>{
-      const [r]=await em.query("SELECT e.*,a.status AS assignment_status FROM mission_email e JOIN assignment a ON a.id=e.assignment_id WHERE e.status IN('PENDING','SENDING') AND ($1::text IS NULL OR lower(e.recipient)=lower($1)) AND e.available_at<=now() AND (e.lease_until IS NULL OR e.lease_until<now()) ORDER BY e.created_at,e.id LIMIT 1 FOR UPDATE OF e SKIP LOCKED",[process.env.RESEND_TEST_RECIPIENT || null]);
+      const [r]=await em.query("SELECT e.*,a.status AS assignment_status FROM mission_email e JOIN assignment a ON a.id=e.assignment_id WHERE e.status='PENDING' AND e.available_at<=now() AND (e.lease_until IS NULL OR e.lease_until<now()) ORDER BY e.created_at,e.id LIMIT 1 FOR UPDATE OF e SKIP LOCKED");
       if(!r)return null;
       const [allowed]=await em.query('SELECT 1 FROM account WHERE id=$1 AND active AND email=$2 AND ($3::uuid IS NULL OR EXISTS(SELECT 1 FROM membership WHERE user_id=$1 AND organization_id=$3 AND active))',[r.user_id,r.recipient,r.organization_id]);
       if(!allowed || (r.kind==='CONFIRMATION' && !['ACTIVE','COMPLETED'].includes(r.assignment_status))) {
@@ -69,28 +69,32 @@ export async function dispatchMissionEmails(db:Database,documents:DocumentsServi
         return {skip:true};
       }
       r.token=randomUUID();
-      r.payload.from ||= process.env.RESEND_FROM;
+      r.payload.from ||= process.env.SMTP2GO_FROM;
       await em.query("UPDATE mission_email SET status='SENDING',attempts=attempts+1,first_attempt_at=COALESCE(first_attempt_at,now()),lease_until=now()+interval '90 seconds',lease_token=$2,payload=$3 WHERE id=$1",[r.id,r.token,JSON.stringify(r.payload)]);
       return r;
     });
     if(!item)break;
     if(item.skip)continue;
-    let failure='SEND_RESULT_UNKNOWN',permanent=false;
+    let failure='SEND_RESULT_UNKNOWN',permanent=false,retry=false,requested=false;
     try {
       const doc=await documents.read(item.user_id,item.document_id);
-      const body={from:item.payload.from,to:[item.recipient],subject:item.payload.subject,html:item.payload.html,text:item.payload.text,attachments:[{filename:(item.kind==='CONFIRMATION'?'confirmation':'annulation')+'-mission-'+item.assignment_id+'.pdf',content:doc.data.toString('base64')}]};
-      const response=await transport('https://api.resend.com/emails',{method:'POST',headers:{Authorization:'Bearer '+process.env.RESEND_API_KEY,'Content-Type':'application/json','Idempotency-Key':'mission-email/'+item.id},body:JSON.stringify(body),signal:AbortSignal.timeout(15000)});
+      const body={sender:item.payload.from,to:[item.recipient],subject:item.payload.subject,html_body:item.payload.html,text_body:item.payload.text,attachments:[{filename:(item.kind==='CONFIRMATION'?'confirmation':'annulation')+'-mission-'+item.assignment_id+'.pdf',fileblob:doc.data.toString('base64'),mimetype:'application/pdf'}]};
+      requested=true;
+      const response=await transport('https://api.smtp2go.com/v3/email/send',{method:'POST',headers:{'X-Smtp2go-Api-Key':process.env.SMTP2GO_API_KEY,'Content-Type':'application/json'},body:JSON.stringify(body),signal:AbortSignal.timeout(15000)});
       if(!response.ok) {
-        failure='RESEND_HTTP_'+response.status;
-        permanent=response.status>=400 && response.status<500 && ![408,409,429].includes(response.status);
+        failure='SMTP2GO_HTTP_'+response.status;
+        retry=response.status===429;
+        permanent=response.status>=400 && response.status<500 && ![408,429].includes(response.status);
         throw new Error(failure);
       }
-      const result=await response.json() as {id?:string};
-      if(!result.id)throw new Error('MISSING_RECEIPT');
-      await db.query("UPDATE mission_email SET status='SENT',provider_id=$3,sent_at=now(),lease_until=NULL,last_error=NULL WHERE id=$1 AND lease_token=$2",[item.id,item.token,result.id]);
+      const result=await response.json() as {data?:{email_id?:string;succeeded?:number;failed?:number}};
+      if(result.data?.succeeded!==1 || result.data.failed!==0 || !result.data.email_id) {
+        permanent=result.data?.succeeded===0;failure='SMTP2GO_RECEIPT_INVALID';throw new Error(failure);
+      }
+      await db.query("UPDATE mission_email SET status='SENT',provider_id=$3,sent_at=now(),lease_until=NULL,last_error=NULL WHERE id=$1 AND lease_token=$2",[item.id,item.token,result.data.email_id]);
       sent++;
     } catch {
-      await db.query("UPDATE mission_email SET status=$3,last_error=$4,lease_until=NULL,available_at=now()+interval '60 seconds'*power(2,LEAST(attempts,5)) WHERE id=$1 AND lease_token=$2",[item.id,item.token,permanent?'FAILED':item.attempts>=4?'UNCERTAIN':'PENDING',failure]);
+      await db.query("UPDATE mission_email SET status=$3,last_error=$4,lease_until=NULL,available_at=now()+interval '60 seconds'*power(2,LEAST(attempts,5)) WHERE id=$1 AND lease_token=$2",[item.id,item.token,permanent?'FAILED':((retry || !requested) && item.attempts<4)?'PENDING':'UNCERTAIN',failure]);
     }
   }
   return {configured:true,sent};
