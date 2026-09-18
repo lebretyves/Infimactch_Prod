@@ -8,7 +8,7 @@ import {validate} from "class-validator";
 import {Database} from "../../src/database/database";
 import {MissionsService} from "../../src/missions/missions.service";
 import {MissionDto} from "../../src/missions/mission.dto";
-import {establishmentPage,enterpriseMissionPage,EstablishmentsPageDto,EnterpriseMissionsPageDto} from "../../src/organizations/establishment-directory";
+import {enterpriseMissionSearch,establishmentPage,enterpriseMissionPage,EstablishmentsPageDto,EnterpriseMissionsPageDto} from "../../src/organizations/establishment-directory";
 let db:Database;
 before(async()=>{const url=new URL(process.env.DATABASE_URL!);if(process.env.NODE_ENV!=="test"||url.hostname!=="127.0.0.1"||url.port!=="55433"||url.pathname!=="/infimatch_test")throw Error("Requires isolated local test database");db=await new Database().connect();});
 after(async()=>{await db?.onModuleDestroy();});
@@ -95,4 +95,36 @@ test("reminders process bounded batches and resume without duplicate windows",as
  assert.deepEqual(results.map(r=>r.processed),[25,25,11,0]);assert.deepEqual(results.map(r=>r.hasMore),[true,true,false,false]);
  const [windows]=await db.query('SELECT count(*)::int n FROM reminder_window WHERE mission_id=ANY($1::uuid[])',[ids]);assert.equal(windows.n,61);
  const [notices]=await db.query("SELECT count(*)::int n FROM notification n JOIN outbox e ON n.event_id=e.id WHERE n.user_id=$1 AND n.kind='REMINDER' AND e.payload->>'missionId'=ANY($2::text[])",[owner.id,ids]);assert.equal(notices.n,61);
+});
+
+
+test("enterprise mission search counts filtered pages, preserves scope and supports local dates",async()=>{
+ const service=new MissionsService(db);
+ const [owner]=await db.query("INSERT INTO account(email,password_hash,family,terms_version) VALUES($1,'fixture','ENTERPRISE','fixture') RETURNING id",[randomUUID()+'@example.invalid']);
+ const [outsider]=await db.query("INSERT INTO account(email,password_hash,family,terms_version) VALUES($1,'fixture','ENTERPRISE','fixture') RETURNING id",[randomUUID()+'@example.invalid']);
+ const [agency]=await db.query("INSERT INTO organization(kind,name,address,referent) VALUES('AGENCY','Pagination agency','Paris','Fixture') RETURNING id");
+ const [site]=await db.query("INSERT INTO organization(kind,name,address,referent,finess) VALUES('ESTABLISHMENT','Pagination hospital','Lyon','Fixture','000000021') RETURNING id");
+ await db.query('INSERT INTO membership(user_id,organization_id) VALUES($1,$2),($1,$3)',[owner.id,agency.id,site.id]);
+ await db.query('INSERT INTO agency_link(agency_id,establishment_id) VALUES($1,$2)',[agency.id,site.id]);
+ const base:MissionDto={agencyId:agency.id,establishmentId:site.id,title:'Paged mission',description:'Isolated pagination test',qualification:'IDE',service:'URGENCES',population:'ADULT',block:'NONE',requiredSkills:[],desiredSkills:[],minExperienceMonths:0,start:'2037-04-01T08:00:00Z',end:'2037-04-01T16:00:00Z',shift:'DAY',address:'Lyon fixture',latitude:45.76,longitude:4.84,hourlySalary:25,timezone:'Europe/Paris'};
+ const ids:string[]=[];
+ for(let i=0;i<21;i++){const result=await service.create(owner.id,{...base,title:'Paged mission '+i,qualification:i===20?'IBODE':'IDE',shift:i===20?'NIGHT':'DAY'},randomUUID(),true);ids.push(result.id);}
+ const first=await enterpriseMissionSearch(db,owner.id,{limit:20,offset:0});
+ assert.equal(first.total,21);assert.equal(first.items.length,20);assert.equal(first.limit,20);assert.equal(first.offset,0);
+ const second=await enterpriseMissionSearch(db,owner.id,{limit:20,offset:20});assert.equal(second.total,21);assert.equal(second.items.length,1);assert.equal(new Set([...first.items,...second.items].map(m=>m.id)).size,21);
+ const beyond=await enterpriseMissionSearch(db,owner.id,{limit:20,offset:100});assert.equal(beyond.total,21);assert.deepEqual(beyond.items,[]);
+ const hidden=await enterpriseMissionSearch(db,outsider.id,{limit:20,offset:0});assert.equal(hidden.total,0);assert.deepEqual(hidden.items,[]);
+ const filtered=await enterpriseMissionSearch(db,owner.id,{limit:20,offset:0,qualification:'IBODE',shift:'NIGHT',location:'000000021',status:'OPEN',q:'Paged mission 20',date:'2037-04-01'});assert.equal(filtered.total,1);assert.equal(filtered.items[0].id,ids[20]);
+ assert.equal((await enterpriseMissionSearch(db,owner.id,{limit:20,offset:0,qualification:'IDE'})).total,20);
+ for(const q of ['%',"' OR 1=1 --",'missing'])assert.equal((await enterpriseMissionSearch(db,owner.id,{limit:20,offset:0,q})).total,0);
+ await db.query("UPDATE mission SET status='CANCELLED' WHERE id=$1",[ids[0]]);
+ assert.equal((await enterpriseMissionSearch(db,owner.id,{limit:20,offset:0,status:'CANCELLED'})).items[0].id,ids[0]);
+ assert.equal((await enterpriseMissionSearch(db,owner.id,{limit:20,offset:0,status:'OPEN'})).total,20);
+ const night=await service.create(owner.id,{...base,title:'DOM overnight',timezone:'America/Guadeloupe',start:'2037-04-02T02:00:00Z',end:'2037-04-02T10:00:00Z',shift:'NIGHT'},randomUUID(),true);
+ for(const date of ['2037-04-01','2037-04-02'])assert.equal((await enterpriseMissionSearch(db,owner.id,{limit:20,offset:0,q:'DOM overnight',date})).total,1);
+ assert.equal((await enterpriseMissionSearch(db,owner.id,{limit:20,offset:0,q:'DOM overnight',date:'2037-04-03'})).total,0);
+ assert.equal((await enterpriseMissionSearch(db,owner.id,{limit:20,offset:0,sort:'start_desc'})).items[0].id,night.id);
+ assert.notEqual((await enterpriseMissionSearch(db,owner.id,{limit:20,offset:0,sort:'start_asc'})).items[0].id,night.id);
+ for(const invalid of [{status:'HACK'},{shift:'BAD'},{sort:'start_at;drop table mission'},{q:'x'.repeat(151)}])assert.ok((await validate(Object.assign(new EnterpriseMissionsPageDto(),invalid))).length);
+ await db.query('UPDATE membership SET active=false WHERE user_id=$1',[owner.id]);assert.equal((await enterpriseMissionSearch(db,owner.id,{limit:20,offset:0})).total,0);
 });

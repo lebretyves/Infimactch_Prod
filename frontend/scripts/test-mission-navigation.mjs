@@ -1,0 +1,10 @@
+import assert from 'node:assert/strict';
+import { missionReturnTo, missionPages } from '../src/lib/missionNavigation.ts';
+for(const value of ['https://evil.example/missions','//evil.example/missions','/missions/other','/missions-evil','/%6dissions','/missions%3Foffset=20','/missions\\evil','javascript:alert(1)','/missions\n?offset=20'])assert.equal(missionReturnTo(value),'/missions');
+assert.equal(missionReturnTo('/missions?offset=20&mode=edit&location=Paris&returnTo=https://evil.example#secret'),'/missions?offset=20&mode=edit&location=Paris');
+assert.equal(missionReturnTo('/missions?q=%3Cscript%3E'),'/missions?q=%3Cscript%3E');
+assert.deepEqual(missionPages(1,155),[1,2,3,'gap',155]);
+assert.deepEqual(missionPages(155,155),[1,'gap',153,154,155]);
+assert.deepEqual(missionPages(1,1),[1]);
+assert.deepEqual(missionPages(80,155),[1,'gap',78,79,80,81,82,'gap',155]);
+console.log('PASS local return targets and bounded numbered pagination.');

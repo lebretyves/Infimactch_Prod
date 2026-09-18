@@ -1,3 +1,4 @@
+import { missionReturnTo } from "@/lib/missionNavigation";
 import { serviceOptionsFor } from "@/data/clinicalSkills";
 import { ClinicalSkillsPicker } from "@/components/ClinicalSkillsPicker";
 import { useRef, useState, type FormEvent } from "react";
@@ -78,6 +79,8 @@ function Form({
   requestedEstablishmentId?: string;
 }) {
   const navigate = useNavigate();
+  const [navigationParams] = useSearchParams();
+  const returnTo = missionReturnTo(navigationParams.get("returnTo"));
   const agencies = context.organizations.filter(
     (o) =>
       o.kind === "AGENCY" &&
@@ -191,7 +194,7 @@ function Form({
         mission ? "/missions/" + mission.id : "/missions/open",
         { method: mission ? "PUT" : "POST", body, key: key.current.id },
       );
-      navigate("/gestion/missions/" + (mission?.id || result.id));
+      navigate("/gestion/missions/" + (mission?.id || result.id) + "?" + new URLSearchParams({ returnTo }));
     } catch (e) {
       setError((e as Error).message);
     } finally {
@@ -496,10 +499,10 @@ function Form({
       <ButtonLink
         to={
           mission
-            ? "/gestion/missions/" + mission.id
+            ? "/gestion/missions/" + mission.id + "?" + new URLSearchParams({ returnTo })
             : need
               ? "/besoins"
-              : "/missions"
+              : returnTo
         }
         variant="ghost"
       >

@@ -123,6 +123,15 @@ export const enterpriseMissions = (offset: number, signal?: AbortSignal, establi
   }
   return api<Listing[]>("/missions?" + params, { signal });
 };
+export type EnterpriseMissionSearchFilters = EnterpriseMissionFilters & { q?: string; status?: string; shift?: string; sort?: string };
+export const enterpriseMissionSearch = (offset: number, signal?: AbortSignal, establishmentId?: string, filters: EnterpriseMissionSearchFilters = {}) => {
+  const params = new URLSearchParams({ limit: "20", offset: String(offset) });
+  if (establishmentId) params.set("establishmentId", establishmentId);
+  for (const key of ["qualification", "location", "date", "q", "status", "shift", "sort"] as const) {
+    const value = filters[key]?.trim(); if (value) params.set(key, value);
+  }
+  return api<ListingPage>("/enterprise/missions?" + params, { signal });
+};
 export type ManagedEstablishment = {
   id: string; name: string; address: string; finess: string | null;
   counts: Record<"DRAFT" | "OPEN" | "FILLED" | "COMPLETED" | "CANCELLED", number>;
