@@ -1,3 +1,4 @@
+import {AutomationService} from "../../src/automation/automation.module";
 import {enterpriseApplicationPage,missionApplicationPage,ApplicationInboxDto} from "../../src/missions/application-inbox";
 import "reflect-metadata";
 import {test,before,after} from "node:test";
@@ -81,4 +82,17 @@ test("establishment directory scopes counts and pages; creation publishes atomic
  await db.query('UPDATE membership SET active=false WHERE user_id=$1 AND organization_id=$2',[owner,agency]);assert.equal((await enterpriseApplicationPage(db,owner,{limit:20,offset:0})).total,0);
  assert.ok((await validate(Object.assign(new ApplicationInboxDto(),{q:'x'.repeat(151)}))).length);
 
+});
+
+test("reminders process bounded batches and resume without duplicate windows",async()=>{
+ const [template]=await db.query('SELECT * FROM mission LIMIT 1');
+ const [owner]=await db.query("INSERT INTO account(email,password_hash,family,terms_version) VALUES($1,'fixture','ENTERPRISE','fixture') RETURNING id",[randomUUID()+'@example.invalid']);
+ await db.query('INSERT INTO membership(user_id,organization_id) VALUES($1,$2)',[owner.id,template.agency_id]);
+ const ids=[];
+ for(let i=0;i<61;i++){const id=randomUUID();ids.push(id);await db.query('INSERT INTO mission SELECT * FROM jsonb_populate_record(NULL::mission,$1::jsonb)',[JSON.stringify({...template,id,status:'OPEN',created_at:'2020-01-01T00:00:00Z',start_at:'2037-01-01T08:00:00Z',end_at:'2037-01-01T16:00:00Z'})]);}
+ const service=new AutomationService(db,{} as any);const results=[];
+ for(let i=0;i<4;i++)results.push(await service.reminders());
+ assert.deepEqual(results.map(r=>r.processed),[25,25,11,0]);assert.deepEqual(results.map(r=>r.hasMore),[true,true,false,false]);
+ const [windows]=await db.query('SELECT count(*)::int n FROM reminder_window WHERE mission_id=ANY($1::uuid[])',[ids]);assert.equal(windows.n,61);
+ const [notices]=await db.query("SELECT count(*)::int n FROM notification n JOIN outbox e ON n.event_id=e.id WHERE n.user_id=$1 AND n.kind='REMINDER' AND e.payload->>'missionId'=ANY($2::text[])",[owner.id,ids]);assert.equal(notices.n,61);
 });
