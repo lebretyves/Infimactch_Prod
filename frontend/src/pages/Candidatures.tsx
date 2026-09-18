@@ -1,4 +1,5 @@
-﻿import { useRef, useState } from "react";
+import EntrepriseCandidatures from "./EntrepriseCandidatures";
+import { useRef, useState } from "react";
 import { Link, useSearchParams } from "react-router";
 import { useRemote } from "@/lib/useRemote";
 import {
@@ -21,6 +22,10 @@ function group(a: Application) {
       : "historique";
 }
 export default function Candidatures() {
+  const { user } = useAuth();
+  return user?.role === "interimaire" ? <NurseCandidatures /> : <EntrepriseCandidatures />;
+}
+function NurseCandidatures() {
   const { user } = useAuth();
   const [params, setParams] = useSearchParams();
   const tab = ["confirmees", "historique"].includes(params.get("vue") || "")

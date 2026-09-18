@@ -1,3 +1,5 @@
+import { CandidateMatch } from "@/components/CandidateMatch";
+import type { CandidateMatching } from "@/services/enterpriseApplications";
 import {missionDate} from "@/services/market";
 import { useRef, useState } from "react";
 import { useParams } from "react-router";
@@ -12,6 +14,7 @@ import { ConfirmationButton } from "@/components/ConfirmationButton";
 import page from "./Candidater.module.css";
 import s from "./inscription/Etape.module.css";
 type Candidate = {
+  matching?: CandidateMatching | null;
   id: string;
   nurse_id: string;
   status: string;
@@ -176,7 +179,7 @@ export default function GestionMission() {
           )}
         </section>
       )}
-      <section className={s.bloc}>
+      <section className={s.bloc} id="candidatures">
         <h2>Candidatures reçues ({m.application_count})</h2>
         {!r.data.candidates.length && <p>Aucune candidature sur cette page.</p>}
         {r.data.candidates.map((c) => (
@@ -194,6 +197,7 @@ export default function GestionMission() {
               Compétences :{" "}
               {c.skills.map(labelCode).join(", ") || "À compléter"}
             </p>
+            <CandidateMatch matching={c.matching} qualification={m.qualification} service={m.service} />
             <details>
               <summary>Parcours et disponibilités</summary>
               {c.experience.map((e, i) => (

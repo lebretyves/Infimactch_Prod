@@ -286,7 +286,7 @@ export default function Accueil() {
                     <strong>{r.data?.dashboard.activity?.needs ?? 0}</strong>
                     <p>Besoins à préparer</p>
                   </Link>
-                  <Link to="/missions">
+                  <Link to="/candidatures">
                     <strong>
                       {r.data?.dashboard.activity?.applications ?? 0}
                     </strong>
