@@ -135,3 +135,13 @@
   color: var(--danger-700);
 }
 :global([data-space="candidate"]) .favori { width: 44px; height: 44px; }
+
+.matching {
+  margin: 0;
+  padding: 9px 12px;
+  border-radius: 8px;
+  background: var(--brand-50);
+  color: var(--brand-700);
+  font-size: 14px;
+  font-weight: 700;
+}

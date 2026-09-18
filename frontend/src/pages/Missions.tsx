@@ -86,7 +86,7 @@ function NurseMissions() {
       ? params.get("sort")
       : legacyRecommended
         ? "relevance"
-        : "recent"
+        : "relevance"
   ) as NonNullable<SearchFilters["sort"]>;
   const origin = readOfferOrigin(
     params.get("origine") || (legacyRecommended ? "partenaires" : null),
@@ -724,7 +724,7 @@ function NurseMissions() {
           }}
         >
           <option value="recent">Les plus récentes</option>
-          <option value="relevance">Correspondance avec mon profil</option>
+          <option value="relevance">Taux de matching décroissant</option>
           <option
             value="distance"
             disabled={
@@ -738,8 +738,9 @@ function NurseMissions() {
       </div>
       {sort === "relevance" && (
         <p className={s.help}>
-          Correspondance calculée pour les missions partenaires. Les offres
-          externes restent à vérifier avec l’annonceur.
+          Missions internes classées du taux de matching le plus élevé au plus faible,
+          y compris les taux indicatifs des profils incomplets. Les offres externes,
+          sans pourcentage vérifiable, apparaissent ensuite.
         </p>
       )}
       {(values.available === "1" || values.published) && (
