@@ -238,10 +238,10 @@ function Editor({ initial }: { initial: ProfessionalProfile }) {
                 })}
               </div>
               <h3 id="experiences" tabIndex={-1}>Expérience par service</h3>
-              <fieldset className={s.cvImport} disabled={Boolean(experienceEdit)}>
-              <details className={s.cvDisclosure} onToggle={event=>{const panel=event.currentTarget;if(!panel.open&&panel.querySelector('[role="alert"],[role="status"]'))panel.open=true;}}>
+              <fieldset className={s.cvImport}>
+              <details open className={s.cvDisclosure} onToggle={event=>{const panel=event.currentTarget;if(!panel.open&&panel.querySelector('[role="alert"],[role="status"]'))panel.open=true;}}>
                 <summary>Importer un CV <span>Préremplir mes expériences</span></summary>
-              <CvImport services={ref.data?.ideServices||[]} existing={p.experience} onAdd={values=>change({experience:[...p.experience,...values]})}/>
+              <CvImport addBlocked={Boolean(experienceEdit)} services={ref.data?.ideServices||[]} existing={p.experience} onAdd={values=>change({experience:[...p.experience,...values]})}/>
               </details>
               </fieldset>
               {!p.experience.length && (
