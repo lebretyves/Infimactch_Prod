@@ -1,3 +1,4 @@
+import { MatchingRules } from "@/components/MatchingRules";
 import { useEffect, useState } from "react";
 import { useSearchParams } from "react-router";
 import { useAuth } from "@/context/AuthContext";
@@ -29,6 +30,7 @@ export default function EntrepriseCandidatures() {
   function move(next: number) { const updated = new URLSearchParams(params); updated.set("offset", String(next)); setParams(updated); }
   return <div className={s.page}>
     <header className={s.header}><div><h1>Candidatures à traiter</h1><p className={s.subtitle}>Comparez les profils aux missions de vos établissements, puis ouvrez la mission pour traiter chaque candidature.</p></div><ButtonLink to="/mes-etablissements" variant="outline">Mes établissements</ButtonLink></header>
+    <MatchingRules />
     <form className={inbox.search} onSubmit={e => { e.preventDefault(); setParams(query.trim() ? { q: query.trim() } : {}); }}>
       <TextField label="Rechercher une candidature" type="search" maxLength={150} value={query} onChange={e => setQuery(e.target.value)} placeholder="Nom, mission ou lieu" />
       <div className={s.actions}><Button type="submit">Rechercher</Button>{q && <Button type="button" variant="ghost" onClick={() => { setQuery(""); setParams({}); }}>Réinitialiser</Button>}</div>

@@ -59,6 +59,12 @@ export function partialOfferMatch(
   const services = servicePatterns
     .filter(([code, pattern]) => pattern.test(title)&&isJobServiceEvidence(offer.title??"",code))
     .map(([s]) => s);
+  const practiceRole = f?.qualification as keyof NonNullable<Professional['practiceServices']> | undefined;
+  const preferredServices = practiceRole ? p.practiceServices?.[practiceRole] : undefined;
+  if (preferredServices?.length) {
+    if (services.length !== 1) c("practiceServices", "OFFER_MISSING", "SERVICE_NOT_UNAMBIGUOUS");
+    else c("practiceServices", preferredServices.includes(services[0]!) ? "INDICATIVE_MATCH" : "INDICATIVE_MISMATCH", "TITLE_SERVICE_VS_PRACTICE_PREFERENCES", services[0]);
+  }
   if (services.length !== 1)
     c("service", "OFFER_MISSING", "SERVICE_NOT_UNAMBIGUOUS");
   else {
@@ -202,7 +208,7 @@ export function partialOfferMatch(
             : "POSSIBLE_MATCH";
   return {
     mode: "PARTIAL_PROFILE_COMPARISON",
-    rulesVersion: "external-partial-v1",
+    rulesVersion: "external-partial-v2-services",
     comparedAt: now,
     result,
     score: null,

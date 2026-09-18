@@ -186,6 +186,7 @@ class RppsDto {
 export function professional(p: any, conflicts: any[] = []): Professional {
   return {
     qualifications: p.qualifications,
+    practiceServices: p.details?.practiceServices,
     skills: p.skills,
     experience: p.experience,
     available: p.available,

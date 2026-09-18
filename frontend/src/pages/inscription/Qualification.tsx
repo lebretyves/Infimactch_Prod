@@ -1,4 +1,5 @@
-import { ClinicalSkillsPicker } from "@/components/ClinicalSkillsPicker";
+import { experienceServiceOptions } from "@/data/clinicalSkills";
+import { PracticeChoices } from "@/components/PracticeChoices";
 import { Button } from "@/ui/Button";
 import { Checkbox } from "@/ui/Choice";
 import { SelectField, TextField } from "@/ui/Field";
@@ -17,6 +18,7 @@ export default function Qualification() {
       ),
     "reference-data",
   );
+  const experienceServices = experienceServiceOptions(ref.data?.ideServices);
   function toggle(q: string) {
     modifier({
       qualifications: v.qualifications.includes(q)
@@ -94,8 +96,8 @@ export default function Qualification() {
           onChange={(e) => modifier({ rpps: e.target.value })}
         />
       </div>
-      <ClinicalSkillsPicker label="Compétences de soins" qualifications={v.qualifications} value={v.competences}
-        chooseContext onChange={competences => modifier({ competences })} />
+      <PracticeChoices qualifications={v.qualifications} services={v.practiceServices || {}} skills={v.competences}
+        onChange={(practiceServices, competences) => modifier({ practiceServices, competences })} />
       <fieldset className={s.bloc}>
         <legend>Populations prises en charge</legend>
         {[['POPULATION_ADULT', 'Adultes'], ['POPULATION_PEDIATRIC', 'Pédiatrie']].map(([code, label]) => <Checkbox key={code} checked={v.competences.includes(code)} onChange={event => modifier({ competences: event.target.checked ? [...v.competences, code] : v.competences.filter(item => item !== code) })}>{label}</Checkbox>)}
@@ -128,12 +130,12 @@ export default function Qualification() {
               onChange={(event) => exp(i, "service", event.target.value)}
             >
               <option value="">Sélectionner un service</option>
-              {(ref.data?.ideServices || []).map((service) => (
+              {experienceServices.map(({ value: service, label }) => (
                 <option key={service} value={service}>
-                  {labelCode(service)}
+                  {label}
                 </option>
               ))}
-              {e.service && !ref.data?.ideServices.includes(e.service) && (
+              {e.service && !experienceServices.some(option => option.value === e.service) && (
                 <option value={e.service}>{labelCode(e.service)}</option>
               )}
             </SelectField>

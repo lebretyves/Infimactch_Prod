@@ -6,8 +6,8 @@ import { SelectField, TextField } from "@/ui/Field";
 import s from "./ClinicalSkillsPicker.module.css";
 const isClinical = (code: string) => !code.startsWith("POPULATION_") && !code.startsWith("BLOCK_");
 const normalized = (text: string) => text.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLocaleLowerCase("fr-FR");
-type Props = { label: string; qualifications: string[]; service?: string; value: string[]; onChange: (value: string[]) => void; chooseContext?: boolean };
-export function ClinicalSkillsPicker({ label, qualifications, service, value, onChange, chooseContext = false }: Props) {
+type Props = { label: string; qualifications: string[]; service?: string; value: string[]; onChange: (value: string[]) => void; chooseContext?: boolean; services?: string[]; personal?: boolean };
+export function ClinicalSkillsPicker({ label, qualifications, service, value, onChange, chooseContext = false, services: selectedServices, personal = chooseContext }: Props) {
   const [chosenQualification, setQualification] = useState("");
   const [chosenService, setService] = useState("");
   const [query, setQuery] = useState("");
@@ -16,7 +16,7 @@ export function ClinicalSkillsPicker({ label, qualifications, service, value, on
   const contextQualifications = chooseContext ? (qualification ? [qualification] : []) : declared;
   const services = serviceOptionsFor(contextQualifications);
   const contextService = chooseContext ? (services.some(option => option.value === chosenService) ? chosenService : "") : service;
-  const suggestions = skillsForContext(contextQualifications, contextService).filter(skill => isClinical(skill.code));
+  const suggestions = (selectedServices?.length ? skillsForContext(contextQualifications).filter(skill => !skill.services.length || selectedServices.some(service => skill.services.includes(service))) : skillsForContext(contextQualifications, contextService)).filter(skill => isClinical(skill.code));
   const suggestedCodes = new Set(suggestions.map(skill => skill.code));
   const selected = chooseContext ? value.filter(isClinical) : value;
   const outside = selected.filter(code => !suggestedCodes.has(code));
@@ -33,7 +33,7 @@ export function ClinicalSkillsPicker({ label, qualifications, service, value, on
   function toggle(code: string, checked: boolean) { onChange(checked ? [...new Set([...value, code])] : value.filter(item => item !== code)); }
   return <fieldset className={s.picker}>
     <legend>{label} <span className={s.count}>{selected.length} sélectionnée(s)</span></legend>
-    <p className={s.help}>Suggestions selon le métier et le service. Cochez uniquement les compétences utiles ou réellement maîtrisées ; cette déclaration ne vaut pas certification.</p>
+    <p className={s.help}>{personal ? "Suggestions selon le métier et le service. Cochez uniquement les compétences que vous maîtrisez réellement. Le diplôme ne coche aucune compétence automatiquement ; votre déclaration ne vaut pas certification." : "Suggestions selon le métier et le service. Sélectionnez les compétences attendues pour cette mission. Le diplôme et les compétences déclarées du candidat sont vérifiés séparément."}</p>
     {chooseContext && <div className={s.context}>
       <SelectField label="Métier d’exercice pour les suggestions" value={qualification} onChange={event => { setQualification(event.target.value); setService(""); }}>
         {declared.length !== 1 && <option value="">Choisir parmi mes diplômes</option>}

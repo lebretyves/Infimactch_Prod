@@ -1,9 +1,10 @@
+import { PersonalMatching } from "@/components/PersonalMatching";
 import {missionDate} from "@/services/market";
 import { ParsedOfferDetails } from "@/components/ParsedOfferDetails";
 import { extractedSidebar } from "@/services/parsed-offer";
 import { ExternalCorrespondence } from "@/components/ExternalCorrespondence";
 import { useEffect, useState } from "react";
-import { Link, useParams, useSearchParams } from "react-router";
+import { Link, useParams } from "react-router";
 import { labelCode } from "@/data/professional";
 import { useRemote } from "@/lib/useRemote";
 import {
@@ -17,7 +18,6 @@ import {
   sourceLabel,
   externalExpired,
 } from "@/services/market";
-import { api } from "@/services/api";
 import { useAuth } from "@/context/AuthContext";
 import { ButtonLink, Button } from "@/ui/Button";
 import { Icon } from "@/ui/Icon";
@@ -25,7 +25,6 @@ import s from "./MarketPages.module.css";
 export default function MissionDetail() {
   const { id = "" } = useParams(),
     { user } = useAuth();
-  const [params] = useSearchParams();
   const r = useRemote((signal) => detail(id, signal), id);
   const parsedOffer = r.data?.parsedOffer;
   const parsedSummary = extractedSidebar(parsedOffer);
@@ -53,23 +52,6 @@ export default function MissionDetail() {
       ),
     );
   }, [saved.data, id, r.data?.establishment_id]);
-  const explanationId = params.get("correspondance");
-  const explanation = useRemote(
-    async (signal) =>
-      explanationId
-        ? api<{
-            stale: boolean;
-            result: {
-              eligible: boolean;
-              score: number | null;
-              distanceKm?: number;
-            };
-          }>("/matches/" + encodeURIComponent(explanationId) + "/explanation", {
-            signal,
-          })
-        : null,
-    "explanation:" + explanationId,
-  );
   async function toggle(kind: "mission" | "facility") {
     if (!r.data || busy) return;
     setBusy(kind);
@@ -271,6 +253,7 @@ export default function MissionDetail() {
           )}
         </div>
         <aside className={s.card}>
+          {!external && nurse && user && <PersonalMatching key={user.id + id} id={id} userId={user.id} />}
           <h2>Votre prochaine mission</h2>
           <p>
             <Icon name="calendar" size={18} /> {m.start_at || m.end_at ? `Du ${missionDate(m)} au ${missionDate(m, true)} (${m.timezone || "Europe/Paris"})` : "Dates de mission non précisées"}
@@ -283,47 +266,6 @@ export default function MissionDetail() {
             ] || "Horaires non précisés"}
           </p>}
           <p className={s.money}>{parsedSummary.pay || salary(m)}</p>
-          {explanationId &&
-            (explanation.loading ? (
-              <p role="status">Chargement de votre correspondance…</p>
-            ) : explanation.error ? (
-              <p className={s.notice}>
-                Cette explication n’est pas disponible.{" "}
-                <Link to="/missions?vue=recommandees">
-                  Actualiser les recommandations
-                </Link>
-              </p>
-            ) : (
-              explanation.data && (
-                <div className={s.notice}>
-                  {explanation.data.stale ? (
-                    <>
-                      <strong>Correspondance à actualiser.</strong> Votre profil
-                      ou la mission a changé.{" "}
-                      <Link to="/missions?vue=recommandees">Recalculer</Link>
-                    </>
-                  ) : (
-                    <>
-                      <strong>
-                        {explanation.data.result.eligible
-                          ? "Mission compatible avec votre profil"
-                          : "Correspondance non confirmée"}
-                      </strong>
-                      {explanation.data.result.score != null && (
-                        <p>
-                          Score calculé :{" "}
-                          {Math.round(explanation.data.result.score)}/100.
-                        </p>
-                      )}
-                      <p>
-                        Qualifications, compétences, disponibilités et mobilité
-                        prises en compte.
-                      </p>
-                    </>
-                  )}
-                </div>
-              )
-            ))}
           <div className={s.stack} style={{ marginTop: 22 }}>
             {external ? (
               expired ? (

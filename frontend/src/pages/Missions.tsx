@@ -1,3 +1,5 @@
+import { readSearchArea, saveSearchArea, validRadius, type SearchArea } from "@/lib/searchArea";
+import { MatchingRules } from "@/components/MatchingRules";
 import { jobSearch, changeJobText } from "@/lib/jobSearch";
 import { SearchPlace, validCoordinates } from "@/components/SearchPlace";
 import { OfferOriginChoices, readOfferOrigin } from "@/components/OfferOrigin";
@@ -39,6 +41,7 @@ function pageNumbers(current: number, last: number): (number | string)[] {
 const filterKeys = [
   "q",
   "qualification",
+  "includeIde",
   "service",
   "population",
   "block",
@@ -62,7 +65,7 @@ const fromParams = (p: URLSearchParams) =>
 export default function Missions() {
   const { user } = useAuth();
   return user?.role === "interimaire" ? (
-    <NurseMissions />
+    <NurseMissions key={user.id} />
   ) : (
     <EntrepriseMissions />
   );
@@ -104,6 +107,48 @@ function NurseMissions() {
       ),
     "search-reference",
   );
+  const [zoneInitialized, setZoneInitialized] = useState(() =>
+    ["place", "lat", "lon", "radius", "zone"].some(key => params.has(key)));
+  const hadZoneInUrl = useRef(zoneInitialized);
+  useEffect(() => {
+    const explicit = ["place", "lat", "lon", "radius", "zone"].some(key => params.has(key));
+    if (explicit) hadZoneInUrl.current = true;
+    else if (hadZoneInUrl.current && zoneInitialized) {
+      hadZoneInUrl.current = false;
+      setZoneInitialized(false);
+    }
+  }, [params, zoneInitialized]);
+  const initialZone = useRemote<SearchArea | null>(async signal => {
+    if (zoneInitialized || !p.data || !user) return null;
+    const previous = readSearchArea(user.id);
+    if (previous) return previous;
+    const city = p.data.details?.city?.trim() || user.ville?.trim();
+    if (!city) return {place:"",lat:"",lon:"",radius:""};
+    const query = [city, p.data.details?.postalCode].filter(Boolean).join(" ");
+    const response = await api<{items:{label:string;latitude:number;longitude:number}[]}>(
+      "/listings/locations/communes?q=" + encodeURIComponent(query.slice(0,150)), {signal});
+    const normalize = (v:string) => v.normalize("NFD").replace(/[\u0300-\u036f]/g,"").toLowerCase().replace(/[^a-z0-9]/g,"");
+    const matches = response.items.filter(item => normalize(item.label.replace(/\s*\([^)]*\)\s*$/, "")) === normalize(city));
+    const place = matches.length === 1 ? matches[0] : response.items.length === 1 ? response.items[0] : null;
+    if (!place || !validCoordinates(place.latitude, place.longitude))
+      return {place:city.slice(0,150),lat:"",lon:"",radius:"25"};
+    const radius = String(p.data.radius_km || 25);
+    return {place:place.label.slice(0,150),lat:String(place.latitude),lon:String(place.longitude),radius:validRadius(radius)?radius:"25"};
+  }, JSON.stringify([user?.id, p.data?.details?.city, p.data?.details?.postalCode, !!p.data, zoneInitialized]));
+  useEffect(() => {
+    if (zoneInitialized || !initialZone.data) return;
+    const next = new URLSearchParams(params);
+    for (const [key,value] of Object.entries(initialZone.data)) if(value)next.set(key,value);
+    next.set("zone","1");
+    setParams(next,{replace:true});
+    setZoneInitialized(true);
+  }, [zoneInitialized, initialZone.data, params, setParams]);
+  useEffect(() => {
+    if (!zoneInitialized || !user) return;
+    const area = {place:params.get("place") || "",lat:params.get("lat") || "",lon:params.get("lon") || "",radius:params.get("radius") || ""};
+    if (validRadius(area.radius) && (validCoordinates(area.lat,area.lon) || (params.has("zone") && Object.values(area).every(value => !value))))
+      saveSearchArea(user.id,area);
+  }, [params, zoneInitialized, user?.id]);
   const homeCoordinates = validCoordinates(p.data?.latitude, p.data?.longitude);
   const home = homeCoordinates
     ? {
@@ -117,14 +162,16 @@ function NurseMissions() {
   const selectedQualification = qualifications.includes(values.qualification)
     ? values.qualification
     : "";
+  if (!["IADE", "IBODE"].includes(selectedQualification) || !qualifications.includes("IDE")) values.includeIde = "";
   const publicOffers = !!p.data && !qualifications.length;
   const selected = selectedQualification
-    ? [selectedQualification]
+    ? [selectedQualification, ...(["IADE", "IBODE"].includes(selectedQualification) && values.includeIde === "1" && qualifications.includes("IDE") ? ["IDE"] : [])]
     : qualifications;
   const filtered = filterKeys.some((k) => !!values[k]);
   const requestKey = JSON.stringify([
     user?.id,
     p.data,
+    zoneInitialized,
     sort,
     origin,
     values,
@@ -132,7 +179,7 @@ function NurseMissions() {
   ]);
   const result = useRemote<(ListingPage & { requestKey: string }) | null>(
     async (signal) => {
-      if (!p.data) return null;
+      if (!p.data || !zoneInitialized || !["place", "lat", "lon", "radius", "zone"].some(key => params.has(key))) return null;
       const filters: SearchFilters = { sort };
       if ([1, 7, 30].includes(Number(values.published)))
         filters.publishedWithinDays = Number(values.published) as 1 | 7 | 30;
@@ -169,7 +216,7 @@ function NurseMissions() {
         if (
           !center ||
           (values.radius &&
-            ![5, 10, 25, 50, 100, 200].includes(Number(values.radius)))
+            !validRadius(values.radius))
         )
           throw new Error(
             "Choisissez un lieu valide pour rechercher par distance.",
@@ -193,7 +240,7 @@ function NurseMissions() {
     requestKey,
   );
   const data = result.data?.requestKey === requestKey ? result.data : null;
-  const error = p.error || result.error;
+  const error = p.error || initialZone.error || result.error;
   const loading = p.loading || result.loading || (!data && !error);
   const total = data?.total ?? 0,
     lastPage = Math.max(1, Math.min(501, Math.ceil(total / PAGE_SIZE)));
@@ -230,6 +277,9 @@ function NurseMissions() {
       if (!value || (key === "page" && value === 1)) next.delete(key);
       else next.set(key, String(value));
     }
+    next.set("zone","1");
+    if(user)saveSearchArea(user.id, {place:next.get("place") || "",lat:next.get("lat") || "",lon:next.get("lon") || "",radius:next.get("radius") || ""});
+    setZoneInitialized(true);
     focusResults.current = true;
     setParams(next);
   }
@@ -252,7 +302,7 @@ function NurseMissions() {
       if (
         !center ||
         (draft.radius &&
-          ![5, 10, 25, 50, 100, 200].includes(Number(draft.radius)))
+          !validRadius(draft.radius))
       ) {
         setFormError(
           "Choisissez explicitement un lieu parmi les propositions ou votre zone de mobilité avant de rechercher par distance.",
@@ -278,7 +328,7 @@ function NurseMissions() {
   const set = (k: keyof Draft, v: string) =>
     setDraft((d) => ({ ...d, [k]: v }));
   const draftQualifications = draft.qualification
-    ? [draft.qualification]
+    ? [draft.qualification, ...(["IADE", "IBODE"].includes(draft.qualification) && draft.includeIde === "1" && qualifications.includes("IDE") ? ["IDE"] : [])]
     : qualifications;
   const specialist = draftQualifications.some(
     (q) => q === "IADE" || q === "IBODE",
@@ -298,6 +348,7 @@ function NurseMissions() {
           Mon profil {qualifications.join(" · ")}
         </ButtonLink>
       </header>
+    <MatchingRules />
       <nav className={u.tabs} aria-label="Recherche et favoris">
         <Link to="/missions" aria-current="page">
           <Icon name="search" size={18} />
@@ -351,7 +402,7 @@ function NurseMissions() {
             onChange={(e) => set("radius", e.target.value)}
           >
             <option value="">Toute la France</option>
-            {[5, 10, 25, 50, 100, 200].map((v) => (
+            {[...new Set([5, 10, 25, 50, 100, 200, ...(draft.radius && validRadius(draft.radius) ? [Number(draft.radius)] : [])])].sort((a,b)=>a-b).map((v) => (
               <option key={v} value={v}>
                 {v} km
               </option>
@@ -372,23 +423,42 @@ function NurseMissions() {
               <SelectField
                 label="Qualification"
                 value={draft.qualification}
-                onChange={(e) =>
-                  setDraft((d) => ({
-                    ...d,
-                    q: jobSearch(d.q).qualification ? jobSearch(d.q).keywords : d.q,
+                onChange={(e) => {
+                  const changed = {
+                    q: jobSearch(values.q).qualification ? jobSearch(values.q).keywords : values.q,
                     qualification: e.target.value,
+                    includeIde: "",
                     service: "",
                     population: "",
                     block: "",
                     specialty: "",
-                  }))
-                }
+                  };
+                  setDraft(d => ({ ...d, ...changed }));
+                  setFormError("");
+                  update({ ...changed, page: 1 });
+                }}
               >
                 <option value="">Toutes mes qualifications</option>
                 {qualifications.map((q) => (
                   <option key={q}>{q}</option>
                 ))}
               </SelectField>
+              {["IADE", "IBODE"].includes(draft.qualification) && qualifications.includes("IDE") && (
+                <label className={s.check}>
+                  <input type="checkbox" checked={draft.includeIde === "1"}
+                    onChange={event => {
+                      const includeIde = event.target.checked ? "1" : "";
+                      setDraft(d => ({ ...d, includeIde }));
+                      update({ qualification: draft.qualification, includeIde, page: 1 });
+                    }} />
+                  Inclure aussi les missions IDE
+                </label>
+              )}
+              {["IADE", "IBODE"].includes(draft.qualification) && (
+                <p className={s.groupHint}>{draft.includeIde === "1" && qualifications.includes("IDE")
+                  ? `Missions ${draft.qualification} et IDE. Le métier est appliqué immédiatement.`
+                  : `Uniquement les missions ${draft.qualification}. Le métier est appliqué immédiatement.`}</p>
+              )}
               {draftQualifications.includes("IDE") && (
                 <SelectField
                   label="Service"
@@ -578,6 +648,7 @@ function NurseMissions() {
                 const labels: Partial<Record<keyof Draft, string>> = {
                   q: values.q,
                   qualification: values.qualification,
+                  includeIde: "Missions IDE incluses",
                   service: labelCode(values.service),
                   population: labelCode(values.population),
                   block: labelCode(values.block),
@@ -687,7 +758,7 @@ function NurseMissions() {
         <section className={u.empty} role="alert">
           <h2>Le chargement des offres a échoué</h2>
           <p>{error}</p>
-          <Button onClick={() => (p.error ? p.reload() : result.reload())}>
+          <Button onClick={() => (p.error ? p.reload() : initialZone.error ? initialZone.reload() : result.reload())}>
             Réessayer
           </Button>
         </section>

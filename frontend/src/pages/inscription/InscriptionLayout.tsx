@@ -1,3 +1,4 @@
+import { MatchingReminder } from "@/components/MatchingReminder";
 import { useState } from 'react';
 import { Link, Outlet, useLocation } from 'react-router';
 import { Logo } from '@/ui/Logo';
@@ -89,6 +90,7 @@ export function InscriptionLayout() {
 
         <main className={s.form} id="contenu">
           <p>Le brouillon est effacé après 30 minutes sans modification et au plus tard après 2 heures.</p>
+          <MatchingReminder />
           <InscriptionContext value={{ valeurs, modifier }}>
             <Outlet />
           </InscriptionContext>

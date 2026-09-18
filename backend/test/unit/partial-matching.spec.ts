@@ -148,3 +148,11 @@ test("transport emergency words do not imply emergency department experience",()
  const explicit=partialOfferMatch({title:'IDE aux urgences',provenance:{facts:{qualification:'IDE',warnings:[]}}},profile,now);
  expect(explicit.criteria.service!.status).toBe('INDICATIVE_MATCH');
 });
+
+test("external service preferences are compared for the offer role without inventing missing evidence", () => {
+ const p={...profile,practiceServices:{IDE:['CARDIOLOGIE'],IADE:['URGENCES']}};
+ expect(partialOfferMatch(offer('IDE Urgences'),p,now).criteria.practiceServices?.status).toBe('INDICATIVE_MISMATCH');
+ expect(partialOfferMatch(offer('IADE Urgences'),p,now).criteria.practiceServices?.status).toBe('INDICATIVE_MATCH');
+ expect(partialOfferMatch(offer('IDE'),p,now).criteria.practiceServices?.status).toBe('OFFER_MISSING');
+ expect(partialOfferMatch(offer('IDE Urgences'),{...p,practiceServices:{IDE:[]}},now).criteria.practiceServices).toBeUndefined();
+});

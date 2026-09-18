@@ -123,9 +123,9 @@ export function MissionCard({
             .join(" · ")}
         </p>
       )}
-      {!external && mission.matching_score != null && (
+      {!external && user?.role === "interimaire" && (
         <span className={s.population}>
-          Correspondance : {Math.round(mission.matching_score)}/100
+          {mission.matching_score != null && Number.isFinite(mission.matching_score) ? `Taux de matching : ${Math.round(mission.matching_score)} %` : "Matching à vérifier dans la fiche"}
         </span>
       )}
       <div className={s.bas}>

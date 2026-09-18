@@ -1,3 +1,4 @@
+import { MatchingRules } from "@/components/MatchingRules";
 import { missionReturnTo } from "@/lib/missionNavigation";
 import { CandidateMatch } from "@/components/CandidateMatch";
 import type { CandidateMatching } from "@/services/enterpriseApplications";
@@ -115,6 +116,7 @@ export default function GestionMission() {
     agency = m.can_manage;
   return (
     <div className={page.page}>
+      <MatchingRules />
       <ButtonLink to={returnTo} variant="ghost">
         Retour aux missions
       </ButtonLink>
@@ -247,15 +249,18 @@ export default function GestionMission() {
               ["SUBMITTED", "SELECTED"].includes(c.status) && (
                 <>
                   <p>
-                    La confirmation reste soumise aux disponibilités et aux
-                    conditions de la mission.
+                    Les informations de profil incomplètes restent des avertissements.
+                    En confirmant, vous validez avec le candidat ses compétences et sa
+                    disponibilité. La mission sera ajoutée en bleu à son agenda et
+                    bloquera le créneau. Une autre mission déjà confirmée sur ce
+                    créneau empêche l’affectation.
                   </p>
                   <Button
                     disabled={!!busy}
                     onClick={() => {
                       if (
                         window.confirm(
-                          "Confirmer l’affectation de ce candidat à cette mission ?",
+                          "Avez-vous vérifié avec le candidat ses compétences et sa disponibilité ? Confirmer l’affectation ajoutera la mission à son agenda et bloquera ce créneau.",
                         )
                       )
                         void action("/missions/" + id + "/assignments", {
@@ -300,8 +305,8 @@ export default function GestionMission() {
                 <div key={c.candidateId}>
                   <h3>{c.display_name || "Profil proposé " + (i + 1)}</h3>
                   <p>
-                    {c.qualifications.join(", ")} · Correspondance :{" "}
-                    {Math.round(c.score)}/100
+                    {c.qualifications.join(", ")} ·{" "}
+                    <strong>Taux de matching : {Math.round(c.score)} %</strong>
                   </p>
                   <p>{c.skills.map(labelCode).join(", ")}</p>
                   {c.reasons.length > 0 && <p>{explainReasons(c.reasons)}</p>}

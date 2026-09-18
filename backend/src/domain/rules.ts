@@ -24,7 +24,7 @@ const weights = Object.freeze({
 });
 export const MATCH_RULES = Object.freeze({
   version:
-    "1.0.0-" +
+    "1.1.0-services-" +
     createHash("sha256")
       .update(JSON.stringify(weights))
       .digest("hex")

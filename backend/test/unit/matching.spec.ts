@@ -140,3 +140,17 @@ test("explicit exact precision preserves legacy matching results", () => {
   expect(match(p, { ...m, schedulePrecision: "EXACT" })).toEqual(match(p, m));
   expect(match({ ...p, available: [], conflicts: [slot] }, { ...m, schedulePrecision: "EXACT" })).toEqual(match({ ...p, available: [], conflicts: [slot] }, m));
 });
+
+
+test("practice services are alternatives within the mission qualification", () => {
+  const profile = { ...p, practiceServices: { IDE: ["URGENCES", "REANIMATION"], IADE: ["ANESTHESIE"] } };
+  expect(match(profile, m).eligible).toBe(true);
+  expect(match(profile, { ...m, service: "REANIMATION" }).eligible).toBe(true);
+  expect(match(profile, { ...m, service: "ANESTHESIE" }).reasons).toContain("SERVICE_NOT_PREFERRED");
+  expect(match({ ...profile, skills: [...p.skills, "POPULATION_ADULT"] }, { ...m, qualification: "IADE", service: "ANESTHESIE" }).eligible).toBe(true);
+  expect(match(profile, { ...m, qualification: "IADE", service: "URGENCES" }).reasons).toContain("SERVICE_NOT_PREFERRED");
+});
+test("empty and missing service preferences preserve existing matching", () => {
+  for (const practiceServices of [undefined, {}, { IDE: [] }, { IADE: ["ANESTHESIE"] }])
+    expect(match({ ...p, practiceServices }, m)).toEqual(match(p, m));
+});

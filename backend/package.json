@@ -63,5 +63,8 @@
     "tsc-watch": "7.2.1",
     "tsx": "4.23.13",
     "typescript": "5.9.3"
+  },
+  "imports": {
+    "#standard-fonts/*": "pdfkit/standard-fonts/*"
   }
 }

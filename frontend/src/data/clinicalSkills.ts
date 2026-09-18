@@ -29,3 +29,10 @@ export function serviceOptionsFor(qualifications: string[]): { value: string; la
   const codes = new Set(qualifications.flatMap(role => byRole[role] || []));
   return [...codes].map(value => ({ value, label: labels[value] || value }));
 }
+
+/** Historical experience uses every known service, without inferring a diploma. */
+export function experienceServiceOptions(legacyServices: string[] = []): { value: string; label: string }[] {
+  const labels: Record<string, string> = catalog.services;
+  const codes = new Set([...Object.keys(labels), ...legacyServices]);
+  return [...codes].map(value => ({ value, label: labels[value] || value }));
+}

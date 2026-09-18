@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
-import {skillsForContext, serviceOptionsFor, clinicalSkills} from '../src/data/clinicalSkills.ts';
+import {skillsForContext, serviceOptionsFor, experienceServiceOptions, clinicalSkills} from '../src/data/clinicalSkills.ts';
 const catalog = JSON.parse(readFileSync(new URL('../src/data/clinical-skills.json',import.meta.url),'utf8'));
 const ids = new Set(clinicalSkills.map(s => s.code));
 assert.equal(ids.size,clinicalSkills.length,'Stable codes must be unique');
@@ -36,3 +36,10 @@ assert.ok(serviceOptionsFor(['IBODE']).some(s=>s.value==='STERILISATION'));
 assert.ok(!serviceOptionsFor(['IBODE']).some(s=>s.value==='ANESTHESIE'));
 for (const code of ['TRIAGE','POSE_VOIE_VEINEUSE','SOINS_PALLIATIFS','PERFUSION','PANSEMENTS_COMPLEXES','URGENCES_VITALES','DIALYSE','CHIMIOTHERAPIE','PRELEVEMENTS','SURVEILLANCE_POST_OPERATOIRE','EDUCATION_THERAPEUTIQUE','ANESTHESIE','SSPI']) assert.ok(ids.has(code),'Preserve legacy code '+code);
 console.log(`PASS: ${clinicalSkills.length} sourced clinical skills; role/service isolation, multi-qualification, legacy codes, unknown contexts, sources and codes.`);
+
+const experienceServices = experienceServiceOptions(['ANCIEN_SERVICE', 'ANESTHESIE']);
+for (const code of ['ANESTHESIE', 'BLOC_OPERATOIRE', 'SMUR', 'STERILISATION', 'ANCIEN_SERVICE']) {
+ assert.ok(experienceServices.some(option => option.value === code), 'Historical experience must support ' + code);
+}
+assert.equal(experienceServices.length, new Set(experienceServices.map(option => option.value)).size);
+assert.equal(experienceServices.find(option => option.value === 'ANESTHESIE').label, 'Anesthésie');
