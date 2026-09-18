@@ -40,7 +40,7 @@ export function listingOrder(data: any, profile: Professional, search: SearchDto
     const result = displayMatch(profile, mission, data.matchingDistanceKm !== undefined ? data.matchingDistanceKm : (profile.latitude !== null && profile.longitude !== null && target ? distanceKm(profile.latitude,profile.longitude,target.latitude,target.longitude) : null));
     score = result.score;
     indicativeScore = result.indicativeScore;
-    relevance = [result.eligible ? 0 : 1, result.reasons.length, 0, -(score ?? 0)];
+    relevance = [0, -(score ?? indicativeScore ?? 0), result.eligible ? 0 : 1, result.reasons.length];
   }
   return {
     id: data.id, publicationDate: published, distanceKm: distance,

@@ -40,3 +40,15 @@ test('partner correspondence uses the database geodesic distance at radius bound
  const r=listingOrder({...mission,matchingDistanceKm:31},p,search,now);assert.equal(r.matching_score,null);
  assert.equal(listingOrder({...mission,matchingDistanceKm:29},p,search,now).matching_score!==null,true);
 });
+
+test('matching sort ranks displayed percentages, including incomplete profiles, before pagination',()=>{
+ const base=listingOrder(mission,{...p,available:[]},search,now);
+ assert.equal(base.matching_score,null);
+ assert.equal(typeof base.matching_indicative_score,'number');
+ const high=listingOrder(mission,{...p,available:[]},search,now);
+ const low=listingOrder({...mission,id:'m_low',longitude:4},{...p,available:[]},search,now);
+ assert.ok(high.matching_indicative_score!>low.matching_indicative_score!);
+ assert.ok(compareListingOrder(high,low,'relevance')<0);
+ const external=listingOrder({id:'e_1',kind:'EXTERNAL_OFFER'},p,search,now);
+ assert.ok(compareListingOrder(low,external,'relevance')<0);
+});

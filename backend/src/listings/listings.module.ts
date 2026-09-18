@@ -58,6 +58,7 @@ export class ListingsController {
     if (b.qualifications.some((q) => !p.qualifications.includes(q)))
       throw new BadRequestException("Qualification not held");
     b.origine ??= 'toutes';
+    b.sort ??= 'relevance';
     // Browsing a public mission does not grant eligibility or the right to apply.
     const generalBrowse=!p.qualifications.length && !b.qualifications.length;
     if(generalBrowse) b.qualifications=['IDE','IADE','IBODE'];

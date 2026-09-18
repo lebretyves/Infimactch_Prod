@@ -76,6 +76,11 @@ export function MissionCard({
       <h3 className={s.titre}>
         <Link to={target}>{mission.title}</Link>
       </h3>
+      {!external && user?.role === "interimaire" && (
+        <p className={s.matching}>
+          {matchingScoreLabel(mission.matching_score,mission.matching_indicative_score)}
+        </p>
+      )}
       <p className={s.place}>
         {mission.establishment_name ||
           mission.location_label ||
@@ -123,11 +128,6 @@ export function MissionCard({
             .filter(Boolean)
             .join(" · ")}
         </p>
-      )}
-      {!external && user?.role === "interimaire" && (
-        <span className={s.population}>
-          {matchingScoreLabel(mission.matching_score,mission.matching_indicative_score)}
-        </span>
       )}
       <div className={s.bas}>
         {external && url && !expired ? (
