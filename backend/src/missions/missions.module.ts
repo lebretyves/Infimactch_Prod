@@ -137,6 +137,15 @@ class MissionsController {
   @Get("enterprise/applications") applicationInbox(@Req() r: Request, @Query() page: ApplicationInboxDto) {
     return this.db.transaction(em => enterpriseApplicationPage(em,user(r),page));
   }
+  @Get("me/missions/:id/assignments") ownAssignments(
+    @Req() r: Request,
+    @Param("id", ParseUUIDPipe) id: string,
+  ) {
+    return this.db.query(
+      "SELECT id,status FROM assignment WHERE nurse_id=$1 AND mission_id=$2 ORDER BY created_at DESC,id",
+      [user(r), id],
+    );
+  }
   @Get("me/applications") applications(
     @Req() r: Request,
     @Query() page: PageDto,

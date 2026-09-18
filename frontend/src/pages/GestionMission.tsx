@@ -128,6 +128,13 @@ export default function GestionMission() {
       <p>{m.status === "DRAFT" ? "Brouillon : cette offre n’est pas encore visible aux intérimaires. Complétez-la puis publiez-la." : m.status === "OPEN" ? "Offre publiée : les intérimaires peuvent la consulter et candidater selon leurs critères." : "Cette offre n’est plus ouverte aux nouvelles candidatures."}</p>
       {m.staffing_request_id && <ButtonLink to={"/besoins#besoin-"+m.staffing_request_id} variant="outline">Voir le besoin d’origine</ButtonLink>}
       <p>{m.application_count} candidature(s) reçue(s) · {m.assignments.filter(a=>a.status==='ACTIVE').length} affectation(s) confirmée(s)</p>
+      {m.assignments.map((a) => (
+        <section key={a.id} className={s.bloc}>
+          <h2>Confirmation de mission</h2>
+          <p>{a.display_name} — {statusLabels[a.status] || a.status}</p>
+          <ConfirmationButton assignmentId={a.id} />
+        </section>
+      ))}
       {error && <p role="alert">{error}</p>}
       {message && <p role="status">{message}</p>}
       {!!m.events?.length && <section className={s.bloc}><h2>Suivi de l’offre</h2><ul>{m.events.map((e,index)=><li key={index}>{({MISSION_CREATED:"Mission créée",MISSION_OPEN:"Offre publiée",MISSION_REVISED:"Conditions modifiées",MISSION_CANCELLED:"Offre annulée",MISSION_COMPLETED:"Mission terminée",MISSION_DRAFT:"Retour en brouillon"} as Record<string,string>)[e.event] || "Mise à jour de la mission"} · {date(e.created_at)}</li>)}</ul></section>}
@@ -328,14 +335,7 @@ export default function GestionMission() {
           )}
         </section>
       )}
-      {m.assignments.map((a) => (
-        <section key={a.id} className={s.bloc}>
-          <h2>
-            {a.display_name} — {statusLabels[a.status] || a.status}
-          </h2>
-          <ConfirmationButton assignmentId={a.id} />
-        </section>
-      ))}
+
     </div>
   );
 }
