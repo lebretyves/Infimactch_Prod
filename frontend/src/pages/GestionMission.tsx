@@ -121,7 +121,7 @@ export default function GestionMission() {
       <p>{m.application_count} candidature(s) reçue(s) · {m.assignments.filter(a=>a.status==='ACTIVE').length} affectation(s) confirmée(s)</p>
       {error && <p role="alert">{error}</p>}
       {message && <p role="status">{message}</p>}
-      {!!m.events?.length && <section className={s.bloc}><h2>Suivi de l’offre</h2><ul>{m.events.map((e,index)=><li key={index}>{({MISSION_CREATED:"Brouillon créé",MISSION_OPEN:"Offre publiée",MISSION_REVISED:"Conditions modifiées",MISSION_CANCELLED:"Offre annulée",MISSION_COMPLETED:"Mission terminée",MISSION_DRAFT:"Retour en brouillon"} as Record<string,string>)[e.event] || "Mise à jour de la mission"} · {date(e.created_at)}</li>)}</ul></section>}
+      {!!m.events?.length && <section className={s.bloc}><h2>Suivi de l’offre</h2><ul>{m.events.map((e,index)=><li key={index}>{({MISSION_CREATED:"Mission créée",MISSION_OPEN:"Offre publiée",MISSION_REVISED:"Conditions modifiées",MISSION_CANCELLED:"Offre annulée",MISSION_COMPLETED:"Mission terminée",MISSION_DRAFT:"Retour en brouillon"} as Record<string,string>)[e.event] || "Mise à jour de la mission"} · {date(e.created_at)}</li>)}</ul></section>}
       {agency && (
         <section className={s.bloc}>
           <h2>Gestion de la mission</h2>

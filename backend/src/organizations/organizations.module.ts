@@ -1,3 +1,4 @@
+import { establishmentPage, EstablishmentsPageDto } from "./establishment-directory";
 import { NeedDto, normalizeNeedDetails } from "./need.dto";
 import { commandReceipt } from "../common/idempotency";
 import { Headers } from "@nestjs/common";
@@ -61,6 +62,9 @@ class NotificationDto {
 @UseGuards(SessionGuard)
 class OrganizationsController {
   constructor(private readonly db: Database) {}
+  @Get("me/establishments") directory(@Req() r: Request, @Query() page: EstablishmentsPageDto) {
+    return establishmentPage(this.db, user(r), page);
+  }
   @Get("me/organizations") async own(@Req() r: Request) {
     const organizations = await this.db.query(
       "SELECT o.*,f.latitude,f.longitude FROM organization o JOIN membership m ON m.organization_id=o.id LEFT JOIN finess_establishment f ON f.finess=o.finess WHERE m.user_id=$1 AND m.active ORDER BY o.name,o.id",

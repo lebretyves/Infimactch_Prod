@@ -51,7 +51,7 @@ type Notification = {
 };
 const labels: Record<string, string> = {
   DRAFT: "Brouillons",
-  OPEN: "Missions ouvertes",
+  OPEN: "Missions publiées (ouvertes)",
   FILLED: "Missions pourvues",
   COMPLETED: "Missions terminées",
   CANCELLED: "Missions annulées",
@@ -269,7 +269,7 @@ export default function Accueil() {
           ) : (
             <>
               <section className={u.card}>
-                <h2>Mon activité</h2>
+                <h2>Mon activité</h2><p>Gérez vos missions et leurs candidatures par établissement.</p>
                 <div className={u.actions}>
                   <ButtonLink to="/gestion/missions/nouvelle">
                     Créer une offre
@@ -284,7 +284,7 @@ export default function Accueil() {
                 <div className={s.stats}>
                   <Link to="/besoins">
                     <strong>{r.data?.dashboard.activity?.needs ?? 0}</strong>
-                    <p>Besoins enregistrés</p>
+                    <p>Besoins à préparer</p>
                   </Link>
                   <Link to="/missions">
                     <strong>
@@ -301,7 +301,7 @@ export default function Accueil() {
                     ),
                   )}
                 </div>
-                <ButtonLink to="/missions">Consulter les missions</ButtonLink>
+                <div className={u.actions}><ButtonLink to="/mes-etablissements">Mes établissements</ButtonLink><ButtonLink to="/missions" variant="outline">Toutes les missions</ButtonLink></div>
               </section>
               <section className={u.card}>
                 <h2>Mes derniers besoins</h2>
