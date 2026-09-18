@@ -1,3 +1,4 @@
+import { diplomaFields, diplomaDetails, withIde } from "./diplomas";
 import { experienceServiceOptions } from "@/data/clinicalSkills";
 import { PracticeChoices } from "@/components/PracticeChoices";
 import { Button } from "@/ui/Button";
@@ -21,14 +22,12 @@ export default function Qualification() {
   const experienceServices = experienceServiceOptions(ref.data?.ideServices);
   function toggle(q: string) {
     modifier({
-      qualifications: v.qualifications.includes(q)
+      qualifications: withIde(v.qualifications.includes(q)
         ? v.qualifications.filter((x) => x !== q)
-        : [...v.qualifications, q],
+        : [...v.qualifications, q]),
     });
   }
-  const ideManquant =
-    v.qualifications.some((q) => q !== "IDE") &&
-    !v.qualifications.includes("IDE");
+  const ideAutomatique = v.qualifications.some(q => q === "IADE" || q === "IBODE");
   function exp(i: number, key: string, value: string) {
     modifier({
       experiences: v.experiences.map((e, n) =>
@@ -44,10 +43,7 @@ export default function Qualification() {
       onValider={() => {
         if (!v.qualifications.length)
           throw new Error("Sélectionnez au moins un diplôme.");
-        if (ideManquant)
-          throw new Error(
-            "Cochez aussi « IDE — Infirmier diplômé d’État » : une spécialité IADE ou IBODE suppose ce diplôme.",
-          );
+        diplomaDetails(v.qualifications, v);
         if (
           v.experiences.some(
             (e) =>
@@ -66,31 +62,36 @@ export default function Qualification() {
           <Checkbox
             key={q}
             checked={v.qualifications.includes(q)}
+            disabled={q === "IDE" && ideAutomatique}
             onChange={() => toggle(q)}
           >
             {label}
           </Checkbox>
         ))}
         <p>
-          Cochez chaque diplôme obtenu, y compris IDE si vous êtes spécialisé.
+          IADE et IBODE sont des diplômes distincts du diplôme IDE. Cocher IADE
+          ou IBODE sélectionne aussi IDE automatiquement.
         </p>
-        {ideManquant && (
+        {ideAutomatique && (
           <p role="status" className={s.rappel}>
-            Une spécialité suppose le diplôme IDE : cochez « IDE — Infirmier
-            diplômé d’État » pour pouvoir continuer.
+            IDE est sélectionné automatiquement. Renseignez l’année propre à
+            chaque diplôme ; aucune année n’est recopiée d’un diplôme à l’autre.
           </p>
         )}
       </fieldset>
       <div className={s.paire}>
-        <TextField
-          label="Année d’obtention"
-          required
-          type="number"
-          min={1900}
-          max={new Date().getFullYear()}
-          value={v.anneeDiplome}
-          onChange={(e) => modifier({ anneeDiplome: e.target.value })}
-        />
+        {diplomaFields.filter(([q]) => v.qualifications.includes(q)).map(([q, field]) => (
+          <TextField
+            key={q}
+            label={`Année d’obtention du diplôme ${q}`}
+            required
+            type="number"
+            min={1900}
+            max={new Date().getFullYear()}
+            value={v[field]}
+            onChange={(e) => modifier({ [field]: e.target.value })}
+          />
+        ))}
         <TextField
           label="Numéro RPPS"
           inputMode="numeric"
