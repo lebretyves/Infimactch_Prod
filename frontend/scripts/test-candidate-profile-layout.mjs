@@ -32,7 +32,7 @@ try{
  assert.equal(await page.locator('#justificatifs').getByRole('button',{name:/charger$/}).count(),2);
  await page.getByText('Coordonn\u00e9es enregistr\u00e9es',{exact:true}).waitFor();
  await page.getByText('Banque de d\u00e9monstration',{exact:true}).waitFor();
- assert.equal(await page.locator('input').filter({visible:true}).evaluateAll(nodes=>nodes.some(n=>n.value==='Alex Exemple')),true);
+ assert.equal(await page.locator('#reference, a[href="#reference"]').count(),0);
  }
  if(route==='calendrier')await page.getByLabel('Vue du calendrier').selectOption('month');
  if(populated&&route==='calendrier'){
@@ -58,5 +58,5 @@ try{
  }
  assert.deepEqual(errors,[]);await context.close();
  }
- console.log('PASS candidate A '+phase+': 20 responsive captures, populated documents/reference/RIB, calendar available/unavailable/confirmed, CV error disclosure, no overflow, one h1, empty/filled; after includes identity lock, section anchors, CV disclosure, experience/save.');
+ console.log('PASS candidate A '+phase+': 20 responsive captures, populated documents/RIB, calendar available/unavailable/confirmed, CV error disclosure, no overflow, one h1, empty/filled; after includes identity lock, section anchors, CV disclosure, experience/save.');
 }finally{await browser.close();}
