@@ -88,6 +88,7 @@ export function InscriptionLayout() {
         </nav>
 
         <main className={s.form} id="contenu">
+          <p>Le brouillon est effacé après 30 minutes sans modification et au plus tard après 2 heures.</p>
           <InscriptionContext value={{ valeurs, modifier }}>
             <Outlet />
           </InscriptionContext>

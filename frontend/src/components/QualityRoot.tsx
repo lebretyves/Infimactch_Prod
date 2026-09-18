@@ -1,12 +1,21 @@
+import {DRAFT_EXPIRED_EVENT, verifierExpiration} from '@/pages/inscription/state';
 import {SITE_ORIGIN, PUBLIC_PATHS, setPageMetadata} from '@/lib/pageMetadata';
 import { Suspense, useEffect, useState } from 'react';
-import { Outlet, useLocation } from 'react-router';
+import { Outlet, useLocation, useNavigate } from 'react-router';
 import { Button } from '@/ui/Button';
 import { applyUpdate, updateAvailable } from '@/lib/pwa';
 const origin = SITE_ORIGIN;
 const publicPages = PUBLIC_PATHS;
 export function QualityRoot() {
   const location = useLocation();
+  const navigate = useNavigate();
+  const [draftVersion,setDraftVersion]=useState(0),[draftExpired,setDraftExpired]=useState(false);
+  useEffect(()=>{
+    const expired=()=>{if(window.location.pathname.startsWith('/inscription')){setDraftExpired(true);setDraftVersion(v=>v+1);navigate('/inscription',{replace:true});}};
+    const check=()=>{verifierExpiration();};
+    window.addEventListener(DRAFT_EXPIRED_EVENT,expired);window.addEventListener('pageshow',check);document.addEventListener('visibilitychange',check);check();
+    return ()=>{window.removeEventListener(DRAFT_EXPIRED_EVENT,expired);window.removeEventListener('pageshow',check);document.removeEventListener('visibilitychange',check);};
+  },[navigate]);
   const [online, setOnline] = useState(navigator.onLine);
   const [, render] = useState(0);
   useEffect(() => {
@@ -27,8 +36,9 @@ export function QualityRoot() {
     } else canonical?.remove();
   }, [location.pathname, location.search]);
   return <>
+    {draftExpired && location.pathname.startsWith('/inscription') && <p role="status" className="qualityNotice">Votre brouillon d’inscription a expiré et a été effacé de cet appareil. Vous pouvez recommencer.</p>}
     {!online && <p role="status" className="qualityNotice">Hors connexion. Les données affichées peuvent être anciennes. Les modifications et candidatures nécessitent le réseau.</p>}
     {updateAvailable() && <div className="qualityNotice" role="status"><p>Une mise à jour est disponible. Terminez et enregistrez vos formulaires avant de recharger.</p><Button variant="outline" onClick={applyUpdate}>Mettre à jour et recharger</Button></div>}
-    <Suspense fallback={<main id="contenu" tabIndex={-1} className="qualityNotice" aria-busy="true"><p role="status">Chargement de la page…</p></main>}><Outlet /></Suspense>
+    <Suspense fallback={<main id="contenu" tabIndex={-1} className="qualityNotice" aria-busy="true"><p role="status">Chargement de la page…</p></main>}><Outlet key={draftVersion} /></Suspense>
   </>;
 }

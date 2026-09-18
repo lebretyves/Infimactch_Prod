@@ -1,3 +1,4 @@
+import { preventApiCaching } from './common/private-cache';
 import {PscModule} from "./auth/psc.module";
 import {AdminModule} from "./admin/admin.module";
 import {CloudJobsModule} from "./automation/cloud-jobs.module";
@@ -128,6 +129,7 @@ export async function createApp() {
   });
   app.set("trust proxy", parseTrustProxy());
   app.setGlobalPrefix("api/v1");
+  app.use(preventApiCaching);
   app.useBodyParser("json", { limit: "7mb" });
   app.use((req: any, res: any, next: any) => {
     req.requestId = randomUUID();

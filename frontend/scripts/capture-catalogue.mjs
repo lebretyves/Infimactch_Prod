@@ -83,7 +83,7 @@ for(const entry of entries.filter(item=>!process.env.CATALOGUE_ONLY || process.e
   const auth=entry.auth || (entry.group==='public'||entry.group==='systeme'?'public':entry.group);
   const context=await browser.newContext({viewport:device==='desktop'?{width:1440,height:960}:{width:375,height:812},deviceScaleFactor:1,locale:'fr-FR',timezoneId:'Europe/Paris',serviceWorkers:'block'});
   if(!entry.cookies)await context.addInitScript(()=>localStorage.setItem('infimatch:cookie-preferences',JSON.stringify({version:1,savedAt:new Date().toISOString(),google:false})));
-  if(entry.draft)await context.addInitScript(d=>sessionStorage.setItem('infimatch:inscription-draft-v1',JSON.stringify(d)),{...draft,google:!!entry.google});
+  if(entry.draft)await context.addInitScript(d=>sessionStorage.setItem('infimatch:inscription-draft-v1',JSON.stringify({version:2,createdAt:Date.now(),expiresAt:Date.now()+1800000,data:d})),{...draft,google:!!entry.google});
   const errors=[],unknown=[],calls=[],blocked=[];
   const page=await context.newPage();
   page.on('pageerror',e=>errors.push(e.message));
