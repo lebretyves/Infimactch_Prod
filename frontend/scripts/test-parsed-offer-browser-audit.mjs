@@ -4,11 +4,14 @@ import {chromium} from 'playwright';
 const avc='Prise en charge des urgences AVC (Alertes thrombolyses) amenés par les pompiers ou le SAMU';
 const cardio='Vous assurez la surveillance des patients en cardiologie et en soins intensifs.';
 const diploma='Diplôme d’État infirmier exigé.';
+const benefit='FASTT : tarifs préférentiels sur la location de véhicules.';
 const title='Infirmer en cardiologie et soins intensifs';
 const field=(key,value,evidence,state='MENTION')=>({key,value,display:'LIBELLÉ GÉNÉRÉ '+value,label:key,state,evidence:{origin:'DESCRIPTION',text:evidence,start:0,end:evidence.length}});
 const fields=[field('qualification_titre','IDE',title,'REPORTED'),field('service','URGENCES',avc,'REQUIRED'),field('specialite','CARDIOLOGIE',cardio),field('service','SOINS_INTENSIFS',cardio),field('certification','DIPLOME_INFIRMIER',diploma,'REQUIRED')];
+fields[0].evidence.origin='TITLE';
+fields.push(field('competence','TRANSPORT',benefit),field('avantage','FASTT',benefit));
 const parsed={schemaVersion:1,parserVersion:'4.0.0',inputHash:'fixture',parsedAt:'2026-09-18T00:00:00Z',fields,warnings:[],reviewQueue:[avc,cardio,diploma,avc]};
-const description=[title,avc,cardio,diploma].join('\n');
+const description=[title,avc,cardio,diploma,benefit].join('\n');
 const base=process.env.BASE_URL||'http://127.0.0.1:4187';
 const localPreview=['localhost','127.0.0.1','[::1]'].includes(new URL(base).hostname);
 const browser=await chromium.launch({channel:'msedge',headless:true});
@@ -22,7 +25,8 @@ try{
  await page.goto(base+'/missions/e_parser-fixture');
  const consent=page.getByRole('button',{name:'Tout refuser',exact:true});if(await consent.count())await consent.click();
  const panel=page.getByRole('region',{name:'Informations extraites de l’annonce'});await panel.waitFor({timeout:5000});
- const strong=await panel.locator('strong').allTextContents();assert.deepEqual(strong,[title,cardio,diploma]);assert.doesNotMatch(strong.join('\n'),/LIBELLÉ GÉNÉRÉ|URGENCES/);
+ const strong=await panel.locator('strong').allTextContents();assert.deepEqual(strong,[title,cardio,diploma,benefit]);assert.doesNotMatch(strong.join('\n'),/LIBELLÉ GÉNÉRÉ|URGENCES/);
+ assert.equal(await panel.getByText('Avantages proposés',{exact:true}).count(),1);assert.equal(await panel.getByText('Intitulé du poste',{exact:true}).count(),1);assert.equal(await panel.getByText('Activités et soins à réaliser',{exact:true}).count(),1);assert.equal(await panel.getByText('Passage de l’annonce',{exact:true}).count(),0);
  assert.equal(await panel.getByText(cardio,{exact:true}).count(),1);assert.equal(await panel.getByText(diploma,{exact:true}).count(),1);
  await panel.locator('summary').click();assert.equal(await panel.getByText(avc,{exact:true}).count(),1);
  await page.getByText('Lire la description intégrale',{exact:true}).click();assert.equal(await page.getByText(description,{exact:true}).textContent(),description);
@@ -31,7 +35,7 @@ try{
  if(localPreview){
  const preview={id:'fixture',descriptionHash:'fixture',alerts:[],missing:[],groups:[{title:'Poste',items:fields.map(f=>({label:f.label,value:String(f.value),status:'explicit',evidence:f.evidence.text}))}]};
  await page.evaluate(async preview=>{const React=await import('/node_modules/.vite/deps/react.js');const client=await import('/node_modules/.vite/deps/react-dom_client.js');const createRoot=client.createRoot||client.default.createRoot;const {ParsedOfferPreview}=await import('/src/components/ParsedOfferPreview.tsx');const div=document.createElement('div');div.id='preview-audit';document.body.append(div);createRoot(div).render((React.createElement||React.default.createElement)(ParsedOfferPreview,{offer:preview}));},preview);
- const previewNode=page.locator('#preview-audit');await previewNode.locator('strong').first().waitFor();assert.doesNotMatch(await previewNode.innerText(),/LIBELLÉ GÉNÉRÉ/);assert.equal(await previewNode.getByText(cardio,{exact:true}).count(),1);assert.equal(await previewNode.getByText(avc,{exact:true}).count(),0);assert.deepEqual(await previewNode.locator('strong').allTextContents(),[title,cardio,diploma]);await previewNode.screenshot({path:'artifacts/parsed-offer-audit/preview-375.png'});
+ const previewNode=page.locator('#preview-audit');await previewNode.locator('strong').first().waitFor();assert.doesNotMatch(await previewNode.innerText(),/LIBELLÉ GÉNÉRÉ/);assert.equal(await previewNode.getByText(cardio,{exact:true}).count(),1);assert.equal(await previewNode.getByText(avc,{exact:true}).count(),0);assert.deepEqual(await previewNode.locator('strong').allTextContents(),[title,cardio,diploma,benefit]);await previewNode.screenshot({path:'artifacts/parsed-offer-audit/preview-375.png'});
  }
  assert.deepEqual(errors,[]);console.log('PASS Details source-only strong/dedupe/context-filter/original preservation; '+(localPreview?'Preview source-only/dedupe checked':'Preview dev-only skipped on deployed build')+'; APIs mocked only');
 }finally{await browser.close()}
