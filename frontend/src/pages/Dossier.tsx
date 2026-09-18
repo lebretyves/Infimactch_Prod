@@ -191,16 +191,22 @@ export default function Dossier() {
                 Vérification professionnelle
               </h2>
               <fieldset className={s.fields} disabled={!!busy}>
-                <TextField
-                  label="Numéro RPPS"
-                  required
-                  pattern="[0-9]{11}"
-                  maxLength={11}
-                  inputMode="numeric"
-                  readOnly={rppsFound}
-                  value={rppsFound ? r.data?.profile.rpps_number ?? "" : number ?? r.data?.profile.rpps_number ?? ""}
-                  onChange={(e) => setNumber(e.target.value)}
-                />
+                {rppsFound ? (
+                  <dl className={s.verifiedNumber}>
+                    <dt>Numéro RPPS</dt>
+                    <dd>{r.data?.profile.rpps_number}</dd>
+                  </dl>
+                ) : (
+                  <TextField
+                    label="Numéro RPPS"
+                    required
+                    pattern="[0-9]{11}"
+                    maxLength={11}
+                    inputMode="numeric"
+                    value={number ?? r.data?.profile.rpps_number ?? ""}
+                    onChange={(e) => setNumber(e.target.value)}
+                  />
+                )}
                 <span
                   className={
                     r.data?.profile.rpps_status === "FOUND"
