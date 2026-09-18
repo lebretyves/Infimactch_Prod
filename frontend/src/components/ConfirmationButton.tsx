@@ -35,7 +35,7 @@ export function ConfirmationButton({ assignmentId }: { assignmentId: string }) {
           }
         }}
       >
-        Voir la confirmation
+        Télécharger le PDF de confirmation
       </Button>
       {message && <p role="status">{message}</p>}
     </div>

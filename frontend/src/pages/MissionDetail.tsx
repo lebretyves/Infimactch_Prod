@@ -1,3 +1,5 @@
+import { ConfirmationButton } from "@/components/ConfirmationButton";
+import { api } from "@/services/api";
 import { PersonalMatching } from "@/components/PersonalMatching";
 import {missionDate} from "@/services/market";
 import { ParsedOfferDetails } from "@/components/ParsedOfferDetails";
@@ -26,6 +28,10 @@ export default function MissionDetail() {
   const { id = "" } = useParams(),
     { user } = useAuth();
   const r = useRemote((signal) => detail(id, signal), id);
+  const assignments = useRemote(async signal => {
+    if (user?.role !== "interimaire" || !id.startsWith("m_")) return [];
+    return api<{id:string;status:string}[]>("/me/missions/"+encodeURIComponent(id.slice(2))+"/assignments",{signal});
+  }, "mission-confirmations:"+user?.id+":"+id);
   const parsedOffer = r.data?.parsedOffer;
   const parsedSummary = extractedSidebar(parsedOffer);
   const saved = useRemote(
@@ -129,6 +135,15 @@ export default function MissionDetail() {
           </div>
         </div>
       </header>
+      {!external && nurse && <>
+        {assignments.error && <section className={s.card} role="alert"><h2>Confirmation de mission</h2><p>Impossible de charger votre confirmation.</p><Button onClick={assignments.reload}>Réessayer</Button></section>}
+        {assignments.data?.map(assignment => <section className={s.card} key={assignment.id}>
+          <h2>Confirmation de mission</h2>
+          <p>{statusLabels[assignment.status] || assignment.status}</p>
+          <ConfirmationButton assignmentId={assignment.id} />
+        </section>)}
+      </>}
+
       {!external && nurse && user && <div className={s.card}><PersonalMatching key={user.id + id} id={id} userId={user.id} /></div>}
       {error && (
         <p className={s.error} role="alert">
