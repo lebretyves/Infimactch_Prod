@@ -1,3 +1,4 @@
+import {matchingScoreLabel, indicativeScoreNotice} from "@/lib/matchingScore";
 import type { CandidateMatching } from "@/services/enterpriseApplications";
 import { labelCode } from "@/data/professional";
 import s from "./CandidateMatch.module.css";
@@ -30,7 +31,8 @@ export function CandidateMatch({ matching: m, qualification, service }: { matchi
   const scheduleUnknown = m.reasons.includes("SCHEDULE_UNCONFIRMED");
   const availability = scheduleUnknown ? "Horaires à confirmer" : availabilityIssue ? "Écart à vérifier" : m.eligible ? "Vacation couverte" : "À confirmer";
   return <section className={s.match} aria-label="Comparaison du profil avec la mission">
-    <div className={s.heading}><strong>Profil et mission</strong><span className={s.status} data-tone={m.eligible ? "ok" : "review"}>{m.eligible ? "Critères compatibles" : "Points à examiner"}</span><span className={s.score}>{m.score !== null && Number.isFinite(m.score) ? `Taux de matching : ${Math.round(m.score)} %` : "Taux de matching non calculable"}</span></div>
+    <div className={s.heading}><strong>Profil et mission</strong><span className={s.status} data-tone={m.eligible ? "ok" : "review"}>{m.eligible ? "Critères compatibles" : "Points à examiner"}</span><span className={s.score}>{matchingScoreLabel(m.score,m.indicativeScore)}</span></div>
+    {m.score == null && m.indicativeScore != null && <p>{indicativeScoreNotice}</p>}
     <dl className={s.criteria}>
       <div><dt>Métier demandé</dt><dd>{qualification} · {m.qualificationMatches ? "déclaré" : "à confirmer"}</dd></div>
       <div><dt>RPPS</dt><dd>{m.rppsStatus === "FOUND" ? "Retrouvé dans le répertoire" : m.rppsStatus === "PENDING" ? "Vérification en attente" : "À confirmer"}</dd></div>

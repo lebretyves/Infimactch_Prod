@@ -1,8 +1,9 @@
+import { displayMatch } from '../domain/matching-display';
 ﻿import { ApiProperty } from '@nestjs/swagger';
 import { IsOptional, IsString, MaxLength } from 'class-validator';
 import { PageDto } from '../common/page.dto';
 import { SqlClient } from '../database/database';
-import { match, experienceMonths, requiredMissionSkills } from '../domain/matching';
+import { experienceMonths, requiredMissionSkills } from '../domain/matching';
 import { professional } from '../profiles/profiles.module';
 import { matchingMission } from './missions.service';
 export class ApplicationInboxDto extends PageDto {
@@ -21,7 +22,7 @@ async function comparisons(db:SqlClient,rows:any[]) {
   const {profile_data,mission_data,mission_latitude,mission_longitude,distance_km,establishment_name,...candidate}=row;
   const p=professional(profile_data,conflicts.filter(a=>a.nurse_id===row.nurse_id));
   const m=matchingMission({...mission_data,latitude:mission_latitude,longitude:mission_longitude});
-  const matching={...match(p,m,distance_km===null?null:Number(distance_km)),experienceMonths:experienceMonths(p.experience,m.service,m.start),requiredExperienceMonths:m.minExperienceMonths,qualificationMatches:p.qualifications.includes(m.qualification),rppsStatus:p.rppsStatus,missingRequiredSkills:requiredMissionSkills(m).filter(s=>!p.skills.includes(s)),desiredSkillsMatched:m.desiredSkills.filter(s=>p.skills.includes(s)),desiredSkills:m.desiredSkills,radiusKm:p.radiusKm};
+  const matching={...displayMatch(p,m,distance_km===null?null:Number(distance_km)),experienceMonths:experienceMonths(p.experience,m.service,m.start),requiredExperienceMonths:m.minExperienceMonths,qualificationMatches:p.qualifications.includes(m.qualification),rppsStatus:p.rppsStatus,missingRequiredSkills:requiredMissionSkills(m).filter(s=>!p.skills.includes(s)),desiredSkillsMatched:m.desiredSkills.filter(s=>p.skills.includes(s)),desiredSkills:m.desiredSkills,radiusKm:p.radiusKm};
   const {id,title,qualification,service,start_at,end_at,timezone,schedule_precision,address,min_experience_months}=mission_data;
   return {...candidate,mission:{id,title,qualification,service,start_at,end_at,timezone,schedule_precision,address,min_experience_months,establishment_name},matching};
  });

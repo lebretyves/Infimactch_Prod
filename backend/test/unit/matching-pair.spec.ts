@@ -2,7 +2,7 @@ import 'reflect-metadata';
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { MatchingService } from '../../src/matching/matching.module';
-import { match } from '../../src/domain/matching';
+import { displayMatch } from '../../src/domain/matching-display';
 import { professional } from '../../src/profiles/profiles.module';
 import { matchingMission } from '../../src/missions/missions.service';
 
@@ -34,7 +34,7 @@ function service(p: unknown = profile, m: unknown = mission) {
 }
 test('personal matching uses the same score as enterprise matching and only the authenticated profile', async () => {
   const {instance, queries} = service();
-  assert.deepEqual(await instance.forPair('authenticated-user', 'mission'), match(professional(profile), matchingMission(mission), 0));
+  assert.deepEqual(await instance.forPair('authenticated-user', 'mission'), displayMatch(professional(profile), matchingMission(mission), 0));
   assert.deepEqual(queries[0]?.params, ['authenticated-user']);
   assert.match(queries[1]!.sql, /m.status IN/);
   assert.deepEqual(queries[2]?.params, ['authenticated-user']);

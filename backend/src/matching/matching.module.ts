@@ -1,3 +1,4 @@
+import { displayMatch } from "../domain/matching-display";
 import { MATCH_RULES } from "../domain/rules";
 import { geodesicKm } from "../database/distance";
 import { PageDto } from "../common/page.dto";
@@ -117,7 +118,7 @@ export class MatchingService implements OnModuleDestroy {
     const [m] = await this.db.query(missionSelect + " WHERE m.id=$1 AND m.status IN ('OPEN','FILLED','COMPLETED','CANCELLED')", [id]);
     if (!m) throw new NotFoundException();
     const conflicts = await this.db.query("SELECT start_at,end_at FROM assignment WHERE nurse_id=$1 AND status='ACTIVE'", [actor]);
-    const result = match(professional(p, conflicts), matchingMission(m), await geodesicKm(this.db, p, m));
+    const result = displayMatch(professional(p, conflicts), matchingMission(m), await geodesicKm(this.db, p, m));
     if (new Date(m.start_at).getTime() <= Date.now()) {
       return { ...result, eligible: false, score: null, components: null, reasons: [...result.reasons, "MISSION_ALREADY_STARTED"] };
     }

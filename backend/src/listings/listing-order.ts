@@ -1,3 +1,4 @@
+import { displayMatch } from '../domain/matching-display';
 import { Database } from '../database/database';
 import { covers, distanceKm, match, overlaps, Professional } from '../domain/matching';
 import { matchingMission } from '../missions/missions.service';
@@ -12,6 +13,7 @@ export type ListingOrder = {
   distanceKm: number | null;
   availabilityCompatible: boolean | null;
   matching_score: number | null;
+  matching_indicative_score?: number | null;
   relevance: number[];
   startsAt: number | null;
 };
@@ -26,7 +28,7 @@ export function listingOrder(data: any, profile: Professional, search: SearchDto
   const origin = point(search.latitude ?? profile.latitude, search.longitude ?? profile.longitude);
   const distance = origin && target ? distanceKm(origin.latitude, origin.longitude, target.latitude, target.longitude) : null;
   const published = publicationDate(external ? data.provenance?.publishedAt : data.publicationDate ?? data.created_at, now);
-  let availability: boolean | null = null, score: number | null = null, relevance: number[];
+  let availability: boolean | null = null, score: number | null = null, indicativeScore: number | null = null, relevance: number[];
   if (external) {
     const result = partialOfferMatch(data, profile, new Date(now).toISOString());
     const positives = Object.values(result.criteria).filter(c => c.status === 'MATCH' || c.status === 'INDICATIVE_MATCH').length;
@@ -35,13 +37,14 @@ export function listingOrder(data: any, profile: Professional, search: SearchDto
   } else {
     const mission = matchingMission(data);
     availability = covers(mission, profile.available, profile.unavailable) && !profile.conflicts.some(i => overlaps(mission, i));
-    const result = match(profile, mission, data.matchingDistanceKm);
+    const result = displayMatch(profile, mission, data.matchingDistanceKm !== undefined ? data.matchingDistanceKm : (profile.latitude !== null && profile.longitude !== null && target ? distanceKm(profile.latitude,profile.longitude,target.latitude,target.longitude) : null));
     score = result.score;
+    indicativeScore = result.indicativeScore;
     relevance = [result.eligible ? 0 : 1, result.reasons.length, 0, -(score ?? 0)];
   }
   return {
     id: data.id, publicationDate: published, distanceKm: distance,
-    availabilityCompatible: availability, matching_score: score, relevance,
+    availabilityCompatible: availability, matching_score: score, matching_indicative_score: indicativeScore, relevance,
     startsAt: !external && Number.isFinite(Date.parse(data.start_at)) ? Date.parse(data.start_at) : null,
   };
 }
@@ -66,7 +69,7 @@ export async function rankedListingPage(db: Database, sourceSql: string, sourceP
     const bind = (v: unknown) => { parameters.push(v); return '$' + parameters.length; };
     const q = search.q?.trim();
     const textFilter = q ? "strpos(lower(concat_ws(' ',data->>'title',data->>'service',data->>'location_label',data->>'address')),lower(" + bind(q) + "::text))>0" : 'true';
-    const fields = ['id','kind','title','qualification','service','status','start_at','end_at','timezone','created_at','publicationDate','required_skills','desired_skills','min_experience_months','population','block','specialty','shift','latitude','longitude'];
+    const fields = ['id','kind','title','qualification','service','status','start_at','end_at','timezone','created_at','publicationDate','required_skills','desired_skills','min_experience_months','population','block','specialty','shift','schedule_precision','latitude','longitude'];
     const profilePoint = point(profile.latitude, profile.longitude);
     const matchDistance = profilePoint
       ? "CASE WHEN data->>'kind'='INTERNAL_MISSION' THEN ST_Distance(ST_SetSRID(ST_MakePoint((data->>'longitude')::double precision,(data->>'latitude')::double precision),4326)::geography,ST_SetSRID(ST_MakePoint(" + bind(profilePoint.longitude) + "," + bind(profilePoint.latitude) + "),4326)::geography)/1000 ELSE NULL END"

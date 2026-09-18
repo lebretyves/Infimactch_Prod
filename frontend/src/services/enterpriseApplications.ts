@@ -2,6 +2,7 @@
 export type CandidateMatching = {
   eligible: boolean;
   score: number | null;
+  indicativeScore?: number | null;
   components: { C: number; Z: number; D: number; E: number } | null;
   reasons: string[];
   distanceKm: number | null;
