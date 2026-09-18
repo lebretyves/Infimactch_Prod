@@ -1,3 +1,4 @@
+import { jobSearch, changeJobText } from "@/lib/jobSearch";
 import { SearchPlace, validCoordinates } from "@/components/SearchPlace";
 import { OfferOriginChoices, readOfferOrigin } from "@/components/OfferOrigin";
 import EntrepriseMissions from "./EntrepriseMissions";
@@ -111,6 +112,8 @@ function NurseMissions() {
       }
     : null;
   const qualifications = p.data?.qualifications || [];
+  if (!values.qualification && qualifications.includes(jobSearch(values.q).qualification))
+    values.qualification = jobSearch(values.q).qualification;
   const selectedQualification = qualifications.includes(values.qualification)
     ? values.qualification
     : "";
@@ -179,7 +182,7 @@ function NurseMissions() {
         selected,
         offset,
         signal,
-        values.q,
+        jobSearch(values.q).qualification === selectedQualification ? jobSearch(values.q).keywords : values.q,
         filters,
         origin,
       );
@@ -198,8 +201,13 @@ function NurseMissions() {
   const items = data?.items || [];
   const paramsKey = params.toString();
   useEffect(
-    () => setDraft(fromParams(new URLSearchParams(paramsKey))),
-    [paramsKey],
+    () => {
+      const restored = fromParams(new URLSearchParams(paramsKey));
+      if (!restored.qualification && qualifications.includes(jobSearch(restored.q).qualification))
+        restored.qualification = jobSearch(restored.q).qualification;
+      setDraft(restored);
+    },
+    [paramsKey, qualifications.join(",")],
   );
   useEffect(() => {
     if (outOfRange) {
@@ -320,7 +328,7 @@ function NurseMissions() {
             placeholder="Intitulé, service, mot-clé…"
             maxLength={150}
             value={draft.q}
-            onChange={(e) => set("q", e.target.value)}
+            onChange={(e) => setDraft((d) => changeJobText(d, e.target.value, qualifications))}
           />
           <SearchPlace
             value={draft.place}
@@ -367,6 +375,7 @@ function NurseMissions() {
                 onChange={(e) =>
                   setDraft((d) => ({
                     ...d,
+                    q: jobSearch(d.q).qualification ? jobSearch(d.q).keywords : d.q,
                     qualification: e.target.value,
                     service: "",
                     population: "",
@@ -603,10 +612,12 @@ function NurseMissions() {
                                 : {}),
                             }
                           : {}),
+                        ...(k === "q" && jobSearch(values.q).qualification === values.qualification ? { qualification: "", service: "", population: "", block: "", specialty: "" } : {}),
                         ...(k === "start" ? { end: "" } : {}),
                         ...(k === "block" ? { specialty: "" } : {}),
                         ...(k === "qualification"
                           ? {
+                              q: jobSearch(values.q).qualification ? jobSearch(values.q).keywords : values.q,
                               service: "",
                               population: "",
                               block: "",
