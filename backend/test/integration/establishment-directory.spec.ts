@@ -1,3 +1,4 @@
+import {enterpriseApplicationPage,missionApplicationPage,ApplicationInboxDto} from "../../src/missions/application-inbox";
 import "reflect-metadata";
 import {test,before,after} from "node:test";
 import assert from "node:assert/strict";
@@ -56,5 +57,28 @@ test("establishment directory scopes counts and pages; creation publishes atomic
  const [exact]=await db.query('SELECT schedule_precision FROM mission WHERE id=$1',[opened.id]);assert.equal(exact.schedule_precision,'EXACT');
  await assert.rejects(service.create(owner,{...dateBody,start:'2037-01-02T08:00:00Z'},randomUUID(),true));
  await assert.rejects(service.edit(owner,dateOnly.id,{...dateBody,schedulePrecision:undefined,start:'2037-01-02T08:00:00Z'},randomUUID()));
+
+ const targets=await enterpriseMissionPage(db,owner,{limit:20,offset:0,establishmentId:b});
+ const nurses=[];
+ for(let i=0;i<3;i++){
+  const [n]=await db.query("INSERT INTO account(email,password_hash,family,terms_version) VALUES($1,'fixture','NURSE','fixture') RETURNING id",[randomUUID()+'@example.invalid']);nurses.push(n.id);
+  await db.query("INSERT INTO profile(user_id,display_name,qualifications,rpps_status,latitude,longitude,radius_km,accepted_shifts,available) VALUES($1,$2,ARRAY['IDE'],'FOUND',48.85,2.35,30,ARRAY['DAY'],$3::jsonb)",[n.id,'Candidate '+i,JSON.stringify([{start:base.start,end:base.end}])]);
+  await db.query("INSERT INTO application(mission_id,nurse_id,consent_version,status) VALUES($1,$2,1,$3)",[targets[0].id,n.id,i===2?'REJECTED':i===1?'SELECTED':'SUBMITTED']);
+ }
+ const inbox=await enterpriseApplicationPage(db,owner,{limit:1,offset:0});assert.equal(inbox.total,2);assert.equal(inbox.items.length,1);
+ assert.equal(inbox.items[0].matching.eligible,true);assert.equal(typeof inbox.items[0].matching.score,'number');assert.equal(inbox.items[0].matching.qualificationMatches,true);
+ assert.equal(inbox.items[0].mission.establishment_name,'B fixture');assert.equal(inbox.items[0].profile_data,undefined);assert.equal(inbox.items[0].rpps_number,undefined);
+ const second=await enterpriseApplicationPage(db,owner,{limit:1,offset:1});assert.equal(second.total,2);assert.notEqual(second.items[0].id,inbox.items[0].id);
+ assert.equal((await enterpriseApplicationPage(db,outsider,{limit:20,offset:0})).total,0);
+ assert.equal((await enterpriseApplicationPage(db,nurses[0],{limit:20,offset:0})).total,0);
+ assert.equal((await enterpriseApplicationPage(db,owner,{limit:20,offset:0,q:'Candidate 1'})).total,1);
+ assert.equal((await enterpriseApplicationPage(db,owner,{limit:20,offset:0,q:'%'})).total,0);
+ assert.equal((await enterpriseApplicationPage(db,owner,{limit:20,offset:99})).total,2);
+ await db.query("UPDATE profile SET qualifications=ARRAY['IADE'],available='[]'::jsonb,latitude=NULL WHERE user_id=$1",[nurses[0]]);
+ const mismatch=(await enterpriseApplicationPage(db,owner,{limit:20,offset:0,q:'Candidate 0'})).items[0];assert.equal(mismatch.matching.score,null);assert.ok(mismatch.matching.reasons.includes('QUALIFICATION_MISSING'));assert.ok(mismatch.matching.reasons.includes('NOT_FULLY_AVAILABLE'));assert.ok(mismatch.matching.reasons.includes('MOBILITY_INCOMPLETE'));
+ await db.query("UPDATE mission SET schedule_precision='DATE',shift='UNKNOWN' WHERE id=$1",[targets[0].id]);
+ const dateCandidates=await missionApplicationPage(db,targets[0].id,{limit:20,offset:0});assert.equal(dateCandidates.length,3);assert.ok(dateCandidates.every(c=>c.matching.reasons.includes('SCHEDULE_UNCONFIRMED')));assert.ok(dateCandidates.every(c=>!c.matching.reasons.includes('NOT_FULLY_AVAILABLE')));
+ await db.query('UPDATE membership SET active=false WHERE user_id=$1 AND organization_id=$2',[owner,agency]);assert.equal((await enterpriseApplicationPage(db,owner,{limit:20,offset:0})).total,0);
+ assert.ok((await validate(Object.assign(new ApplicationInboxDto(),{q:'x'.repeat(151)}))).length);
 
 });

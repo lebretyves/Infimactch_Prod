@@ -1,3 +1,4 @@
+import { ApplicationInboxDto, enterpriseApplicationPage, missionApplicationPage } from "./application-inbox";
 import { enterpriseMissionPage, EnterpriseMissionsPageDto } from "../organizations/establishment-directory";
 import { PageDto } from "../common/page.dto";
 import { Query } from "@nestjs/common";
@@ -133,6 +134,9 @@ class MissionsController {
   ) {
     return this.service.assign(user(r), id, b.applicationId, key);
   }
+  @Get("enterprise/applications") applicationInbox(@Req() r: Request, @Query() page: ApplicationInboxDto) {
+    return this.db.transaction(em => enterpriseApplicationPage(em,user(r),page));
+  }
   @Get("me/applications") applications(
     @Req() r: Request,
     @Query() page: PageDto,
@@ -196,10 +200,7 @@ class MissionsController {
     return this.db.transaction(async (em) => {
       const [m] = await em.query("SELECT * FROM mission WHERE id=$1", [id]);
       await scope(em, user(r), m ?? {});
-      return em.query(
-        "SELECT a.*,p.display_name,p.qualifications,p.skills,p.rpps_status,p.experience,p.available,p.unavailable,p.radius_km,p.details->>'city' AS city FROM application a JOIN profile p ON p.user_id=a.nurse_id WHERE a.mission_id=$1 ORDER BY a.updated_at DESC,a.id LIMIT $2 OFFSET $3",
-        [id, page.limit, page.offset],
-      );
+      return missionApplicationPage(em,id,page);
     });
   }
 }
