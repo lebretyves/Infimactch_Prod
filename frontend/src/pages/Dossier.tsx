@@ -57,6 +57,7 @@ export default function Dossier() {
     },
     user?.id + ":" + offset,
   );
+  const rppsFound = r.data?.profile.rpps_status === "FOUND";
   useEffect(() => {
     if(hash !== "#rib" || r.loading || r.error) return;
     const target=window.document.getElementById("rib");
@@ -168,6 +169,7 @@ export default function Dossier() {
               className={u.card}
               onSubmit={(e) => {
                 e.preventDefault();
+                if (rppsFound) return;
                 void act(
                   "rpps",
                   async () => {
@@ -195,7 +197,8 @@ export default function Dossier() {
                   pattern="[0-9]{11}"
                   maxLength={11}
                   inputMode="numeric"
-                  value={number ?? r.data?.profile.rpps_number ?? ""}
+                  readOnly={rppsFound}
+                  value={rppsFound ? r.data?.profile.rpps_number ?? "" : number ?? r.data?.profile.rpps_number ?? ""}
                   onChange={(e) => setNumber(e.target.value)}
                 />
                 <span
@@ -208,9 +211,9 @@ export default function Dossier() {
                   {rppsLabels[r.data?.profile.rpps_status || "NOT_CHECKED"] ||
                     "Vérification en attente"}
                 </span>
-                <Button type="submit" loading={busy === "rpps"}>
+                {!rppsFound && <Button type="submit" loading={busy === "rpps"}>
                   Vérifier mon numéro
-                </Button>
+                </Button>}
                 {r.data?.profile.rpps_status === "PENDING" && (
                   <Button
                     type="button"

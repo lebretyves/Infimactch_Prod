@@ -26,6 +26,7 @@ try{
  await page.locator('h1').waitFor();await page.waitForTimeout(200);
  if(route==='profil'){await page.getByLabel(/^Prénom/).waitFor();}
  if(route==='dossier')await page.getByLabel(/^Numéro RPPS/).waitFor();
+ if(route==='dossier'){assert.equal(await page.getByLabel(/^Numéro RPPS/).isEditable(),!populated);assert.equal(await page.getByRole('button',{name:'Vérifier mon numéro',exact:true}).count(),populated?0:1);}
  if(route==='calendrier')await page.getByRole('combobox',{name:'Ville de référence'}).waitFor();
  if(populated&&route==='dossier'){
  assert.equal(await page.locator('#justificatifs li').count(),2);
