@@ -1,5 +1,6 @@
 import { MATCH_RULES } from "../domain/rules";
 import { Controller, Get, Module } from "@nestjs/common";
+import clinicalSkills from "./clinical-skills.json";
 export const ideServices = [
   "CARDIOLOGIE",
   "PNEUMOLOGIE",
@@ -66,6 +67,7 @@ class ReferenceController {
   @Get() get() {
     return {
       qualifications: ["IDE", "IADE", "IBODE"],
+      clinicalSkills,
       ideServices,
       blockSpecialties,
       populations: ["ADULT", "PEDIATRIC", "MIXED"],

@@ -1,0 +1,1703 @@
+{
+  "version": "2026-09-18.1",
+  "reviewedAt": "2026-09-18",
+  "purpose": "Suggestions de compétences déclarées par métier et contexte. Ni certification, ni attribution automatique, ni règle d’éligibilité.",
+  "groups": {
+    "SOINS": "Soins et surveillance",
+    "TECHNIQUES": "Soins techniques",
+    "URGENCE_REA": "Urgences et soins critiques",
+    "SPECIALITES": "Pratiques par service",
+    "ACCOMPAGNEMENT": "Accompagnement et prévention",
+    "ANESTHESIE": "Anesthésie et réveil",
+    "BLOC": "Pratiques au bloc",
+    "SECURITE_BLOC": "Sécurité et dispositifs du bloc"
+  },
+  "services": {
+    "CARDIOLOGIE": "Cardiologie",
+    "PNEUMOLOGIE": "Pneumologie",
+    "NEUROLOGIE": "Neurologie",
+    "GASTRO_ENTEROLOGIE": "Gastro-entérologie",
+    "NEPHROLOGIE": "Néphrologie",
+    "ENDOCRINOLOGIE": "Endocrinologie",
+    "INFECTIOLOGIE": "Infectiologie",
+    "DERMATOLOGIE": "Dermatologie",
+    "RHUMATOLOGIE": "Rhumatologie",
+    "CHIRURGIE": "Chirurgie",
+    "URGENCES": "Urgences",
+    "REANIMATION": "Réanimation",
+    "SOINS_INTENSIFS": "Soins intensifs",
+    "SSPI": "Salle de réveil (SSPI)",
+    "PEDIATRIE": "Pédiatrie",
+    "NEONATOLOGIE": "Néonatologie",
+    "GYNECOLOGIE": "Gynécologie",
+    "MATERNITE": "Maternité",
+    "ONCOLOGIE": "Oncologie",
+    "HEMATOLOGIE": "Hématologie",
+    "DIALYSE": "Dialyse",
+    "PSYCHIATRIE": "Psychiatrie",
+    "PEDOPSYCHIATRIE": "Pédopsychiatrie",
+    "ADDICTOLOGIE": "Addictologie",
+    "GERIATRIE": "Gériatrie",
+    "SOINS_LONGUE_DUREE": "Soins de longue durée",
+    "EHPAD": "EHPAD",
+    "SMR": "Soins médicaux et de réadaptation",
+    "SOINS_PALLIATIFS": "Soins palliatifs",
+    "DOULEUR": "Prise en charge de la douleur",
+    "CONSULTATIONS": "Consultations",
+    "HOPITAL_JOUR": "Hôpital de jour",
+    "CHIRURGIE_AMBULATOIRE": "Chirurgie ambulatoire",
+    "ENDOSCOPIE": "Endoscopie",
+    "EXPLORATIONS": "Explorations fonctionnelles",
+    "INTERVENTIONNEL": "Plateau interventionnel",
+    "MAS": "Maison d’accueil spécialisée",
+    "FAM": "Foyer d’accueil médicalisé",
+    "HAD": "Hospitalisation à domicile",
+    "DOMICILE_SALARIE": "Soins à domicile (salarié)",
+    "SANTE_TRAVAIL": "Santé au travail",
+    "PREVENTION": "Prévention",
+    "CENTRE_SANTE": "Centre de santé",
+    "SUPPLEANCE": "Équipe de suppléance",
+    "AUTRE": "Autre service",
+    "BLOC_OPERATOIRE": "Bloc opératoire",
+    "ANESTHESIE": "Anesthésie",
+    "SMUR": "SMUR",
+    "STERILISATION": "Stérilisation"
+  },
+  "servicesByQualification": {
+    "IDE": [
+      "CARDIOLOGIE",
+      "PNEUMOLOGIE",
+      "NEUROLOGIE",
+      "GASTRO_ENTEROLOGIE",
+      "NEPHROLOGIE",
+      "ENDOCRINOLOGIE",
+      "INFECTIOLOGIE",
+      "DERMATOLOGIE",
+      "RHUMATOLOGIE",
+      "CHIRURGIE",
+      "URGENCES",
+      "REANIMATION",
+      "SOINS_INTENSIFS",
+      "SSPI",
+      "PEDIATRIE",
+      "NEONATOLOGIE",
+      "GYNECOLOGIE",
+      "MATERNITE",
+      "ONCOLOGIE",
+      "HEMATOLOGIE",
+      "DIALYSE",
+      "PSYCHIATRIE",
+      "PEDOPSYCHIATRIE",
+      "ADDICTOLOGIE",
+      "GERIATRIE",
+      "SOINS_LONGUE_DUREE",
+      "EHPAD",
+      "SMR",
+      "SOINS_PALLIATIFS",
+      "DOULEUR",
+      "CONSULTATIONS",
+      "HOPITAL_JOUR",
+      "CHIRURGIE_AMBULATOIRE",
+      "ENDOSCOPIE",
+      "EXPLORATIONS",
+      "INTERVENTIONNEL",
+      "MAS",
+      "FAM",
+      "HAD",
+      "DOMICILE_SALARIE",
+      "SANTE_TRAVAIL",
+      "PREVENTION",
+      "CENTRE_SANTE",
+      "SUPPLEANCE",
+      "AUTRE",
+      "BLOC_OPERATOIRE",
+      "SMUR"
+    ],
+    "IADE": [
+      "ANESTHESIE",
+      "BLOC_OPERATOIRE",
+      "SSPI",
+      "SMUR",
+      "REANIMATION",
+      "SOINS_INTENSIFS",
+      "DOULEUR",
+      "ENDOSCOPIE",
+      "INTERVENTIONNEL",
+      "CHIRURGIE_AMBULATOIRE",
+      "PEDIATRIE",
+      "MATERNITE",
+      "SUPPLEANCE",
+      "AUTRE"
+    ],
+    "IBODE": [
+      "BLOC_OPERATOIRE",
+      "CHIRURGIE_AMBULATOIRE",
+      "ENDOSCOPIE",
+      "INTERVENTIONNEL",
+      "STERILISATION",
+      "SUPPLEANCE",
+      "AUTRE"
+    ]
+  },
+  "sources": [
+    {
+      "id": "IDE_2026",
+      "title": "Référentiel de formation IDE — arrêté du 20 février 2026",
+      "url": "https://www.legifrance.gouv.fr/jorf/id/JORFTEXT000053568913",
+      "consultedAt": "2026-09-18"
+    },
+    {
+      "id": "IADE_2012",
+      "title": "Référentiel de formation IADE — arrêté du 23 juillet 2012",
+      "url": "https://www.legifrance.gouv.fr/loda/id/JORFTEXT000026230199/",
+      "consultedAt": "2026-09-18"
+    },
+    {
+      "id": "IBODE_2022",
+      "title": "Référentiel de formation IBODE — arrêté du 27 avril 2022",
+      "url": "https://www.legifrance.gouv.fr/loda/id/JORFTEXT000045696964",
+      "consultedAt": "2026-09-18"
+    },
+    {
+      "id": "IADE_HEGP",
+      "title": "AP-HP — IADE, Hôpital européen Georges-Pompidou",
+      "url": "https://recrutement.aphp.fr/jobs/848993",
+      "consultedAt": "2026-09-18"
+    },
+    {
+      "id": "IBODE_CARCASSONNE",
+      "title": "FHF — IBODE / IDE de bloc, Centre hospitalier de Carcassonne",
+      "url": "https://emploi.fhf.fr/emploi/477629",
+      "consultedAt": "2026-09-18"
+    },
+    {
+      "id": "IBODE_VERDUN",
+      "title": "FHF — IBODE, Centre hospitalier de Verdun",
+      "url": "https://emploi.fhf.fr/emploi/454521",
+      "consultedAt": "2026-09-18"
+    },
+    {
+      "id": "DIALYSE_BORDEAUX",
+      "title": "FHF — IDE en hémodialyse, CHU de Bordeaux",
+      "url": "https://emploi.fhf.fr/emploi/464755",
+      "consultedAt": "2026-09-18"
+    },
+    {
+      "id": "ONCOLOGIE_SAT",
+      "title": "AP-HP — IDE en oncologie, Saint-Antoine",
+      "url": "https://recrutement.aphp.fr/jobs/819085",
+      "consultedAt": "2026-09-18"
+    },
+    {
+      "id": "ONCOLOGIE_SLS",
+      "title": "AP-HP — IDE en oncologie, Saint-Louis",
+      "url": "https://recrutement.aphp.fr/jobs/603501",
+      "consultedAt": "2026-09-18"
+    },
+    {
+      "id": "EHPAD_AUCH",
+      "title": "FHF — IDE en EHPAD, Auch",
+      "url": "https://emploi.fhf.fr/emploi/484079",
+      "consultedAt": "2026-09-18"
+    },
+    {
+      "id": "PSYCHIATRIE_PSL",
+      "title": "AP-HP — IDE en consultation de psychiatrie, Pitié-Salpêtrière",
+      "url": "https://recrutement.aphp.fr/jobs/826451",
+      "consultedAt": "2026-09-18"
+    },
+    {
+      "id": "PEDOPSY_PSL",
+      "title": "AP-HP — IDE de nuit en psychiatrie de l’enfant et de l’adolescent",
+      "url": "https://recrutement.aphp.fr/jobs/857601?action=jobapplication&extId=2026-23710&source=exchange",
+      "consultedAt": "2026-09-18"
+    },
+    {
+      "id": "ENDOSCOPIE_AVC",
+      "title": "AP-HP — IDE en endoscopie, Avicenne",
+      "url": "https://recrutement.aphp.fr/jobs/816477",
+      "consultedAt": "2026-09-18"
+    },
+    {
+      "id": "PNEUMOLOGIE_LMR",
+      "title": "AP-HP — IDE en pneumologie, Louis-Mourier",
+      "url": "https://recrutement.aphp.fr/jobs/815664",
+      "consultedAt": "2026-09-18"
+    },
+    {
+      "id": "NEUROLOGIE_LRB",
+      "title": "AP-HP — IDE en neurologie, Lariboisière",
+      "url": "https://recrutement.aphp.fr/jobs/757225",
+      "consultedAt": "2026-09-18"
+    },
+    {
+      "id": "CARDIOLOGIE_BCT",
+      "title": "AP-HP — IDE en explorations cardiologiques, Bicêtre",
+      "url": "https://recrutement.aphp.fr/jobs/821674",
+      "consultedAt": "2026-09-18"
+    },
+    {
+      "id": "REANIMATION_LRB",
+      "title": "AP-HP — IDE en réanimation médicale, Lariboisière",
+      "url": "https://recrutement.aphp.fr/jobs/739614",
+      "consultedAt": "2026-09-18"
+    },
+    {
+      "id": "SSPI_PSL",
+      "title": "AP-HP — IDE en salle de réveil, Pitié-Salpêtrière",
+      "url": "https://recrutement.aphp.fr/jobs/603163",
+      "consultedAt": "2026-09-18"
+    },
+    {
+      "id": "URGENCES_HMN",
+      "title": "AP-HP — IDE aux urgences, Bicêtre (IOA après formation)",
+      "url": "https://recrutement.aphp.fr/jobs/766423",
+      "consultedAt": "2026-09-18"
+    },
+    {
+      "id": "IADE_PEDIATRIE",
+      "title": "AP-HP Robert-Debré — fiche de poste IADE pédiatrique",
+      "url": "https://robertdebre.aphp.fr/wp-content/blogs.dir/13/files/2019/03/FdP-IADE-2019.pdf",
+      "consultedAt": "2026-09-18"
+    },
+    {
+      "id": "HAD_APHP",
+      "title": "AP-HP — département clinique HAD adulte",
+      "url": "https://www.aphp.fr/hospitalisation-domicile/service-de-departement-clinique-had-adulte",
+      "consultedAt": "2026-09-18"
+    },
+    {
+      "id": "IADE_SMUR",
+      "title": "FHF — IADE bloc, SSPI et SMUR, Centre hospitalier d’Alençon",
+      "url": "https://emploi.fhf.fr/emploi/475435",
+      "consultedAt": "2026-09-18"
+    },
+    {
+      "id": "PEDIATRIE_APR",
+      "title": "AP-HP — IDE / puériculteur en pédiatrie, Ambroise-Paré",
+      "url": "https://recrutement.aphp.fr/jobs/753398",
+      "consultedAt": "2026-09-18"
+    },
+    {
+      "id": "NEONATOLOGIE_JVR",
+      "title": "AP-HP — IDE en néonatologie, Jean-Verdier",
+      "url": "https://recrutement.aphp.fr/jobs/743601",
+      "consultedAt": "2026-09-18"
+    },
+    {
+      "id": "SANTE_TRAVAIL",
+      "title": "FHF — IDE en santé au travail, Centre hospitalier Montperrin",
+      "url": "https://emploi.fhf.fr/emploi/471814",
+      "consultedAt": "2026-09-18"
+    },
+    {
+      "id": "IADE_RNCP",
+      "title": "France compétences — diplôme d’État IADE, RNCP39908",
+      "url": "https://www.francecompetences.fr/recherche/rncp/39908",
+      "consultedAt": "2026-09-18"
+    }
+  ],
+  "skills": [
+    {
+      "code": "EVALUATION_CLINIQUE",
+      "label": "Évaluation clinique et repérage d’une aggravation",
+      "qualifications": [
+        "IDE",
+        "IADE"
+      ],
+      "services": [],
+      "group": "SOINS",
+      "sources": [
+        "IDE_2026",
+        "IADE_HEGP"
+      ]
+    },
+    {
+      "code": "SECURISATION_MEDICAMENTS",
+      "label": "Administration et surveillance des traitements prescrits",
+      "qualifications": [
+        "IDE",
+        "IADE"
+      ],
+      "services": [],
+      "group": "SOINS",
+      "sources": [
+        "IDE_2026",
+        "ONCOLOGIE_SAT"
+      ]
+    },
+    {
+      "code": "EVALUATION_DOULEUR",
+      "label": "Évaluation de la douleur et suivi du soulagement",
+      "qualifications": [
+        "IDE",
+        "IADE"
+      ],
+      "services": [],
+      "group": "SOINS",
+      "sources": [
+        "ONCOLOGIE_SAT",
+        "IADE_HEGP"
+      ]
+    },
+    {
+      "code": "PREVENTION_INFECTIONS",
+      "label": "Précautions d’hygiène et prévention des infections",
+      "qualifications": [
+        "IDE",
+        "IADE",
+        "IBODE"
+      ],
+      "services": [],
+      "group": "SOINS",
+      "sources": [
+        "IDE_2026",
+        "IADE_HEGP",
+        "IBODE_2022"
+      ]
+    },
+    {
+      "code": "TRANSMISSIONS_CIBLEES",
+      "label": "Traçabilité des soins et transmissions cliniques",
+      "qualifications": [
+        "IDE",
+        "IADE",
+        "IBODE"
+      ],
+      "services": [],
+      "group": "SOINS",
+      "sources": [
+        "IDE_2026",
+        "IADE_HEGP",
+        "IBODE_2022"
+      ]
+    },
+    {
+      "code": "POSE_VOIE_VEINEUSE",
+      "label": "Pose et surveillance d’une voie veineuse périphérique",
+      "qualifications": [
+        "IDE",
+        "IADE"
+      ],
+      "services": [
+        "URGENCES",
+        "REANIMATION",
+        "SOINS_INTENSIFS",
+        "SSPI",
+        "CHIRURGIE",
+        "CHIRURGIE_AMBULATOIRE",
+        "ONCOLOGIE",
+        "HEMATOLOGIE",
+        "CARDIOLOGIE",
+        "PNEUMOLOGIE",
+        "NEUROLOGIE",
+        "GASTRO_ENTEROLOGIE",
+        "NEPHROLOGIE",
+        "DIALYSE",
+        "HOPITAL_JOUR",
+        "ENDOSCOPIE",
+        "INTERVENTIONNEL",
+        "ANESTHESIE",
+        "BLOC_OPERATOIRE",
+        "SMUR",
+        "HAD",
+        "DOMICILE_SALARIE",
+        "PEDIATRIE"
+      ],
+      "group": "TECHNIQUES",
+      "sources": [
+        "IDE_2026",
+        "CARDIOLOGIE_BCT"
+      ]
+    },
+    {
+      "code": "PERFUSION",
+      "label": "Préparation et surveillance des perfusions",
+      "qualifications": [
+        "IDE",
+        "IADE"
+      ],
+      "services": [
+        "URGENCES",
+        "REANIMATION",
+        "SOINS_INTENSIFS",
+        "SSPI",
+        "CHIRURGIE",
+        "CHIRURGIE_AMBULATOIRE",
+        "ONCOLOGIE",
+        "HEMATOLOGIE",
+        "CARDIOLOGIE",
+        "PNEUMOLOGIE",
+        "NEUROLOGIE",
+        "GASTRO_ENTEROLOGIE",
+        "NEPHROLOGIE",
+        "HOPITAL_JOUR",
+        "HAD",
+        "DOMICILE_SALARIE",
+        "ANESTHESIE",
+        "BLOC_OPERATOIRE",
+        "SMUR",
+        "PEDIATRIE",
+        "INFECTIOLOGIE"
+      ],
+      "group": "TECHNIQUES",
+      "sources": [
+        "ONCOLOGIE_SAT",
+        "CARDIOLOGIE_BCT"
+      ]
+    },
+    {
+      "code": "PRELEVEMENTS",
+      "label": "Prélèvements sanguins et préparation des examens",
+      "qualifications": [
+        "IDE"
+      ],
+      "services": [
+        "CARDIOLOGIE",
+        "EXPLORATIONS",
+        "CONSULTATIONS",
+        "CENTRE_SANTE",
+        "URGENCES",
+        "REANIMATION",
+        "SOINS_INTENSIFS",
+        "ONCOLOGIE",
+        "HEMATOLOGIE",
+        "NEPHROLOGIE",
+        "DIALYSE",
+        "HOPITAL_JOUR",
+        "CHIRURGIE",
+        "HAD",
+        "DOMICILE_SALARIE",
+        "PEDIATRIE",
+        "INFECTIOLOGIE",
+        "ENDOCRINOLOGIE"
+      ],
+      "group": "TECHNIQUES",
+      "sources": [
+        "CARDIOLOGIE_BCT",
+        "ONCOLOGIE_SAT"
+      ]
+    },
+    {
+      "code": "PANSEMENTS_COMPLEXES",
+      "label": "Évaluation des plaies et pansements complexes",
+      "qualifications": [
+        "IDE"
+      ],
+      "services": [
+        "CHIRURGIE",
+        "CHIRURGIE_AMBULATOIRE",
+        "DERMATOLOGIE",
+        "GERIATRIE",
+        "EHPAD",
+        "SOINS_LONGUE_DUREE",
+        "SMR",
+        "HAD",
+        "DOMICILE_SALARIE",
+        "CENTRE_SANTE",
+        "SOINS_PALLIATIFS",
+        "ENDOCRINOLOGIE",
+        "ONCOLOGIE"
+      ],
+      "group": "TECHNIQUES",
+      "sources": [
+        "HAD_APHP",
+        "EHPAD_AUCH",
+        "ONCOLOGIE_SLS"
+      ]
+    },
+    {
+      "code": "CATHETER_CENTRAL",
+      "label": "Soins et surveillance des cathéters centraux et chambres implantables",
+      "qualifications": [
+        "IDE",
+        "IADE"
+      ],
+      "services": [
+        "ONCOLOGIE",
+        "HEMATOLOGIE",
+        "REANIMATION",
+        "SOINS_INTENSIFS",
+        "HOPITAL_JOUR",
+        "HAD",
+        "ANESTHESIE",
+        "BLOC_OPERATOIRE"
+      ],
+      "group": "TECHNIQUES",
+      "sources": [
+        "ONCOLOGIE_SAT",
+        "IADE_2012",
+        "IADE_RNCP"
+      ]
+    },
+    {
+      "code": "TRANSFUSION",
+      "label": "Contrôles et surveillance transfusionnels",
+      "qualifications": [
+        "IDE",
+        "IADE"
+      ],
+      "services": [
+        "ONCOLOGIE",
+        "HEMATOLOGIE",
+        "CHIRURGIE",
+        "REANIMATION",
+        "SOINS_INTENSIFS",
+        "URGENCES",
+        "HOPITAL_JOUR",
+        "ANESTHESIE",
+        "BLOC_OPERATOIRE",
+        "SMUR"
+      ],
+      "group": "TECHNIQUES",
+      "sources": [
+        "ONCOLOGIE_SAT",
+        "IADE_HEGP"
+      ]
+    },
+    {
+      "code": "POMPE_PCA",
+      "label": "Utilisation et surveillance des pompes d’analgésie (PCA)",
+      "qualifications": [
+        "IDE",
+        "IADE"
+      ],
+      "services": [
+        "ONCOLOGIE",
+        "HEMATOLOGIE",
+        "SOINS_PALLIATIFS",
+        "DOULEUR",
+        "CHIRURGIE",
+        "SSPI",
+        "HAD",
+        "ANESTHESIE",
+        "BLOC_OPERATOIRE"
+      ],
+      "group": "TECHNIQUES",
+      "sources": [
+        "ONCOLOGIE_SAT",
+        "IADE_2012",
+        "IADE_RNCP"
+      ]
+    },
+    {
+      "code": "NUTRITION_ENTERALE_PARENTERALE",
+      "label": "Surveillance de la nutrition entérale ou parentérale",
+      "qualifications": [
+        "IDE"
+      ],
+      "services": [
+        "ONCOLOGIE",
+        "HEMATOLOGIE",
+        "GASTRO_ENTEROLOGIE",
+        "REANIMATION",
+        "SOINS_INTENSIFS",
+        "GERIATRIE",
+        "SOINS_LONGUE_DUREE",
+        "HAD",
+        "NEUROLOGIE"
+      ],
+      "group": "TECHNIQUES",
+      "sources": [
+        "ONCOLOGIE_SAT"
+      ]
+    },
+    {
+      "code": "SOINS_STOMIES",
+      "label": "Soins de stomies et accompagnement du patient",
+      "qualifications": [
+        "IDE"
+      ],
+      "services": [
+        "CHIRURGIE",
+        "GASTRO_ENTEROLOGIE",
+        "ONCOLOGIE",
+        "HAD",
+        "DOMICILE_SALARIE",
+        "SMR"
+      ],
+      "group": "TECHNIQUES",
+      "sources": [
+        "ONCOLOGIE_SAT",
+        "ONCOLOGIE_SLS"
+      ]
+    },
+    {
+      "code": "TRIAGE",
+      "label": "Accueil, évaluation et orientation aux urgences (IOA, après formation)",
+      "qualifications": [
+        "IDE"
+      ],
+      "services": [
+        "URGENCES"
+      ],
+      "group": "URGENCE_REA",
+      "sources": [
+        "URGENCES_HMN"
+      ]
+    },
+    {
+      "code": "URGENCES_VITALES",
+      "label": "Repérage et prise en charge des urgences vitales en équipe",
+      "qualifications": [
+        "IDE",
+        "IADE"
+      ],
+      "services": [
+        "URGENCES",
+        "REANIMATION",
+        "SOINS_INTENSIFS",
+        "SSPI",
+        "CARDIOLOGIE",
+        "SMUR",
+        "ANESTHESIE",
+        "BLOC_OPERATOIRE"
+      ],
+      "group": "URGENCE_REA",
+      "sources": [
+        "IDE_2026",
+        "IADE_HEGP"
+      ]
+    },
+    {
+      "code": "MONITORAGE_CONTINU",
+      "label": "Surveillance continue des paramètres vitaux et des alarmes",
+      "qualifications": [
+        "IDE",
+        "IADE"
+      ],
+      "services": [
+        "REANIMATION",
+        "SOINS_INTENSIFS",
+        "SSPI",
+        "URGENCES",
+        "CARDIOLOGIE",
+        "SMUR",
+        "ANESTHESIE",
+        "BLOC_OPERATOIRE",
+        "NEONATOLOGIE"
+      ],
+      "group": "URGENCE_REA",
+      "sources": [
+        "REANIMATION_LRB",
+        "IADE_2012",
+        "IADE_RNCP"
+      ]
+    },
+    {
+      "code": "VENTILATION_INVASIVE",
+      "label": "Surveillance du patient sous ventilation invasive",
+      "qualifications": [
+        "IDE",
+        "IADE"
+      ],
+      "services": [
+        "REANIMATION",
+        "SOINS_INTENSIFS",
+        "SMUR",
+        "ANESTHESIE",
+        "BLOC_OPERATOIRE"
+      ],
+      "group": "URGENCE_REA",
+      "sources": [
+        "REANIMATION_LRB",
+        "IADE_2012",
+        "IADE_RNCP"
+      ]
+    },
+    {
+      "code": "VENTILATION_NON_INVASIVE",
+      "label": "Surveillance et accompagnement sous ventilation non invasive",
+      "qualifications": [
+        "IDE",
+        "IADE"
+      ],
+      "services": [
+        "PNEUMOLOGIE",
+        "REANIMATION",
+        "SOINS_INTENSIFS",
+        "URGENCES",
+        "SMUR",
+        "SSPI"
+      ],
+      "group": "URGENCE_REA",
+      "sources": [
+        "PNEUMOLOGIE_LMR",
+        "REANIMATION_LRB"
+      ]
+    },
+    {
+      "code": "EPURATION_EXTRA_RENALE",
+      "label": "Surveillance de l’épuration extrarénale en réanimation",
+      "qualifications": [
+        "IDE",
+        "IADE"
+      ],
+      "services": [
+        "REANIMATION",
+        "SOINS_INTENSIFS"
+      ],
+      "group": "URGENCE_REA",
+      "sources": [
+        "REANIMATION_LRB"
+      ]
+    },
+    {
+      "code": "SOINS_TRACHEOTOMIE",
+      "label": "Soins et surveillance d’une trachéotomie",
+      "qualifications": [
+        "IDE"
+      ],
+      "services": [
+        "PNEUMOLOGIE",
+        "REANIMATION",
+        "SOINS_INTENSIFS",
+        "SMR",
+        "HAD"
+      ],
+      "group": "SPECIALITES",
+      "sources": [
+        "PNEUMOLOGIE_LMR"
+      ]
+    },
+    {
+      "code": "SURVEILLANCE_DRAIN_THORACIQUE",
+      "label": "Surveillance d’un drainage thoracique",
+      "qualifications": [
+        "IDE"
+      ],
+      "services": [
+        "PNEUMOLOGIE",
+        "CHIRURGIE",
+        "REANIMATION",
+        "SOINS_INTENSIFS"
+      ],
+      "group": "SPECIALITES",
+      "sources": [
+        "PNEUMOLOGIE_LMR"
+      ]
+    },
+    {
+      "code": "ECG",
+      "label": "Réalisation d’un électrocardiogramme",
+      "qualifications": [
+        "IDE"
+      ],
+      "services": [
+        "CARDIOLOGIE",
+        "EXPLORATIONS",
+        "URGENCES",
+        "SOINS_INTENSIFS",
+        "CONSULTATIONS",
+        "HOPITAL_JOUR"
+      ],
+      "group": "SPECIALITES",
+      "sources": [
+        "CARDIOLOGIE_BCT"
+      ]
+    },
+    {
+      "code": "EXPLORATIONS_CARDIOLOGIQUES",
+      "label": "Préparation et surveillance des explorations cardiologiques",
+      "qualifications": [
+        "IDE"
+      ],
+      "services": [
+        "CARDIOLOGIE",
+        "EXPLORATIONS",
+        "INTERVENTIONNEL",
+        "HOPITAL_JOUR"
+      ],
+      "group": "SPECIALITES",
+      "sources": [
+        "CARDIOLOGIE_BCT"
+      ]
+    },
+    {
+      "code": "SURVEILLANCE_NEUROLOGIQUE",
+      "label": "Surveillance neurologique et utilisation des échelles du service",
+      "qualifications": [
+        "IDE"
+      ],
+      "services": [
+        "NEUROLOGIE",
+        "URGENCES",
+        "SOINS_INTENSIFS",
+        "REANIMATION"
+      ],
+      "group": "SPECIALITES",
+      "sources": [
+        "NEUROLOGIE_LRB"
+      ]
+    },
+    {
+      "code": "PARCOURS_AVC",
+      "label": "Soins infirmiers dans le parcours aigu de l’AVC",
+      "qualifications": [
+        "IDE"
+      ],
+      "services": [
+        "NEUROLOGIE",
+        "URGENCES",
+        "SOINS_INTENSIFS"
+      ],
+      "group": "SPECIALITES",
+      "sources": [
+        "NEUROLOGIE_LRB"
+      ]
+    },
+    {
+      "code": "DIALYSE",
+      "label": "Prise en charge d’une séance d’hémodialyse",
+      "qualifications": [
+        "IDE"
+      ],
+      "services": [
+        "DIALYSE",
+        "NEPHROLOGIE"
+      ],
+      "group": "SPECIALITES",
+      "sources": [
+        "DIALYSE_BORDEAUX"
+      ]
+    },
+    {
+      "code": "GENERATEUR_HEMODIALYSE",
+      "label": "Préparation et contrôles du générateur d’hémodialyse",
+      "qualifications": [
+        "IDE"
+      ],
+      "services": [
+        "DIALYSE",
+        "NEPHROLOGIE"
+      ],
+      "group": "SPECIALITES",
+      "sources": [
+        "DIALYSE_BORDEAUX"
+      ]
+    },
+    {
+      "code": "SURVEILLANCE_HEMODIALYSE",
+      "label": "Surveillance clinique pendant la séance d’hémodialyse",
+      "qualifications": [
+        "IDE"
+      ],
+      "services": [
+        "DIALYSE",
+        "NEPHROLOGIE"
+      ],
+      "group": "SPECIALITES",
+      "sources": [
+        "DIALYSE_BORDEAUX"
+      ]
+    },
+    {
+      "code": "CHIMIOTHERAPIE",
+      "label": "Administration et surveillance des chimiothérapies prescrites",
+      "qualifications": [
+        "IDE"
+      ],
+      "services": [
+        "ONCOLOGIE",
+        "HEMATOLOGIE",
+        "HOPITAL_JOUR",
+        "HAD"
+      ],
+      "group": "SPECIALITES",
+      "sources": [
+        "ONCOLOGIE_SAT",
+        "ONCOLOGIE_SLS"
+      ]
+    },
+    {
+      "code": "IMMUNOTHERAPIE",
+      "label": "Administration et surveillance des immunothérapies prescrites",
+      "qualifications": [
+        "IDE"
+      ],
+      "services": [
+        "ONCOLOGIE",
+        "HEMATOLOGIE",
+        "HOPITAL_JOUR"
+      ],
+      "group": "SPECIALITES",
+      "sources": [
+        "ONCOLOGIE_SAT"
+      ]
+    },
+    {
+      "code": "SURVEILLANCE_POST_OPERATOIRE",
+      "label": "Surveillance des suites opératoires et repérage des complications",
+      "qualifications": [
+        "IDE"
+      ],
+      "services": [
+        "CHIRURGIE",
+        "CHIRURGIE_AMBULATOIRE",
+        "SSPI",
+        "GYNECOLOGIE",
+        "MATERNITE"
+      ],
+      "group": "SPECIALITES",
+      "sources": [
+        "SSPI_PSL",
+        "IDE_2026"
+      ]
+    },
+    {
+      "code": "SSPI",
+      "label": "Surveillance du réveil post-anesthésique en SSPI",
+      "qualifications": [
+        "IDE",
+        "IADE"
+      ],
+      "services": [
+        "SSPI",
+        "CHIRURGIE_AMBULATOIRE",
+        "ANESTHESIE",
+        "BLOC_OPERATOIRE"
+      ],
+      "group": "ANESTHESIE",
+      "sources": [
+        "SSPI_PSL",
+        "IADE_HEGP"
+      ]
+    },
+    {
+      "code": "PREPARATION_ENDOSCOPIE",
+      "label": "Préparation et surveillance du patient en endoscopie",
+      "qualifications": [
+        "IDE",
+        "IBODE"
+      ],
+      "services": [
+        "ENDOSCOPIE",
+        "GASTRO_ENTEROLOGIE",
+        "PNEUMOLOGIE"
+      ],
+      "group": "SPECIALITES",
+      "sources": [
+        "ENDOSCOPIE_AVC",
+        "IBODE_2022"
+      ]
+    },
+    {
+      "code": "DESINFECTION_ENDOSCOPES",
+      "label": "Désinfection des endoscopes et traçabilité des cycles",
+      "qualifications": [
+        "IDE",
+        "IBODE"
+      ],
+      "services": [
+        "ENDOSCOPIE",
+        "STERILISATION"
+      ],
+      "group": "SPECIALITES",
+      "sources": [
+        "ENDOSCOPIE_AVC",
+        "IBODE_VERDUN"
+      ]
+    },
+    {
+      "code": "ENTRETIEN_INFIRMIER_PSY",
+      "label": "Conduite d’entretiens infirmiers en psychiatrie",
+      "qualifications": [
+        "IDE"
+      ],
+      "services": [
+        "PSYCHIATRIE",
+        "PEDOPSYCHIATRIE",
+        "ADDICTOLOGIE"
+      ],
+      "group": "SPECIALITES",
+      "sources": [
+        "PSYCHIATRIE_PSL"
+      ]
+    },
+    {
+      "code": "RISQUE_SUICIDAIRE",
+      "label": "Évaluation et surveillance du risque suicidaire",
+      "qualifications": [
+        "IDE"
+      ],
+      "services": [
+        "PSYCHIATRIE",
+        "PEDOPSYCHIATRIE",
+        "ADDICTOLOGIE",
+        "URGENCES"
+      ],
+      "group": "SPECIALITES",
+      "sources": [
+        "PSYCHIATRIE_PSL",
+        "PEDOPSY_PSL"
+      ]
+    },
+    {
+      "code": "GESTION_CRISE_PSY",
+      "label": "Repérage de l’agitation et accompagnement d’une crise psychiatrique",
+      "qualifications": [
+        "IDE"
+      ],
+      "services": [
+        "PSYCHIATRIE",
+        "PEDOPSYCHIATRIE",
+        "ADDICTOLOGIE",
+        "URGENCES"
+      ],
+      "group": "SPECIALITES",
+      "sources": [
+        "PSYCHIATRIE_PSL",
+        "PEDOPSY_PSL"
+      ]
+    },
+    {
+      "code": "SURVEILLANCE_PSYCHOTROPES",
+      "label": "Surveillance de la tolérance des traitements psychotropes",
+      "qualifications": [
+        "IDE"
+      ],
+      "services": [
+        "PSYCHIATRIE",
+        "PEDOPSYCHIATRIE",
+        "ADDICTOLOGIE",
+        "GERIATRIE",
+        "EHPAD"
+      ],
+      "group": "SPECIALITES",
+      "sources": [
+        "PEDOPSY_PSL"
+      ]
+    },
+    {
+      "code": "PREVENTION_CHUTES",
+      "label": "Évaluation et prévention du risque de chute",
+      "qualifications": [
+        "IDE"
+      ],
+      "services": [
+        "GERIATRIE",
+        "EHPAD",
+        "SOINS_LONGUE_DUREE",
+        "SMR",
+        "MAS",
+        "FAM",
+        "NEUROLOGIE"
+      ],
+      "group": "ACCOMPAGNEMENT",
+      "sources": [
+        "EHPAD_AUCH"
+      ]
+    },
+    {
+      "code": "PREVENTION_ESCARRES",
+      "label": "Prévention des escarres et suivi de l’intégrité cutanée",
+      "qualifications": [
+        "IDE"
+      ],
+      "services": [
+        "GERIATRIE",
+        "EHPAD",
+        "SOINS_LONGUE_DUREE",
+        "SMR",
+        "REANIMATION",
+        "SOINS_INTENSIFS",
+        "MAS",
+        "FAM",
+        "HAD",
+        "DOMICILE_SALARIE"
+      ],
+      "group": "ACCOMPAGNEMENT",
+      "sources": [
+        "EHPAD_AUCH"
+      ]
+    },
+    {
+      "code": "RISQUE_DENUTRITION_DEGLUTITION",
+      "label": "Repérage de la dénutrition et des troubles de déglutition",
+      "qualifications": [
+        "IDE"
+      ],
+      "services": [
+        "GERIATRIE",
+        "EHPAD",
+        "SOINS_LONGUE_DUREE",
+        "SMR",
+        "NEUROLOGIE",
+        "MAS",
+        "FAM"
+      ],
+      "group": "ACCOMPAGNEMENT",
+      "sources": [
+        "EHPAD_AUCH",
+        "NEUROLOGIE_LRB"
+      ]
+    },
+    {
+      "code": "SOINS_PALLIATIFS",
+      "label": "Soins de confort et accompagnement de fin de vie",
+      "qualifications": [
+        "IDE"
+      ],
+      "services": [
+        "SOINS_PALLIATIFS",
+        "ONCOLOGIE",
+        "HEMATOLOGIE",
+        "GERIATRIE",
+        "EHPAD",
+        "SOINS_LONGUE_DUREE",
+        "HAD",
+        "DOMICILE_SALARIE",
+        "DOULEUR"
+      ],
+      "group": "ACCOMPAGNEMENT",
+      "sources": [
+        "ONCOLOGIE_SAT",
+        "EHPAD_AUCH"
+      ]
+    },
+    {
+      "code": "EDUCATION_THERAPEUTIQUE",
+      "label": "Accompagnement éducatif du patient atteint de maladie chronique",
+      "qualifications": [
+        "IDE"
+      ],
+      "services": [
+        "CARDIOLOGIE",
+        "PNEUMOLOGIE",
+        "ENDOCRINOLOGIE",
+        "NEPHROLOGIE",
+        "DIALYSE",
+        "ONCOLOGIE",
+        "HEMATOLOGIE",
+        "CONSULTATIONS",
+        "HOPITAL_JOUR",
+        "CENTRE_SANTE",
+        "HAD",
+        "SMR",
+        "RHUMATOLOGIE"
+      ],
+      "group": "ACCOMPAGNEMENT",
+      "sources": [
+        "IDE_2026",
+        "CARDIOLOGIE_BCT",
+        "DIALYSE_BORDEAUX"
+      ]
+    },
+    {
+      "code": "COORDINATION_DOMICILE",
+      "label": "Coordination des soins avec les intervenants du domicile",
+      "qualifications": [
+        "IDE"
+      ],
+      "services": [
+        "HAD",
+        "DOMICILE_SALARIE",
+        "CENTRE_SANTE"
+      ],
+      "group": "ACCOMPAGNEMENT",
+      "sources": [
+        "HAD_APHP",
+        "IDE_2026"
+      ]
+    },
+    {
+      "code": "PREVENTION_DEPISTAGE",
+      "label": "Actions de prévention, dépistage et éducation à la santé",
+      "qualifications": [
+        "IDE"
+      ],
+      "services": [
+        "PREVENTION",
+        "SANTE_TRAVAIL",
+        "CENTRE_SANTE",
+        "CONSULTATIONS",
+        "ENDOCRINOLOGIE",
+        "INFECTIOLOGIE"
+      ],
+      "group": "ACCOMPAGNEMENT",
+      "sources": [
+        "IDE_2026"
+      ]
+    },
+    {
+      "code": "ANESTHESIE",
+      "label": "Prise en charge anesthésique en collaboration avec le médecin anesthésiste",
+      "qualifications": [
+        "IADE"
+      ],
+      "services": [
+        "ANESTHESIE",
+        "BLOC_OPERATOIRE",
+        "ENDOSCOPIE",
+        "INTERVENTIONNEL",
+        "CHIRURGIE_AMBULATOIRE",
+        "MATERNITE",
+        "PEDIATRIE"
+      ],
+      "group": "ANESTHESIE",
+      "sources": [
+        "IADE_2012",
+        "IADE_HEGP",
+        "IADE_RNCP"
+      ]
+    },
+    {
+      "code": "PREPARATION_SITE_ANESTHESIE",
+      "label": "Préparation et vérification du site d’anesthésie",
+      "qualifications": [
+        "IADE"
+      ],
+      "services": [
+        "ANESTHESIE",
+        "BLOC_OPERATOIRE",
+        "ENDOSCOPIE",
+        "INTERVENTIONNEL",
+        "CHIRURGIE_AMBULATOIRE",
+        "MATERNITE",
+        "PEDIATRIE"
+      ],
+      "group": "ANESTHESIE",
+      "sources": [
+        "IADE_HEGP",
+        "IADE_2012",
+        "IADE_RNCP"
+      ]
+    },
+    {
+      "code": "EVALUATION_PRE_ANESTHESIQUE",
+      "label": "Recueil des données utiles à la prise en charge anesthésique",
+      "qualifications": [
+        "IADE"
+      ],
+      "services": [
+        "ANESTHESIE",
+        "BLOC_OPERATOIRE",
+        "ENDOSCOPIE",
+        "INTERVENTIONNEL",
+        "CHIRURGIE_AMBULATOIRE",
+        "MATERNITE",
+        "PEDIATRIE"
+      ],
+      "group": "ANESTHESIE",
+      "sources": [
+        "IADE_HEGP"
+      ]
+    },
+    {
+      "code": "INDUCTION_ANESTHESIQUE",
+      "label": "Induction anesthésique avec le médecin anesthésiste",
+      "qualifications": [
+        "IADE"
+      ],
+      "services": [
+        "ANESTHESIE",
+        "BLOC_OPERATOIRE",
+        "ENDOSCOPIE",
+        "INTERVENTIONNEL",
+        "CHIRURGIE_AMBULATOIRE",
+        "MATERNITE",
+        "PEDIATRIE"
+      ],
+      "group": "ANESTHESIE",
+      "sources": [
+        "IADE_HEGP"
+      ]
+    },
+    {
+      "code": "SURVEILLANCE_PER_ANESTHESIQUE",
+      "label": "Surveillance et adaptation de la prise en charge per-anesthésique",
+      "qualifications": [
+        "IADE"
+      ],
+      "services": [
+        "ANESTHESIE",
+        "BLOC_OPERATOIRE",
+        "ENDOSCOPIE",
+        "INTERVENTIONNEL",
+        "CHIRURGIE_AMBULATOIRE",
+        "MATERNITE",
+        "PEDIATRIE"
+      ],
+      "group": "ANESTHESIE",
+      "sources": [
+        "IADE_2012",
+        "IADE_RNCP"
+      ]
+    },
+    {
+      "code": "VOIES_AERIENNES_ANESTHESIE",
+      "label": "Gestion des voies aériennes dans le cadre anesthésique",
+      "qualifications": [
+        "IADE"
+      ],
+      "services": [
+        "ANESTHESIE",
+        "BLOC_OPERATOIRE",
+        "ENDOSCOPIE",
+        "INTERVENTIONNEL",
+        "CHIRURGIE_AMBULATOIRE",
+        "PEDIATRIE",
+        "MATERNITE",
+        "SMUR",
+        "REANIMATION"
+      ],
+      "group": "ANESTHESIE",
+      "sources": [
+        "IADE_2012",
+        "IADE_RNCP"
+      ]
+    },
+    {
+      "code": "REVEIL_EXTUBATION",
+      "label": "Accompagnement du réveil et de l’extubation selon protocole",
+      "qualifications": [
+        "IADE"
+      ],
+      "services": [
+        "ANESTHESIE",
+        "BLOC_OPERATOIRE",
+        "SSPI",
+        "CHIRURGIE_AMBULATOIRE",
+        "PEDIATRIE"
+      ],
+      "group": "ANESTHESIE",
+      "sources": [
+        "IADE_2012",
+        "IADE_HEGP",
+        "IADE_RNCP"
+      ]
+    },
+    {
+      "code": "ANESTHESIE_PEDIATRIQUE",
+      "label": "Prise en charge anesthésique pédiatrique",
+      "qualifications": [
+        "IADE"
+      ],
+      "services": [
+        "PEDIATRIE",
+        "ANESTHESIE",
+        "BLOC_OPERATOIRE"
+      ],
+      "group": "ANESTHESIE",
+      "sources": [
+        "IADE_PEDIATRIE"
+      ]
+    },
+    {
+      "code": "ANESTHESIE_HORS_BLOC",
+      "label": "Organisation de l’anesthésie sur un site hors bloc",
+      "qualifications": [
+        "IADE"
+      ],
+      "services": [
+        "ENDOSCOPIE",
+        "INTERVENTIONNEL",
+        "ANESTHESIE"
+      ],
+      "group": "ANESTHESIE",
+      "sources": [
+        "IADE_HEGP"
+      ]
+    },
+    {
+      "code": "SOINS_SMUR",
+      "label": "Soins d’urgence préhospitaliers au sein d’une équipe SMUR",
+      "qualifications": [
+        "IADE",
+        "IDE"
+      ],
+      "services": [
+        "SMUR"
+      ],
+      "group": "URGENCE_REA",
+      "sources": [
+        "IADE_SMUR",
+        "IDE_2026"
+      ]
+    },
+    {
+      "code": "PREPARATION_SALLE_BLOC",
+      "label": "Préparation et contrôle de la salle d’intervention",
+      "qualifications": [
+        "IBODE",
+        "IDE"
+      ],
+      "services": [
+        "BLOC_OPERATOIRE",
+        "CHIRURGIE_AMBULATOIRE",
+        "INTERVENTIONNEL"
+      ],
+      "group": "BLOC",
+      "sources": [
+        "IBODE_CARCASSONNE"
+      ]
+    },
+    {
+      "code": "CIRCULATION_BLOC",
+      "label": "Fonction de circulant au bloc opératoire",
+      "qualifications": [
+        "IBODE",
+        "IDE"
+      ],
+      "services": [
+        "BLOC_OPERATOIRE",
+        "CHIRURGIE_AMBULATOIRE",
+        "INTERVENTIONNEL"
+      ],
+      "group": "BLOC",
+      "sources": [
+        "IBODE_CARCASSONNE"
+      ]
+    },
+    {
+      "code": "INSTRUMENTATION",
+      "label": "Préparation des tables et instrumentation opératoire",
+      "qualifications": [
+        "IBODE",
+        "IDE"
+      ],
+      "services": [
+        "BLOC_OPERATOIRE",
+        "CHIRURGIE_AMBULATOIRE",
+        "INTERVENTIONNEL"
+      ],
+      "group": "BLOC",
+      "sources": [
+        "IBODE_CARCASSONNE"
+      ]
+    },
+    {
+      "code": "INSTALLATION_CHIRURGICALE",
+      "label": "Installation chirurgicale du patient — actes relevant du cadre IBODE",
+      "qualifications": [
+        "IBODE"
+      ],
+      "services": [
+        "BLOC_OPERATOIRE",
+        "CHIRURGIE_AMBULATOIRE",
+        "INTERVENTIONNEL"
+      ],
+      "group": "BLOC",
+      "sources": [
+        "IBODE_2022"
+      ]
+    },
+    {
+      "code": "ASSISTANCE_CHIRURGICALE_IBODE",
+      "label": "Assistance chirurgicale — actes exclusifs IBODE maîtrisés",
+      "qualifications": [
+        "IBODE"
+      ],
+      "services": [
+        "BLOC_OPERATOIRE",
+        "CHIRURGIE_AMBULATOIRE",
+        "INTERVENTIONNEL"
+      ],
+      "group": "BLOC",
+      "sources": [
+        "IBODE_2022",
+        "IBODE_VERDUN"
+      ]
+    },
+    {
+      "code": "ASEPSIE_CHAMP_OPERATOIRE",
+      "label": "Préparation et maintien du champ opératoire stérile",
+      "qualifications": [
+        "IBODE",
+        "IDE"
+      ],
+      "services": [
+        "BLOC_OPERATOIRE",
+        "CHIRURGIE_AMBULATOIRE",
+        "INTERVENTIONNEL"
+      ],
+      "group": "SECURITE_BLOC",
+      "sources": [
+        "IBODE_2022",
+        "IBODE_CARCASSONNE"
+      ]
+    },
+    {
+      "code": "CONTROLE_INSTRUMENTS",
+      "label": "Contrôle de conformité des instruments et ancillaires",
+      "qualifications": [
+        "IBODE",
+        "IDE"
+      ],
+      "services": [
+        "BLOC_OPERATOIRE",
+        "CHIRURGIE_AMBULATOIRE",
+        "STERILISATION",
+        "INTERVENTIONNEL"
+      ],
+      "group": "SECURITE_BLOC",
+      "sources": [
+        "IBODE_CARCASSONNE"
+      ]
+    },
+    {
+      "code": "TRACABILITE_IMPLANTS",
+      "label": "Traçabilité des implants et dispositifs médicaux implantables",
+      "qualifications": [
+        "IBODE",
+        "IDE"
+      ],
+      "services": [
+        "BLOC_OPERATOIRE",
+        "CHIRURGIE_AMBULATOIRE",
+        "INTERVENTIONNEL"
+      ],
+      "group": "SECURITE_BLOC",
+      "sources": [
+        "IBODE_CARCASSONNE"
+      ]
+    },
+    {
+      "code": "CIRCUIT_STERILISATION",
+      "label": "Organisation du circuit des instruments avec la stérilisation",
+      "qualifications": [
+        "IBODE",
+        "IDE"
+      ],
+      "services": [
+        "BLOC_OPERATOIRE",
+        "CHIRURGIE_AMBULATOIRE",
+        "STERILISATION",
+        "ENDOSCOPIE"
+      ],
+      "group": "SECURITE_BLOC",
+      "sources": [
+        "IBODE_CARCASSONNE",
+        "IBODE_VERDUN"
+      ]
+    },
+    {
+      "code": "GESTION_DISPOSITIFS_BLOC",
+      "label": "Gestion des dispositifs stériles et du matériel opératoire",
+      "qualifications": [
+        "IBODE",
+        "IDE"
+      ],
+      "services": [
+        "BLOC_OPERATOIRE",
+        "CHIRURGIE_AMBULATOIRE",
+        "STERILISATION",
+        "INTERVENTIONNEL"
+      ],
+      "group": "SECURITE_BLOC",
+      "sources": [
+        "IBODE_CARCASSONNE"
+      ]
+    },
+    {
+      "code": "COORDINATION_PERIOPERATOIRE",
+      "label": "Coordination et continuité de la prise en charge périopératoire",
+      "qualifications": [
+        "IBODE"
+      ],
+      "services": [
+        "BLOC_OPERATOIRE",
+        "CHIRURGIE_AMBULATOIRE",
+        "ENDOSCOPIE",
+        "INTERVENTIONNEL"
+      ],
+      "group": "BLOC",
+      "sources": [
+        "IBODE_2022",
+        "IBODE_VERDUN"
+      ]
+    },
+    {
+      "code": "SURVEILLANCE_PEDIATRIQUE",
+      "label": "Observation clinique et surveillance adaptées à l’âge de l’enfant",
+      "qualifications": [
+        "IDE"
+      ],
+      "services": [
+        "PEDIATRIE",
+        "NEONATOLOGIE"
+      ],
+      "group": "SPECIALITES",
+      "sources": [
+        "PEDIATRIE_APR",
+        "NEONATOLOGIE_JVR"
+      ]
+    },
+    {
+      "code": "DOULEUR_PEDIATRIQUE",
+      "label": "Évaluation et accompagnement de la douleur de l’enfant",
+      "qualifications": [
+        "IDE"
+      ],
+      "services": [
+        "PEDIATRIE",
+        "NEONATOLOGIE"
+      ],
+      "group": "SPECIALITES",
+      "sources": [
+        "PEDIATRIE_APR"
+      ]
+    },
+    {
+      "code": "ACCOMPAGNEMENT_PARENTS",
+      "label": "Accompagnement des parents dans les soins et la préparation de la sortie",
+      "qualifications": [
+        "IDE"
+      ],
+      "services": [
+        "PEDIATRIE",
+        "NEONATOLOGIE",
+        "MATERNITE",
+        "PEDOPSYCHIATRIE"
+      ],
+      "group": "ACCOMPAGNEMENT",
+      "sources": [
+        "PEDIATRIE_APR",
+        "NEONATOLOGIE_JVR"
+      ]
+    },
+    {
+      "code": "SOINS_NOUVEAU_NE",
+      "label": "Soins et surveillance du nouveau-né hospitalisé",
+      "qualifications": [
+        "IDE"
+      ],
+      "services": [
+        "NEONATOLOGIE",
+        "MATERNITE"
+      ],
+      "group": "SPECIALITES",
+      "sources": [
+        "NEONATOLOGIE_JVR"
+      ]
+    },
+    {
+      "code": "ENTRETIEN_SANTE_TRAVAIL",
+      "label": "Entretiens infirmiers de santé au travail selon protocole médical",
+      "qualifications": [
+        "IDE"
+      ],
+      "services": [
+        "SANTE_TRAVAIL"
+      ],
+      "group": "SPECIALITES",
+      "sources": [
+        "SANTE_TRAVAIL"
+      ]
+    },
+    {
+      "code": "PREVENTION_RISQUES_PROFESSIONNELS",
+      "label": "Repérage des risques professionnels et actions de prévention",
+      "qualifications": [
+        "IDE"
+      ],
+      "services": [
+        "SANTE_TRAVAIL"
+      ],
+      "group": "ACCOMPAGNEMENT",
+      "sources": [
+        "SANTE_TRAVAIL"
+      ]
+    }
+  ]
+}

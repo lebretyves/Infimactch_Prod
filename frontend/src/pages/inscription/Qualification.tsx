@@ -1,7 +1,8 @@
+import { ClinicalSkillsPicker } from "@/components/ClinicalSkillsPicker";
 import { Button } from "@/ui/Button";
 import { Checkbox } from "@/ui/Choice";
 import { SelectField, TextField } from "@/ui/Field";
-import { QUALIFICATIONS, SKILLS, labelCode } from "@/data/professional";
+import { QUALIFICATIONS, labelCode } from "@/data/professional";
 import { api } from "@/services/api";
 import { useRemote } from "@/lib/useRemote";
 import { Etape, etapeStyles as s } from "./Etape";
@@ -93,32 +94,16 @@ export default function Qualification() {
           onChange={(e) => modifier({ rpps: e.target.value })}
         />
       </div>
+      <ClinicalSkillsPicker label="Compétences de soins" qualifications={v.qualifications} value={v.competences}
+        chooseContext onChange={competences => modifier({ competences })} />
       <fieldset className={s.bloc}>
-        <legend>Compétences</legend>
-        {Object.entries({
-          ...SKILLS,
-          ...Object.fromEntries(
-            (ref.data?.blockSpecialties || []).map((b) => [
-              "BLOCK_" + b,
-              "Bloc : " + labelCode(b),
-            ]),
-          ),
-        }).map(([code, label]) => (
-          <Checkbox
-            key={code}
-            checked={v.competences.includes(code)}
-            onChange={() =>
-              modifier({
-                competences: v.competences.includes(code)
-                  ? v.competences.filter((x) => x !== code)
-                  : [...v.competences, code],
-              })
-            }
-          >
-            {label}
-          </Checkbox>
-        ))}
+        <legend>Populations prises en charge</legend>
+        {[['POPULATION_ADULT', 'Adultes'], ['POPULATION_PEDIATRIC', 'Pédiatrie']].map(([code, label]) => <Checkbox key={code} checked={v.competences.includes(code)} onChange={event => modifier({ competences: event.target.checked ? [...v.competences, code] : v.competences.filter(item => item !== code) })}>{label}</Checkbox>)}
       </fieldset>
+      {(v.qualifications.some(q => ['IADE', 'IBODE'].includes(q)) || v.competences.some(code => code.startsWith('BLOCK_'))) && <fieldset className={s.bloc}>
+        <legend>Spécialités au bloc</legend>
+        {[...new Set([...(v.qualifications.some(q => ['IADE', 'IBODE'].includes(q)) ? ref.data?.blockSpecialties || [] : []), ...v.competences.filter(code => code.startsWith('BLOCK_')).map(code => code.slice(6))])].map(block => <Checkbox key={block} checked={v.competences.includes('BLOCK_' + block)} onChange={event => modifier({ competences: event.target.checked ? [...v.competences, 'BLOCK_' + block] : v.competences.filter(code => code !== 'BLOCK_' + block) })}>{labelCode(block)}</Checkbox>)}
+      </fieldset>}
       <fieldset className={s.bloc}>
         <legend>Expérience professionnelle</legend>
         {ref.error && (

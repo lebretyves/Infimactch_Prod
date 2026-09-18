@@ -1,24 +1,14 @@
+import { clinicalSkills } from './clinicalSkills';
+
 export const QUALIFICATIONS: Record<string, string> = {
   IDE: 'IDE — Infirmier diplômé d’État',
   IADE: 'IADE — Infirmier anesthésiste diplômé d’État',
   IBODE: 'IBODE — Infirmier de bloc opératoire diplômé d’État',
 };
 export const SKILLS: Record<string, string> = {
-  TRIAGE: "Triage",
-  POSE_VOIE_VEINEUSE: "Pose de voie veineuse",
-  SOINS_PALLIATIFS: "Soins palliatifs",
-  PERFUSION: "Perfusion",
-  PANSEMENTS_COMPLEXES: "Pansements complexes",
-  URGENCES_VITALES: "Urgences vitales",
-  DIALYSE: "Dialyse",
-  CHIMIOTHERAPIE: "Chimiothérapie",
-  PRELEVEMENTS: "Prélèvements",
-  SURVEILLANCE_POST_OPERATOIRE: "Surveillance post-opératoire",
-  EDUCATION_THERAPEUTIQUE: "Éducation thérapeutique",
+  ...Object.fromEntries(clinicalSkills.map(skill => [skill.code, skill.label])),
   POPULATION_ADULT: "Pratique auprès des adultes",
   POPULATION_PEDIATRIC: "Pratique pédiatrique",
-  ANESTHESIE: "Anesthésie",
-  SSPI: "Surveillance en salle de réveil",
 };
 export const labelCode = (value: string) =>
   (value === "UNKNOWN" ? "Non connu" : SKILLS[value]) ||
