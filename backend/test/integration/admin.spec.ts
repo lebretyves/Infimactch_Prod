@@ -71,6 +71,9 @@ test('stored matching is readable, versioned and cannot bypass active agency lin
  await post(owner.agent,'organizations/'+agency.id+'/links',owner.csrf,{otherOrganizationId:est.id,active:true,reason:'Create fictional agency link'}).expect(201);
  const [mission]=await db.query("INSERT INTO mission(agency_id,establishment_id,title,description,qualification,service,population,block,start_at,end_at,shift,address,location,hourly_salary) VALUES($1,$2,'Fictional matching mission','Fictional description','IDE','URGENCES','ADULT','NONE','2039-01-01T08:00Z','2039-01-01T16:00Z','DAY','Fictional address',ST_SetSRID(ST_MakePoint(2,48),4326),25) RETURNING id,version,status",[agency.id,est.id]);
  await post(owner.agent,'organizations/'+agency.id+'/links',owner.csrf,{otherOrganizationId:est.id,active:false,reason:'Prevent breaking active link'}).expect(409);
+ // Mission detail mixes a uuid column and a JSON text field on the same parameter.
+ await db.query("INSERT INTO audit(event,details) VALUES('FICTIONAL_MISSION_NOTE',jsonb_build_object('missionId',$1::text))",[mission.id]);
+ const detail=await owner.agent.get('/api/v1/admin/missions/'+mission.id).expect(200);assert.equal(detail.body.mission.id,mission.id);assert.ok(detail.body.events.some((e:any)=>e.event==='FICTIONAL_MISSION_NOTE'));
  const [profile]=await db.query('SELECT updated_at,rpps_version FROM profile WHERE user_id=$1',[nurse.id]);
  const matching=app.get(MatchingService);await matching.ready();
  const run=await matching.runs.create({ownerId:nurse.id,missionId:mission.id,profileVersion:new Date(profile.updated_at).toISOString()+':'+profile.rpps_version,missionVersion:mission.version,missionStatus:mission.status,rulesVersion:MATCH_RULES.version,result:{eligible:false,score:null,components:null,reasons:['RPPS_REQUIRED'],distanceKm:0},expiresAt:new Date(Date.now()+60000)});
