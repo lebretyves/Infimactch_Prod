@@ -1,3 +1,4 @@
+import { ClinicalSkillsPicker } from "@/components/ClinicalSkillsPicker";
 import {CvImport} from '@/components/CvImport';
 import {PersonalCorrectionRequest} from '@/components/PersonalCorrectionRequest';
 import { ProSanteConnect } from "@/components/ProSanteConnect";
@@ -16,7 +17,6 @@ import { dateInput } from "@/services/nurse";
 import { wholeDayPeriod } from "@/lib/datePeriods";
 import {
   QUALIFICATIONS,
-  SKILLS,
   labelCode,
   shiftOptions,
 } from "@/data/professional";
@@ -140,14 +140,6 @@ function Editor({ initial }: { initial: ProfessionalProfile }) {
     : p.skills.includes("POPULATION_PEDIATRIC")
       ? "PEDIATRIC"
       : "";
-  const otherSkills = {
-    ...SKILLS,
-    ...Object.fromEntries(
-      p.skills
-        .filter((k) => !SKILLS[k] && !k.startsWith("BLOCK_"))
-        .map((k) => [k, labelCode(k)]),
-    ),
-  };
   return (
     <form className={`${u.page} ${s.profilePage}`} onSubmit={submit} onInvalidCapture={event=>{(event.target as HTMLElement).closest("details")?.setAttribute("open","");}}>
       <header className={u.header}>
@@ -416,11 +408,11 @@ function Editor({ initial }: { initial: ProfessionalProfile }) {
                 <option value="PEDIATRIC">Pédiatrique</option>
                 <option value="MIXED">Adulte et pédiatrique</option>
               </SelectField>
-              {specialized && (
+              {(specialized || p.skills.some(code => code.startsWith("BLOCK_"))) && (
                 <>
                   <h3>Spécialités maîtrisées</h3>
                   <div className={s.choices}>
-                    {(ref.data?.blockSpecialties || []).map((code) => (
+                    {[...new Set([...(specialized ? ref.data?.blockSpecialties || [] : []), ...p.skills.filter(code => code.startsWith("BLOCK_")).map(code => code.slice(6))])].map((code) => (
                       <Checkbox
                         key={code}
                         checked={p.skills.includes("BLOCK_" + code)}
@@ -438,31 +430,8 @@ function Editor({ initial }: { initial: ProfessionalProfile }) {
                   </p>
                 </>
               )}
-              <details className={s.details} open={!specialized}>
-                <summary>
-                  Compétences de soins (
-                  {
-                    p.skills.filter(
-                      (k) =>
-                        !k.startsWith("POPULATION_") && !k.startsWith("BLOCK_"),
-                    ).length
-                  }
-                  )
-                </summary>
-                <div className={s.choices}>
-                  {Object.entries(otherSkills)
-                    .filter(([code]) => !code.startsWith("POPULATION_"))
-                    .map(([code, label]) => (
-                      <Checkbox
-                        key={code}
-                        checked={p.skills.includes(code)}
-                        onChange={(e) => toggleSkill(code, e.target.checked)}
-                      >
-                        {label}
-                      </Checkbox>
-                    ))}
-                </div>
-              </details>
+              <ClinicalSkillsPicker label="Compétences de soins" qualifications={p.qualifications} value={p.skills}
+                chooseContext onChange={skills => change({ skills })} />
             </section>
             <section id="preferences" tabIndex={-1} className={u.card}>
               <h2 className={u.cardHeading}>

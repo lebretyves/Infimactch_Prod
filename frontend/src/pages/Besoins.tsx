@@ -1,3 +1,5 @@
+import { serviceOptionsFor } from "@/data/clinicalSkills";
+import { ClinicalSkillsPicker } from "@/components/ClinicalSkillsPicker";
 import { useRef, useState, type FormEvent } from "react";
 import { useAuth } from "@/context/AuthContext";
 import { useRemote } from "@/lib/useRemote";
@@ -16,10 +18,9 @@ import {
 } from "@/services/needs";
 import { parisDateTimeLabel } from "@/lib/parisDateTime";
 import { localDate, inclusiveEndDate, missionDateRange, missionDateRangeLabel } from "@/lib/missionDateRange";
-import { QUALIFICATIONS, SKILLS, labelCode } from "@/data/professional";
+import { QUALIFICATIONS, labelCode } from "@/data/professional";
 import { Button, ButtonLink } from "@/ui/Button";
 import { TextField, SelectField, TextArea } from "@/ui/Field";
-import { Checkbox } from "@/ui/Choice";
 import { Icon } from "@/ui/Icon";
 import u from "@/components/NurseUI.module.css";
 import s from "./Besoins.module.css";
@@ -289,6 +290,7 @@ function NeedForm({
               onChange={(e) =>
                 change({
                   qualification: e.target.value as NeedDetails["qualification"],
+                  service: serviceOptionsFor([e.target.value]).some(option => option.value === details.service) ? details.service : "",
                   block: "NONE",
                   specialty: undefined,
                 })
@@ -307,11 +309,8 @@ function NeedForm({
               onChange={(e) => change({ service: e.target.value })}
             >
               <option value="">Choisir un service</option>
-              {reference.ideServices.map((code) => (
-                <option key={code} value={code}>
-                  {labelCode(code)}
-                </option>
-              ))}
+              {serviceOptionsFor([details.qualification]).map(option => <option key={option.value} value={option.value}>{option.label}</option>)}
+              {details.service && !serviceOptionsFor([details.qualification]).some(option => option.value === details.service) && <option value={details.service}>{labelCode(details.service)}</option>}
             </SelectField>
             <SelectField
               label="Population prise en charge"
@@ -371,35 +370,8 @@ function NeedForm({
               hint="0 = aucune expérience minimale. Exemple : 1,5 an = 18 mois. Les fractions d’année sont arrondies au mois le plus proche."
             />
           </div>
-          <details className={s.skills}>
-            <summary>
-              Compétences obligatoires ({details.requiredSkills.length})
-            </summary>
-            <div>
-              {Object.entries({
-                ...SKILLS,
-                ...Object.fromEntries(
-                  details.requiredSkills
-                    .filter((code) => !SKILLS[code])
-                    .map((code) => [code, labelCode(code)]),
-                ),
-              }).map(([code, label]) => (
-                <Checkbox
-                  key={code}
-                  checked={details.requiredSkills.includes(code)}
-                  onChange={(e) =>
-                    change({
-                      requiredSkills: e.target.checked
-                        ? [...details.requiredSkills, code]
-                        : details.requiredSkills.filter((v) => v !== code),
-                    })
-                  }
-                >
-                  {label}
-                </Checkbox>
-              ))}
-            </div>
-          </details>
+          <ClinicalSkillsPicker label="Compétences indispensables" qualifications={[details.qualification]}
+            service={details.service} value={details.requiredSkills} onChange={requiredSkills => change({ requiredSkills })} />
         </section>
         <div className={s.formActions}>
           <p className={s.help}>

@@ -1,3 +1,5 @@
+import { serviceOptionsFor } from "@/data/clinicalSkills";
+import { ClinicalSkillsPicker } from "@/components/ClinicalSkillsPicker";
 import { useRef, useState, type FormEvent } from "react";
 import { useNavigate, useParams, useSearchParams } from "react-router";
 import { useRemote } from "@/lib/useRemote";
@@ -9,10 +11,9 @@ import {
 import { staffingNeed, type StaffingNeed } from "@/services/needs";
 import { localDate, inclusiveEndDate, missionDateRange, type SchedulePrecision } from "@/lib/missionDateRange";
 import u from "@/components/NurseUI.module.css";
-import { SKILLS, labelCode } from "@/data/professional";
+import { labelCode } from "@/data/professional";
 import { Button, ButtonLink } from "@/ui/Button";
 import { TextField, TextArea, SelectField } from "@/ui/Field";
-import { Checkbox } from "@/ui/Choice";
 import page from "./Candidater.module.css";
 import s from "./inscription/Etape.module.css";
 type Draft = {
@@ -322,6 +323,7 @@ function Form({
             onChange={(e) =>
               set({
                 qualification: e.target.value,
+                service: serviceOptionsFor([e.target.value]).some(option => option.value === v.service) ? v.service : "",
                 block: "NONE",
                 specialty: undefined,
               })
@@ -338,12 +340,8 @@ function Form({
             onChange={(e) => set({ service: e.target.value })}
           >
             <option value="">Choisir un service</option>
-            {reference.ideServices.map((q) => (
-              <option key={q} value={q}>
-                {labelCode(q)}
-              </option>
-            ))}
-            {v.service && !reference.ideServices.includes(v.service) && (
+            {serviceOptionsFor([v.qualification]).map(option => <option key={option.value} value={option.value}>{option.label}</option>)}
+            {v.service && !serviceOptionsFor([v.qualification]).some(option => option.value === v.service) && (
               <option value={v.service}>{labelCode(v.service)}</option>
             )}
           </SelectField>
@@ -385,37 +383,10 @@ function Form({
             ))}
           </SelectField>
         )}
-        {(["requiredSkills", "desiredSkills"] as const).map((kind) => (
-          <fieldset key={kind} className={s.bloc}>
-            <legend>
-              {kind === "requiredSkills"
-                ? "Compétences obligatoires"
-                : "Compétences souhaitées"}
-            </legend>
-            {Object.entries({
-              ...SKILLS,
-              ...Object.fromEntries(
-                v[kind]
-                  .filter((code) => !SKILLS[code])
-                  .map((code) => [code, labelCode(code)]),
-              ),
-            }).map(([code, label]) => (
-              <Checkbox
-                key={code}
-                checked={v[kind].includes(code)}
-                onChange={(e) =>
-                  set({
-                    [kind]: e.target.checked
-                      ? [...v[kind], code]
-                      : v[kind].filter((q) => q !== code),
-                  })
-                }
-              >
-                {label}
-              </Checkbox>
-            ))}
-          </fieldset>
-        ))}
+        {(["requiredSkills", "desiredSkills"] as const).map(kind => <ClinicalSkillsPicker key={kind}
+          label={kind === "requiredSkills" ? "Compétences indispensables" : "Compétences souhaitées"}
+          qualifications={[v.qualification]} service={v.service} value={v[kind]}
+          onChange={skills => set({ [kind]: skills })} />)}
         <TextField
           label="Expérience minimale dans le service (années)"
           type="number"
