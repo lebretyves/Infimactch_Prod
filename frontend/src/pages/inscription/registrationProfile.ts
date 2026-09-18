@@ -1,3 +1,4 @@
+import { diplomaDetails } from "./diplomas";
 import type { Inscription } from "./state";
 import type { ProfessionalProfile, ProfileDetails } from "@/services/profile";
 import { wholeDayPeriod } from "@/lib/datePeriods";
@@ -44,7 +45,7 @@ export function registrationProfile(v: Inscription): ProfessionalProfile {
     ...(v.codePostal ? { postalCode: v.codePostal } : {}),
     ...(v.ville ? { city: v.ville } : {}),
     ...(v.diplome ? { diploma: v.diplome } : {}),
-    ...(v.anneeDiplome ? { diplomaYear: Number(v.anneeDiplome) } : {}),
+    ...diplomaDetails(v.qualifications, v),
     ...(v.transport ? { transport: v.transport } : {}),
   };
   return {

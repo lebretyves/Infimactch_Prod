@@ -49,9 +49,8 @@ async function candidate(page, address, { navigation = false } = {}) {
   await page.getByLabel(/^Code postal/).fill('75001');
   await page.getByLabel(/^Ville/).fill('Paris');
   await step(page, '/inscription/qualification');
-  await page.getByRole('checkbox', {name:'IDE', exact:true}).check();
-  await page.getByLabel(/^Intitulé du diplôme/).fill('Diplôme fictif de test');
-  await page.getByLabel(/^Année/).fill('2015');
+  await page.getByRole('checkbox', {name:/^IDE —/}).check();
+  await page.getByLabel(/^Année d’obtention du diplôme IDE/).fill('2015');
   await page.getByLabel(/^Numéro RPPS/).fill('10000000001');
   await step(page, '/inscription/mobilite');
   await step(page, '/inscription/disponibilites');

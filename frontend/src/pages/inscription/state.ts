@@ -1,7 +1,8 @@
+import { withIde, diplomaFields, type DiplomaYears } from "./diplomas";
 import { createContext, use } from 'react';
 import type { PracticeServices } from '@/services/profile';
 
-export type Inscription = {
+export type Inscription = DiplomaYears & {
   google: boolean;
   email: string;
   motDePasse: string;
@@ -57,6 +58,9 @@ export const vide: Inscription = {
   longitude: null,
   diplome: '',
   anneeDiplome: '',
+  ideDiplomaYear: '',
+  iadeDiplomaYear: '',
+  ibodeDiplomaYear: '',
   rpps: '',
   competences: [],
   experiences: [{ etablissement: '', service: '', annees: '' }],
@@ -169,6 +173,13 @@ function lireBrouillon(): Inscription {
     try{sessionStorage.removeItem(CLE_BROUILLON);}catch{}
     /* Browser storage may be unavailable or contain an old draft. */
   }
+  // A legacy shared year is unambiguous only when a single diploma was selected.
+  if (restored.qualifications.length === 1 && restored.anneeDiplome) {
+    const field = diplomaFields.find(([q]) => q === restored.qualifications[0])?.[1];
+    if (field && !restored[field]) restored[field] = restored.anneeDiplome;
+  }
+  restored.anneeDiplome = "";
+  restored.qualifications = withIde(restored.qualifications);
   return restored;
 }
 let brouillon = lireBrouillon();
