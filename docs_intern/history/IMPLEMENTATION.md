@@ -352,3 +352,7 @@ Correction de défauts reproduits dans la reconnaissance des expériences : date
 Revue des quatorze types de pages du candidat : regroupement de la navigation par usages, meilleure utilisation de la largeur et des espacements, clarification profil/dossier/calendrier. Identité verrouillée, demandes de correction, expériences par cartes, règles de matching et candidature, justificatifs et sauvegardes explicites conservés.
 
 SEO : titres et descriptions spécifiques aux routes, sans données personnelles ; HTML initial privé noindex sans canonique d’accueil. Sitemap limité aux cinq pages publiques existantes. Aucun JobPosting pour les données de démonstration. Le rapport distingue ce travail de l’indexation effective dans Google, non vérifiée sans Search Console. Voir quality/PROFIL_CANDIDAT_DESIGN_SEO_2026-09-18.md.
+
+## 2026-09-18 — Intitulés et rubriques des annonces externes
+
+Analyse de 200 annonces du catalogue public (168 France Travail,32 JobsPipe). La présentation regroupe les extraits exacts par contenu : poste, activités, profil, horaires, rémunération et contexte établissement. Les champs multiples ne perdent plus leur intitulé sous « Passage de l’annonce » ; FASTT et majorations restent dans les avantages/rémunération. Le matching et les champs métier ne changent pas. Contrôles de fidélité sur921passages,7tests ciblés et recette navigateur réussis. Rapport : quality/CATEGORISATION_ANNONCES_2026-09-18.md.
