@@ -50,12 +50,13 @@ export default function Notifications() {
     } finally {challengePending.current=false;setSendingCode(false);setBusy(false);}
   }
   const data=settings.data;
-  return <div className={s.page}>
+  return <div className={`${s.page} ${s.focusedPage}`}>
     <header className={s.header}><div><h1>Notifications</h1><p>Retrouvez les informations de vos missions et de votre compte. Les notifications restent disponibles ici, même si Discord est désactivé.</p></div></header>
     {error&&<p role="alert">{error}</p>}{message&&<p role="status">{message}</p>}
+    {user?.role === "interimaire" && <nav className={s.sectionNav} aria-label="Sections des notifications"><a href="#notice-list">Votre activité</a><a href="#discord-settings">Réglages Discord</a></nav>}
     <section className={s.card} aria-labelledby="notice-list"><h2 id="notice-list">Votre activité</h2>
       {notices.loading?<p role="status">Chargement…</p>:notices.error?<p role="alert">{notices.error} <Button onClick={notices.reload}>Réessayer</Button></p>:<>
-      {notices.data?.length?<ul>{notices.data.map(n=><li key={n.id} style={{paddingBlock:14}}><strong>{data?.catalog[n.kind]||"Notification"}{!n.read_at?" — Non lue":""}</strong><p>{n.message}</p><time dateTime={n.created_at}>{new Date(n.created_at).toLocaleString("fr-FR")}</time><div className={s.actions}><Link to={notificationHref(n.href,n.id)}>Consulter</Link></div></li>)}</ul>:<p>Aucune notification pour cette page.</p>}
+      {notices.data?.length?<ul className={s.noticeList}>{notices.data.map(n=><li className={s.noticeItem} key={n.id} style={user?.role === "interimaire" ? undefined : {paddingBlock:14}}><strong>{data?.catalog[n.kind]||"Notification"}{!n.read_at?" — Non lue":""}</strong><p>{n.message}</p><time dateTime={n.created_at}>{new Date(n.created_at).toLocaleString("fr-FR")}</time><div className={s.actions}><Link to={notificationHref(n.href,n.id)}>Consulter</Link></div></li>)}</ul>:<p>Aucune notification pour cette page.</p>}
       <div className={s.actions}><Button variant="outline" disabled={offset===0} onClick={()=>setOffset(v=>Math.max(0,v-20))}>Précédent</Button><Button variant="outline" disabled={(notices.data?.length??0)<20} onClick={()=>setOffset(v=>v+20)}>Suivant</Button></div></>}
     </section>
     <section className={s.card} aria-labelledby="discord-settings"><h2 id="discord-settings">Notifications Discord</h2>

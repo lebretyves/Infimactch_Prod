@@ -159,3 +159,6 @@
 .width-lg {
   max-width: 320px;
 }
+/* Candidate account controls meet the same touch target as other actions. */
+:global([data-space="candidate"]) .bouton { width: 44px; height: 44px; }
+:global([data-space="candidate"]) .action { right: 4px; }

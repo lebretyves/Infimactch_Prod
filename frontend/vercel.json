@@ -27,7 +27,7 @@
     },
     {
       "source": "/:path(accueil|catalogue|apercu-annonces|connexion|mot-de-passe-oublie|reinitialiser-mot-de-passe|compte|inscription(?:/.*)?|notifications|missions(?:/.*)?|candidatures(?:/.*)?|calendrier|profil|dossier|favoris|etablissements/[^/]+|historique|organisation|besoins|gestion/missions/[^/]+(?:/modifier)?)",
-      "destination": "/index.html"
+      "destination": "/private.html"
     }
   ],
   "headers": [

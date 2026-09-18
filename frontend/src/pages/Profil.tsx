@@ -149,7 +149,7 @@ function Editor({ initial }: { initial: ProfessionalProfile }) {
     ),
   };
   return (
-    <form className={u.page} onSubmit={submit}>
+    <form className={`${u.page} ${s.profilePage}`} onSubmit={submit} onInvalidCapture={event=>{(event.target as HTMLElement).closest("details")?.setAttribute("open","");}}>
       <header className={u.header}>
         <div>
           <p className={u.eyebrow}>Mon parcours</p>
@@ -163,7 +163,10 @@ function Editor({ initial }: { initial: ProfessionalProfile }) {
           Enregistrer les modifications
         </Button>
       </header>
-      <ProSanteConnect purpose="link" />
+      <nav className={s.sectionNav} aria-label="Rubriques de mon profil">
+        <a href="#qualifications">Diplômes</a><a href="#experiences">Expériences et CV</a><a href="#competences">Compétences</a><a href="#preferences">Préférences</a><a href="#informations-personnelles">Informations personnelles</a>
+      </nav>
+      <p className={s.contextNote}>Ce profil sert à proposer des missions adaptées à votre parcours. <a href="/dossier">Mon dossier</a> rassemble les vérifications, justificatifs et coordonnées bancaires.</p>
       {error && (
         <p className={u.feedback} role="alert">
           {error}
@@ -175,81 +178,8 @@ function Editor({ initial }: { initial: ProfessionalProfile }) {
         </p>
       )}
       <fieldset disabled={busy} className={s.formBody}>
-        <div className={u.twoColumns}>
-          <div className={u.stack}>
-            <section className={u.card}>
-              <h2 className={u.cardHeading}>
-                <Icon name="user" />
-                Informations personnelles
-              </h2>
-              <p>Ces informations sont verrouillées après votre inscription. Pour les corriger, envoyez une demande à un administrateur.</p>
-              <div className={u.grid}>
-                <div id="prenom">
-                  <TextField
-                    label="Prénom"
-                    required
-                    minLength={2}
-                    maxLength={100}
-                    autoComplete="given-name"
-                    value={d.firstName ?? p.display_name}
-                    readOnly
-                  />
-                </div>
-                <TextField
-                  label="Nom"
-                  maxLength={100}
-                  autoComplete="family-name"
-                  value={d.lastName || ""}
-                  readOnly
-                />
-                <TextField
-                  label="E-mail"
-                  type="email"
-                  value={user?.email || ""}
-                  readOnly
-                />
-                <TextField
-                  label="Ville"
-                  maxLength={150}
-                  value={d.city || ""}
-                  readOnly
-                />
-                <TextField
-                  label="Téléphone"
-                  type="tel"
-                  maxLength={40}
-                  value={d.phone || ""}
-                  readOnly
-                />
-                <TextField
-                  label="Date de naissance"
-                  type="date"
-                  max={dateInput(new Date())}
-                  value={d.birthDate || ""}
-                  readOnly
-                />
-              </div>
-              <details className={s.details}>
-                <summary>Adresse postale</summary>
-                <div className={s.fields}>
-                  <TextField
-                    label="Adresse"
-                    maxLength={500}
-                    value={d.address || ""}
-                    readOnly
-                  />
-                  <TextField
-                    label="Code postal"
-                    pattern="[0-9]{5}"
-                    maxLength={5}
-                    value={d.postalCode || ""}
-                    readOnly
-                  />
-                </div>
-              </details>
-              <PersonalCorrectionRequest />
-            </section>
-            <section className={`${u.card} ${s.qualifications}`}>
+        <div className={s.sections}>
+            <section id="qualifications" tabIndex={-1} className={`${u.card} ${s.qualifications}`}>
               <h2 className={u.cardHeading}>
                 <Icon name="graduation" />
                 Qualifications et expérience
@@ -307,9 +237,12 @@ function Editor({ initial }: { initial: ProfessionalProfile }) {
                   ) : null;
                 })}
               </div>
-              <h3>Expérience par service</h3>
+              <h3 id="experiences" tabIndex={-1}>Expérience par service</h3>
               <fieldset className={s.cvImport} disabled={Boolean(experienceEdit)}>
+              <details className={s.cvDisclosure} onToggle={event=>{const panel=event.currentTarget;if(!panel.open&&panel.querySelector('[role="alert"],[role="status"]'))panel.open=true;}}>
+                <summary>Importer un CV <span>Préremplir mes expériences</span></summary>
               <CvImport services={ref.data?.ideServices||[]} existing={p.experience} onAdd={values=>change({experience:[...p.experience,...values]})}/>
+              </details>
               </fieldset>
               {!p.experience.length && (
                 <p className={u.muted}>
@@ -455,9 +388,7 @@ function Editor({ initial }: { initial: ProfessionalProfile }) {
                 + Ajouter une expérience
               </Button>
             </section>
-          </div>
-          <div className={u.stack}>
-            <section className={u.card}>
+            <section id="competences" tabIndex={-1} className={`${u.card} ${s.skillSection}`}>
               <h2 className={u.cardHeading}>
                 <Icon name="settings" />
                 {specialized ? "Pratique au bloc" : "Pratique et compétences"}
@@ -533,10 +464,10 @@ function Editor({ initial }: { initial: ProfessionalProfile }) {
                 </div>
               </details>
             </section>
-            <section className={u.card}>
+            <section id="preferences" tabIndex={-1} className={u.card}>
               <h2 className={u.cardHeading}>
                 <Icon name="briefcase" />
-                Missions accessibles
+                Mes préférences de mission
               </h2>
               <div className={u.actions}>
                 {p.qualifications.map((q) => (
@@ -581,7 +512,81 @@ function Editor({ initial }: { initial: ProfessionalProfile }) {
                 Rendre mon profil visible aux agences
               </Checkbox>
             </section>
-            <section className={u.card}>
+            <section id="informations-personnelles" tabIndex={-1} className={u.card}>
+              <h2 className={u.cardHeading}>
+                <Icon name="user" />
+                Informations personnelles
+              </h2>
+              <p>Ces informations sont verrouillées après votre inscription. Pour les corriger, envoyez une demande à un administrateur.</p>
+              <div className={u.grid}>
+                <div id="prenom">
+                  <TextField
+                    label="Prénom"
+                    required
+                    minLength={2}
+                    maxLength={100}
+                    autoComplete="given-name"
+                    value={d.firstName ?? p.display_name}
+                    readOnly
+                  />
+                </div>
+                <TextField
+                  label="Nom"
+                  maxLength={100}
+                  autoComplete="family-name"
+                  value={d.lastName || ""}
+                  readOnly
+                />
+                <TextField
+                  label="E-mail"
+                  type="email"
+                  value={user?.email || ""}
+                  readOnly
+                />
+                <TextField
+                  label="Ville"
+                  maxLength={150}
+                  value={d.city || ""}
+                  readOnly
+                />
+                <TextField
+                  label="Téléphone"
+                  type="tel"
+                  maxLength={40}
+                  value={d.phone || ""}
+                  readOnly
+                />
+                <TextField
+                  label="Date de naissance"
+                  type="date"
+                  max={dateInput(new Date())}
+                  value={d.birthDate || ""}
+                  readOnly
+                />
+              </div>
+              <details className={s.details}>
+                <summary>Adresse postale</summary>
+                <div className={s.fields}>
+                  <TextField
+                    label="Adresse"
+                    maxLength={500}
+                    value={d.address || ""}
+                    readOnly
+                  />
+                  <TextField
+                    label="Code postal"
+                    pattern="[0-9]{5}"
+                    maxLength={5}
+                    value={d.postalCode || ""}
+                    readOnly
+                  />
+                </div>
+              </details>
+              <PersonalCorrectionRequest />
+              <ProSanteConnect purpose="link" />
+            </section>
+          <div className={s.related}>
+            <section id="mobilite" tabIndex={-1} className={u.card}>
               <h2 className={u.cardHeading}>
                 <Icon name="calendar" />
                 Disponibilités et mobilité
@@ -591,10 +596,10 @@ function Editor({ initial }: { initial: ProfessionalProfile }) {
                 {p.radius_km ? " · rayon de " + p.radius_km + " km" : ""}.
               </p>
               <ButtonLink to="/calendrier" variant="outline">
-                Gérer mon planning
+                Gérer mes disponibilités et ma mobilité
               </ButtonLink>
             </section>
-            <section className={u.card}>
+            <section id="coordonnees-bancaires" tabIndex={-1} className={u.card}>
               <h2 className={u.cardHeading}>
                 <Icon name="file-text" />
                 Coordonnées bancaires

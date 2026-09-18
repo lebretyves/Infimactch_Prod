@@ -19,3 +19,13 @@ for (const [path, title, description] of pages) {
   fs.writeFileSync(`dist/${path}.html`, html);
 }
 console.log('Static metadata generated for four useful public routes.');
+
+// Private routes must not initially advertise the homepage canonical or indexability.
+const privateShell = shell.replace(/<title>.*?<\/title>/s, '<title>Espace personnel — InfiMatch</title>')
+ .replace(/(<meta\s+name="robots"\s+content=")[^"]*/, '$1noindex,follow')
+ .replace(/<link\s+rel="canonical"[^>]*>/, '')
+ .replace(/(<meta\s+name="description"\s+content=")[^"]*/, '$1Connectez-vous pour accéder à votre espace InfiMatch.')
+ .replace(/(<meta\s+property="og:title"\s+content=")[^"]*/, '$1Espace personnel — InfiMatch')
+ .replace(/(<meta\s+property="og:description"\s+content=")[^"]*/, '$1Connectez-vous pour accéder à votre espace InfiMatch.')
+ .replace(/<noscript>[\s\S]*?<\/noscript>/, '<noscript>Activez JavaScript et connectez-vous pour accéder à votre espace personnel.</noscript>');
+fs.writeFileSync('dist/private.html', privateShell);

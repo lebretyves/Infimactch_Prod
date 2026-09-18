@@ -1,4 +1,4 @@
-﻿.page {
+.page {
   display: grid;
   gap: 24px;
   max-width: 1240px;
@@ -414,4 +414,43 @@
   .actions > * {
     flex-shrink: 1;
   }
+}
+
+/* Candidate pages share a compact rhythm; enterprise pages retain their layout. */
+:global([data-space="candidate"]) .page { gap: 20px; }
+:global([data-space="candidate"]) .header h1 { font-size: clamp(26px, 2.6vw, 34px); margin: 0 0 8px; }
+:global([data-space="candidate"]) .header p { margin: 0; line-height: 1.6; }
+:global([data-space="candidate"]) .card { padding: 20px; }
+:global([data-space="candidate"]) .card h2 { margin-bottom: 14px; }
+:global([data-space="candidate"]) .stack { gap: 16px; }
+:global([data-space="candidate"]) .columns { gap: 20px; }
+:global([data-space="candidate"]) .listItem { padding: 16px; gap: 20px; }
+:global([data-space="candidate"]) .listItem > .stack { gap: 8px; flex-shrink: 0; }
+:global([data-space="candidate"]) .card:has(> .list:only-child) { padding: 0; background: transparent; border: 0; box-shadow: none; }
+:global([data-space="candidate"]) .card > .empty { border: 0; padding: 16px 0 0; text-align: left; }
+:global([data-space="candidate"]) .row { flex-wrap: wrap; gap: 12px; }
+:global([data-space="candidate"]) .row h2 { margin-bottom: 0; }
+:global([data-space="candidate"]) .tabs a,
+:global([data-space="candidate"]) .tabs button { min-height: 44px; padding: 10px 16px; }
+:global([data-space="candidate"]) .details { margin: 18px 0; }
+:global([data-space="candidate"]) .empty { padding: 28px 20px; }
+:global([data-space="candidate"]) .focusedPage { max-width: 960px; }
+:global([data-space="candidate"]) .noticeList { list-style: none; padding: 0; margin: 0 0 16px; display: grid; }
+:global([data-space="candidate"]) .noticeItem { padding: 16px 0; border-top: 1px solid var(--line); display: grid; gap: 8px; }
+:global([data-space="candidate"]) .noticeItem:first-child { border-top: 0; padding-top: 0; }
+:global([data-space="candidate"]) .noticeItem p { margin: 0; }
+:global([data-space="candidate"]) .noticeItem time { font-size: 12px; color: var(--ink-600); }
+:global([data-space="candidate"]) .noticeItem a { display: inline-flex; align-items: center; min-height: 44px; }
+:global([data-space="candidate"]) .sectionNav { display: flex; flex-wrap: wrap; gap: 8px; }
+:global([data-space="candidate"]) .sectionNav a { min-height: 44px; display: inline-flex; align-items: center; padding: 8px 14px; border: 1px solid var(--line); border-radius: 8px; background: #fff; text-decoration: none; font-weight: 600; font-size: 13px; }
+@media (max-width: 1000px) {
+  :global([data-space="candidate"]) .columns { grid-template-columns: minmax(0, 1fr); }
+}
+@media (max-width: 600px) {
+  :global([data-space="candidate"]) .card { padding: 16px; }
+  :global([data-space="candidate"]) .listItem { padding: 16px; }
+  :global([data-space="candidate"]) .tabs { gap: 4px; }
+  :global([data-space="candidate"]) .tabs a,
+  :global([data-space="candidate"]) .tabs button { padding: 10px 12px; }
+  :global([data-space="candidate"]) .details { grid-template-columns: 1fr; }
 }

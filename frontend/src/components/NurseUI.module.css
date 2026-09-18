@@ -209,3 +209,13 @@
     flex-grow: 1;
   }
 }
+
+:global([data-space="candidate"]) .page { gap: 20px; }
+:global([data-space="candidate"]) .page h1 { font-size: clamp(26px, 2.6vw, 34px); margin-bottom: 8px; }
+:global([data-space="candidate"]) .card { padding: 20px; }
+:global([data-space="candidate"]) .stack,
+:global([data-space="candidate"]) .twoColumns { gap: 20px; }
+@media (max-width: 600px) {
+  :global([data-space="candidate"]) .card { padding: 16px; }
+}
+:global([data-space="candidate"]) .actions[aria-label="Origine des offres"] > button { min-height: 44px; height: auto; padding-block: 10px; }

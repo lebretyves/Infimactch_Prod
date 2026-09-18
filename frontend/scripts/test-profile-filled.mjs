@@ -15,7 +15,7 @@ await p.route('**/api/**',async r=>{
  else if(path.endsWith('/me/bank-details'))json={iban:null,document:null};
  await r.fulfill({json});
 });
-await p.goto('http://127.0.0.1:4193/profil');
+await p.goto((process.env.BASE_URL||'http://127.0.0.1:4187')+'/profil');
 const consent=p.getByRole('button',{name:'Tout refuser',exact:true});if(await consent.count())await consent.click();
 const section=p.locator('section').filter({has:p.getByRole('heading',{name:'Qualifications et exp',exact:false})});
 await section.waitFor();

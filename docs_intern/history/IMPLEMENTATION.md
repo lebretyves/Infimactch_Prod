@@ -346,3 +346,9 @@ Réorganisation de la page d’accueil pour supprimer la longue colonne vide à 
 ## 2026-09-18 — Formats de dates du CV
 
 Correction de défauts reproduits dans la reconnaissance des expériences : dates françaises avec tirets, jours et mois écrits, abréviations janv./févr./juil./juill./aoû., formats année/mois et mois abrégés répartis sur plusieurs lignes. Les limites exactes jour/mois sont conservées ; une abréviation ne doit plus faire perdre le mois au profit d’une période annuelle. Les dates impossibles, futures et les périodes en cours ne deviennent pas des expériences terminées. Aucun fichier CV utilisateur n’a été reçu ; son cas exact reste à vérifier sur un extrait. Validation : 13 tests CV et compilation backend réussis.
+
+## 2026-09-18 — Organisation de l’espace candidat et référencement
+
+Revue des quatorze types de pages du candidat : regroupement de la navigation par usages, meilleure utilisation de la largeur et des espacements, clarification profil/dossier/calendrier. Identité verrouillée, demandes de correction, expériences par cartes, règles de matching et candidature, justificatifs et sauvegardes explicites conservés.
+
+SEO : titres et descriptions spécifiques aux routes, sans données personnelles ; HTML initial privé noindex sans canonique d’accueil. Sitemap limité aux cinq pages publiques existantes. Aucun JobPosting pour les données de démonstration. Le rapport distingue ce travail de l’indexation effective dans Google, non vérifiée sans Search Console. Voir quality/PROFIL_CANDIDAT_DESIGN_SEO_2026-09-18.md.

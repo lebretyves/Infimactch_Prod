@@ -1,4 +1,4 @@
-﻿.carte {
+.carte {
   display: flex;
   flex-direction: column;
   gap: 10px;
@@ -134,3 +134,4 @@
   font-size: 12px;
   color: var(--danger-700);
 }
+:global([data-space="candidate"]) .favori { width: 44px; height: 44px; }
