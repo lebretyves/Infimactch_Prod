@@ -8,6 +8,7 @@ export type Listing = {
   id: string;
   kind?: "INTERNAL_MISSION" | "EXTERNAL_OFFER";
   matching_score?: number | null;
+  matching_indicative_score?: number | null;
   match_explanation_id?: string | null;
   title: string;
   description?: string;

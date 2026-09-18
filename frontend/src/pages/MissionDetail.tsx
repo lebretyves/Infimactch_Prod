@@ -129,6 +129,7 @@ export default function MissionDetail() {
           </div>
         </div>
       </header>
+      {!external && nurse && user && <div className={s.card}><PersonalMatching key={user.id + id} id={id} userId={user.id} /></div>}
       {error && (
         <p className={s.error} role="alert">
           {error}
@@ -253,7 +254,7 @@ export default function MissionDetail() {
           )}
         </div>
         <aside className={s.card}>
-          {!external && nurse && user && <PersonalMatching key={user.id + id} id={id} userId={user.id} />}
+
           <h2>Votre prochaine mission</h2>
           <p>
             <Icon name="calendar" size={18} /> {m.start_at || m.end_at ? `Du ${missionDate(m)} au ${missionDate(m, true)} (${m.timezone || "Europe/Paris"})` : "Dates de mission non précisées"}

@@ -163,18 +163,30 @@ export function match(
       reasons,
       distanceKm: distance,
     };
+  const {score, components} = scoreDetails(p, m, distance);
+  return {
+    eligible: true,
+    score,
+    components,
+    reasons,
+    distanceKm: distance,
+  };
+}
+
+// Informational fit calculation; this never grants matching eligibility.
+export function scoreDetails(p: Professional, m: MatchMission, distance: number | null) {
+  const months = experienceMonths(p.experience, m.service, m.start);
   const C = m.desiredSkills.length
     ? m.desiredSkills.filter((s) => p.skills.includes(s)).length /
       m.desiredSkills.length
     : 1;
-  const Z = Math.max(0, 1 - distance! / p.radiusKm!);
-  const D =
+  const Z = distance !== null && Number.isFinite(distance) && p.radiusKm !== null && p.radiusKm > 0 ? Math.max(0, 1 - distance / p.radiusKm) : 0;
+  const D = m.schedulePrecision === "DATE" || m.shift === "UNKNOWN" ? 0 :
     p.preferredShifts.length === 0 || p.preferredShifts.includes(m.shift)
       ? 1
       : 0.5;
   const E = Math.min(months / 24, 1);
   return {
-    eligible: true,
     score:
       Math.round(
         100 *
@@ -185,7 +197,5 @@ export function match(
           100,
       ) / 100,
     components: { C, Z, D, E },
-    reasons,
-    distanceKm: distance,
   };
 }

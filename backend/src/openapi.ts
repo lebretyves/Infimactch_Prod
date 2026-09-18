@@ -58,7 +58,7 @@ const application = object(
 const candidateApplication = object({
  ...application.properties,display_name:text,qualifications:{type:'array',items:text},city:nullableText,
  mission:object({...mission.properties,establishment_name:text,address:text,service:text,schedule_precision:{type:'string',enum:['EXACT','DATE']},min_experience_months:{type:'string'}}),
- matching:object({eligible:{type:'boolean'},score:{type:'number',nullable:true},components:{type:'object',nullable:true,properties:{C:{type:'number'},Z:{type:'number'},D:{type:'number'},E:{type:'number'}}},reasons:{type:'array',items:text},distanceKm:{type:'number',nullable:true},experienceMonths:{type:'number'},requiredExperienceMonths:{type:'number'},qualificationMatches:{type:'boolean'},rppsStatus:text,missingRequiredSkills:{type:'array',items:text},desiredSkillsMatched:{type:'array',items:text},desiredSkills:{type:'array',items:text},radiusKm:{type:'number',nullable:true}}),
+ matching:object({eligible:{type:'boolean'},score:{type:'number',nullable:true},indicativeScore:{type:'number'},components:{type:'object',nullable:true,properties:{C:{type:'number'},Z:{type:'number'},D:{type:'number'},E:{type:'number'}}},reasons:{type:'array',items:text},distanceKm:{type:'number',nullable:true},experienceMonths:{type:'number'},requiredExperienceMonths:{type:'number'},qualificationMatches:{type:'boolean'},rppsStatus:text,missingRequiredSkills:{type:'array',items:text},desiredSkillsMatched:{type:'array',items:text},desiredSkills:{type:'array',items:text},radiusKm:{type:'number',nullable:true}}),
 },['id','status','mission','matching']);
 const assignment = object(
   {

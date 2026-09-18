@@ -1,3 +1,4 @@
+import {matchingScoreLabel} from "@/lib/matchingScore";
 import {missionDate} from "@/services/market";
 ﻿import { useEffect, useState } from "react";
 import { Link } from "react-router";
@@ -125,7 +126,7 @@ export function MissionCard({
       )}
       {!external && user?.role === "interimaire" && (
         <span className={s.population}>
-          {mission.matching_score != null && Number.isFinite(mission.matching_score) ? `Taux de matching : ${Math.round(mission.matching_score)} %` : "Matching à vérifier dans la fiche"}
+          {matchingScoreLabel(mission.matching_score,mission.matching_indicative_score)}
         </span>
       )}
       <div className={s.bas}>
