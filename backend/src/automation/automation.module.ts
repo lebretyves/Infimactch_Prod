@@ -98,13 +98,13 @@ export class AutomationService {
     const delay = Number(process.env.REMINDER_DELAY_MINUTES ?? 60);
     if (!Number.isFinite(delay) || delay < 0)
       throw new Error("Invalid reminder delay");
-    let notifications = 0;
-    while (true) {
+    const limit = 25;
+    {
       const batch = await this.db.transaction(async (em) => {
         const window = new Date().toISOString().slice(0, 13);
         const missions = await em.query(
-          "SELECT * FROM mission WHERE status='OPEN' AND start_at>now() AND created_at<now()-make_interval(mins=>$1) AND NOT EXISTS(SELECT 1 FROM reminder_window w WHERE w.mission_id=mission.id AND w.version=mission.version AND w.window_key=$2) ORDER BY id LIMIT 100 FOR UPDATE SKIP LOCKED",
-          [Math.floor(delay), window],
+          "SELECT * FROM mission WHERE status='OPEN' AND start_at>now() AND created_at<now()-make_interval(mins=>$1) AND NOT EXISTS(SELECT 1 FROM reminder_window w WHERE w.mission_id=mission.id AND w.version=mission.version AND w.window_key=$2) ORDER BY id LIMIT $3 FOR UPDATE SKIP LOCKED",
+          [Math.floor(delay), window, limit],
         );
         let count = 0;
         for (const m of missions) {
@@ -136,10 +136,8 @@ export class AutomationService {
         }
         return { selected: missions.length, notifications: count };
       });
-      notifications += batch.notifications;
-      if (batch.selected === 0) break;
+      return { status: "PROCESSED", notifications: batch.notifications, processed: batch.selected, hasMore: batch.selected === limit };
     }
-    return { status: "PROCESSED", notifications };
   }
   async confirmation(id: string) {
     const reservation = await this.db.transaction(async (em) => {

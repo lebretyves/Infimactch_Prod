@@ -36,7 +36,10 @@
         "options": {
           "timeout": 30000
         }
-      }
+      },
+      "retryOnFail": true,
+      "maxTries": 3,
+      "waitBetweenTries": 5000
     },
     {
       "id": "1faf3d50-0b45-49c5-9190-7feca1872fd8",
@@ -100,7 +103,10 @@
         "options": {
           "timeout": 240000
         }
-      }
+      },
+      "retryOnFail": true,
+      "maxTries": 3,
+      "waitBetweenTries": 5000
     },
     {
       "id": "46aac199-0a8f-4fed-be49-c7adcf15bfa3",
@@ -108,8 +114,8 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
       "position": [
-        720,
-        0
+        1120,
+        120
       ],
       "parameters": {
         "method": "POST",
@@ -132,6 +138,56 @@
         "options": {
           "timeout": 240000
         }
+      },
+      "retryOnFail": true,
+      "maxTries": 3,
+      "waitBetweenTries": 5000
+    },
+    {
+      "id": "958b1453-c36e-402d-acc6-00beff9e574d",
+      "name": "Valider le lot de rappels",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        680,
+        0
+      ],
+      "parameters": {
+        "jsCode": "if(typeof $json.hasMore !== 'boolean') throw new Error('REMINDER_BATCH_RESPONSE_INVALID'); if($json.hasMore && $runIndex >= 199) throw new Error('REMINDER_BATCH_LIMIT_REACHED'); return [{json:$json}];"
+      }
+    },
+    {
+      "id": "8aa3788d-66e0-40b5-9fff-2ae14f312efd",
+      "name": "Encore des rappels",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        900,
+        0
+      ],
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "c6dd9384-11e9-4653-9f9b-68e8e0c415a2",
+              "leftValue": "={{ $json.hasMore }}",
+              "rightValue": "",
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
       }
     }
   ],
@@ -173,6 +229,35 @@
       "main": [
         [
           {
+            "node": "Valider le lot de rappels",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Valider le lot de rappels": {
+      "main": [
+        [
+          {
+            "node": "Encore des rappels",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Encore des rappels": {
+      "main": [
+        [
+          {
+            "node": "Rappels",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
             "node": "Poursuivre les collectes",
             "type": "main",
             "index": 0
@@ -183,7 +268,7 @@
   },
   "settings": {
     "executionOrder": "v1",
-    "saveDataErrorExecution": "none",
+    "saveDataErrorExecution": "all",
     "saveDataSuccessExecution": "none",
     "saveManualExecutions": false,
     "saveExecutionProgress": false
