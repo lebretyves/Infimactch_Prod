@@ -1,6 +1,6 @@
 import { ProSanteConnect } from "@/components/ProSanteConnect";
 import { GoogleConnexion } from "@/components/GoogleConnexion";
-import { useState, type FormEvent } from "react";
+import { useRef, useState, type FormEvent } from "react";
 import { Link, useNavigate, useLocation } from "react-router";
 import { EcranAuth, authStyles as a } from "@/layouts/EcranAuth";
 import { Button } from "@/ui/Button";
@@ -19,29 +19,68 @@ export default function Connexion() {
   const navigate = useNavigate();
   const location = useLocation();
   const { login } = useAuth();
-  const [expired] = useState(() => { try { return sessionStorage.getItem("infimatch:expired") === "1"; } catch { return false; } });
+  const [expired] = useState(() => {
+    try {
+      return sessionStorage.getItem("infimatch:expired") === "1";
+    } catch {
+      return false;
+    }
+  });
   const [email, setEmail] = useState("");
   const [motDePasse, setMotDePasse] = useState("");
   const [erreur, setErreur] = useState("");
+  const [erreurEmail, setErreurEmail] = useState("");
+  const [erreurMotDePasse, setErreurMotDePasse] = useState("");
   const [enCours, setEnCours] = useState(false);
+  const emailRef = useRef<HTMLInputElement>(null);
+  const motDePasseRef = useRef<HTMLInputElement>(null);
+
+  function focusPremierChampEnErreur(emailErr: string, mdpErr: string) {
+    requestAnimationFrame(() => {
+      if (emailErr) emailRef.current?.focus();
+      else if (mdpErr) motDePasseRef.current?.focus();
+      else emailRef.current?.focus();
+    });
+  }
 
   async function soumettre(event: FormEvent) {
     event.preventDefault();
     if (enCours) return;
 
-    if (!email.includes("@") || motDePasse.length < 12) {
-      setErreur(
-        "Identifiants incorrects. Vérifiez votre adresse e-mail et votre mot de passe.",
-      );
+    const emailVide = !email.trim();
+    const emailInvalide = !emailVide && !email.includes("@");
+    const mdpVide = motDePasse.length === 0;
+    const mdpCourt = !mdpVide && motDePasse.length < 12;
+
+    const nextEmail = emailVide
+      ? "Saisissez votre adresse e-mail."
+      : emailInvalide
+        ? "Indiquez une adresse e-mail valide (avec @)."
+        : "";
+    const nextMdp = mdpVide
+      ? "Saisissez votre mot de passe."
+      : mdpCourt
+        ? "Le mot de passe doit contenir au moins 12 caractères."
+        : "";
+
+    setErreur("");
+    setErreurEmail(nextEmail);
+    setErreurMotDePasse(nextMdp);
+
+    if (nextEmail || nextMdp) {
+      focusPremierChampEnErreur(nextEmail, nextMdp);
       return;
     }
 
-    setErreur("");
     setEnCours(true);
 
     try {
       await login({ email, motDePasse, role: "interimaire" });
-      try { sessionStorage.removeItem("infimatch:expired"); } catch {}
+      try {
+        sessionStorage.removeItem("infimatch:expired");
+      } catch {
+        /* ignore */
+      }
       const next = location.state?.from;
       navigate(
         typeof next === "string" &&
@@ -52,11 +91,14 @@ export default function Connexion() {
         { replace: true },
       );
     } catch (err: unknown) {
+      setErreurEmail("");
+      setErreurMotDePasse("");
       if (err instanceof Error) {
         setErreur(err.message);
       } else {
         setErreur("Identifiants incorrects ou service indisponible.");
       }
+      focusPremierChampEnErreur("", "");
     } finally {
       setEnCours(false);
     }
@@ -89,7 +131,12 @@ export default function Connexion() {
         <p>Connectez-vous à votre espace.</p>
       </div>
 
-      {expired && <p role="status">Votre session a expiré après une période d’inactivité. Reconnectez-vous pour continuer.</p>}
+      {expired && (
+        <p role="status">
+          Votre session a expiré après une période d’inactivité. Reconnectez-vous
+          pour continuer.
+        </p>
+      )}
       <form className={s.form} onSubmit={soumettre} noValidate>
         <p>
           Votre compte ouvre automatiquement votre espace professionnel ou
@@ -103,6 +150,7 @@ export default function Connexion() {
         )}
 
         <TextField
+          ref={emailRef}
           label="Adresse e-mail"
           icon="mail"
           type="email"
@@ -110,17 +158,28 @@ export default function Connexion() {
           autoComplete="email"
           placeholder="vous@exemple.fr"
           value={email}
-          onChange={(e) => setEmail(e.target.value)}
+          error={erreurEmail}
+          onChange={(e) => {
+            setEmail(e.target.value);
+            if (erreurEmail) setErreurEmail("");
+            if (erreur) setErreur("");
+          }}
           disabled={enCours}
         />
 
         <PasswordField
+          ref={motDePasseRef}
           label="Mot de passe"
           name="password"
           autoComplete="current-password"
           placeholder="Votre mot de passe"
           value={motDePasse}
-          onChange={(e) => setMotDePasse(e.target.value)}
+          error={erreurMotDePasse}
+          onChange={(e) => {
+            setMotDePasse(e.target.value);
+            if (erreurMotDePasse) setErreurMotDePasse("");
+            if (erreur) setErreur("");
+          }}
           disabled={enCours}
         />
 
