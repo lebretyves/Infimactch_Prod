@@ -9,7 +9,7 @@ import {DocumentsService} from '../../src/documents/documents.module';
 import {AutomationService} from '../../src/automation/automation.module';
 import {dispatchMissionEmails,generateCancellations,missionEmailContent} from '../../src/automation/mission-mail';
 let db:Database,service:MissionsService,docs:DocumentsService;
-before(async()=>{const u=new URL(process.env.DATABASE_URL||'http://invalid');if(process.env.NODE_ENV!=='test'||u.hostname!=='127.0.0.1'||u.port!=='55433'||u.pathname!=='/infimatch_test')throw Error('Requires isolated database');process.env.APP_ORIGIN='https://example.invalid';process.env.DOCUMENT_STORAGE='postgres';process.env.RESEND_API_KEY='test-only';process.env.RESEND_FROM='InfiMatch <onboarding@resend.dev>';db=await new Database().connect();await db.source.runMigrations({transaction:'all'});service=new MissionsService(db);docs=new DocumentsService(db);});
+before(async()=>{const u=new URL(process.env.DATABASE_URL||'http://invalid');if(process.env.NODE_ENV!=='test'||u.hostname!=='127.0.0.1'||u.port!=='55433'||u.pathname!=='/infimatch_test')throw Error('Requires isolated database');process.env.APP_ORIGIN='https://example.invalid';process.env.DOCUMENT_STORAGE='postgres';process.env.SMTP2GO_API_KEY='test-only';process.env.SMTP2GO_FROM='InfiMatch <missions@example.invalid>';db=await new Database().connect();await db.source.runMigrations({transaction:'all'});service=new MissionsService(db);docs=new DocumentsService(db);});
 after(async()=>{await db?.onModuleDestroy();});
 async function fixture(){
  const [n]=await db.query("INSERT INTO account(email,password_hash,family,terms_version) VALUES($1,'fixture','NURSE','fixture') RETURNING id",[randomUUID()+'@example.invalid']);
@@ -23,13 +23,13 @@ async function fixture(){
  return {n:n.id,r:r.id,m,a,org:org.id};
 }
 const sent:any[]=[];
-const transport:typeof fetch=async(url,options)=>{assert.equal(url,'https://api.resend.com/emails');const body=JSON.parse(options!.body as string);assert.equal(body.to.length,1);assert.equal(Buffer.from(body.attachments[0].content,'base64').subarray(0,5).toString(),'%PDF-');assert.ok((options!.headers as any)['Idempotency-Key']);sent.push({body,key:(options!.headers as any)['Idempotency-Key']});return Response.json({id:randomUUID()});};
-test('confirmation queues PDF email for both parties exactly once; Resend receives individual attachments',async()=>{
+const transport:typeof fetch=async(url,options)=>{assert.equal(url,'https://api.smtp2go.com/v3/email/send');const body=JSON.parse(options!.body as string);assert.equal(body.to.length,1);assert.equal(Buffer.from(body.attachments[0].fileblob,'base64').subarray(0,5).toString(),'%PDF-');assert.equal((options!.headers as any)['X-Smtp2go-Api-Key'],'test-only');sent.push({body,key:(options!.headers as any)['Idempotency-Key']});return Response.json({data:{email_id:randomUUID(),succeeded:1,failed:0}});};
+test('confirmation queues PDF email for both parties exactly once; SMTP2GO receives individual attachments',async()=>{
  const f=await fixture();const [e]=await db.query("SELECT id FROM outbox WHERE event='AssignmentCreated' AND payload->>'assignmentId'=$1",[f.a.id]);
  const automation=new AutomationService(db,docs);assert.equal((await automation.confirmation(e.id)).status,'READY');await automation.confirmation(e.id);
  assert.equal((await db.query('SELECT id FROM mission_email WHERE assignment_id=$1',[f.a.id])).length,2);
  assert.equal((await dispatchMissionEmails(db,docs,10,transport)).sent,2);assert.equal((await dispatchMissionEmails(db,docs,10,transport)).sent,0);
- assert.ok(sent.some(x=>x.body.html.includes('/missions/m_'+f.m.id)));assert.ok(sent.some(x=>x.body.html.includes('/gestion/missions/'+f.m.id)));
+ assert.ok(sent.some(x=>x.body.html_body.includes('/missions/m_'+f.m.id)));assert.ok(sent.some(x=>x.body.html_body.includes('/gestion/missions/'+f.m.id)));
 });
 test('nurse cancellation releases agenda, reopens mission and generates one downloadable PDF for both parties',async()=>{
  const f=await fixture(),key=randomUUID();
@@ -55,21 +55,31 @@ test('company cancellation preserves snapshot after reopening and suppresses que
  const before=sent.length;await dispatchMissionEmails(db,docs,10,transport);assert.equal(sent.length-before,2);assert.ok(sent.slice(before).every(x=>x.body.subject.includes('Annulation')));
  assert.equal((await db.query("SELECT id FROM mission_email WHERE assignment_id=$1 AND kind='CONFIRMATION' AND status='CANCELLED'",[f.a.id])).length,2);
 });
-test('retry reuses identical payload and key; changed recipient and expired idempotency never send',async()=>{
+test('rate limiting retries the same payload; changed recipient and ambiguous interrupted sends never send',async()=>{
  const f=await fixture();await service.cancelAssignment(f.n,f.a.id,randomUUID());await generateCancellations(db,docs);
  let first:any;
- await dispatchMissionEmails(db,docs,1,async(_url,options)=>{first={body:options!.body,key:(options!.headers as any)['Idempotency-Key']};throw Error('timeout');});
+ await dispatchMissionEmails(db,docs,1,async(_url,options)=>{first={body:options!.body,key:(options!.headers as any)['Idempotency-Key']};return new Response('',{status:429});});
  const [pending]=await db.query("SELECT * FROM mission_email WHERE assignment_id=$1 AND attempts=1",[f.a.id]);
  await db.query("UPDATE mission_email SET available_at=now()+interval '1 hour' WHERE assignment_id=$1 AND id<>$2",[f.a.id,pending.id]);
  await db.query('UPDATE mission_email SET available_at=now() WHERE id=$1',[pending.id]);
- await dispatchMissionEmails(db,docs,1,async(_url,options)=>{assert.equal(options!.body,first.body);assert.equal((options!.headers as any)['Idempotency-Key'],first.key);return Response.json({id:randomUUID()});});
- await db.query("UPDATE mission_email SET first_attempt_at=now()-interval '25 hours' WHERE assignment_id=$1 AND status='PENDING'",[f.a.id]);
+ await dispatchMissionEmails(db,docs,1,async(_url,options)=>{assert.equal(options!.body,first.body);assert.equal((options!.headers as any)['Idempotency-Key'],first.key);return Response.json({data:{email_id:randomUUID(),succeeded:1,failed:0}});});
+ await db.query("UPDATE mission_email SET status='SENDING',lease_until=now()-interval '1 minute' WHERE assignment_id=$1 AND status='PENDING'",[f.a.id]);
  await dispatchMissionEmails(db,docs,10,async()=>{throw Error('must not send');});
  assert.equal((await db.query("SELECT id FROM mission_email WHERE assignment_id=$1 AND status='UNCERTAIN'",[f.a.id])).length,1);
  const g=await fixture();await service.cancelAssignment(g.n,g.a.id,randomUUID());await generateCancellations(db,docs);await db.query("UPDATE account SET email=id::text||'changed@example.invalid' WHERE id IN($1,$2)",[g.n,g.r]);
  assert.equal((await dispatchMissionEmails(db,docs,10,transport)).sent,0);
 });
+test('HTTP 200 with provider rejection is not sent, and a timed-out request is never retried blindly',async()=>{
+ const f=await fixture();await service.cancelAssignment(f.n,f.a.id,randomUUID());await generateCancellations(db,docs);
+ let calls=0;
+ await dispatchMissionEmails(db,docs,10,async()=>{calls++;return Response.json({data:{succeeded:0,failed:1,failures:['Unverified sender']}});});
+ assert.equal(calls,2);assert.equal((await db.query("SELECT id FROM mission_email WHERE assignment_id=$1 AND status='FAILED'",[f.a.id])).length,2);
+ const g=await fixture();await service.cancelAssignment(g.n,g.a.id,randomUUID());await generateCancellations(db,docs);
+ await dispatchMissionEmails(db,docs,10,async()=>{throw Error('response lost');});
+ assert.equal((await db.query("SELECT id FROM mission_email WHERE assignment_id=$1 AND status='UNCERTAIN'",[g.a.id])).length,2);
+ let repeated=0;await dispatchMissionEmails(db,docs,10,async()=>{repeated++;return Response.json({});});assert.equal(repeated,0);
+});
 test('email markup escapes mission content and missing configuration does not send',async()=>{
  assert.ok(!missionEmailContent('CONFIRMATION','<img src=x>','https://example.invalid').html.includes('<img src=x>'));
- delete process.env.RESEND_API_KEY;assert.deepEqual(await dispatchMissionEmails(db,docs),{configured:false,sent:0});
+ delete process.env.SMTP2GO_API_KEY;assert.deepEqual(await dispatchMissionEmails(db,docs),{configured:false,sent:0});
 });
