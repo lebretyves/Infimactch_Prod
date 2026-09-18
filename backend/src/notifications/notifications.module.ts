@@ -113,7 +113,12 @@ export class NotificationsService {
           obsolete=!m || m.version!==row.context.version;
           if(m && ["MATCH","REMINDER","MISSION_CHANGED","APPLICATION_SUBMITTED","APPLICATION_SELECTED","MISSION_PUBLISHED"].includes(row.kind)) obsolete ||= m.status!=="OPEN" || new Date(m.start_at).getTime()<=Date.now();
           if(m && row.kind==='CONFIRMATION') obsolete ||= !['FILLED','COMPLETED'].includes(m.status);
-          if(m && row.kind==='CANCELLATION') obsolete ||= m.status!=='CANCELLED';
+          if(m && row.kind==='CANCELLATION') {
+            if(row.context.assignmentId) {
+              const [a]=await em.query('SELECT status FROM assignment WHERE id=$1 AND mission_id=$2',[row.context.assignmentId,row.context.missionId]);
+              obsolete=!a || a.status!=='CANCELLED';
+            } else obsolete ||= m.status!=='CANCELLED';
+          }
           if(row.kind==='MATCH') { const [p]=await em.query("SELECT 1 FROM profile WHERE user_id=$1 AND notifications_enabled",[row.user_id]); obsolete ||= !p; }
         }
         if(!active || !owner || !row.enabled || row.version!==row.destination_version || !row.events.includes(row.kind) || (!row.organization_id && muted) || obsolete) {

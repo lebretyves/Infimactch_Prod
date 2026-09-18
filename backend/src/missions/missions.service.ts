@@ -1,3 +1,4 @@
+import {cancellationRecord} from '../automation/mission-mail';
 import {validDateBounds,startsInPast} from "../domain/schedule-period";
 import { assessApplication } from "./application-assessment";
 import { assessAssignment } from "./assignment-assessment";
@@ -308,6 +309,8 @@ export class MissionsService {
           a.nurse_id,
         ]);
       }
+      if (action === "cancel")
+        for (const a of assignments) await cancellationRecord(em,m,a,"ENTERPRISE");
       if (["cancel", "complete"].includes(action))
         await em.query(
           "UPDATE assignment SET status=$2 WHERE mission_id=$1 AND status='ACTIVE'",
@@ -419,6 +422,31 @@ export class MissionsService {
       );
       await audit(em, actor, "APPLICATION_" + action, id);
       return receipt.save({ id, status: action });
+    });
+  }
+  async cancelAssignment(actor:string,id:string,key?:string) {
+    return this.db.transaction(async em=>{
+      const [ref]=await em.query('SELECT mission_id,nurse_id FROM assignment WHERE id=$1',[id]);
+      if(!ref || ref.nurse_id!==actor)throw new NotFoundException();
+      const m=await lockMission(em,ref.mission_id);
+      await requireActiveAccount(em,actor);
+      await nurse(em,actor);
+      const receipt=await commandReceipt(em,actor,'assignment:cancel:'+id,key,{});
+      if(receipt.replay)return receipt.response;
+      const [a]=await em.query('SELECT * FROM assignment WHERE id=$1 FOR UPDATE',[id]);
+      if(a.status==='CANCELLED')return receipt.save({id,status:'CANCELLED'});
+      if(a.status!=='ACTIVE' || m.status!=='FILLED')throw new ConflictException('Cette affectation ne peut plus être annulée.');
+      if(new Date(a.start_at).getTime()<=Date.now())throw new ConflictException('La mission a déjà commencé. Contactez l’entreprise pour organiser son interruption.');
+      await cancellationRecord(em,m,a,'NURSE');
+      await em.query("UPDATE assignment SET status='CANCELLED' WHERE id=$1",[id]);
+      await em.query("UPDATE application SET status='WITHDRAWN',updated_at=now() WHERE id=$1",[a.application_id]);
+      await em.query("UPDATE mission_confirmation SET status='CANCELLED' WHERE assignment_id=$1",[id]);
+      await em.query("UPDATE mission SET status='OPEN' WHERE id=$1 AND NOT EXISTS(SELECT 1 FROM assignment WHERE mission_id=$1 AND status='ACTIVE')",[m.id]);
+      await em.query('UPDATE profile SET updated_at=now() WHERE user_id=$1',[actor]);
+      await audit(em,actor,'ASSIGNMENT_CANCELLED',id,{missionId:m.id});
+      const [e]=await em.query("INSERT INTO outbox(event,payload,completed_at) VALUES('AssignmentCancelled',$1,now()) RETURNING id",[JSON.stringify({assignmentId:id,missionId:m.id,version:m.version})]);
+      await em.query("INSERT INTO notification(user_id,event_id,kind,message,organization_id,href,context) SELECT s.user_id,$1,'CANCELLATION','L’intérimaire a annulé son affectation. Le PDF d’annulation sera disponible dans le suivi.',s.organization_id,$2,$3 FROM membership s JOIN account a ON a.id=s.user_id AND a.active WHERE s.active AND s.organization_id IN($4,$5) ON CONFLICT DO NOTHING",[e.id,'/gestion/missions/'+m.id,JSON.stringify({missionId:m.id,version:m.version,assignmentId:id}),m.agency_id,m.establishment_id]);
+      return receipt.save({id,status:'CANCELLED'});
     });
   }
   async assign(actor: string, id: string, applicationId: string, key: string) {

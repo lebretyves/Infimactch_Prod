@@ -210,6 +210,8 @@ export async function anonymizeAccount(em: SqlClient, accountId: string) {
   await em.query("DELETE FROM favorite WHERE user_id=$1", [accountId]);
   await em.query("DELETE FROM profile_qualification WHERE nurse_id=$1", [accountId]);
   await em.query("DELETE FROM notification WHERE user_id=$1", [accountId]);
+  await em.query("DELETE FROM mission_email WHERE user_id=$1 OR assignment_id IN(SELECT id FROM assignment WHERE nurse_id=$1)",[accountId]);
+  await em.query("DELETE FROM mission_cancellation WHERE assignment_id IN(SELECT id FROM assignment WHERE nurse_id=$1)",[accountId]);
   await em.query("DELETE FROM idempotency WHERE actor_id=$1", [accountId]);
   await em.query("UPDATE audit SET actor_id=NULL,details='{}'::jsonb WHERE actor_id=$1 OR resource_id=$1", [accountId]);
   const ids = documents.map((row: { id: string }) => row.id);

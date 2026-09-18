@@ -119,7 +119,7 @@ export default function CandidatureDetail() {
                   <p className={s.muted}>
                     Consultez la confirmation et ses conditions enregistrées.
                   </p>
-                  <ConfirmationButton assignmentId={a.id} />
+                  <ConfirmationButton assignmentId={a.id} cancelled={a.status === "CANCELLED"} />
                 </section>
               ))}
               <div className={s.card}>

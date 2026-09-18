@@ -7,6 +7,7 @@ const sample={assignmentId:'12345678-1234-4567-8901-123456789012',missionVersion
 (async()=>{
  for(const [name,data] of [
  ['confirmation-mission-exemple',sample],
+ ['annulation-mission-exemple',{...sample,cancellation:{initiator:'NURSE',cancelledAt:'2026-09-18T12:00:00Z'}}],
  ['confirmation-mission-longue',{...sample,title:'IDE — Mission de remplacement en soins médicaux et de réadaptation auprès des adultes — Équipe polyvalente de nuit',qualification:'IDE',service:'SOINS_MEDICAUX_ET_READAPTATION',professionalName:'Camille Martin-Dupont',establishmentName:'Centre hospitalier de démonstration — Pôle soins médicaux et de réadaptation',agencyName:'Agence de démonstration InfiMatch',address:'Bâtiment des consultations et hospitalisations, entrée principale côté jardin, 128 avenue de la République, 97110 Pointe-à-Pitre',timezone:'America/Guadeloupe',start:'2026-10-12T22:00:00Z',end:'2026-10-13T10:00:00Z'}]]) {
   const b=await createConfirmationPdf(data);fs.writeFileSync(path.join(dir,name+'.pdf'),b);console.log(name+': '+b.length+' octets');
  }

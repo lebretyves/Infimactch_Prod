@@ -180,8 +180,8 @@ function NurseCandidatures() {
                   <ButtonLink to={"/candidatures/" + a.id}>
                     Voir le suivi
                   </ButtonLink>
-                  {a.assignment_id && a.assignment_status === "ACTIVE" && (
-                    <ConfirmationButton assignmentId={a.assignment_id} />
+                  {a.assignment_id && ["ACTIVE","COMPLETED","CANCELLED"].includes(a.assignment_status || "") && (
+                    <ConfirmationButton assignmentId={a.assignment_id} cancelled={a.assignment_status === "CANCELLED"} />
                   )}{" "}
                   {["SUBMITTED", "SELECTED"].includes(a.status) &&
                     !a.assignment_id &&

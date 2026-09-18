@@ -137,6 +137,16 @@ class MissionsController {
   @Get("enterprise/applications") applicationInbox(@Req() r: Request, @Query() page: ApplicationInboxDto) {
     return this.db.transaction(em => enterpriseApplicationPage(em,user(r),page));
   }
+  @Post("assignments/:id/cancel") cancelAssignment(@Req() r:Request,@Param("id",ParseUUIDPipe) id:string,@Headers("idempotency-key") key:string) {
+    return this.service.cancelAssignment(user(r),id,key);
+  }
+  @Get("assignments/:id/cancellation") async cancellationDocument(@Req() r:Request,@Param("id",ParseUUIDPipe) id:string) {
+    const [a]=await this.db.query('SELECT a.nurse_id,m.agency_id,m.establishment_id FROM assignment a JOIN mission m ON m.id=a.mission_id WHERE a.id=$1',[id]);
+    if(!a)throw new NotFoundException();
+    if(a.nurse_id!==user(r))await scope(this.db,user(r),a);
+    const [c]=await this.db.query('SELECT status,document_id FROM mission_cancellation WHERE assignment_id=$1',[id]);
+    return c ?? {status:'UNAVAILABLE',document_id:null};
+  }
   @Get("me/missions/:id/assignments") ownAssignments(
     @Req() r: Request,
     @Param("id", ParseUUIDPipe) id: string,
