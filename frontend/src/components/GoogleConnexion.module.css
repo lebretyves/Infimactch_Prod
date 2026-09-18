@@ -39,3 +39,8 @@
 .section > div[hidden] {
   display: none;
 }
+
+.googleButton {
+  width: 100%;
+  min-width: 0;
+}

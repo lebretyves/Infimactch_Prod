@@ -7,7 +7,7 @@ export type IdentityClient = {
   }) => void;
   renderButton: (
     element: HTMLElement,
-    options: { theme: string; size: string; text: string },
+    options: { theme: string; size: string; text: string; width?: string },
   ) => void;
   cancel?: () => void;
 };

@@ -41,6 +41,7 @@ export function GoogleConnexion({
   }, [googleAllowed]);
   useEffect(() => {
     let active = true;
+    let resizeObserver: ResizeObserver | undefined;
     const controller = new AbortController();
     const element = target.current;
     setReady(false);
@@ -138,12 +139,24 @@ export function GoogleConnexion({
             }
           },
         });
-        target.current.replaceChildren();
-        window.google.accounts.id.renderButton(target.current, {
-          theme: "outline",
-          size: "large",
-          text: mode === "signup" ? "signup_with" : "signin_with",
-        });
+        const buttonTarget = target.current;
+        let previousWidth = 0;
+        const render = () => {
+          if (!active || !isGoogleIdentityAllowed()) return;
+          const width = Math.min(400, Math.floor(buttonTarget.clientWidth));
+          if (width <= 0 || width === previousWidth) return;
+          previousWidth = width;
+          buttonTarget.replaceChildren();
+          window.google?.accounts.id.renderButton(buttonTarget, {
+            theme: "outline",
+            size: "large",
+            text: mode === "signup" ? "signup_with" : "signin_with",
+            width: String(width),
+          });
+        };
+        render();
+        resizeObserver = new ResizeObserver(render);
+        resizeObserver.observe(buttonTarget);
         setReady(true);
       } catch (e) {
         if (
@@ -158,6 +171,7 @@ export function GoogleConnexion({
     return () => {
       active = false;
       controller.abort();
+      resizeObserver?.disconnect();
       pending.current = false;
       element?.replaceChildren();
     };
@@ -206,6 +220,7 @@ export function GoogleConnexion({
       )}
       <div
         ref={target}
+        className={s.googleButton}
         hidden={!googleAllowed}
         inert={busy || !ready || !googleAllowed}
         style={
