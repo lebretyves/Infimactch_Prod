@@ -31,6 +31,7 @@ export type Listing = {
   agency_id?: string;
   agency_name?: string;
   establishment_name?: string;
+  can_manage?: boolean;
   required_skills?: string[];
   min_experience_months?: number;
   source?: string;
@@ -112,9 +113,13 @@ export function list(
     signal,
   });
 }
-export const enterpriseMissions = (offset: number, signal?: AbortSignal, establishmentId?: string) => {
+export type EnterpriseMissionFilters = { qualification?: string; location?: string; date?: string };
+export const enterpriseMissions = (offset: number, signal?: AbortSignal, establishmentId?: string, filters: EnterpriseMissionFilters = {}) => {
   const params = new URLSearchParams({ limit: "20", offset: String(offset) });
   if (establishmentId) params.set("establishmentId", establishmentId);
+  for (const key of ["qualification", "location", "date"] as const) {
+    const value = filters[key]?.trim(); if (value) params.set(key, value);
+  }
   return api<Listing[]>("/missions?" + params, { signal });
 };
 export type ManagedEstablishment = {
