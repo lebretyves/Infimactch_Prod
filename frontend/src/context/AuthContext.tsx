@@ -1,3 +1,4 @@
+import {effacerBrouillon} from '@/pages/inscription/state';
 import { SessionInactivity } from "@/components/SessionInactivity";
 import {
   createContext,
@@ -34,9 +35,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null),
     [isLoading, setLoading] = useState(true),
     [error, setError] = useState("");
+  const authenticated = useRef(false);
+  authenticated.current=!!user;
   const generation = useRef(0),
     pending = useRef<AbortController | null>(null);
-  const expireIdle = useCallback(() => { pending.current?.abort(); ++generation.current; clearAuth(); setUser(null); setLoading(false); setError(""); }, []);
+  const expireIdle = useCallback(() => { effacerBrouillon(); pending.current?.abort(); ++generation.current; clearAuth(); setUser(null); setLoading(false); setError(""); }, []);
   const refresh = useCallback(async () => {
     pending.current?.abort();
     const controller = new AbortController();
@@ -59,7 +62,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     clearAuth();
     void refresh();
-    const expire = () => setUser(null);
+    const expire = () => {if(authenticated.current)effacerBrouillon();setUser(null);};
     window.addEventListener("infimatch:session-expired", expire);
     return () => {
       ++generation.current;

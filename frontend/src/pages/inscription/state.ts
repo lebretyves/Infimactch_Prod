@@ -88,6 +88,21 @@ export const CLE = 'infimatch:inscription';
 
 // Keep the password in memory only. The tab draft excludes bank details and passwords.
 export const CLE_BROUILLON = 'infimatch:inscription-draft-v1';
+export const DRAFT_IDLE_MS = 30 * 60 * 1000;
+export const DRAFT_MAX_MS = 2 * 60 * 60 * 1000;
+export const DRAFT_EXPIRED_EVENT = 'infimatch:registration-draft-expired';
+let createdAt = 0, expiresAt = 0;
+let expirationTimer: ReturnType<typeof setTimeout> | undefined;
+function scheduleExpiration() {
+ if(expirationTimer)clearTimeout(expirationTimer);
+ if(expiresAt && typeof window!=='undefined')expirationTimer=setTimeout(verifierExpiration,Math.max(0,expiresAt-Date.now()));
+}
+export function verifierExpiration(): boolean {
+ if(!expiresAt || Date.now()<expiresAt)return false;
+ effacerBrouillon();
+ if(typeof window!=='undefined')window.dispatchEvent(new Event(DRAFT_EXPIRED_EVENT));
+ return true;
+}
 function videNeuf(): Inscription {
   return structuredClone(vide);
 }
@@ -97,9 +112,15 @@ function lireBrouillon(): Inscription {
     const value: unknown = JSON.parse(
       sessionStorage.getItem(CLE_BROUILLON) || '{}',
     );
-    if (!value || typeof value !== 'object' || Array.isArray(value))
-      return restored;
-    const source = value as Record<string, unknown>;
+    if (!value || typeof value !== 'object' || Array.isArray(value)) {
+      sessionStorage.removeItem(CLE);sessionStorage.removeItem(CLE_BROUILLON);return restored;
+    }
+    const envelope = value as Record<string, unknown>, now=Date.now();
+    if(envelope.version!==2 || typeof envelope.createdAt!=='number' || typeof envelope.expiresAt!=='number' || !Number.isFinite(envelope.createdAt) || !Number.isFinite(envelope.expiresAt) || envelope.createdAt>now || envelope.expiresAt<=now || envelope.expiresAt>Math.min(now+DRAFT_IDLE_MS,envelope.createdAt+DRAFT_MAX_MS) || !envelope.data || typeof envelope.data!=='object' || Array.isArray(envelope.data)) {
+      sessionStorage.removeItem(CLE);sessionStorage.removeItem(CLE_BROUILLON);return restored;
+    }
+    createdAt=envelope.createdAt;expiresAt=envelope.expiresAt;
+    const source = envelope.data as Record<string, unknown>;
     const excluded = ['motDePasse', 'iban', 'bic', 'titulaireCompte'];
     for (const key of Object.keys(vide) as (keyof Inscription)[]) {
       if (excluded.includes(key)) continue;
@@ -134,15 +155,21 @@ function lireBrouillon(): Inscription {
       }
     }
   } catch {
+    try{sessionStorage.removeItem(CLE_BROUILLON);}catch{}
     /* Browser storage may be unavailable or contain an old draft. */
   }
   return restored;
 }
 let brouillon = lireBrouillon();
+scheduleExpiration();
 export function charger(): Inscription {
+  verifierExpiration();
   return structuredClone(brouillon);
 }
 export function enregistrer(champs: Partial<Inscription>) {
+  if(verifierExpiration())return;
+  const now=Date.now();if(!createdAt)createdAt=now;expiresAt=Math.min(now+DRAFT_IDLE_MS,createdAt+DRAFT_MAX_MS);
+  scheduleExpiration();
   brouillon = { ...brouillon, ...champs };
   const draft: Partial<Inscription> = { ...brouillon };
   delete draft.motDePasse;
@@ -151,12 +178,13 @@ export function enregistrer(champs: Partial<Inscription>) {
   delete draft.titulaireCompte;
   try {
     sessionStorage.removeItem(CLE);
-    sessionStorage.setItem(CLE_BROUILLON, JSON.stringify(draft));
+    sessionStorage.setItem(CLE_BROUILLON, JSON.stringify({version:2,createdAt,expiresAt,data:draft}));
   } catch {
     /* Continue in memory when storage is blocked. */
   }
 }
 export function effacerBrouillon() {
+  if(expirationTimer)clearTimeout(expirationTimer);expirationTimer=undefined;createdAt=0;expiresAt=0;
   brouillon = videNeuf();
   try {
     sessionStorage.removeItem(CLE);

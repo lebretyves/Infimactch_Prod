@@ -114,10 +114,11 @@ try {
         sessionStorage.getItem('infimatch:inscription-draft-v1') || '{}',
       ),
     );
-    assert.equal(draft.email, email);
-    assert.equal(draft.prenom, 'Test');
+    assert.equal(draft.version, 2);
+    assert.equal(draft.data.email, email);
+    assert.equal(draft.data.prenom, 'Test');
     for (const key of ['motDePasse', 'iban', 'bic', 'titulaireCompte'])
-      assert.equal(key in draft, false);
+      assert.equal(key in draft.data, false);
     assert.equal(await page.locator('input[name=password]').inputValue(), '');
     await page.locator('input[name=password]').fill(password);
     await consent(page);

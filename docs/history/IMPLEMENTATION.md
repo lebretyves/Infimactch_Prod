@@ -356,3 +356,7 @@ SEO : titres et descriptions spécifiques aux routes, sans données personnelles
 ## 2026-09-18 — Intitulés et rubriques des annonces externes
 
 Analyse de 200 annonces du catalogue public (168 France Travail,32 JobsPipe). La présentation regroupe les extraits exacts par contenu : poste, activités, profil, horaires, rémunération et contexte établissement. Les champs multiples ne perdent plus leur intitulé sous « Passage de l’annonce » ; FASTT et majorations restent dans les avantages/rémunération. Le matching et les champs métier ne changent pas. Contrôles de fidélité sur921passages,7tests ciblés et recette navigateur réussis. Rapport : quality/CATEGORISATION_ANNONCES_2026-09-18.md.
+
+## 2026-09-18 — Corrections de sécurité PWA
+
+CSP et protections anti-iframe/MIME/référent/permissions sur le frontend. Brouillon d’inscription expirant après 30 minutes sans modification, maximum 2 heures, purge au retour et à la déconnexion ; anciens brouillons sans date effacés. no-store généralisé avant les parseurs et contrôles d’accès API, y compris réponses refusées, plus routes HTML privées et proxy. Tests de brouillon, cache/session, sécurité navigateur sous CSP, CV/PDF/OCR/RIB/caméra, inscription et service worker réussis ; builds frontend/backend réussis. Rapport quality/CORRECTIONS_SECURITE_PWA_2026-09-18.md.

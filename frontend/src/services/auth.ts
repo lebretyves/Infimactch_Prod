@@ -1,3 +1,4 @@
+import {effacerBrouillon} from '../pages/inscription/state';
 import { clearAppCaches } from '../lib/pwa';
 import { profilePayload,type ProfessionalProfile,type ProfileDetails } from './profile';
 import { api, ApiError, resetCsrf } from './api';
@@ -137,6 +138,7 @@ export async function login(data: LoginCredentials): Promise<AuthResponse> {
     method: 'POST',
     body: { email: data.email, password: data.motDePasse },
   });
+  effacerBrouillon();
   return { user: await current() };
 }
 export async function register(data: RegisterData): Promise<AuthResponse> {
@@ -173,6 +175,7 @@ export async function register(data: RegisterData): Promise<AuthResponse> {
       : {}),
   };
   await api(data.google ? '/auth/google/register' : '/auth/register', { method: 'POST', body });
+  effacerBrouillon();
   clearAuth();
   try {
     return { user: await current() };
@@ -181,6 +184,7 @@ export async function register(data: RegisterData): Promise<AuthResponse> {
   }
 }
 export async function logout() {
+  effacerBrouillon();
   await api('/auth/logout', { method: 'POST' });
   await clearAppCaches().catch(() => undefined);
   clearAuth();
