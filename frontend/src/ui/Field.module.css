@@ -162,3 +162,6 @@
 /* Candidate account controls meet the same touch target as other actions. */
 :global([data-space="candidate"]) .bouton { width: 44px; height: 44px; }
 :global([data-space="candidate"]) .action { right: 4px; }
+
+.readOnly { margin: 0; display: grid; gap: 6px; }
+.readOnly dd { margin: 0; color: var(--ink-900); font-size: var(--font-body); line-height: var(--leading-normal); white-space: pre-wrap; overflow-wrap: anywhere; }
