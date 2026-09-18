@@ -1,8 +1,9 @@
-import { useEffect, useRef, useState } from "react";
+import {missionDate} from "@/services/market";
+﻿import { useEffect, useRef, useState } from "react";
 import { useParams } from "react-router";
 import { useAuth } from "@/context/AuthContext";
 import { useRemote } from "@/lib/useRemote";
-import { detail, apply, applicationCheck, date, salary, type ApplicationCheck, type Listing } from "@/services/market";
+import { detail, apply, applicationCheck, salary, type ApplicationCheck, type Listing } from "@/services/market";
 import { reasonLabels } from "@/services/messages";
 import { labelCode } from "@/data/professional";
 import { Button, ButtonLink } from "@/ui/Button";
@@ -18,8 +19,10 @@ function warningText(code: string, check: ApplicationCheck | null, mission: List
       return check
         ? `Expérience en ${labelCode(mission.service || "ce service")} : ${(Math.floor(check.experienceMonths * 10) / 10).toLocaleString("fr-FR", { maximumFractionDigits: 1 })} mois renseignés pour ${check.requiredExperienceMonths} mois demandés.`
         : "L’expérience renseignée est inférieure à celle demandée pour ce service.";
+    case "SCHEDULE_UNCONFIRMED":
+      return "Horaires précis à confirmer avec l’établissement : la disponibilité et les chevauchements ne peuvent pas être entièrement vérifiés avant cette confirmation.";
     case "NOT_FULLY_AVAILABLE":
-      return `Vos disponibilités enregistrées ne couvrent pas toute la mission, du ${date(mission.start_at, mission.timezone)} au ${date(mission.end_at, mission.timezone)}.`;
+      return `Vos disponibilités enregistrées ne couvrent pas toute la mission, du ${missionDate(mission)} au ${missionDate(mission, true)}.`;
     case "SHIFT_NOT_ACCEPTED":
       return `Les horaires de cette mission (${({ DAY: "jour", NIGHT: "nuit", MIXED: "jour et nuit" } as Record<string, string>)[mission.shift || ""] || "voir les conditions"}) ne figurent pas parmi vos horaires acceptés.`;
     case "OUTSIDE_RADIUS":
@@ -113,7 +116,7 @@ export default function Candidater() {
       <section className={s.rappel}>
         <h2>{m.title}</h2>
         <p>
-          {date(m.start_at, m.timezone)} → {date(m.end_at, m.timezone)}
+          {missionDate(m)} → {missionDate(m, true)}
         </p>
         <p>{salary(m)}</p>
         <p>{m.address}</p>

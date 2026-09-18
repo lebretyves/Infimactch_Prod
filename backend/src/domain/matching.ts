@@ -28,6 +28,7 @@ export interface MatchMission extends Interval {
   block: "NONE" | "GENERAL" | "SPECIALIZED";
   specialty: string | null;
   shift: string;
+  schedulePrecision?: "EXACT" | "DATE";
   latitude: number | null;
   longitude: number | null;
 }
@@ -120,11 +121,17 @@ export function match(
     reasons.push("REQUIRED_SKILLS_MISSING");
   const months = experienceMonths(p.experience, m.service, m.start);
   if (months < m.minExperienceMonths) reasons.push("EXPERIENCE_INSUFFICIENT");
-  if (!covers(m, p.available, p.unavailable))
-    reasons.push("NOT_FULLY_AVAILABLE");
-  if (p.conflicts.some((i) => overlaps(m, i)))
-    reasons.push("ASSIGNMENT_CONFLICT");
-  if (!p.acceptedShifts.includes(m.shift)) reasons.push("SHIFT_NOT_ACCEPTED");
+  // Date bounds locate a request in the calendar; they are not a full-day shift.
+  const datesOnly = m.schedulePrecision === "DATE";
+  if (datesOnly || m.shift === "UNKNOWN") reasons.push("SCHEDULE_UNCONFIRMED");
+  if (!datesOnly) {
+    if (!covers(m, p.available, p.unavailable))
+      reasons.push("NOT_FULLY_AVAILABLE");
+    if (p.conflicts.some((i) => overlaps(m, i)))
+      reasons.push("ASSIGNMENT_CONFLICT");
+  }
+  if (m.shift !== "UNKNOWN" && !p.acceptedShifts.includes(m.shift))
+    reasons.push("SHIFT_NOT_ACCEPTED");
   let distance: number | null = null;
   if (
     p.latitude === null ||

@@ -83,6 +83,9 @@ export class MissionDto {
   @ApiProperty({ type: () => String, required: true })
   @IsString()
   start!: string;
+  @ApiProperty({required:false,enum:['EXACT','DATE'],default:'EXACT'})
+  @IsOptional() @IsIn(['EXACT','DATE'])
+  schedulePrecision?: 'EXACT' | 'DATE';
   @ApiProperty({ type: () => String, required: false, default: "Europe/Paris", example: "America/Guadeloupe" })
   @ValidateIf((_object, value) => value !== undefined)
   @IsTimeZone()
@@ -94,9 +97,9 @@ export class MissionDto {
   @ApiProperty({
     type: () => String,
     required: true,
-    enum: ["DAY", "NIGHT", "MIXED"],
+    enum: ["DAY", "NIGHT", "MIXED", "UNKNOWN"],
   })
-  @IsIn(["DAY", "NIGHT", "MIXED"])
+  @IsIn(["DAY", "NIGHT", "MIXED", "UNKNOWN"])
   shift!: string;
   @ApiProperty({ type: () => String, required: true })
   @IsString()

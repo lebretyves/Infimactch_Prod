@@ -20,3 +20,19 @@ test('implicit specialized skills are included and duplicates are removed',()=>{
  const r=assessApplication({...profile,qualifications:['IBODE']},{...mission,qualification:'IBODE',population:'MIXED',block:'SPECIALIZED',specialty:'CARDIAC',requiredSkills:['POPULATION_ADULT','TRIAGE']},0);
  assert.deepEqual(r.missingSkills,['POPULATION_ADULT','TRIAGE','POPULATION_PEDIATRIC','BLOCK_CARDIAC']);assert.deepEqual(r.blockingReasons,[]);
 });
+
+test('date-only application warns without assuming full-day unavailability or conflict',()=>{
+ const m={...mission,requiredSkills:[],minExperienceMonths:0,schedulePrecision:'DATE' as const,shift:'UNKNOWN'};
+ const p={...profile,conflicts:[slot],unavailable:[slot],acceptedShifts:[]};
+ const r=assessApplication(p,m,0,Date.parse(slot.start)+3600000);
+ assert.deepEqual(r.warnings,['SCHEDULE_UNCONFIRMED']);assert.deepEqual(r.blockingReasons,[]);
+ assert.equal(match(p,m,0).eligible,false);assert.equal(match(p,m,0).score,null);
+ assert.deepEqual(assessApplication(p,m,0,Date.parse(slot.end)).blockingReasons,['MISSION_ALREADY_STARTED']);
+});
+test('date-only schedule warning never bypasses qualification or RPPS requirements',()=>{
+ const r=assessApplication({...profile,qualifications:[],rppsStatus:'NOT_FOUND'},{...mission,schedulePrecision:'DATE',shift:'UNKNOWN'},0,0);
+ assert.deepEqual(r.blockingReasons,['QUALIFICATION_MISSING','RPPS_NOT_FOUND']);assert.ok(r.warnings.includes('SCHEDULE_UNCONFIRMED'));
+});
+test('exact applications remain closed after the actual start time',()=>{
+ assert.ok(assessApplication(profile,{...mission,schedulePrecision:'EXACT'},0,Date.parse(slot.start)).blockingReasons.includes('MISSION_ALREADY_STARTED'));
+});

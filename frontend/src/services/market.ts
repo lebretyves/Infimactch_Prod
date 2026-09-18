@@ -32,6 +32,7 @@ export type Listing = {
   agency_name?: string;
   establishment_name?: string;
   can_manage?: boolean;
+  schedule_precision?: "EXACT" | "DATE";
   required_skills?: string[];
   min_experience_months?: number;
   source?: string;
@@ -200,6 +201,12 @@ export function date(value?: string | null, timeZone = "Europe/Paris") {
     dateStyle: "medium",
     timeStyle: "short",
   }).format(new Date(value));
+}
+export function missionDate(m: Pick<Listing, 'start_at' | 'end_at' | 'timezone' | 'schedule_precision'>, end = false) {
+  const value = end ? m.end_at : m.start_at;
+  if (m.schedule_precision !== 'DATE') return date(value, m.timezone);
+  if (!value || !Number.isFinite(Date.parse(value))) return 'Non précisée';
+  return new Intl.DateTimeFormat('fr-FR', {timeZone:m.timezone || 'Europe/Paris', dateStyle:'medium'}).format(new Date(Date.parse(value) - (end ? 1 : 0)));
 }
 export function salary(m: Listing) {
   if (m.id.startsWith("e_")) return "Rémunération : voir l’annonce source";

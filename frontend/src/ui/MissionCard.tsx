@@ -1,3 +1,4 @@
+import {missionDate} from "@/services/market";
 ﻿import { useEffect, useState } from "react";
 import { Link } from "react-router";
 import { Icon } from "./Icon";
@@ -5,7 +6,6 @@ import { ButtonLink } from "./Button";
 import {
   type Listing,
   favorite,
-  date,
   salary,
   sourceLabel,
   externalExpired,
@@ -92,7 +92,7 @@ export function MissionCard({
         <p>
           <Icon name="calendar" size={17} />
           {mission.start_at
-            ? date(mission.start_at, mission.timezone)
+            ? missionDate(mission)
             : "Dates à consulter dans l’annonce"}
         </p>
         <p className={s.taux}>{salary(mission)}</p>

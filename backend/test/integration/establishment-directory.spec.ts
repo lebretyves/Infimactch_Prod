@@ -50,4 +50,11 @@ test("establishment directory scopes counts and pages; creation publishes atomic
  assert.ok((await validate(Object.assign(new EnterpriseMissionsPageDto(),{date:'2037-02-31'}))).length);
  assert.ok((await validate(Object.assign(new EnterpriseMissionsPageDto(),{qualification:'OTHER'}))).length);
 
+ const dateBody:MissionDto={...base,title:'Date-only fixture',start:'2037-01-01T23:00:00Z',end:'2037-01-02T23:00:00Z',schedulePrecision:'DATE',shift:'UNKNOWN',minExperienceMonths:18};
+ const dateOnly=await service.create(owner,dateBody,randomUUID(),true);assert.equal(dateOnly.status,'OPEN');
+ const [stored]=await db.query('SELECT schedule_precision,shift,min_experience_months FROM mission WHERE id=$1',[dateOnly.id]);assert.equal(stored.schedule_precision,'DATE');assert.equal(stored.shift,'UNKNOWN');assert.equal(Number(stored.min_experience_months),18);
+ const [exact]=await db.query('SELECT schedule_precision FROM mission WHERE id=$1',[opened.id]);assert.equal(exact.schedule_precision,'EXACT');
+ await assert.rejects(service.create(owner,{...dateBody,start:'2037-01-02T08:00:00Z'},randomUUID(),true));
+ await assert.rejects(service.edit(owner,dateOnly.id,{...dateBody,schedulePrecision:undefined,start:'2037-01-02T08:00:00Z'},randomUUID()));
+
 });

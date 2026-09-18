@@ -1,3 +1,4 @@
+import {validDateBounds,startsInPast} from "../domain/schedule-period";
 import { assessApplication } from "./application-assessment";
 import { requireActiveAccount } from "../common/access";
 import { commandReceipt } from "../common/idempotency";
@@ -33,6 +34,7 @@ export function matchingMission(m: any): MatchMission {
     latitude: m.latitude,
     longitude: m.longitude,
     shift: m.shift,
+    schedulePrecision: m.schedule_precision,
   };
 }
 export async function lockMission(em: SqlClient, id: string) {
@@ -94,6 +96,8 @@ export class MissionsService {
     } catch {
       throw new BadRequestException("Invalid mission interval");
     }
+    if (b.schedulePrecision === 'DATE' && !validDateBounds(b.start,b.end,b.timezone))
+      throw new BadRequestException("Date-only bounds must be complete local calendar days");
     if (b.block === "SPECIALIZED" && !b.specialty)
       throw new BadRequestException("Specialty required");
     if (b.block !== "SPECIALIZED" && b.specialty)
@@ -117,10 +121,10 @@ export class MissionsService {
       }
       const receipt = await commandReceipt(em, actor, publish ? "mission:create-open" : "mission:create", key, b);
       if (receipt.replay) return receipt.response;
-      if (publish && new Date(b.start).getTime() <= Date.now())
+      if (publish && startsInPast(b.start,b.schedulePrecision,b.timezone))
         throw new ConflictException("Mission must start in the future");
       const [m] = await em.query(
-        `INSERT INTO mission(agency_id,establishment_id,title,description,qualification,service,population,block,specialty,required_skills,desired_skills,min_experience_months,start_at,end_at,shift,address,location,hourly_salary,staffing_request_id,timezone) VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,ST_SetSRID(ST_MakePoint($17,$18),4326)::geography,$19,$20,$21) RETURNING id,version,status`,
+        `INSERT INTO mission(agency_id,establishment_id,title,description,qualification,service,population,block,specialty,required_skills,desired_skills,min_experience_months,start_at,end_at,shift,address,location,hourly_salary,staffing_request_id,timezone,schedule_precision) VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,ST_SetSRID(ST_MakePoint($17,$18),4326)::geography,$19,$20,$21,$22) RETURNING id,version,status`,
         [
           b.agencyId ?? null,
           b.establishmentId,
@@ -143,6 +147,7 @@ export class MissionsService {
           b.hourlySalary,
           b.staffingRequestId ?? null,
           b.timezone ?? "Europe/Paris",
+          b.schedulePrecision ?? "EXACT",
         ],
       );
       await audit(em, actor, "MISSION_CREATED", m.id);
@@ -160,6 +165,7 @@ export class MissionsService {
     return this.db.transaction(async (em) => {
       const m = await lockMission(em, id);
       await scope(em, actor, m, true);
+      this.validate({...b,schedulePrecision:b.schedulePrecision ?? m.schedule_precision,timezone:b.timezone ?? m.timezone});
       const receipt = await commandReceipt(
         em,
         actor,
@@ -195,6 +201,7 @@ export class MissionsService {
         m.latitude,
         Number(m.hourly_salary),
         m.timezone ?? "Europe/Paris",
+        m.schedule_precision ?? "EXACT",
       ];
       const newTerms = [
         b.qualification,
@@ -213,11 +220,12 @@ export class MissionsService {
         b.latitude,
         b.hourlySalary,
         b.timezone ?? m.timezone ?? "Europe/Paris",
+        b.schedulePrecision ?? m.schedule_precision ?? "EXACT",
       ];
       const revision =
         JSON.stringify(oldTerms) === JSON.stringify(newTerms) ? 0 : 1;
       const [updated] = await em.query(
-        `UPDATE mission SET title=$2,description=$3,qualification=$4,service=$5,population=$6,block=$7,specialty=$8,required_skills=$9,desired_skills=$10,min_experience_months=$11,start_at=$12,end_at=$13,shift=$14,address=$15,location=ST_SetSRID(ST_MakePoint($16,$17),4326)::geography,hourly_salary=$18,version=version+$19,timezone=$20 WHERE id=$1 RETURNING id,version,status`,
+        `UPDATE mission SET title=$2,description=$3,qualification=$4,service=$5,population=$6,block=$7,specialty=$8,required_skills=$9,desired_skills=$10,min_experience_months=$11,start_at=$12,end_at=$13,shift=$14,address=$15,location=ST_SetSRID(ST_MakePoint($16,$17),4326)::geography,hourly_salary=$18,version=version+$19,timezone=$20,schedule_precision=$21 WHERE id=$1 RETURNING id,version,status`,
         [
           id,
           b.title,
@@ -239,6 +247,7 @@ export class MissionsService {
           b.hourlySalary,
           revision,
           b.timezone ?? m.timezone ?? "Europe/Paris",
+          b.schedulePrecision ?? m.schedule_precision ?? "EXACT",
         ],
       );
       await audit(em, actor, "MISSION_REVISED", id, {
@@ -284,7 +293,7 @@ export class MissionsService {
       }[action];
       if (!allowed.includes(m.status))
         throw new ConflictException("Invalid mission transition");
-      if (action === "publish" && new Date(m.start_at).getTime() <= Date.now())
+      if (action === "publish" && startsInPast(new Date(m.start_at).toISOString(),m.schedule_precision,m.timezone))
         throw new ConflictException("Mission must start in the future");
       if (action === "complete" && new Date(m.end_at).getTime() > Date.now())
         throw new ConflictException("Mission has not ended");

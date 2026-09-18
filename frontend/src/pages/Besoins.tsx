@@ -14,12 +14,8 @@ import {
   type StaffingNeed,
   type NeedDetails,
 } from "@/services/needs";
-import {
-  parisDateTimeInput,
-  parisDateTimeToISO,
-  parisDateTimeLabel,
-  nextDate,
-} from "@/lib/parisDateTime";
+import { parisDateTimeLabel } from "@/lib/parisDateTime";
+import { localDate, inclusiveEndDate, missionDateRange, missionDateRangeLabel } from "@/lib/missionDateRange";
 import { QUALIFICATIONS, SKILLS, labelCode } from "@/data/professional";
 import { Button, ButtonLink } from "@/ui/Button";
 import { TextField, SelectField, TextArea } from "@/ui/Field";
@@ -29,6 +25,7 @@ import u from "@/components/NurseUI.module.css";
 import s from "./Besoins.module.css";
 type Reference = { ideServices: string[]; blockSpecialties: string[] };
 const shiftLabels = {
+  UNKNOWN: "Non connu",
   DAY: "Jour",
   NIGHT: "Nuit",
   MIXED: "Alternance jour et nuit",
@@ -71,7 +68,9 @@ function NeedForm({
       : {
           qualification: "IDE",
           service: "",
-          shift: "DAY",
+          shift: "UNKNOWN",
+          schedulePrecision: "DATE",
+          timezone: "Europe/Paris",
           headcount: 1,
           population: "ADULT",
           block: "NONE",
@@ -81,18 +80,13 @@ function NeedForm({
             initial?.establishment_address || establishments[0]?.address || "",
         },
   );
-  const [startDate, setStartDate] = useState(
-      original ? parisDateTimeInput(original.start).slice(0, 10) : "",
-    ),
-    [startTime, setStartTime] = useState(
-      original ? parisDateTimeInput(original.start).slice(11) : "06:00",
-    ),
-    [endDate, setEndDate] = useState(
-      original ? parisDateTimeInput(original.end).slice(0, 10) : "",
-    ),
-    [endTime, setEndTime] = useState(
-      original ? parisDateTimeInput(original.end).slice(11) : "14:00",
-    );
+  const [timezone, setTimezone] = useState(original?.timezone || "Europe/Paris");
+  const [startDate, setStartDate] = useState(original ? localDate(original.start, original.timezone) : "");
+  const [endDate, setEndDate] = useState(original ? inclusiveEndDate(original.end, original.timezone) : "");
+  // Keep a string while editing so clearing zero does not immediately restore it.
+  const [experienceYears, setExperienceYears] = useState(() =>
+    String(Number((details.minExperienceMonths / 12).toFixed(4))),
+  );
   const [busy, setBusy] = useState(false),
     [error, setError] = useState("");
   const locked = useRef(false),
@@ -101,17 +95,6 @@ function NeedForm({
     setDetails((v) => ({ ...v, ...values }));
     setError("");
   }
-  function preset(which: "morning" | "afternoon" | "night") {
-    if (!startDate) return;
-    setStartTime(
-      which === "morning" ? "06:00" : which === "afternoon" ? "14:00" : "22:00",
-    );
-    setEndTime(
-      which === "morning" ? "14:00" : which === "afternoon" ? "22:00" : "06:00",
-    );
-    setEndDate(which === "night" ? nextDate(startDate) : startDate);
-    change({ shift: which === "night" ? "NIGHT" : "DAY" });
-  }
   async function submit(e: FormEvent) {
     e.preventDefault();
     if (locked.current) return;
@@ -119,15 +102,13 @@ function NeedForm({
     setBusy(true);
     setError("");
     try {
-      const start = parisDateTimeToISO(
-          startDate + "T" + startTime,
-          original?.start,
-        ),
-        end = parisDateTimeToISO(endDate + "T" + endTime, original?.end);
-      if (Date.parse(start) <= Date.now())
-        throw new Error("La période demandée doit commencer dans le futur.");
-      if (Date.parse(end) <= Date.parse(start))
-        throw new Error("La fin du besoin doit être après son début.");
+      const years = Number(experienceYears);
+      if (!experienceYears.trim() || !Number.isFinite(years) || years < 0 || years > 50)
+        throw new Error("Renseignez une expérience entre 0 et 50 ans.");
+      const minExperienceMonths = Math.round(years * 12);
+      const { start, end, schedulePrecision } = missionDateRange(startDate, endDate, timezone, original || undefined);
+      if (!original && startDate < localDate(new Date().toISOString(), timezone))
+        throw new Error("La période doit commencer aujourd’hui ou à une date ultérieure.");
       if (!establishments.some((o) => o.id === org))
         throw new Error(
           "Choisissez un établissement auquel vous êtes rattaché.",
@@ -138,6 +119,9 @@ function NeedForm({
         description: description.trim(),
         details: {
           ...details,
+          minExperienceMonths,
+          schedulePrecision,
+          timezone,
           start,
           end,
           address: details.address.trim(),
@@ -255,80 +239,15 @@ function NeedForm({
               <Icon name="calendar" />
               Période et effectif
             </h3>
-            <p className={s.help}>
-              Heure de Paris (Europe/Paris). Définissez une plage exacte, sans
-              répétition quotidienne automatique.
+            <p className={s.help}>Dates inclusives. Horaires précis à confirmer.
+              {original && original.schedulePrecision !== "DATE" && " Les horaires enregistrés sont conservés si les dates et le fuseau restent inchangés."}
             </p>
+            <SelectField label="Fuseau horaire du besoin" value={timezone} onChange={e => setTimezone(e.target.value)}>
+              {Array.from(new Set(["Europe/Paris", "America/Guadeloupe", "America/Martinique", "America/Cayenne", "Indian/Reunion", "Indian/Mayotte", timezone])).map(zone => <option key={zone} value={zone}>{zone}</option>)}
+            </SelectField>
             <div className={u.grid}>
-              <TextField
-                label="Date de début du besoin"
-                type="date"
-                required
-                value={startDate}
-                onChange={(e) => {
-                  setStartDate(e.target.value);
-                  if (!endDate) setEndDate(e.target.value);
-                }}
-              />
-              <TextField
-                label="Heure de début du besoin"
-                type="time"
-                step={60}
-                required
-                value={startTime}
-                onChange={(e) => setStartTime(e.target.value)}
-              />
-            </div>
-            <div className={s.presets} aria-label="Horaires prédéfinis">
-              <Button
-                type="button"
-                variant="outline"
-                size="sm"
-                disabled={!startDate}
-                onClick={() => preset("morning")}
-              >
-                Matin 06–14
-              </Button>
-              <Button
-                type="button"
-                variant="outline"
-                size="sm"
-                disabled={!startDate}
-                onClick={() => preset("afternoon")}
-              >
-                Après-midi 14–22
-              </Button>
-              <Button
-                type="button"
-                variant="outline"
-                size="sm"
-                disabled={!startDate}
-                onClick={() => preset("night")}
-              >
-                Nuit 22–06
-              </Button>
-            </div>
-            <p className={s.help}>
-              Les présélections s’appliquent à la date de début ; la nuit se
-              termine le lendemain. Les heures restent modifiables.
-            </p>
-            <div className={u.grid}>
-              <TextField
-                label="Date de fin du besoin"
-                type="date"
-                min={startDate || undefined}
-                required
-                value={endDate}
-                onChange={(e) => setEndDate(e.target.value)}
-              />
-              <TextField
-                label="Heure de fin du besoin"
-                type="time"
-                step={60}
-                required
-                value={endTime}
-                onChange={(e) => setEndTime(e.target.value)}
-              />
+              <TextField label="Date de début du besoin" type="date" required value={startDate} onChange={e => { setStartDate(e.target.value); if (!endDate) setEndDate(e.target.value); }} />
+              <TextField label="Date de fin incluse" type="date" min={startDate || undefined} required value={endDate} onChange={e => setEndDate(e.target.value)} />
             </div>
             <div className={u.grid}>
               <SelectField
@@ -338,7 +257,7 @@ function NeedForm({
                   change({ shift: e.target.value as NeedDetails["shift"] })
                 }
               >
-                {Object.entries(shiftLabels).map(([value, label]) => (
+                {Object.entries(shiftLabels).filter(([value]) => value !== "MIXED" || details.shift === "MIXED").map(([value, label]) => (
                   <option key={value} value={value}>
                     {label}
                   </option>
@@ -441,16 +360,15 @@ function NeedForm({
               </SelectField>
             )}
             <TextField
-              label="Expérience minimale dans le service (mois)"
+              label="Expérience minimale dans le service (années)"
               type="number"
               required
               min={0}
-              max={600}
-              step={1}
-              value={details.minExperienceMonths}
-              onChange={(e) =>
-                change({ minExperienceMonths: Number(e.target.value) })
-              }
+              max={50}
+              step="any"
+              value={experienceYears}
+              onChange={(e) => setExperienceYears(e.target.value)}
+              hint="0 = aucune expérience minimale. Exemple : 1,5 an = 18 mois. Les fractions d’année sont arrondies au mois le plus proche."
             />
           </div>
           <details className={s.skills}>
@@ -538,8 +456,7 @@ function NeedCard({
             </span>
             <span>
               <Icon name="calendar" size={17} />
-              {parisDateTimeLabel(d.start)} → {parisDateTimeLabel(d.end)} ·
-              Paris
+              {missionDateRangeLabel(d)}
             </span>
             <span>
               <Icon name="briefcase" size={17} />
@@ -567,7 +484,7 @@ function NeedCard({
               </div>
               <div>
                 <dt>Expérience minimale</dt>
-                <dd>{d.minExperienceMonths} mois dans le service</dd>
+                <dd>{Math.floor(d.minExperienceMonths / 12)} an(s){d.minExperienceMonths % 12 ? ` et ${d.minExperienceMonths % 12} mois` : ""} dans le service</dd>
               </div>
               <div>
                 <dt>Compétences requises</dt>

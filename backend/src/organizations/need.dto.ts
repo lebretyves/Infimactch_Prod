@@ -1,3 +1,4 @@
+import {validDateBounds,startsInPast} from "../domain/schedule-period";
 ﻿import { ApiProperty } from "@nestjs/swagger";
 import { Transform, Type } from "class-transformer";
 import {
@@ -8,6 +9,7 @@ import {
   IsIn,
   IsInt,
   IsOptional,
+  IsTimeZone,
   IsString,
   IsUUID,
   Length,
@@ -29,9 +31,11 @@ export class NeedDetailsDto {
   @ApiProperty({ enum: ideServices }) @IsIn(ideServices) service!: string;
   @ApiProperty() @IsString() start!: string;
   @ApiProperty() @IsString() end!: string;
-  @ApiProperty({ enum: ["DAY", "NIGHT", "MIXED"] })
-  @IsIn(["DAY", "NIGHT", "MIXED"])
-  shift!: "DAY" | "NIGHT" | "MIXED";
+  @ApiProperty({required:false,enum:['EXACT','DATE']}) @IsOptional() @IsIn(['EXACT','DATE']) schedulePrecision?: 'EXACT'|'DATE';
+  @ApiProperty({required:false}) @IsOptional() @IsTimeZone() timezone?: string;
+  @ApiProperty({ enum: ["DAY", "NIGHT", "MIXED", "UNKNOWN"] })
+  @IsIn(["DAY", "NIGHT", "MIXED", "UNKNOWN"])
+  shift!: "DAY" | "NIGHT" | "MIXED" | "UNKNOWN";
   @ApiProperty({ minimum: 1, maximum: 100 })
   @IsInt()
   @Min(1)
@@ -92,7 +96,8 @@ export function normalizeNeedDetails(
       "Indiquez une date de fin après le début, avec des horaires valides.",
     );
   }
-  if (bounds[0] <= now) invalid("Le début du besoin doit être dans le futur.");
+  if (details.schedulePrecision === 'DATE' && !validDateBounds(details.start,details.end,details.timezone)) invalid("Les dates doivent couvrir des jours entiers.");
+  if (startsInPast(details.start,details.schedulePrecision,details.timezone,now)) invalid("Le début du besoin doit être dans le futur.");
   if (details.block === "SPECIALIZED" && !details.specialty)
     invalid("Choisissez la spécialité du bloc.");
   if (details.block !== "SPECIALIZED" && details.specialty)

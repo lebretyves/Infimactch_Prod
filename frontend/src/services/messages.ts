@@ -1,4 +1,5 @@
 ﻿export const reasonLabels: Record<string, string> = {
+  SCHEDULE_UNCONFIRMED: "Horaires précis à confirmer.",
   QUALIFICATION_MISSING: "Le diplôme requis n’est pas renseigné.",
   RPPS_NOT_CHECKED: "Vérifiez votre numéro professionnel dans Mon dossier.",
   RPPS_PENDING: "La vérification professionnelle est encore en attente.",
