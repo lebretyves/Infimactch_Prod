@@ -1,3 +1,4 @@
+import {cleanupSharedRateLimits} from "../security/shared-rate-limit";
 import {RefreshService,RefreshModule,PROVIDERS,providerName} from "../public-data/refresh.service";
 import {UseInterceptors} from "@nestjs/common";
 import {ExecutionTrace} from "./execution-trace";
@@ -37,6 +38,7 @@ export class CloudJobsController {
  }
  @Post("maintenance") async maintenance(@Headers("x-infimatch-token") token:string){
   this.authorize(token);
+  await cleanupSharedRateLimits(this.db,500);
   const closures=await processClosures(this.db,5);
   if(closures.failed)throw Error("CLOSURE_RETRY_REQUIRED");
   await this.documents.reconcile(5);

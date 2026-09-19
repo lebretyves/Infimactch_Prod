@@ -1,4 +1,5 @@
 import { lazy } from "react";
+const Aide = lazy(() => import("./pages/Aide"));
 import { QualityRoot } from "./components/QualityRoot";
 const Compte = lazy(() => import("./pages/Compte"));
 const ReinitialiserMotDePasse = lazy(() => import("./pages/ReinitialiserMotDePasse"));
@@ -59,6 +60,7 @@ export const router = creerRouteur([{ element: <QualityRoot />, children: [
     ),
   },
   { path: "/", element: <AccueilPublic /> },
+  { path: "/aide", element: <Aide /> },
   { path: "/installer", element: <Installer /> },
   { path: "/accessibilite", element: <Accessibilite /> },
   { path: "/ecoconception", element: <Ecoconception /> },

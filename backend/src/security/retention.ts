@@ -201,6 +201,9 @@ export async function anonymizeAccount(em: SqlClient, accountId: string) {
   await em.query("DELETE FROM platform_admin WHERE user_id=$1",[accountId]);
   await em.query("DELETE FROM recovery_request WHERE account_id=$1", [accountId]);
   await em.query("DELETE FROM personal_correction_request WHERE account_id=$1", [accountId]);
+  // Free-text support messages can contain personal data, including staff replies.
+  await em.query("DELETE FROM support_ticket WHERE owner_id=$1", [accountId]);
+  await em.query("UPDATE support_reply SET author_id=NULL,body='Message supprimé après clôture du compte.' WHERE author_id=$1", [accountId]);
   await em.query("DELETE FROM google_identity WHERE account_id=$1", [accountId]);
   await em.query("DELETE FROM discord_link WHERE account_id=$1", [accountId]);
   await em.query("DELETE FROM discord_challenge WHERE account_id=$1", [accountId]);

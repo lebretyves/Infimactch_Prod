@@ -1,4 +1,4 @@
-﻿import "reflect-metadata";
+import "reflect-metadata";
 import { test, before, after } from "node:test";
 import assert from "node:assert/strict";
 import { randomUUID } from "node:crypto";
@@ -35,6 +35,8 @@ test('only the recorded import is muted, with confirmation and cancellation pres
   for(const kind of ['CONFIRMATION','CANCELLATION','APPLICATION_SUBMITTED'])assert.equal(demoNoticeSuppressed(muted,kind),false);
 });
 test('reminders skip the old batch in SQL and still notify the new mission',async()=>{
+  assert.equal((await automation.reminders()).processed,0); // Creation age is not publication age.
+  await db.query("UPDATE mission SET first_published_at=now()-interval '2 days' WHERE id=ANY($1::uuid[])",[[...mutedDemoMissionIds.slice(0,26),fresh]]);
   const r=await automation.reminders();assert.equal(r.processed,1);assert.equal(r.notifications,1);assert.equal(r.hasMore,false);
   const rows=await db.query("SELECT context->>'missionId' AS id FROM notification WHERE kind='REMINDER'");assert.deepEqual(rows.map(r=>r.id),[fresh]);
   assert.equal((await automation.reminders()).processed,0);

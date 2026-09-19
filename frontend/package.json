@@ -12,14 +12,15 @@
     "screenshots": "node scripts/screenshots.mjs",
     "audit:a11y": "node scripts/audit-a11y.mjs",
     "build:demo": "node scripts/prepare-ocr-assets.mjs && tsc -b && vite build --base ./ --outDir dist-demo --mode demo",
-    "test": "node --test scripts/test-api.mjs && node --experimental-strip-types --test scripts/test-idle-session.mjs scripts/test-registration-diplomas.mjs",
+    "test": "node --test scripts/test-api.mjs && node --experimental-strip-types --test scripts/test-idle-session.mjs scripts/test-registration-diplomas.mjs scripts/test-bank-fields.mjs scripts/test-cv-review.mjs scripts/test-help-guides.mjs",
     "test:integration": "node scripts/test-integration.mjs",
     "test:signup": "node scripts/test-signup.mjs",
     "test:availability": "node --experimental-strip-types scripts/test-availability-slots.mjs",
     "test:datetime": "node --experimental-strip-types scripts/test-paris-datetime.mjs",
     "test:pwa": "node --test scripts/test-pwa.mjs",
     "test:quality": "node scripts/test-quality.mjs",
-    "build:admin": "tsc -b && vite build --config vite.admin.config.ts"
+    "build:admin": "tsc -b && vite build --config vite.admin.config.ts",
+    "test:seo": "node scripts/test-seo-build.mjs && node --test scripts/test-help-routes.mjs"
   },
   "dependencies": {
     "pdfjs-dist": "^6.3.289",

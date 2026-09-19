@@ -1,3 +1,4 @@
+import {productionBackupBase} from './production-backup-paths.mjs';
 import {readFile,realpath,stat,writeFile,mkdir} from 'node:fs/promises';
 import {resolve,sep} from 'node:path';
 import {withRole,request,root} from './common.mjs';
@@ -7,7 +8,7 @@ try {
   let result;
   if(process.argv.includes('--self-test'))result=await restoreProbe({synthetic:true});
   else {
-    const base=await realpath(resolve(root,'data/backups/production'));
+    const base=await productionBackupBase();
     const folder=await realpath(resolve(process.argv[2]||base));
     if(!folder.startsWith(base+sep))throw Error('EXPECTED_PRODUCTION_BACKUP_SUBDIRECTORY');
     result=await withRole('operator',async token=>{

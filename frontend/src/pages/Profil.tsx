@@ -235,7 +235,7 @@ function Editor({ initial }: { initial: ProfessionalProfile }) {
               <fieldset className={s.cvImport}>
               <details open className={s.cvDisclosure} onToggle={event=>{const panel=event.currentTarget;if(!panel.open&&panel.querySelector('[role="alert"],[role="status"]'))panel.open=true;}}>
                 <summary>Importer un CV <span>Préremplir mes expériences</span></summary>
-              <CvImport addBlocked={Boolean(experienceEdit)} services={experienceServices.map(option => option.value)} existing={p.experience} onAdd={values=>change({experience:[...p.experience,...values]})}/>
+              <CvImport profile={p} onProfileApply={change} addBlocked={Boolean(experienceEdit)} services={experienceServices.map(option => option.value)} existing={p.experience} onAdd={values=>change({experience:[...p.experience,...values]})}/>
               </details>
               </fieldset>
               {!p.experience.length && (

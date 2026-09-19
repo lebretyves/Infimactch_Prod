@@ -636,7 +636,7 @@ function NurseMissions() {
         </div>
         <details className={s.searchHelp}>
           <summary>Comment fonctionne la localisation ?</summary>
-          <p>Choisissez une ville, un code postal ou une adresse dans les suggestions. La distance est mesurée à vol d’oiseau ; les offres sans coordonnées connues sont exclues lorsqu’un rayon est choisi. La recherche ne modifie pas votre zone de mobilité.</p>
+          <p>Choisissez une ville, un code postal ou une adresse dans les suggestions. La distance est mesurée à vol d’oiseau ; les offres sans coordonnées connues sont exclues lorsqu’un rayon est choisi. Cette ville et ce rayon filtrent uniquement votre recherche. Le taux de matching et les alertes de missions compatibles utilisent la position et le rayon de mobilité de votre profil : une recherche dans une autre ville ne les modifie pas. Pour changer la zone des alertes, ouvrez « Disponibilités et mobilité ».</p>
         </details>
         {formError && (
           <p className={u.error} role="alert">

@@ -1,3 +1,4 @@
+import {EMAIL_CORRELATION_HEADER} from './email-delivery';
 import {randomUUID} from 'node:crypto';
 import {Database, SqlClient} from '../database/database';
 import {DocumentsService} from '../documents/documents.module';
@@ -86,7 +87,7 @@ export async function dispatchMissionEmails(db:Database,documents:DocumentsServi
     let failure='SEND_RESULT_UNKNOWN',permanent=false,retry=false,requested=false;
     try {
       const doc=await documents.read(item.user_id,item.document_id);
-      const body={sender:item.payload.from,to:[item.recipient],subject:item.payload.subject,html_body:item.payload.html,text_body:item.payload.text,attachments:[{filename:(item.kind==='CONFIRMATION'?'confirmation':'annulation')+'-mission-'+item.assignment_id+'.pdf',fileblob:doc.data.toString('base64'),mimetype:'application/pdf'}]};
+      const body={sender:item.payload.from,to:[item.recipient],subject:item.payload.subject,html_body:item.payload.html,text_body:item.payload.text,custom_headers:[{header:EMAIL_CORRELATION_HEADER,value:item.id}],attachments:[{filename:(item.kind==='CONFIRMATION'?'confirmation':'annulation')+'-mission-'+item.assignment_id+'.pdf',fileblob:doc.data.toString('base64'),mimetype:'application/pdf'}]};
       requested=true;
       const response=await transport('https://api.smtp2go.com/v3/email/send',{method:'POST',headers:{'X-Smtp2go-Api-Key':process.env.SMTP2GO_API_KEY,'Content-Type':'application/json'},body:JSON.stringify(body),signal:AbortSignal.timeout(15000)});
       if(!response.ok) {
@@ -99,10 +100,10 @@ export async function dispatchMissionEmails(db:Database,documents:DocumentsServi
       if(result.data?.succeeded!==1 || result.data.failed!==0 || !result.data.email_id) {
         permanent=result.data?.succeeded===0;failure='SMTP2GO_RECEIPT_INVALID';throw new Error(failure);
       }
-      await db.query("UPDATE mission_email SET status='SENT',provider_id=$3,sent_at=now(),lease_until=NULL,last_error=NULL WHERE id=$1 AND lease_token=$2",[item.id,item.token,result.data.email_id]);
+      await db.query("UPDATE mission_email SET status='SENT',provider_id=COALESCE(provider_id,$3),sent_at=COALESCE(sent_at,now()),accepted_at=COALESCE(accepted_at,now()),lease_until=NULL,last_error=NULL WHERE id=$1 AND lease_token=$2 AND status='SENDING'",[item.id,item.token,result.data.email_id]);
       sent++;
     } catch {
-      await db.query("UPDATE mission_email SET status=$3,last_error=$4,lease_until=NULL,available_at=now()+interval '60 seconds'*power(2,LEAST(attempts,5)) WHERE id=$1 AND lease_token=$2",[item.id,item.token,permanent?'FAILED':((retry || !requested) && item.attempts<4)?'PENDING':'UNCERTAIN',failure]);
+      await db.query("UPDATE mission_email SET status=$3,last_error=$4,lease_until=NULL,available_at=now()+interval '60 seconds'*power(2,LEAST(attempts,5)) WHERE id=$1 AND lease_token=$2 AND status='SENDING'",[item.id,item.token,permanent?'FAILED':((retry || !requested) && item.attempts<4)?'PENDING':'UNCERTAIN',failure]);
     }
   }
   return {configured:true,sent};

@@ -10,8 +10,8 @@
     "db:migrate": "tsx src/cli.ts migrate",
     "seed": "tsx src/cli.ts seed",
     "test": "npm run test:compile && node --test \".test-build/test/unit/*.spec.js\"",
-    "test:integration": "npm run test:compile && node --test \".test-build/test/integration/*.spec.js\"",
-    "coverage": "npm run test:compile && c8 --reporter=text --reporter=json-summary --reporter=html --reports-dir=../docs/proofs/coverage node --test \".test-build/test/unit/*.spec.js\" \".test-build/test/integration/*.spec.js\"",
+    "test:integration": "npm run test:compile && node ../scripts/security/test-suite.cjs integration",
+    "coverage": "npm run test:compile && c8 --all --src=src --extension=.ts --include=\"src/**\" --include=\".test-build/src/**\" --reporter=text --reporter=json-summary --reporter=html --reports-dir=../docs/proofs/coverage node ../scripts/security/test-suite.cjs coverage",
     "test:compile": "tsc --outDir .test-build",
     "worker": "node --use-system-ca dist/worker.js",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\""

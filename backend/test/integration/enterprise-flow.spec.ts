@@ -1,3 +1,4 @@
+import {fixtureDate} from './fixture-dates';
 import "reflect-metadata";
 import {before,after,test} from "node:test";
 import assert from "node:assert/strict";
@@ -11,14 +12,14 @@ before(async()=>{const url=new URL(process.env.DATABASE_URL!);if(process.env.NOD
 after(async()=>{await app?.close();});
 async function account(family:"ENTERPRISE"|"NURSE"){
  const agent=request.agent(app.getHttpServer()),csrf=await agent.get('/api/v1/auth/csrf').expect(200);
- const body={email:randomUUID()+'@example.invalid',password:'Fictional-production-flow-123',family,termsVersion:'2026-09-14',...(family==='ENTERPRISE'?{organizationType:'ESTABLISHMENT',name:'Entreprise FICTIVE',address:'1 rue fictive Paris',referent:'Contact fictif',finess:'000000001'}:{})};
+ const body={email:randomUUID()+'@example.invalid',password:'Fictional-production-flow-123',family,termsVersion:'2026-09-14',...(family==='NURSE'?{profile:{displayName:'Professionnel FICTIF',qualifications:[],skills:[],experience:[],available:[],unavailable:[],latitude:null,longitude:null,radiusKm:null,acceptedShifts:[],preferredShifts:[],visible:false}}:{}),...(family==='ENTERPRISE'?{organizationType:'ESTABLISHMENT',name:'Entreprise FICTIVE',address:'1 rue fictive Paris',referent:'Contact fictif',finess:'000000001'}:{})};
  const response=await agent.post('/api/v1/auth/register').set('Origin',process.env.APP_ORIGIN!).set('X-CSRF-Token',csrf.body.csrfToken).set('Idempotency-Key',randomUUID()).send(body).expect(201);
  const me=await agent.get('/api/v1/auth/me').expect(200);return {agent,id:response.body.user.id,token:response.body.csrfToken,org:me.body.organizations[0]?.id};
 }
 function post(a:Awaited<ReturnType<typeof account>>,path:string,body?:object){return a.agent.post('/api/v1/'+path).set('Origin',process.env.APP_ORIGIN!).set('X-CSRF-Token',a.token).set('Idempotency-Key',randomUUID()).send(body);}
 test('enterprise need becomes a tracked direct mission visible to nurses only after publication',async()=>{
  const owner=await account('ENTERPRISE'),other=await account('ENTERPRISE'),nurse=await account('NURSE');
- const slot={start:'2037-02-10T08:00:00Z',end:'2037-02-10T16:00:00Z'};
+ const slot={start:fixtureDate('2037-02-10T08:00:00Z'),end:fixtureDate('2037-02-10T16:00:00Z')};
  const details={...slot,qualification:'IDE',service:'URGENCES',shift:'DAY',headcount:1,population:'ADULT',block:'NONE',requiredSkills:[],minExperienceMonths:0,address:'1 rue fictive Paris'};
  const need=await post(owner,'staffing-requests',{establishmentId:owner.org,title:'Besoin FICTIF suivi',description:'Besoin de recette strictement fictif',details}).expect(201);
  const dashboard=await owner.agent.get('/api/v1/dashboards').expect(200);assert.equal(dashboard.body.activity.needs,1);assert.equal(dashboard.body.recentNeeds[0].id,need.body.id);
@@ -35,7 +36,7 @@ test('enterprise need becomes a tracked direct mission visible to nurses only af
  await post(other,'missions/'+id+'/publish').expect(404);
  const key=randomUUID();await post(owner,'missions/'+id+'/publish').set('Idempotency-Key',key).expect(201);await post(owner,'missions/'+id+'/publish').set('Idempotency-Key',key).expect(201);
  await nurse.agent.get('/api/v1/listings/m_'+id).expect(200);
- await nurse.agent.put('/api/v1/profile').set('Origin',process.env.APP_ORIGIN!).set('X-CSRF-Token',nurse.token).send({displayName:'Professionnel FICTIF',qualifications:['IDE'],skills:[],experience:[],available:[slot],unavailable:[],latitude:48,longitude:2,radiusKm:30,acceptedShifts:['DAY'],preferredShifts:[],visible:true}).expect(200);
+ await nurse.agent.put('/api/v1/profile').set('Origin',process.env.APP_ORIGIN!).set('X-CSRF-Token',nurse.token).send({displayName:(await nurse.agent.get('/api/v1/profile').expect(200)).body.display_name,qualifications:['IDE'],skills:[],experience:[],available:[slot],unavailable:[],latitude:48,longitude:2,radiusKm:30,acceptedShifts:['DAY'],preferredShifts:[],visible:true}).expect(200);
  // Isolated fixture only: no public route permits declaring an RPPS as verified.
  await db.query("UPDATE profile SET rpps_status='FOUND' WHERE user_id=$1",[nurse.id]);
  const matches=await nurse.agent.get('/api/v1/me/matches?limit=50').expect(200);assert.ok(matches.body.items.some((m:any)=>m.missionId===id));
@@ -54,8 +55,8 @@ test('enterprise need becomes a tracked direct mission visible to nurses only af
 
 test('mixed recommendations keep eligible internal missions distinct from active external offers',async()=>{
  const owner=await account('ENTERPRISE'),nurse=await account('NURSE');
- const slot={start:'2037-10-24T20:00:00+02:00',end:'2037-10-25T06:00:00+01:00'};
- await nurse.agent.put('/api/v1/profile').set('Origin',process.env.APP_ORIGIN!).set('X-CSRF-Token',nurse.token).send({displayName:'Fictional mixed profile',qualifications:['IDE'],skills:[],experience:[],available:[slot],unavailable:[],latitude:48,longitude:2,radiusKm:30,acceptedShifts:['NIGHT'],preferredShifts:[],visible:false}).expect(200);
+ const slot={start:fixtureDate('2037-10-24T20:00:00+02:00'),end:fixtureDate('2037-10-25T06:00:00+01:00')};
+ await nurse.agent.put('/api/v1/profile').set('Origin',process.env.APP_ORIGIN!).set('X-CSRF-Token',nurse.token).send({displayName:(await nurse.agent.get('/api/v1/profile').expect(200)).body.display_name,qualifications:['IDE'],skills:[],experience:[],available:[slot],unavailable:[],latitude:48,longitude:2,radiusKm:30,acceptedShifts:['NIGHT'],preferredShifts:[],visible:false}).expect(200);
  await db.query("UPDATE profile SET rpps_status='FOUND' WHERE user_id=$1",[nurse.id]);
  const ids:string[]=[];
  for(const name of ['Older open','Recent open','Closed recent','Past open']){

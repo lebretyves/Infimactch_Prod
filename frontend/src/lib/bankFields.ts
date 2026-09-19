@@ -16,4 +16,4 @@ export function parseBankText(text:string):BankFields {
  return result;
 }
 
-export function completeBankText(text:string){const fields=parseBankText(text);return Boolean(fields.iban&&fields.bic&&fields.holder);}
+export function completeBankText(text:string){const fields=parseBankText(text);return Boolean(fields.iban&&fields.holder);}

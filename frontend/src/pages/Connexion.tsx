@@ -195,6 +195,7 @@ export default function Connexion() {
       </form>
       <p><Link to="/mot-de-passe-oublie">Mot de passe oublié ? Retrouver mon accès</Link></p>
       <GoogleConnexion password={motDePasse} />
+      <p><Link to="/aide">Aide et support</Link></p>
       <ProSanteConnect />
 
       <p className={s.bascule}>

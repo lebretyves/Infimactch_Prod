@@ -1,4 +1,4 @@
-﻿import "reflect-metadata";
+import "reflect-metadata";
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import { plainToInstance } from "class-transformer";
@@ -21,4 +21,13 @@ test("every diploma year is an integer with sensible bounds and cannot be future
 });
 test("legacy diploma details remain accepted when optional additions are omitted",()=>{
  assert.equal(errors({diploma:"Ancien intitulé conservé",diplomaYear:2010,firstName:"Camille"}).length,0);
+});
+
+test("API validates each specialist diploma chronology without merging diploma years",()=>{
+ for(const field of ['iadeDiplomaYear','ibodeDiplomaYear']) {
+  assert.throws(()=>validateProfile({...base,details:{ideDiplomaYear:2020,[field]:2019}} as ProfileDto),/cannot precede/);
+  assert.doesNotThrow(()=>validateProfile({...base,details:{ideDiplomaYear:2020,[field]:2020}} as ProfileDto));
+  assert.doesNotThrow(()=>validateProfile({...base,details:{ideDiplomaYear:2015,[field]:2020}} as ProfileDto));
+ }
+ assert.doesNotThrow(()=>validateProfile({...base,details:{iadeDiplomaYear:2020}} as ProfileDto));
 });

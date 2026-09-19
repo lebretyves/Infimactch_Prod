@@ -1,0 +1,15 @@
+{
+  "status": "PASS",
+  "pdfPages": 12,
+  "pptxSlides": 12,
+  "speakerNotes": 12,
+  "localLinks": "PASS",
+  "textBounds": "PASS (generator)",
+  "visualPreviews": [
+    1,
+    2,
+    6,
+    11
+  ],
+  "networkCallsDuringGeneration": 0
+}

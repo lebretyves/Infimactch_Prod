@@ -1,3 +1,5 @@
+import {PARSER_VERSION} from '../../src/public-data/offer-parser';
+import {fixtureDate} from './fixture-dates';
 import { normalizeOffer } from "../../src/public-data/offers";
 import {
   AutomationService,
@@ -11,7 +13,7 @@ import { DocumentsService } from "../../src/documents/documents.module";
 import { MatchingService } from "../../src/matching/matching.module";
 import { missionSelect } from "../../src/missions/missions.service";
 import { RppsService, RppsResult } from "../../src/profiles/rpps";
-import { test, before as beforeAll, after as afterAll } from "node:test";
+import { test, beforeEach, before as beforeAll, after as afterAll } from "node:test";
 import { expect } from "expect";
 import { INestApplication } from "@nestjs/common";
 import request from "supertest";
@@ -28,6 +30,7 @@ async function account(family: string, kind?: string) {
     password: "Fictional-test-password-123",
     family,
     termsVersion: "2026-09-14",
+    ...(family==='NURSE'?{profile:{displayName:'Infirmier FICTIF',qualifications:[],skills:[],experience:[],available:[],unavailable:[],latitude:null,longitude:null,radiusKm:null,acceptedShifts:[],preferredShifts:[],visible:false}}:{}),
   };
   if (kind)
     Object.assign(body, {
@@ -92,6 +95,8 @@ beforeAll(async () => {
   await app.listen(0, "127.0.0.1");
   db = app.get(Database);
 });
+// Cases share business fixtures, but unrelated cases must not consume each other's HTTP quotas.
+beforeEach(async()=>{await db.query("DELETE FROM rate_limit_bucket");});
 afterAll(async () => {
   await app?.close();
 });
@@ -105,9 +110,9 @@ test("full internal journey and concurrency, with isolated fixture RPPS", async 
     "INSERT INTO agency_link(agency_id,establishment_id) VALUES($1,$2)",
     [agency.org, facility.org],
   );
-  const slot = { start: "2030-01-10T20:00:00Z", end: "2030-01-11T06:00:00Z" };
+  const slot = { start: fixtureDate("2030-01-10T20:00:00Z"), end: fixtureDate("2030-01-11T06:00:00Z") };
   const profile = {
-    displayName: "Infirmier FICTIF",
+    displayName: (await n.agent.get("/api/v1/profile").expect(200)).body.display_name,
     qualifications: ["IDE"],
     skills: ["TRIAGE"],
     experience: [],
@@ -133,7 +138,7 @@ test("full internal journey and concurrency, with isolated fixture RPPS", async 
       .set("Origin", process.env.APP_ORIGIN!)
       .set("X-CSRF-Token", c.token)
       .set("Idempotency-Key", randomUUID())
-      .send(profile)
+      .send({...profile,displayName:(await c.agent.get("/api/v1/profile").expect(200)).body.display_name})
       .expect(200);
   }
   await post(n, "internal/automation/reminders").expect(401);
@@ -317,7 +322,7 @@ test("full internal journey and concurrency, with isolated fixture RPPS", async 
     201,
   );
   await db.query(
-    "UPDATE mission SET created_at=now()-interval '2 hours' WHERE id=$1",
+    "UPDATE mission SET first_published_at=now()-interval '2 days' WHERE id=$1",
     [id],
   );
   await workflow("reminders");
@@ -414,7 +419,7 @@ test("full internal journey and concurrency, with isolated fixture RPPS", async 
     .set("Origin", process.env.APP_ORIGIN!)
     .set("X-CSRF-Token", assignedNurse.token)
     .set("Idempotency-Key", randomUUID())
-    .send({ ...profile, available: [] })
+    .send({ ...profile, displayName:(await assignedNurse.agent.get("/api/v1/profile").expect(200)).body.display_name, available: [] })
     .expect(409);
   const bankKey = randomUUID();
   const bank = await n.agent
@@ -783,8 +788,8 @@ test("sensitive mission commands replay atomically, reject changed content and r
     requiredSkills: [],
     desiredSkills: [],
     minExperienceMonths: 0,
-    start: "2034-01-10T08:00:00Z",
-    end: "2034-01-10T16:00:00Z",
+    start: fixtureDate("2034-01-10T08:00:00Z"),
+    end: fixtureDate("2034-01-10T16:00:00Z"),
     shift: "DAY",
     address: "Lieu fictif de recette",
     latitude: 48,
@@ -832,7 +837,7 @@ test("sensitive mission commands replay atomically, reject changed content and r
     establishmentId: facility.org,
     title: "FICTIF besoin",
     description: "FICTIF besoin de recette",
-    details: {qualification:'IDE',service:'URGENCES',start:'2035-01-10T06:00:00Z',end:'2035-01-10T14:00:00Z',shift:'DAY',headcount:1,population:'ADULT',block:'NONE',requiredSkills:[],minExperienceMonths:0,address:'1 rue fictive Paris'},
+    details: {qualification:'IDE',service:'URGENCES',start:fixtureDate('2035-01-10T06:00:00Z'),end:fixtureDate('2035-01-10T14:00:00Z'),shift:'DAY',headcount:1,population:'ADULT',block:'NONE',requiredSkills:[],minExperienceMonths:0,address:'1 rue fictive Paris'},
   };
   const n1 = await post(facility, "staffing-requests", need)
     .set("Idempotency-Key", needKey)
@@ -1096,8 +1101,8 @@ test("partial external comparison is private and incomplete leads require explic
     expect(publicDetail.body.profileCorrespondence).toBeUndefined();
     const filters = {
       qualifications: ["IDE"],
-      start: "2030-01-10T08:00:00Z",
-      end: "2030-01-10T20:00:00Z",
+      start: fixtureDate("2030-01-10T08:00:00Z"),
+      end: fixtureDate("2030-01-10T20:00:00Z"),
       limit: 50,
     };
     const strict = await post(first, "listings/search", filters).expect(201);
@@ -1138,7 +1143,7 @@ test("stored parser is exposed with proof and stable reimports; preferences pers
  await importOffers(db,[raw],false);
  const [stored]=await db.query("SELECT * FROM external_offer WHERE source_id=$1",[id]);
  const first=stored.parsed_offer;
- expect(first.parserVersion).toBe("4.0.0");
+ expect(first.parserVersion).toBe(PARSER_VERSION);
  const detail=await request(app.getHttpServer()).get("/api/v1/listings/e_"+stored.id).expect(200);
  expect(detail.body.parsedOffer.inputHash).toBe(first.inputHash);
  expect(detail.body.parsed_offer).toBeUndefined();
@@ -1247,12 +1252,14 @@ test("freshness never treats a bounded import as a complete snapshot",async()=>{
 test("every OpenAPI operation has a success contract and controlled errors",async()=>{
  const r=await readOpenApi();
  const schemas=r.body.components.schemas;
+ const missing:string[]=[];
  for(const [path,item]of Object.entries(r.body.paths) as any){for(const method of ['get','post','put','patch','delete']){
   const op=item[method];if(!op)continue;
-  const response=op.responses[method==='post'?201:200];
-  if(!response?.content)throw Error('Missing success schema: '+method+' '+path);
+  const responses=Object.entries(op.responses).filter(([status])=>/^2\d\d$/.test(status)).map(([,value])=>value) as any[];
+  if(!responses.some(response=>response?.content))missing.push(method+' '+path);
   expect(op.responses[403].content['application/json'].schema.$ref).toBe('#/components/schemas/Error');
  }}
+ expect(missing).toEqual([]);
  expect(schemas.AuthReceipt.required).toContain('csrfToken');expect(schemas.Profile.properties.available.type).toBe('array');
  expect(r.body.paths['/api/v1/auth/google'].post.responses[201].content['application/json'].schema.oneOf.length).toBe(2);
  expect(r.body.paths['/api/v1/me/documents/{id}'].get.responses[200].content['application/pdf'].schema.format).toBe('binary');
@@ -1265,7 +1272,7 @@ test("reminders exclude disabled accounts and do not duplicate delivery on repla
   await db.query("UPDATE account SET active=false WHERE id=$1",[disabled.id]);
   const [template]=await db.query("SELECT * FROM mission LIMIT 1");
   const missionId=randomUUID();
-  await db.query("INSERT INTO mission SELECT * FROM jsonb_populate_record(NULL::mission,$1::jsonb)",[JSON.stringify({...template,id:missionId,agency_id:owner.org,establishment_id:recipientFacility.org,status:'OPEN',start_at:'2036-01-01T08:00:00Z',end_at:'2036-01-01T16:00:00Z',created_at:'2020-01-01T00:00:00Z'})]);
+  await db.query("INSERT INTO mission SELECT * FROM jsonb_populate_record(NULL::mission,$1::jsonb)",[JSON.stringify({...template,id:missionId,agency_id:owner.org,establishment_id:recipientFacility.org,status:'OPEN',start_at:'2036-01-01T08:00:00Z',end_at:'2036-01-01T16:00:00Z',created_at:'2020-01-01T00:00:00Z',first_published_at:'2020-01-01T00:00:00Z',reminders_enabled:true,last_reminder_at:null,reminder_count:0})]);
   const service=app.get(AutomationService);
   await service.reminders();await service.reminders();
   const rows=await db.query("SELECT n.user_id FROM notification n JOIN outbox e ON e.id=n.event_id WHERE n.kind='REMINDER' AND e.payload->>'missionId'=$1",[missionId]);

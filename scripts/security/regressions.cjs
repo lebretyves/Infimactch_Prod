@@ -1,4 +1,4 @@
-﻿const assert=require('node:assert/strict');const {randomUUID}=require('node:crypto');const {readFile,writeFile,stat,utimes}=require('node:fs/promises');const {resolve}=require('node:path');const {spawnSync}=require('node:child_process');
+const assert=require('node:assert/strict');const {randomUUID}=require('node:crypto');const {readFile,writeFile,stat,utimes}=require('node:fs/promises');const {resolve}=require('node:path');const {spawnSync}=require('node:child_process');
 const {Database}=require('../../backend/dist/database/database');const {DocumentsService}=require('../../backend/dist/documents/documents.module');const {MissionsService}=require('../../backend/dist/missions/missions.service');const {MatchingService}=require('../../backend/dist/matching/matching.module');const {AutomationService}=require('../../backend/dist/automation/automation.module');const {AuthService}=require('../../backend/dist/auth/auth.module');
 if(!new URL(process.env.DATABASE_URL).pathname.endsWith('_test'))throw Error('Isolated test database required');
 (async()=>{const db=await new Database().connect();const docs=new DocumentsService(db),missions=new MissionsService(db),auth=new AuthService(db),matching=new MatchingService(db),automation=new AutomationService(db,docs);const checks=[];
@@ -8,7 +8,7 @@ try{
  const [agency]=await db.query('SELECT organization_id AS id FROM membership WHERE user_id=$1',[actor.id]);
  const [facility]=await db.query("INSERT INTO organization(kind,name,address,referent,finess) VALUES('ESTABLISHMENT','FICTIF','Adresse fictive','Fictif','000000001') RETURNING id");
  await db.query('INSERT INTO agency_link VALUES($1,$2)',[agency.id,facility.id]);
- const slot={start:'2032-01-10T20:00:00Z',end:'2032-01-11T06:00:00Z'};
+ const slotStart=new Date(Date.now()+30*86400000);slotStart.setUTCHours(20,0,0,0);const slot={start:slotStart.toISOString(),end:new Date(slotStart.getTime()+10*3600000).toISOString()};
  const n=await auth.register({...base,email:randomUUID()+'@example.invalid',family:'NURSE',profile:{displayName:'FICTIF',qualifications:['IDE'],skills:['TRIAGE'],experience:[],available:[slot],unavailable:[],latitude:48,longitude:2,radiusKm:30,acceptedShifts:['NIGHT'],preferredShifts:['NIGHT'],visible:true}});
  await db.query("UPDATE profile SET rpps_status='FOUND' WHERE user_id=$1",[n.id]);
  const dto={...slot,agencyId:agency.id,establishmentId:facility.id,title:'Mission FICTIVE',description:'Description fictive de test',qualification:'IDE',service:'URGENCES',population:'ADULT',block:'NONE',requiredSkills:['TRIAGE'],desiredSkills:[],minExperienceMonths:0,shift:'NIGHT',address:'Lieu fictif',latitude:48,longitude:2,hourlySalary:25};
