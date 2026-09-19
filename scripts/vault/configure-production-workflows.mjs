@@ -1,3 +1,4 @@
+import {offerSchedule,LEGACY_DAILY_NAME,OFFER_WORKFLOW_NAMES} from '../n8n/offer-schedules.mjs';
 import {resilientReminders} from "../n8n/reminder-resilience.mjs";
 import {randomUUID} from 'node:crypto';
 import {readFile,writeFile,mkdir} from 'node:fs/promises';
@@ -36,18 +37,15 @@ try{
  const schedule={id:randomUUID(),name:'Toutes les 30 minutes',type:'n8n-nodes-base.scheduleTrigger',typeVersion:1.2,position:[0,0],parameters:{rule:{interval:[{field:'minutes',minutesInterval:30}]}}};
  workflows.push({name:'InfiMatch production - reprise et rappels',nodes:[schedule,call('Traiter la file','https://infimactch-prod-backend.vercel.app/api/v1/internal/automation/jobs/dispatch',[240,0]),call('Rappels','https://infimactch-prod-backend.vercel.app/api/v1/internal/automation/reminders',[480,0])],connections:{'Toutes les 30 minutes':{main:[[{node:'Traiter la file',type:'main',index:0}]]},'Traiter la file':{main:[[{node:'Rappels',type:'main',index:0}]]}},settings});
  const daily={id:randomUUID(),name:'Chaque jour',type:'n8n-nodes-base.scheduleTrigger',typeVersion:1.2,position:[0,0],parameters:{rule:{interval:[{field:'days',daysInterval:1,triggerAtHour:4,triggerAtMinute:15}]}}};
- if(process.argv.includes('--enable-maintenance'))workflows.push({name:'InfiMatch production - maintenance quotidienne',nodes:[daily,call('Actualiser les offres','https://infimactch-prod-backend.vercel.app/api/v1/internal/automation/jobs/refresh-offers',[240,0]),call('Maintenance','https://infimactch-prod-backend.vercel.app/api/v1/internal/automation/jobs/maintenance',[480,0])],connections:{'Chaque jour':{main:[[{node:'Actualiser les offres',type:'main',index:0}]]},'Actualiser les offres':{main:[[{node:'Maintenance',type:'main',index:0}]]}},settings:{...settings,timezone:'Europe/Paris'}});
- const refreshOnly={name:'InfiMatch production - actualisation quotidienne',nodes:[daily,call('Actualiser les offres','https://infimactch-prod-backend.vercel.app/api/v1/internal/automation/jobs/refresh-offers',[240,0])],connections:{'Chaque jour':{main:[[{node:'Actualiser les offres',type:'main',index:0}]]}},settings:{...settings,timezone:'Europe/Paris'}};
- if(!process.argv.includes('--enable-maintenance'))workflows.push(refreshOnly);
+ if(process.argv.includes('--enable-maintenance'))workflows.push({name:'InfiMatch production - maintenance quotidienne',nodes:[daily,call('Maintenance','https://infimactch-prod-backend.vercel.app/api/v1/internal/automation/jobs/maintenance',[240,0])],connections:{'Chaque jour':{main:[[{node:'Maintenance',type:'main',index:0}]]}},settings:{...settings,timezone:'Europe/Paris'}});
+ workflows.push(offerSchedule('FRANCE_TRAVAIL',credential),offerSchedule('JOBSPIPE',credential));
  const periodic=workflows.find(w=>w.name==='InfiMatch production - reprise et rappels');
  periodic.nodes.splice(1,0,{id:randomUUID(),name:'Verifier disponibilite API',type:'n8n-nodes-base.httpRequest',typeVersion:4.2,position:[120,-160],parameters:{method:'GET',url:'https://infimactch-prod-backend.vercel.app/api/v1/health',options:{timeout:30000}}});
  periodic.connections['Toutes les 30 minutes']={main:[[{node:'Verifier disponibilite API',type:'main',index:0}]]};
  periodic.connections['Verifier disponibilite API']={main:[[{node:'Traiter la file',type:'main',index:0}]]};
- periodic.nodes.push(call('Poursuivre les collectes','https://infimactch-prod-backend.vercel.app/api/v1/internal/automation/jobs/refresh-offers',[720,0]));
- periodic.connections.Rappels={main:[[{node:'Poursuivre les collectes',type:'main',index:0}]]};
  resilientReminders(periodic);
  await mkdir(resolve(root,'docs/n8n'),{recursive:true});
- for(const workflow of workflows){const old=existing.find(x=>x.name===workflow.name);const saved=old?await api('/rest/workflows/'+old.id,'PATCH',workflow):await api('/rest/workflows','POST',{...workflow,projectId});await api('/rest/workflows/'+saved.id+'/activate','POST',{versionId:saved.versionId});const clean=structuredClone(workflow);for(const node of clean.nodes)delete node.credentials;await writeFile(resolve(root,'docs/n8n/'+workflow.name.replace(/[^a-z0-9]+/gi,'-')+'.json'),JSON.stringify(clean,null,2)+'\n');console.log(JSON.stringify({workflow:workflow.name,id:saved.id,published:true}));}
+ for(const workflow of workflows){const old=existing.find(x=>x.name===workflow.name)||(workflow.name===OFFER_WORKFLOW_NAMES.FRANCE_TRAVAIL?existing.find(x=>x.name===LEGACY_DAILY_NAME):undefined);const saved=old?await api('/rest/workflows/'+old.id,'PATCH',workflow):await api('/rest/workflows','POST',{...workflow,projectId});await api('/rest/workflows/'+saved.id+'/activate','POST',{versionId:saved.versionId});const clean=structuredClone(workflow);for(const node of clean.nodes)delete node.credentials;await writeFile(resolve(root,'docs/n8n/'+workflow.name.replace(/[^a-z0-9]+/gi,'-')+'.json'),JSON.stringify(clean,null,2)+'\n');console.log(JSON.stringify({workflow:workflow.name,id:saved.id,published:true}));}
 }catch(e){console.error('Production workflows configuration failed: '+e.message);process.exitCode=1;}finally{ws.close();}
 
 

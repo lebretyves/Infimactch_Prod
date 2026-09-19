@@ -9,3 +9,13 @@ test("cloud dispatch authenticates before processing and bounds work",async()=>{
  assert.deepEqual(await jobs.dispatch(process.env.SERVICE_TOKEN),{processed:0});assert.deepEqual(calls,["events:1","notifications:5","heartbeat"]);
  }finally{if(old===undefined)delete process.env.SERVICE_TOKEN;else process.env.SERVICE_TOKEN=old;}
 });
+
+test('scheduled provider endpoint authenticates and calls only the selected provider',async()=>{
+ const old=process.env.SERVICE_TOKEN;process.env.SERVICE_TOKEN='fixture-service-token';
+ try{
+  const calls:string[]=[];const jobs=new CloudJobsController({} as any,{} as any,{} as any,{} as any,{runBatch:async(p:string)=>{calls.push(p);return {provider:p,status:'SUCCESS'};}} as any);
+  await assert.rejects(jobs.refreshProvider('wrong','JOBSPIPE'));await assert.rejects(jobs.refreshProvider('fixture-service-token','UNKNOWN'));
+  assert.deepEqual(calls,[]);
+  assert.equal((await jobs.refreshProvider('fixture-service-token','FRANCE_TRAVAIL')).provider,'FRANCE_TRAVAIL');assert.deepEqual(calls,['FRANCE_TRAVAIL']);
+ }finally{if(old===undefined)delete process.env.SERVICE_TOKEN;else process.env.SERVICE_TOKEN=old;}
+});

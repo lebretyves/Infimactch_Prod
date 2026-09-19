@@ -22,3 +22,11 @@ test('scheduled batches follow pages, retain page checkpoints and stop on provid
  calls=0;service.run=(async()=>{calls++;return {provider:'FRANCE_TRAVAIL',status:'RETRY_REQUIRED',accepted:0};}) as any;
  await service.runBatch('FRANCE_TRAVAIL');assert.equal(calls,1);
 });
+
+test('quota and idle refreshes never run geolocation repair',async()=>{
+ const service=new RefreshService({query:async()=>{throw Error('Unexpected geolocation query');}} as any);
+ for(const status of ['QUOTA_EXHAUSTED','COOLDOWN','UP_TO_DATE','RETRY_REQUIRED']){
+  service.run=(async()=>({provider:'JOBSPIPE',status,accepted:0})) as any;
+  assert.equal((await service.runBatch('JOBSPIPE')).geolocation,null);
+ }
+});

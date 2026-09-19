@@ -1,4 +1,6 @@
-﻿# Planification France Travail
+> Depuis le 19 septembre 2026, cette planification Windows est historique : France Travail passe par n8n à 07 h et 15 h, Europe/Paris. Voir [le réglage actuel](quality/IMPORTS_SOBRIETE_2026-09-19.md).
+
+# Planification France Travail
 
 Tache Windows : InfiMatch-FranceTravail-Import.
 Tous les jours : 00h, 07h, 09h, 11h, 13h, 15h, 17h, heure Paris (fuseau Windows Romance Standard Time).

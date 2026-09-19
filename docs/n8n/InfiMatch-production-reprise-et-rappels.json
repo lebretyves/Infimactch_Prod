@@ -109,42 +109,7 @@
       "waitBetweenTries": 5000
     },
     {
-      "id": "46aac199-0a8f-4fed-be49-c7adcf15bfa3",
-      "name": "Poursuivre les collectes",
-      "type": "n8n-nodes-base.httpRequest",
-      "typeVersion": 4.2,
-      "position": [
-        1120,
-        120
-      ],
-      "parameters": {
-        "method": "POST",
-        "url": "https://infimactch-prod-backend.vercel.app/api/v1/internal/automation/jobs/refresh-offers",
-        "authentication": "genericCredentialType",
-        "genericAuthType": "httpHeaderAuth",
-        "sendHeaders": true,
-        "headerParameters": {
-          "parameters": [
-            {
-              "name": "X-N8N-Execution-Id",
-              "value": "={{ $execution.id }}"
-            },
-            {
-              "name": "X-N8N-Workflow-Id",
-              "value": "={{ $workflow.id }}"
-            }
-          ]
-        },
-        "options": {
-          "timeout": 240000
-        }
-      },
-      "retryOnFail": true,
-      "maxTries": 3,
-      "waitBetweenTries": 5000
-    },
-    {
-      "id": "958b1453-c36e-402d-acc6-00beff9e574d",
+      "id": "bea7c1a3-895f-4264-8b62-306857db2742",
       "name": "Valider le lot de rappels",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
@@ -157,7 +122,7 @@
       }
     },
     {
-      "id": "8aa3788d-66e0-40b5-9fff-2ae14f312efd",
+      "id": "a019caae-5951-498f-ab27-50203a803d41",
       "name": "Encore des rappels",
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.2,
@@ -175,7 +140,7 @@
           },
           "conditions": [
             {
-              "id": "c6dd9384-11e9-4653-9f9b-68e8e0c415a2",
+              "id": "c3e93ccf-25a0-42e6-8ba3-095c1829d485",
               "leftValue": "={{ $json.hasMore }}",
               "rightValue": "",
               "operator": {
@@ -256,13 +221,7 @@
             "index": 0
           }
         ],
-        [
-          {
-            "node": "Poursuivre les collectes",
-            "type": "main",
-            "index": 0
-          }
-        ]
+        []
       ]
     }
   },

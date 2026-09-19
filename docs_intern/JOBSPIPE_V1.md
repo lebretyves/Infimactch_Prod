@@ -1,4 +1,6 @@
-﻿# JobsPipe — V1
+> Mise à jour du 19 septembre 2026 : les horaires Windows ci-dessous sont historiques. Les imports sont désormais gérés par n8n : France Travail à 07 h et 15 h, JobsPipe à 07 h, heure de Paris. Voir [le réglage actuel](quality/IMPORTS_SOBRIETE_2026-09-19.md).
+
+# JobsPipe — V1
 
 Source supplémentaire, import opérateur borné à une requête (10 résultats par défaut), sans abonnement automatique ni remplacement de France Travail.
 

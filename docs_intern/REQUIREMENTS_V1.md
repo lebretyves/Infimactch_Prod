@@ -44,10 +44,9 @@ Les qualifications IDE, IADE et IBODE ne sont pas des rôles d'autorisation et n
 ### Sources et calendrier d'import
 
 - France Travail conservé ; JobsPipe ajouté comme source supplémentaire. Premier lot JobsPipe : 10 offres enregistrées avant contrôle CDI.
-- Chaque jour, heure de Paris : **00 h, 07 h, 09 h, 11 h, 13 h, 15 h, 17 h**. Il n'y a pas de lancement à 18 h.
-- JobsPipe : une recherche par lancement, 10 résultats maximum. France Travail : authentification puis quatre recherches, 10 résultats maximum par mot-clé avant dédoublonnage.
-- Tâches Windows : `InfiMatch-JobsPipe-Import` et `InfiMatch-FranceTravail-Import`. Pas de rattrapage des horaires manqués, pas de relance automatique, pas de chevauchement d'une même tâche ; limite de cinq minutes.
-- PC éveillé, session Windows ouverte, Docker, PostgreSQL et Vault disponibles. Installation et déclencheurs vérifiés ; cela ne constitue pas une preuve de succès de chaque exécution automatique.
+- Depuis le 19 septembre 2026 : France Travail **07 h et 15 h**, JobsPipe **07 h**, via n8n, fuseau Europe/Paris. Voir `quality/IMPORTS_SOBRIETE_2026-09-19.md`.
+- Collecte paginée avec checkpoints : jusqu'à 12 pages par lot backend, 20 lots par exécution n8n et deux reprises applicatives après échec temporaire. Les limites de quota restent prioritaires.
+- Les anciennes tâches Windows sont désactivées ; les imports ne dépendent plus du PC ni de la session Windows. Le workflow n8n de 30 minutes conserve les rappels et la file, sans import externe.
 - Aucun engagement sur le quota disponible : surveiller le compte fournisseur et les journaux. Aucun abonnement payant ajouté.
 
 Détails : [JobsPipe](JOBSPIPE_V1.md), [France Travail](FRANCE_TRAVAIL_PLANIFICATION.md). Scripts dans `scripts/security/`, journaux privés dans `data/security/`.

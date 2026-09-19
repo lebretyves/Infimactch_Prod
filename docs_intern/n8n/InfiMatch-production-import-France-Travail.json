@@ -1,0 +1,188 @@
+{
+  "name": "InfiMatch production - import France Travail",
+  "nodes": [
+    {
+      "id": "ea498599-1659-4894-8288-f86726f89a90",
+      "name": "Horaires Paris",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "position": [
+        0,
+        0
+      ],
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "cronExpression",
+              "expression": "0 0 7,15 * * *"
+            }
+          ]
+        }
+      },
+      "typeVersion": 1.2
+    },
+    {
+      "id": "ce572887-2090-46ae-8e78-2816baffbcb3",
+      "name": "Importer un lot",
+      "type": "n8n-nodes-base.httpRequest",
+      "position": [
+        240,
+        0
+      ],
+      "parameters": {
+        "method": "POST",
+        "url": "https://infimactch-prod-backend.vercel.app/api/v1/internal/automation/jobs/refresh-offers/FRANCE_TRAVAIL",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "X-N8N-Execution-Id",
+              "value": "={{ $execution.id }}"
+            },
+            {
+              "name": "X-N8N-Workflow-Id",
+              "value": "={{ $workflow.id }}"
+            }
+          ]
+        },
+        "options": {
+          "timeout": 240000
+        }
+      },
+      "typeVersion": 4.2,
+      "retryOnFail": true,
+      "maxTries": 2,
+      "waitBetweenTries": 5000
+    },
+    {
+      "id": "6121bb8c-ecd7-4c98-8e44-a7bedd326ab8",
+      "name": "Decider la reprise",
+      "type": "n8n-nodes-base.code",
+      "position": [
+        480,
+        0
+      ],
+      "parameters": {
+        "jsCode": "const status=$json.status;\nconst allowed=['SUCCESS','IN_PROGRESS','UP_TO_DATE','COOLDOWN','PAUSED','BUSY','QUOTA_EXHAUSTED','RETRY_REQUIRED','INCOMPLETE','AUTH_REQUIRED'];\nif(!allowed.includes(status))throw new Error('IMPORT_RESPONSE_INVALID');\nif(status==='INCOMPLETE'||status==='AUTH_REQUIRED')throw new Error('IMPORT_'+status);\nconst previous=$runIndex>0?$items('Decider la reprise',0,$runIndex-1)[0].json.failures:0;\nconst failures=previous+(status==='RETRY_REQUIRED'?1:0);\nif(failures>2)throw new Error('IMPORT_RETRY_LIMIT_REACHED');\nconst hasMore=status==='IN_PROGRESS'||status==='RETRY_REQUIRED';\nif(hasMore&&$runIndex>=19)throw new Error('IMPORT_BATCH_LIMIT_REACHED_CHECKPOINT_SAVED');\nreturn [{json:{...$json,hasMore,failures,waitSeconds:status==='RETRY_REQUIRED'?300:1}}];"
+      },
+      "typeVersion": 2
+    },
+    {
+      "id": "77155b38-9a81-4172-8a06-8e5b4b22a084",
+      "name": "Encore des pages",
+      "type": "n8n-nodes-base.if",
+      "position": [
+        720,
+        0
+      ],
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "b76302d5-e395-4a48-8cbe-8dc732d2f96f",
+              "leftValue": "={{ $json.hasMore }}",
+              "rightValue": "",
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "typeVersion": 2.2
+    },
+    {
+      "id": "fb77cafb-d582-4628-831c-61b555a9dfe2",
+      "name": "Attendre avant reprise",
+      "type": "n8n-nodes-base.wait",
+      "position": [
+        960,
+        -80
+      ],
+      "parameters": {
+        "amount": "={{ $json.waitSeconds }}",
+        "unit": "seconds"
+      },
+      "typeVersion": 1.1
+    }
+  ],
+  "connections": {
+    "Horaires Paris": {
+      "main": [
+        [
+          {
+            "node": "Importer un lot",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Importer un lot": {
+      "main": [
+        [
+          {
+            "node": "Decider la reprise",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Decider la reprise": {
+      "main": [
+        [
+          {
+            "node": "Encore des pages",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Encore des pages": {
+      "main": [
+        [
+          {
+            "node": "Attendre avant reprise",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        []
+      ]
+    },
+    "Attendre avant reprise": {
+      "main": [
+        [
+          {
+            "node": "Importer un lot",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "timezone": "Europe/Paris",
+    "executionTimeout": 3600,
+    "saveDataErrorExecution": "all",
+    "saveDataSuccessExecution": "none",
+    "saveManualExecutions": false,
+    "saveExecutionProgress": false
+  }
+}
