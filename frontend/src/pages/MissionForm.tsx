@@ -1,3 +1,4 @@
+import { missionMaxDate, validateMissionHorizon } from "@/lib/missionDateRange";
 import { missionReturnTo } from "@/lib/missionNavigation";
 import { serviceOptionsFor } from "@/data/clinicalSkills";
 import { ClinicalSkillsPicker } from "@/components/ClinicalSkillsPicker";
@@ -173,6 +174,7 @@ function Form({
         throw new Error(
           "Choisissez votre établissement ou un établissement rattaché à votre agence.",
         );
+      validateMissionHorizon(v.start,v.end,v.timezone);
       const { start, end, schedulePrecision } = missionDateRange(v.start, v.end, v.timezone,
         mission ? { start: mission.start_at, end: mission.end_at, timezone: mission.timezone, schedulePrecision: mission.schedule_precision } : undefined);
       if (!mission && v.start < localDate(new Date().toISOString(), v.timezone))
@@ -413,6 +415,7 @@ function Form({
             label="Date de début"
             type="date"
             required
+            max={missionMaxDate(v.timezone)}
             value={v.start}
             onChange={(e) => set({ start: e.target.value })}
           />
@@ -421,6 +424,7 @@ function Form({
             type="date"
             required
             min={v.start || undefined}
+            max={missionMaxDate(v.timezone)}
             value={v.end}
             onChange={(e) => set({ end: e.target.value })}
           />

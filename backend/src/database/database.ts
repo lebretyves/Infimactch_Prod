@@ -1,3 +1,4 @@
+import { MissionGuardrails1789826400000 } from "./mission-guardrails";
 import { postgresConnection } from "./connection";
 import { mutedDemoMissionIds } from "../notifications/demo-suppression";
 import {MissionMail1789722000000} from './mission-mail';
@@ -63,6 +64,7 @@ export class Database implements OnModuleDestroy {
       PersonalCorrections1789382300000,
       MissionSchedulePrecision1789718400000,
       MissionMail1789722000000,
+      MissionGuardrails1789826400000,
     ],
     logging: false,
     extra: { max: 12 },

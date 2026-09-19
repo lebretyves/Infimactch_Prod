@@ -1,3 +1,4 @@
+import { sendReminders } from './reminders';
 import { demoNoticeSuppressed, mutedDemoMissionIds } from "../notifications/demo-suppression";
 import {queueMissionEmails, generateCancellations, dispatchMissionEmails} from './mission-mail';
 import {UseInterceptors} from "@nestjs/common";
@@ -98,49 +99,7 @@ export class AutomationService {
     });
   }
   async reminders() {
-    const delay = Number(process.env.REMINDER_DELAY_MINUTES ?? 60);
-    if (!Number.isFinite(delay) || delay < 0)
-      throw new Error("Invalid reminder delay");
-    const limit = 25;
-    {
-      const batch = await this.db.transaction(async (em) => {
-        const window = new Date().toISOString().slice(0, 13);
-        const missions = await em.query(
-          "SELECT * FROM mission WHERE id<>ALL($4::uuid[]) AND status='OPEN' AND start_at>now() AND created_at<now()-make_interval(mins=>$1) AND NOT EXISTS(SELECT 1 FROM reminder_window w WHERE w.mission_id=mission.id AND w.version=mission.version AND w.window_key=$2) ORDER BY id LIMIT $3 FOR UPDATE SKIP LOCKED",
-          [Math.floor(delay), window, limit, mutedDemoMissionIds],
-        );
-        let count = 0;
-        for (const m of missions) {
-          const [existing] = await em.query(
-            "SELECT 1 FROM reminder_window WHERE mission_id=$1 AND version=$2 AND window_key=$3",
-            [m.id, m.version, window],
-          );
-          if (existing) continue;
-          const [e] = await em.query(
-            "INSERT INTO outbox(event,payload,completed_at) VALUES('ReminderCreated',$1,now()) RETURNING id",
-            [JSON.stringify({ missionId: m.id, version: m.version })],
-          );
-          const members = await em.query(
-            "SELECT a.id AS user_id, CASE WHEN EXISTS(SELECT 1 FROM membership s WHERE s.user_id=a.id AND s.organization_id=$1 AND s.active) THEN 'AGENCY' ELSE 'ESTABLISHMENT' END AS role FROM account a WHERE a.active AND EXISTS(SELECT 1 FROM membership s WHERE s.user_id=a.id AND s.organization_id IN($1,$2) AND s.active) ORDER BY a.id FOR SHARE OF a",
-            [m.agency_id, m.establishment_id],
-          );
-          for (const actor of members) {
-            await missionNotice(em,e.id,actor,"REMINDER",m);
-            count++;
-          }
-          await em.query(
-            "INSERT INTO reminder_window(mission_id,version,window_key,event_id) VALUES($1,$2,$3,$4)",
-            [m.id, m.version, window, e.id],
-          );
-          await em.query(
-            "INSERT INTO workflow_receipt(event_id,action) VALUES($1,'reminder')",
-            [e.id],
-          );
-        }
-        return { selected: missions.length, notifications: count };
-      });
-      return { status: "PROCESSED", notifications: batch.notifications, processed: batch.selected, hasMore: batch.selected === limit };
-    }
+    return sendReminders(this.db,missionNotice);
   }
   async confirmation(id: string) {
     const reservation = await this.db.transaction(async (em) => {

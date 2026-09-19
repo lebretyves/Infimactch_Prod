@@ -16,6 +16,7 @@ type Application = {
   events: { event: string; created_at: string }[];
 };
 const events: Record<string, string> = {
+  APPLICATION_UNAVAILABLE: "Candidature fermée automatiquement : autre mission confirmée sur ce créneau",
   APPLICATION_SUBMITTED: "Candidature envoyée ou reconfirmée",
   APPLICATION_SELECTED: "Candidature sélectionnée par l’établissement",
   APPLICATION_REJECTED: "Candidature refusée",
@@ -77,7 +78,7 @@ export default function CandidatureDetail() {
                     après validation de l’affectation par l’agence.
                   </p>
                 )}
-              {r.data.requires_reconsent && (
+              {r.data.requires_reconsent && ["SUBMITTED","SELECTED"].includes(r.data.status) && (
                 <div className={s.notice}>
                   <p>Les conditions de la mission ont changé.</p>
                   {user?.role === "interimaire" && (

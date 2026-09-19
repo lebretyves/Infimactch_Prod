@@ -1,9 +1,11 @@
 ﻿import 'reflect-metadata';
-import { test } from 'node:test';
+import { test, beforeEach, afterEach, mock } from 'node:test';
 import assert from 'node:assert/strict';
 import { validate } from 'class-validator';
 import { MissionDto } from '../../src/missions/mission.dto';
 import { MissionsService } from '../../src/missions/missions.service';
+beforeEach(()=>{mock.method(Date,'now',()=>Date.parse('2029-01-01T12:00:00Z'));});
+afterEach(()=>mock.restoreAll());
 const body: MissionDto = {establishmentId:'11111111-1111-4111-8111-111111111111',title:'Mission test',description:'Mission de test seulement',qualification:'IDE',service:'CHIRURGIE',population:'ADULT',block:'NONE',requiredSkills:[],desiredSkills:[],minExperienceMonths:0,start:'2030-07-10T12:00:00Z',end:'2030-07-10T20:00:00Z',shift:'DAY',address:'Adresse test',latitude:16,longitude:-61,hourlySalary:20};
 test('Mission timezone accepts IANA DOM and Paris; rejects invalid/null/offset',async()=>{
  for(const timezone of [undefined,'Europe/Paris','America/Guadeloupe','America/Martinique','America/Cayenne','Indian/Reunion','Indian/Mayotte'])assert.equal((await validate(Object.assign(new MissionDto(),body,{timezone}))).length,0);

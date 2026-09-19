@@ -1,3 +1,4 @@
+import { missionMaxDate, validateMissionHorizon } from "@/lib/missionDateRange";
 import { serviceOptionsFor } from "@/data/clinicalSkills";
 import { ClinicalSkillsPicker } from "@/components/ClinicalSkillsPicker";
 import { useRef, useState, type FormEvent } from "react";
@@ -107,6 +108,7 @@ function NeedForm({
       if (!experienceYears.trim() || !Number.isFinite(years) || years < 0 || years > 50)
         throw new Error("Renseignez une expérience entre 0 et 50 ans.");
       const minExperienceMonths = Math.round(years * 12);
+      validateMissionHorizon(startDate,endDate,timezone);
       const { start, end, schedulePrecision } = missionDateRange(startDate, endDate, timezone, original || undefined);
       if (!original && startDate < localDate(new Date().toISOString(), timezone))
         throw new Error("La période doit commencer aujourd’hui ou à une date ultérieure.");
@@ -247,8 +249,8 @@ function NeedForm({
               {Array.from(new Set(["Europe/Paris", "America/Guadeloupe", "America/Martinique", "America/Cayenne", "Indian/Reunion", "Indian/Mayotte", timezone])).map(zone => <option key={zone} value={zone}>{zone}</option>)}
             </SelectField>
             <div className={u.grid}>
-              <TextField label="Date de début du besoin" type="date" required value={startDate} onChange={e => { setStartDate(e.target.value); if (!endDate) setEndDate(e.target.value); }} />
-              <TextField label="Date de fin incluse" type="date" min={startDate || undefined} required value={endDate} onChange={e => setEndDate(e.target.value)} />
+              <TextField label="Date de début du besoin" type="date" max={missionMaxDate(timezone)} required value={startDate} onChange={e => { setStartDate(e.target.value); if (!endDate) setEndDate(e.target.value); }} />
+              <TextField label="Date de fin incluse" type="date" max={missionMaxDate(timezone)} min={startDate || undefined} required value={endDate} onChange={e => setEndDate(e.target.value)} />
             </div>
             <div className={u.grid}>
               <SelectField

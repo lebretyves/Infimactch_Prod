@@ -34,3 +34,13 @@ export function missionDateRangeLabel(period: OriginalMissionPeriod): string {
   const end = exact ? period.end : new Date(Date.parse(period.end) - 1).toISOString();
   return `${format(period.start, exact)} → ${format(end, exact)}${exact ? "" : " inclus"} · ${timezone}`;
 }
+
+export function missionMaxDate(timezone='Europe/Paris',now=new Date()):string {
+  const [year,month,day]=localDate(now.toISOString(),timezone).split('-').map(Number);
+  const lastDay=new Date(Date.UTC(year+2,month,0)).getUTCDate();
+  return `${year+2}-${String(month).padStart(2,'0')}-${String(Math.min(day,lastDay)).padStart(2,'0')}`;
+}
+export function validateMissionHorizon(start:string,end:string,timezone='Europe/Paris') {
+  const max=missionMaxDate(timezone);
+  if(start>max || end>max) throw new Error('Les dates ne peuvent pas dépasser deux ans à partir d’aujourd’hui.');
+}
