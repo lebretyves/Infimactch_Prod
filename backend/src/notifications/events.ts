@@ -1,8 +1,10 @@
+import { demoNoticeSuppressed } from "./demo-suppression";
 import type { SqlClient } from "../database/database";
 import { noticeMessage, NoticeKind } from "./catalog";
 
 type Context = { missionId?: string; version?: number; applicationId?: string; needId?: string; detail?: string };
 export async function notify(em: SqlClient, kind: NoticeKind, users: string[], organizations: string[] = [], context: Context = {}) {
+  if (demoNoticeSuppressed(context.missionId, kind)) return;
   const [event] = await em.query("INSERT INTO outbox(event,payload,completed_at) VALUES('NotificationCreated',$1,now()) RETURNING id", [JSON.stringify({kind, ...context})]);
   const recipients = await em.query(`
     SELECT a.id AS user_id,NULL::uuid AS organization_id,

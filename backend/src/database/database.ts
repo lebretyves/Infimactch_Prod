@@ -1,3 +1,4 @@
+import { mutedDemoMissionIds } from "../notifications/demo-suppression";
 import {MissionMail1789722000000} from './mission-mail';
 import {MissionSchedulePrecision1789718400000} from "./mission-schedule-precision";
 import {PersonalCorrections1789382300000} from './personal-corrections';
@@ -127,7 +128,7 @@ function queryRows(result: any): any[] {
 
 export async function queueProfileMatches(em: SqlClient, actor: string) {
   await em.query(
-    "INSERT INTO outbox(event,payload) SELECT 'MatchRequested',jsonb_build_object('missionId',m.id,'version',m.version,'profileId',$1::uuid) FROM mission m JOIN profile p ON p.user_id=$1 WHERE m.status='OPEN' AND m.end_at>now() AND m.qualification=ANY(p.qualifications)",
-    [actor],
+    "INSERT INTO outbox(event,payload) SELECT 'MatchRequested',jsonb_build_object('missionId',m.id,'version',m.version,'profileId',$1::uuid) FROM mission m JOIN profile p ON p.user_id=$1 WHERE m.id<>ALL($2::uuid[]) AND m.status='OPEN' AND m.end_at>now() AND m.qualification=ANY(p.qualifications)",
+    [actor, mutedDemoMissionIds],
   );
 }

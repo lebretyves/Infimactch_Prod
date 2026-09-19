@@ -1,3 +1,4 @@
+import { demoNoticeSuppressed } from "./demo-suppression";
 import { BadRequestException, Body, ConflictException, Controller, Delete, Get, Injectable, Module, Param, ParseUUIDPipe, Post, Put, Req, UseGuards } from "@nestjs/common";
 import { ArrayMaxSize, ArrayUnique, IsArray, IsBoolean, IsIn, IsOptional, IsString, Matches } from "class-validator";
 import { Request } from "express";
@@ -107,10 +108,10 @@ export class NotificationsService {
         const [active]=await em.query("SELECT 1 FROM account WHERE id=$1 AND active",[row.user_id]);
         const [owner]=await em.query("SELECT 1 FROM account a WHERE a.id=$1 AND a.active AND ($2::uuid IS NULL OR EXISTS(SELECT 1 FROM membership m WHERE m.user_id=a.id AND m.organization_id=$2 AND m.active))",[row.connected_by,row.organization_id]);
         const [muted]=await em.query("SELECT 1 FROM notification_preference WHERE account_id=$1 AND kind=$2 AND NOT discord",[row.user_id,row.kind]);
-        let obsolete=false;
+        let obsolete=demoNoticeSuppressed(row.context.missionId, row.kind);
         if(row.context.missionId) {
           const [m]=await em.query("SELECT status,version,start_at FROM mission WHERE id=$1",[row.context.missionId]);
-          obsolete=!m || m.version!==row.context.version;
+          obsolete ||= !m || m.version!==row.context.version;
           if(m && ["MATCH","REMINDER","MISSION_CHANGED","APPLICATION_SUBMITTED","APPLICATION_SELECTED","MISSION_PUBLISHED"].includes(row.kind)) obsolete ||= m.status!=="OPEN" || new Date(m.start_at).getTime()<=Date.now();
           if(m && row.kind==='CONFIRMATION') obsolete ||= !['FILLED','COMPLETED'].includes(m.status);
           if(m && row.kind==='CANCELLATION') {
