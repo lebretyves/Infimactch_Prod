@@ -10,7 +10,7 @@ Les missions restent visibles, leur score est calculable et les candidatures, af
 
 Une nouvelle mission avec un nouvel identifiant reste notifiée, même avec le même titre et la même description. Rejouer exactement le précédent import avec les mêmes clés d'idempotence réutilise les anciennes missions : ce n'est pas un nouveau lot et elles restent inhibées. Ne pas ajouter automatiquement de nouveaux identifiants à ce fichier.
 
-Aucune migration SQL n'est nécessaire : le correctif est compatible avec le schéma actuel, même si Neon est inaccessible au moment du déploiement. Il prendra effet quand l'API pourra de nouveau accéder à la base. Il ne rembourse pas les quotas déjà consommés.
+Aucune migration SQL n'est nécessaire : le correctif fonctionne sur la base Supabase de production. Les UUID sont conservés lors de la réinjection du lot fictif ; la suppression des anciennes alertes reste donc effective.
 
 Validation : six tests d'intégration sur PostGIS isolé (dont 26 missions inhibées pour dépasser la taille d'un lot de rappels, une nouvelle mission et une livraison Discord simulée), puis onze tests existants sur les notifications, confirmations, annulations et PDF/emails. Aucun message réel envoyé pendant ces tests.
 
@@ -24,4 +24,4 @@ Le mode aperçu ne modifie rien. Un échec annule le lot entier. Les lignes de l
 
 Six tests d'intégration PostGIS couvrent l'aperçu, le rollback, les données métier et PDF inchangés, la préservation des nouvelles missions et confirmations/annulations, la concurrence avec un envoi et la limite de lot. La suppression rend l'espace réutilisable par PostgreSQL ; elle ne garantit pas une baisse immédiate de la taille physique et ne restitue pas de quota de calcul/transfert consommé.
 
-Tentative de production du 19 septembre 2026 : refus de connexion Neon SQLSTATE 53000 avant toute transaction. Aucun enregistrement de production supprimé. Le script reste prêt pour l'accès rétabli ou pour une copie récente validée sur Supabase.
+Tentative de production du 19 septembre 2026 : refus de connexion Neon SQLSTATE 53000 avant toute transaction. Aucun enregistrement de production supprimé. Cette tentative est historique : la production est repartie sans ces notifications sur Supabase. Le script de purge actuel utilise la connexion Supabase et n'est pas nécessaire pour effacer une seconde fois ces anciennes notifications absentes de la nouvelle base.

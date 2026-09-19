@@ -1,5 +1,6 @@
 # Administration indépendante et recommandations mixtes
 
+> Rapport historique : cet état précède la bascule vers Supabase du 19 septembre. Pour la configuration actuelle, consulter [l'inventaire](../DEPLOIEMENT_INVENTAIRE.md).
 Livraison du 17 septembre 2026. Ce rapport remplace les états « en attente » des diagnostics historiques pour les éléments ci-dessous.
 
 ## Déploiement

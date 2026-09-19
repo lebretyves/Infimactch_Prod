@@ -24,10 +24,10 @@ Les consignes des documents constituent le périmètre de travaux demandé, pas 
 |---|---|---|---|---|
 | Frontend | React 19, Vite 7, `frontend/vercel.json` | Vercel, artefacts déployés | Build et parcours API publics testés | Propriétaire du compte Vercel |
 | API | NestJS 12, Node 24, `backend/src/app.ts` | Fonctions Vercel, instances transitoires | Santé SQL, sessions et écritures vérifiées | Pas de processus permanent présumé |
-| PostgreSQL/PostGIS | Décisions métier, sessions, événements, documents chiffrés | Neon ; compte applicatif DML limité | Migrations explicites, tests PostGIS/contraintes | Sauvegarde indépendante à vérifier |
+| PostgreSQL/PostGIS | Décisions métier, sessions, événements, documents chiffrés | Supabase ; compte applicatif DML limité | Migrations explicites, tests PostGIS/contraintes | Sauvegarde indépendante à vérifier |
 | MongoDB | Explications de matching versionnées ; registre d’effacement cloud | Atlas Free | Écriture/lecture couvertes par recette isolée ; ping réel dans admin | Réseau Internet autorisé précédemment pour le POC, TLS + compte limité |
 | Vault | Coffre principal et préparation des variables serveur | PC local, persistance et TLS existants | Choix explicite du propriétaire conservé | Non autonome PC éteint ; exploitation/récupération locale |
-| Documents | AES-GCM, métadonnées SQL, stockage `postgres` | Neon, pas disque Vercel | Upload/déchiffrement/téléchargement autorisé testés publiquement | Démonstration : documents fictifs ; restauration avec clés non encore prouvée |
+| Documents | AES-GCM, métadonnées SQL, stockage `postgres` | Supabase, pas disque Vercel | Upload/déchiffrement/téléchargement autorisé testés publiquement | Démonstration : documents fictifs ; restauration avec clés non encore prouvée |
 | Worker métier | Outbox transactionnelle, baux, reprises | Déclenchement borné Vercel après écriture + n8n périodique | Recettes événements/confirmations/rappels | Pas de daemon cloud ; délai possible jusqu’à prochaine reprise |
 | n8n | Automatisations externalisées, appels backend authentifiés | n8n Cloud existant | Six workflows production actifs observés | Période d’essai limitée ; aucun abonnement souscrit ni gratuité permanente promise |
 | Discord | Relais bot existant, préférences/destinations | Discord + n8n Cloud | Identité bot et relais testés précédemment | Aucune preuve de lecture d’un message Discord ; quotas à respecter |

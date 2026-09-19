@@ -1,6 +1,6 @@
-﻿# PostgreSQL hébergé : Neon et Supabase
+﻿# PostgreSQL de production : Supabase
 
-Le backend peut se connecter à Neon ou Supabase sans changer l'API frontend ni l'authentification InfiMatch.
+La production et ses outils de maintenance utilisent uniquement Supabase, sans changement de l'API frontend ni de l'authentification InfiMatch.
 
 ## Configuration
 
@@ -30,7 +30,7 @@ L'utilisateur a explicitement accepté une reprise sans sauvegarde. La productio
 - Référentiel FINESS officiel du 17 septembre importé : 174 741 établissements.
 - Aucun compte, candidature, affectation ou document provenant de Neon repris. Deux accès neufs préparés : propriétaire du portail administrateur (activé après autorisation explicite) et entreprise de démonstration. Les informations d'accès restent privées, dans Vault et un fichier local protégé ; aucun secret dans Git.
 - Taille mesurée après import : 72 125 587 octets, environ 72 Mo. Cette mesure est un état initial, pas une garantie sur la croissance future.
-- Configuration PostgreSQL remplacée dans Vault et Vercel ; autres clés de services conservées. L'ancienne configuration Neon est archivée séparément dans Vault.
+- Configuration PostgreSQL remplacée dans Vault et Vercel ; autres clés de services conservées. L'ancienne configuration avait été archivée pour la bascule ; le nettoyage demandé ensuite retire ses valeurs du secret courant d'archive et retire l'identifiant de l'ancien projet du secret de production. L'historique du coffre reste un historique, pas une configuration opérationnelle.
 - Déploiement de bascule : `dpl_2KWW1z4Xec9C2HqfRcNB26rvfegC`, code `ae9b997`, état READY ; alias backend de production vérifié.
 
 ### Vérifications réelles
@@ -43,7 +43,7 @@ Le rôle applicatif peut lire les missions mais ne peut créer de table ni lire 
 
 Les affectations, nouveaux PDF et envois SMTP n'ont pas fait l'objet d'une nouvelle démonstration complète pendant cette bascule. Aucun ancien PDF ne peut réapparaître sans récupération de ses données et de l'affectation correspondante. Les anciens utilisateurs doivent recréer leur compte.
 
-Les preuves locales de cette opération se trouvent dans `audits/2026-09-19-supabase` à la racine de l'espace de travail. Elles comprennent les résultats de migration, les tests navigateur et le contrôle des relances. Les scripts historiques spécifiques à Neon (capture initiale, copie initiale, bootstrap/récupération d'administrateur) ne doivent pas être utilisés tels quels contre Supabase ; la migration, la synchronisation et la sauvegarde courantes prennent en charge Supabase.
+Les preuves locales de cette opération se trouvent dans `audits/2026-09-19-supabase` à la racine de l'espace de travail. Elles comprennent les résultats de migration, les tests navigateur et le contrôle des relances. Les outils obsolètes de capture, copie initiale et préparation ont été retirés. Les scripts actuels d'administration, de contrôle, de migration et de sauvegarde utilisent Supabase avec vérification TLS.
 
 ### Correction de la première recherche
 

@@ -1,5 +1,6 @@
 # Recette des correctifs et de l'administration initiale
 
+> Rapport historique : cet état précède la bascule vers Supabase du 19 septembre. Pour la configuration actuelle, consulter [l'inventaire](../DEPLOIEMENT_INVENTAIRE.md).
 Contrôles effectués le 17 septembre 2026, vers 03:14–03:19 Europe/Paris. Ce bilan distingue ce lot livré de l'administration complète demandée, dont les étapes avancées restent ouvertes. Aucun résultat ne constitue un audit RGAA, une certification RGESN ou une validation ANS.
 
 ## Versions publiées

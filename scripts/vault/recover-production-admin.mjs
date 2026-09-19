@@ -1,3 +1,4 @@
+import {managedPostgresConnection} from './postgres-target.mjs';
 // Exceptional operator procedure, never exposed by HTTP. Identity verification
 // and explicit authorization of this exact account must precede --apply.
 import {withRole,request} from './common.mjs';
@@ -9,8 +10,7 @@ const email=process.argv[2],reason=process.argv[3],apply=process.argv.includes('
 if(!email||!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)||!reason||reason.length<20||reason.length>500)throw Error('Pass the authorized existing administrator email and an incident reference/reason of 20-500 characters; dry-run by default.');
 await withRole('operator',async token=>{
   const values=(await request('kv/data/infimatch/v1/production',{token})).data.data;
-  const u=new URL(values.DATABASE_URL_UNPOOLED);if(!u.hostname.endsWith('.neon.tech'))throw Error('Unexpected target');u.searchParams.set('sslmode','verify-full');
-  const db=new Client({connectionString:u.href});await db.connect();
+  const db=new Client(managedPostgresConnection(values.DATABASE_URL_UNPOOLED,values.DATABASE_CA_CERT));await db.connect();
   try {
     await db.query('BEGIN');await db.query('SELECT pg_advisory_xact_lock(1789381700)');
     const {rows:[account]}=await db.query('SELECT a.id,p.role,p.active FROM account a JOIN platform_admin p ON p.user_id=a.id WHERE lower(a.email)=lower($1) AND a.active FOR UPDATE OF p',[email]);

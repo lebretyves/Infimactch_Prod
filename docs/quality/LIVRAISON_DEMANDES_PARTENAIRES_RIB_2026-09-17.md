@@ -1,5 +1,6 @@
 # Demandes clients, offres partenaires et dossier RIB
 
+> Rapport historique : cet état précède la bascule vers Supabase du 19 septembre. Pour la configuration actuelle, consulter [l'inventaire](../DEPLOIEMENT_INVENTAIRE.md).
 ## Comportement livre
 - Recuperation manuelle : demande generique, verification d'identite par l'administration, lien personnel valable 30 minutes et utilisable une fois. Aucun email automatique ; Resend sera raccorde plus tard. Les sessions sont revoquees au changement de mot de passe. Les comptes administrateurs sont exclus de ce parcours client.
 - Cloture : confirmation du mot de passe, suivi, annulation avant traitement ; approbation et execution distinctes dans l'administration. Candidatures en cours, affectations actives et dernier gestionnaire d'organisation bloquent la cloture. Une interruption de nettoyage reste PROCESSING et peut etre reprise. Les donnees de profil sont anonymisees, l'historique metier est conserve.

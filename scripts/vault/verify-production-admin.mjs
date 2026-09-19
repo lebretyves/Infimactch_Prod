@@ -1,3 +1,4 @@
+import {managedPostgresConnection} from './postgres-target.mjs';
 import {withRole,request} from './common.mjs';
 import {Client} from 'pg';
 import {randomUUID,randomBytes,createHash,createHmac} from 'node:crypto';
@@ -6,7 +7,7 @@ const site='https://infimactch-prod-backend-l5bc.vercel.app',admin='https://infi
 const email='qa-admin-'+randomUUID()+'@example.invalid',password=randomBytes(24).toString('hex'),invitation=randomBytes(32).toString('base64url');
 const jars=new Map(),csrf=new Map();let actor;
 async function call(origin,path,body,status=200){const r=await fetch(origin+'/api/v1'+path,{method:body===undefined?'GET':'POST',headers:{Origin:origin,...(jars.has(origin)?{Cookie:jars.get(origin)}:{}),...(body!==undefined?{'Content-Type':'application/json','X-CSRF-Token':csrf.get(origin)??'','Idempotency-Key':randomUUID()}: {})},body:body===undefined?undefined:JSON.stringify(body),signal:AbortSignal.timeout(45000)});for(const c of r.headers.getSetCookie())if(c.startsWith('infimatch.sid=')||c.startsWith('infimatch.admin.sid=')){assert.match(c,/HttpOnly/i);assert.match(c,/Secure/i);if(origin===admin){assert.match(c,/SameSite=Strict/i);assert.match(c,/Path=\/api\/v1\/admin/i);}jars.set(origin,c.split(';')[0]);}assert.equal(r.status,status,path+' status');const data=await r.json();if(data.csrfToken)csrf.set(origin,data.csrfToken);return data;}
-await withRole('operator',async token=>{const values=(await request('kv/data/infimatch/v1/production',{token})).data.data;const u=new URL(values.DATABASE_URL_UNPOOLED);assert.ok(u.hostname.endsWith('.neon.tech'));u.searchParams.set('sslmode','verify-full');const db=new Client({connectionString:u.href});await db.connect();
+await withRole('operator',async token=>{const values=(await request('kv/data/infimatch/v1/production',{token})).data.data;const db=new Client(managedPostgresConnection(values.DATABASE_URL_UNPOOLED,values.DATABASE_CA_CERT));await db.connect();
 try{await call(site,'/auth/csrf');const created=await call(site,'/auth/register',{email,password,family:'NURSE',termsVersion:'2026-09-14'},201);actor=created.user.id;await call(admin,'/admin/overview',undefined,401);await call(admin,'/admin/csrf');await call(admin,'/admin/login',{email,password},401);console.log('Ordinary account denied admin access PASS');
 await db.query("INSERT INTO platform_admin(user_id,role,invitation_hash,invitation_expires_at) VALUES($1,'OWNER',$2,now()+interval '10 minutes')",[actor,createHash('sha256').update(invitation).digest('hex')]);
 await db.query("UPDATE account SET password_hash='ADMIN_ACTIVATION_PENDING',platform_only=true WHERE id=$1",[actor]);
