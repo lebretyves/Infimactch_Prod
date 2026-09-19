@@ -3,6 +3,14 @@ import {Database, SqlClient} from '../database/database';
 import {DocumentsService} from '../documents/documents.module';
 import {createConfirmationPdf, ConfirmationDetails} from './confirmation-pdf';
 
+// Identity fields are maintained by registration and administrator-approved corrections.
+// Keep legacy display names when a complete identity is unavailable; never infer a surname.
+export function professionalIdentityName(person: {first_name?: unknown; last_name?: unknown; professional_name?: unknown} | null | undefined): string | undefined {
+  const text = (value: unknown) => typeof value === 'string' ? value.trim().replace(/\s+/g, ' ') : '';
+  const first = text(person?.first_name), last = text(person?.last_name);
+  return (first && last ? first + ' ' + last : text(person?.professional_name) || first || last) || undefined;
+}
+
 const escapeHtml=(value:string)=>value.replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]!));
 export function missionEmailContent(kind:'CONFIRMATION'|'CANCELLATION', title:string, href:string, initiator?:string) {
   const heading=kind==='CONFIRMATION'?'Votre mission est confirmée':'Annulation de mission';
@@ -12,8 +20,8 @@ export function missionEmailContent(kind:'CONFIRMATION'|'CANCELLATION', title:st
     html:`<!doctype html><html lang="fr"><body style="margin:0;background:#f1f6fe;font-family:Arial,sans-serif;color:#0a2540"><table role="presentation" width="100%" cellspacing="0" cellpadding="0"><tr><td style="padding:32px 16px"><table role="presentation" width="100%" style="max-width:600px;margin:auto;background:white;border-radius:16px" cellspacing="0" cellpadding="28"><tr><td style="border-top:6px solid #1466e0"><strong style="font-size:26px">Infi<span style="color:#1466e0">Match</span></strong><h1 style="font-size:24px;color:#1466e0">${escapeHtml(heading)}</h1><h2 style="font-size:19px">${escapeHtml(title)}</h2><p style="line-height:1.7">${escapeHtml(message)}</p><p style="padding:18px 0"><a href="${escapeHtml(href)}" style="background:#1466e0;color:white;padding:14px 20px;border-radius:8px;text-decoration:none">Consulter la mission</a></p><p style="font-size:12px;color:#4f6480">Ce message concerne une affectation enregistrée dans InfiMatch. Le document joint reprend son statut au moment de son émission.</p></td></tr></table></td></tr></table></body></html>`};
 }
 export async function cancellationRecord(em:SqlClient,m:any,a:any,initiator:'NURSE'|'ENTERPRISE',reason='') {
-  const [names]=await em.query('SELECT p.display_name AS professional_name,e.name AS establishment_name,g.name AS agency_name FROM profile p LEFT JOIN organization e ON e.id=$2 LEFT JOIN organization g ON g.id=$3 WHERE p.user_id=$1',[a.nurse_id,m.establishment_id,m.agency_id]);
-  const details:ConfirmationDetails={assignmentId:a.id,missionVersion:m.version,title:m.title,qualification:m.qualification,service:m.service,address:m.address,start:a.start_at,end:a.end_at,timezone:m.timezone,hourlySalary:m.hourly_salary,professionalName:names?.professional_name,establishmentName:names?.establishment_name,agencyName:names?.agency_name,cancellation:{initiator,cancelledAt:new Date().toISOString(),reason}};
+  const [names]=await em.query('SELECT p.display_name AS professional_name,p.details->>\'firstName\' AS first_name,p.details->>\'lastName\' AS last_name,e.name AS establishment_name,e.referent AS establishment_contact,g.name AS agency_name FROM profile p LEFT JOIN organization e ON e.id=$2 LEFT JOIN organization g ON g.id=$3 WHERE p.user_id=$1',[a.nurse_id,m.establishment_id,m.agency_id]);
+  const details:ConfirmationDetails={assignmentId:a.id,missionId:m.id,missionVersion:m.version,title:m.title,qualification:m.qualification,service:m.service,address:m.address,start:a.start_at,end:a.end_at,timezone:m.timezone,schedulePrecision:m.schedule_precision,hourlySalary:m.hourly_salary,professionalName:professionalIdentityName(names),establishmentName:names?.establishment_name,establishmentContact:names?.establishment_contact,agencyName:names?.agency_name,population:m.population,block:m.block,cancellation:{initiator,cancelledAt:new Date().toISOString(),reason}};
   await em.query('INSERT INTO mission_cancellation(assignment_id,details) VALUES($1,$2) ON CONFLICT DO NOTHING',[a.id,JSON.stringify(details)]);
 }
 export async function queueMissionEmails(em:SqlClient,m:any,a:any,kind:'CONFIRMATION'|'CANCELLATION',documentId:string,initiator?:string) {
