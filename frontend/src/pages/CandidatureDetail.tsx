@@ -121,6 +121,7 @@ export default function CandidatureDetail() {
                     Consultez la confirmation et ses conditions enregistrées.
                   </p>
                   <ConfirmationButton assignmentId={a.id} cancelled={a.status === "CANCELLED"} />
+                  <ButtonLink to={"/affectations/" + a.id + "/preparation-contrat"} variant="outline">Voir la préparation du contrat</ButtonLink>
                 </section>
               ))}
               <div className={s.card}>

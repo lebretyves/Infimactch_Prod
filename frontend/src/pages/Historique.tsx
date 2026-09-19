@@ -285,6 +285,7 @@ export default function Historique() {
                   Voir la mission
                 </ButtonLink>
                 <ConfirmationButton assignmentId={selectedItem.id} cancelled={selectedItem.status === "CANCELLED"} />
+                <ButtonLink to={"/affectations/" + selectedItem.id + "/preparation-contrat"} variant="outline">Consulter la préparation</ButtonLink>
               </div>
             </section>
           )}

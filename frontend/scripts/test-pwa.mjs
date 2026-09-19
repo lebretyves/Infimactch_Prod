@@ -27,3 +27,11 @@ test('Logout cache purge removes application caches without deleting other appli
   try { const module = await import('data:text/javascript;base64,' + Buffer.from(source).toString('base64')); await module.clearAppCaches(); assert.deepEqual(removed, ['infimatch-static-v1', 'infimatch-old']); }
   finally { globalThis.window = oldWindow; globalThis.caches = oldCaches; }
 });
+
+test('retired catalogue navigations use the network redirect and never a cached gallery', async () => {
+ const handlers={},seen=[];
+ const response=Response.redirect('https://app.example/',308);
+ vm.runInNewContext(fs.readFileSync('public/sw.js','utf8'),{URL,Response,self:{location:{origin:'https://app.example'},addEventListener:(type,fn)=>handlers[type]=fn},caches:{match:()=>{throw Error('Gallery must not come from cache');}},fetch:async request=>{seen.push(request.url);return response;}});
+ for(const path of ['/catalogue','/apercu-annonces']){let result;handlers.fetch({request:{method:'GET',url:'https://app.example'+path,mode:'navigate'},respondWith:value=>result=value});assert.equal(await result,response);}
+ assert.deepEqual(seen,['https://app.example/catalogue','https://app.example/apercu-annonces']);
+});

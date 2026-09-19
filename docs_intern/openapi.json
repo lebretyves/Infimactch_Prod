@@ -25026,6 +25026,699 @@
         ]
       }
     },
+    "/api/v1/assignments/{id}/contract-preparation": {
+      "get": {
+        "operationId": "ContractsController_get",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "assignment": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "string",
+                          "format": "uuid"
+                        },
+                        "status": {
+                          "type": "string",
+                          "enum": [
+                            "ACTIVE",
+                            "COMPLETED",
+                            "CANCELLED"
+                          ]
+                        }
+                      },
+                      "required": [
+                        "id",
+                        "status"
+                      ]
+                    },
+                    "mission": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "string",
+                          "format": "uuid"
+                        },
+                        "title": {
+                          "type": "string"
+                        },
+                        "qualification": {
+                          "type": "string"
+                        },
+                        "service": {
+                          "type": "string"
+                        },
+                        "address": {
+                          "type": "string"
+                        },
+                        "startAt": {
+                          "type": "string",
+                          "format": "date-time"
+                        },
+                        "endAt": {
+                          "type": "string",
+                          "format": "date-time"
+                        },
+                        "timeZone": {
+                          "type": "string"
+                        },
+                        "hourlySalary": {
+                          "oneOf": [
+                            {
+                              "type": "string"
+                            },
+                            {
+                              "type": "number"
+                            }
+                          ]
+                        }
+                      },
+                      "required": [
+                        "id",
+                        "title",
+                        "qualification",
+                        "service",
+                        "address",
+                        "startAt",
+                        "endAt",
+                        "timeZone",
+                        "hourlySalary"
+                      ]
+                    },
+                    "employer": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "string",
+                          "format": "uuid"
+                        },
+                        "kind": {
+                          "type": "string"
+                        },
+                        "name": {
+                          "type": "string"
+                        },
+                        "address": {
+                          "type": "string"
+                        },
+                        "siret": {
+                          "type": "string",
+                          "nullable": true
+                        },
+                        "contact": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "id",
+                        "kind",
+                        "name",
+                        "address",
+                        "siret",
+                        "contact"
+                      ]
+                    },
+                    "establishment": {
+                      "type": "object",
+                      "properties": {
+                        "name": {
+                          "type": "string"
+                        },
+                        "address": {
+                          "type": "string"
+                        },
+                        "finess": {
+                          "type": "string",
+                          "nullable": true
+                        }
+                      },
+                      "required": [
+                        "name",
+                        "address",
+                        "finess"
+                      ]
+                    },
+                    "worker": {
+                      "type": "object",
+                      "properties": {
+                        "displayName": {
+                          "type": "string"
+                        },
+                        "firstName": {
+                          "type": "string",
+                          "nullable": true
+                        },
+                        "lastName": {
+                          "type": "string",
+                          "nullable": true
+                        }
+                      },
+                      "required": [
+                        "displayName",
+                        "firstName",
+                        "lastName"
+                      ]
+                    },
+                    "canEdit": {
+                      "type": "boolean"
+                    },
+                    "preparation": {
+                      "type": "object",
+                      "properties": {
+                        "version": {
+                          "type": "integer"
+                        },
+                        "notes": {
+                          "type": "object",
+                          "properties": {
+                            "reason": {
+                              "type": "string"
+                            },
+                            "workSchedule": {
+                              "type": "string"
+                            },
+                            "payTerms": {
+                              "type": "string"
+                            },
+                            "contactName": {
+                              "type": "string"
+                            },
+                            "additionalNotes": {
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "reason",
+                            "workSchedule",
+                            "payTerms",
+                            "contactName",
+                            "additionalNotes"
+                          ]
+                        },
+                        "updatedAt": {
+                          "type": "string",
+                          "format": "date-time",
+                          "nullable": true
+                        }
+                      },
+                      "required": [
+                        "version",
+                        "notes",
+                        "updatedAt"
+                      ]
+                    },
+                    "missingInformation": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    },
+                    "notice": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "assignment",
+                    "mission",
+                    "employer",
+                    "establishment",
+                    "worker",
+                    "canEdit",
+                    "preparation",
+                    "missingInformation",
+                    "notice"
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Controlled API error; applicability depends on route",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Controlled API error; applicability depends on route",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Controlled API error; applicability depends on route",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Controlled API error; applicability depends on route",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Controlled API error; applicability depends on route",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "413": {
+            "description": "Controlled API error; applicability depends on route",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Controlled API error; applicability depends on route",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Controlled API error; applicability depends on route",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Controlled API error; applicability depends on route",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Contracts"
+        ]
+      },
+      "put": {
+        "operationId": "ContractsController_save",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "X-CSRF-Token",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Token from /auth/csrf; cookie credentials and the configured Origin are required"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ContractPreparationDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "assignment": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "string",
+                          "format": "uuid"
+                        },
+                        "status": {
+                          "type": "string",
+                          "enum": [
+                            "ACTIVE",
+                            "COMPLETED",
+                            "CANCELLED"
+                          ]
+                        }
+                      },
+                      "required": [
+                        "id",
+                        "status"
+                      ]
+                    },
+                    "mission": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "string",
+                          "format": "uuid"
+                        },
+                        "title": {
+                          "type": "string"
+                        },
+                        "qualification": {
+                          "type": "string"
+                        },
+                        "service": {
+                          "type": "string"
+                        },
+                        "address": {
+                          "type": "string"
+                        },
+                        "startAt": {
+                          "type": "string",
+                          "format": "date-time"
+                        },
+                        "endAt": {
+                          "type": "string",
+                          "format": "date-time"
+                        },
+                        "timeZone": {
+                          "type": "string"
+                        },
+                        "hourlySalary": {
+                          "oneOf": [
+                            {
+                              "type": "string"
+                            },
+                            {
+                              "type": "number"
+                            }
+                          ]
+                        }
+                      },
+                      "required": [
+                        "id",
+                        "title",
+                        "qualification",
+                        "service",
+                        "address",
+                        "startAt",
+                        "endAt",
+                        "timeZone",
+                        "hourlySalary"
+                      ]
+                    },
+                    "employer": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "string",
+                          "format": "uuid"
+                        },
+                        "kind": {
+                          "type": "string"
+                        },
+                        "name": {
+                          "type": "string"
+                        },
+                        "address": {
+                          "type": "string"
+                        },
+                        "siret": {
+                          "type": "string",
+                          "nullable": true
+                        },
+                        "contact": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "id",
+                        "kind",
+                        "name",
+                        "address",
+                        "siret",
+                        "contact"
+                      ]
+                    },
+                    "establishment": {
+                      "type": "object",
+                      "properties": {
+                        "name": {
+                          "type": "string"
+                        },
+                        "address": {
+                          "type": "string"
+                        },
+                        "finess": {
+                          "type": "string",
+                          "nullable": true
+                        }
+                      },
+                      "required": [
+                        "name",
+                        "address",
+                        "finess"
+                      ]
+                    },
+                    "worker": {
+                      "type": "object",
+                      "properties": {
+                        "displayName": {
+                          "type": "string"
+                        },
+                        "firstName": {
+                          "type": "string",
+                          "nullable": true
+                        },
+                        "lastName": {
+                          "type": "string",
+                          "nullable": true
+                        }
+                      },
+                      "required": [
+                        "displayName",
+                        "firstName",
+                        "lastName"
+                      ]
+                    },
+                    "canEdit": {
+                      "type": "boolean"
+                    },
+                    "preparation": {
+                      "type": "object",
+                      "properties": {
+                        "version": {
+                          "type": "integer"
+                        },
+                        "notes": {
+                          "type": "object",
+                          "properties": {
+                            "reason": {
+                              "type": "string"
+                            },
+                            "workSchedule": {
+                              "type": "string"
+                            },
+                            "payTerms": {
+                              "type": "string"
+                            },
+                            "contactName": {
+                              "type": "string"
+                            },
+                            "additionalNotes": {
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "reason",
+                            "workSchedule",
+                            "payTerms",
+                            "contactName",
+                            "additionalNotes"
+                          ]
+                        },
+                        "updatedAt": {
+                          "type": "string",
+                          "format": "date-time",
+                          "nullable": true
+                        }
+                      },
+                      "required": [
+                        "version",
+                        "notes",
+                        "updatedAt"
+                      ]
+                    },
+                    "missingInformation": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    },
+                    "notice": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "assignment",
+                    "mission",
+                    "employer",
+                    "establishment",
+                    "worker",
+                    "canEdit",
+                    "preparation",
+                    "missingInformation",
+                    "notice"
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Controlled API error; applicability depends on route",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Controlled API error; applicability depends on route",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Controlled API error; applicability depends on route",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Controlled API error; applicability depends on route",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Controlled API error; applicability depends on route",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "413": {
+            "description": "Controlled API error; applicability depends on route",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Controlled API error; applicability depends on route",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Controlled API error; applicability depends on route",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Controlled API error; applicability depends on route",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Contracts"
+        ]
+      }
+    },
     "/api/v1/internal/automation/jobs/dispatch": {
       "post": {
         "operationId": "CloudJobsController_dispatch",
@@ -29194,6 +29887,55 @@
         "required": [
           "clientRequestId",
           "body"
+        ]
+      },
+      "ContractNotesDto": {
+        "type": "object",
+        "properties": {
+          "reason": {
+            "type": "string",
+            "maxLength": 2000
+          },
+          "workSchedule": {
+            "type": "string",
+            "maxLength": 2000
+          },
+          "payTerms": {
+            "type": "string",
+            "maxLength": 2000
+          },
+          "contactName": {
+            "type": "string",
+            "maxLength": 150
+          },
+          "additionalNotes": {
+            "type": "string",
+            "maxLength": 2000
+          }
+        },
+        "required": [
+          "reason",
+          "workSchedule",
+          "payTerms",
+          "contactName",
+          "additionalNotes"
+        ]
+      },
+      "ContractPreparationDto": {
+        "type": "object",
+        "properties": {
+          "version": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 2147483646
+          },
+          "notes": {
+            "$ref": "#/components/schemas/ContractNotesDto"
+          }
+        },
+        "required": [
+          "version",
+          "notes"
         ]
       },
       "OrganizationDto": {
