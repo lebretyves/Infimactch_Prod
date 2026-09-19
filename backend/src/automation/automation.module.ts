@@ -1,6 +1,6 @@
 import { sendReminders } from './reminders';
 import { demoNoticeSuppressed, mutedDemoMissionIds } from "../notifications/demo-suppression";
-import {queueMissionEmails, generateCancellations, dispatchMissionEmails} from './mission-mail';
+import {professionalIdentityName, queueMissionEmails, generateCancellations, dispatchMissionEmails} from './mission-mail';
 import {UseInterceptors} from "@nestjs/common";
 import {ExecutionTrace} from "./execution-trace";
 import { geodesicKm } from "../database/distance";
@@ -148,7 +148,7 @@ export class AutomationService {
         [c.id, (c.lease_token = randomUUID())],
       );
       const [participants] = await em.query(
-        "SELECT p.display_name AS professional_name, e.name AS establishment_name, agency.name AS agency_name FROM profile p LEFT JOIN organization e ON e.id=$2 LEFT JOIN organization agency ON agency.id=$3 WHERE p.user_id=$1",
+        "SELECT p.display_name AS professional_name, p.details->>'firstName' AS first_name, p.details->>'lastName' AS last_name, e.name AS establishment_name, e.referent AS establishment_contact, agency.name AS agency_name FROM profile p LEFT JOIN organization e ON e.id=$2 LEFT JOIN organization agency ON agency.id=$3 WHERE p.user_id=$1",
         [a.nurse_id, m.establishment_id, m.agency_id],
       );
       return { done: false, m, a, c, participants };
@@ -159,6 +159,7 @@ export class AutomationService {
     try {
       const pdf = await createConfirmationPdf({
         assignmentId: a.id,
+        missionId: m.id,
         missionVersion: m.version,
         title: m.title,
         qualification: m.qualification,
@@ -167,9 +168,13 @@ export class AutomationService {
         start: m.start_at,
         end: m.end_at,
         timezone: m.timezone,
+        schedulePrecision: m.schedule_precision,
         hourlySalary: m.hourly_salary,
-        professionalName: participants?.professional_name,
+        professionalName: professionalIdentityName(participants),
         establishmentName: participants?.establishment_name,
+        establishmentContact: participants?.establishment_contact,
+        population: m.population,
+        block: m.block,
         agencyName: participants?.agency_name,
       });
       generationStage = "STORAGE";

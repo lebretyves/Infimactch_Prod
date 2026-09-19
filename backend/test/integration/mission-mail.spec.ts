@@ -2,6 +2,7 @@ import 'reflect-metadata';
 import {test,before,after} from 'node:test';
 import assert from 'node:assert/strict';
 import {randomUUID} from 'node:crypto';
+import {inflateSync} from 'node:zlib';
 import {Database} from '../../src/database/database';
 import {MissionsService} from '../../src/missions/missions.service';
 import {MissionsModule} from '../../src/missions/missions.module';
@@ -14,7 +15,7 @@ after(async()=>{await db?.onModuleDestroy();});
 async function fixture(){
  const [n]=await db.query("INSERT INTO account(email,password_hash,family,terms_version) VALUES($1,'fixture','NURSE','fixture') RETURNING id",[randomUUID()+'@example.invalid']);
  const [r]=await db.query("INSERT INTO account(email,password_hash,family,terms_version) VALUES($1,'fixture','ENTERPRISE','fixture') RETURNING id",[randomUUID()+'@example.invalid']);
- await db.query("INSERT INTO profile(user_id,display_name,qualifications,rpps_status,latitude,longitude,radius_km,accepted_shifts) VALUES($1,'Camille Test',ARRAY['IDE'],'FOUND',48,2,30,ARRAY['DAY'])",[n.id]);
+ await db.query("INSERT INTO profile(user_id,display_name,qualifications,rpps_status,latitude,longitude,radius_km,accepted_shifts,details) VALUES($1,'Camille',ARRAY['IDE'],'FOUND',48,2,30,ARRAY['DAY'],$2)",[n.id,JSON.stringify({firstName:'Camille',lastName:'Dupont'})]);
  const [org]=await db.query("INSERT INTO organization(kind,name,address,referent,finess) VALUES('ESTABLISHMENT','Fictional test','Fictional address','Test','000000000') RETURNING id");
  await db.query('INSERT INTO membership(user_id,organization_id) VALUES($1,$2)',[r.id,org.id]);
  const [m]=await db.query("INSERT INTO mission(establishment_id,title,description,qualification,service,population,block,start_at,end_at,shift,address,location,hourly_salary,status) VALUES($1,'Fictional email test','Fixture only','IDE','URGENCES','ADULT','NONE',now()+interval '10 days',now()+interval '10 days 8 hours','DAY','Fictional address',ST_SetSRID(ST_MakePoint(2,48),4326)::geography,25,'OPEN') RETURNING *",[org.id]);
@@ -22,12 +23,24 @@ async function fixture(){
  const a=await service.assign(r.id,m.id,application.id,randomUUID());
  return {n:n.id,r:r.id,m,a,org:org.id};
 }
+// PDFKit standard-font text uses hexadecimal strings in compressed content streams.
+function pdfText(pdf:Buffer) {
+ let text='';
+ for(const stream of pdf.toString('latin1').matchAll(/stream\r?\n([\s\S]*?)\r?\nendstream/g)) {
+  try {const content=inflateSync(Buffer.from(stream[1]!,'latin1')).toString('latin1');
+   text += [...content.matchAll(/<([a-f0-9]+)>/gi)].map(m=>Buffer.from(m[1]!,'hex').toString('latin1')).join('');
+  } catch { /* Only Flate text streams are relevant. */ }
+ }
+ return text;
+}
 const sent:any[]=[];
 const transport:typeof fetch=async(url,options)=>{assert.equal(url,'https://api.smtp2go.com/v3/email/send');const body=JSON.parse(options!.body as string);assert.equal(body.to.length,1);assert.equal(Buffer.from(body.attachments[0].fileblob,'base64').subarray(0,5).toString(),'%PDF-');assert.equal((options!.headers as any)['X-Smtp2go-Api-Key'],'test-only');sent.push({body,key:(options!.headers as any)['Idempotency-Key']});return Response.json({data:{email_id:randomUUID(),succeeded:1,failed:0}});};
 test('confirmation queues PDF email for both parties exactly once; SMTP2GO receives individual attachments',async()=>{
  const f=await fixture();const [e]=await db.query("SELECT id FROM outbox WHERE event='AssignmentCreated' AND payload->>'assignmentId'=$1",[f.a.id]);
  const automation=new AutomationService(db,docs);assert.equal((await automation.confirmation(e.id)).status,'READY');await automation.confirmation(e.id);
  assert.equal((await db.query('SELECT id FROM mission_email WHERE assignment_id=$1',[f.a.id])).length,2);
+ const [confirmation]=await db.query('SELECT document_id FROM mission_confirmation WHERE assignment_id=$1',[f.a.id]);
+ assert.ok(pdfText((await docs.read(f.n,confirmation.document_id)).data).includes('Camille Dupont'));
  assert.equal((await dispatchMissionEmails(db,docs,10,transport)).sent,2);assert.equal((await dispatchMissionEmails(db,docs,10,transport)).sent,0);
  assert.ok(sent.some(x=>x.body.html_body.includes('/missions/m_'+f.m.id)));assert.ok(sent.some(x=>x.body.html_body.includes('/gestion/missions/'+f.m.id)));
 });
@@ -39,7 +52,7 @@ test('nurse cancellation releases agenda, reopens mission and generates one down
  assert.equal((await db.query("SELECT id FROM assignment WHERE nurse_id=$1 AND status='ACTIVE'",[f.n])).length,0);
  assert.equal((await db.query('SELECT id FROM mission_cancellation WHERE assignment_id=$1',[f.a.id])).length,1);
  await Promise.all([generateCancellations(db,docs),generateCancellations(db,docs)]);
- const [c]=await db.query('SELECT * FROM mission_cancellation WHERE assignment_id=$1',[f.a.id]);assert.equal(c.status,'READY');assert.equal(c.details.cancellation.initiator,'NURSE');
+ const [c]=await db.query('SELECT * FROM mission_cancellation WHERE assignment_id=$1',[f.a.id]);assert.equal(c.status,'READY');assert.equal(c.details.cancellation.initiator,'NURSE');assert.equal(c.details.professionalName,'Camille Dupont');assert.equal(c.details.missionId,f.m.id);assert.ok(pdfText((await docs.read(f.n,c.document_id)).data).includes('Camille Dupont'));
  assert.equal((await docs.read(f.r,c.document_id)).data.subarray(0,5).toString(),'%PDF-');await docs.read(f.n,c.document_id);
  const [Controller]=Reflect.getMetadata('controllers',MissionsModule),controller=new Controller(service,db);
  await assert.rejects(controller.cancellationDocument({session:{userId:randomUUID()}},f.a.id),(e:any)=>e.getStatus()===404);
@@ -50,8 +63,9 @@ test('nurse cancellation releases agenda, reopens mission and generates one down
 test('company cancellation preserves snapshot after reopening and suppresses queued confirmation',async()=>{
  const f=await fixture();const [e]=await db.query("SELECT id FROM outbox WHERE event='AssignmentCreated' AND payload->>'assignmentId'=$1",[f.a.id]);await new AutomationService(db,docs).confirmation(e.id);
  await service.transition(f.r,f.m.id,'cancel',randomUUID());await service.transition(f.r,f.m.id,'reopen',randomUUID());
- await db.query("UPDATE mission SET title='Changed after cancellation' WHERE id=$1",[f.m.id]);await generateCancellations(db,docs);
- const [c]=await db.query('SELECT * FROM mission_cancellation WHERE assignment_id=$1',[f.a.id]);assert.equal(c.details.title,'Fictional email test');assert.equal(c.details.cancellation.initiator,'ENTERPRISE');
+ await db.query("UPDATE mission SET title='Changed after cancellation' WHERE id=$1",[f.m.id]);
+ await db.query("UPDATE profile SET details=$2 WHERE user_id=$1",[f.n,JSON.stringify({firstName:'New',lastName:'Identity'})]);await generateCancellations(db,docs);
+ const [c]=await db.query('SELECT * FROM mission_cancellation WHERE assignment_id=$1',[f.a.id]);assert.equal(c.details.title,'Fictional email test');assert.equal(c.details.cancellation.initiator,'ENTERPRISE');assert.equal(c.details.professionalName,'Camille Dupont');assert.ok(pdfText((await docs.read(f.n,c.document_id)).data).includes('Camille Dupont'));
  const before=sent.length;await dispatchMissionEmails(db,docs,10,transport);assert.equal(sent.length-before,2);assert.ok(sent.slice(before).every(x=>x.body.subject.includes('Annulation')));
  assert.equal((await db.query("SELECT id FROM mission_email WHERE assignment_id=$1 AND kind='CONFIRMATION' AND status='CANCELLED'",[f.a.id])).length,2);
 });
