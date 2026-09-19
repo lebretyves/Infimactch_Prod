@@ -48,7 +48,7 @@ export default function Connexion() {
     if (enCours) return;
 
     const emailVide = !email.trim();
-    const emailInvalide = !emailVide && !email.includes("@");
+    const emailInvalide = !emailVide && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim());
     const mdpVide = motDePasse.length === 0;
     const mdpCourt = !mdpVide && motDePasse.length < 12;
 
@@ -75,7 +75,7 @@ export default function Connexion() {
     setEnCours(true);
 
     try {
-      await login({ email, motDePasse, role: "interimaire" });
+      await login({ email: email.trim(), motDePasse, role: "interimaire" });
       try {
         sessionStorage.removeItem("infimatch:expired");
       } catch {

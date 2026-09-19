@@ -11,6 +11,7 @@ import s from './Field.module.css';
 type Width = 'sm' | 'md' | 'lg';
 
 type WrapperProps = {
+  id?: string;
   label: string;
   hint?: string;
   error?: string;
@@ -19,9 +20,10 @@ type WrapperProps = {
   children: (props: { id: string; describedBy?: string; invalid: boolean }) => ReactNode;
 };
 
-function Wrapper({ label, hint, error, optional, required, children }: WrapperProps) {
-  const id = useId();
-  const hintId = hint ? `${id}-hint` : undefined;
+function Wrapper({ id: suppliedId, label, hint, error, optional, required, children }: WrapperProps) {
+  const generatedId = useId();
+  const id = suppliedId ?? generatedId;
+  const hintId = hint && !error ? `${id}-hint` : undefined;
   const errorId = error ? `${id}-error` : undefined;
   const describedBy = [errorId, hintId].filter(Boolean).join(' ') || undefined;
 
@@ -106,7 +108,7 @@ export const TextField = forwardRef<
   if (rest.readOnly) return <ReadOnlyField label={label} value={rest.value ?? rest.defaultValue}
     hint={hint} error={error} name={rest.name} disabled={rest.disabled} type={rest.type} />;
   return (
-    <Wrapper label={label} hint={hint} error={error} optional={optional} required={required}>
+    <Wrapper id={rest.id} label={label} hint={hint} error={error} optional={optional} required={required}>
       {({ id, describedBy, invalid }) => (
         <span className={shell(icon, action)}>
           {icon && (
@@ -118,11 +120,11 @@ export const TextField = forwardRef<
             {...rest}
             ref={ref}
             id={id}
-            className={[s.control, invalid && s.invalid, width && s[`width-${width}`]]
+            className={[s.control, invalid && s.invalid, width && s[`width-${width}`], rest.className]
               .filter(Boolean)
               .join(' ')}
-            aria-describedby={describedBy}
-            aria-invalid={invalid || undefined}
+            aria-describedby={[describedBy, rest['aria-describedby']].filter(Boolean).join(' ') || undefined}
+            aria-invalid={invalid || rest['aria-invalid']}
             required={required}
           />
           {action && <span className={s.action}>{action}</span>}
@@ -173,14 +175,14 @@ export function TextArea({
   if (rest.readOnly) return <ReadOnlyField label={label} value={rest.value ?? rest.defaultValue}
     hint={hint} error={error} name={rest.name} disabled={rest.disabled} />;
   return (
-    <Wrapper label={label} hint={hint} error={error} optional={optional} required={required}>
+    <Wrapper id={rest.id} label={label} hint={hint} error={error} optional={optional} required={required}>
       {({ id, describedBy, invalid }) => (
         <textarea
           {...rest}
           id={id}
-          className={[s.control, s.textarea, invalid && s.invalid].filter(Boolean).join(' ')}
-          aria-describedby={describedBy}
-          aria-invalid={invalid || undefined}
+          className={[s.control, s.textarea, invalid && s.invalid, rest.className].filter(Boolean).join(' ')}
+          aria-describedby={[describedBy, rest['aria-describedby']].filter(Boolean).join(' ') || undefined}
+          aria-invalid={invalid || rest['aria-invalid']}
           required={required}
         />
       )}
@@ -200,7 +202,7 @@ export function SelectField({
   ...rest
 }: FieldProps & SelectHTMLAttributes<HTMLSelectElement>) {
   return (
-    <Wrapper label={label} hint={hint} error={error} optional={optional} required={required}>
+    <Wrapper id={rest.id} label={label} hint={hint} error={error} optional={optional} required={required}>
       {({ id, describedBy, invalid }) => (
         <span className={shell(icon)}>
           {icon && (
@@ -211,11 +213,11 @@ export function SelectField({
           <select
             {...rest}
             id={id}
-            className={[s.control, s.select, invalid && s.invalid, width && s[`width-${width}`]]
+            className={[s.control, s.select, invalid && s.invalid, width && s[`width-${width}`], rest.className]
               .filter(Boolean)
               .join(' ')}
-            aria-describedby={describedBy}
-            aria-invalid={invalid || undefined}
+            aria-describedby={[describedBy, rest['aria-describedby']].filter(Boolean).join(' ') || undefined}
+            aria-invalid={invalid || rest['aria-invalid']}
             required={required}
           >
             {children}

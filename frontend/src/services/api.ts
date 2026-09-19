@@ -6,13 +6,14 @@ export function formatRateLimitMessage(retryAfter: string | null): string {
     return "Trop de tentatives. Réessayez dans quelques minutes.";
   }
   const raw = retryAfter.trim();
-  let seconds = Number(raw);
-  if (!Number.isFinite(seconds) || seconds < 0) {
+  // Reject malformed numeric values rather than interpreting them as dates.
+  let seconds = /^\d+$/.test(raw) ? Number(raw) : NaN;
+  if (!Number.isFinite(seconds) && /^[A-Za-z]{3}, /.test(raw)) {
     const until = Date.parse(raw);
-    if (!Number.isFinite(until)) {
-      return "Trop de tentatives. Réessayez dans quelques minutes.";
-    }
-    seconds = Math.max(1, Math.ceil((until - Date.now()) / 1000));
+    if (Number.isFinite(until)) seconds = Math.ceil((until - Date.now()) / 1000);
+  }
+  if (!Number.isFinite(seconds)) {
+    return "Trop de tentatives. Réessayez dans quelques minutes.";
   }
   seconds = Math.max(1, Math.ceil(seconds));
   if (seconds < 60) {
