@@ -13,3 +13,15 @@ Une nouvelle mission avec un nouvel identifiant reste notifiée, même avec le m
 Aucune migration SQL n'est nécessaire : le correctif est compatible avec le schéma actuel, même si Neon est inaccessible au moment du déploiement. Il prendra effet quand l'API pourra de nouveau accéder à la base. Il ne rembourse pas les quotas déjà consommés.
 
 Validation : six tests d'intégration sur PostGIS isolé (dont 26 missions inhibées pour dépasser la taille d'un lot de rappels, une nouvelle mission et une livraison Discord simulée), puis onze tests existants sur les notifications, confirmations, annulations et PDF/emails. Aucun message réel envoyé pendant ces tests.
+
+## Purge des anciennes alertes
+
+L'opérateur peut exécuter `node scripts/vault/purge-demo-alerts.mjs` pour consulter les compteurs, puis ajouter `--apply` pour la purge autorisée. Le backend doit être compilé et le coffre local accessible depuis ce checkout. Le script utilise uniquement les identifiants de la liste historique, jamais toutes les anciennes missions.
+
+La purge travaille par transactions limitées à 500 alertes, 500 anciennes livraisons Discord et 500 événements de matching, avec un maximum de 20 lots par lancement. Elle supprime les alertes MATCH/REMINDER/MISSION_PUBLISHED et leurs livraisons associées ; elle clôture les événements de matching encore en attente et conserve leur reçu pour éviter un rejeu. Elle ne supprime ni missions ni comptes ni profils ni candidatures ni affectations ni documents. Elle préserve les notifications transactionnelles, les livraisons SENDING/UNCERTAIN et les événements dont le traitement est encore loué à un worker.
+
+Le mode aperçu ne modifie rien. Un échec annule le lot entier. Les lignes de livraison sont verrouillées et revérifiées avant suppression pour conserver un envoi ayant commencé entre la sélection et le verrouillage. Les lots appliqués sont enregistrés dans l'audit sans recopier les messages ni données personnelles.
+
+Six tests d'intégration PostGIS couvrent l'aperçu, le rollback, les données métier et PDF inchangés, la préservation des nouvelles missions et confirmations/annulations, la concurrence avec un envoi et la limite de lot. La suppression rend l'espace réutilisable par PostgreSQL ; elle ne garantit pas une baisse immédiate de la taille physique et ne restitue pas de quota de calcul/transfert consommé.
+
+Tentative de production du 19 septembre 2026 : refus de connexion Neon SQLSTATE 53000 avant toute transaction. Aucun enregistrement de production supprimé. Le script reste prêt pour l'accès rétabli ou pour une copie récente validée sur Supabase.
