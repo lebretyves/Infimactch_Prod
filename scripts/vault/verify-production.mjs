@@ -1,3 +1,4 @@
+import {managedPostgresConnection} from './postgres-target.mjs';
 import {withRole,request} from './common.mjs';
 import {Client} from 'pg';
 import {randomUUID,randomBytes} from 'node:crypto';
@@ -41,7 +42,7 @@ try{
  const saved=csrf;csrf='invalid';await call('/profile','PUT',{},403);csrf=saved;console.log('CSRF rejection PASS');
  await call('/internal/automation/jobs/dispatch','POST',{},401);console.log('Internal route protection PASS');
 }catch(e){console.error('Production verification failed: '+e.message);process.exitCode=1;}finally{
- await withRole('operator',async token=>{const values=(await request('kv/data/infimatch/v1/production',{token})).data.data;const u=new URL(values.DATABASE_URL_UNPOOLED);u.searchParams.set('sslmode','verify-full');const db=new Client({connectionString:u.toString()});await db.connect();try{
+ await withRole('operator',async token=>{const values=(await request('kv/data/infimatch/v1/production',{token})).data.data;const db=new Client(managedPostgresConnection(values.DATABASE_URL_UNPOOLED,values.DATABASE_CA_CERT));await db.connect();try{
   await db.query('BEGIN');const rows=(await db.query('SELECT id FROM account WHERE email=$1 FOR UPDATE',[email])).rows;
   if(rows.length){const id=rows[0].id;if(actor)assert.equal(actor,id);assert.ok(email.startsWith('qa-cloud-')&&email.endsWith('@example.invalid'));
    await db.query('DELETE FROM document WHERE owner_id=$1',[id]);await db.query('DELETE FROM notification WHERE user_id=$1',[id]);await db.query('DELETE FROM profile_qualification WHERE nurse_id=$1',[id]);await db.query('DELETE FROM profile WHERE user_id=$1',[id]);await db.query('DELETE FROM idempotency WHERE actor_id=$1',[id]);await db.query('DELETE FROM audit WHERE actor_id=$1',[id]);await db.query("DELETE FROM session WHERE sess->>'userId'=$1",[id]);await db.query('DELETE FROM account WHERE id=$1 AND email=$2',[id,email]);

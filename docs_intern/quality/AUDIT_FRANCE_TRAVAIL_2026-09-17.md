@@ -1,5 +1,6 @@
 # Audit de la collecte France Travail — 17 septembre 2026
 
+> Rapport historique : cet état précède la bascule vers Supabase du 19 septembre. Pour la configuration actuelle, consulter [l'inventaire](../DEPLOIEMENT_INVENTAIRE.md).
 ## Conclusion
 
 **InfiMatch ne récupère pas actuellement toutes les annonces France Travail.** Le système importe un sous-ensemble borné d’annonces d’intérim, puis les recherches des utilisateurs interrogent ce catalogue local. Une recherche sans résultat dans InfiMatch ne démontre pas l’absence d’offres correspondantes chez France Travail.

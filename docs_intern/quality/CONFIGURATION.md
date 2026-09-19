@@ -4,7 +4,7 @@ Inventaire au 17 septembre 2026, issu du code et des scripts de configuration. L
 
 | Variables | Composant / environnement | Nature | Emplacement | Vérification |
 |---|---|---|---|---|
-| `DATABASE_URL` | API, worker, local / production | Secret | Vault ; variable serveur Vercel pour Neon | Santé, migrations et écritures publiques |
+| `DATABASE_URL` | API, worker, local / production | Secret | Vault ; variable serveur Vercel pour Supabase | Santé, migrations et écritures publiques |
 | `DATABASE_URL_UNPOOLED` | Opérateur production | Secret privilégié | Vault production uniquement | Script de migration ; jamais dans le frontend |
 | `MONGODB_URI` | API / worker | Secret | Vault et serveur Vercel | Ping réel ; écriture/lecture des explications en recette isolée |
 | `SESSION_SECRET` | API | Secret | Vault et serveur Vercel | Sessions séparées, révocation, cookies |
@@ -36,7 +36,7 @@ Inventaire au 17 septembre 2026, issu du code et des scripts de configuration. L
 | `MATCHING_WEIGHTS_JSON` | Matching | Configuration métier | Vault / serveur | Éligibilité bloquante indépendante du score |
 | `MATCHING_RETENTION_DAYS`, `BUSINESS_HISTORY_RETENTION_DAYS` | Conservation | Politique interne | Vault / serveur | Maintenance destructive en attente de décision ; pas de durée inventée |
 | `ERASURE_LEDGER_DIRECTORY` | Effacement local | Chemin interne | Configuration locale | Registre cloud dans MongoDB ; procédures de restauration |
-| `POSTGRES_PASSWORD`, `MONGO_PASSWORD` | Docker local | Secrets | Vault infrastructure, injectés dans le processus | Démarrage local ; non utilisés par Neon/Atlas |
+| `POSTGRES_PASSWORD`, `MONGO_PASSWORD` | Docker local | Secrets | Vault infrastructure, injectés dans le processus | Démarrage local ; non utilisés par Supabase/Atlas |
 | `VITE_API_URL` | Frontend | Public uniquement | Vercel frontend / exemple local | `/api/v1`, proxy vers API |
 | `VITE_ROUTER` | Frontend démo | Public | Build de démonstration seulement | Hash en démo ; routes navigateur sur le site |
 | `API_PROXY_TARGET` | Vite local | URL de développement | Exemple frontend | Proxy local ; pas utilisé comme URL de production |
