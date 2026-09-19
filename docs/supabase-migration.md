@@ -20,4 +20,31 @@ La sauvegarde Supabase exporte le schéma applicatif `public`, sans exporter/res
 3. Après validation des données seulement, remplacer les paramètres PostgreSQL du secret Vault de production, puis synchroniser les variables Vercel et redéployer le backend.
 4. Tester connexion, sessions, recherche, matching, affectations, agenda, PDF et automatisations ; vérifier les reçus existants avant toute reprise.
 
-L'exécution de 25 migrations dans une transaction ensuite annulée, une connexion applicative et un export SQL de la cible préparée ont été vérifiés sur Supabase avec TLS. Ces vérifications établissent la compatibilité technique, pas la récupération des données Neon. Au 19 septembre 2026, la bascule de données reste bloquée par le quota de la source. Une restauration ancienne exige une décision explicite acceptant les données manquantes et le rapprochement du registre actuel des effacements.
+## Bascule effectuée le 19 septembre 2026
+
+L'utilisateur a explicitement accepté une reprise sans sauvegarde. La production utilise désormais Supabase ; aucune sauvegarde ancienne n'a été restaurée et Neon reste intact.
+
+- 25 migrations appliquées sur PostgreSQL 17.6, avec PostGIS et btree_gist.
+- 3 092 missions fictives locales réinjectées avec leurs UUID d'origine : 2 990 ouvertes et 102 conservées en brouillon car leur début était passé au moment de la reprise.
+- 647 organisations de démonstration, dont une agence et 646 établissements. Les descriptions conservent la mention de leur caractère fictif.
+- Référentiel FINESS officiel du 17 septembre importé : 174 741 établissements.
+- Aucun compte, candidature, affectation ou document provenant de Neon repris. Deux accès neufs préparés : propriétaire du portail administrateur à activer et entreprise de démonstration. Les informations d'accès restent privées, dans Vault et un fichier local protégé ; aucun secret dans Git.
+- Taille mesurée après import : 72 125 587 octets, environ 72 Mo. Cette mesure est un état initial, pas une garantie sur la croissance future.
+- Configuration PostgreSQL remplacée dans Vault et Vercel ; autres clés de services conservées. L'ancienne configuration Neon est archivée séparément dans Vault.
+- Déploiement de bascule : `dpl_2KWW1z4Xec9C2HqfRcNB26rvfegC`, code `ae9b997`, état READY ; alias backend de production vérifié.
+
+### Vérifications réelles
+
+Santé backend et proxy frontend HTTP 200 ; connexion entreprise dans le navigateur avec session persistante ; inscription intérimaire ; recherche IDE à 30 km de Paris donnant 338 missions ; classement décroissant des scores indicatifs pour un profil incomplet ; consultation d'une fiche mission ; recherche FINESS.
+
+Le point d'entrée de relance utilisé par n8n répond HTTP 201, `processed=0`, `notifications=0`, `hasMore=false`. Les 3 092 UUID réinjectés figurent dans la liste de suppression : aucun rattrapage d'alertes de création, de matching ou de relance. Les nouvelles missions créées avec de nouveaux UUID restent hors de cette liste ; confirmations et annulations ne sont pas supprimées par cette règle.
+
+Le rôle applicatif peut lire les missions mais ne peut créer de table ni lire les migrations. Les 49 tables applicatives ne sont accessibles ni à `anon` ni à `authenticated`. L'API Data Supabase est désactivée ; l'accès passe par le backend InfiMatch.
+
+Les affectations, nouveaux PDF et envois SMTP n'ont pas fait l'objet d'une nouvelle démonstration complète pendant cette bascule. Aucun ancien PDF ne peut réapparaître sans récupération de ses données et de l'affectation correspondante. Les anciens utilisateurs doivent recréer leur compte.
+
+Les preuves locales de cette opération se trouvent dans `audits/2026-09-19-supabase` à la racine de l'espace de travail. Elles comprennent les résultats de migration, les tests navigateur et le contrôle des relances. Les scripts historiques spécifiques à Neon (capture initiale, copie initiale, bootstrap/récupération d'administrateur) ne doivent pas être utilisés tels quels contre Supabase ; la migration, la synchronisation et la sauvegarde courantes prennent en charge Supabase.
+
+### Correction de la première recherche
+
+Le contrôle navigateur a révélé une attente infinie à l'ouverture de `/missions` sans paramètres de zone. L'initialisation pouvait terminer son état React avant l'ajout de `zone=1` dans l'URL ; la première recherche était alors ignorée et la clé de chargement ne changeait plus. La clé inclut maintenant ce paramètre. Build frontend réussi ; test navigateur de la version corrigée contre l'API de production : liste chargée et 20 pourcentages visibles, sans renseigner manuellement de zone.

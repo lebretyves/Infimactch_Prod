@@ -172,6 +172,9 @@ function NurseMissions() {
     user?.id,
     p.data,
     zoneInitialized,
+    // The default area can update only this URL marker after state initialization.
+    // Include it so a search skipped before the navigation is retried afterwards.
+    params.get("zone"),
     sort,
     origin,
     values,
