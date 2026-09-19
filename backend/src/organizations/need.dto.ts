@@ -1,4 +1,4 @@
-import {validDateBounds,startsInPast} from "../domain/schedule-period";
+import {validDateBounds,startsInPast,withinMissionHorizon} from "../domain/schedule-period";
 ﻿import { ApiProperty } from "@nestjs/swagger";
 import { Transform, Type } from "class-transformer";
 import {
@@ -98,6 +98,8 @@ export function normalizeNeedDetails(
   }
   if (details.schedulePrecision === 'DATE' && !validDateBounds(details.start,details.end,details.timezone)) invalid("Les dates doivent couvrir des jours entiers.");
   if (startsInPast(details.start,details.schedulePrecision,details.timezone,now)) invalid("Le début du besoin doit être dans le futur.");
+  if (!withinMissionHorizon(details.start,details.end,details.timezone,now))
+    invalid("Les dates du besoin ne peuvent pas dépasser deux ans à partir d’aujourd’hui.");
   if (details.block === "SPECIALIZED" && !details.specialty)
     invalid("Choisissez la spécialité du bloc.");
   if (details.block !== "SPECIALIZED" && details.specialty)

@@ -1,5 +1,5 @@
 import {cancellationRecord} from '../automation/mission-mail';
-import {validDateBounds,startsInPast} from "../domain/schedule-period";
+import {validDateBounds,startsInPast,withinMissionHorizon} from "../domain/schedule-period";
 import { assessApplication } from "./application-assessment";
 import { assessAssignment } from "./assignment-assessment";
 import { requireActiveAccount } from "../common/access";
@@ -86,7 +86,7 @@ async function applicationAssessment(em: SqlClient, p: any, m: any) {
 @Injectable()
 export class MissionsService {
   constructor(private readonly db: Database) {}
-  private validate(b: MissionDto) {
+  private validate(b: MissionDto, checkHorizon = true) {
     if (b.timezone !== undefined) {
       try {
         if (typeof b.timezone !== "string" || !/^[A-Za-z_]+(?:\/[A-Za-z0-9_+.-]+)*$/.test(b.timezone)) throw new Error();
@@ -100,6 +100,8 @@ export class MissionsService {
     }
     if (b.schedulePrecision === 'DATE' && !validDateBounds(b.start,b.end,b.timezone))
       throw new BadRequestException("Date-only bounds must be complete local calendar days");
+    if (checkHorizon && !withinMissionHorizon(b.start,b.end,b.timezone))
+      throw new BadRequestException("Les dates de mission ne peuvent pas dépasser deux ans à partir d’aujourd’hui.");
     if (b.block === "SPECIALIZED" && !b.specialty)
       throw new BadRequestException("Specialty required");
     if (b.block !== "SPECIALIZED" && b.specialty)
@@ -163,7 +165,7 @@ export class MissionsService {
     });
   }
   async edit(actor: string, id: string, b: MissionDto, key?: string) {
-    this.validate(b);
+    this.validate(b, false);
     return this.db.transaction(async (em) => {
       const m = await lockMission(em, id);
       await scope(em, actor, m, true);
@@ -295,6 +297,8 @@ export class MissionsService {
       }[action];
       if (!allowed.includes(m.status))
         throw new ConflictException("Invalid mission transition");
+      if (action === 'publish' && !withinMissionHorizon(new Date(m.start_at).toISOString(),new Date(m.end_at).toISOString(),m.timezone))
+        throw new ConflictException("Corrigez les dates : la mission ne peut pas être programmée au-delà de deux ans.");
       if (action === "publish" && startsInPast(new Date(m.start_at).toISOString(),m.schedule_precision,m.timezone))
         throw new ConflictException("Mission must start in the future");
       if (action === "complete" && new Date(m.end_at).getTime() > Date.now())
@@ -367,7 +371,7 @@ export class MissionsService {
       if (assessment.blockingReasons.length)
         throw new ConflictException({code: "INELIGIBLE", reasons: assessment.blockingReasons});
       const [a] = await em.query(
-        `INSERT INTO application(mission_id,nurse_id,consent_version) VALUES($1,$2,$3) ON CONFLICT(mission_id,nurse_id) DO UPDATE SET status='SUBMITTED',consent_version=$3,updated_at=now() RETURNING *`,
+        `INSERT INTO application(mission_id,nurse_id,consent_version) VALUES($1,$2,$3) ON CONFLICT(mission_id,nurse_id) DO UPDATE SET status='SUBMITTED',consent_version=$3,closure_reason=NULL,closed_at=NULL,updated_at=now() RETURNING *`,
         [id, actor, version],
       );
       await audit(em, actor, "APPLICATION_SUBMITTED", a.id, {
@@ -498,6 +502,18 @@ export class MissionsService {
           "UPDATE application SET status='ACCEPTED',updated_at=now() WHERE id=$1",
           [a.id],
         );
+        // All application actions lock this profile before application rows.
+        // Do not lock other missions: competing assignments may hold them already.
+        const closed = await em.query(`UPDATE application a SET status='UNAVAILABLE',
+          closure_reason='OTHER_ASSIGNMENT_CONFIRMED',closed_at=now(),updated_at=now()
+          FROM mission other WHERE a.mission_id=other.id AND a.nurse_id=$1
+            AND a.id<>$2 AND a.status IN('SUBMITTED','SELECTED')
+            AND other.start_at<$4 AND other.end_at>$3 RETURNING a.id`,
+          [p.user_id,a.id,m.start_at,m.end_at]);
+        for (const application of closed)
+          await audit(em,null,'APPLICATION_UNAVAILABLE',application.id,{
+            reason:'OTHER_ASSIGNMENT_CONFIRMED',assignmentId:assigned.id,
+          });
         await em.query("UPDATE mission SET status='FILLED' WHERE id=$1", [id]);
         await em.query("UPDATE profile SET updated_at=now() WHERE user_id=$1", [
           p.user_id,
