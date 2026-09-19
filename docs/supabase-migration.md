@@ -28,7 +28,7 @@ L'utilisateur a explicitement accepté une reprise sans sauvegarde. La productio
 - 3 092 missions fictives locales réinjectées avec leurs UUID d'origine : 2 990 ouvertes et 102 conservées en brouillon car leur début était passé au moment de la reprise.
 - 647 organisations de démonstration, dont une agence et 646 établissements. Les descriptions conservent la mention de leur caractère fictif.
 - Référentiel FINESS officiel du 17 septembre importé : 174 741 établissements.
-- Aucun compte, candidature, affectation ou document provenant de Neon repris. Deux accès neufs préparés : propriétaire du portail administrateur à activer et entreprise de démonstration. Les informations d'accès restent privées, dans Vault et un fichier local protégé ; aucun secret dans Git.
+- Aucun compte, candidature, affectation ou document provenant de Neon repris. Deux accès neufs préparés : propriétaire du portail administrateur (activé après autorisation explicite) et entreprise de démonstration. Les informations d'accès restent privées, dans Vault et un fichier local protégé ; aucun secret dans Git.
 - Taille mesurée après import : 72 125 587 octets, environ 72 Mo. Cette mesure est un état initial, pas une garantie sur la croissance future.
 - Configuration PostgreSQL remplacée dans Vault et Vercel ; autres clés de services conservées. L'ancienne configuration Neon est archivée séparément dans Vault.
 - Déploiement de bascule : `dpl_2KWW1z4Xec9C2HqfRcNB26rvfegC`, code `ae9b997`, état READY ; alias backend de production vérifié.
@@ -48,3 +48,5 @@ Les preuves locales de cette opération se trouvent dans `audits/2026-09-19-supa
 ### Correction de la première recherche
 
 Le contrôle navigateur a révélé une attente infinie à l'ouverture de `/missions` sans paramètres de zone. L'initialisation pouvait terminer son état React avant l'ajout de `zone=1` dans l'URL ; la première recherche était alors ignorée et la clé de chargement ne changeait plus. La clé inclut maintenant ce paramètre. Build frontend réussi ; test navigateur de la version corrigée contre l'API de production : liste chargée et 20 pourcentages visibles, sans renseigner manuellement de zone.
+
+Validation finale en production : déploiement frontend `dpl_5yQ3N9rJmWmgTnJGUo2nJQCgrbuN`, commit `203f281`, état READY. Ouverture sans zone explicite réussie et 20 pourcentages visibles. Accès propriétaire activé via l'API normale après autorisation explicite, puis tableau de bord vérifié : PostgreSQL et MongoDB disponibles, SMTP2GO configuré, traitement cloud disponible, aucun événement métier en attente ou en échec. La configuration SMTP détectée ne constitue pas une preuve de réception d'un email. Les trois comptes techniques temporaires ont été supprimés avec contrôle de l'absence de candidatures, affectations et documents ; leur audit a été conservé. Après reprise de la collecte des offres externes, une nouvelle mesure donnait 83 102 867 octets ; le volume évolue avec ces imports.
