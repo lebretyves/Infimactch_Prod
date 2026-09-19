@@ -27,6 +27,7 @@ try {
     else if (path === '/login') { authenticated=true;body = { status: 'AUTHENTICATED', csrfToken: 'isolated-fixture-csrf' }; }
     else if (path === '/overview') body = { observedAt: new Date().toISOString(), counts: { accounts: 1, organizations: 0, applications: 0, pendingEvents: 0, failedEvents: 0, documents: 0, missions: { OPEN: 0 } }, alerts: [{kind: 'backup', message: 'Fixture backup status', href: '/backups'}] };
     else if (path === '/executions') body = {items: [{id: 'fixture-run', state: 'completed', checked_at: '2026-09-17T10:00:00Z', execution_id: 'fixture-execution', workflow_id: 'fixture/unsafe?fragment', action: 'confirmation', duration_ms: 125}], total: 1, limit: 20, offset: 0};
+    else if(path.endsWith('/email-deliveries'))body={items:[]};
     else if(path.endsWith('/notifications'))body={connection:{state:'NOT_ASSOCIATED'},personal:{state:'NOT_ASSOCIATED'},internal:{total:0,unread:0},deliveries:{counts:{},recent:[]},organizations:[],catalog:{}};
     else if (path === '/accounts') body = { items: [{ id: 'fixture-account', email: 'client@example.invalid', family: 'NURSE', active: true }], total: 1, limit: 20, offset: 0 };
     else if (path === '/accounts/fixture-account/verification') body = {directory: {status:'FOUND'}, professionalIdentity:null, reviews:[]};

@@ -1,3 +1,4 @@
+import {ContractPreparation1789855200000} from './contract-preparation';
 import {SupportTickets1789851600000} from "./support-tickets";
 import { SharedRateLimit1789848000000 } from "./shared-rate-limit";
 import { RecoveryEmail1789840800000 } from "./recovery-email";
@@ -73,6 +74,7 @@ export class Database implements OnModuleDestroy {
       EmailDelivery1789844400000,
       SupportTickets1789851600000,
       SharedRateLimit1789848000000,
+      ContractPreparation1789855200000,
     ],
     logging: false,
     extra: { max: 12 },

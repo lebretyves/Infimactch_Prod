@@ -19,6 +19,15 @@ const supportList=obj({items:array(supportTicket),hasMore:bool},['items','hasMor
 const supportDetail=obj({ticket:obj({...supportTicket.properties,description:str},[...supportTicket.required,'description']),replies:array(obj({id:uuid,body:str,is_staff:bool,created_at:date},['id','body','is_staff','created_at'])),hasMore:bool},['ticket','replies','hasMore']);
 const cvEvidence={evidence:str,warnings:array(str)};
 const cvCatalog=obj({code:str,label:str,...cvEvidence},['code','label','evidence','warnings']);
+const contractPreparation=obj({
+ assignment:obj({id:uuid,status:{...str,enum:['ACTIVE','COMPLETED','CANCELLED']}},['id','status']),
+ mission:obj({id:uuid,title:str,qualification:str,service:str,address:str,startAt:date,endAt:date,timeZone:str,hourlySalary:{oneOf:[str,num]}},['id','title','qualification','service','address','startAt','endAt','timeZone','hourlySalary']),
+ employer:obj({id:uuid,kind:str,name:str,address:str,siret:nullable(str),contact:str},['id','kind','name','address','siret','contact']),
+ establishment:obj({name:str,address:str,finess:nullable(str)},['name','address','finess']),
+ worker:obj({displayName:str,firstName:nullable(str),lastName:nullable(str)},['displayName','firstName','lastName']),
+ canEdit:bool,preparation:obj({version:int,notes:obj({reason:str,workSchedule:str,payTerms:str,contactName:str,additionalNotes:str},['reason','workSchedule','payTerms','contactName','additionalNotes']),updatedAt:nullable(date)},['version','notes','updatedAt']),
+ missingInformation:array(str),notice:str,
+},['assignment','mission','employer','establishment','worker','canEdit','preparation','missingInformation','notice']);
 export const additionalSchemas={
  RecoveryRequestDto:obj({email:{type:'string',format:'email',minLength:3,maxLength:254}},['email']),
  RecoveryCompleteDto:obj({token:{type:'string',pattern:'^[a-f0-9]{64}$'},password:{type:'string',minLength:12,maxLength:128}},['token','password']),
@@ -27,6 +36,9 @@ Profile:profile,Organization:organization,SessionTiming:session,AuthReceipt:auth
  ExternalCorrespondence:obj({mode:str,score:nullable(num),eligibilityVerified:bool,criteria:{type:"object",additionalProperties:obj({status:str,reason:str,offerValue:{},profileValue:{},value:{}})},warnings:array(str),missingForFullMatching:array(str)}),
 };
 export const additionalResponses:Record<string,any>={
+ "GET /api/v1/assignments/{id}/contract-preparation":contractPreparation,
+ "PUT /api/v1/assignments/{id}/contract-preparation":contractPreparation,
+
  "GET /api/v1/missions/{id}/application-check":obj({warnings:array(str),blockingReasons:array(str),missingSkills:array(str),experienceMonths:num,requiredExperienceMonths:num,distanceKm:nullable(num)},['warnings','blockingReasons','missingSkills','experienceMonths','requiredExperienceMonths','distanceKm']),
  "GET /api/v1/me/missions/{id}/assignments":array(obj({id:uuid,status:{...str,enum:['ACTIVE','COMPLETED','CANCELLED']}},['id','status'])),
  "GET /api/v1/enterprise/missions":page({allOf:[ref('Mission'),obj({establishment_name:str,establishment_address:str,can_manage:bool})]}),

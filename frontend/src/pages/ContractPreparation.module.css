@@ -1,0 +1,24 @@
+.page { max-width: 1320px; margin: 0 auto; padding: 28px 32px 56px; color: var(--ink-900, #0a2540); }
+.header { margin-bottom: 24px; }
+.header > a { margin: 0 0 24px -16px; }
+.header h1 { font-size: clamp(1.8rem, 3.5vw, 2.6rem); letter-spacing: -.045em; margin: 6px 0 12px; line-height: 1.2; }
+.header > p:last-child { color: var(--ink-600, #4f6480); max-width: 64ch; }
+.eyebrow { font-size: .78rem; font-weight: 800; letter-spacing: .09em; text-transform: uppercase; color: var(--teal-700, #0e6c7c); margin: 0 0 8px; }
+.notice { display: flex; gap: 12px; align-items: flex-start; background: #e4f3f7; border-left: 3px solid var(--teal-700, #0e6c7c); padding: 16px 20px; margin-bottom: 28px; line-height: 1.6; }
+.notice svg { flex-shrink: 0; margin-top: 3px; }.notice p { margin: 0; }
+.columns { display: grid; grid-template-columns: minmax(260px, .85fr) minmax(0, 1.4fr); gap: 32px; align-items: start; }
+.recap { padding: 26px; border: 1px solid var(--line, #dbe4f0); border-top: 4px solid var(--brand-600, #1466e0); border-radius: 4px 4px 16px 16px; background: #fff; overflow-wrap: anywhere; }
+.recap h2,.missing h2,.form h2 { font-size: 1.25rem; letter-spacing: -.025em; line-height: 1.4; margin: 0 0 16px; }
+.missionTitle { font-size: 1.05rem; line-height: 1.6; font-weight: 700; margin: 0 0 24px; }
+.recap dl { margin: 0; }.fact { margin: 0 0 16px; }.fact dt { font-size: .8rem; color: var(--ink-600, #4f6480); margin-bottom: 5px; }.fact dd { margin: 0; font-size: .94rem; line-height: 1.65; white-space: pre-wrap; }
+.organization { border-top: 1px solid var(--line, #dbe4f0); padding-top: 20px; margin-top: 22px; }.organization h3 { font-size: .85rem; color: var(--teal-700, #0e6c7c); margin: 0 0 12px; }.organization p { font-size: .94rem; line-height: 1.6; margin: 4px 0 14px; }
+.reference { border-top: 1px solid var(--line, #dbe4f0); padding-top: 18px; margin: 20px 0 0; color: var(--ink-600, #4f6480); font-size: .75rem; line-height: 1.7; }
+.draft { min-width: 0; }.missing { padding: 20px 24px; background: #fff5df; border: 1px solid #e6cc98; border-radius: 12px; margin-bottom: 24px; }.missing h2 { font-size: 1rem; margin-bottom: 8px; }.missing p,.missing li { font-size: .88rem; line-height: 1.65; }.missing p { margin: 0; }.missing ul { margin: 10px 0 0; padding-left: 20px; }
+.form { padding: 28px; background: #fff; border: 1px solid var(--line, #dbe4f0); border-radius: 16px; display: grid; gap: 23px; min-width: 0; }
+.formHeader { display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 12px; }.formHeader h2 { margin: 0; }.version { color: var(--brand-800, #0b3d9e); background: var(--brand-50, #f1f6fe); padding: 7px 10px; border-radius: 6px; font-size: .78rem; font-weight: 700; }
+.help { color: var(--ink-600, #4f6480); font-size: .82rem; line-height: 1.7; margin: 0; }.readOnly { background: var(--brand-50, #f1f6fe); padding: 14px 16px; font-size: .88rem; line-height: 1.6; margin: 0; border-left: 3px solid var(--brand-600, #1466e0); }
+.form textarea { min-width: 0; resize: vertical; }.error { padding: 16px; background: #fff0f0; border: 1px solid #d78080; border-radius: 8px; line-height: 1.65; }.error p { margin: 0 0 12px; }.error:focus { outline: 3px solid var(--brand-600, #1466e0); outline-offset: 3px; }
+.saveBar { border-top: 1px solid var(--line, #dbe4f0); padding-top: 20px; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 16px; }.saveBar p { margin: 0; font-size: .82rem; line-height: 1.6; color: var(--ink-600, #4f6480); flex: 1 1 160px; }
+.state { padding: 40px 24px; background: #fff; border: 1px solid var(--line, #dbe4f0); border-radius: 12px; line-height: 1.7; }
+@media (max-width: 1000px) { .columns { grid-template-columns: minmax(0, 1fr); gap: 24px; }.recap dl { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 0 24px; } }
+@media (max-width: 599px) { .page { padding: 20px 12px 40px; }.header > a { margin-left: -10px; }.form,.recap { padding: 20px 16px; }.notice,.missing { padding: 16px; }.recap dl { grid-template-columns: minmax(0,1fr); }.saveBar button { width: 100%; }.formHeader { display: block; }.version { display: inline-block; margin-top: 12px; }.header h1 { font-size: 1.8rem; } }

@@ -1,3 +1,4 @@
+import {ContractsModule} from './contracts/contracts.module';
 import {SupportModule} from "./support/support.module";
 import { EmailDeliveryModule } from "./automation/email-delivery.module";
 import { postgresConnection } from "./database/connection";
@@ -69,6 +70,7 @@ class HealthController {
     AutomationModule,
     EmailDeliveryModule,
     SupportModule,
+    ContractsModule,
     CloudJobsModule,
     OrganizationsModule,
     ReferenceDataModule,

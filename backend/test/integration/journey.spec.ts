@@ -1213,7 +1213,7 @@ test("closure CLI removes Mongo history and can be retried",async()=>{
  await matching.connection.collection("matchingruns").insertOne({ownerId:c.id,fixture:true});
  for(let i=0;i<2;i++){
   const run=spawnSync(process.execPath,["backend/dist/cli.js","anonymize-account","--account",c.id,"--apply"],{cwd:projectRoot,env:process.env,encoding:"utf8"});
-  if(run.status!==0)throw new Error(run.stderr || "Closure CLI failed");
+  if(run.status!==0)throw new Error(run.stderr || `Closure CLI failed: status=${run.status}, signal=${run.signal}, error=${run.error?.message??"none"}, stdoutBytes=${run.stdout?.length??0}`);
  }
  expect(await matching.connection.collection("matchingruns").countDocuments({ownerId:c.id})).toBe(0);
  } finally {await matching.onModuleDestroy();}

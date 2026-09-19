@@ -1,3 +1,5 @@
+> Archive : les pages /catalogue et /apercu-annonces ont été retirées le 19 septembre 2026. Elles redirigent vers l’accueil. Les nouvelles captures éventuelles restent dans docs/proofs/catalogue-archives, hors des fichiers publics. Les instructions ci-dessous décrivent l’ancienne galerie.
+
 # Catalogue consultable du frontend — 16 septembre 2026
 
 Ouvrir http://127.0.0.1:5173/catalogue (serveur Vite lancé). Route publique, accessible depuis l’accueil et le menu connecté.

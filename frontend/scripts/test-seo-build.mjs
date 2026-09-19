@@ -1,5 +1,5 @@
 import assert from 'node:assert/strict';
-import {readFileSync,writeFileSync,mkdirSync} from 'node:fs';
+import {readFileSync,writeFileSync,mkdirSync,existsSync,readdirSync} from 'node:fs';
 import {fileURLToPath} from 'node:url';
 import {dirname,resolve} from 'node:path';
 const root=resolve(dirname(fileURLToPath(import.meta.url)),'..');
@@ -22,3 +22,12 @@ assert.ok(read('dist/robots.txt').includes('Sitemap: '+origin+'/sitemap.xml'));a
 const report={date:new Date().toISOString(),publicPages:pages,privateRoutes:privatePaths,privateShellNoindex:true,privateRewritesCovered:true,privateCacheNoStore:true,sitemapOnlyPublic:true,jobPostingNotPublished:true,limits:['Built files and Vercel configuration only; not a live deployment or Google indexing test']};
 const output=process.env.SEO_PROOF_PATH;if(output){mkdirSync(dirname(output),{recursive:true});writeFileSync(output,JSON.stringify(report,null,2));}
 console.log(JSON.stringify({PASS:true,publicPages:pages.length,privateRoutes:privatePaths.length,privateShellNoindex:true,sitemapOnlyPublic:true}));
+
+// Retired demonstration URLs redirect instead of exposing a gallery or fixtures.
+for(const path of ['/catalogue','/apercu-annonces']){
+ assert.ok(config.redirects.some(r=>r.source===path+'/:path*'&&r.destination==='/'&&r.permanent===true));
+ assert.ok(!matcher.test(path));assert.ok(!sitemap.includes(path));
+ const route=read('src/router.tsx');assert.ok(route.includes('{ path: "'+path+'", element: <Navigate to="/" replace /> }'));
+}
+assert.ok(!existsSync(resolve(root,'dist/catalogue')));
+assert.ok(!readdirSync(resolve(root,'dist/assets')).some(name=>/ApercuAnnonces|^Catalogue-/.test(name)));

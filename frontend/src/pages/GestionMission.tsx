@@ -133,6 +133,7 @@ export default function GestionMission() {
           <h2>Confirmation de mission</h2>
           <p>{a.display_name} — {statusLabels[a.status] || a.status}</p>
           <ConfirmationButton assignmentId={a.id} cancelled={a.status === "CANCELLED"} />
+          <ButtonLink to={"/affectations/" + a.id + "/preparation-contrat"} variant="outline">{agency && a.status === "ACTIVE" ? "Préparer le contrat" : "Consulter la préparation"}</ButtonLink>
         </section>
       ))}
       {error && <p role="alert">{error}</p>}

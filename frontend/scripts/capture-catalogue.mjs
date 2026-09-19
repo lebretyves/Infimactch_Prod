@@ -3,7 +3,8 @@ import { mkdir, writeFile, readFile } from 'node:fs/promises';
 import path from 'node:path';
 import assert from 'node:assert/strict';
 const base = process.env.CATALOGUE_BASE_URL || 'http://127.0.0.1:5173';
-const output = path.resolve('public/catalogue');
+// Historical screenshot evidence stays outside public assets. The gallery route was retired.
+const output = path.resolve('docs/proofs/catalogue-archives');
 const uid = (n) => `00000000-0000-4000-8000-${String(n).padStart(12,'0')}`;
 const nurseId=uid(1), agencyId=uid(2), facilityId=uid(3), missionId=uid(4), applicationId=uid(5), assignmentId=uid(6), documentId=uid(7);
 const agency={id:agencyId,kind:'AGENCY',name:'Agence Horizon — démonstration',address:'12 avenue des Exemples, 75001 Paris',referent:'Camille Exemple · Référente agence · 0600000000',siret:'00000000000000',finess:null};

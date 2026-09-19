@@ -7,7 +7,6 @@ const Installer = lazy(() => import("./pages/Installer"));
 const Accessibilite = lazy(() => import("./pages/Qualite").then(m => ({ default: m.Accessibilite })));
 const Ecoconception = lazy(() => import("./pages/Qualite").then(m => ({ default: m.Ecoconception })));
 const Notifications = lazy(() => import("./pages/Notifications"));
-const ApercuAnnonces = lazy(() => import("./pages/ApercuAnnonces"));
 const Besoins = lazy(() => import("./pages/Besoins"));
 const Etablissement = lazy(() => import("./pages/Etablissement"));
 const Dossier = lazy(() => import("./pages/Dossier"));
@@ -36,6 +35,7 @@ const Disponibilites = lazy(() => import("./pages/inscription/Disponibilites"));
 const Consentements = lazy(() => import("./pages/inscription/Consentements"));
 const Confirmation = lazy(() => import("./pages/inscription/Confirmation"));
 const ConfirmationEtablissement = lazy(() => import("./pages/inscription/ConfirmationEtablissement"));
+const ContractPreparation = lazy(() => import("./pages/ContractPreparation"));
 const Accueil = lazy(() => import("./pages/Accueil"));
 const Missions = lazy(() => import("./pages/Missions"));
 const MissionDetail = lazy(() => import("./pages/MissionDetail"));
@@ -65,7 +65,7 @@ export const router = creerRouteur([{ element: <QualityRoot />, children: [
   { path: "/accessibilite", element: <Accessibilite /> },
   { path: "/ecoconception", element: <Ecoconception /> },
   { path: "/catalogue", element: <Navigate to="/" replace /> },
-  { path: "/apercu-annonces", element: <ApercuAnnonces /> },
+  { path: "/apercu-annonces", element: <Navigate to="/" replace /> },
   { path: "/connexion", element: <Connexion /> },
   { path: "/mot-de-passe-oublie", element: <MotDePasseOublie /> },
   { path: "/reinitialiser-mot-de-passe", element: <ReinitialiserMotDePasse /> },
@@ -107,6 +107,7 @@ export const router = creerRouteur([{ element: <QualityRoot />, children: [
           { path: "/favoris", element: <Favoris /> },
           { path: "/etablissements/:id", element: <Etablissement /> },
           { path: "/historique", element: <Historique /> },
+          { path: "/affectations/:id/preparation-contrat", element: <ContractPreparation /> },
           { path: "/organisation", element: <Organisation /> },
           { path: "/mes-etablissements", element: <MesEtablissements /> },
           { path: "/besoins", element: <Besoins /> },
