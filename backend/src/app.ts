@@ -1,3 +1,4 @@
+import { postgresConnection } from "./database/connection";
 import { preventApiCaching } from './common/private-cache';
 import {PscModule} from "./auth/psc.module";
 import {AdminModule} from "./admin/admin.module";
@@ -138,7 +139,7 @@ export async function createApp() {
   });
   app.use(helmet());
   app.enableCors({ origin: [required("APP_ORIGIN"), ...(process.env.ADMIN_ORIGIN ? [process.env.ADMIN_ORIGIN] : [])], credentials: true });
-  const pool = new Pool({ connectionString: required("DATABASE_URL"), max: 4 });
+  const pool = new Pool({ ...postgresConnection(), max: 4 });
   const Store = connectPgSimple(session);
   const sessionStore = new Store({ pool, tableName: "session" });
   const clientSession = session({

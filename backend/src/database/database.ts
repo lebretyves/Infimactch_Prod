@@ -1,3 +1,4 @@
+import { postgresConnection } from "./connection";
 import { mutedDemoMissionIds } from "../notifications/demo-suppression";
 import {MissionMail1789722000000} from './mission-mail';
 import {MissionSchedulePrecision1789718400000} from "./mission-schedule-precision";
@@ -23,7 +24,6 @@ import { Finess1789380300000 } from "./finess";
 import { retryTransaction } from "../common/retry";
 import { Global, Injectable, Module, OnModuleDestroy } from "@nestjs/common";
 import { DataSource, EntityManager } from "typeorm";
-import { required } from "../config";
 import { Harden1789380200000 } from "./harden";
 import { Extended1789380100000 } from "./extended";
 import { InitialSchema1789380000000 } from "./schema";
@@ -31,9 +31,11 @@ import { DocumentSecurity1789380700000 } from "./document-security";
 import { AccountSecurity1789380800000 } from "./account-security";
 @Injectable()
 export class Database implements OnModuleDestroy {
+  private readonly connection = postgresConnection();
   readonly source = new DataSource({
     type: "postgres",
-    url: required("DATABASE_URL"),
+    url: this.connection.connectionString,
+    ssl: this.connection.ssl,
     synchronize: false,
     migrations: [
       InitialSchema1789380000000,
