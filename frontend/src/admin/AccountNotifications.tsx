@@ -1,3 +1,4 @@
+import {AccountEmails} from './AccountEmails';
 import { Badge, DataState, date, useData, type Row } from './App';
 
 const connectionLabels: Record<string, string> = { ASSOCIATED: 'Compte Discord associé', PENDING: 'Association en attente', EXPIRED: 'Association expirée', NOT_ASSOCIATED: 'Aucun compte Discord associé' };
@@ -14,7 +15,7 @@ function Events({ events, catalog, empty }: { events: string[]; catalog: Record<
 }
 export function AccountNotifications({ id, version }: { id: string; version: number }) {
   const request = useData(`/accounts/${encodeURIComponent(id)}/notifications`, version);
-  return <section className="admin-panel"><h2>Notifications et Discord</h2><p>Consultation uniquement. L’association prouve le rattachement du compte Discord ; elle n’indique pas si la personne est en ligne.</p><DataState request={request}>{d => {
+  return <><AccountEmails id={id} version={version}/><section className="admin-panel"><h2>Notifications et Discord</h2><p>Consultation uniquement. L’association prouve le rattachement du compte Discord ; elle n’indique pas si la personne est en ligne.</p><DataState request={request}>{d => {
     const catalog = d.catalog || {}; const connection = d.connection || {}; const personal = d.personal || {}; const deliveries = d.deliveries || {};
     const recent: Row[] = (deliveries.recent || []).slice(0, 10);
     return <><p className="admin-caption">État observé le {date(d.observedAt)} · Europe/Paris</p>
@@ -33,5 +34,5 @@ export function AccountNotifications({ id, version }: { id: string; version: num
       <h3>Canaux des organisations</h3><p className="admin-caption">Ces réglages appartiennent aux organisations et sont distincts des préférences personnelles du compte.</p>
       {d.organizations?.length ? d.organizations.map((org: Row) => <section key={org.id} className="admin-panel"><h4>{org.name}</h4><Badge value={!org.configured ? 'Canal non configuré' : org.enabled ? 'Envois du canal activés' : 'Envois du canal désactivés'} /><dl className="admin-facts"><div><dt>Canal</dt><dd>{org.channelName || 'Non renseigné'}</dd></div><div><dt>Dernier changement</dt><dd>{date(org.updatedAt)}</dd></div></dl><Events events={org.events || []} catalog={catalog} empty="Aucun événement sélectionné pour cette organisation." /></section>) : <p className="admin-caption">Aucune organisation rattachée dans ce périmètre.</p>}
     </>;
-  }}</DataState></section>;
+  }}</DataState></section></>;
 }

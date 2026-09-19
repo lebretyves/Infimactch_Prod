@@ -30,7 +30,7 @@ try{
  await page.getByRole('button',{name:'Ouvrir la caméra',exact:true}).click();
  await page.waitForFunction(()=>[...document.querySelectorAll('input')].some(x=>x.value==='FR7630006000011234567890189'),{},{timeout:60000});
  await page.waitForFunction(()=>[...document.querySelectorAll('input')].some(x=>x.value==='CAMILLE AUTO'),{},{timeout:60000});
- assert.equal(await page.getByRole('textbox',{name:'BIC',exact:true}).inputValue(),'PSSTFRPPXXX');
+ assert.equal(await page.getByRole('textbox',{name:/^BIC/}).inputValue(),'PSSTFRPPXXX');
  assert.equal(await page.getByLabel('Titulaire du compte').inputValue(),'CAMILLE AUTO');
  assert.equal(await page.getByLabel('Nom de la banque').inputValue(),'BANQUE EXEMPLE');
  assert.ok(await page.evaluate(()=>window.previewReads>=2));assert.equal(writes,0);assert.deepEqual(external,[]);

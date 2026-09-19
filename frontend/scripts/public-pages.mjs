@@ -31,3 +31,9 @@ const privateShell = shell.replace(/<title>.*?<\/title>/s, '<title>Espace person
  .replace(/(<meta\s+property="og:description"\s+content=")[^"]*/, '$1Connectez-vous pour accéder à votre espace InfiMatch.')
  .replace(/<noscript>[\s\S]*?<\/noscript>/, '<noscript>Activez JavaScript et connectez-vous pour accéder à votre espace personnel.</noscript>');
 fs.writeFileSync('dist/private.html', privateShell);
+
+// Public assistance and authenticated tickets share this route: always noindex/no-store.
+const helpShell = privateShell.replaceAll('Espace personnel — InfiMatch', 'Aide et support — InfiMatch')
+ .replaceAll('Connectez-vous pour accéder à votre espace InfiMatch.', 'Consultez les guides et retrouvez vos demandes de support après connexion.')
+ .replace(/<noscript>[\s\S]*?<\/noscript>/, '<noscript>Activez JavaScript pour consulter les guides. Sans accès au compte, écrivez à yleb.user@outlook.fr sans joindre de document personnel ni de mot de passe.</noscript>');
+fs.writeFileSync('dist/aide.html', helpShell);

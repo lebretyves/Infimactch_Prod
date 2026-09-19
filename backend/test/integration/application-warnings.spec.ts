@@ -1,4 +1,4 @@
-﻿import 'reflect-metadata';
+import 'reflect-metadata';
 import {test,before,after} from 'node:test';
 import assert from 'node:assert/strict';
 import {randomUUID} from 'node:crypto';
@@ -12,11 +12,11 @@ async function fixture(){
  await db.query("INSERT INTO profile(user_id,display_name,qualifications,rpps_status,latitude,longitude,radius_km,accepted_shifts) VALUES($1,'Fictional application test',ARRAY['IDE'],'FOUND',48,2,30,ARRAY['DAY'])",[a.id]);
  const [org]=await db.query("INSERT INTO organization(kind,name,address,referent,finess) VALUES('ESTABLISHMENT','Fictional test','Fictional address','Test','000000000') RETURNING id");
  await db.query('INSERT INTO membership(user_id,organization_id) VALUES($1,$2)',[a.id,org.id]);
- const [m]=await db.query("INSERT INTO mission(establishment_id,title,description,qualification,service,population,block,required_skills,min_experience_months,start_at,end_at,shift,address,location,hourly_salary,status) VALUES($1,'Fictional application test','Fixture only','IDE','URGENCES','ADULT','NONE',ARRAY['TRIAGE'],12,'2037-01-10T08:00:00Z','2037-01-10T16:00:00Z','DAY','Fictional address',ST_SetSRID(ST_MakePoint(2,48),4326)::geography,25,'OPEN') RETURNING id",[org.id]);
+ const [m]=await db.query("INSERT INTO mission(establishment_id,title,description,qualification,service,population,block,required_skills,min_experience_months,start_at,end_at,shift,address,location,hourly_salary,status) VALUES($1,'Fictional application test','Fixture only','IDE','URGENCES','ADULT','NONE',ARRAY['TRIAGE'],12,now()+interval '10 days',now()+interval '10 days 8 hours','DAY','Fictional address',ST_SetSRID(ST_MakePoint(2,48),4326)::geography,25,'OPEN') RETURNING id",[org.id]);
  return {actor:a.id,mission:m.id};
 }
 const conflict=(e:any)=>e.getStatus()===409;
-test('soft mismatch preview, application, audit and idempotent receipt agree; assignment remains strict',async()=>{
+test('soft mismatch preview, application, audit and idempotent receipt agree; recruiter confirmation preserves warnings',async()=>{
  const {actor,mission}=await fixture(),preview=await service.applicationCheck(actor,mission);
  assert.deepEqual(preview.blockingReasons,[]);assert.deepEqual(preview.warnings,['REQUIRED_SKILLS_MISSING','EXPERIENCE_INSUFFICIENT','NOT_FULLY_AVAILABLE']);assert.deepEqual(preview.missingSkills,['TRIAGE']);
  const key=randomUUID(),a=await service.apply(actor,mission,1,key);assert.equal(a.status,'SUBMITTED');assert.deepEqual(a.warnings,preview.warnings);
@@ -24,7 +24,8 @@ test('soft mismatch preview, application, audit and idempotent receipt agree; as
  const repeated=await service.apply(actor,mission,1,randomUUID());assert.equal(repeated.id,a.id);
  const rows=await db.query('SELECT id FROM application WHERE mission_id=$1 AND nurse_id=$2',[mission,actor]);assert.equal(rows.length,1);
  const [audit]=await db.query("SELECT details FROM audit WHERE resource_id=$1 AND event='APPLICATION_SUBMITTED' ORDER BY id LIMIT 1",[a.id]);assert.deepEqual(audit.details.warnings,preview.warnings);
- await assert.rejects(service.assign(actor,mission,a.id,randomUUID()),conflict);
+ const assigned=await service.assign(actor,mission,a.id,randomUUID());assert.equal(assigned.status,'ACTIVE');
+ const [confirmationAudit]=await db.query("SELECT details FROM audit WHERE resource_id=$1 AND event='ASSIGNMENT_CREATED'",[assigned.id]);assert.deepEqual(confirmationAudit.details.profileWarnings,preview.warnings);
 });
 test('version, mission lifecycle, qualification, RPPS and account restrictions remain enforced',async()=>{
  const {actor,mission}=await fixture();await assert.rejects(service.apply(actor,mission,2,randomUUID()),conflict);

@@ -67,3 +67,47 @@ test('expanded CV date formats still reject impossible dates and non-work sectio
  for(const period of ['31 février 2020 - 15 mars 2021','00-02-2020 - 31-03-2021','2020/13 - 2021/03','janv. 2020 - présent'])assert.equal(parseCvExperience('Expériences\n'+period+' | CHU Exemple | Urgences',now).experiences.length,0,period);
  assert.equal(parseCvExperience('Formation\njanv. 2015 - juil. 2018 | École infirmière\nExpériences\njanv. 2020 - juil. 2021 | CHU Exemple | Urgences',now).experiences.length,1);
 });
+
+
+test('CV proposes labelled identity and header contact with evidence, never referee identity',()=>{
+ const r=parseCvExperience('Prénom : Anne-Marie\nNom : DUBOIS\nEmail : anne@example.test\nTéléphone : 06 12 34 56 78\nVille : Lyon\nCode postal : 69003\nExpériences\n2019 - 2020 | CHU Exemple | Urgences\nRéférences\nNom : Autre\nEmail : referent@example.test',now);
+ assert.equal(r.suggestions.identity.firstName?.value,'Anne-Marie');assert.equal(r.suggestions.identity.lastName?.value,'DUBOIS');
+ assert.equal(r.suggestions.identity.email?.value,'anne@example.test');assert.equal(r.suggestions.identity.phone?.value,'06 12 34 56 78');
+ assert.equal(r.suggestions.identity.city?.value,'Lyon');assert.equal(r.suggestions.identity.postalCode?.value,'69003');
+ assert.ok(r.suggestions.identity.lastName?.evidence);assert.equal(r.requiresReview,true);assert.equal(r.method,'RULES_V2');
+});
+test('CV distinguishes clear names, ambiguous all-caps names and contradictory header values',()=>{
+ assert.equal(parseCvExperience('Camille MARTIN',now).suggestions.identity.firstName?.value,'Camille');
+ assert.equal(parseCvExperience('MARTIN Camille',now).suggestions.identity.lastName?.value,'MARTIN');
+ assert.deepEqual(parseCvExperience('CAMILLE MARTIN',now).suggestions.identity,{});
+ for(const title of ['Infirmier IADE','Diplôme IDE','Curriculum VITAE'])assert.deepEqual(parseCvExperience(title,now).suggestions.identity,{},title);
+ const r=parseCvExperience('Prénom : Camille\nPrénom : Sophie\nEmail : a@example.test b@example.test',now);
+ assert.equal(r.suggestions.identity.firstName,undefined);assert.equal(r.suggestions.identity.email,undefined);assert.ok(r.warnings.some(w=>w.includes('Plusieurs valeurs')));
+});
+test('CV keeps separate IDE and IADE diploma years, no inferred IDE or RPPS validation',()=>{
+ const r=parseCvExperience('Camille MARTIN\nRPPS : 12345678901\nDiplômes\n2014 Diplôme d’État infirmier IDE\n2020 Diplôme IADE',now);
+ assert.deepEqual(r.suggestions.diplomas.map(d=>[d.qualification,d.year]),[['IDE',2014],['IADE',2020]]);
+ assert.ok(r.suggestions.diplomas.every(d=>d.evidence&&d.warnings.length));assert.ok(r.warnings.some(w=>w.includes('RPPS')));
+ assert.equal('rpps' in r.suggestions.identity,false);
+ assert.deepEqual(parseCvExperience('Diplômes\n2020 IADE',now).suggestions.diplomas.map(d=>d.qualification),['IADE']);
+ assert.deepEqual(parseCvExperience('Infirmier anesthésiste\nExpériences\n2018 - 2020 IADE CHU Exemple',now).suggestions.diplomas,[]);
+});
+test('CV never manufactures diploma years from training ranges, conflicting dates or shared dates',()=>{
+ for(const input of ['Formation\n2018 - 2020 Diplôme IADE','Diplômes\nIADE','Diplômes\n2019 IADE\n2020 IADE','Diplômes\n2020 IDE et IADE']){
+  const r=parseCvExperience(input,now);assert.ok(r.suggestions.diplomas.length);assert.ok(r.suggestions.diplomas.every(d=>d.year===null),input);
+ }
+ assert.equal(parseCvExperience('Diplômes\nDiplôme IBODE\n2021',now).suggestions.diplomas[0]?.year,2021);
+ for(const input of ['Formation\n2027 Diplôme IADE','Formation\nDiplôme IADE en cours','Formation\nPréparation du diplôme IBODE','Formation\nIADE non obtenu'])assert.deepEqual(parseCvExperience(input,now).suggestions.diplomas,[],input);
+});
+test('CV catalog skills require explicit mentions, not the service or a qualification',()=>{
+ const r=parseCvExperience('Expériences\n2019 - 2020 | CHU Test | Cardiologie\nCompétences\nECG, prélèvements sanguins\nVentilation non invasive\nPas de maîtrise des pansements complexes\nFormation\nSurveillance neurologique',now);
+ assert.deepEqual(r.suggestions.skills.map(s=>s.code).sort(),['ECG','PRELEVEMENTS','VENTILATION_NON_INVASIVE'].sort());
+ assert.ok(r.suggestions.services.some(s=>s.code==='CARDIOLOGIE'));
+ assert.ok(r.suggestions.skills.every(s=>s.evidence&&s.warnings.length));
+ const onlyService=parseCvExperience('Expériences\n2019 - 2020 | CHU Test | Anesthésie',now);
+ assert.equal(onlyService.suggestions.skills.length,0);assert.ok(onlyService.suggestions.services.some(s=>s.code==='ANESTHESIE'));
+});
+test('CV no readable text, negative or ambiguous OCR produces no invented profile values',()=>{
+ const r=parseCvExperience('--- | 1ADE ???\nFormation\n20?2 I8ODE\nCompétences\nECG non maîtrisé\nSans expérience en réanimation',now);
+ assert.deepEqual(r.suggestions,{identity:{},diplomas:[],skills:[],services:[]});assert.equal(r.experiences.length,0);assert.ok(r.warnings.length);
+});

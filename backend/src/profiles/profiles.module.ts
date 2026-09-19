@@ -5,7 +5,7 @@ import {
   normalizeAvailability,
 } from "../domain/availability";
 import { ProfileDetailsDto } from "./profile-details";
-import { geodesicKm } from "../database/distance";
+import { worsensCommittedAvailability } from "../domain/assignment-profile";
 import { ApiProperty } from "@nestjs/swagger";
 import {
   Body,
@@ -42,8 +42,7 @@ import { Type } from "class-transformer";
 import { Request } from "express";
 import { Database, audit, queueProfileMatches } from "../database/database";
 import { nurse, user, SessionGuard } from "../common/access";
-import { interval, Professional, match, covers } from "../domain/matching";
-import { missionSelect, matchingMission } from "../missions/missions.service";
+import { interval, Professional } from "../domain/matching";
 import { RppsService } from "./rpps";
 export class PeriodDto {
   @ApiProperty({ type: () => String, required: true })
@@ -237,6 +236,10 @@ export function validateProfile(b: ProfileDto) {
     ].some((year) => year !== undefined && year > new Date().getFullYear())
   )
     throw new BadRequestException("Diploma year cannot be in the future");
+  if (b.details?.ideDiplomaYear !== undefined &&
+      [b.details.iadeDiplomaYear, b.details.ibodeDiplomaYear]
+        .some(year => year !== undefined && year < b.details!.ideDiplomaYear!))
+    throw new BadRequestException("Specialist diploma year cannot precede IDE diploma year");
   // Canonicalize every full-profile write, including registration and legacy clients.
   const normalized = normalizeAvailability(b);
   ensureAvailabilityLimit(normalized);
@@ -258,7 +261,7 @@ export class ProfilesService {
       const next = changeAvailability(current, b.changes);
       ensureAvailabilityLimit(next);
       const active = await em.query(
-        "SELECT m.start_at,m.end_at FROM assignment a JOIN mission m ON m.id=a.mission_id WHERE a.nurse_id=$1 AND a.status='ACTIVE'",
+        "SELECT start_at,end_at FROM assignment WHERE nurse_id=$1 AND status='ACTIVE'",
         [actor],
       );
       for (const assignment of active) {
@@ -266,7 +269,7 @@ export class ProfilesService {
           start: new Date(assignment.start_at).toISOString(),
           end: new Date(assignment.end_at).toISOString(),
         };
-        if (!covers(period, next.available, next.unavailable))
+        if (worsensCommittedAvailability(period, current, next))
           throw new ConflictException({
             code: "ACTIVE_ASSIGNMENT_INCOMPATIBLE",
             reasons: ["NOT_FULLY_AVAILABLE"],
@@ -291,29 +294,19 @@ export class ProfilesService {
       const previous = await nurse(em, actor);
       assertPersonalInformationUnchanged(previous,b);
       const active = await em.query(
-        missionSelect +
-          " JOIN assignment a ON a.mission_id=m.id WHERE a.nurse_id=$1 AND a.status='ACTIVE'",
+        "SELECT a.start_at,a.end_at,m.qualification FROM assignment a JOIN mission m ON m.id=a.mission_id WHERE a.nurse_id=$1 AND a.status='ACTIVE'",
         [actor],
       );
-      const proposed: Professional = {
-        ...b,
-        conflicts: [],
-        rppsStatus: "FOUND",
-      };
-      for (const m of active) {
-        const evaluation = match(
-          proposed,
-          {
-            ...matchingMission(m),
-            status: "OPEN",
-          },
-          await geodesicKm(em, b, m),
-        );
-        if (!evaluation.eligible)
-          throw new ConflictException({
-            code: "ACTIVE_ASSIGNMENT_INCOMPATIBLE",
-            reasons: evaluation.reasons,
-          });
+      for (const assignment of active) {
+        const reasons: string[] = [];
+        if (!b.qualifications.includes(assignment.qualification)) reasons.push("QUALIFICATION_MISSING");
+        const period = {
+          start: new Date(assignment.start_at).toISOString(),
+          end: new Date(assignment.end_at).toISOString(),
+        };
+        if (worsensCommittedAvailability(period, previous, b)) reasons.push("NOT_FULLY_AVAILABLE");
+        if (reasons.length)
+          throw new ConflictException({code: "ACTIVE_ASSIGNMENT_INCOMPATIBLE", reasons});
       }
       await em.query(
         "UPDATE profile SET display_name=$2,qualifications=$3,skills=$4,experience=$5,available=$6,unavailable=$7,latitude=$8,longitude=$9,radius_km=$10,accepted_shifts=$11,preferred_shifts=$12,visible=$13,details=COALESCE($14::jsonb,details),updated_at=now() WHERE user_id=$1",

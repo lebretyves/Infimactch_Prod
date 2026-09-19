@@ -15,7 +15,7 @@ async function age(id:string){await db.query("UPDATE mission SET first_published
 async function noDue(){await db.query('UPDATE mission SET reminders_enabled=false');}
 before(async()=>{
  const u=new URL(process.env.DATABASE_URL!);assert.equal(process.env.NODE_ENV,'test');assert.equal(u.hostname,'127.0.0.1');assert.equal(u.port,'55433');assert.equal(u.pathname,'/infimatch_test');
- db=await new Database().connect();const latest=db.source.migrations.pop()!;assert.equal(latest.constructor.name,'MissionGuardrails1789826400000');
+ db=await new Database().connect();const guardrailIndex=db.source.migrations.findIndex(m=>m.constructor.name==='MissionGuardrails1789826400000');assert.ok(guardrailIndex>=0);const pending=db.source.migrations.splice(guardrailIndex);
  await db.source.runMigrations({transaction:'all'});
  const [o]=await db.query("INSERT INTO organization(kind,name,address,referent,finess) VALUES('ESTABLISHMENT','Fixture','Fixture','Fixture','000000000') RETURNING id");org=o.id;
  for(const family of ['ENTERPRISE','NURSE']){const [a]=await db.query("INSERT INTO account(email,password_hash,family,terms_version) VALUES($1,'fixture',$2,'fixture') RETURNING id",[randomUUID()+'@example.invalid',family]);if(family==='ENTERPRISE')actor=a.id;else nurseId=a.id;}
@@ -25,7 +25,7 @@ before(async()=>{
  // Over 1,000 pre-existing missions: a real upgrade must exclude every one.
  await db.query(`INSERT INTO mission(establishment_id,title,description,qualification,service,population,block,start_at,end_at,shift,address,location,hourly_salary,status,created_at)
  SELECT $1,'Old fixture','No reminder','IDE','URGENCES','ADULT','NONE',now()+interval '10 days',now()+interval '11 days','DAY','Fixture',ST_SetSRID(ST_MakePoint(2,48),4326)::geography,25,'OPEN',now()-interval '10 days' FROM generate_series(1,1001)`,[org]);
- db.source.migrations.push(latest);await db.source.runMigrations({transaction:'all'});
+ db.source.migrations.push(...pending);await db.source.runMigrations({transaction:'all'});
  service=new MissionsService(db);automation=new AutomationService(db,{} as any);
 });
 after(async()=>{await db?.onModuleDestroy();});

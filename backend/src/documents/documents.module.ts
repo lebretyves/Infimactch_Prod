@@ -1,6 +1,7 @@
 import { PageDto } from "../common/page.dto";
 import { Query } from "@nestjs/common";
 import { ApiProperty } from "@nestjs/swagger";
+import { Transform } from "class-transformer";
 import {
   Controller,
   Get,
@@ -29,6 +30,7 @@ import {
   IsIBAN,
   IsBIC,
   IsOptional,
+  ValidateIf,
   MaxLength,
 } from "class-validator";
 import { Request, Response } from "express";
@@ -66,7 +68,9 @@ class UploadDto {
 }
 class BankDto {
   @ApiProperty() @IsIBAN() iban!: string;
-  @ApiProperty() @IsBIC() bic!: string;
+  @ApiProperty({ required: false, description: 'Facultatif si absent du RIB ; vérifié lorsqu’il est renseigné.' })
+  @Transform(({value}) => typeof value === 'string' ? value.trim().toUpperCase() : value)
+  @ValidateIf((_object, value) => value !== undefined && value !== '') @IsBIC() bic?: string;
   @ApiProperty() @IsString() @Length(2, 150) holder!: string;
   @ApiProperty({ required: false }) @IsOptional() @IsString() @MaxLength(150) bankName?: string;
   @ApiProperty() @Equals(true) reviewed!: boolean;
@@ -79,7 +83,7 @@ class BankFileDto extends BankDto {
 }
 function bankFields(b: BankDto) {
   if (b.holder.trim().length < 2) throw new BadRequestException('Titulaire requis.');
-  return { iban: b.iban.replace(/\s/g, '').toUpperCase(), bic: b.bic.toUpperCase(), holder: b.holder.trim(), bankName: b.bankName?.trim() || '' };
+  return { iban: b.iban.replace(/\s/g, '').toUpperCase(), bic: b.bic?.trim().toUpperCase() || '', holder: b.holder.trim(), bankName: b.bankName?.trim() || '' };
 }
 
 type StoredDocument = { id: string; status: "READY" };

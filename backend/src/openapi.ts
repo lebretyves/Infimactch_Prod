@@ -1,3 +1,4 @@
+import {notificationCatalog} from "./notifications/catalog";
 import { additionalSchemas, additionalResponses } from "./openapi-contracts";
 import { OpenAPIObject } from "@nestjs/swagger";
 const uuid = { type: "string", format: "uuid" };
@@ -6,6 +7,13 @@ const text = { type: "string" };
 const nullableText = { type: "string", nullable: true };
 const date = { type: "string", format: "date-time" };
 const nullableDate = { ...date, nullable: true };
+const boundedText=(minLength:number,maxLength:number)=>({type:"string",minLength,maxLength});
+const adminReason=boundedText(8,500);
+const adminRole={type:"string",enum:["OWNER","SUPPORT","OPS","AUDITOR"]};
+const password={...boundedText(12,128),format:"password",writeOnly:true};
+const adminEmail={...boundedText(3,254),format:"email"};
+const invitation={...boundedText(32,128),writeOnly:true,description:"Invitation required for activation; optional for normal login."};
+const verifiedIdentity={type:"boolean",enum:[true],description:"Explicit identity verification acknowledgement; false is rejected."};
 const object = (properties: Record<string, any>, required: string[] = []) => ({
   type: "object",
   properties,
@@ -46,12 +54,14 @@ const application = object(
     consent_version: integer,
     status: {
       type: "string",
-      enum: ["SUBMITTED", "SELECTED", "REJECTED", "WITHDRAWN", "ACCEPTED"],
+      enum: ["SUBMITTED", "SELECTED", "REJECTED", "WITHDRAWN", "ACCEPTED", "UNAVAILABLE"],
     },
     updated_at: date,
     title: text,
     current_version: integer,
     requires_reconsent: { type: "boolean" },
+    closure_reason: nullableText,
+    closed_at: nullableDate,
   },
   ["id", "status"],
 );
@@ -108,6 +118,31 @@ const need = object(
 export function configureOpenApi(doc: OpenAPIObject) {
   const schemas: any = {
     ...additionalSchemas,
+    CorrectionDto: object({field:{type:"string",enum:["firstName","lastName","city","phone","birthDate","address","postalCode","email"]},value:{...boundedText(0,500),description:"Field-specific profile validation also applies. Empty names and invalid/future birth dates are rejected; email must be valid and at most 254 characters."}},["field","value"]),
+    Reason: object({reason:adminReason},["reason"]),
+    Approval: object({reason:adminReason,identityVerified:verifiedIdentity},["reason","identityVerified"]),
+    Issue: object({reason:adminReason,identityVerified:verifiedIdentity},["reason","identityVerified"]),
+    LoginDto: object({email:adminEmail,password,invitation},["email","password"]),
+    AdminActivationRequest: object({email:adminEmail,password,invitation},["email","password","invitation"]),
+    PasswordDto: object({password},["password"]),
+    State: object({reason:adminReason,active:{type:"boolean"}},["reason","active"]),
+    Invite: object({reason:adminReason,email:adminEmail,role:adminRole},["reason","email","role"]),
+    Access: object({reason:adminReason,active:{type:"boolean"},role:adminRole},["reason","active","role"]),
+    Membership: object({reason:adminReason,email:adminEmail,active:{type:"boolean"}},["reason","email","active"]),
+    Link: object({reason:adminReason,otherOrganizationId:uuid,active:{type:"boolean"}},["reason","otherOrganizationId","active"]),
+    Review: object({reason:adminReason,state:{type:"string",enum:["TO_REVIEW","REVIEWED","NEEDS_INFORMATION"]}},["reason","state"]),
+    SourceState: object({reason:adminReason,enabled:{type:"boolean"}},["reason","enabled"]),
+    Incident: object({reason:adminReason,service:{type:"string",enum:["API","POSTGRES","MONGODB","N8N","DISCORD","IMPORTS","DOCUMENTS","VAULT"]},impact:boundedText(8,500),ownerLabel:boundedText(2,100)},["reason","service","impact","ownerLabel"]),
+    IncidentState: object({reason:adminReason,state:{type:"string",enum:["OPEN","INVESTIGATING","RESOLVED"]}},["reason","state"]),
+    ClosurePassword: object({password:{...boundedText(1,128),format:"password",writeOnly:true}},["password"]),
+    ChallengeDto: object({discordUserId:{type:"string",pattern:"^[0-9]{17,20}$"}},["discordUserId"]),
+    VerifyDto: object({code:{type:"string",pattern:"^[0-9]{6}$",writeOnly:true}},["code"]),
+    DestinationDto: object({enabled:{type:"boolean"},events:{type:"array",maxItems:30,uniqueItems:true,items:{type:"string",enum:Object.keys(notificationCatalog)}},channelId:{type:"string",pattern:"^[0-9]{17,20}$"}},["enabled","events"]),
+    PreferenceDto: object({discord:{type:"boolean"}},["discord"]),
+    BeginDto: object({purpose:{type:"string",enum:["login","link"]}},["purpose"]),
+    CreateTicket: object({clientRequestId:uuid,category:{type:"string",enum:["ACCESS","PROFILE","MISSION","DOCUMENT","NOTIFICATION","OTHER"]},subject:boundedText(3,150),description:boundedText(10,4000)},["clientRequestId","category","subject","description"]),
+    ReplyTicket: object({clientRequestId:uuid,body:boundedText(2,4000),status:{type:"string",enum:["OPEN","RESOLVED"],description:"Optional administrative status; client replies reopen the request automatically."}},["clientRequestId","body"]),
+    ClientReplyTicket: object({clientRequestId:uuid,body:boundedText(2,4000)},["clientRequestId","body"]),
     ParsedOffer: object({schemaVersion:{type:"integer",enum:[1]},parserVersion:text,inputHash:text,parsedAt:date,
       fields:{type:"array",items:object({key:text,label:text,value:{},display:text,state:{type:"string",enum:["REPORTED","MENTION","DESIRED","REQUIRED","NEGATED","REVIEW_REQUIRED"]},evidence:object({origin:{type:"string",enum:["TITLE","DESCRIPTION"]},text,start:integer,end:integer},["origin","text","start","end"])},["key","label","value","display","state","evidence"])},
       warnings:{type:"array",items:text},reviewQueue:{type:"array",items:text}},["schemaVersion","parserVersion","inputHash","parsedAt","fields","warnings","reviewQueue"]),
@@ -134,7 +169,7 @@ export function configureOpenApi(doc: OpenAPIObject) {
     DocumentMetadata: object(
       {
         id: uuid,
-        kind: { type: "string", enum: ["EVIDENCE", "CONFIRMATION"] },
+        kind: { type: "string", enum: ["EVIDENCE", "CONFIRMATION", "CANCELLATION"] },
         mime: text,
         size_bytes: integer,
         status: { type: "string", enum: ["STAGING", "READY"] },
@@ -177,6 +212,9 @@ export function configureOpenApi(doc: OpenAPIObject) {
   };
   doc.components ??= {};
   doc.components.schemas = { ...doc.components.schemas, ...schemas };
+  doc.components.securitySchemes = {...doc.components.securitySchemes,
+    Smtp2goWebhook: {type:'http',scheme:'bearer',description:'Dedicated SMTP2GO_WEBHOOK_SECRET; not the internal service token or provider API key.'},
+  };
   const ref = (name: string) => ({ $ref: "#/components/schemas/" + name });
   const responses: Record<string, any> = {
     ...additionalResponses,
@@ -227,12 +265,19 @@ export function configureOpenApi(doc: OpenAPIObject) {
     "PUT /api/v1/staffing-requests/{id}": "StaffingRequest",
     "POST /api/v1/me/documents": "DocumentCommand",
     "PUT /api/v1/me/bank-details": "DocumentCommand",
+    "PUT /api/v1/me/bank-document": "DocumentCommand",
+    "POST /api/v1/assignments/{id}/cancel": "Assignment",
   };
   for (const [path, item] of Object.entries(doc.paths))
     for (const method of ["get", "post", "put", "delete", "patch"]) {
       const op = (item as any)[method];
       if (!op) continue;
       const key = method.toUpperCase() + " " + path;
+      // DTO decorators do not describe these command bodies without the Swagger compiler plugin.
+      // Activation enforces invitation at runtime; client support cannot supply admin status.
+      const commandBody = key === "POST /api/v1/admin/activate" ? "AdminActivationRequest"
+        : key === "POST /api/v1/me/support-tickets/{id}/replies" ? "ClientReplyTicket" : undefined;
+      if(commandBody) op.requestBody={required:true,content:{"application/json":{schema:ref(commandBody)}}};
       for (const code of [400, 401, 403, 404, 409, 413, 429, 500, 503])
         op.responses[code] ??= {
           description: "Controlled API error; applicability depends on route",
@@ -253,13 +298,23 @@ export function configureOpenApi(doc: OpenAPIObject) {
       if (key === "GET /api/v1/me/documents/{id}") {
         op.responses[200] = {description:"Authorized decrypted document download",headers:{"Content-Disposition":{schema:{type:"string"}},"Cache-Control":{schema:{type:"string"}}},content:Object.fromEntries(["application/pdf","image/png","image/jpeg","application/octet-stream"].map(mime=>[mime,{schema:{type:"string",format:"binary"}}]))};
       }
+      const emailWebhook = path === "/api/v1/internal/automation/smtp2go/webhook";
+      if (emailWebhook) {
+        op.security = [{Smtp2goWebhook:[]}];
+        op.description = "SMTP2GO delivery callback. Configure one JSON webhook with Authorization: Bearer <SMTP2GO_WEBHOOK_SECRET> and custom header X-InfiMatch-Email-ID. Events are deduplicated and checked against the attempted recipient. Opening and click events are ignored.";
+        op.requestBody = {required:true,content:{"application/json":{schema:{type:"object",required:["event"],properties:{
+          event:{type:"string",description:"processed, delivered, bounce, reject or spam; other event types are acknowledged without tracking"},
+          email_id:{type:"string"},rcpt:{type:"string",format:"email"},time:{oneOf:[{type:"string"},{type:"number"}]},
+          "X-InfiMatch-Email-ID":{type:"string",format:"uuid"},bounce:{type:"string",enum:["hard","soft"]},
+        }}}}};
+      }
       if (!["get"].includes(method)) {
         op.parameters ??= [];
         if (!path.startsWith("/api/v1/internal/")) op.parameters.push({name:"X-CSRF-Token",in:"header",required:true,schema:{type:"string"},description:"Token from /auth/csrf; cookie credentials and the configured Origin are required"});
-        else op.parameters.push({name:"X-InfiMatch-Token",in:"header",required:true,schema:{type:"string"},description:"Internal service credential; never expose in browser code"});
+        else if (!emailWebhook) op.parameters.push({name:"X-InfiMatch-Token",in:"header",required:true,schema:{type:"string"},description:"Internal service credential; never expose in browser code"});
       }
       if (responses[key])
-        op.responses[method === "post" ? "201" : "200"] = {
+        op.responses[Object.keys(op.responses).find(code => /^2\d\d$/.test(code)) || (method === "post" ? "201" : "200")] = {
           description: "Successful operation",
           content: { "application/json": { schema: responses[key] } },
         };

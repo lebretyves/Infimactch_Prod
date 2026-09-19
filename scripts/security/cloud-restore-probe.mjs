@@ -27,7 +27,7 @@ export async function restoreProbe({dump,mongo,configuration,synthetic=false}) {
       const key=randomBytes(32),id=randomUUID(),content=Buffer.from('%PDF-1.4\nFICTITIOUS RESTORE PROBE\n%%EOF');configuration={DOCUMENT_KEY:key.toString('base64'),DOCUMENT_KEY_VERSION:'1'};
       const encrypted=encrypt(content,key,id);
       sql(pg,`CREATE TABLE account(id uuid); CREATE TABLE mission(id uuid); CREATE TABLE document(id uuid,size_bytes integer,key_version integer,status text,storage_backend text); CREATE TABLE document_blob(document_id uuid,encrypted bytea); INSERT INTO document VALUES('${id}',${content.length},1,'READY','postgres'); INSERT INTO document_blob VALUES('${id}',decode('${encrypted.toString('hex')}','hex'));`);
-      dump=docker(['exec',pg,'pg_dump','-U','restore_admin','-d','infimatch_restore','-Fc','--no-owner','--no-acl']);
+      dump=docker(['exec',pg,'pg_dump','-U','restore_admin','-d','infimatch_restore','-Fc','--no-owner','--no-acl','--schema=public']);
       // Exercise the same authenticated archive envelope as production backups.
       const envelope=sealBackup(dump,key);dump=openBackup(envelope.bytes,key,envelope);
       const damaged=Buffer.from(envelope.bytes);damaged[0]^=1;let rejected=false;try{openBackup(damaged,key,envelope);}catch{rejected=true;}if(!rejected)throw Error('AUTHENTICATION_TAMPER_NOT_REJECTED');
@@ -35,7 +35,12 @@ export async function restoreProbe({dump,mongo,configuration,synthetic=false}) {
       mongo={matchingruns:[{_id:{$oid:'000000000000000000000001'},result:{eligible:false,reasons:['FICTITIOUS']}}]};
     }
     if(!Buffer.isBuffer(dump)||!mongo||typeof mongo!=='object'||!configuration)throw Error('INVALID_RESTORE_INPUT');
-    docker(['exec','-i',pg,'pg_restore','-U','restore_admin','-d','infimatch_restore','--no-owner','--no-acl','--exit-on-error'],dump);
+    // A public-only managed dump references extension types, but omits extension
+    // installation. The disposable PostGIS database already owns schema public.
+    sql(pg,'CREATE EXTENSION IF NOT EXISTS postgis; CREATE EXTENSION IF NOT EXISTS btree_gist; CREATE EXTENSION IF NOT EXISTS pgcrypto;');
+    const toc=docker(['exec','-i',pg,'pg_restore','--list'],dump).toString().split('\n').filter(line=>!/^\d+; .* SCHEMA - public /.test(line)).join('\n');
+    docker(['exec','-i',pg,'sh','-c','umask 077; cat > /tmp/restore.list'],toc);
+    docker(['exec','-i',pg,'pg_restore','-U','restore_admin','-d','infimatch_restore','--no-owner','--no-acl','--exit-on-error','--use-list=/tmp/restore.list'],dump);
     const counts=JSON.parse(sql(pg,"SELECT json_build_object('accounts',(SELECT count(*) FROM account),'missions',(SELECT count(*) FROM mission),'documents',(SELECT count(*) FROM document),'blobs',(SELECT count(*) FROM document_blob));"));
     const missing=Number(sql(pg,"SELECT count(*) FROM document d LEFT JOIN document_blob b ON b.document_id=d.id WHERE d.status='READY' AND (d.storage_backend<>'postgres' OR b.document_id IS NULL);"));
     if(missing)throw Error('RESTORED_DOCUMENT_STORAGE_INCOMPLETE');

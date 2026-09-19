@@ -28,7 +28,7 @@ export class AdminClientRequestsController {
    const admin=await em.query('SELECT 1 FROM platform_admin WHERE user_id=$1',[candidate.account_id]);
    const closing=await em.query("SELECT 1 FROM closure_request WHERE account_id=$1 AND status IN('APPROVED','PROCESSING')",[candidate.account_id]);
    if(!a?.active||a.platform_only||admin.length||closing.length||!['REQUESTED','ISSUED'].includes(row?.status))throw new ConflictException('Demande non eligible a la recuperation.');
-   const [updated]=await em.query("UPDATE recovery_request SET status='ISSUED',issued_at=now(),expires_at=now()+interval '30 minutes',token_hash=$2,account_version=$3,issued_by=$4,decision_reason=$5 WHERE id=$1 RETURNING expires_at",[id,recoveryHash(token),a.session_version,actor,b.reason]);
+   const [updated]=await em.query("UPDATE recovery_request SET status='ISSUED',issued_at=now(),expires_at=now()+interval '30 minutes',token_hash=$2,account_version=$3,issued_by=$4,decision_reason=$5,email_status='NOT_REQUESTED',email_provider_id=NULL,email_last_error=NULL WHERE id=$1 RETURNING expires_at",[id,recoveryHash(token),a.session_version,actor,b.reason]);
    await audit(em,actor,'ADMIN_RECOVERY_LINK_CREATED',id,{reason:b.reason,identityVerified:true});return updated.expires_at;
   });
   return {id,status:'ISSUED',resetUrl:new URL('/reinitialiser-mot-de-passe',base.origin).toString()+'#token='+token,expiresAt};

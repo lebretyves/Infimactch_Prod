@@ -1,17 +1,17 @@
 {
-  "date": "2026-09-17T06:34:41.728Z",
+  "date": "2026-09-19T19:52:02.900Z",
   "status": "PASS",
   "synthetic": false,
-  "elapsedMs": 5719,
+  "elapsedMs": 8593,
   "sqlCounts": {
-    "accounts": 6,
-    "missions": 0,
-    "documents": 1,
-    "blobs": 1
+    "accounts": 2,
+    "missions": 3092,
+    "documents": 0,
+    "blobs": 0
   },
   "mongoCollections": 1,
   "mongoDocuments": 0,
-  "decryptedDocuments": 1,
+  "decryptedDocuments": 0,
   "network": "none",
   "portsPublished": false,
   "productionModified": false,

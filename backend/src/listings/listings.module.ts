@@ -1,3 +1,4 @@
+import {ConversionController,ConversionService} from './conversions';
 import {rankedListingPage} from './listing-order';
 import {LocationsController} from './locations';
 import {RecommendationsController} from './recommendations';
@@ -368,5 +369,5 @@ export class ListingsController {
     return { ok: true };
   }
 }
-@Module({ imports:[MatchingModule], controllers: [LocationsController,ListingsController,RecommendationsController] })
+@Module({ imports:[MatchingModule], controllers: [LocationsController,ListingsController,RecommendationsController,ConversionController], providers:[ConversionService] })
 export class ListingsModule {}

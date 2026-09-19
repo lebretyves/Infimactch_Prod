@@ -2,20 +2,59 @@ const str={type:"string"},num={type:"number"},int={type:"integer"},bool={type:"b
 const obj=(properties:Record<string,any>,required:string[]=[])=>({type:"object",properties,required});
 const array=(items:any)=>({type:"array",items});const nullable=(s:any)=>({...s,nullable:true});const ref=(s:string)=>({$ref:"#/components/schemas/"+s});
 const page=(items:any)=>obj({items:array(items),limit:int,offset:int,total:int,excluded:int},["items","limit","offset","total"]);
+const conversionRate=obj({numerator:int,denominator:int,percent:nullable(num)},["numerator","denominator","percent"]);
 const interval=obj({start:date,end:date},["start","end"]);
 const organization=obj({id:uuid,kind:{...str,enum:["AGENCY","ESTABLISHMENT"]},name:str,address:str,referent:str,finess:nullable(str),siret:nullable(str)},["id","kind","name"]);
 const session=obj({idleTimeoutMs:int,idleExpiresAt:int},["idleTimeoutMs","idleExpiresAt"]);
-const match=obj({eligible:bool,score:nullable(num),reasons:array(str),missionId:uuid,explanationId:nullable(str),historyStatus:str,candidateId:uuid,display_name:str,qualifications:array(str),skills:array(str)},["eligible","score"]);
+const match=obj({eligible:bool,score:nullable(num),indicativeScore:num,reasons:array(str),missionId:uuid,explanationId:nullable(str),historyStatus:str,candidateId:uuid,display_name:str,qualifications:array(str),skills:array(str)},["eligible","score"]);
 const closure=obj({id:uuid,status:{...str,enum:["REQUESTED","APPROVED","PROCESSING","COMPLETED","CANCELLED","REJECTED"]},requested_at:date,approved_at:nullable(date),completed_at:nullable(date),decision_reason:nullable(str),last_error:nullable(str)},["id","status","requested_at"]);
-const profile=obj({user_id:uuid,display_name:str,qualifications:array(str),skills:array(str),experience:array(obj({service:str,months:num})),available:array(interval),unavailable:array(interval),latitude:nullable(num),longitude:nullable(num),radius_km:nullable(num),accepted_shifts:array(str),preferred_shifts:array(str),visible:bool,notifications_enabled:bool,rpps_number:nullable(str),rpps_status:{...str,enum:["NOT_CHECKED","FOUND","NOT_FOUND","PENDING"]},rpps_version:int,rpps_checked_at:nullable(date),updated_at:date,details:{type:"object",additionalProperties:true,description:"Versioned professional form fields; no bank document or credential"}},["user_id","display_name","qualifications","available","unavailable","rpps_status"]);
+const profile=obj({user_id:uuid,display_name:str,qualifications:array(str),skills:array(str),experience:array(obj({service:str,start:date,end:date,establishment:str})),available:array(interval),unavailable:array(interval),latitude:nullable(num),longitude:nullable(num),radius_km:nullable(num),accepted_shifts:array(str),preferred_shifts:array(str),visible:bool,notifications_enabled:bool,rpps_number:nullable(str),rpps_status:{...str,enum:["NOT_CHECKED","FOUND","NOT_FOUND","PENDING"]},rpps_version:int,rpps_checked_at:nullable(date),updated_at:date,details:{type:"object",additionalProperties:true,description:"Versioned professional form fields; no bank document or credential"}},["user_id","display_name","qualifications","available","unavailable","rpps_status"]);
 const auth=obj({user:obj({id:uuid,family:{...str,enum:["NURSE","ENTERPRISE"]}},["id","family"]),csrfToken:str},["user","csrfToken"]);
 const ok=obj({ok:{type:"boolean",enum:[true]}},["ok"]);
 const finess=obj({finess:str,name:str,address:str,city:str,postal_code:str,category_code:str,category_label:str},["finess","name"]);
-export const additionalSchemas={Profile:profile,Organization:organization,SessionTiming:session,AuthReceipt:auth,MatchResult:match,ClosureRequest:closure,
+const emailDeliveryJournal=obj({items:array(obj({id:uuid,kind:{...str,enum:['CONFIRMATION','CANCELLATION']},sendStatus:{...str,enum:['PENDING','SENDING','SENT','FAILED','CANCELLED','UNCERTAIN']},deliveryStatus:{...str,enum:['NOT_REPORTED','PROCESSED','DELIVERED','BOUNCED','REJECTED','SPAM']},createdAt:date,acceptedAt:nullable(date),deliveryEventAt:nullable(date),processedAt:nullable(date),deliveredAt:nullable(date),bouncedAt:nullable(date),rejectedAt:nullable(date),spamAt:nullable(date),attempts:int,events:array(obj({event:str,happenedAt:date,receivedAt:date,bounceType:nullable(str)}))})),limit:int,observedAt:date},['items','limit','observedAt']);
+const correction=obj({id:uuid,field:str,proposed_value:str,status:{...str,enum:['REQUESTED','COMPLETED','REJECTED']},requested_at:date,completed_at:nullable(date),decision_reason:nullable(str)},['id','field','proposed_value','status','requested_at']);
+const supportTicket=obj({id:uuid,category:{...str,enum:['ACCESS','PROFILE','MISSION','DOCUMENT','NOTIFICATION','OTHER']},subject:str,status:{...str,enum:['OPEN','RESOLVED']},created_at:date,updated_at:date},['id','category','subject','status','created_at','updated_at']);
+const supportList=obj({items:array(supportTicket),hasMore:bool},['items','hasMore']);
+const supportDetail=obj({ticket:obj({...supportTicket.properties,description:str},[...supportTicket.required,'description']),replies:array(obj({id:uuid,body:str,is_staff:bool,created_at:date},['id','body','is_staff','created_at'])),hasMore:bool},['ticket','replies','hasMore']);
+const cvEvidence={evidence:str,warnings:array(str)};
+const cvCatalog=obj({code:str,label:str,...cvEvidence},['code','label','evidence','warnings']);
+export const additionalSchemas={
+ RecoveryRequestDto:obj({email:{type:'string',format:'email',minLength:3,maxLength:254}},['email']),
+ RecoveryCompleteDto:obj({token:{type:'string',pattern:'^[a-f0-9]{64}$'},password:{type:'string',minLength:12,maxLength:128}},['token','password']),
+Profile:profile,Organization:organization,SessionTiming:session,AuthReceipt:auth,MatchResult:match,ClosureRequest:closure,
  OfferFreshness:obj({lastSeenAt:nullable(date),staleAfterDays:int,state:{...str,enum:["RECENTLY_SEEN","STALE_UNVERIFIED","EXPIRED"]}},["lastSeenAt","staleAfterDays","state"]),
  ExternalCorrespondence:obj({mode:str,score:nullable(num),eligibilityVerified:bool,criteria:{type:"object",additionalProperties:obj({status:str,reason:str,offerValue:{},profileValue:{},value:{}})},warnings:array(str),missingForFullMatching:array(str)}),
 };
 export const additionalResponses:Record<string,any>={
+ "GET /api/v1/missions/{id}/application-check":obj({warnings:array(str),blockingReasons:array(str),missingSkills:array(str),experienceMonths:num,requiredExperienceMonths:num,distanceKm:nullable(num)},['warnings','blockingReasons','missingSkills','experienceMonths','requiredExperienceMonths','distanceKm']),
+ "GET /api/v1/me/missions/{id}/assignments":array(obj({id:uuid,status:{...str,enum:['ACTIVE','COMPLETED','CANCELLED']}},['id','status'])),
+ "GET /api/v1/enterprise/missions":page({allOf:[ref('Mission'),obj({establishment_name:str,establishment_address:str,can_manage:bool})]}),
+ "GET /api/v1/listings/locations/communes":obj({provider:{...str,enum:['IGN']},items:array(obj({label:str,latitude:num,longitude:num},['label','latitude','longitude']))},['provider','items']),
+ "POST /api/v1/internal/automation/jobs/refresh-offers/{provider}":obj({provider:str,status:str,accepted:int},['provider','status','accepted']),
+
+ "GET /api/v1/me/personal-corrections":obj({request:nullable(correction)},['request']),
+ "POST /api/v1/me/personal-corrections":obj({id:uuid,status:str,requested_at:date},['id','status','requested_at']),
+ "GET /api/v1/admin/personal-corrections":page(obj({...correction.properties,account_id:uuid,email:str,previous_value:str,reviewed_by:nullable(uuid)})),
+ "POST /api/v1/admin/personal-corrections/{id}/approve":ok,
+ "POST /api/v1/admin/personal-corrections/{id}/reject":ok,
+ "GET /api/v1/me/support-tickets":supportList,
+ "POST /api/v1/me/support-tickets":obj({id:uuid,status:str,created_at:date},['id','status','created_at']),
+ "GET /api/v1/me/support-tickets/{id}":supportDetail,
+ "POST /api/v1/me/support-tickets/{id}/replies":obj({id:uuid},['id']),
+ "GET /api/v1/admin/support-tickets":supportList,
+ "GET /api/v1/admin/support-tickets/{id}":supportDetail,
+ "POST /api/v1/admin/support-tickets/{id}/replies":obj({id:uuid},['id']),
+ "GET /api/v1/dashboards/conversions":obj({organization:obj({id:uuid,name:str,kind:str},['id','name','kind']),period:obj({from:{...str,format:'date'},to:{...str,format:'date'},timeZone:{...str,enum:['UTC']},endInclusive:bool}),observedAt:date,fillRate:conversionRate,selectionRate:conversionRate,missionCancellationRate:conversionRate,assignmentCancellationRate:conversionRate,fillDelay:obj({averageHours:nullable(num),samples:int}),exclusions:obj({demoMissions:int,undatedPublications:int,undatedApplications:int,externalOffers:bool}),definitions:obj({fill:str,selection:str,cancellation:str,delay:str,history:str})},['organization','period','observedAt','fillRate','selectionRate','missionCancellationRate','assignmentCancellationRate','fillDelay','exclusions','definitions']),
+ "POST /api/v1/profile/cv/parse":obj({experiences:array(obj({establishment:str,service:str,startDate:{...str,format:'date'},endDate:{...str,format:'date'},periodLabel:str,...cvEvidence})),warnings:array(str),method:{...str,enum:['RULES_V2']},requiresReview:{...bool,enum:[true]},suggestions:obj({identity:obj(Object.fromEntries(['firstName','lastName','email','phone','city','postalCode'].map(key=>[key,obj({value:str,...cvEvidence},['value','evidence','warnings'])]))),diplomas:array(obj({qualification:{...str,enum:['IDE','IADE','IBODE']},year:nullable(int),...cvEvidence})),skills:array(cvCatalog),services:array(cvCatalog)})}),
+
+ "POST /api/v1/internal/automation/smtp2go/webhook":ok,
+ "GET /api/v1/me/email-deliveries":emailDeliveryJournal,
+ "GET /api/v1/admin/accounts/{id}/email-deliveries":emailDeliveryJournal,
+ "GET /api/v1/me/matches/mission/{id}":match,
+ "GET /api/v1/matching/rules":obj({version:str,weights:obj({C:num,Z:num,D:num,E:num},['C','Z','D','E'])},['version','weights']),
+ "GET /api/v1/assignments/{id}/cancellation":obj({status:str,document_id:nullable(uuid),created_at:date},['status','document_id']),
+
  "GET /api/v1/listings/locations":obj({provider:str,items:array(obj({label:str,latitude:num,longitude:num}))}),
 
  "PUT /api/v1/me/bank-document":obj({id:uuid,status:str}),

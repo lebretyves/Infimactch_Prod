@@ -33,7 +33,7 @@ try{
  await input.setInputFiles({name:'synthetic-rib.png',mimeType:'image/png',buffer:Buffer.from(png,'base64')});
  await page.getByRole('heading',{name:'Vérifier les coordonnées',exact:true}).waitFor({timeout:60000});
  assert.equal(await page.getByRole('textbox',{name:'IBAN',exact:true}).inputValue(),iban);
- assert.equal(await page.getByRole('textbox',{name:'BIC',exact:true}).inputValue(),'PSSTFRPPXXX');
+ assert.equal(await page.getByRole('textbox',{name:/^BIC/}).inputValue(),'PSSTFRPPXXX');
  assert.equal(await page.getByLabel('Titulaire du compte').inputValue(),'CAMILLE TEST');assert.equal(await page.getByLabel('Nom de la banque').inputValue(),'BANQUE EXEMPLE');
  assert.equal(writes.length,0);assert.equal(await page.getByRole('button',{name:'Enregistrer mon RIB vérifié'}).isDisabled(),true);
  await page.getByRole('checkbox',{name:/J’ai vérifié ces coordonnées/}).check();await page.getByRole('button',{name:'Enregistrer mon RIB vérifié'}).click();await page.getByRole('heading',{name:'Coordonnées enregistrées'}).waitFor();
@@ -56,7 +56,7 @@ try{
  await page.getByRole('region',{name:'Appareil photo du RIB'}).waitFor({state:'hidden',timeout:65000});
  await page.getByRole('heading',{name:'Vérifier les coordonnées',exact:true}).waitFor();
  assert.equal(await page.getByRole('textbox',{name:'IBAN',exact:true}).inputValue(),iban);
- assert.equal(await page.getByRole('textbox',{name:'BIC',exact:true}).inputValue(),'PSSTFRPPXXX');
+ assert.equal(await page.getByRole('textbox',{name:/^BIC/}).inputValue(),'PSSTFRPPXXX');
  assert.equal(await page.getByLabel('Titulaire du compte').inputValue(),'CAMILLE CAMERA');
  assert.equal(await page.getByLabel('Nom de la banque').inputValue(),'BANQUE CAMERA');
  assert.equal(writes.length,1); // Capture/analysis never save bank details without confirmation.

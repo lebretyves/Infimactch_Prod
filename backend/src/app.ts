@@ -1,3 +1,5 @@
+import {SupportModule} from "./support/support.module";
+import { EmailDeliveryModule } from "./automation/email-delivery.module";
 import { postgresConnection } from "./database/connection";
 import { preventApiCaching } from './common/private-cache';
 import {PscModule} from "./auth/psc.module";
@@ -30,7 +32,7 @@ import session from "express-session";
 import connectPgSimple from "connect-pg-simple";
 import { Pool } from "pg";
 import helmet from "helmet";
-import { rateLimit } from "express-rate-limit";
+import { sharedRateLimit } from "./security/shared-rate-limit";
 import { randomUUID, timingSafeEqual } from "node:crypto";
 import { DatabaseModule, Database } from "./database/database";
 import { AuthModule } from "./auth/auth.module";
@@ -65,6 +67,8 @@ class HealthController {
     ListingsModule,
     DocumentsModule,
     AutomationModule,
+    EmailDeliveryModule,
+    SupportModule,
     CloudJobsModule,
     OrganizationsModule,
     ReferenceDataModule,
@@ -158,19 +162,20 @@ export async function createApp() {
   const adminStore = new Store({pool,tableName:"admin_session"});
   const adminSession = session({name:"infimatch.admin.sid",secret:required("SESSION_SECRET")+":admin",store:adminStore,resave:false,saveUninitialized:false,cookie:{path:"/api/v1/admin",httpOnly:true,secure:process.env.NODE_ENV==="production",sameSite:"strict",maxAge:8*3600000}});
   app.use((req:any,res:any,next:any)=>(req.path.startsWith("/api/v1/admin/")?adminSession:clientSession)(req,res,next));
-  app.use("/api/v1/admin", authRateLimit());
+  const limiterDb = app.get(Database);
+  app.use("/api/v1/admin", authRateLimit(limiterDb, "admin"));
   app.use((req: any, res: any, next: any) => {
     if (req.path.startsWith("/api/v1/admin") || req.session?.userId || req.path.startsWith("/api/v1/auth"))
       res.setHeader("Cache-Control", "no-store");
     next();
   });
   app.use(idleSession);
-  app.use("/api/v1/auth", authRateLimit());
-  app.use("/api/v1/listings/locations",rateLimit({windowMs:60000,limit:30,standardHeaders:"draft-8",legacyHeaders:false}));
-  app.use("/api/v1/auth/activity", rateLimit({windowMs: 60_000, limit: 20, keyGenerator: req => req.sessionID, standardHeaders: "draft-8", legacyHeaders: false}));
+  app.use("/api/v1/auth", authRateLimit(limiterDb, "auth"));
+  app.use("/api/v1/listings/locations",sharedRateLimit(limiterDb,"locations",{windowMs:60000,limit:30,standardHeaders:"draft-8",legacyHeaders:false}));
+  app.use("/api/v1/auth/activity", sharedRateLimit(limiterDb,"activity",{windowMs: 60_000, limit: 20, keyGenerator: req => req.sessionID, standardHeaders: "draft-8", legacyHeaders: false}));
   app.use(
     "/api/v1/profile/rpps",
-    rateLimit({
+    sharedRateLimit(limiterDb,"rpps",{
       windowMs: 60 * 1000,
       limit: 5,
       standardHeaders: "draft-8",
@@ -202,7 +207,7 @@ export async function createApp() {
   });
   app.use(
     "/api/v1/me/documents",
-    rateLimit({
+    sharedRateLimit(limiterDb,"documents",{
       windowMs: 60000,
       limit: 30,
       standardHeaders: "draft-8",
@@ -211,14 +216,14 @@ export async function createApp() {
   );
   app.use(
     "/api/v1/me/matches",
-    rateLimit({
+    sharedRateLimit(limiterDb,"matches",{
       windowMs: 60000,
       limit: 15,
       standardHeaders: "draft-8",
       legacyHeaders: false,
     }),
   );
-  app.use("/api/v1/profile/cv/parse",rateLimit({windowMs:60000,limit:10,standardHeaders:"draft-8",legacyHeaders:false}));
+  app.use("/api/v1/profile/cv/parse",sharedRateLimit(limiterDb,"cv",{windowMs:60000,limit:10,standardHeaders:"draft-8",legacyHeaders:false}));
   app.useGlobalPipes(
     new ValidationPipe({
       whitelist: true,

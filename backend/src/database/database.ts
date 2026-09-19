@@ -1,3 +1,7 @@
+import {SupportTickets1789851600000} from "./support-tickets";
+import { SharedRateLimit1789848000000 } from "./shared-rate-limit";
+import { RecoveryEmail1789840800000 } from "./recovery-email";
+import { EmailDelivery1789844400000 } from "./email-delivery";
 import { MissionGuardrails1789826400000 } from "./mission-guardrails";
 import { postgresConnection } from "./connection";
 import { mutedDemoMissionIds } from "../notifications/demo-suppression";
@@ -65,6 +69,10 @@ export class Database implements OnModuleDestroy {
       MissionSchedulePrecision1789718400000,
       MissionMail1789722000000,
       MissionGuardrails1789826400000,
+      RecoveryEmail1789840800000,
+      EmailDelivery1789844400000,
+      SupportTickets1789851600000,
+      SharedRateLimit1789848000000,
     ],
     logging: false,
     extra: { max: 12 },

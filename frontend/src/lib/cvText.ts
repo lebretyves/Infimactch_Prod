@@ -1,7 +1,9 @@
+import {acceptsCv,isCvDocx,docxDocumentXml,docxXmlText} from './cvDocx';
 import {cvPdfText} from './cvPdfText';
-﻿import {createBankCameraReader} from './bankOcr';
+import {createBankCameraReader} from './bankOcr';
 export async function extractCvText(file:File,signal:AbortSignal,progress:(message:string)=>void){
- if(file.size>5*1024*1024||!['application/pdf','image/jpeg','image/png'].includes(file.type))throw Error('Choisissez un CV PDF, JPEG ou PNG de 5 Mo maximum.');
+ if(!acceptsCv(file))throw Error('Choisissez un CV PDF, DOCX, JPEG ou PNG de 5 Mo maximum.');
+ if(isCvDocx(file)){progress('Lecture du document Word…');return docxXmlText(await docxDocumentXml(await file.arrayBuffer(),signal));}
  let reader:Awaited<ReturnType<typeof createBankCameraReader>>|undefined,loading:import('pdfjs-dist').PDFDocumentLoadingTask|undefined;
  const check=()=>{if(signal.aborted)throw new DOMException('Analyse interrompue','AbortError');};
  const stop=()=>{reader?.close();void loading?.destroy().catch(()=>{});};signal.addEventListener('abort',stop,{once:true});

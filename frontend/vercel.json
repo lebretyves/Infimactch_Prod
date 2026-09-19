@@ -6,6 +6,10 @@
   "outputDirectory": "dist",
   "rewrites": [
     {
+      "source": "/aide",
+      "destination": "/aide.html"
+    },
+    {
       "source": "/installer",
       "destination": "/installer.html"
     },
@@ -26,7 +30,7 @@
       "destination": "https://infimactch-prod-backend.vercel.app/api/:path*"
     },
     {
-      "source": "/:path(accueil|catalogue|apercu-annonces|connexion|mot-de-passe-oublie|reinitialiser-mot-de-passe|compte|inscription(?:/.*)?|notifications|missions(?:/.*)?|candidatures(?:/.*)?|calendrier|profil|dossier|favoris|etablissements/[^/]+|historique|organisation|besoins|gestion/missions/[^/]+(?:/modifier)?)",
+      "source": "/:path(accueil|catalogue|apercu-annonces|connexion|mot-de-passe-oublie|reinitialiser-mot-de-passe|compte|inscription(?:/.*)?|notifications|missions(?:/.*)?|candidatures(?:/.*)?|calendrier|profil|dossier|favoris|etablissements/[^/]+|historique|organisation|mes-etablissements|besoins|gestion/missions/[^/]+(?:/modifier)?)",
       "destination": "/private.html"
     }
   ],
@@ -113,7 +117,7 @@
       ]
     },
     {
-      "source": "/:path(accueil|catalogue|apercu-annonces|connexion|mot-de-passe-oublie|reinitialiser-mot-de-passe|compte|inscription(?:/.*)?|notifications|missions(?:/.*)?|candidatures(?:/.*)?|calendrier|profil|dossier|favoris|etablissements/[^/]+|historique|organisation|besoins|gestion/missions/[^/]+(?:/modifier)?)",
+      "source": "/:path(aide|accueil|catalogue|apercu-annonces|connexion|mot-de-passe-oublie|reinitialiser-mot-de-passe|compte|inscription(?:/.*)?|notifications|missions(?:/.*)?|candidatures(?:/.*)?|calendrier|profil|dossier|favoris|etablissements/[^/]+|historique|organisation|mes-etablissements|besoins|gestion/missions/[^/]+(?:/modifier)?)",
       "headers": [
         {
           "key": "Cache-Control",
@@ -148,6 +152,23 @@
     },
     {
       "source": "/api/:path*",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "no-store"
+        },
+        {
+          "key": "CDN-Cache-Control",
+          "value": "no-store"
+        },
+        {
+          "key": "Vercel-CDN-Cache-Control",
+          "value": "no-store"
+        }
+      ]
+    },
+    {
+      "source": "/aide.html",
       "headers": [
         {
           "key": "Cache-Control",

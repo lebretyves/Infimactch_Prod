@@ -1,3 +1,4 @@
+import {EnterpriseConversion} from '@/components/EnterpriseConversion';
 import { BankReminder } from "@/components/BankReminder";
 import { MixedRecommendations } from "@/components/MixedRecommendations";
 import { UpcomingMissions } from "@/components/UpcomingMissions";
@@ -303,6 +304,7 @@ export default function Accueil() {
                 </div>
                 <div className={u.actions}><ButtonLink to="/mes-etablissements">Mes établissements</ButtonLink><ButtonLink to="/missions" variant="outline">Toutes les missions</ButtonLink></div>
               </section>
+              <EnterpriseConversion userId={user!.id}/>
               <section className={u.card}>
                 <h2>Mes derniers besoins</h2>
                 {r.data?.dashboard.recentNeeds?.length ? (

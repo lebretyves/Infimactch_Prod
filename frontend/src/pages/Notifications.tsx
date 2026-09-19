@@ -1,3 +1,4 @@
+import {EmailDeliveryJournal} from '@/components/EmailDeliveryJournal';
 import { useRef, useState } from "react";
 import { Link } from "react-router";
 import { useRemote } from "@/lib/useRemote";
@@ -54,6 +55,7 @@ export default function Notifications() {
     <header className={s.header}><div><h1>Notifications</h1><p>Retrouvez les informations de vos missions et de votre compte. Les notifications restent disponibles ici, même si Discord est désactivé.</p></div></header>
     {error&&<p role="alert">{error}</p>}{message&&<p role="status">{message}</p>}
     {user?.role === "interimaire" && <nav className={s.sectionNav} aria-label="Sections des notifications"><a href="#notice-list">Votre activité</a><a href="#discord-settings">Réglages Discord</a></nav>}
+    {user?.role === "interimaire" && <p>Les alertes de missions compatibles suivent la position et le rayon de mobilité de votre profil, ainsi que vos qualifications et critères d’admissibilité. La dernière ville utilisée dans la recherche ne change pas cette zone. <Link to="/calendrier">Vérifier ma mobilité et mes disponibilités</Link>.</p>}
     <section className={s.card} aria-labelledby="notice-list"><h2 id="notice-list">Votre activité</h2>
       {notices.loading?<p role="status">Chargement…</p>:notices.error?<p role="alert">{notices.error} <Button onClick={notices.reload}>Réessayer</Button></p>:<>
       {notices.data?.length?<ul className={s.noticeList}>{notices.data.map(n=><li className={s.noticeItem} key={n.id} style={user?.role === "interimaire" ? undefined : {paddingBlock:14}}><strong>{data?.catalog[n.kind]||"Notification"}{!n.read_at?" — Non lue":""}</strong><p>{n.message}</p><time dateTime={n.created_at}>{new Date(n.created_at).toLocaleString("fr-FR")}</time><div className={s.actions}><Link to={notificationHref(n.href,n.id)}>Consulter</Link></div></li>)}</ul>:<p>Aucune notification pour cette page.</p>}
@@ -98,6 +100,7 @@ export default function Notifications() {
         </>}
       </>}
     </section>
+    <EmailDeliveryJournal userId={user?.id||"anonymous"}/>
     <section className={s.card}><h2>Suivi des envois Discord</h2><Button variant="outline" onClick={deliveries.reload}>Actualiser</Button>{deliveries.error?<p role="alert">{deliveries.error}</p>:deliveries.data?.length?<ul>{deliveries.data.map(d=><li key={d.id}>{data?.catalog[d.kind]||d.kind} : {deliveryLabels[d.status]||d.status}</li>)}</ul>:<p>Aucun envoi pour le moment.</p>}</section>
   </div>;
 }

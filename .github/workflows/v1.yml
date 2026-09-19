@@ -22,8 +22,8 @@ jobs:
         with:
           name: v1-test-evidence
           path: |
-            docs/proofs/v1-hardening
-            docs/proofs/coverage
+            docs_intern/proofs/v1-hardening
+            docs_intern/proofs/coverage
   frontend:
     runs-on: ubuntu-latest
     steps:
@@ -38,4 +38,6 @@ jobs:
             npm ci
             npm test
             npm run build
+            npm run test:seo
+            npm run build:admin
           fi

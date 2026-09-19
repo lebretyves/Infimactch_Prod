@@ -1,0 +1,122 @@
+[
+  {
+    "title": "Qualifier une mission. Expliquer le choix.",
+    "subtitle": "InfiMatch · projet étudiant MBA / MSc2 Epitech",
+    "leftTitle": "Un besoin concret",
+    "left": "Une mission IDE ponctuelle impose de rapprocher métier, service, horaires et mobilité. Le recruteur doit comprendre ce qui correspond et ce qui reste à vérifier.",
+    "rightTitle": "Notre démonstration",
+    "right": "Un parcours continu : publier, rechercher, candidater, confirmer, retrouver son agenda et son document. Les personnes du scénario sont fictives.",
+    "tag": "01 / PROBLÈME",
+    "notes": "Présenter le problème sans prétendre à une étude terrain réalisée. Membres, date et durée officielle restent à renseigner par l’équipe."
+  },
+  {
+    "title": "Un secteur en tension, déjà outillé.",
+    "subtitle": "Contexte documenté ; aucune part de marché revendiquée.",
+    "leftTitle": "36 700 projets",
+    "left": "France Travail cite 36 700 projets de recrutement en 2026 pour les infirmiers et sages-femmes, dont 60,2 % jugés difficiles. Ce total ne mesure pas le seul intérim ni la cible IDE/IADE/IBODE.",
+    "rightTitle": "Une concurrence réelle",
+    "right": "Appel Médical associe offres et parcours intérimaire. Hublo propose la gestion des remplacements aux établissements. InfiMatch démontre une compatibilité expliquée ; aucune supériorité mesurée.",
+    "tag": "02 / MARCHÉ",
+    "notes": "Sources S1, S2, S3 du dossier. Différencier volume de recrutement, marché adressable et chiffre d’affaires : les deux derniers ne sont pas établis."
+  },
+  {
+    "title": "Une promesse volontairement précise.",
+    "subtitle": "Aider à décider, conserver une décision humaine.",
+    "leftTitle": "Pour le professionnel",
+    "left": "Profil IDE / IADE / IBODE, services d’exercice, zone de mobilité, recherche, candidatures et agenda. Le CV suggère des informations à relire ; il ne certifie aucun diplôme.",
+    "rightTitle": "Pour le recruteur",
+    "right": "Besoins et missions structurés, profils proposés, explication du score, affectation, historique et documents. Une donnée manquante doit être visible ; elle ne doit jamais être inventée.",
+    "tag": "03 / VALEUR",
+    "notes": "La lecture CV enrichie est un lot local testé, en cours d’intégration frontend. Ne pas annoncer sa disponibilité en production avant recette."
+  },
+  {
+    "title": "Trois acteurs, des droits distincts.",
+    "subtitle": "Deux familles de comptes ; organisations contrôlées côté serveur.",
+    "leftTitle": "Candidat → établissement",
+    "left": "Le candidat renseigne son parcours et propose ses services. L’établissement décrit un besoin, son lieu, les horaires et les qualifications attendues.",
+    "rightTitle": "Agence → affectation",
+    "right": "L’agence intervient dans le scénario d’intérim et confirme l’affectation autorisée. La confirmation PDF récapitule la mission ; elle ne remplace pas les contrats requis.",
+    "tag": "04 / CADRE",
+    "notes": "Source S4. ETT-salarié : contrat de mission ; ETT-entreprise utilisatrice : mise à disposition. Le projet étudiant ne prouve pas une activité d’ETT autorisée."
+  },
+  {
+    "title": "Démonstration : publier un besoin lisible.",
+    "subtitle": "Scénario fictif préparé sur environnement isolé.",
+    "leftTitle": "1 — Préparer",
+    "left": "Établissement de démonstration, mission IDE, service Urgences, date future proche et horaires explicites. Les données de personne et de contact restent fictives.",
+    "rightTitle": "2 — Vérifier",
+    "right": "Montrer les erreurs de saisie, la limite de programmation à deux ans, la ville et le rayon de recherche. Vérifier l’enregistrement avant de montrer la fiche mission.",
+    "tag": "05 / PRODUIT",
+    "notes": "Suivre DEMONSTRATION.md. Aucune mission ni notification réelle n’est créée par ce support. Ne pas confondre horizon de programmation et durée légale d’un contrat."
+  },
+  {
+    "title": "Le matching explique ses paramètres.",
+    "subtitle": "Score indicatif et conditions d’action sont deux informations différentes.",
+    "leftTitle": "Pondération par défaut",
+    "left": "Compétences souhaitées 45 % ; proximité 25 % ; préférences horaires 20 % ; expérience dans le service 10 %. Configuration effective à vérifier via matching/rules.",
+    "rightTitle": "À interpréter",
+    "right": "Le score dépend des déclarations. Géolocalisation ou horaires absents affectent les composantes. L’affectation assouplie ne doit pas contourner un conflit réel de mission.",
+    "tag": "06 / DÉCISION",
+    "notes": "Preuves : backend/src/domain/rules.ts et matching.ts. Pondérations configurables ; aucune optimisation statistique démontrée. Montrer deux profils fictifs et les détails réels, ne pas inventer de score."
+  },
+  {
+    "title": "Confirmer, puis garder un état cohérent.",
+    "subtitle": "La mission confirmée devient un engagement dans l’agenda.",
+    "leftTitle": "Candidature → affectation",
+    "left": "Montrer la décision humaine, le créneau et le lieu. Les candidatures chevauchant une affectation sont fermées avec un motif ; une double affectation reste bloquée.",
+    "rightTitle": "Document → suivi",
+    "right": "Ouvrir le PDF de confirmation puis celui d’annulation. Distinguer email accepté, livré au serveur et réellement lu. L’annulation applicative n’établit pas la légalité d’une rupture.",
+    "tag": "07 / PARCOURS",
+    "notes": "PDF refondus : preuve de déploiement connue. Suivi email enrichi et correctifs profil : locaux selon l’instantané du dossier. Source juridique S4 ; aucun conseil individuel."
+  },
+  {
+    "title": "La donnée publique devient exploitable.",
+    "subtitle": "Collecter, normaliser, dédoublonner, expliquer la provenance.",
+    "leftTitle": "Chaîne de données",
+    "left": "FINESS enrichit les établissements ; les offres externes gardent leur source. PostgreSQL / PostGIS porte l’état métier et la géographie ; MongoDB conserve les traces de matching.",
+    "rightTitle": "Sobriété mesurable",
+    "right": "Planning prévu : France Travail à 7 h et 15 h ; JobsPipe à 7 h, heure de Paris. Reprises bornées et arrêt au quota. Le succès des nouveaux créneaux reste à observer.",
+    "tag": "08 / DONNÉES",
+    "notes": "Source locale IMPORTS_SOBRIETE_2026-09-19. Une exécution comprend plusieurs appels paginés. Ne pas annoncer un quota fournisseur restant sans mesure récente."
+  },
+  {
+    "title": "Deux automatisations à démontrer au minimum.",
+    "subtitle": "Workflows n8n, transitions métier et preuves d’exécution.",
+    "leftTitle": "Correspondance",
+    "left": "Publication → comparaison → notification interne aux profils admissibles ayant activé les alertes, avec périmètre. Montrer une exécution et son destinataire fictif.",
+    "rightTitle": "Confirmation et relance",
+    "right": "Affectation → confirmation PDF. Mission non pourvue → rappel encadré : 24 h, intervalle 24 h, trois au maximum. Les anciennes missions fictives restent exclues.",
+    "tag": "09 / NO-CODE",
+    "notes": "Les imports ne tournent plus dans le workflow de rappels toutes les 30 minutes. Vérifier versions actives/exécutions avant soutenance ; scénario de secours dans DEMONSTRATION.md."
+  },
+  {
+    "title": "La qualité se montre avec des preuves.",
+    "subtitle": "Des contrôles ciblés ; aucune conformité globale inventée.",
+    "leftTitle": "Sécurité et continuité",
+    "left": "Droits serveur, transactions, documents protégés, récupération sécurisée et limiteurs partagés testés localement. Restauration isolée réussie ; déchiffrement prouvé sur fixture synthétique.",
+    "rightTitle": "Accessibilité et sobriété",
+    "right": "Parcours clavier et responsive à rejouer sur la version remise. Réduire appels et doublons ; privilégier le matériel existant ou reconditionné. Pas de certification RGAA ou de bilan carbone revendiqué.",
+    "tag": "10 / QUALITÉ",
+    "notes": "La matrice 42 scénarios décrit des états partiels. Les campagnes de tests ne s’additionnent pas en un total unique. Pas de couverture finale annoncée sans rapport du SHA livré."
+  },
+  {
+    "title": "Comparer l’estimé et le réalisé honnêtement.",
+    "subtitle": "Référence actuelle : quatre personnes, onze jours.",
+    "leftTitle": "348–528 h-personnes",
+    "left": "Fourchette initiale de conception conservée dans CHIFFRAGE_V1. Ce n’est pas un temps mesuré. Quatre personnes × onze jours = 44 journées-personnes, sans durée productive supposée.",
+    "rightTitle": "Réalisé à compléter",
+    "right": "Les heures humaines ne sont pas renseignées. Le journal contient 0,921 h d’agent historique, outils et attente inclus ; ce relevé ne représente ni l’équipe ni le travail total.",
+    "tag": "11 / PILOTAGE",
+    "notes": "Rôles proposés A backend métier, B données, C frontend, D intégration. Les noms, disponibilités, temps réels et écarts sont reportés à l’équipe, sans nouvelle demande ni estimation inventée."
+  },
+  {
+    "title": "Une démonstration solide, des limites assumées.",
+    "subtitle": "Le support accompagne les preuves de la version effectivement remise.",
+    "leftTitle": "À terminer avant remise",
+    "left": "Publier et recetter les lots locaux ; vérifier emails et nouveaux créneaux ; joindre couverture finale et SHA. Répéter le scénario et renseigner les éléments humains reportés.",
+    "rightTitle": "À décider séparément",
+    "right": "MFA administrateur, contrat complet et signature, fiches mission publiques / JobPosting, continuité d’hébergement n8n. Aucun de ces choix n’est activé par ce dossier.",
+    "tag": "12 / SUITE",
+    "notes": "Conclure sur une valeur démontrable et les réserves précises. Le PDF de confirmation n’est pas un contrat ; le RPPS facultatif à l’inscription ne constitue pas une vérification professionnelle."
+  }
+]
