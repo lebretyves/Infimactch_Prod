@@ -1,3 +1,4 @@
+import { demoNoticeSuppressed, mutedDemoMissionIds } from "../notifications/demo-suppression";
 import {queueMissionEmails, generateCancellations, dispatchMissionEmails} from './mission-mail';
 import {UseInterceptors} from "@nestjs/common";
 import {ExecutionTrace} from "./execution-trace";
@@ -58,6 +59,7 @@ export class AutomationService {
       if (receipt.length) return { status: "ALREADY_PROCESSED" };
       let count = 0;
       if (
+        !demoNoticeSuppressed(m.id, "MATCH") &&
         m.status === "OPEN" &&
         m.version === e.payload.version &&
         new Date(m.start_at).getTime() > Date.now()
@@ -104,8 +106,8 @@ export class AutomationService {
       const batch = await this.db.transaction(async (em) => {
         const window = new Date().toISOString().slice(0, 13);
         const missions = await em.query(
-          "SELECT * FROM mission WHERE status='OPEN' AND start_at>now() AND created_at<now()-make_interval(mins=>$1) AND NOT EXISTS(SELECT 1 FROM reminder_window w WHERE w.mission_id=mission.id AND w.version=mission.version AND w.window_key=$2) ORDER BY id LIMIT $3 FOR UPDATE SKIP LOCKED",
-          [Math.floor(delay), window, limit],
+          "SELECT * FROM mission WHERE id<>ALL($4::uuid[]) AND status='OPEN' AND start_at>now() AND created_at<now()-make_interval(mins=>$1) AND NOT EXISTS(SELECT 1 FROM reminder_window w WHERE w.mission_id=mission.id AND w.version=mission.version AND w.window_key=$2) ORDER BY id LIMIT $3 FOR UPDATE SKIP LOCKED",
+          [Math.floor(delay), window, limit, mutedDemoMissionIds],
         );
         let count = 0;
         for (const m of missions) {
@@ -306,8 +308,8 @@ export class AutomationService {
     await dispatchMissionEmails(this.db,this.documents);
     const events = await this.db.transaction(async (em) => {
       const rows = await em.query(
-        "SELECT * FROM outbox WHERE event IN('MissionOPEN','MatchRequested','AssignmentCreated','MissionCANCELLED') AND ($2::uuid IS NULL OR id=$2) AND completed_at IS NULL AND attempts<5 AND available_at<=now() AND (lease_until IS NULL OR lease_until<now()) ORDER BY CASE WHEN event='AssignmentCreated' THEN 0 ELSE 1 END,created_at,id LIMIT $1 FOR UPDATE SKIP LOCKED",
-        [limit, eventId],
+        "SELECT * FROM outbox WHERE event IN('MissionOPEN','MatchRequested','AssignmentCreated','MissionCANCELLED') AND ($2::uuid IS NULL OR id=$2) AND NOT (event IN('MissionOPEN','MatchRequested') AND COALESCE(payload->>'missionId','')=ANY($3::text[])) AND completed_at IS NULL AND attempts<5 AND available_at<=now() AND (lease_until IS NULL OR lease_until<now()) ORDER BY CASE WHEN event='AssignmentCreated' THEN 0 ELSE 1 END,created_at,id LIMIT $1 FOR UPDATE SKIP LOCKED",
+        [limit, eventId, mutedDemoMissionIds],
       );
       for (const row of rows) {
         row.token = randomUUID();
