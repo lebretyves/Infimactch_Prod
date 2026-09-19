@@ -1,4 +1,28 @@
 import { serverMessages, explainReasons } from "./messages";
+
+/** Message 429 actionnable à partir de l’en-tête Retry-After (secondes ou date HTTP). */
+export function formatRateLimitMessage(retryAfter: string | null): string {
+  if (!retryAfter?.trim()) {
+    return "Trop de tentatives. Réessayez dans quelques minutes.";
+  }
+  const raw = retryAfter.trim();
+  // Reject malformed numeric values rather than interpreting them as dates.
+  let seconds = /^\d+$/.test(raw) ? Number(raw) : NaN;
+  if (!Number.isFinite(seconds) && /^[A-Za-z]{3}, /.test(raw)) {
+    const until = Date.parse(raw);
+    if (Number.isFinite(until)) seconds = Math.ceil((until - Date.now()) / 1000);
+  }
+  if (!Number.isFinite(seconds)) {
+    return "Trop de tentatives. Réessayez dans quelques minutes.";
+  }
+  seconds = Math.max(1, Math.ceil(seconds));
+  if (seconds < 60) {
+    return `Trop de tentatives. Réessayez dans ${seconds} seconde${seconds > 1 ? "s" : ""}.`;
+  }
+  const minutes = Math.ceil(seconds / 60);
+  return `Trop de tentatives. Réessayez dans environ ${minutes} minute${minutes > 1 ? "s" : ""}.`;
+}
+
 export class ApiError extends Error {
   constructor(
     public status: number,
@@ -135,7 +159,7 @@ export async function api<T>(
           : r.status === 413
             ? "La limite de stockage ou la taille maximale du fichier est dépassée."
           : r.status === 429
-            ? "Trop de tentatives. Réessayez dans quelques minutes."
+            ? formatRateLimitMessage(r.headers.get("Retry-After"))
             : r.status === 401
               ? "Identifiants incorrects ou session expirée."
               : r.status === 403

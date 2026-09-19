@@ -184,3 +184,28 @@ test('An offline mutation is refused before CSRF or any network request', async 
   try { const { api } = await load(); await assert.rejects(api('/missions', { method: 'POST', body: {} }), e => e.code === 'OFFLINE'); assert.equal(calls, 0); }
   finally { delete navigator.onLine; globalThis.fetch = original; }
 });
+
+test('429 uses Retry-After without replaying a mutation', async () => {
+  let writes = 0;
+  globalThis.fetch = async (url) => {
+    if (url.endsWith('/auth/csrf')) return response(200, { csrfToken: 'fixture' });
+    writes++;
+    return new Response('{}', { status: 429, headers: { 'Retry-After': '90', 'Content-Type': 'application/json' } });
+  };
+  const { api } = await load();
+  await assert.rejects(api('/auth/login', { method: 'POST', body: {} }), e => e.status === 429 && /environ 2 minutes/.test(e.message));
+  assert.equal(writes, 1);
+});
+
+test('Rate-limit durations handle seconds, HTTP dates and invalid headers', async t => {
+  t.mock.method(Date, 'now', () => Date.parse('2026-09-19T12:00:00Z'));
+  const { formatRateLimitMessage: format } = await load();
+  assert.match(format('1'), /1 seconde\./);
+  assert.match(format('59'), /59 secondes/);
+  assert.match(format('60'), /environ 1 minute\./);
+  assert.match(format('Sat, 19 Sep 2026 12:01:30 GMT'), /environ 2 minutes/);
+  assert.match(format('Sat, 19 Sep 2026 11:00:00 GMT'), /1 seconde\./);
+  for (const value of [null, '', '  ', '-1', '1e3', '1.5', 'invalid', 'Infinity']) {
+    assert.match(format(value), /quelques minutes/);
+  }
+});

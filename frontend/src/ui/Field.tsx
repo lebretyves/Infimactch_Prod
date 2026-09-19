@@ -1,4 +1,4 @@
-import { useId, useState } from 'react';
+import { forwardRef, useId, useState } from 'react';
 import type {
   InputHTMLAttributes,
   ReactNode,
@@ -11,6 +11,7 @@ import s from './Field.module.css';
 type Width = 'sm' | 'md' | 'lg';
 
 type WrapperProps = {
+  id?: string;
   label: string;
   hint?: string;
   error?: string;
@@ -19,9 +20,10 @@ type WrapperProps = {
   children: (props: { id: string; describedBy?: string; invalid: boolean }) => ReactNode;
 };
 
-function Wrapper({ label, hint, error, optional, required, children }: WrapperProps) {
-  const id = useId();
-  const hintId = hint ? `${id}-hint` : undefined;
+function Wrapper({ id: suppliedId, label, hint, error, optional, required, children }: WrapperProps) {
+  const generatedId = useId();
+  const id = suppliedId ?? generatedId;
+  const hintId = hint && !error ? `${id}-hint` : undefined;
   const errorId = error ? `${id}-error` : undefined;
   const describedBy = [errorId, hintId].filter(Boolean).join(' ') || undefined;
 
@@ -96,21 +98,17 @@ function ReadOnlyField({ label, value, hint, error, name, disabled, type }: {
   );
 }
 
-export function TextField({
-  label,
-  hint,
-  error,
-  optional,
-  required,
-  width,
-  icon,
-  action,
-  ...rest
-}: FieldProps & InputHTMLAttributes<HTMLInputElement>) {
+export const TextField = forwardRef<
+  HTMLInputElement,
+  FieldProps & InputHTMLAttributes<HTMLInputElement>
+>(function TextField(
+  { label, hint, error, optional, required, width, icon, action, ...rest },
+  ref,
+) {
   if (rest.readOnly) return <ReadOnlyField label={label} value={rest.value ?? rest.defaultValue}
     hint={hint} error={error} name={rest.name} disabled={rest.disabled} type={rest.type} />;
   return (
-    <Wrapper label={label} hint={hint} error={error} optional={optional} required={required}>
+    <Wrapper id={rest.id} label={label} hint={hint} error={error} optional={optional} required={required}>
       {({ id, describedBy, invalid }) => (
         <span className={shell(icon, action)}>
           {icon && (
@@ -119,41 +117,52 @@ export function TextField({
             </span>
           )}
           <input
+            {...rest}
+            ref={ref}
             id={id}
-            className={[s.control, invalid && s.invalid, width && s[`width-${width}`]]
+            className={[s.control, invalid && s.invalid, width && s[`width-${width}`], rest.className]
               .filter(Boolean)
               .join(' ')}
-            aria-describedby={describedBy}
-            aria-invalid={invalid || undefined}
+            aria-describedby={[describedBy, rest['aria-describedby']].filter(Boolean).join(' ') || undefined}
+            aria-invalid={invalid || rest['aria-invalid']}
             required={required}
-            {...rest}
           />
           {action && <span className={s.action}>{action}</span>}
         </span>
       )}
     </Wrapper>
   );
-}
+});
 
 type PasswordProps = Omit<FieldProps, 'action'> & InputHTMLAttributes<HTMLInputElement>;
 
-export function PasswordField({ icon = 'lock', ...rest }: PasswordProps) {
-  const [visible, setVisible] = useState(false);
+export const PasswordField = forwardRef<HTMLInputElement, PasswordProps>(
+  function PasswordField({ icon = 'lock', ...rest }, ref) {
+    const [visible, setVisible] = useState(false);
 
-  const bascule = (
-    <button
-      type="button"
-      className={s.bouton}
-      onClick={() => setVisible((v) => !v)}
-      aria-pressed={visible}
-      aria-label={visible ? 'Masquer le mot de passe' : 'Afficher le mot de passe'}
-    >
-      <Icon name={visible ? 'eye-off' : 'eye'} size={19} />
-    </button>
-  );
+    const bascule = (
+      <button
+        type="button"
+        className={s.bouton}
+        onClick={() => setVisible((v) => !v)}
+        aria-pressed={visible}
+        aria-label={visible ? 'Masquer le mot de passe' : 'Afficher le mot de passe'}
+      >
+        <Icon name={visible ? 'eye-off' : 'eye'} size={19} />
+      </button>
+    );
 
-  return <TextField {...rest} icon={icon} type={visible ? 'text' : 'password'} action={bascule} />;
-}
+    return (
+      <TextField
+        {...rest}
+        ref={ref}
+        icon={icon}
+        type={visible ? 'text' : 'password'}
+        action={bascule}
+      />
+    );
+  },
+);
 
 export function TextArea({
   label,
@@ -166,15 +175,15 @@ export function TextArea({
   if (rest.readOnly) return <ReadOnlyField label={label} value={rest.value ?? rest.defaultValue}
     hint={hint} error={error} name={rest.name} disabled={rest.disabled} />;
   return (
-    <Wrapper label={label} hint={hint} error={error} optional={optional} required={required}>
+    <Wrapper id={rest.id} label={label} hint={hint} error={error} optional={optional} required={required}>
       {({ id, describedBy, invalid }) => (
         <textarea
-          id={id}
-          className={[s.control, s.textarea, invalid && s.invalid].filter(Boolean).join(' ')}
-          aria-describedby={describedBy}
-          aria-invalid={invalid || undefined}
-          required={required}
           {...rest}
+          id={id}
+          className={[s.control, s.textarea, invalid && s.invalid, rest.className].filter(Boolean).join(' ')}
+          aria-describedby={[describedBy, rest['aria-describedby']].filter(Boolean).join(' ') || undefined}
+          aria-invalid={invalid || rest['aria-invalid']}
+          required={required}
         />
       )}
     </Wrapper>
@@ -193,7 +202,7 @@ export function SelectField({
   ...rest
 }: FieldProps & SelectHTMLAttributes<HTMLSelectElement>) {
   return (
-    <Wrapper label={label} hint={hint} error={error} optional={optional} required={required}>
+    <Wrapper id={rest.id} label={label} hint={hint} error={error} optional={optional} required={required}>
       {({ id, describedBy, invalid }) => (
         <span className={shell(icon)}>
           {icon && (
@@ -202,14 +211,14 @@ export function SelectField({
             </span>
           )}
           <select
+            {...rest}
             id={id}
-            className={[s.control, s.select, invalid && s.invalid, width && s[`width-${width}`]]
+            className={[s.control, s.select, invalid && s.invalid, width && s[`width-${width}`], rest.className]
               .filter(Boolean)
               .join(' ')}
-            aria-describedby={describedBy}
-            aria-invalid={invalid || undefined}
+            aria-describedby={[describedBy, rest['aria-describedby']].filter(Boolean).join(' ') || undefined}
+            aria-invalid={invalid || rest['aria-invalid']}
             required={required}
-            {...rest}
           >
             {children}
           </select>
