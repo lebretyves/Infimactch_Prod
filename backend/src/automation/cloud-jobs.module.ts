@@ -1,8 +1,8 @@
-import {RefreshService,RefreshModule,PROVIDERS} from "../public-data/refresh.service";
+import {RefreshService,RefreshModule,PROVIDERS,providerName} from "../public-data/refresh.service";
 import {UseInterceptors} from "@nestjs/common";
 import {ExecutionTrace} from "./execution-trace";
 import {processClosures} from "../security/closure";
-import {Controller,Headers,Module,Post,UnauthorizedException} from "@nestjs/common";
+import {Controller,Headers,Module,Param,Post,UnauthorizedException} from "@nestjs/common";
 import {timingSafeEqual} from "node:crypto";
 import {required} from "../config";
 import {Database} from "../database/database";
@@ -30,6 +30,10 @@ export class CloudJobsController {
   this.authorize(token);
   const providers=await Promise.all(PROVIDERS.map(provider=>this.refreshService.runBatch(provider)));
   return {providers};
+ }
+ @Post("refresh-offers/:provider") async refreshProvider(@Headers("x-infimatch-token") token:string,@Param("provider") provider:string){
+  this.authorize(token);
+  return this.refreshService.runBatch(providerName(provider));
  }
  @Post("maintenance") async maintenance(@Headers("x-infimatch-token") token:string){
   this.authorize(token);

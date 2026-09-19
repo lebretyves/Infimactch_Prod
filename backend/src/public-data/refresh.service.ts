@@ -26,7 +26,7 @@ export class RefreshService {
     while(result.status==='IN_PROGRESS' && batches<12 && Date.now()<deadline){
       result=await this.run(provider);accepted+=result.accepted;batches++;
     }
-    const geolocation = result.status === "PAUSED" || result.status === "BUSY" ? null : await repairOfferLocations(this.db,provider);
+    const geolocation = accepted === 0 || result.status === "PAUSED" || result.status === "BUSY" ? null : await repairOfferLocations(this.db,provider);
     return {...result,accepted,batches,geolocation};
   }
   async run(provider:Provider,manual=false) {

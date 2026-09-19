@@ -1,4 +1,4 @@
-﻿import 'reflect-metadata';
+import 'reflect-metadata';
 import {test,before} from 'node:test';
 import assert from 'node:assert/strict';
 import {randomUUID} from 'node:crypto';
@@ -78,4 +78,16 @@ test('national import batches 151 offers and repeated import retains unique IDs'
  assert.equal((await sql.query('SELECT count(*)::int AS n FROM external_offer'))[0].n,151);
  await importOffers(db,rows,false);
  assert.equal((await sql.query('SELECT count(*)::int AS n FROM external_offer'))[0].n,151);
+}));
+
+test('unchanged imports reuse parser output; changed input and parser upgrades rebuild it',async()=>isolated(async(db,sql)=>{
+ const raw=offer();await importOffers(db,[raw],false);
+ await sql.query("UPDATE external_offer SET parsed_offer=parsed_offer||'{\"cacheProbe\":true}'::jsonb WHERE source_id=$1",[raw.id]);
+ await importOffers(db,[raw],false);
+ let [row]=await sql.query('SELECT parsed_offer FROM external_offer WHERE source_id=$1',[raw.id]);assert.equal(row.parsed_offer.cacheProbe,true);
+ await importOffers(db,[{...raw,description:raw.description+' Horaire de nuit.'}],false);
+ [row]=await sql.query('SELECT parsed_offer FROM external_offer WHERE source_id=$1',[raw.id]);assert.equal(row.parsed_offer.cacheProbe,undefined);
+ await sql.query("UPDATE external_offer SET parsed_offer=parsed_offer||'{\"parserVersion\":\"obsolete\",\"cacheProbe\":true}'::jsonb WHERE source_id=$1",[raw.id]);
+ await importOffers(db,[raw],false);
+ [row]=await sql.query('SELECT parsed_offer FROM external_offer WHERE source_id=$1',[raw.id]);assert.notEqual(row.parsed_offer.parserVersion,'obsolete');assert.equal(row.parsed_offer.cacheProbe,undefined);
 }));

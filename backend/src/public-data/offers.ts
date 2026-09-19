@@ -1,5 +1,5 @@
 import {FranceTravailClient,FT_KEYWORDS,advanceFtQuery,type FtQuery} from "./france-travail-client";
-import { parseOffer } from "./offer-parser";
+import { parseOffer, currentParsedOffer } from "./offer-parser";
 import { guardCrossSourceDuplicates } from "./offer-deduplication";
 import {
   offerRetirementReasons,
@@ -108,13 +108,17 @@ export async function importOffers(db: Database, raw: any[], dryRun: boolean, no
           [source, sourceId, rejection.reason],
         );
       }
-      // One round trip per page, retaining the same transaction and unique key.
+      // Batch reads and writes per page, retaining the transaction and unique key.
       for (let start = 0; start < accepted.length; start += 150) {
         const batch = accepted.slice(start, start + 150);
+        // Reuse the versioned parsing result before running the parser, not only
+        // during SQL upsert. Freshness timestamps still advance for seen offers.
+        const cached = await em.query('SELECT source,source_id,parsed_offer FROM external_offer WHERE source=$1 AND source_id=ANY($2::text[])', [source, batch.map(o=>o.sourceId)]);
+        const previous = new Map(cached.map(row=>[row.source_id,row.parsed_offer]));
         const parameters = batch.flatMap(o => [
           o.source, o.sourceId, o.title, o.description, o.url, o.locationLabel,
           o.qualification, o.rawHash, JSON.stringify(o.provenance), o.expiresAt ?? null,
-          JSON.stringify(parseOffer({ ...o, location_label: o.locationLabel })),
+          JSON.stringify(currentParsedOffer({ ...o, location_label: o.locationLabel, parsed_offer: previous.get(o.sourceId) as any }) ?? parseOffer({ ...o, location_label: o.locationLabel })),
         ]);
         const values = batch.map((_, index) => "(" + Array.from({length: 11}, (_, field) => "$" + (index * 11 + field + 1)).join(",") + ")").join(",");
         await em.query(`INSERT INTO external_offer(source,source_id,title,description,url,location_label,qualification,raw_hash,provenance,expires_at,parsed_offer) VALUES ${values} ON CONFLICT(source,source_id) DO UPDATE SET title=EXCLUDED.title,description=EXCLUDED.description,url=EXCLUDED.url,location_label=EXCLUDED.location_label,qualification=EXCLUDED.qualification,raw_hash=EXCLUDED.raw_hash,provenance=EXCLUDED.provenance || CASE WHEN external_offer.provenance ? 'availabilityCheck' THEN jsonb_build_object('availabilityCheck',external_offer.provenance->'availabilityCheck') ELSE '{}'::jsonb END || CASE WHEN external_offer.provenance->>'retiredReason'='PROVIDER_CLOSED' THEN jsonb_build_object('retiredReason','PROVIDER_CLOSED') ELSE '{}'::jsonb END,expires_at=EXCLUDED.expires_at,parsed_offer=CASE WHEN external_offer.parsed_offer->>'inputHash'=EXCLUDED.parsed_offer->>'inputHash' AND external_offer.parsed_offer->>'parserVersion'=EXCLUDED.parsed_offer->>'parserVersion' THEN external_offer.parsed_offer ELSE EXCLUDED.parsed_offer END,imported_at=now(),active=CASE WHEN external_offer.provenance->>'retiredReason'='PROVIDER_CLOSED' THEN false ELSE true END`, parameters);
