@@ -23,3 +23,9 @@
 | diagrams | Illustrations d'architecture |
 
 Les documents d'exploitation gardent leur contexte de validation. En cas de contradiction, vérifier le code et les exigences courantes ; ne pas transformer une ancienne preuve en promesse actuelle. Les conversations et anciens bilans ont été [archivés](ARCHIVES.md).
+
+## Schémas et dossier technique
+
+- [Automatisations : catalogue, reprise et preuves](AUTOMATISATIONS.md).
+
+[Guide utilisateur](GUIDE_UTILISATEUR.md) · [Inventaire documentaire](INVENTAIRE_DOCUMENTAIRE.md).

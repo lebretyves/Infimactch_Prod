@@ -1,5 +1,7 @@
 # Limites de requêtes partagées — 19 septembre 2026
 
+> Preuve datée : les constats et chiffres ci-dessous concernent cette campagne. Pour la configuration actuelle, consulter [l’architecture](../SCHEMA_ARCHITECTURE_V1.md), [les automatisations](../AUTOMATISATIONS.md) et [les réserves du rendu](../rendu/README.md).
+
 ## Changement
 
 Les compteurs express-rate-limit précédemment stockés en mémoire d'une instance sont désormais stockés dans PostgreSQL. Deux fonctions Vercel ou processus backend partagent donc la même consommation. Redémarrer une instance ne remet plus son quota à zéro. Aucun quota existant n'est augmenté ou diminué.

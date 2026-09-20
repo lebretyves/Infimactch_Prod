@@ -1,5 +1,7 @@
 # Recette des parcours client — 19 septembre 2026
 
+> Preuve datée : les constats et chiffres ci-dessous concernent cette campagne. Pour la configuration actuelle, consulter [l’architecture](../SCHEMA_ARCHITECTURE_V1.md), [les automatisations](../AUTOMATISATIONS.md) et [les réserves du rendu](../rendu/README.md).
+
 ## Résultat
 
 **58 états et variantes, 174 contrôles de rendu** aux largeurs 320, 768 et 1440 pixels. Aucun échec de chargement final, aucune erreur JavaScript ni appel API sans fixture. Les 20 routes privées hors contrat sont couvertes ; la 21e, préparation du contrat, dispose de sa recette distincte de 31 contrôles.

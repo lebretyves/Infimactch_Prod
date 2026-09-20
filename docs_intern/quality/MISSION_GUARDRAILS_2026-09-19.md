@@ -1,5 +1,7 @@
 # Garde-fous des missions — 19 septembre 2026
 
+> Preuve datée : les constats et chiffres ci-dessous concernent cette campagne. Pour la configuration actuelle, consulter [l’architecture](../SCHEMA_ARCHITECTURE_V1.md), [les automatisations](../AUTOMATISATIONS.md) et [les réserves du rendu](../rendu/README.md).
+
 ## Candidatures et affectation
 Une affectation confirmée ferme, dans la même transaction, les autres candidatures SUBMITTED/SELECTED du même intérimaire dont les périodes se chevauchent. Statut UNAVAILABLE, motif OTHER_ASSIGNMENT_CONFIRMED, date de fermeture et événement d’audit avec référence interne de l’affectation. Les créneaux adjacents restent possibles. L’annulation ne réactive aucune candidature ; une nouvelle candidature explicite efface le motif courant tout en conservant l’audit.
 

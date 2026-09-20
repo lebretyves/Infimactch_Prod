@@ -25,3 +25,7 @@ Deux pratiques documentées : [requêtes de matching regroupées](../quality/OPT
 ## Clôture
 
 Compléter [la recette finale](RECETTE_FINALE.csv), les heures humaines, les décisions de responsabilité/conservation et les essais humains. Vérifier le parcours publié, les deux workflows et le MFA réel. Les réserves de sauvegarde indépendante et rotation des secrets restent celles de l'audit. Les fonctions admin avancées proposées ne sont pas exigées explicitement par le sujet.
+
+## Schémas et dossier technique
+
+- [Architecture](../SCHEMA_ARCHITECTURE_V1.md), [flux métier](../FLUX_V1.md) et [automatisations](../AUTOMATISATIONS.md).

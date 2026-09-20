@@ -1,5 +1,7 @@
 # Corrections ciblées RGAA — 20 septembre 2026
 
+> Preuve datée : les constats et chiffres ci-dessous concernent cette campagne. Pour la configuration actuelle, consulter [l’architecture](../SCHEMA_ARCHITECTURE_V1.md), [les automatisations](../AUTOMATISATIONS.md) et [les réserves du rendu](../rendu/README.md).
+
 - Identité : autocomplete=bday transmis au véritable input de date.
 - Demande de correction : section nommée par un h3 via aria-labelledby et identifiant React unique ; bday également sur la correction de naissance.
 - Contrôles partagés : boutons avec retour à la ligne et hauteurs minimales, champs avec hauteur adaptable, libellés avec retour à la ligne. Fonctionne sans activer le panneau d’accessibilité.

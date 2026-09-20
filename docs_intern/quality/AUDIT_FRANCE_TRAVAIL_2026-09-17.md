@@ -1,5 +1,7 @@
 # Audit de la collecte France Travail — 17 septembre 2026
 
+> Preuve datée : les constats et chiffres ci-dessous concernent cette campagne. Pour la configuration actuelle, consulter [l’architecture](../SCHEMA_ARCHITECTURE_V1.md), [les automatisations](../AUTOMATISATIONS.md) et [les réserves du rendu](../rendu/README.md).
+
 > Rapport historique : cet état précède la bascule vers Supabase du 19 septembre. Pour la configuration actuelle, consulter [l'inventaire](../DEPLOIEMENT_INVENTAIRE.md).
 ## Conclusion
 

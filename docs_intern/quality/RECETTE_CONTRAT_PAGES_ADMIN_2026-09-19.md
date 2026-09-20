@@ -1,5 +1,7 @@
 # Préparation du contrat et recette des pages — 19 septembre 2026
 
+> Preuve datée : les constats et chiffres ci-dessous concernent cette campagne. Pour la configuration actuelle, consulter [l’architecture](../SCHEMA_ARCHITECTURE_V1.md), [les automatisations](../AUTOMATISATIONS.md) et [les réserves du rendu](../rendu/README.md).
+
 ## Changements livrables
 
 - Préparation d’un **brouillon** depuis une affectation confirmée : mission, dates, lieu, nom et prénom, organisation gestionnaire, établissement et taux horaire préremplis. Cinq champs de préparation enregistrables même incomplets, avec les informations manquantes explicites.

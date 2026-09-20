@@ -1,5 +1,6 @@
 # RIB : capture et analyse automatiques
 
+> Preuve datée : les constats et chiffres ci-dessous concernent cette campagne. Pour la configuration actuelle, consulter [l’architecture](../SCHEMA_ARCHITECTURE_V1.md), [les automatisations](../AUTOMATISATIONS.md) et [les réserves du rendu](../rendu/README.md).
 
 ## 2026-09-17 — Capture et analyse automatiques du RIB
 

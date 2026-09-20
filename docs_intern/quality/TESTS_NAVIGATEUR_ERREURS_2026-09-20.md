@@ -1,5 +1,7 @@
 # Tests navigateur et secours de rendu — 20 septembre 2026
 
+> Preuve datée : les constats et chiffres ci-dessous concernent cette campagne. Pour la configuration actuelle, consulter [l’architecture](../SCHEMA_ARCHITECTURE_V1.md), [les automatisations](../AUTOMATISATIONS.md) et [les réserves du rendu](../rendu/README.md).
+
 ## Corrections
 - Scripts officiels notification-read et mixed-recommendations : réponses email-deliveries et matching/rules explicites ; attentes de réponses associées aux filtres Partenaires/Externes, sans délai fixe de diagnostic.
 - Journal des emails : validation de la liste, des champs rendus, des dates et des événements avant affichage ; erreur compréhensible avec actualisation, sans message technique serveur.

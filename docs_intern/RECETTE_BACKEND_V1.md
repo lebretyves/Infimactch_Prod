@@ -1,5 +1,7 @@
 # Recette et revue du backend V1 — 15 septembre 2026
 
+> Recette historique du backend local. Les mentions de cloud non raccordé et les résultats décrivent cette campagne ; consulter [l’architecture actuelle](SCHEMA_ARCHITECTURE_V1.md) pour le déploiement.
+
 **Verdict : backend local fonctionnel sur les parcours testés, validation intégrale V1 encore incomplète.** La recette initiale passait 48 tests. Après corrections, 62 tests passent ; typecheck et compilation réussissent. Couverture : 77,94 % des lignes, 82,62 % des branches. Les tests ne prouvent pas à eux seuls la conformité de tous les endpoints.
 
 ## Ce qui fonctionne avec preuve

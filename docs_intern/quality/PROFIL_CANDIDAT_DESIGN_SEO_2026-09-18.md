@@ -1,5 +1,7 @@
 # Profil intérimaire, organisation des pages et SEO — 18 septembre 2026
 
+> Preuve datée : les constats et chiffres ci-dessous concernent cette campagne. Pour la configuration actuelle, consulter [l’architecture](../SCHEMA_ARCHITECTURE_V1.md), [les automatisations](../AUTOMATISATIONS.md) et [les réserves du rendu](../rendu/README.md).
+
 ## Périmètre
 
 Quatorze types de pages candidat examinés : vue d’ensemble, recherche, fiche annonce, candidature, liste et détail des candidatures, disponibilités/mobilité, profil, dossier, favoris, historique des missions, fiche établissement, notifications et compte. Revue de code et tests avec données fictives ; pas de contrôle du contenu du compte personnel ouvert par l’utilisateur.

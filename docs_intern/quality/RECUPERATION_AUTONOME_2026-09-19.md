@@ -1,5 +1,7 @@
 # Récupération autonome des comptes clients — 19 septembre 2026
 
+> Preuve datée : les constats et chiffres ci-dessous concernent cette campagne. Pour la configuration actuelle, consulter [l’architecture](../SCHEMA_ARCHITECTURE_V1.md), [les automatisations](../AUTOMATISATIONS.md) et [les réserves du rendu](../rendu/README.md).
+
 ## Comportement
 
 `POST /auth/recovery/request` envoie un email SMTP2GO lorsque `SMTP2GO_API_KEY`, `SMTP2GO_FROM` et une origine applicative HTTPS de confiance sont configurés. Le lien de réinitialisation contient un jeton aléatoire de 32 octets dans son fragment. Seul le SHA-256 du jeton est conservé en base ; aucun corps d'email ni lien secret n'est enregistré dans une file, une trace ou une réponse API. Le frontend retire immédiatement le fragment de l'historique et ne stocke pas le jeton dans localStorage/sessionStorage.

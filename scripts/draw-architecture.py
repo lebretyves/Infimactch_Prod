@@ -6,12 +6,12 @@ from reportlab.pdfbase import pdfmetrics
 from reportlab.pdfbase.ttfonts import TTFont
 import pypdfium2 as pdfium
 
-out=Path('docs/diagrams');out.mkdir(exist_ok=True)
+out=Path('docs_intern/diagrams');out.mkdir(exist_ok=True)
 W,H=1600,1360
 pdfmetrics.registerFont(TTFont('Arial',r'C:\Windows\Fonts\arial.ttf'))
 pdfmetrics.registerFont(TTFont('Arial-Bold',r'C:\Windows\Fonts\arialbd.ttf'))
 c=canvas.Canvas(str(out/'architecture-infimatch-v1.pdf'),pagesize=(W,H))
-c.setTitle('InfiMatch - Architecture backend V1 - 15 septembre 2026')
+c.setTitle('InfiMatch - Architecture technique - 21 septembre 2026')
 svg=[f'<svg xmlns="http://www.w3.org/2000/svg" width="{W}" height="{H}" viewBox="0 0 {W} {H}">']
 ink='#182B43'; muted='#526478';blue='#2361A2';teal='#147D72';amber='#B57818';gray='#748297'
 def rect(x,y,w,h,fill,stroke=None,r=14,dash=False):
@@ -42,78 +42,31 @@ def card(x,y,w,h,title,lines,kind='blue'):
  text(x+22,y+37,title,25,True,border)
  for i,line in enumerate(lines):text(x+22,y+72+29*i,line,19)
 rect(0,0,W,H,'#FFFFFF',r=0)
-text(60,65,'InfiMatch — architecture backend V1',38,True)
-text(60,102,'État au 15 septembre 2026 • flux principaux • monolithe modulaire NestJS',21,color=muted)
-rect(1080,42,20,20,'#F0F6FC',blue,r=4);text(1110,60,'Implémenté / testé en local',18)
-rect(1080,80,20,20,'#FFF8EB',amber,r=4,dash=True);text(1110,98,'Prévu / à raccorder',18)
-card(60,180,400,110,'Navigateur',['Infirmier, établissement ou agence'],'gray')
-card(560,180,480,110,'Reverse proxy HTTPS',['Origine unique — déploiement à valider'],'amber')
-card(1120,180,420,110,'Frontend Next.js prévu',['Pages, cartes, espace utilisateur'],'amber')
-arrow([(460,235),(560,235)],True);text(510,215,'HTTPS',17,anchor='middle')
-arrow([(1040,235),(1120,235)],True);text(1080,215,'Pages',17,anchor='middle')
-arrow([(800,290),(800,410)],True);text(822,355,'/api/v1',20,color=muted)
-card(560,410,480,245,'API NestJS / TypeScript',[
- 'Sessions, permissions et contrôles',
- 'Interne : admissibilité puis score',
- 'Externe : comparaison partielle',
- 'Règles métier, notifications et PDF',
- 'Service actuel : HTTP local'
-])
-card(60,410,400,110,'Annuaire Santé — API FHIR',['Recherche exacte du numéro RPPS'],'teal')
-arrow([(560,468),(460,468)],both=True,color=teal)
-text(510,446,'HTTPS',16,anchor='middle',color=teal)
-card(1120,410,420,170,'n8n local — 3 workflows',[
- 'Notification de correspondance',
- 'Relance des missions non pourvues',
- 'Confirmation de mission'
-])
-arrow([(1120,487),(1040,487)],color=blue)
-text(1080,464,'Actions',16,anchor='middle',color=blue)
-card(1120,650,420,115,'Worker asynchrone',[
- 'Lit les événements dans PostgreSQL',
- 'Appelle n8n et gère les reprises'
-])
-arrow([(1330,650),(1330,580)],color=blue);text(1350,622,'Webhooks',18,color=blue)
-card(1120,815,420,85,'n8n Cloud',['Instance fournie : non raccordée'],'amber')
-card(60,610,400,135,'Données publiques',[
- 'France Travail : annonces via API',
- 'FINESS : fichier officiel téléchargé'
-],'teal')
-card(60,795,400,105,'CLI TypeScript / Commander',[
- 'Nettoyage, classement et import'
-])
-arrow([(260,745),(260,795)],color=teal)
-arrow([(160,900),(160,1030)],color=teal)
-text(177,956,'Import contrôlé',18,color=teal)
-arrow([(800,655),(800,980),(260,980),(260,1030)],color=blue)
-arrow([(800,980),(800,1030)],color=blue)
-arrow([(800,980),(1330,980),(1330,1030)],color=blue)
-text(824,803,'Données métier',19,color=blue)
-text(824,832,'Explications internes',19,color=blue)
-text(824,861,'Documents chiffrés',19,color=blue)
-card(60,1030,400,180,'PostgreSQL + PostGIS',[
- 'mission • external_offer • profile',
- 'Candidatures, affectations, FINESS',
- 'Sessions, notifications et audit',
- 'Outbox : événements à traiter'
-],'teal')
-card(560,1030,480,180,'MongoDB',[
- 'Explications du matching interne',
- 'Résultats et règles versionnés',
- 'Expiration des traces',
- 'Comparaison externe : non stockée'
-],'teal')
-card(1120,1030,420,180,'Fichiers privés',[
- 'Justificatifs et confirmations PDF',
- 'Chiffrement AES-256-GCM',
- 'Téléchargement via API autorisée'
-],'teal')
-rect(60,1240,1480,78,'#F5F7FA',r=10)
-text(80,1271,'Score interne : pondération expérimentale 45 / 25 / 20 / 10, à réévaluer. Annonces externes : aucun score global.',19)
-text(80,1300,'Les bases, fichiers et l’éditeur n8n restent privés. Le contrôle réglementaire des deux ans en ETP reste à implémenter.',18,color=muted)
-text(60,1342,'n8n orchestre ; le backend décide selon les règles. L’agence valide humainement l’affectation.',17,color=muted)
+text(60,65,'InfiMatch — architecture technique',38,True)
+text(60,108,'21 septembre 2026 • flux logiques • déploiement distinct du site, de l’API et de l’administration',21,color=muted)
+card(60,180,440,150,'Site public — Vercel',['React / TypeScript / Vite','Candidats, établissements, agences'])
+card(580,180,440,150,'Administration — Vercel',['React / build séparé','Rôles, sessions admin et MFA'])
+card(1100,180,440,150,'Configuration privée',['Vault local → variables serveur','Aucun secret dans le bundle VITE'],'gray')
+arrow([(280,330),(280,410),(580,410),(580,465)])
+arrow([(800,330),(800,465)])
+text(80,393,'HTTPS / sessions / CSRF',19,color=muted)
+card(500,465,600,245,'API NestJS / Node 24 — Vercel',['Validation, autorisations et transactions','Matching PostGIS, candidatures, affectations','PDF, notifications, outbox et reçus métier','Tentative de dispatch après écritures éligibles'])
+card(60,475,360,220,'Sources publiques',['RPPS : Annuaire Santé','Offres : France Travail / JobsPipe','FINESS : import par CLI'],'teal')
+arrow([(500,560),(420,560)],both=True,color=teal)
+card(1180,475,360,220,'n8n Cloud',['Webhooks métier authentifiés','Reprise toutes les 4 heures','Imports et maintenance séparés'],'blue')
+arrow([(1100,560),(1180,560)],both=True)
+card(60,825,460,200,'Supabase / PostgreSQL',['PostGIS, profils, missions, sessions','Outbox, reçus et audit','document_blob : contenu chiffré'],'teal')
+card(570,825,440,200,'MongoDB Atlas',['Explications du matching','Données minimisées et versionnées','Stockage distinct des décisions SQL'],'teal')
+card(1060,825,480,200,'Notifications externes',['Discord : canal facultatif','SMTP2GO : emails transactionnels','Réception réelle à prouver séparément'],'teal')
+arrow([(660,710),(660,760),(290,760),(290,825)])
+arrow([(800,710),(800,825)])
+arrow([(940,710),(940,760),(1300,760),(1300,825)])
+card(60,1100,690,145,'Exploitation locale',['CLI : migrations, imports et sauvegardes','Rôle de migration distinct du rôle applicatif'],'gray')
+card(800,1100,740,145,'Frontières et limites',['API : contrôle des droits avant accès aux documents','Noc ode : orchestration ; règles métier et PDF dans l’API'.replace('Noc ode','Nocode')],'gray')
+text(60,1300,'Vue documentaire : ne vaut ni recette complète de production ni preuve de restauration ou de conformité.',20,color=muted)
 c.save();svg.append('</svg>')
 (out/'architecture-infimatch-v1.svg').write_text('\n'.join(svg),encoding='utf-8')
-doc=pdfium.PdfDocument(str(out/'architecture-infimatch-v1.pdf'));page=doc[0];page.render(scale=1.4).to_pil().save(out/'architecture-infimatch-v1.png')
+doc=pdfium.PdfDocument(str(out/'architecture-infimatch-v1.pdf'));page=doc[0]
+page.render(scale=1).to_pil().save(out/'architecture-infimatch-v1.png')
 page.close();doc.close()
-print('SVG, PDF and PNG created')
+print('Architecture: SVG, PDF et PNG générés')

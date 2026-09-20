@@ -20,7 +20,7 @@ Les dépôts de livraison sont `lebretyves/Infimactch_Prod` (Main) et `EpitechMs
 
 ## Reprise des données
 
-Reprise sans sauvegarde autorisée le 19 septembre : 3 092 missions fictives réinjectées avec leurs identifiants d'origine, dont 2 990 ouvertes et 102 en brouillon, plus 174 741 références FINESS. Deux nouveaux accès administrateur/entreprise ont été préparés. Les anciens comptes, candidatures, affectations et PDF n'ont pas été repris. Voir [la migration et ses preuves](supabase-migration.md).
+Reprise sans sauvegarde autorisée le 19 septembre : 3 092 missions fictives réinjectées avec leurs identifiants d'origine, dont 2 990 ouvertes et 102 en brouillon, plus 174 741 références FINESS. Deux nouveaux accès administrateur/entreprise ont été préparés. Les anciens comptes, candidatures, affectations et PDF n'ont pas été repris. Voir [la migration et ses preuves](../docs/supabase-migration.md).
 
 Les anciennes missions fictives ne déclenchent plus de notifications de création, matching ou relance. Les nouvelles missions restent traitées normalement. Les confirmations et annulations sont distinctes de cette suppression. La première ouverture de la recherche et l'affichage des pourcentages ont été vérifiés après correction du frontend.
 

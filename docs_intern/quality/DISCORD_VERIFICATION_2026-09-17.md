@@ -1,5 +1,7 @@
 # Verification Discord
 
+> Preuve datée : les constats et chiffres ci-dessous concernent cette campagne. Pour la configuration actuelle, consulter [l’architecture](../SCHEMA_ARCHITECTURE_V1.md), [les automatisations](../AUTOMATISATIONS.md) et [les réserves du rendu](../rendu/README.md).
+
 Le relais n8n actif utilise un noeud HTTP Request avec identifiant securise discordBotApi. Lecture authentifiee /users/@me : HTTP 200 et bot=true ; lecture des serveurs : un serveur. Aucun message de test envoye a une personne.
 
 L'administration effectue maintenant un controle reel en lecture de l'identite du bot. Disponible signifie authentification du bot reussie, pas livraison ou lecture d'un message prive. L'echec du controle s'affiche comme indisponible.

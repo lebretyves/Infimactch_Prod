@@ -1,5 +1,7 @@
 # Missions de démonstration — contrôle du 18 septembre 2026
 
+> Preuve datée : les constats et chiffres ci-dessous concernent cette campagne. Pour la configuration actuelle, consulter [l’architecture](../SCHEMA_ARCHITECTURE_V1.md), [les automatisations](../AUTOMATISATIONS.md) et [les réserves du rendu](../rendu/README.md).
+
 Lot de 1 000 demandes à titres professionnels, non importées en production : 646 IDE, 203 IBODE, 151 IADE, sur 646 FINESS géographiques distincts et 101 départements. Établissements réels, scénarios et conditions inventés explicitement pour la démonstration ; aucun recrutement réel attribué aux établissements.
 
 400 demandes (40 %) se déroulent intégralement du 18 au 27 septembre 2026 : 100 débutent le 18, 300 la semaine suivante. Aucun début antérieur au 18 septembre. 820 demandes d'une ou deux vacations, 60 demandes longues de quatre ou huit semaines ; 3 092 vacations distinctes. Validation indépendante PASS, SHA256 données C8AC69B91C6B239164BD257F659755CEB9E9E06B7FB43EBEF709181E86C2FBC0.

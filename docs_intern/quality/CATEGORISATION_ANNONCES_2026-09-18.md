@@ -1,5 +1,7 @@
 # Catégorisation des extraits d’annonces — 18 septembre 2026
 
+> Preuve datée : les constats et chiffres ci-dessous concernent cette campagne. Pour la configuration actuelle, consulter [l’architecture](../SCHEMA_ARCHITECTURE_V1.md), [les automatisations](../AUTOMATISATIONS.md) et [les réserves du rendu](../rendu/README.md).
+
 Échantillon de 200 annonces distinctes du catalogue public actuel : 168 France Travail et 32 JobsPipe. Récupération UTC : 2026-09-18T00:17:56.440Z. Le catalogue renvoyait 4 840 annonces. Échantillon des 150 premières et des 50 dernières annonces du catalogue ; il ne représente pas statistiquement l’ensemble, ni 100 annonces de chaque fournisseur. Aucune nouvelle collecte payante et aucune modification des annonces en base.
 
 ## Constat et correction

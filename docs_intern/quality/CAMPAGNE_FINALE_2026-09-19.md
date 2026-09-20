@@ -1,5 +1,7 @@
 # Campagne locale finale — 19 septembre 2026
 
+> Preuve datée : les constats et chiffres ci-dessous concernent cette campagne. Pour la configuration actuelle, consulter [l’architecture](../SCHEMA_ARCHITECTURE_V1.md), [les automatisations](../AUTOMATISATIONS.md) et [les réserves du rendu](../rendu/README.md).
+
 **Résultat : PASS, sur un instantané backend stable.** 306 tests unitaires et 148 tests d’intégration répartis sur 22 fichiers ont réussi : **454 tests, aucun échec, aucun test ignoré ou annulé**. Cinq scénarios supplémentaires de régression de sécurité PostgreSQL ont également réussi ; ils sont distincts des 454 tests et ne gonflent pas ce total.
 
 Ce résultat valide le code local testé. Il ne constitue ni une preuve de déploiement, ni une preuve de réception d’email réel, ni une certification de conformité RGAA/RGPD.

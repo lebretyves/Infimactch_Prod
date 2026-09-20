@@ -1,5 +1,7 @@
 # Qualité frontend — 17 septembre 2026
 
+> Preuve datée : les constats et chiffres ci-dessous concernent cette campagne. Pour la configuration actuelle, consulter [l’architecture](../SCHEMA_ARCHITECTURE_V1.md), [les automatisations](../AUTOMATISATIONS.md) et [les réserves du rendu](../rendu/README.md).
+
 ## Périmètre observé
 
 React 19, React Router 7, Vite 7.3.6. Le lot conserve les recommandations sans modifier leur sélection, titre ou classement. Aucun audit exhaustif RGAA/RGESN n’est revendiqué. Aucun trafic, score SEO, CO₂ ou résultat sur appareil réel n’est inventé.

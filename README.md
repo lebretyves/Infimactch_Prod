@@ -28,6 +28,22 @@ Le RIB reste facultatif. Le domicile et la zone de recherche/alertes sont distin
 
 ## Architecture
 
+```mermaid
+flowchart LR
+    Web["Site React / Vite"] --> API["API NestJS — Vercel"]
+    Admin["Administration React / MFA"] --> API
+    API --> SQL["Supabase / PostGIS et documents chiffrés"]
+    API --> Mongo["MongoDB : explications"]
+    API --> N8N["n8n Cloud"]
+    N8N --> API
+    API --> Services["Discord, SMTP2GO et sources publiques"]
+```
+
+[Architecture détaillée et schéma imprimable](docs_intern/SCHEMA_ARCHITECTURE_V1.md) · [Flux métier et sécurité](docs_intern/FLUX_V1.md) · [Automatisations, horaires et preuves](docs_intern/AUTOMATISATIONS.md).
+
+Le backend porte les règles métier ; n8n orchestre les appels. La reprise périodique est réglée sur quatre heures, en complément des tentatives immédiates après certaines écritures. Les trois applications Vercel sont déployées séparément.
+
+
 | Composant | Technologie / rôle |
 | --- | --- |
 | Application et administration | React 19, TypeScript, React Router, Vite ; builds séparés |
@@ -43,7 +59,7 @@ frontend/      Application, administration et tests navigateur
 infra/         Environnement local et configuration d'infrastructure
 scripts/       Validation, imports, exploitation et sauvegardes
 workflows/     Modèles de workflows n8n
-docs_intern/         Guides, exigences, preuves et préparation du rendu
+docs/         Guides, exigences, preuves et préparation du rendu
 ```
 
 ## Installation locale
@@ -118,3 +134,5 @@ Les variables `VITE_*` sont publiques : ne jamais y mettre de secret. L'administ
 Conserver les tests et preuves adaptés au changement. Mettre à jour les exigences lorsqu'un comportement produit évolue. Ne pas placer conversations, prompts, comptes rendus successifs ou secrets dans les branches actives. Les guides décrivent l'usage courant ; les preuves datées décrivent uniquement leur campagne. Voir [les archives](docs_intern/ARCHIVES.md).
 
 Licence : [LICENSE](LICENSE).
+
+[Guide utilisateur](docs_intern/GUIDE_UTILISATEUR.md) · [Inventaire documentaire](docs_intern/INVENTAIRE_DOCUMENTAIRE.md).
