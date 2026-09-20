@@ -1,5 +1,4 @@
 import { AccessibilityProvider } from "./context/AccessibilityContext";
-import { AccessibilityPanel } from "./components/AccessibilityPanel";
 import { stopSpeech } from "./services/pageSpeech";
 import { startPwa } from "./lib/pwa";
 import { StrictMode } from "react";
@@ -30,7 +29,6 @@ createRoot(document.getElementById("root")!).render(
       <AuthProvider>
         <IconSprite />
         <RouterProvider router={router} />
-        <AccessibilityPanel />
       </AuthProvider>
     </CookieConsentProvider>
     </AccessibilityProvider>

@@ -112,5 +112,4 @@ html[data-a11y-spacing="wide"] :is(button, input, select, textarea) { letter-spa
 html[data-a11y-text]:not([data-a11y-text="normal"]) body { overflow-wrap: anywhere; }
 
 html[data-a11y-text] { scroll-padding-bottom: 90px; }
-html[data-a11y-text] body { padding-bottom: 70px; }
 html[data-a11y-text] :focus-visible { scroll-margin-block: 90px; }
