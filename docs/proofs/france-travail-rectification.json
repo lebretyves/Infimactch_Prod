@@ -1,89 +1,166 @@
 {
-  "checkedAt": "2026-09-14T23:00:08.241Z",
+  "checkedAt": "2026-09-19T21:43:49.226Z",
+  "sampling": {
+    "department": "75",
+    "pages": [
+      {
+        "keyword": "infirmier",
+        "department": "75",
+        "limit": 150,
+        "received": 150,
+        "totalReported": 153,
+        "hasMore": true
+      },
+      {
+        "keyword": "IDE",
+        "department": "75",
+        "limit": 150,
+        "received": 150,
+        "totalReported": 155,
+        "hasMore": true
+      },
+      {
+        "keyword": "IADE",
+        "department": "75",
+        "limit": 150,
+        "received": 11,
+        "totalReported": 11,
+        "hasMore": false
+      },
+      {
+        "keyword": "IBODE",
+        "department": "75",
+        "limit": 150,
+        "received": 150,
+        "totalReported": 156,
+        "hasMore": true
+      }
+    ],
+    "maxSearchCalls": 4,
+    "retriesExcludedFromSearchBudget": true,
+    "exhaustive": false,
+    "scope": "First page per keyword only; Paris commune checked locally; never a complete provider inventory"
+  },
   "queries": [
     {
       "keyword": "infirmier",
       "department": "75",
-      "status": 200,
-      "range": "offres 0-130/131"
+      "status": 206,
+      "range": "offres 0-149/153"
     },
     {
       "keyword": "IDE",
       "department": "75",
-      "status": 200,
-      "range": "offres 0-132/133"
+      "status": 206,
+      "range": "offres 0-149/155"
     },
     {
       "keyword": "IADE",
       "department": "75",
       "status": 200,
-      "range": "offres 0-8/9"
+      "range": "offres 0-10/11"
     },
     {
       "keyword": "IBODE",
       "department": "75",
-      "status": 200,
-      "range": "offres 0-131/132"
+      "status": 206,
+      "range": "offres 0-149/156"
     }
   ],
-  "uniqueAcquired": 134,
+  "uniqueAcquired": 155,
   "first": {
-    "received": 134,
-    "accepted": 134,
-    "rejected": [],
+    "received": 155,
+    "accepted": 154,
+    "rejected": [
+      {
+        "index": 148,
+        "reason": "PERMANENT_POSITION_EXCLUDED"
+      }
+    ],
     "dryRun": false,
-    "source": "FRANCE_TRAVAIL"
+    "source": "FRANCE_TRAVAIL",
+    "duplicates": []
   },
   "replay": {
-    "received": 134,
-    "accepted": 134,
-    "rejected": [],
+    "received": 155,
+    "accepted": 154,
+    "rejected": [
+      {
+        "index": 148,
+        "reason": "PERMANENT_POSITION_EXCLUDED"
+      }
+    ],
     "dryRun": false,
-    "source": "FRANCE_TRAVAIL"
+    "source": "FRANCE_TRAVAIL",
+    "duplicates": []
   },
-  "persisted": 134,
+  "persisted": 154,
   "replayWithoutDuplicates": true,
   "classification": {
-    "IDE": 120,
+    "IDE": 138,
     "IADE": 7,
     "UNCONFIRMED": 6,
-    "IBODE": 1
+    "IBODE": 3
   },
   "warningCounts": {
-    "CONTRACT_TEXT_REVIEW_REQUIRED": 17,
-    "EXPERIENCE_TEXT_REVIEW_REQUIRED": 14,
-    "LOCATION_TEXT_REVIEW_REQUIRED": 1,
+    "CONTRACT_TEXT_REVIEW_REQUIRED": 15,
+    "EXPERIENCE_TEXT_REVIEW_REQUIRED": 21,
     "BLOCK_DIPLOMA_UNCONFIRMED": 6,
     "QUALIFICATION_UNCONFIRMED": 6
   },
   "httpPresentationVerified": true,
   "fullMatchingScore": null,
   "sourceIds": [
+    "7034268",
+    "7034261",
+    "7034116",
+    "7034078",
+    "7034072",
+    "7034068",
+    "7033999",
+    "7033986",
+    "7033856",
+    "7033821",
+    "7033840",
+    "6989569",
+    "6989542",
+    "6989029",
+    "6970383",
+    "6967867",
+    "6967793",
+    "6966559",
+    "6934182",
+    "6934093",
+    "6929554",
+    "6929552",
+    "6929551",
+    "6929482",
+    "6929468",
+    "6929457",
+    "6929440",
+    "6929439",
+    "6929436",
+    "6929420",
+    "6909932",
+    "6900362",
+    "6900347",
+    "6900313",
+    "6900256",
+    "6899784",
+    "6899779",
+    "6899768",
+    "6899750",
+    "6892498",
+    "6892496",
+    "6892489",
+    "6807590",
+    "6802256",
+    "6744344",
     "213MTBB",
     "213MSHC",
     "213MQQB",
     "213MQDX",
     "213MPSD",
-    "212QZDZ",
-    "6850711",
-    "6850435",
-    "6850325",
-    "6850269",
-    "6850252",
-    "6850244",
-    "6850233",
-    "6829541",
-    "6829535",
-    "6829477",
-    "6829433",
-    "6829254",
-    "6829224",
-    "6829092",
-    "6807590",
-    "6802256",
-    "6801826",
-    "6769892",
-    "6744344",
     "6624763",
     "6598440",
     "6593904",
@@ -109,8 +186,6 @@
     "6592723",
     "6592699",
     "6592607",
-    "6578795",
-    "6578705",
     "6534477",
     "6525086",
     "6525082",
@@ -125,7 +200,6 @@
     "6347097",
     "6266108",
     "6266046",
-    "6209211",
     "6172406",
     "6172400",
     "6172399",
@@ -171,6 +245,8 @@
     "5040893",
     "5040890",
     "5040822",
+    "5040828",
+    "5040818",
     "4940250",
     "4892200",
     "4890511",
@@ -185,15 +261,11 @@
     "3972914",
     "3972734",
     "3627423",
-    "3625780",
-    "2085632",
-    "1999092",
-    "5040828",
-    "5040818",
-    "6829575",
+    "7034136",
     "6385401",
+    "6934261",
+    "6929556",
     "5778620"
   ],
-  "scope": "Bounded 150 per keyword, Paris commune checked locally; SQL upsert replay and current HTTP presentation. No full external eligibility verified.",
-  "codeCommit": "df3b8f3aea4d9583917b3c658644cf19a2f96709"
+  "scope": "One page of at most 150 per keyword; Paris commune checked locally; isolated SQL upsert replay and HTTP presentation. Non-exhaustive provider sample; no full external eligibility verified."
 }

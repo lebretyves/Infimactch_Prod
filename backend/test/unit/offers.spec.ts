@@ -38,3 +38,22 @@ test("missing provider access cannot report an acquisition", async () => {
     if (b) process.env.FT_CLIENT_SECRET = b;
   }
 });
+
+test("provider ISO dates are normalized to UTC without changing their instant", () => {
+  const o = normalizeOffer({...raw,dateCreation:"2026-09-19T09:30:00+02:00",dateActualisation:"2026-09-19T08:15:25Z"});
+  expect(o.provenance.publishedAt).toBe("2026-09-19T07:30:00.000Z");
+  expect(o.provenance.sourceUpdatedAt).toBe("2026-09-19T08:15:25.000Z");
+  expect(o.provenance.normalizationVersion).toBe(3);
+});
+test("invalid or missing provider dates become null without rejecting the offer", () => {
+  for (const value of [undefined,null,123,{},[],"","pas une date","2026-02-30T12:00:00Z","19/09/2026"]) {
+    const o = normalizeOffer({...raw,dateCreation:value,dateActualisation:value});
+    expect(o.provenance.publishedAt).toBe(null);
+    expect(o.provenance.sourceUpdatedAt).toBe(null);
+  }
+});
+test("ISO dates without offset use UTC rather than the machine timezone", () => {
+  const o = normalizeOffer({...raw,dateCreation:"2026-09-19",dateActualisation:"2026-09-19T09:30:00"});
+  expect(o.provenance.publishedAt).toBe("2026-09-19T00:00:00.000Z");
+  expect(o.provenance.sourceUpdatedAt).toBe("2026-09-19T09:30:00.000Z");
+});

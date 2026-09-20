@@ -186,7 +186,7 @@ export function SearchPlace({
       )}
       {home && value && (
         <button type="button" className={s.home} onClick={() => choose(home)}>
-          Utiliser ma zone de mobilité
+          Utiliser ma zone enregistrée
         </button>
       )}
     </div>

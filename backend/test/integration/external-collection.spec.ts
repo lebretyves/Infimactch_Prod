@@ -91,3 +91,16 @@ test('unchanged imports reuse parser output; changed input and parser upgrades r
  await importOffers(db,[raw],false);
  [row]=await sql.query('SELECT parsed_offer FROM external_offer WHERE source_id=$1',[raw.id]);assert.notEqual(row.parsed_offer.parserVersion,'obsolete');assert.equal(row.parsed_offer.cacheProbe,undefined);
 }));
+
+test('malformed provider dates persist as null and valid ISO dates survive import and replay',async()=>isolated(async(db,sql)=>{
+ const invalid={...offer(),dateCreation:'date mal formée',dateActualisation:'2026-02-30T12:00:00Z'};
+ const valid={...offer(),dateCreation:'2026-09-19T09:30:00+02:00',dateActualisation:'2026-09-19T08:15:25Z'};
+ const first=await importOffers(db,[invalid,valid],false);
+ assert.equal(first.accepted,2);assert.deepEqual(first.rejected,[]);
+ const rows=await sql.query('SELECT source_id,provenance FROM external_offer WHERE source_id=ANY($1::text[])',[[invalid.id,valid.id]]);
+ const bad=rows.find(row=>row.source_id===invalid.id),good=rows.find(row=>row.source_id===valid.id);
+ assert.equal(bad.provenance.publishedAt,null);assert.equal(bad.provenance.sourceUpdatedAt,null);
+ assert.equal(good.provenance.publishedAt,'2026-09-19T07:30:00.000Z');assert.equal(good.provenance.sourceUpdatedAt,'2026-09-19T08:15:25.000Z');
+ const replay=await importOffers(db,[invalid,valid],false);assert.equal(replay.accepted,2);
+ assert.equal((await sql.query('SELECT count(*)::int AS n FROM external_offer'))[0].n,2);
+}));

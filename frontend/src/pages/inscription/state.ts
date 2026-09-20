@@ -223,5 +223,5 @@ export const etapes = [
   { path: '/inscription/qualification', titre: 'Qualification' },
   { path: '/inscription/mobilite', titre: 'Mobilité' },
   { path: '/inscription/disponibilites', titre: 'Disponibilités' },
-  { path: '/inscription/consentements', titre: 'Consentements' },
+  { path: '/inscription/consentements', titre: 'Conditions' },
 ];

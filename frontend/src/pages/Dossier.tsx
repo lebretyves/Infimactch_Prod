@@ -141,7 +141,7 @@ export default function Dossier() {
         </p>
       </header>
       <nav className={s.sectionNav} aria-label="Rubriques de mon dossier">
-        <a href="#verification">Vérification RPPS</a><a href="#justificatifs">Justificatifs</a><a href="#rib">RIB</a>
+        <a href="#verification">Vérification RPPS</a><a href="#justificatifs">Justificatifs</a><a href="#rib">RIB facultatif</a>
       </nav>
       <p className={s.contextNote}>Pour vos diplômes déclarés, compétences et expériences, rendez-vous dans <a href="/profil">Mon profil</a>.</p>
       <BankReminder key={r.data?.bank.document?.id||r.data?.bank.iban||"empty"} />

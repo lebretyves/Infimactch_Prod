@@ -74,3 +74,8 @@ export function updateAvailability(changes: AvailabilityChange[]) {
     },
   );
 }
+
+export type SavedSearchArea = Pick<ProfessionalProfile, "latitude" | "longitude" | "radius_km" | "details">;
+export function updateSearchArea(area: {latitude: number; longitude: number; radiusKm: number; city: string}) {
+  return api<SavedSearchArea>("/profile/search-area", {method: "PATCH", body: area});
+}

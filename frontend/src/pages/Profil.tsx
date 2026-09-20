@@ -515,7 +515,7 @@ function Editor({ initial }: { initial: ProfessionalProfile }) {
                   readOnly
                 />
                 <TextField
-                  label="Ville"
+                  label="Ville de mon domicile"
                   maxLength={150}
                   value={d.city || ""}
                   readOnly
@@ -536,7 +536,7 @@ function Editor({ initial }: { initial: ProfessionalProfile }) {
                 />
               </div>
               <details className={s.details}>
-                <summary>Adresse postale</summary>
+                <summary>Mon domicile</summary>
                 <div className={s.fields}>
                   <TextField
                     label="Adresse"
@@ -560,14 +560,15 @@ function Editor({ initial }: { initial: ProfessionalProfile }) {
             <section id="mobilite" tabIndex={-1} className={u.card}>
               <h2 className={u.cardHeading}>
                 <Icon name="calendar" />
-                Disponibilités et mobilité
+                Ma zone de recherche et d’alertes
               </h2>
               <p className={s.help}>
-                {p.available.length} période(s) disponible(s) enregistrée(s)
+                {p.details?.mobilityCity || "Zone à préciser"}
                 {p.radius_km ? " · rayon de " + p.radius_km + " km" : ""}.
               </p>
-              <ButtonLink to="/calendrier" variant="outline">
-                Gérer mes disponibilités et ma mobilité
+              <p className={s.help}>Cette zone peut être différente de votre domicile. Elle sert aux alertes et propose votre zone par défaut. La dernière recherche mémorisée sur cet appareil reste prioritaire. Une recherche ponctuelle ne la modifie pas.</p>
+              <ButtonLink to="/calendrier#zone-mobilite" variant="outline">
+                Modifier ma zone de recherche et d’alertes
               </ButtonLink>
             </section>
             <section id="coordonnees-bancaires" tabIndex={-1} className={u.card}>

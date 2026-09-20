@@ -338,7 +338,7 @@ export class DocumentsService {
 }
 @Controller("me")
 @UseGuards(SessionGuard)
-class DocumentsController {
+export class DocumentsController {
   constructor(
     private readonly db: Database,
     private readonly documents: DocumentsService,
@@ -434,14 +434,14 @@ class DocumentsController {
       [user(r)],
     );
     const [assignment]=await this.db.query("SELECT 1 FROM assignment WHERE nurse_id=$1 AND status IN('ACTIVE','COMPLETED') LIMIT 1",[user(r)]);
-    if(!d)return {iban:null,details:null,document:null,required:!!assignment};
-    if(d.mime!=='application/json')return {iban:null,details:null,document:d,required:false};
+    if(!d)return {iban:null,details:null,document:null,required:false,suggested:!!assignment};
+    if(d.mime!=='application/json')return {iban:null,details:null,document:d,required:false,suggested:false};
     const data=await this.documents.read(user(r),d.id),b=JSON.parse(data.data.toString());
     if(b.version===2){
       const document=b.file?{...d,mime:b.file.mime,size_bytes:Buffer.byteLength(b.file.contentBase64,'base64')}:null;
-      return {iban:b.details.iban.slice(0,2)+'** **** '+b.details.iban.slice(-4),details:b.details,document,required:false};
+      return {iban:b.details.iban.slice(0,2)+'** **** '+b.details.iban.slice(-4),details:b.details,document,required:false,suggested:false};
     }
-    return {iban:'FR** **** **** **** **** **'+b.iban.slice(-4),details:null,document:null,required:false};
+    return {iban:'FR** **** **** **** **** **'+b.iban.slice(-4),details:null,document:null,required:false,suggested:false};
   }
 
 }

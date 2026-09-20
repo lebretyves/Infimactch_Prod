@@ -44,6 +44,7 @@ export function registrationProfile(v: Inscription): ProfessionalProfile {
     ...(v.adresse ? { address: v.adresse } : {}),
     ...(v.codePostal ? { postalCode: v.codePostal } : {}),
     ...(v.ville ? { city: v.ville } : {}),
+    ...(v.ville && v.latitude != null && v.longitude != null ? { mobilityCity: v.ville } : {}),
     ...(v.diplome ? { diploma: v.diplome } : {}),
     ...diplomaDetails(v.qualifications, v),
     ...(v.transport ? { transport: v.transport } : {}),
