@@ -3,7 +3,7 @@
 Version du 14 septembre 2026. Conception synchronisée avec le méga prompt ; aucun logiciel ni test applicatif déclaré livré.
 
 ## 1. Périmètre et décisions
-La référence est le **catalogue Word courant, F01 à F26 et F02 bis**, complété par le sujet D-WEB-901 et les décisions explicites de l’utilisateur. Les anciens PDF/catalogues et méga prompts sont des archives. Le détail des parcours et de l’API est défini dans [le prompt](Interimatch_Sante_Mega_Prompt_Backend_V1.md).
+La référence est le **catalogue Word courant, F01 à F26 et F02 bis**, complété par le sujet D-WEB-901 et les décisions explicites de l’utilisateur. Les anciens PDF/catalogues et méga prompts sont des archives. Le détail des parcours et de l’API est défini dans [le prompt — archive](https://github.com/lebretyves/Infimactch_Prod/blob/fd68a377da28a76151483529ac62473eed99d264/docs/references/Interimatch_Sante_Mega_Prompt_Backend_V1.md).
 
 Décisions : F12 comprend trois workflows ; F18 consulte le RPPS par API, avec blocage si non retrouvé et attente si indisponible. Aucune validation manuelle par l’agence n’est ajoutée à ce contrôle. L’attestation F02 reste V2 ; les références professionnelles sont hors V1, envisagées en V2 et encore à définir. La validation humaine de l’affectation F19 reste distincte du contrôle RPPS.
 
@@ -108,7 +108,7 @@ France Travail est le fournisseur d’offres initial proposé : accès et condit
 
 FINESS enrichit les établissements et le préremplissage ; il ne remplace pas F15 import d’offres. CLI Commander partage le pipeline, avec dry-run, limite, bilan et code de sortie. Un manifeste décrit licence, empreinte, acquisition, transformations et périmètre. Aucun import réellement exécuté n’est affirmé.
 
-La fiche officielle décrit les offres et partenaires consentants [France Travail](https://www.data.gouv.fr/dataservices/api-offres-demploi). Le jeu FINESS publie des structures en JSON [FINESS](https://www.data.gouv.fr/datasets/finess-structures-1). Voir docs/ACCES_API_V1.md pour les preuves disponibles et manquantes.
+La fiche officielle décrit les offres et partenaires consentants [France Travail](https://www.data.gouv.fr/dataservices/api-offres-demploi). Le jeu FINESS publie des structures en JSON [FINESS](https://www.data.gouv.fr/datasets/finess-structures-1). Voir docs_intern/ACCES_API_V1.md pour les preuves disponibles et manquantes.
 
 ## 9. Trois workflows F12
 A : MissionPublished ou évolution pertinente du profil → matching autorisé → notification interne.
@@ -133,15 +133,15 @@ OpenAPI fait autorité pour les contrats de transport, types client générés s
 
 CI : installation déterministe, types/lint, migrations, tests, coverage et build. Intégration sur vraies bases PostgreSQL/PostGIS et MongoDB isolées, pas uniquement des mocks. Les 18 contrôles SEC du prompt correspondent à la note de sécurité ; leurs résultats restent à produire.
 
-La matrice docs/MATRICE_VALIDATION_V1.csv rassemble F, R01–R40 et SEC01–SEC18, avec état réel, preuve et responsable. Le chiffrage docs/CHIFFRAGE_V1.csv est une hypothèse initiale, pas un engagement. Le journal des temps réels reste vide jusqu’à saisie.
+La matrice docs_intern/MATRICE_VALIDATION_V1.csv rassemble F, R01–R40 et SEC01–SEC18, avec état réel, preuve et responsable. Le chiffrage docs_intern/CHIFFRAGE_V1.csv est une hypothèse initiale, pas un engagement. Le journal des temps réels reste vide jusqu’à saisie.
 
 Front : responsive, RGAA, SEO public, états d’erreur et parcours intégrés. Collectif : marché, proposition de valeur, CDC J+2, go/no-go, deux pratiques RGESN, règles du scénario, achat responsable/réemploi, README et soutenance avec participation de tous. Aucun succès global à partir des seuls endpoints.
 
 ## 12. Reprise et dépendances
-Lire docs/REPRISE_BACKEND_V1.md ; si absent, inspecter et créer. L’absence de Git ou de code est un état initial, pas une erreur à masquer. Empreintes des sources dans docs/SOURCES_SHA256.json.
+Lire docs_intern/REPRISE_BACKEND_V1.md ; si absent, inspecter et créer. L’absence de Git ou de code est un état initial, pas une erreur à masquer. Empreintes des sources dans docs_intern/SOURCES_SHA256.json.
 
 Une fonctionnalité est terminée lorsque comportement, droits, tests, documentation et preuves existent. Les accès API absents restent bloqués et les tests non exécutés restent non exécutés. La prochaine étape est le bootstrap du vrai dépôt et les appels authentifiés autorisés.
 
 Décisions ouvertes : identifiants projet API, modèle visuel de confirmation, champs RIB obligatoires et représentation, conservation et déploiement cible, répartition effective de l’équipe. Les références professionnelles restent hors V1 ; elles ne bloquent pas le cadrage V1.
 
-Contrainte de livraison confirmee : quatre personnes, onze jours, date fixe. Voir docs/PLANNING_4_PERSONNES_11_JOURS.md pour la repartition et docs/CHIFFRAGE_V1.md pour les hypotheses de charge.
+Contrainte de livraison confirmee : quatre personnes, onze jours, date fixe. Voir docs_intern/PLANNING_4_PERSONNES_11_JOURS.md pour la repartition et docs_intern/CHIFFRAGE_V1.md pour les hypotheses de charge.

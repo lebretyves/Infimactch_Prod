@@ -1,0 +1,14 @@
+﻿scenario;version;etat;preuve;date;observateur
+Inscription candidat et entreprise;fd68a377da28a76151483529ac62473eed99d264;A_RECETTER_SUR_VERSION_PUBLIEE;;;
+Discord facultatif et passage sans activation;fd68a377da28a76151483529ac62473eed99d264;A_RECETTER_SUR_VERSION_PUBLIEE;;;
+Connexion admin et MFA réel;fd68a377da28a76151483529ac62473eed99d264;A_RECETTER_SUR_VERSION_PUBLIEE;;;
+Création et consultation mission;fd68a377da28a76151483529ac62473eed99d264;A_RECETTER_SUR_VERSION_PUBLIEE;;;
+Matching et candidature;fd68a377da28a76151483529ac62473eed99d264;A_RECETTER_SUR_VERSION_PUBLIEE;;;
+Confirmation et agenda;fd68a377da28a76151483529ac62473eed99d264;A_RECETTER_SUR_VERSION_PUBLIEE;;;
+PDF accessible seulement aux personnes autorisées;fd68a377da28a76151483529ac62473eed99d264;A_RECETTER_SUR_VERSION_PUBLIEE;;;
+Workflow nocode mission compatible;fd68a377da28a76151483529ac62473eed99d264;A_RECETTER_SUR_VERSION_PUBLIEE;;;
+Workflow nocode confirmation;fd68a377da28a76151483529ac62473eed99d264;A_RECETTER_SUR_VERSION_PUBLIEE;;;
+Réception Discord réelle sur compte autorisé;fd68a377da28a76151483529ac62473eed99d264;A_RECETTER_SUR_VERSION_PUBLIEE;;;
+Email : statut réellement attesté;fd68a377da28a76151483529ac62473eed99d264;A_RECETTER_SUR_VERSION_PUBLIEE;;;
+Annulation et cohérence agenda/PDF;fd68a377da28a76151483529ac62473eed99d264;A_RECETTER_SUR_VERSION_PUBLIEE;;;
+Clavier zoom lecteur écran téléphone;fd68a377da28a76151483529ac62473eed99d264;A_RECETTER_SUR_VERSION_PUBLIEE;;;

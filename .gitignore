@@ -5,7 +5,7 @@ dist/
 !.env.example
 data/
 *.log
-docs/proofs/coverage/
+docs_intern/proofs/coverage/
 backups/
 
 .test-build/
@@ -21,3 +21,9 @@ backups/
 
 # Generated administration bundle
 frontend/dist-admin/
+
+# Local working notes and generated browser artifacts (not delivery documents)
+/docs_intern/audit/
+/frontend/artifacts/
+/workspace-docs_intern/
+/archive/

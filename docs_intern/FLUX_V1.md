@@ -1,6 +1,6 @@
 # Flux mÃ©tier et techniques V1
 
-Ces schÃ©mas dÃ©crivent le backend prÃ©sent. Les scÃ©narios testÃ©s et les limites sont dans les [exigences](REQUIREMENTS_V1.md) et la [reprise](REPRISE_BACKEND_V1.md). Les appels utilisateurs portent le prÃ©fixe `/api/v1`.
+Ces schÃ©mas dÃ©crivent le backend prÃ©sent. Les scÃ©narios testÃ©s et les limites sont dans les [exigences](REQUIREMENTS_V1.md) et la [reprise — archive](https://github.com/lebretyves/Infimactch_Prod/blob/fd68a377da28a76151483529ac62473eed99d264/docs/REPRISE_BACKEND_V1.md). Les appels utilisateurs portent le prÃ©fixe `/api/v1`.
 
 ## Authentification et Ã©critures
 

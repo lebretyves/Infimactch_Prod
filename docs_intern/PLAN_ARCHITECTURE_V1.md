@@ -26,7 +26,7 @@ InfiMatch/
   workflows/                   matches.json, reminders.json, confirmation.json
   infra/compose.yaml           PostgreSQL, MongoDB et profil n8n
   scripts/                     Installation locale, contrÃ´les et sauvegarde Git
-  docs/                        Exigences, schÃ©mas, OpenAPI, preuves et historique
+  docs_intern/                        Exigences, schÃ©mas, OpenAPI, preuves et historique
   data/                        Fichiers locaux privÃ©s, ignorÃ©s par Git
   backups/                     Sauvegardes locales, ignorÃ©es par Git
   package.json                 Commandes et workspace npm
@@ -47,15 +47,15 @@ L'affectation verrouille mission, profil puis candidature. Les contraintes SQL g
 4. Exercer les reprises aprÃ¨s crash du worker et l'expiration concurrente de gÃ©nÃ©ration PDF.
 5. VÃ©rifier le dÃ©ploiement TLS, les privilÃ¨ges des bases et la restauration complÃ¨te.
 
-La [note de reprise](REPRISE_BACKEND_V1.md) dÃ©taille les limites. Le [planning](PLANNING_4_PERSONNES_11_JOURS.md) est un plan d'Ã©quipe, pas un relevÃ© de temps rÃ©ellement passÃ©.
+La [note de reprise — archive](https://github.com/lebretyves/Infimactch_Prod/blob/fd68a377da28a76151483529ac62473eed99d264/docs/REPRISE_BACKEND_V1.md) dÃ©taille les limites. Le [planning](PLANNING_4_PERSONNES_11_JOURS.md) est un plan d'Ã©quipe, pas un relevÃ© de temps rÃ©ellement passÃ©.
 
 ## RÃ©fÃ©rences
 
 - [Exigences V1 et acceptation](REQUIREMENTS_V1.md)
 - [SchÃ©ma de l'architecture](SCHEMA_ARCHITECTURE_V1.md)
 - [Flux mÃ©tier et techniques](FLUX_V1.md)
-- [Prompt source figÃ©](references/Interimatch_Sante_Mega_Prompt_Backend_V1.md)
+- [Prompt source figÃ© — archive](https://github.com/lebretyves/Infimactch_Prod/blob/fd68a377da28a76151483529ac62473eed99d264/docs/references/Interimatch_Sante_Mega_Prompt_Backend_V1.md)
 - [Architecture source figÃ©e](references/Interimatch_Sante_Architecture_Backend_V1.md)
-- [Matrice complÃ¨te](MATRICE_VALIDATION_V1.csv)
+- [Matrice complÃ¨te — archive](https://github.com/lebretyves/Infimactch_Prod/blob/fd68a377da28a76151483529ac62473eed99d264/docs/MATRICE_VALIDATION_V1.csv)
 
 Voir la [recette actuelle](RECETTE_BACKEND_V1.md) : reprises de reservation outbox/PDF testees, cas RPPS positif confirme.
