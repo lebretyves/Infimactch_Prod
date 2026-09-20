@@ -1,6 +1,14 @@
-# Continuité des automatisations — proposition, non basculée
+# Continuité des automatisations et suivi du quota
 
-## État observé
+## Mise à jour du 21 septembre 2026
+
+Le déclencheur du workflow de reprise et rappels a été réglé sur **Hours / 4** et publié depuis Firefox ; l'interface a confirmé « Publié ». Cela représente six passages programmés par jour, hors workflows événementiels, imports et autres tâches. La valeur du champ fait foi ; le nom du bloc peut encore mentionner l'ancien intervalle de 30 minutes.
+
+Le compteur affiché sur le canevas était 801/1000 avec huit jours d'essai restants ; il peut être mis à jour avec retard. Surveiller le quota réel et la file en attente jusqu'au samedi 26 septembre. Les reprises sont plus lentes, éventuellement au-delà de quatre heures en présence d'un backlog. Aucune hausse de quota ni souscription réalisée. L'export et le générateur versionnés utilisent maintenant quatre heures. Les quatre tests locaux de planification réussissent.
+
+Les anciennes observations ci-dessous restent datées ; les passages à 30 minutes y décrivent l'état antérieur. Les imports et traitements immédiats n'ont pas été modifiés par ce lot.
+
+## État observé avant cette mise à jour
 
 Les horaires publiés sont France Travail à 07:00 et 15:00, JobsPipe à 07:00, Europe/Paris. Les imports ont été retirés du cycle principal de 30 minutes. Les anciens déclencheurs Windows d’import sont désactivés. Les imports ne doivent jamais réactiver les notifications des anciens lots fictifs.
 

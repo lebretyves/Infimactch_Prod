@@ -3,7 +3,7 @@
   "nodes": [
     {
       "id": "6d628cb8-6894-42b1-81a6-9bf6bbf7de3b",
-      "name": "Toutes les 30 minutes",
+      "name": "Toutes les 4 heures",
       "type": "n8n-nodes-base.scheduleTrigger",
       "typeVersion": 1.2,
       "position": [
@@ -14,8 +14,8 @@
         "rule": {
           "interval": [
             {
-              "field": "minutes",
-              "minutesInterval": 30
+              "field": "hours",
+              "hoursInterval": 4
             }
           ]
         }
@@ -157,17 +157,6 @@
     }
   ],
   "connections": {
-    "Toutes les 30 minutes": {
-      "main": [
-        [
-          {
-            "node": "Verifier disponibilite API",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
     "Traiter la file": {
       "main": [
         [
@@ -223,6 +212,17 @@
         ],
         []
       ]
+    },
+    "Toutes les 4 heures": {
+      "main": [
+        [
+          {
+            "node": "Verifier disponibilite API",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
     }
   },
   "settings": {
@@ -230,6 +230,7 @@
     "saveDataErrorExecution": "all",
     "saveDataSuccessExecution": "none",
     "saveManualExecutions": false,
-    "saveExecutionProgress": false
+    "saveExecutionProgress": false,
+    "timezone": "Europe/Paris"
   }
 }

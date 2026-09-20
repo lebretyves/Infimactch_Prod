@@ -26,3 +26,12 @@ test('continuation follows pages but stops on quota, completion, 20 batches or 3
  assert.throws(()=>run({status:'IN_PROGRESS'},19,previous(0)),/BATCH_LIMIT/);
  assert.throws(()=>run({},0,previous(0)),/RESPONSE_INVALID/);
 });
+
+test('quota-saving retry schedule is four hours with all trigger edges connected',()=>{
+ const w=JSON.parse(readFileSync(new URL('../../docs/n8n/InfiMatch-production-reprise-et-rappels.json',import.meta.url)));
+ const triggers=w.nodes.filter(n=>n.type==='n8n-nodes-base.scheduleTrigger');
+ assert.equal(triggers.length,1);assert.deepEqual(triggers[0].parameters.rule.interval,[{field:'hours',hoursInterval:4}]);
+ assert.equal(w.settings.timezone,'Europe/Paris');
+ assert.equal(w.connections[triggers[0].name].main[0][0].node,'Verifier disponibilite API');
+ for(const name of Object.keys(w.connections))assert.ok(w.nodes.some(n=>n.name===name));
+});
