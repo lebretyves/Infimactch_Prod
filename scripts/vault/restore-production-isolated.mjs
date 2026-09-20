@@ -1,3 +1,4 @@
+import {backupRoot} from './backup-key.mjs';
 import {productionBackupBase} from './production-backup-paths.mjs';
 import {readFile,realpath,stat,writeFile,mkdir} from 'node:fs/promises';
 import {resolve,sep} from 'node:path';
@@ -14,14 +15,14 @@ try {
     result=await withRole('operator',async token=>{
       const values=(await request('kv/data/infimatch/v1/production',{token})).data.data;
       const manifest=JSON.parse(await readFile(resolve(folder,'manifest.json'),'utf8'));
-      if(manifest.version!==1||manifest.status!=='COMPLETE')throw Error('INCOMPLETE_BACKUP');
+      if(![1,2].includes(manifest.version)||manifest.status!=='COMPLETE')throw Error('INCOMPLETE_BACKUP');
       const expected=['postgres.dump.enc','mongo.ejson.enc','configuration.json.enc'],opened={};
       if(!Array.isArray(manifest.files)||manifest.files.length!==3)throw Error('INVALID_BACKUP_MANIFEST');
       for(const name of expected){
         const entry=manifest.files.find(x=>x.file===name);if(!entry)throw Error('MISSING_BACKUP_COMPONENT');
         const file=await realpath(resolve(folder,name));if(!file.startsWith(folder+sep))throw Error('BACKUP_PATH_ESCAPE');
         if((await stat(file)).size>512*1024*1024)throw Error('BACKUP_EXCEEDS_PROBE_LIMIT');
-        opened[name]=openBackup(await readFile(file),Buffer.from(values.DOCUMENT_KEY,'base64'),entry);
+        opened[name]=openBackup(await readFile(file),backupRoot(values,manifest),entry);
       }
       try{return await restoreProbe({dump:opened['postgres.dump.enc'],mongo:JSON.parse(opened['mongo.ejson.enc'].toString()),configuration:JSON.parse(opened['configuration.json.enc'].toString())});}
       finally{for(const bytes of Object.values(opened))bytes.fill(0);}

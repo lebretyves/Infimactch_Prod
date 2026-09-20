@@ -38,14 +38,32 @@ export class CloudJobsController {
  }
  @Post("maintenance") async maintenance(@Headers("x-infimatch-token") token:string){
   this.authorize(token);
-  await cleanupSharedRateLimits(this.db,500);
-  const closures=await processClosures(this.db,5);
-  if(closures.failed)throw Error("CLOSURE_RETRY_REQUIRED");
-  await this.documents.reconcile(5);
-  await retireStaleOffers(this.db,true);
-  const retention=await this.db.transaction(em=>applyRetention(em));
-  await cleanupRemovedDocuments(this.db,retention.documentIds??[]);
-  return {ok:true};
+  const started=Date.now();
+  try{
+   const result=await this.db.transaction(async em=>{
+    const [lock]=await em.query('SELECT pg_try_advisory_xact_lock(1789905601) AS acquired');
+    if(!lock?.acquired)return {busy:true};
+    await this.db.query("INSERT INTO operational_check(service,state) VALUES('retention-maintenance','running')");
+    await cleanupSharedRateLimits(this.db,500);
+    const closures=await processClosures(this.db,5);
+    if(closures.failed)throw Error('CLOSURE_RETRY_REQUIRED');
+    await this.documents.reconcile(5);
+    await retireStaleOffers(this.db,true);
+    await em.query("SET LOCAL statement_timeout='20s'");
+    // Business history deletion is excluded until its separate policy is approved.
+    const retention=await applyRetention(em,{includeBusinessHistory:false});
+    return {busy:false,documentCount:retention.documentIds?.length??0};
+   });
+   if(result.busy)return {ok:false,status:'BUSY'};
+   await cleanupRemovedDocuments(this.db);
+   const [pending]=await this.db.query('SELECT count(*)::int AS n FROM document_erasure');
+   if(pending?.n)throw Error('DOCUMENT_ERASURE_RETRY_REQUIRED');
+   await this.db.query("INSERT INTO operational_check(service,state,summary) VALUES('retention-maintenance','completed',$1)",[JSON.stringify({durationMs:Date.now()-started,documentCount:result.documentCount,businessHistoryEnabled:false})]);
+   return {ok:true};
+  }catch(error){
+   await this.db.query("INSERT INTO operational_check(service,state,summary) VALUES('retention-maintenance','failed',$1)",[JSON.stringify({durationMs:Date.now()-started,code:'MAINTENANCE_FAILED'})]);
+   throw error;
+  }
  }
 }
 @Module({imports:[AutomationModule,NotificationsModule,DocumentsModule,RefreshModule],controllers:[CloudJobsController],providers:[ExecutionTrace]})

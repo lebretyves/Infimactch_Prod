@@ -1,0 +1,28 @@
+import {useState,type FormEvent} from 'react';
+import {Button} from '../ui/Button';
+import {Logo} from '../ui/Logo';
+import {api,AdminError,clearSession} from './api';
+import type {User} from './App';
+type Challenge={status:string;secret?:string;recoveryCodes?:string[]};
+export function AdminLogin({ready}:{ready:(u:User)=>void}){
+ const [activate,setActivate]=useState(false),[step,setStep]=useState<Challenge|null>(null),[recovery,setRecovery]=useState(false),[error,setError]=useState(''),[busy,setBusy]=useState(false);
+ async function submit(e:FormEvent<HTMLFormElement>){
+  e.preventDefault();const form=new FormData(e.currentTarget);setBusy(true);setError('');
+  try{
+   if(step?.recoveryCodes){ready(await api<User>('/me'));return;}
+   if(activate&&!step&&form.get('password')!==form.get('passwordConfirmation')){setError('Les deux mots de passe doivent être identiques.');return;}
+   const response=await api<Challenge>(step?(recovery?'/mfa/recover':'/mfa'):(activate?'/activate':'/login'),step?{code:form.get('code')}:{email:form.get('email'),password:form.get('password'),invitation:form.get('invitation')||undefined});
+   form.delete('password');form.delete('passwordConfirmation');form.delete('code');
+   if(response.status==='AUTHENTICATED'&&!response.recoveryCodes){ready(await api<User>('/me'));return;}
+   setStep(response);setRecovery(false);
+  }catch(e){setError(e instanceof AdminError?e.message:'Connexion impossible. Réessayez.');}finally{setBusy(false);}
+ }
+ async function back(){setBusy(true);try{await api('/logout',{});clearSession();setStep(null);setRecovery(false);setError('');}catch{setError('Impossible de fermer la vérification. Réessayez.');}finally{setBusy(false);}}
+ return <main className="admin-auth"><div className="admin-auth-brand"><Logo withWordmark size={48}/><span>ADMINISTRATION</span><h1>Veiller au bon fonctionnement, à chaque étape.</h1><p>Un espace réservé aux personnes habilitées pour accompagner les clients et suivre les services InfiMatch.</p><div className="admin-auth-note">Mot de passe et double authentification obligatoires</div></div><section className="admin-auth-form"><p className="admin-eyebrow">Accès à la plateforme</p><h2>{step?.recoveryCodes?'Conserver vos codes de secours':step?.secret?'Configurer la double authentification':step?'Vérifier votre identité':activate?'Activer mon accès administrateur':'Connexion sécurisée'}</h2>
+ <form key={step?.secret||step?.status||String(activate)} onSubmit={submit}>
+ {!step?<><label>Adresse e-mail<input name="email" type="email" autoComplete="username" required/></label><label>{activate?'Nouveau mot de passe (12 caractères minimum)':'Mot de passe'}<input name="password" type="password" autoComplete={activate?'new-password':'current-password'} minLength={12} maxLength={128} required/></label>{activate?<><label>Confirmer le nouveau mot de passe<input name="passwordConfirmation" type="password" autoComplete="new-password" minLength={12} maxLength={128} required/></label><label>Code d’invitation administrateur<input name="invitation" type="password" autoComplete="off" required/></label></>:<details><summary>Première connexion avec une invitation</summary><label>Code d’invitation confidentiel<input name="invitation" type="password" autoComplete="off"/></label></details>}</>:step.recoveryCodes?<><p>Ces huit codes sont affichés une seule fois. Conservez-les dans votre coffre personnel ou sur papier, séparément du téléphone. Chaque code permet une seule récupération et impose de configurer une nouvelle application.</p><label>Codes de secours<textarea readOnly value={step.recoveryCodes.join('\n')} rows={8} autoComplete="off" spellCheck={false}/></label><label><input type="checkbox" required/>J’ai conservé mes codes dans un endroit sûr.</label></>:<>{step.secret?<><p>Dans votre application d’authentification, ajoutez un compte avec une clé de configuration : « InfiMatch Admin », code basé sur le temps (TOTP), six chiffres, renouvelé toutes les 30 secondes.</p><label>Clé de configuration confidentielle<input readOnly value={step.secret} autoComplete="off" spellCheck={false}/></label><p>Saisissez ensuite le code affiché par votre application. Cette étape expire après cinq minutes.</p></>:<p>{recovery?'Saisissez un code de secours conservé lors de l’activation. Vous devrez ensuite configurer une nouvelle application.':'Saisissez le code à six chiffres de votre application d’authentification. Un code déjà utilisé sera refusé ; attendez le suivant.'}</p>}<label>{recovery?'Code de secours':'Code de sécurité'}<input key={String(recovery)} name="code" type={recovery?'password':'text'} inputMode={recovery?'text':'numeric'} autoComplete={recovery?'off':'one-time-code'} pattern={recovery?'[a-f0-9]{32}':'[0-9]{6}'} minLength={recovery?32:6} maxLength={recovery?32:6} required autoFocus/></label></>}
+ {error&&<p role="alert" className="admin-message admin-error">{error}</p>}<Button type="submit" loading={busy} block>{step?.recoveryCodes?'Accéder à l’administration':step?'Vérifier':activate?'Activer mon accès':'Se connecter'}</Button>
+ {step&&!step.secret&&!step.recoveryCodes&&<Button type="button" variant="outline" disabled={busy} onClick={()=>{setRecovery(!recovery);setError('');}}>{recovery?'Utiliser mon application':'Utiliser un code de secours'}</Button>}
+ {step?<Button type="button" variant="outline" disabled={busy} onClick={back}>Revenir à la connexion</Button>:<Button type="button" variant="outline" disabled={busy} onClick={()=>{setActivate(!activate);setError('');}}>{activate?'Revenir à la connexion':'Activer mon accès administrateur'}</Button>}
+ </form><small>Aucun accès aux données clients avant vérification des deux facteurs.</small></section></main>;
+}

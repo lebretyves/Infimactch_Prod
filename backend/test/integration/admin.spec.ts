@@ -1,3 +1,4 @@
+import {totp} from '../../src/admin/mfa';
 import {MatchingService} from '../../src/matching/matching.module';
 import {RefreshService} from '../../src/public-data/refresh.service';
 import {MATCH_RULES} from '../../src/domain/rules';
@@ -15,8 +16,8 @@ beforeEach(async()=>{const u=new URL(process.env.DATABASE_URL!);if(process.env.N
 afterEach(async()=>{await app?.close();});
 async function account(family="NURSE"){const agent=request.agent(app.getHttpServer()),email=randomUUID()+'@example.invalid';const csrf=await agent.get('/api/v1/auth/csrf');const r=await agent.post('/api/v1/auth/register').set('Origin',process.env.APP_ORIGIN!).set('X-CSRF-Token',csrf.body.csrfToken).set('Idempotency-Key',randomUUID()).send({email,password,family,termsVersion:'2026-09-14',...(family==='ENTERPRISE'?{organizationType:'ESTABLISHMENT',name:'Organisation FICTIVE',address:'1 rue fictive Paris',referent:'Contact fictif',finess:'000000001'}:{})}).expect(201);return {agent,email,id:r.body.user.id};}
 function post(agent:ReturnType<typeof request.agent>,path:string,csrf:string,body:object){return agent.post('/api/v1/admin/'+path).set('Origin',origin).set('X-CSRF-Token',csrf).send(body);}
-async function enroll(role='OWNER'){const a=await account(),invitation=randomBytes(32).toString('hex');await db.query("INSERT INTO platform_admin(user_id,role,invitation_hash,invitation_expires_at) VALUES($1,$2,$3,now()+interval '1 hour')",[a.id,role,hashInvitation(invitation)]);const agent=request.agent(app.getHttpServer()),c=await agent.get('/api/v1/admin/csrf').expect(200);const login=await post(agent,'login',c.body.csrfToken,{email:a.email,password,invitation}).expect(201);assert.equal(login.body.status,'AUTHENTICATED');assert.equal(login.body.otpauthUri,undefined);return {...a,agent,csrf:login.body.csrfToken};}
-test('admin routes require authorized access and separate session, with origin isolation',async()=>{const client=await account();await client.agent.get('/api/v1/admin/overview').expect(401);const c=await client.agent.get('/api/v1/admin/csrf');await post(client.agent,'login',c.body.csrfToken,{email:client.email,password}).expect(401);const owner=await enroll();const me=await owner.agent.get('/api/v1/admin/me').expect(200);assert.equal(me.body.role,'OWNER');await owner.agent.get('/api/v1/auth/me').expect(401);await owner.agent.get('/api/v1/admin/overview').expect(200);await post(owner.agent,'accounts/'+client.id+'/state',owner.csrf,{active:false,reason:'Test isolated suspension'}).set('Origin',process.env.APP_ORIGIN!).expect(403);await post(owner.agent,'reauth',owner.csrf,{password:'incorrect-password-123'}).expect(401);});
+async function enroll(role='OWNER'){const a=await account(),invitation=randomBytes(32).toString('hex');await db.query("INSERT INTO platform_admin(user_id,role,invitation_hash,invitation_expires_at) VALUES($1,$2,$3,now()+interval '1 hour')",[a.id,role,hashInvitation(invitation)]);const agent=request.agent(app.getHttpServer()),c=await agent.get('/api/v1/admin/csrf').expect(200);const login=await post(agent,'login',c.body.csrfToken,{email:a.email,password,invitation}).expect(201);assert.equal(login.body.status,'MFA_ENROLLMENT_REQUIRED');await agent.get('/api/v1/admin/me').expect(401);const code=totp(login.body.secret,Math.floor(Date.now()/30000));const mfa=await post(agent,'mfa',login.body.csrfToken,{code}).expect(201);assert.equal(mfa.body.status,'AUTHENTICATED');return {...a,agent,secret:login.body.secret,recoveryCodes:mfa.body.recoveryCodes,csrf:mfa.body.csrfToken};}
+test('admin routes require authorized access and separate session, with origin isolation',async()=>{const client=await account();await client.agent.get('/api/v1/admin/overview').expect(401);const c=await client.agent.get('/api/v1/admin/csrf');await post(client.agent,'login',c.body.csrfToken,{email:client.email,password}).expect(401);const owner=await enroll();const me=await owner.agent.get('/api/v1/admin/me').expect(200);assert.equal(me.body.role,'OWNER');await owner.agent.get('/api/v1/auth/me').expect(401);await owner.agent.get('/api/v1/admin/overview').expect(200);await post(owner.agent,'accounts/'+client.id+'/state',owner.csrf,{active:false,reason:'Test isolated suspension'}).set('Origin',process.env.APP_ORIGIN!).expect(403);await post(owner.agent,'reauth',owner.csrf,{password:'incorrect-password-123',code:'000000'}).expect(401);});
 test('admin permissions, suspension and session revocation are enforced server side',async()=>{const owner=await enroll(),ops=await enroll('OPS'),client=await account();await ops.agent.get('/api/v1/admin/accounts').expect(403);await ops.agent.get('/api/v1/admin/jobs').expect(200);await post(ops.agent,'accounts/'+client.id+'/state',ops.csrf,{active:false,reason:'Forbidden suspension'}).expect(403);await post(owner.agent,'accounts/'+client.id+'/state',owner.csrf,{active:false,reason:'Isolated suspension test'}).expect(201);await client.agent.get('/api/v1/auth/me').expect(401);await post(owner.agent,'access/'+ops.id,owner.csrf,{active:false,role:'OPS',reason:'Isolated revoke access'}).expect(201);await ops.agent.get('/api/v1/admin/jobs').expect(401);});
 test('admin read endpoints expose bounded selected fields and no credentials',async()=>{const owner=await enroll();for(const path of ['accounts','organizations','missions','jobs','sources','infrastructure','audit','access','quality','backups']){const r=await owner.agent.get('/api/v1/admin/'+path).expect(200);assert.doesNotMatch(JSON.stringify(r.body),/password_hash|totp_secret|invitation_hash|postgresql:\/\//);}await owner.agent.get('/api/v1/admin/accounts?limit=1000').expect(400);});
 
@@ -25,7 +26,7 @@ test('last usable owner cannot be removed and sensitive actions require recent p
  try {await post(owner.agent,'access/'+owner.id,owner.csrf,{active:false,role:'OWNER',reason:'Last owner rejection test'}).expect(409);} finally {await db.query("UPDATE platform_admin SET role='OWNER' WHERE user_id=ANY($1::uuid[])",[others.map(a=>a.user_id)]);}
  await db.query("UPDATE admin_session SET sess=jsonb_set(sess::jsonb,'{adminVerifiedAt}',to_jsonb($2::bigint))::json WHERE sess->>'adminId'=$1",[owner.id,Date.now()-6*60000]);
  const client=await account();const denied=await post(owner.agent,'accounts/'+client.id+'/revoke',owner.csrf,{reason:'Recent password confirmation required test'}).expect(403);assert.equal(denied.body.code,'ADMIN_REAUTH_REQUIRED');
- await post(owner.agent,'reauth',owner.csrf,{password}).expect(201);await post(owner.agent,'accounts/'+client.id+'/revoke',owner.csrf,{reason:'Recent password confirmation accepted test'}).expect(201);
+ await post(owner.agent,'reauth',owner.csrf,{password,code:totp(owner.secret,Math.floor(Date.now()/30000)+1)}).expect(201);await post(owner.agent,'accounts/'+client.id+'/revoke',owner.csrf,{reason:'Recent password confirmation accepted test'}).expect(201);
 });
 
 
@@ -89,9 +90,9 @@ test('dedicated administrator activation requires an invitation and never grants
  const agent=request.agent(app.getHttpServer()),c=await agent.get('/api/v1/admin/csrf');
  await post(agent,'activate',c.body.csrfToken,{email,password,invitation:'x'.repeat(64)}).expect(401);
  const activated=await post(agent,'activate',c.body.csrfToken,{email,password,invitation}).expect(201);
- assert.equal(activated.body.status,'AUTHENTICATED');
+ assert.equal(activated.body.status,'MFA_ENROLLMENT_REQUIRED');await agent.get('/api/v1/admin/overview').expect(401);const verified=await post(agent,'mfa',activated.body.csrfToken,{code:totp(activated.body.secret,Math.floor(Date.now()/30000))}).expect(201);
  await agent.get('/api/v1/admin/overview').expect(200);
- await post(agent,'activate',activated.body.csrfToken,{email,password,invitation}).expect(401);
+ await post(agent,'activate',verified.body.csrfToken,{email,password,invitation}).expect(401);
  assert.equal((await agent.get('/api/v1/admin/me').expect(200)).body.role,'OWNER');
  await agent.get('/api/v1/auth/me').expect(401);
  const client=request.agent(app.getHttpServer()),csrf=await client.get('/api/v1/auth/csrf');
@@ -101,14 +102,15 @@ test('dedicated administrator activation requires an invitation and never grants
 });
 
 
-test('activated dedicated administrator signs in with password alone and can reconnect after idle expiration',async()=>{
+test('activated dedicated administrator must repeat both factors after idle expiration',async()=>{
  const owner=await enroll();await db.query("UPDATE account SET platform_only=true,terms_version='ADMIN_ACTIVATED' WHERE id=$1",[owner.id]);
  await db.query("UPDATE admin_session SET sess=jsonb_set(sess::jsonb,'{adminActivityAt}','0'::jsonb)::json WHERE sess->>'adminId'=$1",[owner.id]);
  await owner.agent.get('/api/v1/admin/overview').expect(401);
  const csrf=await owner.agent.get('/api/v1/admin/csrf');
- const login=await post(owner.agent,'login',csrf.body.csrfToken,{email:owner.email,password}).expect(201);assert.equal(login.body.status,'AUTHENTICATED');
+ const login=await post(owner.agent,'login',csrf.body.csrfToken,{email:owner.email,password}).expect(201);assert.equal(login.body.status,'MFA_REQUIRED');
+ await owner.agent.get('/api/v1/admin/overview').expect(401);
+ await post(owner.agent,'mfa',login.body.csrfToken,{code:totp(owner.secret,Math.floor(Date.now()/30000)+1)}).expect(201);
  await owner.agent.get('/api/v1/admin/overview').expect(200);
- await post(owner.agent,'mfa',login.body.csrfToken,{code:'000000'}).expect(404);
 });
 
 test('Discord infrastructure reports a checked bot identity without claiming message delivery',async()=>{
@@ -185,4 +187,54 @@ test('client closure needs password, owner approval and preserves organization m
  const requestCompany=await clientPost(company,'me/closure-request',{password});const detail=await owner.agent.get('/api/v1/admin/privacy-requests/'+requestCompany.body.id).expect(200);assert.ok(detail.body.blockers.some((x:any)=>x.code==='LAST_MANAGER'));await post(owner.agent,'privacy-requests/'+requestCompany.body.id+'/approve',owner.csrf,{reason:'Blocked last organization manager'}).expect(409);
  await post(owner.agent,'privacy-requests/'+requestCompany.body.id+'/reject',owner.csrf,{reason:'Transfer organization management first'}).expect(201);
  assert.equal((await company.agent.get('/api/v1/me/closure-request')).body.request.status,'REJECTED');
+});
+
+
+test('MFA has no password-only bypass, rejects replay, recovers once and invalidates old sessions',async()=>{
+ const owner=await enroll();
+ const fresh=request.agent(app.getHttpServer()),c=await fresh.get('/api/v1/admin/csrf');
+ const login=await post(fresh,'login',c.body.csrfToken,{email:owner.email,password}).expect(201);
+ assert.equal(login.body.status,'MFA_REQUIRED');assert.equal(login.body.secret,undefined);
+ await fresh.get('/api/v1/admin/overview').expect(401);
+ await post(fresh,'mfa',login.body.csrfToken,{code:totp(owner.secret,Math.floor(Date.now()/30000))}).expect(401);
+ const [saved]=await db.query('SELECT recovery_hashes FROM platform_admin WHERE user_id=$1',[owner.id]);
+ assert.equal(saved.recovery_hashes.length,8);assert.ok(!saved.recovery_hashes.includes(owner.recoveryCodes[0]));
+ const recovered=await post(fresh,'mfa/recover',login.body.csrfToken,{code:owner.recoveryCodes[0]}).expect(201);
+ await owner.agent.get('/api/v1/admin/me').expect(401);await fresh.get('/api/v1/admin/me').expect(401);
+ const verified=await post(fresh,'mfa',recovered.body.csrfToken,{code:totp(recovered.body.secret,Math.floor(Date.now()/30000))}).expect(201);
+ assert.equal(verified.body.recoveryCodes.length,8);await fresh.get('/api/v1/admin/me').expect(200);
+ const again=request.agent(app.getHttpServer()),csrf=await again.get('/api/v1/admin/csrf');const next=await post(again,'login',csrf.body.csrfToken,{email:owner.email,password}).expect(201);
+ await post(again,'mfa/recover',next.body.csrfToken,{code:owner.recoveryCodes[0]}).expect(401);
+ await db.query("UPDATE admin_session SET sess=(sess::jsonb-'adminMfaVerified')::json WHERE sess->>'adminId'=$1",[owner.id]);
+ await fresh.get('/api/v1/admin/me').expect(401);
+});
+
+test('MFA failures persist across password login and an expired challenge grants no access',async()=>{
+ const owner=await enroll();let last:any;
+ for(let i=0;i<5;i++){
+  const agent=request.agent(app.getHttpServer()),c=await agent.get('/api/v1/admin/csrf');
+  const login=await post(agent,'login',c.body.csrfToken,{email:owner.email,password}).expect(201);
+  await post(agent,'mfa',login.body.csrfToken,{code:'invalid'}).expect(401);last=agent;
+ }
+ const [a]=await db.query('SELECT failed_attempts,locked_until FROM platform_admin WHERE user_id=$1',[owner.id]);assert.equal(a.failed_attempts,5);assert.ok(new Date(a.locked_until).getTime()>Date.now());
+ const c=await last.get('/api/v1/admin/csrf');await post(last,'login',c.body.csrfToken,{email:owner.email,password}).expect(401);
+ const other=await enroll(),agent=request.agent(app.getHttpServer()),c2=await agent.get('/api/v1/admin/csrf');const l=await post(agent,'login',c2.body.csrfToken,{email:other.email,password}).expect(201);
+ await db.query("UPDATE admin_session SET sess=jsonb_set(sess::jsonb,'{adminChallenge,expires}','0')::json WHERE sess->'adminChallenge'->>'userId'=$1",[other.id]);
+ await post(agent,'mfa',l.body.csrfToken,{code:totp(other.secret,Math.floor(Date.now()/30000)+1)}).expect(401);await agent.get('/api/v1/admin/me').expect(401);
+});
+
+
+test('technical maintenance really purges expired notifications and records success without business-history deletion',async()=>{
+ const a=await account();
+ await db.query("UPDATE notification SET created_at=now()-interval '100 days' WHERE user_id=$1",[a.id]);
+ assert.ok((await db.query('SELECT 1 FROM notification WHERE user_id=$1',[a.id])).length);
+ const missionCount=(await db.query('SELECT count(*)::int n FROM mission'))[0].n;
+ const old=process.env.BUSINESS_HISTORY_RETENTION_DAYS;process.env.BUSINESS_HISTORY_RETENTION_DAYS='1';
+ try{
+  await request(app.getHttpServer()).post('/api/v1/internal/automation/jobs/maintenance').set('X-InfiMatch-Token',process.env.SERVICE_TOKEN!).expect(201);
+  assert.equal((await db.query('SELECT 1 FROM notification WHERE user_id=$1',[a.id])).length,0);
+  assert.equal((await db.query('SELECT count(*)::int n FROM mission'))[0].n,missionCount);
+  assert.equal((await db.query("SELECT state FROM operational_check WHERE service='retention-maintenance' ORDER BY checked_at DESC LIMIT 1"))[0].state,'completed');
+  assert.ok((await db.query("SELECT 1 FROM audit WHERE event='RETENTION_PURGED'")).length);
+ }finally{if(old===undefined)delete process.env.BUSINESS_HISTORY_RETENTION_DAYS;else process.env.BUSINESS_HISTORY_RETENTION_DAYS=old;}
 });
