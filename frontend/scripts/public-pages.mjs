@@ -8,8 +8,11 @@ const pages = [
   ['mentions-legales', 'Mentions légales et données personnelles', 'Fonctionnement du projet InfiMatch, données de compte et préférences cookies.'],
 ];
 const escape = value => value.replaceAll('&', '&amp;').replaceAll('"', '&quot;').replaceAll('<', '&lt;');
-const shell = fs.readFileSync('dist/index.html', 'utf8').replace(/<noscript>[\s\S]*?<\/noscript>/, fallback());
-fs.writeFileSync('dist/index.html', shell);
+const shell = fs.readFileSync('dist/index.html', 'utf8').replace(/<link\b[^>]*data-home-hero[^>]*>\s*/g, '').replace(/<noscript>[\s\S]*?<\/noscript>/, fallback());
+// Home-only image hint: never preload this photo on account or other public routes.
+const media = JSON.parse(fs.readFileSync('src/assets/public-media.json', 'utf8')).accueil;
+const imageHint = `<link data-home-hero rel="preload" as="image" type="image/webp" href="${escape(media.src)}" imagesrcset="${escape(media.srcSet)}" imagesizes="${escape(media.sizes)}" fetchpriority="high" />`;
+fs.writeFileSync('dist/index.html', shell.replace('</head>', `${imageHint}\n</head>`));
 for (const [path, title, description] of pages) {
   const html = shell.replace(/<noscript>[\s\S]*?<\/noscript>/, fallback(path)).replace(/<title>.*?<\/title>/s, `<title>${escape(title)} — InfiMatch</title>`)
     .replace(/(<meta\s+name="description"\s+content=")[^"]*/, `$1${escape(description)}`)

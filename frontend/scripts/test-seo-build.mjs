@@ -31,3 +31,18 @@ for(const path of ['/catalogue','/apercu-annonces']){
 }
 assert.ok(!existsSync(resolve(root,'dist/catalogue')));
 assert.ok(!readdirSync(resolve(root,'dist/assets')).some(name=>/ApercuAnnonces|^Catalogue-/.test(name)));
+
+// Image hints must match the responsive hero and remain exclusive to the homepage.
+const hero = JSON.parse(read('src/assets/public-media.json')).accueil;
+assert.equal((read('dist/index.html').match(/data-home-hero/g) || []).length, 1);
+assert.ok(read('dist/index.html').includes(`imagesrcset="${hero.srcSet}"`));
+assert.ok(read('dist/index.html').includes(`imagesizes="${hero.sizes}"`));
+for (const path of ['installer', 'accessibilite', 'ecoconception', 'mentions-legales', 'private', 'aide']) {
+ assert.ok(!read(`dist/${path}.html`).includes('data-home-hero'), path);
+}
+for (const asset of Object.values(JSON.parse(read('src/assets/public-media.json')))) {
+ for (const variant of asset.variants) assert.ok(existsSync(resolve(root, 'dist' + variant.src)), variant.src);
+}
+assert.ok(existsSync(resolve(root, 'dist/fonts/PlusJakartaSans-Variable.woff2')));
+for (const name of ['maquette-accueil-source.png', 'maquette-connexion-source.png']) assert.ok(!existsSync(resolve(root, 'dist/images/' + name)));
+assert.match(read('dist/index.html'), /name="google-site-verification" content="[A-Za-z0-9_-]+"/);

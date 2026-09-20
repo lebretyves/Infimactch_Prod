@@ -30,3 +30,9 @@ Sur mobile, les champs de connexion/inscription précèdent le panneau photograp
 L’accueil réutilise les deux scènes des maquettes : équipe dans le premier écran, deux soignantes dans la présentation des parcours. Le cadrage des pages d’authentification reste celui du composant partagé.
 
 `public/images/coordination-soins-v1.jpg` est une illustration photographique générée avec imagegen pour la section « Qui sommes-nous ». Elle représente une soignante et une coordinatrice autour d’un planning ; ces personnes ne sont pas présentées comme des membres réels de l’équipe InfiMatch. Le texte alternatif précise le caractère illustratif. L’image est chargée à la demande, avec dimensions explicites.
+
+## Optimisation du 20 septembre 2026
+
+Les originaux cités ci-dessus sont désormais conservés dans `assets-source/`, hors du dossier public. Les cadres CSS ont été remplacés par des découpes identiques (accueil : x760/y230, 632×370 ; soignantes : x56/y448, 656×528), exportées en WebP de plusieurs tailles. Le composant conserve les mêmes formes et textes alternatifs. Les noms des fichiers contiennent leur empreinte ; `src/assets/public-media.json` fournit les dimensions et variantes à React et au préchargement de l’accueil. La photo de coordination reçoit aussi des variantes WebP.
+
+La police Plus Jakarta Sans est convertie en WOFF2 sans changer son contenu ; l’original TTF et sa licence sont conservés. Régénération facultative : `python scripts/optimize-public-media.py` (Pillow avec WebP et fonttools[woff]). Les fichiers produits sont versionnés, aucun outil Python n’est requis pour le build Vercel. Les anciens paragraphes décrivent l’intégration initiale et les empreintes des sources, pas les octets désormais servis.

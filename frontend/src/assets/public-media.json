@@ -1,0 +1,71 @@
+{
+  "accueil": {
+    "width": 632,
+    "height": 370,
+    "sizes": "(max-width: 599px) calc(100vw - 48px), (max-width: 899px) 92vw, (max-width: 1279px) 52vw, 646px",
+    "src": "/images/accueil-632-81dacc2911a1.webp",
+    "srcSet": "/images/accueil-320-ef8b35a2a063.webp 320w, /images/accueil-632-81dacc2911a1.webp 632w",
+    "variants": [
+      {
+        "src": "/images/accueil-320-ef8b35a2a063.webp",
+        "width": 320,
+        "height": 187,
+        "bytes": 11820
+      },
+      {
+        "src": "/images/accueil-632-81dacc2911a1.webp",
+        "width": 632,
+        "height": 370,
+        "bytes": 27726
+      }
+    ]
+  },
+  "soignantes": {
+    "width": 656,
+    "height": 528,
+    "sizes": "(max-width: 767px) 300px, 480px",
+    "src": "/images/soignantes-656-f9c922597265.webp",
+    "srcSet": "/images/soignantes-320-e4d218f027e0.webp 320w, /images/soignantes-656-f9c922597265.webp 656w",
+    "variants": [
+      {
+        "src": "/images/soignantes-320-e4d218f027e0.webp",
+        "width": 320,
+        "height": 258,
+        "bytes": 14722
+      },
+      {
+        "src": "/images/soignantes-656-f9c922597265.webp",
+        "width": 656,
+        "height": 528,
+        "bytes": 35340
+      }
+    ]
+  },
+  "coordination": {
+    "width": 1536,
+    "height": 1024,
+    "sizes": "(max-width: 599px) calc(100vw - 48px), (max-width: 899px) 55vw, 560px",
+    "src": "/images/coordination-1536-0e61f508c7cf.webp",
+    "srcSet": "/images/coordination-480-10bd8d3a26f7.webp 480w, /images/coordination-960-aba91bc947a8.webp 960w, /images/coordination-1536-0e61f508c7cf.webp 1536w",
+    "variants": [
+      {
+        "src": "/images/coordination-480-10bd8d3a26f7.webp",
+        "width": 480,
+        "height": 320,
+        "bytes": 23378
+      },
+      {
+        "src": "/images/coordination-960-aba91bc947a8.webp",
+        "width": 960,
+        "height": 640,
+        "bytes": 58202
+      },
+      {
+        "src": "/images/coordination-1536-0e61f508c7cf.webp",
+        "width": 1536,
+        "height": 1024,
+        "bytes": 112462
+      }
+    ]
+  }
+}
