@@ -16,3 +16,13 @@ for(const path of PUBLIC_PATHS){const html=fs.readFileSync(path==='/'?'dist/inde
 const config=JSON.parse(fs.readFileSync('vercel.json','utf8'));assert.ok(config.rewrites.some(r=>r.source.includes('profil')&&r.destination==='/private.html'));
 assert.doesNotMatch(fs.readFileSync('public/sitemap.xml','utf8'),/\/(profil|dossier|calendrier|candidatures|notifications|compte)</);
 console.log('PASS route titles, descriptions, private IDs absent, static private noindex/canonical removal, public canonicals and sitemap');
+
+const escape=value=>value.replaceAll('&','&amp;').replaceAll('"','&quot;').replaceAll('<','&lt;');
+for(const path of [...PUBLIC_PATHS,'/aide']){
+ const html=fs.readFileSync(path==='/'?'dist/index.html':`dist${path}.html`,'utf8');
+ const expected=pageMetadata(path);
+ assert.equal(html.match(/<title>(.*?)<\/title>/s)?.[1],escape(expected.title),path);
+ for(const attribute of ['name="description"','property="og:description"'])assert.equal(html.match(new RegExp('<meta\\s+'+attribute+'\\s+content="([^"]*)"'))?.[1],escape(expected.description),path+' '+attribute);
+ assert.equal(html.match(/<meta\s+property="og:title"\s+content="([^"]*)"/)?.[1],escape(expected.title),path);
+}
+console.log('PASS initial HTML and runtime metadata share identical titles and descriptions on all public/help routes');

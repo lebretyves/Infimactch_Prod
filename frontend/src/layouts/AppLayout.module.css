@@ -240,3 +240,9 @@
 @media (max-width: 600px) {
   .shell[data-space="candidate"] .main { padding: 20px 14px 18px; }
 }
+
+.helpLink { display: inline-flex; align-items: center; min-height: 44px; padding: 8px 10px; color: var(--brand-700); font-size: 13px; font-weight: 700; text-decoration: underline; text-underline-offset: 3px; }
+@media (max-width: 600px) { .headerRight { gap: 4px; } .helpLink { max-width: 84px; padding: 4px; font-size: 12px; } .identity > span:last-child { display: none; } .avatar { width: 30px; height: 30px; } }
+
+.headerRight > .identity,.headerRight > .menu{flex-shrink:0}
+@media(max-width:380px){.identity{display:none}}

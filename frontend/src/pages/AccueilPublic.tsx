@@ -108,6 +108,7 @@ export default function AccueilPublic() {
               {lien.libelle}
             </a>
           ))}
+          <Link to="/aide" className={s.lien} onClick={() => setMenuOuvert(false)}>Centre d’aide</Link>
         </nav>
         <div className={s.actions} onClick={() => setMenuOuvert(false)}>
           <Link to="/connexion" className={s.connexion}>Connexion</Link>
