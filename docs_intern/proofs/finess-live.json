@@ -1,12 +1,12 @@
 {
-  "checkedAt": "2026-09-14T22:25:14.015Z",
+  "checkedAt": "2026-09-20T20:13:40.570Z",
   "sourceDataset": "https://www.data.gouv.fr/datasets/finess-structures-1",
   "snapshot": {
     "id": 1,
     "generated_at": "2026-09-01T02:07:30.088Z",
     "source_url": "https://static.data.gouv.fr/resources/finess-structures-1/20260901-021627/finess-structures-mensuel-202608.json.gz",
     "sha256": "86b73d3c4a0fd491e8d837a27a665c94e16d39e6a6a02652283184b7ae4d63ac",
-    "imported_at": "2026-09-14T22:01:57.790Z",
+    "imported_at": "2026-09-20T20:13:36.094Z",
     "summary": {
       "rows": 174621,
       "active": 104752,
@@ -32,6 +32,5 @@
     "identity-without-coordinates"
   ],
   "coordinatesPolicy": "Use range-valid source pairs; no inferred projected conversion; conflicting pairs remain unknown",
-  "organizationRightsGranted": false,
-  "codeCommit": "e5a2d72db53559d7ee787e95e9d07ecb6d6ea574"
+  "organizationRightsGranted": false
 }

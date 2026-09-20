@@ -14333,6 +14333,160 @@
         ]
       }
     },
+    "/api/v1/profile/search-area": {
+      "patch": {
+        "description": "Modifie uniquement la position, le rayon et le libellé de mobilité du profil connecté. Préserve le domicile, les disponibilités et les préférences de notifications.",
+        "operationId": "ProfilesController_searchArea",
+        "parameters": [
+          {
+            "name": "X-CSRF-Token",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Token from /auth/csrf; cookie credentials and the configured Origin are required"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SearchAreaDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "latitude",
+                    "longitude",
+                    "radius_km",
+                    "details"
+                  ],
+                  "properties": {
+                    "latitude": {
+                      "type": "number"
+                    },
+                    "longitude": {
+                      "type": "number"
+                    },
+                    "radius_km": {
+                      "type": "number"
+                    },
+                    "details": {
+                      "type": "object",
+                      "additionalProperties": true
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Controlled API error; applicability depends on route",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Controlled API error; applicability depends on route",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Controlled API error; applicability depends on route",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Controlled API error; applicability depends on route",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Controlled API error; applicability depends on route",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "413": {
+            "description": "Controlled API error; applicability depends on route",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Controlled API error; applicability depends on route",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Controlled API error; applicability depends on route",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Controlled API error; applicability depends on route",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "summary": "Enregistrer la zone de recherche et d’alertes",
+        "tags": [
+          "Profiles"
+        ]
+      }
+    },
     "/api/v1/profile/rpps": {
       "put": {
         "operationId": "ProfilesController_rppsCheck",
@@ -19113,6 +19267,183 @@
         ]
       }
     },
+    "/api/v1/listings/locations/reverse": {
+      "post": {
+        "description": "Recherche IGN accessible pendant l’inscription. Ne modifie aucun profil. Sans adresse exploitable, address vaut null et la saisie manuelle reste possible. Les protections CSRF et de fréquence existantes s’appliquent.",
+        "operationId": "ReverseLocationController_reverse",
+        "parameters": [
+          {
+            "name": "X-CSRF-Token",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Token from /auth/csrf; cookie credentials and the configured Origin are required"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ReverseLocationDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Adresse trouvée ou absence de résultat exploitable.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "address",
+                    "provider"
+                  ],
+                  "properties": {
+                    "provider": {
+                      "type": "string",
+                      "enum": [
+                        "IGN"
+                      ],
+                      "example": "IGN"
+                    },
+                    "address": {
+                      "type": "object",
+                      "nullable": true,
+                      "required": [
+                        "address",
+                        "postalCode",
+                        "city"
+                      ],
+                      "properties": {
+                        "address": {
+                          "type": "string",
+                          "maxLength": 200,
+                          "example": "8 Place de la Mairie",
+                          "description": "Voie uniquement ; chaîne vide si seule la commune est connue."
+                        },
+                        "postalCode": {
+                          "type": "string",
+                          "pattern": "^[0-9]{5}$",
+                          "example": "75004"
+                        },
+                        "city": {
+                          "type": "string",
+                          "maxLength": 200,
+                          "example": "Paris"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Coordonnées obligatoires, numériques et dans les limites ; champs supplémentaires refusés.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Controlled API error; applicability depends on route",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Controlled API error; applicability depends on route",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Controlled API error; applicability depends on route",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Controlled API error; applicability depends on route",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "413": {
+            "description": "Controlled API error; applicability depends on route",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Controlled API error; applicability depends on route",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Controlled API error; applicability depends on route",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "IGN indisponible ou réponse inexploitable ; proposer la saisie manuelle.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                },
+                "example": {
+                  "code": "LOCATIONS_UNAVAILABLE",
+                  "message": "La recherche d’adresse est indisponible. Saisissez votre adresse manuellement."
+                }
+              }
+            }
+          }
+        },
+        "summary": "Retrouver une adresse depuis des coordonnées GPS",
+        "tags": [
+          "ReverseLocation"
+        ]
+      }
+    },
     "/api/v1/listings/locations/communes": {
       "get": {
         "operationId": "LocationsController_communes",
@@ -22476,6 +22807,13 @@
                       "nullable": true
                     },
                     "required": {
+                      "type": "boolean",
+                      "enum": [
+                        false
+                      ],
+                      "description": "Le RIB est toujours facultatif sur InfiMatch."
+                    },
+                    "suggested": {
                       "type": "boolean"
                     },
                     "document": {
@@ -22504,6 +22842,7 @@
                     "iban",
                     "details",
                     "required",
+                    "suggested",
                     "document"
                   ]
                 }
@@ -29727,6 +30066,37 @@
           "changes"
         ]
       },
+      "SearchAreaDto": {
+        "type": "object",
+        "properties": {
+          "latitude": {
+            "type": "number",
+            "minimum": -90,
+            "maximum": 90
+          },
+          "longitude": {
+            "type": "number",
+            "minimum": -180,
+            "maximum": 180
+          },
+          "radiusKm": {
+            "type": "number",
+            "minimum": 0.1,
+            "maximum": 1000
+          },
+          "city": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 200
+          }
+        },
+        "required": [
+          "latitude",
+          "longitude",
+          "radiusKm",
+          "city"
+        ]
+      },
       "RppsDto": {
         "type": "object",
         "properties": {
@@ -29896,6 +30266,29 @@
         },
         "required": [
           "applicationId"
+        ]
+      },
+      "ReverseLocationDto": {
+        "type": "object",
+        "properties": {
+          "latitude": {
+            "type": "number",
+            "minimum": -90,
+            "maximum": 90,
+            "example": 48.8566,
+            "description": "Latitude GPS en degrés décimaux."
+          },
+          "longitude": {
+            "type": "number",
+            "minimum": -180,
+            "maximum": 180,
+            "example": 2.3522,
+            "description": "Longitude GPS en degrés décimaux."
+          }
+        },
+        "required": [
+          "latitude",
+          "longitude"
         ]
       },
       "SearchDto": {
