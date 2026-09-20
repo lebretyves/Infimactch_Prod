@@ -1,3 +1,4 @@
+import { DiscordInvitation } from './DiscordInvitation';
 import { useAuth } from '@/context/AuthContext';
 import { usePageTitle } from '@/lib/usePageTitle';
 import { Button, ButtonLink } from '@/ui/Button';
@@ -40,14 +41,9 @@ export default function Confirmation() {
         Vous êtes inscrit avec l’adresse
         <span className={s.email}>{user.email}</span>
       </p>
-      <div className={s.prochaineEtape}>
-        <p className={s.etapeLabel}>La prochaine étape</p>
-        <h2 className={s.etapeTitre}>Préparez votre profil</h2>
-        <p>Complétez votre profil professionnel et vos disponibilités avant de candidater.</p>
-      </div>
+      <DiscordInvitation />
       <div className={s.actions}>
-        <ButtonLink to="/profil" size="lg" block>Compléter mon profil <span aria-hidden="true">→</span></ButtonLink>
-        <ButtonLink to="/accueil" variant="ghost">Accéder à mon espace</ButtonLink>
+        <ButtonLink to="/profil" variant="ghost">Compléter mon profil</ButtonLink>
       </div>
     </ConfirmationLayout>
   );

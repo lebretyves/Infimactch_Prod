@@ -1,12 +1,12 @@
 import {EmailDeliveryJournal} from '@/components/EmailDeliveryJournal';
 import { useRef, useState } from "react";
-import { Link } from "react-router";
+import { Link, useSearchParams } from "react-router";
 import { useRemote } from "@/lib/useRemote";
 import { api } from "@/services/api";
 import { organizations } from "@/services/organizations";
 import { useAuth } from "@/context/AuthContext";
 import { usePageTitle } from "@/lib/usePageTitle";
-import { Button } from "@/ui/Button";
+import { Button, ButtonLink } from "@/ui/Button";
 import { TextField } from "@/ui/Field";
 import s from "./MarketPages.module.css";
 import { notificationHref } from "@/lib/notificationHref";
@@ -20,7 +20,7 @@ const base="/me/notifications-settings";
 const discordInvite=import.meta.env.VITE_DISCORD_INVITE_URL || "https://discord.gg/Ed73jG3pRd";
 const deliveryLabels:Record<string,string>={PENDING:"En attente",SENDING:"Envoi en cours",SENT:"Envoyé",FAILED:"Échec — notification disponible ici",CANCELLED:"Envoi annulé : événement ou préférences modifiés",UNCERTAIN:"Réception non confirmée — notification disponible ici"};
 function DestinationEditor({destination,org,catalog,save}:{destination?:Destination;org?:string;catalog:Record<string,string>;save:(org:string|undefined,body:unknown)=>Promise<void>}) {
-  const [enabled,setEnabled]=useState(destination?.enabled??false),[events,setEvents]=useState(destination?.events??Object.keys(catalog)),[channelId,setChannelId]=useState(destination?.target_id??""),[busy,setBusy]=useState(false);
+  const [enabled,setEnabled]=useState(destination?.enabled??false),[events,setEvents]=useState(destination?.events??[]),[channelId,setChannelId]=useState(destination?.target_id??""),[busy,setBusy]=useState(false);
   return <form onSubmit={e=>{e.preventDefault();setBusy(true);void save(org,{enabled,events,...(org&&enabled?{channelId}:{})}).finally(()=>setBusy(false));}}>
     <label><input type="checkbox" checked={enabled} onChange={e=>setEnabled(e.target.checked)}/> Recevoir les notifications Discord</label>
     {org&&<><TextField label="Identifiant du salon privé" value={channelId} onChange={e=>setChannelId(e.target.value)} required={enabled} pattern="[0-9]{17,20}"/><p>Réservez un salon à cette organisation, masquez-le à @everyone et donnez au bot accès au salon. Vous devez pouvoir gérer le serveur.</p></>}
@@ -29,7 +29,9 @@ function DestinationEditor({destination,org,catalog,save}:{destination?:Destinat
   </form>;
 }
 export default function Notifications() {
-  usePageTitle("Notifications");
+  const [params] = useSearchParams();
+  const onboarding = params.get("bienvenue") === "1";
+  usePageTitle(onboarding ? "Configurer Discord — étape facultative" : "Notifications");
   const {user}=useAuth();
   const [offset,setOffset]=useState(0),[discordId,setDiscordId]=useState(""),[code,setCode]=useState(""),[busy,setBusy]=useState(false),[error,setError]=useState(""),[message,setMessage]=useState("");
   const [discordIdError,setDiscordIdError]=useState("");
@@ -53,14 +55,15 @@ export default function Notifications() {
   const data=settings.data;
   return <div className={`${s.page} ${s.focusedPage}`}>
     <header className={s.header}><div><h1>Notifications</h1><p>Retrouvez les informations de vos missions et de votre compte. Les notifications restent disponibles ici, même si Discord est désactivé.</p></div></header>
+    {onboarding && <section className={s.card} aria-labelledby="optional-discord"><h2 id="optional-discord">Configurer Discord — étape facultative</h2><p>Votre compte est créé. Aucun envoi Discord n’est activé par cette étape : associez votre compte puis choisissez explicitement vos notifications. Vous pouvez continuer sans Discord et revenir dans la rubrique Notifications.</p><ButtonLink to="/accueil" variant="outline">Passer cette étape</ButtonLink></section>}
     {error&&<p role="alert">{error}</p>}{message&&<p role="status">{message}</p>}
-    {user?.role === "interimaire" && <nav className={s.sectionNav} aria-label="Sections des notifications"><a href="#notice-list">Votre activité</a><a href="#discord-settings">Réglages Discord</a></nav>}
+    {!onboarding && user?.role === "interimaire" && <nav className={s.sectionNav} aria-label="Sections des notifications"><a href="#notice-list">Votre activité</a><a href="#discord-settings">Réglages Discord</a></nav>}
     {user?.role === "interimaire" && <p>Les alertes de missions compatibles suivent votre zone de recherche et d’alertes, ainsi que vos qualifications et critères d’admissibilité. La dernière ville utilisée dans la recherche ne change pas cette zone. <Link to="/calendrier#zone-mobilite">Vérifier ma zone de recherche et d’alertes</Link>.</p>}
-    <section className={s.card} aria-labelledby="notice-list"><h2 id="notice-list">Votre activité</h2>
+    {!onboarding && <section className={s.card} aria-labelledby="notice-list"><h2 id="notice-list">Votre activité</h2>
       {notices.loading?<p role="status">Chargement…</p>:notices.error?<p role="alert">{notices.error} <Button onClick={notices.reload}>Réessayer</Button></p>:<>
       {notices.data?.length?<ul className={s.noticeList}>{notices.data.map(n=><li className={s.noticeItem} key={n.id} style={user?.role === "interimaire" ? undefined : {paddingBlock:14}}><strong>{data?.catalog[n.kind]||"Notification"}{!n.read_at?" — Non lue":""}</strong><p>{n.message}</p><time dateTime={n.created_at}>{new Date(n.created_at).toLocaleString("fr-FR")}</time><div className={s.actions}><Link to={notificationHref(n.href,n.id)}>Consulter</Link></div></li>)}</ul>:<p>Aucune notification pour cette page.</p>}
       <div className={s.actions}><Button variant="outline" disabled={offset===0} onClick={()=>setOffset(v=>Math.max(0,v-20))}>Précédent</Button><Button variant="outline" disabled={(notices.data?.length??0)<20} onClick={()=>setOffset(v=>v+20)}>Suivant</Button></div></>}
-    </section>
+    </section>}
     <section className={s.card} aria-labelledby="discord-settings"><h2 id="discord-settings">Notifications Discord</h2>
       <p>Besoin d’aide pour trouver votre identifiant ? <a href="/aide/discord/retrouver-identifiant-discord.pdf" target="_blank" rel="noopener noreferrer">Ouvrir le guide illustré (PDF, 2 pages)</a> · <a href="/aide/discord/retrouver-identifiant-discord.pdf" download>Télécharger le PDF</a></p>
       {settings.loading?<p role="status">Chargement…</p>:settings.error?<p role="alert">{settings.error} <Button onClick={settings.reload}>Réessayer</Button></p>:data&&!data.configured?<p>Discord n’est pas encore disponible. Vos notifications restent consultables dans cette page.</p>:data&&<>
@@ -100,7 +103,9 @@ export default function Notifications() {
         </>}
       </>}
     </section>
-    <EmailDeliveryJournal userId={user?.id||"anonymous"}/>
+    {onboarding && <ButtonLink to="/accueil">Continuer vers mon espace</ButtonLink>}
+    {!onboarding && <><EmailDeliveryJournal userId={user?.id||"anonymous"}/>
     <section className={s.card}><h2>Suivi des envois Discord</h2><Button variant="outline" onClick={deliveries.reload}>Actualiser</Button>{deliveries.error?<p role="alert">{deliveries.error}</p>:deliveries.data?.length?<ul>{deliveries.data.map(d=><li key={d.id}>{data?.catalog[d.kind]||d.kind} : {deliveryLabels[d.status]||d.status}</li>)}</ul>:<p>Aucun envoi pour le moment.</p>}</section>
+    </>}
   </div>;
 }
