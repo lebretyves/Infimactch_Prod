@@ -1,7 +1,7 @@
 import assert from "node:assert/strict";
 import fs from "node:fs";
 import { chromium } from "playwright";
-const browser = await chromium.launch({ channel: "msedge" });
+const browser = await chromium.launch(process.env.BROWSER_CHANNEL?{channel:process.env.BROWSER_CHANNEL}:{});
 const base = process.env.BASE_URL || "http://127.0.0.1:4187";
 const internal = {
   id: "m_11111111-1111-4111-8111-111111111111",
@@ -120,7 +120,8 @@ try {
         offset: request.offset,
         limit: 20,
       };
-    } else if (path.endsWith("/reference-data"))
+    } else if (path.endsWith("/matching/rules")) json={weights:{C:.45,Z:.25,D:.2,E:.1}};
+    else if (path.endsWith("/reference-data"))
       json = { ideServices: [], blockSpecialties: [] };
     else if (path.endsWith("/auth/csrf")) json = { csrfToken: "fixture" };
     else if (path.endsWith("/me/notification-preferences"))
@@ -204,7 +205,7 @@ try {
       .evaluate((e) => getComputedStyle(e).backgroundColor),
     "rgba(0, 0, 0, 0)",
   );
-  fs.mkdirSync("../InfiMatch/docs/quality", { recursive: true });
+  fs.mkdirSync("artifacts/browser-checks", { recursive: true });
   for (const width of [375, 768, 1440]) {
     await page.setViewportSize({ width, height: 1000 });
     assert.equal(
@@ -215,14 +216,15 @@ try {
       `overflow ${width}`,
     );
     await page.screenshot({
-      path: `../InfiMatch/docs/quality/mixed-${width}.png`,
+      path: `artifacts/browser-checks/mixed-${width}.png`,
       fullPage: true,
     });
   }
   const choices = page.getByRole("group", { name: "Origine des offres" });
-  await choices
-    .getByRole("button", { name: "Partenaires", exact: true })
-    .click();
+  await Promise.all([
+    page.waitForResponse(r => {const u=new URL(r.url());return u.pathname.endsWith('/me/recommendations')&&u.searchParams.get('origine')==='partenaires'&&r.ok();}),
+    choices.getByRole("button", { name: "Partenaires", exact: true }).click(),
+  ]);
   await page
     .getByRole("heading", { name: "Offres partenaires InfiMatch", exact: true })
     .waitFor();
@@ -230,7 +232,10 @@ try {
     .getByRole("heading", { name: "Offres externes à explorer", exact: true })
     .waitFor({ state: "hidden" });
   assert.equal(origins.at(-1), "partenaires");
-  await choices.getByRole("button", { name: "Externes", exact: true }).click();
+  await Promise.all([
+    page.waitForResponse(r => {const u=new URL(r.url());return u.pathname.endsWith('/me/recommendations')&&u.searchParams.get('origine')==='externes'&&r.ok();}),
+    choices.getByRole("button", { name: "Externes", exact: true }).click(),
+  ]);
   await page
     .getByRole("heading", { name: "Offres externes à explorer", exact: true })
     .waitFor();
@@ -305,7 +310,7 @@ try {
       false,
     );
     await page.screenshot({
-      path: `../InfiMatch/docs/quality/origins-${width}.png`,
+      path: `artifacts/browser-checks/origins-${width}.png`,
       fullPage: true,
     });
   }

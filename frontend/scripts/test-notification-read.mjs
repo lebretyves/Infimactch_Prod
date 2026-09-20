@@ -1,14 +1,15 @@
-﻿import assert from 'node:assert/strict';
+import assert from 'node:assert/strict';
 import {chromium} from 'playwright';
 const base=process.env.BASE_URL||'http://127.0.0.1:4187';
 const id='11111111-1111-4111-8111-111111111111';
-const browser=await chromium.launch({channel:'msedge'});
+const browser=await chromium.launch(process.env.BROWSER_CHANNEL?{channel:process.env.BROWSER_CHANNEL}:{});
 try{
  const context=await browser.newContext();let read=false,attempts=0,fail=false;
  await context.route('**/api/**',async route=>{
   const p=new URL(route.request().url()).pathname;let json=[];
   if(p.endsWith('/auth/me'))json={id:'fixture',email:'fixture@example.invalid',family:'NURSE',organizations:[]};
   else if(p.endsWith('/profile'))json={display_name:'Fixture',qualifications:['IDE'],details:{}};
+  else if(p.endsWith('/me/email-deliveries'))json={items:[],limit:50,observedAt:new Date().toISOString()};
   else if(p.endsWith('/auth/csrf'))json={csrfToken:'fixture'};
   else if(p.endsWith('/me/notifications-settings'))json={configured:false,link:null,destinations:[],catalog:{MATCH:'Mission'},organizationKinds:[],preferences:[]};
   else if(p.endsWith('/me/notifications'))json=[{id,kind:'MATCH',message:'Mission de test',href:'/compte?section=preferences#contact',read_at:read?'2026-09-18T00:00:00Z':null,created_at:'2026-09-18T00:00:00Z'}];
