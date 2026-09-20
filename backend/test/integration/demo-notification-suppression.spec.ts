@@ -20,7 +20,7 @@ before(async () => {
     const [a] = await db.query("INSERT INTO account(email,password_hash,family,terms_version) VALUES($1,'fixture',$2,'test') RETURNING id",[randomUUID()+'@example.invalid',family]);
     if(family==='NURSE')nurse=a.id;else owner=a.id;
   }
-  await db.query("INSERT INTO profile(user_id,display_name,qualifications,notifications_enabled) VALUES($1,'Fixture',ARRAY['IDE'],true)",[nurse]);
+  await db.query("INSERT INTO profile(user_id,display_name,qualifications,notifications_enabled,visible,latitude,longitude,radius_km) VALUES($1,'Fixture',ARRAY['IDE'],true,true,48,2,30)",[nurse]);
   const [o] = await db.query("INSERT INTO organization(kind,name,address,referent,finess) VALUES('ESTABLISHMENT','Fixture','Fixture','Fixture','000000000') RETURNING id"); org=o.id;
   await db.query('INSERT INTO membership(user_id,organization_id) VALUES($1,$2)',[owner,org]);
   // More muted missions than one reminder batch: they must not starve a new mission.

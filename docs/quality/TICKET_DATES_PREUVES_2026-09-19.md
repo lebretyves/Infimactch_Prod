@@ -26,4 +26,18 @@ Les gardes contre les faux succès (échantillon vide, zéro offre acceptée, do
 
 ## État de livraison
 
-Corrections et preuves préparées dans les deux espaces de travail. Aucun commit, push ou déploiement effectué pour ce ticket. Les fréquences d’import et les workflows de production restent ceux de la livraison précédente.
+Le correctif de dates a été publié le 20 septembre dans les commits 0551601 (Main) et 77ec636 (Backend), avec d’autres corrections. Vercel a confirmé le déploiement du descendant b0f3394 sur les deux projets backend.
+
+## Clôture vérifiée — 20 septembre 2026
+
+- Test Discord corrigé : le profil fictif dispose désormais d’une zone valide (48, 2, rayon 30 km), conformément au contrôle ajouté avant l’envoi. Aucun affaiblissement du filtrage.
+- Campagne isolée complète PASS : 332 tests unitaires, 23 fichiers d’intégration, PostgreSQL/MongoDB/n8n et régressions de sécurité. Résumé : `../proofs/dates-final-validation.json`.
+- Les quatre preuves ont été régénérées. FINESS réutilise l’instantané officiel d’août 2026 en cache (174 621 établissements) : recette récente, pas nouvelle acquisition ni affirmation de fraîcheur nationale.
+- France Travail : 61 offres persistées dans la première preuve, 154 dans la rectification, rejeu sans doublon ; profils fictifs IDE/IADE/IBODE vérifiés dans la preuve partielle. Bases locales isolées supprimées après les essais.
+- Le script de preuve partielle exclut désormais les lignes refusées pour une raison métier connue et les documente, au lieu d’abandonner tout l’échantillon. Les erreurs inattendues restent bloquantes.
+- Budget réseau comptabilisé après activation des certificats système dans les enfants : 16 recherches et 4 authentifications France Travail (12 recherches initiales, puis 4 pour rejouer uniquement la preuve partielle). Aucune reprise HTTP fournisseur observée. Un premier essai non instrumenté a échoué avant production de preuve ; il n’est pas inclus dans ce compteur. Aucun appel JobsPipe, aucun téléchargement FINESS supplémentaire.
+- Reprise des annonces existantes exécutée en transaction après simulation : 4 732 France Travail et 74 JobsPipe, toutes version 2 vers 3. 74 lignes changent leurs valeurs de dates ; les autres dates étaient déjà canoniques. Zéro appel fournisseur pour cette reprise. Seuls les deux champs de dates de provenance et leur version ont été touchés, sans modifier début de mission, visibilité ni horodatage d’import.
+- Nouvelle simulation : zéro candidat. Contrôle API publique : cinq annonces consultées, toutes version 3.
+- Le script `scripts/vault/normalize-production-dates.mjs` est en simulation par défaut ; `--apply` est explicite, TLS vérifié, transaction et plafond de 10 000 lignes. Il ne traite que la version 2.
+
+Les résultats locaux ne remplacent pas le statut de la prochaine exécution GitHub Actions. Les fréquences d’import restent inchangées. Les preuves d’acquisition sont des échantillons bornés, pas un inventaire exhaustif.

@@ -1,0 +1,21 @@
+{
+  "checkedAt": "2026-09-20T20:12:22.730Z",
+  "mode": "DRY_RUN",
+  "candidates": 0,
+  "dateValuesChanged": 0,
+  "affected": 0,
+  "counts": [
+    {
+      "source": "FRANCE_TRAVAIL",
+      "version": "3",
+      "total": 4732
+    },
+    {
+      "source": "JOBSPIPE",
+      "version": "3",
+      "total": 74
+    }
+  ],
+  "providerCalls": 0,
+  "scope": "Only provenance publication/update dates and normalizationVersion 2 to 3. No mission dates, import timestamps, visibility or other fields changed."
+}

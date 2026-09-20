@@ -1,7 +1,55 @@
 {
-  "checkedAt": "2026-09-14T23:30:05.963Z",
+  "checkedAt": "2026-09-20T20:14:47.439Z",
+  "sampling": {
+    "department": "75",
+    "pages": [
+      {
+        "keyword": "infirmier",
+        "department": "75",
+        "limit": 150,
+        "received": 150,
+        "totalReported": 153,
+        "hasMore": true
+      },
+      {
+        "keyword": "IDE",
+        "department": "75",
+        "limit": 150,
+        "received": 150,
+        "totalReported": 155,
+        "hasMore": true
+      },
+      {
+        "keyword": "IADE",
+        "department": "75",
+        "limit": 150,
+        "received": 11,
+        "totalReported": 11,
+        "hasMore": false
+      },
+      {
+        "keyword": "IBODE",
+        "department": "75",
+        "limit": 150,
+        "received": 150,
+        "totalReported": 156,
+        "hasMore": true
+      }
+    ],
+    "maxSearchCalls": 4,
+    "retriesExcludedFromSearchBudget": true,
+    "exhaustive": false,
+    "scope": "First page per keyword only; Paris commune checked locally; never a complete provider inventory"
+  },
   "realProviderAcquisition": true,
-  "uniqueOffers": 134,
+  "received": 155,
+  "rejected": [
+    {
+      "sourceId": "3972734",
+      "reason": "PERMANENT_POSITION_EXCLUDED"
+    }
+  ],
+  "uniqueOffers": 154,
   "syntheticProfiles": true,
   "profileAssumptions": {
     "qualifications": [],
@@ -28,16 +76,16 @@
   "results": [
     {
       "qualification": "IDE",
-      "compared": 120,
+      "compared": 138,
       "outcomes": {
-        "TO_CONFIRM": 25,
-        "POSSIBLE_MATCH": 95
+        "TO_CONFIRM": 31,
+        "POSSIBLE_MATCH": 107
       },
       "examples": [
         {
-          "sourceId": "213MTBB",
-          "url": "https://candidat.francetravail.fr/offres/recherche/detail/213MTBB",
-          "title": "Vacations Infirmiers - SIC - Paris 15\u00c3\u00a8me (H/F)",
+          "sourceId": "7034268",
+          "url": "https://candidat.francetravail.fr/offres/recherche/detail/7034268",
+          "title": "Infirmier en santé au travail H/F - Infirmier en entreprise - Paris 16e",
           "result": "TO_CONFIRM",
           "criteria": {
             "qualification": {
@@ -50,24 +98,16 @@
               "reason": "SERVICE_NOT_UNAMBIGUOUS"
             },
             "experience": {
-              "status": "INDICATIVE_MATCH",
-              "reason": "TOTAL_DECLARED_EXPERIENCE_NOT_SERVICE_ELIGIBILITY",
-              "value": {
-                "minimumMonths": 6,
-                "declaredMonths": 36.01
-              }
+              "status": "OFFER_MISSING",
+              "reason": "EXPERIENCE_THRESHOLD_NOT_UNAMBIGUOUS"
             },
             "location": {
-              "status": "INDICATIVE_MATCH",
-              "reason": "UNVERIFIED_PROVIDER_COORDINATES",
-              "value": {
-                "approximateDistanceKm": 4.16
-              }
+              "status": "OFFER_MISSING",
+              "reason": "EXACT_WORKPLACE_NOT_PROVIDED"
             },
             "shift": {
-              "status": "INDICATIVE_MATCH",
-              "reason": "PROVIDER_SHIFT_NOT_EXACT_SCHEDULE",
-              "value": "DAY"
+              "status": "OFFER_MISSING",
+              "reason": "SHIFT_NOT_UNAMBIGUOUS"
             },
             "availability": {
               "status": "OFFER_MISSING",
@@ -92,10 +132,10 @@
           }
         },
         {
-          "sourceId": "213MSHC",
-          "url": "https://candidat.francetravail.fr/offres/recherche/detail/213MSHC",
-          "title": "Infirmier/Infirmi\u00c3\u00a8re - Autodialyse (H/F) - Vacations - Paris 7\u00c3\u00a8me",
-          "result": "TO_CONFIRM",
+          "sourceId": "7034261",
+          "url": "https://candidat.francetravail.fr/offres/recherche/detail/7034261",
+          "title": "Infirmier D.E H/F votre expertise au service des patients",
+          "result": "POSSIBLE_MATCH",
           "criteria": {
             "qualification": {
               "status": "MATCH",
@@ -103,25 +143,20 @@
               "value": "IDE"
             },
             "service": {
-              "status": "PROFILE_MISSING",
-              "reason": "SERVICE_EXPERIENCE_NOT_RECORDED",
-              "value": "DIALYSE"
+              "status": "OFFER_MISSING",
+              "reason": "SERVICE_NOT_UNAMBIGUOUS"
             },
             "experience": {
-              "status": "REVIEW_REQUIRED",
-              "reason": "PROVIDER_EXPERIENCE_CONFLICT"
+              "status": "OFFER_MISSING",
+              "reason": "EXPERIENCE_THRESHOLD_NOT_UNAMBIGUOUS"
             },
             "location": {
-              "status": "INDICATIVE_MATCH",
-              "reason": "UNVERIFIED_PROVIDER_COORDINATES",
-              "value": {
-                "approximateDistanceKm": 2.34
-              }
+              "status": "OFFER_MISSING",
+              "reason": "EXACT_WORKPLACE_NOT_PROVIDED"
             },
             "shift": {
-              "status": "INDICATIVE_MATCH",
-              "reason": "PROVIDER_SHIFT_NOT_EXACT_SCHEDULE",
-              "value": "DAY"
+              "status": "OFFER_MISSING",
+              "reason": "SHIFT_NOT_UNAMBIGUOUS"
             },
             "availability": {
               "status": "OFFER_MISSING",
@@ -137,7 +172,7 @@
             },
             "contract": {
               "status": "REVIEW_REQUIRED",
-              "reason": "PROVIDER_CONTRACT_CONFLICT"
+              "reason": "NO_CONTRACT_PREFERENCE_IN_PROFILE"
             },
             "rpps": {
               "status": "MATCH",
@@ -157,7 +192,7 @@
         {
           "sourceId": "6592779",
           "url": "https://candidat.francetravail.fr/offres/recherche/detail/6592779",
-          "title": "Infirmier / Infirmi\u00c3\u00a8re anesth\u00c3\u00a9siste (H/F)",
+          "title": "Infirmier / Infirmière anesthésiste (H/F)",
           "result": "POSSIBLE_MATCH",
           "criteria": {
             "qualification": {
@@ -210,7 +245,7 @@
         {
           "sourceId": "6592723",
           "url": "https://candidat.francetravail.fr/offres/recherche/detail/6592723",
-          "title": "Infirmier / Infirmi\u00c3\u00a8re anesth\u00c3\u00a9siste (H/F)",
+          "title": "Infirmier / Infirmière anesthésiste (H/F)",
           "result": "POSSIBLE_MATCH",
           "criteria": {
             "qualification": {
@@ -264,15 +299,64 @@
     },
     {
       "qualification": "IBODE",
-      "compared": 1,
+      "compared": 3,
       "outcomes": {
-        "POSSIBLE_MATCH": 1
+        "POSSIBLE_MATCH": 3
       },
       "examples": [
         {
-          "sourceId": "5778620",
-          "url": "https://candidat.francetravail.fr/offres/recherche/detail/5778620",
-          "title": "Ibode H/f - Chir Gynecologique (H/F)",
+          "sourceId": "6934261",
+          "url": "https://candidat.francetravail.fr/offres/recherche/detail/6934261",
+          "title": "Ibode H/f - Maternite Chir Gynecologique (H/F)",
+          "result": "POSSIBLE_MATCH",
+          "criteria": {
+            "qualification": {
+              "status": "MATCH",
+              "reason": "DECLARED_QUALIFICATION_COMPARISON",
+              "value": "IBODE"
+            },
+            "service": {
+              "status": "OFFER_MISSING",
+              "reason": "SERVICE_NOT_UNAMBIGUOUS"
+            },
+            "experience": {
+              "status": "OFFER_MISSING",
+              "reason": "EXPERIENCE_THRESHOLD_NOT_UNAMBIGUOUS"
+            },
+            "location": {
+              "status": "OFFER_MISSING",
+              "reason": "EXACT_WORKPLACE_NOT_PROVIDED"
+            },
+            "shift": {
+              "status": "OFFER_MISSING",
+              "reason": "SHIFT_NOT_UNAMBIGUOUS"
+            },
+            "availability": {
+              "status": "OFFER_MISSING",
+              "reason": "EXACT_DATES_REQUIRED"
+            },
+            "assignmentConflicts": {
+              "status": "OFFER_MISSING",
+              "reason": "EXACT_DATES_REQUIRED"
+            },
+            "requiredSkills": {
+              "status": "OFFER_MISSING",
+              "reason": "PROVIDER_REQUIREMENTS_NOT_MAPPED"
+            },
+            "contract": {
+              "status": "REVIEW_REQUIRED",
+              "reason": "NO_CONTRACT_PREFERENCE_IN_PROFILE"
+            },
+            "rpps": {
+              "status": "MATCH",
+              "reason": "RPPS_FOUND_NOT_FULL_ELIGIBILITY"
+            }
+          }
+        },
+        {
+          "sourceId": "6929556",
+          "url": "https://candidat.francetravail.fr/offres/recherche/detail/6929556",
+          "title": "Ibode H/f - Maternite Chir Gynecologique (H/F)",
           "result": "POSSIBLE_MATCH",
           "criteria": {
             "qualification": {
@@ -321,6 +405,5 @@
       ]
     }
   ],
-  "scope": "Fresh public France Travail offers compared in memory to three fictional profiles. RPPS FOUND is a fixture only; no real profile or database mutated, no full eligibility or score.",
-  "codeCommit": "5f9db50b26638a03259d37640d1aea8e24c53e18"
+  "scope": "Bounded first-page public France Travail sample compared in memory to three fictional profiles. RPPS FOUND is a fixture only; no production access, no imported offer or real profile mutation; isolated app startup can update technical counters/indexes. No full eligibility or score."
 }

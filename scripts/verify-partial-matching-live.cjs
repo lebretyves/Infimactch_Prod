@@ -39,7 +39,15 @@ async function readJson(app,path,expected=200){
 (async()=>{
  requireIsolatedTarget();
  const {raw,sampling}=await acquireSample(150);
- const offers=raw.map(o=>normalizeOffer(o));
+ const offers=[],rejected=[];
+ for(const row of raw){
+  try{offers.push(normalizeOffer(row));}
+  catch(error){
+   if(!['INVALID_ID','MISSING_CONTENT','OTHER_PROFESSION','PERMANENT_POSITION_EXCLUDED','NOT_TEMPORARY_EMPLOYMENT'].includes(error.message))throw error;
+   rejected.push({sourceId:row.id,reason:error.message});
+  }
+ }
+ assert(offers.length>0,'Sample contains no accepted offer');
  const profile={qualifications:[],skills:[],experience:[{service:"URGENCES",start:"2022-01-01T00:00:00Z",end:"2025-01-01T00:00:00Z"}],available:[],unavailable:[],conflicts:[],rppsStatus:"FOUND",latitude:48.8566,longitude:2.3522,radiusKm:20,acceptedShifts:["DAY"],preferredShifts:[]};
  const results=[];
  for(const q of ["IDE","IADE","IBODE"]){
@@ -64,7 +72,7 @@ async function readJson(app,path,expected=200){
   assert(api.body.paths["/api/v1/me/listings/{id}/correspondence"]);
   writeFileSync(resolve(docsDirectory,'openapi.json'),JSON.stringify(api.body,null,2)+"\n");
  }finally{if(app)await app.close();}
- const proof={checkedAt:new Date().toISOString(),sampling,realProviderAcquisition:true,uniqueOffers:offers.length,syntheticProfiles:true,profileAssumptions:profile,results,scope:"Bounded first-page public France Travail sample compared in memory to three fictional profiles. RPPS FOUND is a fixture only; no production access, no imported offer or real profile mutation; isolated app startup can update technical counters/indexes. No full eligibility or score."};
+ const proof={checkedAt:new Date().toISOString(),sampling,realProviderAcquisition:true,received:raw.length,rejected,uniqueOffers:offers.length,syntheticProfiles:true,profileAssumptions:profile,results,scope:"Bounded first-page public France Travail sample compared in memory to three fictional profiles. RPPS FOUND is a fixture only; no production access, no imported offer or real profile mutation; isolated app startup can update technical counters/indexes. No full eligibility or score."};
  writeFileSync(resolve(proofsDirectory,'external-partial-live.json'),JSON.stringify(proof,null,2)+"\n");
  console.log(JSON.stringify({uniqueOffers:offers.length,syntheticProfiles:true,results:results.map(({examples,...r})=>r)},null,2));
-})().catch(()=>{console.error("Partial live verification failed; no secrets logged");process.exitCode=1;});
+})().catch(error=>{console.error("Partial live verification failed; category="+(error.code||error.name)+"; no secrets logged");process.exitCode=1;});

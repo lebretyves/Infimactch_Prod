@@ -1,0 +1,107 @@
+{
+  "records": [
+    {
+      "host": "entreprise.francetravail.fr",
+      "operation": "authentication",
+      "status": 200
+    },
+    {
+      "host": "api.francetravail.io",
+      "operation": "search",
+      "status": 206
+    },
+    {
+      "host": "api.francetravail.io",
+      "operation": "search",
+      "status": 206
+    },
+    {
+      "host": "api.francetravail.io",
+      "operation": "search",
+      "status": 200
+    },
+    {
+      "host": "api.francetravail.io",
+      "operation": "search",
+      "status": 206
+    },
+    {
+      "host": "entreprise.francetravail.fr",
+      "operation": "authentication",
+      "status": 200
+    },
+    {
+      "host": "api.francetravail.io",
+      "operation": "search",
+      "status": 206
+    },
+    {
+      "host": "api.francetravail.io",
+      "operation": "search",
+      "status": 206
+    },
+    {
+      "host": "api.francetravail.io",
+      "operation": "search",
+      "status": 200
+    },
+    {
+      "host": "api.francetravail.io",
+      "operation": "search",
+      "status": 206
+    },
+    {
+      "host": "entreprise.francetravail.fr",
+      "operation": "authentication",
+      "status": 200
+    },
+    {
+      "host": "api.francetravail.io",
+      "operation": "search",
+      "status": 206
+    },
+    {
+      "host": "api.francetravail.io",
+      "operation": "search",
+      "status": 206
+    },
+    {
+      "host": "api.francetravail.io",
+      "operation": "search",
+      "status": 200
+    },
+    {
+      "host": "api.francetravail.io",
+      "operation": "search",
+      "status": 206
+    },
+    {
+      "host": "entreprise.francetravail.fr",
+      "operation": "authentication",
+      "status": 200
+    },
+    {
+      "host": "api.francetravail.io",
+      "operation": "search",
+      "status": 206
+    },
+    {
+      "host": "api.francetravail.io",
+      "operation": "search",
+      "status": 206
+    },
+    {
+      "host": "api.francetravail.io",
+      "operation": "search",
+      "status": 200
+    },
+    {
+      "host": "api.francetravail.io",
+      "operation": "search",
+      "status": 206
+    }
+  ],
+  "searchCalls": 16,
+  "authenticationCalls": 4,
+  "scope": "Instrumented final attempts only; initial failed uninstrumented attempt excluded. FINESS reused cached official snapshot; no JobsPipe API calls."
+}
