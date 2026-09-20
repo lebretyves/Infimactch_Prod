@@ -1,5 +1,7 @@
 # Matching, accessibilité et SEO — lots 2, 6 et 11
 
+> Preuve datée : les constats et chiffres ci-dessous concernent cette campagne. Pour la configuration actuelle, consulter [l’architecture](../SCHEMA_ARCHITECTURE_V1.md), [les automatisations](../AUTOMATISATIONS.md) et [les réserves du rendu](../rendu/README.md).
+
 19 septembre 2026. Travail local autorisé, sans compte réel, sans email, sans publication ni modification de la pondération. Les preuves sont dans `E:\Interimatch\audits\2026-09-19-matching-a11y-seo`.
 
 ## Modifications

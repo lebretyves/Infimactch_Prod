@@ -1,5 +1,7 @@
 # Demandes clients, offres partenaires et dossier RIB
 
+> Preuve datée : les constats et chiffres ci-dessous concernent cette campagne. Pour la configuration actuelle, consulter [l’architecture](../SCHEMA_ARCHITECTURE_V1.md), [les automatisations](../AUTOMATISATIONS.md) et [les réserves du rendu](../rendu/README.md).
+
 > Rapport historique : cet état précède la bascule vers Supabase du 19 septembre. Pour la configuration actuelle, consulter [l'inventaire](../DEPLOIEMENT_INVENTAIRE.md).
 ## Comportement livre
 - Recuperation manuelle : demande generique, verification d'identite par l'administration, lien personnel valable 30 minutes et utilisable une fois. Aucun email automatique ; Resend sera raccorde plus tard. Les sessions sont revoquees au changement de mot de passe. Les comptes administrateurs sont exclus de ce parcours client.

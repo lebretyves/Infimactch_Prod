@@ -64,3 +64,7 @@ La campagne matching du 20 septembre compare les résultats métier et le nombre
 ## 7. Améliorations distinctes du sujet
 
 Diagnostic détaillé des connexions, chronologie admin centralisée et tableau de gains sont des recommandations, pas des exigences explicites du kick-off. La fiabilité de l'interface et la visibilité des listes tronquées restent des améliorations identifiées. Leur absence ne doit pas être confondue avec l'absence des fonctions métier déjà présentes.
+
+## Documentation de référence
+
+[Architecture technique](SCHEMA_ARCHITECTURE_V1.md), [flux métier](FLUX_V1.md), [automatisations et preuves](AUTOMATISATIONS.md), [guide utilisateur](GUIDE_UTILISATEUR.md) et [inventaire documentaire](INVENTAIRE_DOCUMENTAIRE.md). Les tutoriels vidéo et les supports oraux historiques doivent être revus avant leur présentation comme état actuel.

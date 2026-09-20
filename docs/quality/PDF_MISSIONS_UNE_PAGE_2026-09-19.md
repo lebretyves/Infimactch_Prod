@@ -1,5 +1,7 @@
 # PDF de mission sur une page — 19 septembre 2026
 
+> Preuve datée : les constats et chiffres ci-dessous concernent cette campagne. Pour la configuration actuelle, consulter [l’architecture](../SCHEMA_ARCHITECTURE_V1.md), [les automatisations](../AUTOMATISATIONS.md) et [les réserves du rendu](../rendu/README.md).
+
 Modèles de confirmation et d’annulation validés par l’utilisateur après revue des aperçus. Publication sur les deux Git et Vercel explicitement autorisée par l’utilisateur.
 
 - Une page A4 : disposition mesurée avant rendu, adaptation aux champs longs, aucun texte coupé silencieusement.

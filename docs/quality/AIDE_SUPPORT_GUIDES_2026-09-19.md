@@ -1,5 +1,7 @@
 ﻿# Aide, support et guides — 19 septembre 2026
 
+> Preuve datée : les constats et chiffres ci-dessous concernent cette campagne. Pour la configuration actuelle, consulter [l’architecture](../SCHEMA_ARCHITECTURE_V1.md), [les automatisations](../AUTOMATISATIONS.md) et [les réserves du rendu](../rendu/README.md).
+
 ## Parcours livré
 
 `/aide` est accessible sans connexion et depuis la navigation client et la connexion. Le contact public autorisé est `yleb.user@outlook.fr`. Les comptes connectés disposent d’un formulaire catégorie/sujet/description sans pièce jointe, d’une référence, d’un accusé interne, de leurs demandes paginées et des échanges. Une réponse du client rouvre une demande résolue.

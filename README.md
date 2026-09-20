@@ -28,6 +28,22 @@ Le RIB reste facultatif. Le domicile et la zone de recherche/alertes sont distin
 
 ## Architecture
 
+```mermaid
+flowchart LR
+    Web["Site React / Vite"] --> API["API NestJS — Vercel"]
+    Admin["Administration React / MFA"] --> API
+    API --> SQL["Supabase / PostGIS et documents chiffrés"]
+    API --> Mongo["MongoDB : explications"]
+    API --> N8N["n8n Cloud"]
+    N8N --> API
+    API --> Services["Discord, SMTP2GO et sources publiques"]
+```
+
+[Architecture détaillée et schéma imprimable](docs/SCHEMA_ARCHITECTURE_V1.md) · [Flux métier et sécurité](docs/FLUX_V1.md) · [Automatisations, horaires et preuves](docs/AUTOMATISATIONS.md).
+
+Le backend porte les règles métier ; n8n orchestre les appels. La reprise périodique est réglée sur quatre heures, en complément des tentatives immédiates après certaines écritures. Les trois applications Vercel sont déployées séparément.
+
+
 | Composant | Technologie / rôle |
 | --- | --- |
 | Application et administration | React 19, TypeScript, React Router, Vite ; builds séparés |
@@ -118,3 +134,5 @@ Les variables `VITE_*` sont publiques : ne jamais y mettre de secret. L'administ
 Conserver les tests et preuves adaptés au changement. Mettre à jour les exigences lorsqu'un comportement produit évolue. Ne pas placer conversations, prompts, comptes rendus successifs ou secrets dans les branches actives. Les guides décrivent l'usage courant ; les preuves datées décrivent uniquement leur campagne. Voir [les archives](docs/ARCHIVES.md).
 
 Licence : [LICENSE](LICENSE).
+
+[Guide utilisateur](docs/GUIDE_UTILISATEUR.md) · [Inventaire documentaire](docs/INVENTAIRE_DOCUMENTAIRE.md).

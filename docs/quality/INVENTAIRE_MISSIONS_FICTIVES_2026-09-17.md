@@ -1,5 +1,7 @@
 # Inventaire des anciennes missions fictives — 17 septembre 2026
 
+> Preuve datée : les constats et chiffres ci-dessous concernent cette campagne. Pour la configuration actuelle, consulter [l’architecture](../SCHEMA_ARCHITECTURE_V1.md), [les automatisations](../AUTOMATISATIONS.md) et [les réserves du rendu](../rendu/README.md).
+
 À la demande de l’utilisateur, un agent indépendant a recherché le lot d’annonces et le PDF évoqués dans l’historique. Deux sauvegardes antérieures au nettoyage contiennent 49 identifiants de mission distincts (5 et 44). Toutes les missions sont rattachées au FINESS de test `000000001` : aucun rattachement à un vrai FINESS n’est confirmé dans ce lot.
 
 Le rapport `docs/NETTOYAGE_TESTS_2026-09-16.md` documente leur suppression le 16 septembre. Le diagnostic du 17 septembre consigné dans `docs/history/IMPLEMENTATION.md` précise qu’aucun nouveau lot fictif FINESS ni PDF de missions n’avait été généré. Aucun PDF antérieur correspondant n’a été retrouvé. La production actuelle n’a pas été interrogée dans cet inventaire.

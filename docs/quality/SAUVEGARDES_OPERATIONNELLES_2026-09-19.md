@@ -1,5 +1,7 @@
 # Sauvegardes de production — preuve du 19 septembre 2026
 
+> Preuve datée : les constats et chiffres ci-dessous concernent cette campagne. Pour la configuration actuelle, consulter [l’architecture](../SCHEMA_ARCHITECTURE_V1.md), [les automatisations](../AUTOMATISATIONS.md) et [les réserves du rendu](../rendu/README.md).
+
 La sauvegarde et la restauration isolée autorisées ont été exécutées. La production n’a pas été remplacée. La tâche Windows `InfiMatch-Production-Backup` est installée à 02:00, heure locale Europe/Paris, avec reprise au prochain démarrage si le créneau est manqué. Son premier lancement réel a terminé avec le code 0.
 
 ## Contenu et preuve

@@ -1,38 +1,18 @@
-flowchart LR
-    subgraph client["Utilisateurs"]
-        browser["Navigateur : infirmier ou entreprise"]
-    end
-    subgraph gateway["Accès prévu"]
-        proxy["Reverse proxy HTTPS à déployer"]
-    end
-    subgraph service["Code applicatif"]
-        front["Frontend Next.js prévu"]
-        api["API NestJS : droits, matching, notifications, PDF"]
-        worker["Worker : traitement des événements et reprises"]
-        cli["CLI Commander : acquisition, nettoyage et import"]
-        automation["n8n local : trois workflows"]
-    end
-    subgraph datastore["Stockages privés"]
-        sql["PostgreSQL / PostGIS : mission, external_offer, profile, notifications, outbox"]
-        mongo["MongoDB : explications du matching interne"]
-        files["Fichiers privés chiffrés AES-256-GCM"]
-    end
-    subgraph external["Sources et services"]
-        ans["Annuaire Santé FHIR : contrôle RPPS"]
-        ft["France Travail : annonces JSON"]
-        finess["FINESS : fichier officiel téléchargé"]
-        cloud["n8n Cloud : non raccordé"]
-    end
-    browser -.->|"HTTPS prévu"| proxy
-    proxy -.->|"Pages"| front
-    proxy -.->|"/api/v1"| api
-    api -->|"Données métier et événements"| sql
-    api -->|"Explications versionnées"| mongo
-    api -->|"Stockage et accès autorisé"| files
-    worker -->|"Réservation des événements et reçus"| sql
-    worker -->|"Webhooks authentifiés"| automation
-    automation -->|"Actions internes et relances planifiées"| api
-    api -.->|"Recherche exacte RPPS"| ans
-    cli -.->|"Acquisition"| ft
-    cli -.->|"Lecture du fichier officiel"| finess
-    cli -->|"Import contrôlé"| sql
+flowchart TB
+    user["Candidats, établissements et agences"] --> site["Site React / Vite — Vercel"]
+    owner["Administrateurs"] --> admin["Administration React — Vercel"]
+    site -->|"HTTPS : session et CSRF"| api["API NestJS / Node 24 — Vercel"]
+    admin -->|"HTTPS : session admin et MFA"| api
+    api -->|"SQL avec TLS"| pg["Supabase PostgreSQL / PostGIS : métier, sessions, outbox, documents chiffrés"]
+    api --> mongo["MongoDB Atlas : explications du matching"]
+    api -->|"Webhooks authentifiés"| n8n["n8n Cloud : orchestration"]
+    n8n -->|"Routes internes authentifiées"| api
+    api --> discord["Discord : notifications facultatives"]
+    api --> mail["SMTP2GO : emails transactionnels"]
+    api --> ans["Annuaire Santé : vérification RPPS"]
+    api --> offers["France Travail / JobsPipe : offres externes"]
+    cli["CLI opérateur : migrations, imports, sauvegardes"] --> pg
+    finess["Snapshot FINESS"] --> cli
+    vault["Vault local : gestion des secrets"] -.->|"Configuration opérateur"| config["Variables serveur Vercel / credentials n8n"]
+    config -.-> api
+    config -.-> n8n

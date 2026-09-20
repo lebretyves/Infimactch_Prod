@@ -1,5 +1,7 @@
 # Import de CV et préremplissage des expériences — 17 septembre 2026
 
+> Preuve datée : les constats et chiffres ci-dessous concernent cette campagne. Pour la configuration actuelle, consulter [l’architecture](../SCHEMA_ARCHITECTURE_V1.md), [les automatisations](../AUTOMATISATIONS.md) et [les réserves du rendu](../rendu/README.md).
+
 ## Solution livrée
 
 Dans Qualifications et expérience, l'utilisateur importe un CV PDF, JPEG ou PNG (5 Mo, cinq pages PDF maximum). PDF.js lit les pages contenant du texte ; Tesseract.js, avec modèles français et anglais locaux, traite les pages scannées et images. Le texte est envoyé à l'API interne authentifiée POST /api/v1/profile/cv/parse. Aucun fichier ni texte de CV n'est enregistré par cet endpoint et aucun prestataire tiers n'est appelé.

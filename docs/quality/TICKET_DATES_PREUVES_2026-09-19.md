@@ -1,5 +1,7 @@
 # Ticket dates externes et chemins de preuves — préparation du 19 septembre 2026
 
+> Preuve datée : les constats et chiffres ci-dessous concernent cette campagne. Pour la configuration actuelle, consulter [l’architecture](../SCHEMA_ARCHITECTURE_V1.md), [les automatisations](../AUTOMATISATIONS.md) et [les réserves du rendu](../rendu/README.md).
+
 ## Choix documentaire
 
 Option A pour le dépôt Epitech : les quatre scripts écrivent sous `docs_intern/proofs`, et l’export OpenAPI sous `docs_intern/openapi.json`. Production conserve sa structure actuelle `docs/proofs` et `docs/openapi.json`. Les chemins sont résolus depuis `__dirname`, indépendamment du dossier courant ; les dossiers sont créés automatiquement. Aucun déplacement des anciennes preuves ni fusion d’une branche historique.

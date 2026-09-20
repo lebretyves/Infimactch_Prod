@@ -1,5 +1,7 @@
 # Optimisation du matching — 20 septembre 2026
 
+> Preuve datée : les constats et chiffres ci-dessous concernent cette campagne. Pour la configuration actuelle, consulter [l’architecture](../SCHEMA_ARCHITECTURE_V1.md), [les automatisations](../AUTOMATISATIONS.md) et [les réserves du rendu](../rendu/README.md).
+
 Distances calculées par lots de 100 avec la même formule PostGIS geography. Côté recruteur, une requête charge les affectations actives du lot puis les regroupe par candidat. Côté intérimaire, la distance est réutilisée pour enregistrer l’explication.
 
 Pondérations, critères métier, autorisations, tris, pagination, historique MongoDB, index et schéma inchangés. Le matching reste une photographie : les vérifications transactionnelles lors d’une affectation restent nécessaires.

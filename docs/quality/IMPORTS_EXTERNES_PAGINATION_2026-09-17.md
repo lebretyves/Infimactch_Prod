@@ -1,5 +1,7 @@
 # Collectes France Travail et JobsPipe : pagination, localisation et actualisation
 
+> Preuve datée : les constats et chiffres ci-dessous concernent cette campagne. Pour la configuration actuelle, consulter [l’architecture](../SCHEMA_ARCHITECTURE_V1.md), [les automatisations](../AUTOMATISATIONS.md) et [les réserves du rendu](../rendu/README.md).
+
 ## Perimetre
 Offres accessibles aux API dans le perimetre infirmier/interim France d'InfiMatch. Aucun achat, abonnement nouveau ou rechargement automatique de credits. Les API ne constituent pas un instantane immuable ni la totalite des annonces du marche.
 

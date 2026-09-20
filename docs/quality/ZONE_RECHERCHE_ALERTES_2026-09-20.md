@@ -1,5 +1,7 @@
 # Zone de recherche et alertes — 20 septembre 2026
 
+> Preuve datée : les constats et chiffres ci-dessous concernent cette campagne. Pour la configuration actuelle, consulter [l’architecture](../SCHEMA_ARCHITECTURE_V1.md), [les automatisations](../AUTOMATISATIONS.md) et [les réserves du rendu](../rendu/README.md).
+
 Le domicile (`details.address`, `details.postalCode`, `details.city`) est distinct de la zone de travail (`latitude`, `longitude`, `radius_km`, `details.mobilityCity`).
 
 Priorité de recherche : URL explicite, dernière recherche locale de cet utilisateur, zone du compte, puis proposition de commune du domicile. Le bouton « Utiliser cette zone pour mes alertes » enregistre explicitement le lieu et le rayon saisis. Une recherche ponctuelle ne modifie pas la zone du compte.

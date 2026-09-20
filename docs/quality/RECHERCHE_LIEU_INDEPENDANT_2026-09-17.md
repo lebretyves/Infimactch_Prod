@@ -1,5 +1,7 @@
 # Recherche autour d'un lieu choisi
 
+> Preuve datée : les constats et chiffres ci-dessous concernent cette campagne. Pour la configuration actuelle, consulter [l’architecture](../SCHEMA_ARCHITECTURE_V1.md), [les automatisations](../AUTOMATISATIONS.md) et [les réserves du rendu](../rendu/README.md).
+
 Le lieu de recherche n'est plus impose par les coordonnees du domicile. Dans Missions, choisir une ville ou une adresse parmi les propositions, puis un rayon. La selection propose 25 km ; 5, 10, 25, 50, 100, 200 km et toutes les distances restent disponibles. Le bouton Utiliser mon domicile permet de revenir au centre du profil. Aucune ecriture de profil n'est effectuee.
 
 Le lieu et les coordonnees sont conserves dans les filtres URL pour la pagination, le retour navigateur et le changement d'origine. Modifier le texte invalide la selection precedente. Les profils sans domicile geolocalise peuvent aussi rechercher autour d'un lieu.

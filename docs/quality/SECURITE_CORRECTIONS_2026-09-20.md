@@ -1,5 +1,7 @@
 # Corrections de sécurité — 20 septembre 2026
 
+> Preuve datée : les constats et chiffres ci-dessous concernent cette campagne. Pour la configuration actuelle, consulter [l’architecture](../SCHEMA_ARCHITECTURE_V1.md), [les automatisations](../AUTOMATISATIONS.md) et [les réserves du rendu](../rendu/README.md).
+
 ## Changements préparés
 
 - L’ancien `.env` local ne contient plus ses valeurs secrètes. Archive complète relue et vérifiée dans Vault avant retrait ; réglages non secrets conservés. Les tâches InfiMatch inspectées utilisent le lanceur Vault.

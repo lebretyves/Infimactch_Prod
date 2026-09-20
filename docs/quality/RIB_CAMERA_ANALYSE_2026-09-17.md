@@ -1,5 +1,7 @@
 # RIB : camera, lecture locale et coordonnees verifiees
 
+> Preuve datée : les constats et chiffres ci-dessous concernent cette campagne. Pour la configuration actuelle, consulter [l’architecture](../SCHEMA_ARCHITECTURE_V1.md), [les automatisations](../AUTOMATISATIONS.md) et [les réserves du rendu](../rendu/README.md).
+
 ## Demande
 Ouvrir une camera reconnue sur PC ou la camera du telephone, importer un PDF/JPEG/PNG, extraire les coordonnees bancaires, passer en manuel apres deux analyses infructueuses et retirer la restriction aux RIB fictifs.
 

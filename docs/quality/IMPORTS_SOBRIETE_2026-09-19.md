@@ -1,5 +1,7 @@
 # Imports externes : horaires et sobriété
 
+> Preuve datée : les constats et chiffres ci-dessous concernent cette campagne. Pour la configuration actuelle, consulter [l’architecture](../SCHEMA_ARCHITECTURE_V1.md), [les automatisations](../AUTOMATISATIONS.md) et [les réserves du rendu](../rendu/README.md).
+
 Configuration validée le 19 septembre 2026. Remplace les horaires Windows historiques et les imports n8n toutes les 30 minutes / à 04:15.
 
 - France Travail : 07:00 et 15:00, Europe/Paris (été/hiver automatique).

@@ -1,5 +1,7 @@
 # Collecte nationale des offres externes — 17 septembre 2026
 
+> Preuve datée : les constats et chiffres ci-dessous concernent cette campagne. Pour la configuration actuelle, consulter [l’architecture](../SCHEMA_ARCHITECTURE_V1.md), [les automatisations](../AUTOMATISATIONS.md) et [les réserves du rendu](../rendu/README.md).
+
 Vérification en production le 17 septembre 2026 à 22:03 (Europe/Paris).
 
 | Source | Offres actives | Avec coordonnées | Avec résultat du parseur |

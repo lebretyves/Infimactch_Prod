@@ -1,5 +1,7 @@
 # Diagnostic local du matching — 20 septembre 2026
 
+> Preuve datée : les constats et chiffres ci-dessous concernent cette campagne. Pour la configuration actuelle, consulter [l’architecture](../SCHEMA_ARCHITECTURE_V1.md), [les automatisations](../AUTOMATISATIONS.md) et [les réserves du rendu](../rendu/README.md).
+
 ## Décision
 Le coût N+1 est confirmé. Une optimisation ciblée des distances et conflits par lots est justifiée à 1 000 éléments ; aucun changement métier ni optimisation appliqué pendant ce diagnostic. Pas de nouvel index conseillé sans mesure complémentaire.
 

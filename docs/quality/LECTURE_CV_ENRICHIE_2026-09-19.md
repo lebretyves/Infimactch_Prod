@@ -1,5 +1,7 @@
 # Lecture CV enrichie — 19 septembre 2026
 
+> Preuve datée : les constats et chiffres ci-dessous concernent cette campagne. Pour la configuration actuelle, consulter [l’architecture](../SCHEMA_ARCHITECTURE_V1.md), [les automatisations](../AUTOMATISATIONS.md) et [les réserves du rendu](../rendu/README.md).
+
 État : implémentation locale, aucune publication effectuée par cet agent.
 
 `POST /profile/cv/parse` conserve le tableau `experiences`, les avertissements et `requiresReview: true`. La méthode devient `RULES_V2`. Le nouveau champ `suggestions` contient :

@@ -1,5 +1,7 @@
 # Préparation du contrat et retrait des catalogues — 19 septembre 2026
 
+> Preuve datée : les constats et chiffres ci-dessous concernent cette campagne. Pour la configuration actuelle, consulter [l’architecture](../SCHEMA_ARCHITECTURE_V1.md), [les automatisations](../AUTOMATISATIONS.md) et [les réserves du rendu](../rendu/README.md).
+
 État : modifications locales, sans preuve de déploiement à ce stade. Recette frontend avec réponses API simulées ; les intégrations SQL du nouveau endpoint sont suivies séparément par l’agent backend.
 
 ## Préparation du contrat

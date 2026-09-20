@@ -1,5 +1,7 @@
 # Corrections de sécurité de la PWA — 18 septembre 2026
 
+> Preuve datée : les constats et chiffres ci-dessous concernent cette campagne. Pour la configuration actuelle, consulter [l’architecture](../SCHEMA_ARCHITECTURE_V1.md), [les automatisations](../AUTOMATISATIONS.md) et [les réserves du rendu](../rendu/README.md).
+
 ## Protections navigateur
 
 Ajout des en-têtes aux réponses du frontend : Content-Security-Policy appliquée, X-Frame-Options DENY, X-Content-Type-Options nosniff, Referrer-Policy strict-origin-when-cross-origin et Permissions-Policy. L’intégration dans une iframe est interdite. Scripts en ligne, gestionnaires HTML d’événements et eval JavaScript non autorisés. Objets embarqués interdits ; ressources autorisées limitées à l’application, son API et aux ressources précises de Google Identity Services.

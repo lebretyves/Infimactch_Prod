@@ -1,5 +1,7 @@
 # Conversions entreprise — lot 14
 
+> Preuve datée : les constats et chiffres ci-dessous concernent cette campagne. Pour la configuration actuelle, consulter [l’architecture](../SCHEMA_ARCHITECTURE_V1.md), [les automatisations](../AUTOMATISATIONS.md) et [les réserves du rendu](../rendu/README.md).
+
 19 septembre 2026. Fonctionnalité locale, testée, non publiée. Aucune migration et aucun nouveau tracking navigateur.
 
 ## Périmètre livré

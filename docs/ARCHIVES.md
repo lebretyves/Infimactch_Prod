@@ -5,3 +5,7 @@ Les bilans remplacés, conversations, prompts de travail et doubles de workspace
 La copie locale complète se trouve dans `E:/Interimatch/archive/documentation-2026-09-21/`, avec un manifeste SHA-256. Elle contient aussi les anciennes versions du README et des exigences, ainsi que les notes d'audit locales. Cette archive ne fait pas partie du rendu et ne doit pas être publiée en bloc.
 
 Les liens historiques encore utiles ciblent une version Git figée antérieure au rangement. L'historique Git n'a pas été réécrit. Les anciennes déclarations ne décrivent pas la version actuelle ; utiliser [les exigences](REQUIREMENTS_V1.md) et [l'index documentaire](README.md).
+
+## Complément du 21 septembre : architecture et anciens guides
+
+Les anciennes vues Next.js / backend local, le générateur de cible et les guides remplacés sont sauvegardés hors dépôt dans `E:/Interimatch/archive/documentation-2026-09-21/architecture-before-update/` et `obsolete-guides/`. Un manifeste relie les guides retirés à leur remplacement. Les résultats historiques utiles restent datés ; ils ne servent pas de consignes courantes.

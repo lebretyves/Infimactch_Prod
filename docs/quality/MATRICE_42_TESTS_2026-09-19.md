@@ -1,5 +1,7 @@
 # InfiMatch — état du TODO, relances et 42 scénarios
 
+> Preuve datée : les constats et chiffres ci-dessous concernent cette campagne. Pour la configuration actuelle, consulter [l’architecture](../SCHEMA_ARCHITECTURE_V1.md), [les automatisations](../AUTOMATISATIONS.md) et [les réserves du rendu](../rendu/README.md).
+
 Vérification du 19 septembre 2026 à partir du document utilisateur `E:\InfiMatch_Todo_Tests_Relances.md`, du code, du bilan consolidé et des preuves datées. Le TODO initial indiquait expressément ne pas avoir accès au dépôt : ses cases ne décrivent donc pas l’état réel actuel. Les propositions qu’il contient ne sont pas automatiquement des exigences du kick-off.
 
 ## Versions et signification des états
