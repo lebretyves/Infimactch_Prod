@@ -1,0 +1,20 @@
+.section { display:grid; gap:24px; min-width:0; }
+.section h2,.section h3 { margin:0; }
+.intro { color:var(--ink-600); line-height:1.7; }
+.shortcuts,.grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:16px; }
+.shortcuts { grid-template-columns:repeat(3,minmax(0,1fr)); }
+.shortcut { display:block; padding:18px; border:1px solid var(--line); border-radius:16px; background:#edf7fc; color:var(--ink-900); font-weight:700; line-height:1.6; text-underline-offset:4px; }
+.filters { display:grid; grid-template-columns:2fr 1fr; gap:16px; }
+.card { padding:22px; border:1px solid var(--line); border-radius:18px; background:white; min-width:0; overflow-wrap:anywhere; }
+.card p { line-height:1.7; color:var(--ink-600); }
+.card button,.external { min-height:44px; display:inline-flex; align-items:center; padding:10px 16px; border:1px solid #1466e0; border-radius:10px; background:#1466e0; color:white; font:inherit; font-weight:700; cursor:pointer; text-decoration:none; white-space:normal; }
+.card video { display:block; width:100%; max-height:540px; margin-block:16px; border-radius:10px; background:#09284c; }
+.card:has(video) { grid-column:1/-1; }
+.card ol,.guide ol { padding-left:24px; line-height:1.8; }
+.card li,.guide li { margin-block:8px; }
+.guide { padding:18px; border:1px solid var(--line); border-radius:14px; background:white; scroll-margin-top:24px; }
+.guide summary { cursor:pointer; font-weight:700; line-height:1.6; }
+.guide:target { outline:2px solid #1466e0; outline-offset:3px; }
+@media(max-width:650px) { .grid,.shortcuts,.filters { grid-template-columns:minmax(0,1fr); } .card { padding:18px; } }
+
+.srOnly{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}

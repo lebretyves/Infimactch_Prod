@@ -2,7 +2,7 @@
 export const SITE_ORIGIN = 'https://infimactch-prod-backend-l5bc.vercel.app';
 export const PUBLIC_PATHS = new Set(['/', '/installer', '/accessibilite', '/ecoconception', '/mentions-legales']);
 const pages: Record<string, [string, string]> = {
- '/aide': ['Aide et support', 'Consultez les guides et retrouvez vos demandes de support après connexion.'],
+ '/aide': ['Centre d’aide', 'Consultez les guides et retrouvez vos demandes de support après connexion.'],
  '/': ['L’intérim infirmier, pensé pour le soin', 'Découvrez InfiMatch : un projet de plateforme reliant infirmiers IDE, IADE, IBODE, établissements de santé et agences d’intérim.'],
  '/installer': ['Installer l’application', 'Retrouvez InfiMatch depuis votre écran d’accueil, avec le même compte et les mêmes fonctions.'],
  '/accessibilite': ['Accessibilité : état des travaux', 'Périmètre, méthode et limites des contrôles d’accessibilité du projet InfiMatch.'],

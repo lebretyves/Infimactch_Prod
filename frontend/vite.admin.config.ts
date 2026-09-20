@@ -11,7 +11,6 @@ export default defineConfig({
     this.emitFile({ type: 'asset', fileName: 'robots.txt', source: 'User-agent: *\nDisallow: /\n' });
   }, closeBundle() {
     if (existsSync('public/fonts')) { mkdirSync('dist-admin/fonts', { recursive: true }); cpSync('public/fonts', 'dist-admin/fonts', { recursive: true }); }
-    if (existsSync('public/guides')) { mkdirSync('dist-admin/guides', { recursive: true }); cpSync('public/guides', 'dist-admin/guides', { recursive: true }); }
   }}],
   resolve: { alias: { '@': fileURLToPath(new URL('./src', import.meta.url)) } },
   build: { outDir: 'dist-admin', target: 'es2022', rollupOptions: { input: 'admin.html' } },

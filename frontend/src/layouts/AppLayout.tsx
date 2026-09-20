@@ -83,6 +83,7 @@ export function AppLayout() {
           <Logo size={34} withWordmark />
         </Link>
         <div className={s.headerRight}>
+          <Link to="/aide" className={s.helpLink}>Centre d’aide</Link>
           <Link className={s.identity} to={nurse ? "/profil" : "/organisation"}>
             <span className={s.avatar}>
               {(user?.prenom?.[0] || "I") + (user?.nom?.[0] || "")}
@@ -123,7 +124,7 @@ export function AppLayout() {
         </> : enterpriseNavigation.map(item => <NavigationLink key={item.to} item={item} />)}
         <div className={s.bottom}>
           {nurse && <NavigationLink item={{ to: "/notifications", label: "Notifications", icon: "bell" }} />}
-          <Link to="/aide" className={s.catalogue}>Aide et support</Link>
+          <Link to="/aide" className={s.catalogue}>Centre d’aide</Link>
           <Link to="/compte" className={s.catalogue}>Mon compte</Link>
           <Button variant="ghost" onClick={exit}>
             <Icon name="arrow-left" size={18} />

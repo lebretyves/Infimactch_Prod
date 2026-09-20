@@ -20,7 +20,7 @@
     "test:pwa": "node --test scripts/test-pwa.mjs",
     "test:quality": "node scripts/test-quality.mjs",
     "build:admin": "tsc -b && vite build --config vite.admin.config.ts",
-    "test:seo": "node scripts/test-seo-build.mjs && node --test scripts/test-help-routes.mjs",
+    "test:seo": "node scripts/test-seo-build.mjs && node --test scripts/test-help-routes.mjs && node scripts/test-page-metadata.mjs",
     "measure:build": "node scripts/measure-build.mjs",
     "test:branches": "node --test scripts/test-build-measure.mjs && node --experimental-strip-types --test scripts/test-branch-services.mjs scripts/test-page-speech.mjs",
     "measure:transfers": "node scripts/measure-transfers.mjs"
