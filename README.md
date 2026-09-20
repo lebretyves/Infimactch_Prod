@@ -1,33 +1,58 @@
 # InfiMatch
 
-Projet étudiant de mise en relation entre soignants intérimaires, établissements de santé et agences. Le dépôt contient l’API NestJS, l’interface React, une administration séparée et les workflows n8n.
+Plateforme étudiante de mise en relation entre professionnels de santé, établissements et agences d'intérim. Le projet comprend une application web, une API, une administration séparée et des automatisations n8n.
 
-## État vérifié
+InfiMatch facilite la recherche et le suivi des missions. Les agences assurent l'emploi et la rémunération. Les PDF produits sont des confirmations ou annulations applicatives, pas des contrats de travail complets signés.
 
-Le [bilan du TODO et la matrice des 42 scénarios](docs/quality/MATRICE_42_TESTS_2026-09-19.md) distinguent les fonctionnalités présentes, les tests réellement exécutés et les validations restantes. La livraison PDF `41706fe` constitue le point de départ de cette consolidation. Le code versionné et les preuves locales ne prouvent pas, à eux seuls, son déploiement : vérifier le SHA publié et l’état READY dans Vercel. Aucun taux global de conformité ou de couverture n’est déduit du nombre de fonctions présentes.
+## Accès rapide
 
-Les anciens bilans, nombres de routes, résultats de tests et limites sont conservés dans [le README historique](docs/history/README_BACKEND_AVANT_2026-09-19.md). Ils décrivent leur date, pas l’état courant.
+| Besoin | Document |
+| --- | --- |
+| Périmètre et critères d'acceptation | [Exigences du projet](docs/REQUIREMENTS_V1.md) |
+| Préparer le rendu Epitech | [Livrables et recette finale](docs/rendu/README.md) |
+| Trouver un guide technique | [Index documentaire](docs/README.md) |
+| Comprendre les services déployés | [Déploiement](docs/DEPLOIEMENT_PRODUCTION.md) |
+| Retrouver un ancien document | [Politique d'archivage](docs/ARCHIVES.md) |
 
 ## Fonctionnalités
 
-- Comptes, inscription IDE/IADE/IBODE avec diplômes distincts, vérification RPPS, organisations et droits par rôle.
-- Profil, services d’exercice, mobilité, disponibilités, recherche de missions internes et externes, favoris et matching explicable.
-- Candidatures, affectations transactionnelles, protection des chevauchements, fermeture des candidatures incompatibles et agenda.
-- Documents privés, confirmations et annulations PDF. Ces PDF ne constituent pas une signature de contrat de travail.
-- Notifications internes, automatisations n8n et emails de confirmation/annulation via SMTP2GO lorsque configuré. L’acceptation par le fournisseur ne prouve pas la lecture du mail.
-- Import France Travail et JobsPipe, dédoublonnage, contrôle de fraîcheur, reprises et limites de quota.
-- Lecture de CV PDF/image/DOCX avec propositions à relire ; BIC facultatif quand un IBAN valide est renseigné.
-- Statistiques de conversion par organisation, aide par rôle, tickets privés et guides de navigation sous-titrés.
-- Administration, journaux et outils d’exploitation. Suivi des états de livraison, récupération autonome du compte et limitation partagée des appels ; le suivi SMTP nécessite la configuration du webhook fournisseur.
+- Inscription et connexion des candidats, établissements et agences ; profils et droits distincts.
+- Qualifications, vérification RPPS, disponibilités et zone de recherche enregistrée.
+- Recherche de missions, favoris, candidatures et matching explicable ; affectation après décision humaine.
+- Agenda, documents privés et confirmations/annulations PDF.
+- Notifications internes ; configuration Discord facultative après inscription et modifiable ensuite. Emails selon les services configurés.
+- Import et nettoyage d'offres externes, contrôle des doublons, reprises et quotas.
+- Administration : rôles, MFA, suivi des comptes, incidents, imports et journaux.
 
-Architecture : Node.js 24 / TypeScript, NestJS / Express, PostgreSQL avec PostGIS et btree_gist, TypeORM, MongoDB/Mongoose, n8n; frontend React 19 / React Router / Vite. La production PostgreSQL utilise Supabase. Les bases locales de développement restent distinctes.
+Le RIB reste facultatif. Le domicile et la zone de recherche/alertes sont distincts ; une recherche ponctuelle ne modifie pas les alertes enregistrées. Une correspondance RPPS ne certifie pas à elle seule l'identité du titulaire.
+
+## Architecture
+
+| Composant | Technologie / rôle |
+| --- | --- |
+| Application et administration | React 19, TypeScript, React Router, Vite ; builds séparés |
+| API | NestJS, Node.js 24, TypeScript |
+| Données structurées et géographie | PostgreSQL / PostGIS ; Supabase en production |
+| Explications du matching | MongoDB |
+| Automatisations | Workflows n8n et traitements backend |
+| Documents | Chiffrement applicatif et stockage configuré côté serveur |
+
+```text
+backend/       API, règles métier, migrations et tests
+frontend/      Application, administration et tests navigateur
+infra/         Environnement local et configuration d'infrastructure
+scripts/       Validation, imports, exploitation et sauvegardes
+workflows/     Modèles de workflows n8n
+docs/         Guides, exigences, preuves et préparation du rendu
+```
 
 ## Installation locale
 
-Prérequis : Node.js 24, npm, Git et Docker Desktop. Depuis la racine :
+Prérequis : Node.js 24, npm, Git et Docker avec Compose. Exécuter depuis la racine d'un clone complet :
 
 ```powershell
 npm ci
+npm ci --prefix frontend
 npm run setup
 docker compose --env-file .env -f infra/compose.yaml --profile automation up -d
 npm run db:migrate
@@ -36,64 +61,60 @@ npm run build
 npm run start -w backend
 ```
 
-`setup` prépare la configuration locale. Les clés externes se configurent dans un environnement sécurisé ou Vault, jamais dans Git. Le seed crée uniquement des comptes fictifs locaux et refuse `NODE_ENV=production`; il ne simule pas de résultat RPPS positif. Ne pas lancer seed, migrations ou tests d’écriture contre une base de production.
-
-- API : `http://127.0.0.1:3100/api/v1/health`
-- Swagger : `http://127.0.0.1:3100/api/docs`
-- n8n local : `http://127.0.0.1:55678`
-
 Dans un second terminal :
 
 ```powershell
-npm ci --prefix frontend
 npm run dev --prefix frontend
 ```
 
-Le frontend utilise l’API réelle via son proxy de développement; voir [son README](frontend/README.md). `npm run dev` à la racine démarre le backend. `npm run worker` traite les événements selon la configuration locale; les exports n8n sont dans `workflows/`.
+| Service local | Adresse |
+| --- | --- |
+| Application | http://127.0.0.1:5173 |
+| Santé API | http://127.0.0.1:3100/api/v1/health |
+| OpenAPI interactif | http://127.0.0.1:3100/api/docs |
+| n8n | http://127.0.0.1:55678 |
 
-## API, sécurité et automatisations
+`setup` prépare l'environnement local. Vérifier les destinations avant migrations, seed ou tests d'écriture : ces commandes ne doivent pas cibler les données de production. Les exemples de configuration sont versionnés, jamais les valeurs privées. Un service externe absent peut rendre sa fonctionnalité indisponible sans invalider le reste du démarrage.
 
-Les routes métier ont le préfixe `/api/v1`. Les sessions utilisent des cookies; une écriture utilisateur requiert un `Origin` autorisé et le jeton `X-CSRF-Token` obtenu via `/auth/csrf`. Les droits de l’organisation sont vérifiés côté serveur. Une mission représente un poste continu; les dates portent un décalage explicite et les chevauchements utilisent des intervalles semi-ouverts.
+Pour le développement API avec recompilation : `npm run dev`. Le worker utilise `npm run worker` après compilation ; son exécution peut traiter des événements. Voir le [guide frontend](frontend/README.md) et la [configuration des services](docs/quality/CONFIGURATION.md).
 
-La documentation active est générée par l’application; [docs/openapi.json](docs/openapi.json) est son export versionné. Le script `scripts/export-openapi.cjs` exporte depuis une base de test isolée sur `127.0.0.1:55433/infimatch_test`, après compilation et migrations; il refuse les autres destinations.
+## Validation
 
-Les appels internes n8n utilisent leur authentification de service. **Exception distincte :** le webhook JSON SMTP2GO `POST /api/v1/internal/automation/smtp2go/webhook` utilise uniquement `Authorization: Bearer <SMTP2GO_WEBHOOK_SECRET>` pour son secret dédié. Ne pas lui substituer `X-InfiMatch-Token` ni la clé API d’envoi. Le champ de corrélation `X-InfiMatch-Email-ID` relie l’événement à l’envoi; le suivi des ouvertures et clics n’est pas nécessaire.
+| Contrôle | Commande à la racine |
+| --- | --- |
+| Tests unitaires API | `npm test` |
+| Compilation API | `npm run build` |
+| Tests d'intégration | `npm run test:integration` |
+| Couverture backend | `npm run coverage` |
+| Tests frontend | `npm test --prefix frontend` |
+| Typage frontend | `npm run typecheck --prefix frontend` |
+| Build public | `npm run build --prefix frontend` |
+| Build administration | `npm run build:admin --prefix frontend` |
+| Recettes navigateur configurées | `npm run test:browser --prefix frontend` |
+| Contrôle local des secrets connus | `npm run check:secrets` |
 
-Les relances de missions non pourvues sont des notifications internes aux organisations concernées, avec délai après publication, espacement, plafond et exclusion des anciens lots. Elles ne constituent pas un catalogue complet de relances par email. Les imports ont leurs [horaires et limites dédiés](docs/quality/IMPORTS_SOBRIETE_2026-09-19.md).
+Les intégrations utilisent des bases isolées ; préparer leur environnement avant exécution. Les recettes navigateur nécessitent leurs serveurs et fixtures. Le contrôle des secrets connus ne constitue pas un audit exhaustif de l'historique.
 
-## Vérification
+## État de livraison et limites
 
-```powershell
-npm test
-npm run build
-npm test --prefix frontend
-npm run typecheck --prefix frontend
-npm run build --prefix frontend
-npm run test:seo --prefix frontend
-npm run build:admin --prefix frontend
-npm run check:secrets
-```
+État documentaire : **21 septembre 2026**. Dernier lot applicatif observé avant ce rangement : `fd68a37` ; déploiements frontend et API signalés réussis. Le QR code admin a été livré séparément. Les preuves conservées portent leur date et leur périmètre ; elles ne valident pas automatiquement toute modification ultérieure.
 
-Les intégrations utilisent des bases locales isolées et peuvent créer ou supprimer des données fictives : vérifier leur environnement avant `npm run test:integration` ou les recettes navigateur. La présence d’un script ne prouve pas qu’il a été exécuté; la matrice contient les campagnes datées et leurs limites. Les contrôles automatiques d’accessibilité ne remplacent pas l’audit manuel complet.
+- Optimisation du matching testée sur bases isolées ; résultats et comparaisons conservés.
+- Étape Discord facultative testée sur les trois familles de comptes avec API fictive ; aucune réception Discord réelle n'en est déduite.
+- Recette complète publiée, deux résultats nocode actuels, enrôlement MFA réel et essais humains d'accessibilité restent à documenter.
+- Identité du responsable des données, certaines durées et heures humaines de l'équipe restent à formaliser.
+- La CI Epitech était bloquée par le budget de l'organisation au dernier constat ; ne pas l'assimiler à une CI réussie.
 
-## Documentation
+Le [dossier de rendu](docs/rendu/README.md) distingue livrables disponibles et validations ouvertes. Aucune conformité RGAA complète ni économie financière/carbone n'est revendiquée.
 
-- [Configuration et services](docs/quality/CONFIGURATION.md)
-- [Exigences V1](docs/REQUIREMENTS_V1.md), [architecture](docs/SCHEMA_ARCHITECTURE_V1.md), [flux](docs/FLUX_V1.md)
-- [Matrice actuelle des tests et du reste à faire](docs/quality/MATRICE_42_TESTS_2026-09-19.md)
-- [Récupération autonome](docs/quality/RECUPERATION_AUTONOME_2026-09-19.md)
-- [README frontend](frontend/README.md)
+## API et exploitation
 
-Les documents historiques peuvent contenir des propositions non retenues et des limites corrigées depuis. Confronter leurs affirmations à la date, au code et aux preuves de déploiement avant de les présenter comme actuelles.
+Les routes métier utilisent `/api/v1`. Les écritures authentifiées nécessitent les protections de session, d'origine et CSRF prévues par le client. Les droits sont contrôlés côté serveur. L'[export OpenAPI](docs/openapi.json) complète la documentation servie par l'application.
 
-## Preuves de cette consolidation
+Les variables `VITE_*` sont publiques : ne jamais y mettre de secret. L'administration, le site et l'API ont des livraisons distinctes. Voir [le déploiement](docs/DEPLOIEMENT_PRODUCTION.md), [les sauvegardes](docs/quality/SAUVEGARDES_OPERATIONNELLES_2026-09-19.md) et [les automatisations](docs/rendu/README.md#automatisations).
 
-- [Campagne backend et couverture](docs/quality/CAMPAGNE_FINALE_2026-09-19.md).
-- [Lecture de CV avec revue utilisateur](docs/quality/LECTURE_CV_ENRICHIE_2026-09-19.md).
-- [Aide, support et guides](docs/quality/AIDE_SUPPORT_GUIDES_2026-09-19.md).
-- [Indicateurs entreprise](docs/quality/CONVERSIONS_ENTREPRISE_2026-09-19.md).
-- [Sauvegardes et limites opérationnelles](docs/quality/SAUVEGARDES_OPERATIONNELLES_2026-09-19.md).
-- [Continuité n8n proposée](docs/quality/N8N_CONTINUITE_2026-09-19.md).
-- [Dossier et support de soutenance](docs/presentation/DOSSIER_SOUTENANCE.md).
+## Contribution et documentation
 
-Les responsabilités juridiques, la politique de conservation métier et les informations humaines de soutenance ne sont pas inventées. MFA, changement d’hébergement n8n, catalogue de missions publiques et contrat/signature restent des décisions distinctes. Aucun bouton de validation RPPS fictive n’est ajouté.
+Conserver les tests et preuves adaptés au changement. Mettre à jour les exigences lorsqu'un comportement produit évolue. Ne pas placer conversations, prompts, comptes rendus successifs ou secrets dans les branches actives. Les guides décrivent l'usage courant ; les preuves datées décrivent uniquement leur campagne. Voir [les archives](docs/ARCHIVES.md).
+
+Licence : [LICENSE](LICENSE).

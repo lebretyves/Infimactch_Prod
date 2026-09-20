@@ -71,7 +71,7 @@ Présenter les contrôles clavier, responsive, focus et erreurs réellement rejo
 
 | Proposition | État / décision attendue |
 |---|---|
-| MFA administrateur et secours | [Proposition séparée](../quality/MFA_ADMIN_PROPOSITION_2026-09-19.md), non activée |
+| MFA administrateur et secours | [Proposition séparée — archive](https://github.com/lebretyves/Infimactch_Prod/blob/fd68a377da28a76151483529ac62473eed99d264/docs/quality/MFA_ADMIN_PROPOSITION_2026-09-19.md), non activée |
 | Contrat complet et signature | Cadrer le rôle opérateur, le modèle, les données et le prestataire avant développement/publication |
 | Fiches mission publiques, pages métier/ville et JobPosting | Décision éditoriale et confidentialité à valider avant exposition ; aucun candidat publié |
 | Hébergement pérenne n8n | Comparer continuité après essai, coûts, maintenance et sauvegarde ; aucune migration implicite |

@@ -1,21 +1,23 @@
-# Mise en ligne de l application complete
+# Déploiement et contrôle de publication
 
-Le depot contient backend/, frontend/, infra/, scripts/, workflows/ et la documentation. Les fichiers .env, secrets Vault, bases, documents utilisateurs et sauvegardes restent prives.
+État documentaire au 21 septembre 2026. [Inventaire des services](DEPLOIEMENT_INVENTAIRE.md) et [migration Supabase](supabase-migration.md).
 
-## Frontend Vercel
+## Composants
 
-Importer ce depot, branche Backend. Root Directory : frontend. Framework : Vite. Installation : npm ci. Build : npm run build. Output : dist. Le fichier frontend/vercel.json configure les routes de navigation. Les chemins /api ne sont pas remplaces par du HTML.
+- Site : https://infimactch-prod-backend-l5bc.vercel.app
+- API : https://infimactch-prod-backend.vercel.app/api/v1/health
+- Administration : https://infimatch-admin.vercel.app
 
-Le projet Vercel existant detecte comme backend ne change pas automatiquement de Root Directory lorsque le frontend est ajoute. Creer un projet frontend distinct ou modifier explicitement ce parametre.
+Frontend et API sont des projets Vercel distincts reliés au dépôt production Main. Le dépôt Epitech conserve sa branche Backend. L'administration possède un build et une publication séparés : un push applicatif ne prouve pas sa mise à jour.
 
-## Services encore locaux
+PostgreSQL de production utilise Supabase ; MongoDB, stockage documentaire et n8n suivent l'inventaire. Les conteneurs Docker locaux servent au développement et aux tests. Les secrets sont configurés côté serveur ; aucune variable VITE ne doit contenir de secret.
 
-PostgreSQL, MongoDB, stockage documentaire, worker et automatisations sont uniquement sur le PC. Leur code de configuration est fourni, mais ils ne sont pas heberges par une copie Git. Le backend necessite des services accessibles depuis son hebergement, les migrations et les variables privees de .env.example. Ne pas recopier les adresses localhost en production.
+## Vérifications avant et après publication
 
-Pour le frontend, conserver /api/v1 et configurer un proxy /api vers le futur backend HTTPS sur la meme origine, afin de conserver les sessions par cookie. La destination du proxy sera ajoutee lorsque le backend en ligne sera disponible. APP_ORIGIN doit correspondre au domaine frontend final. Tester CSRF, cookies, Google et telechargements sur cette adresse.
+1. Identifier le commit et exécuter les contrôles appropriés au lot.
+2. Vérifier migrations et compatibilité des configurations avant une évolution de schéma.
+3. Contrôler les déploiements de chaque composant concerné et leurs versions.
+4. Vérifier HTTP, santé API, cookies/CSRF et parcours concernés sur l'adresse publiée.
+5. Conserver les preuves et limites ; READY ne signifie pas recette complète.
 
-Ne jamais placer des secrets dans VITE_ : ces valeurs sont publiques. Ne pas utiliser un stockage temporaire Vercel comme stockage durable des documents. Le worker et les taches planifiees locales necessitent un hebergement adapte.
-
-## Statut
-
-Copie du code complete ; mise en ligne fonctionnelle de bout en bout non realisee. Dernier lot backend encore en validation. Aucun frontend issu des deux commits refuses n est reintroduit : la version copiee est celle conservee dans main.
+Dernier lot applicatif observé avant le rangement documentaire : fd68a37, frontend et backend signalés réussis. QR admin publié dans un lot distinct. La CI Epitech était bloquée par le budget Actions au dernier constat. Ne pas changer un abonnement pour contourner ce blocage sans décision du propriétaire.

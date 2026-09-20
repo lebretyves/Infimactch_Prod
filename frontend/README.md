@@ -6,7 +6,7 @@ Interface React 19 / TypeScript / React Router 7 / Vite pour les intérimaires, 
 
 Le routeur `src/router.tsx` définit les écrans publics, l’inscription et la connexion, la recherche et les fiches missions, les profils, disponibilités, candidatures, affectations, documents et notifications. Les droits et validations restent contrôlés côté API. L’administration utilise son propre point d’entrée et client API.
 
-Le [bilan des 42 scénarios](../docs/quality/MATRICE_42_TESTS_2026-09-19.md) indique ce qui est déployé, testé localement ou encore à valider. L’ancien inventaire d’écrans et les affirmations de simulation par défaut sont conservés dans [le README historique](../docs/history/README_FRONTEND_AVANT_2026-09-19.md).
+Les [exigences courantes](../docs/REQUIREMENTS_V1.md) et le [dossier de rendu](../docs/rendu/README.md) distinguent le code livré des validations restantes. Après création du compte, Discord est proposé sans obligation ni activation automatique. La vérification RPPS se trouve dans « Documents et vérifications ».
 
 ## Développement
 

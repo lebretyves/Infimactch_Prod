@@ -3,7 +3,7 @@
 Version du 14 septembre 2026. Conception synchronisée avec le méga prompt ; aucun logiciel ni test applicatif déclaré livré.
 
 ## 1. Périmètre et décisions
-La référence est le **catalogue Word courant, F01 à F26 et F02 bis**, complété par le sujet D-WEB-901 et les décisions explicites de l’utilisateur. Les anciens PDF/catalogues et méga prompts sont des archives. Le détail des parcours et de l’API est défini dans [le prompt](Interimatch_Sante_Mega_Prompt_Backend_V1.md).
+La référence est le **catalogue Word courant, F01 à F26 et F02 bis**, complété par le sujet D-WEB-901 et les décisions explicites de l’utilisateur. Les anciens PDF/catalogues et méga prompts sont des archives. Le détail des parcours et de l’API est défini dans [le prompt — archive](https://github.com/lebretyves/Infimactch_Prod/blob/fd68a377da28a76151483529ac62473eed99d264/docs/references/Interimatch_Sante_Mega_Prompt_Backend_V1.md).
 
 Décisions : F12 comprend trois workflows ; F18 consulte le RPPS par API, avec blocage si non retrouvé et attente si indisponible. Aucune validation manuelle par l’agence n’est ajoutée à ce contrôle. L’attestation F02 reste V2 ; les références professionnelles sont hors V1, envisagées en V2 et encore à définir. La validation humaine de l’affectation F19 reste distincte du contrôle RPPS.
 

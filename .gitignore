@@ -21,3 +21,9 @@ backups/
 
 # Generated administration bundle
 frontend/dist-admin/
+
+# Local working notes and generated browser artifacts (not delivery documents)
+/docs/audit/
+/frontend/artifacts/
+/workspace-docs/
+/archive/
