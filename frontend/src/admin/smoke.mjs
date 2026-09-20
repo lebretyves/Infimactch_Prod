@@ -24,7 +24,7 @@ try {
     const path = new URL(route.request().url()).pathname.replace('/api/v1/admin', ''); let status = 200; let body = {};
     if (path === '/me') { status = authenticated ? 200 : 401; body = authenticated ? user : {}; }
     else if (path === '/csrf') body = { csrfToken: 'isolated-fixture-csrf' };
-    else if (path === '/activate') { activations++; const payload = route.request().postDataJSON(); assert.equal(payload.invitation, 'fixture-private-invitation'); assert.equal(payload.password, 'fixture-password-123'); assert.equal('passwordConfirmation' in payload, false); enrolling=true; body = {status:'MFA_ENROLLMENT_REQUIRED',secret:'JBSWY3DPEHPK3PXPJBSWY3DPEHPK3PXP',csrfToken:'isolated-fixture-csrf'}; }
+    else if (path === '/activate') { activations++; const payload = route.request().postDataJSON(); assert.equal(payload.invitation, 'fixture-private-invitation'); assert.equal(payload.password, 'fixture-password-123'); assert.equal('passwordConfirmation' in payload, false); enrolling=true; body = {status:'MFA_ENROLLMENT_REQUIRED',secret:'JBSWY3DPEHPK3PXPJBSWY3DPEHPK3PXP',otpauthUri:'otpauth://totp/InfiMatch%20Admin%3Aadmin%40example.invalid?secret=JBSWY3DPEHPK3PXPJBSWY3DPEHPK3PXP&issuer=InfiMatch%20Admin&algorithm=SHA1&digits=6&period=30',csrfToken:'isolated-fixture-csrf'}; }
     else if (path === '/login') { enrolling=false;body = { status: 'MFA_REQUIRED', csrfToken: 'isolated-fixture-csrf' }; }
     else if(path==='/mfa'){assert.deepEqual(route.request().postDataJSON(),{code:'123456'});authenticated=true;body={status:'AUTHENTICATED',csrfToken:'isolated-fixture-csrf',...(enrolling?{recoveryCodes:Array.from({length:8},(_,i)=>String(i).repeat(32))}:{})};}
     else if (path === '/overview') body = { observedAt: new Date().toISOString(), counts: { accounts: 1, organizations: 0, applications: 0, pendingEvents: 0, failedEvents: 0, documents: 0, missions: { OPEN: 0 } }, alerts: [{kind: 'backup', message: 'Fixture backup status', href: '/backups'}] };
@@ -53,6 +53,15 @@ try {
   await page.getByRole('button',{name:'Activer mon accès',exact:true}).click();
   await page.getByRole('heading',{name:'Configurer la double authentification',exact:true}).waitFor();
   assert.equal(await page.getByRole('heading',{name:'Vue d’ensemble',exact:true}).count(),0);
+  const qr=page.getByRole('img',{name:'QR code à scanner dans votre application d’authentification'});await qr.waitFor();
+  assert.ok(await qr.locator('path').count()>0);
+  assert.equal(await page.getByLabel('Clé de configuration confidentielle').isVisible(),false);
+  await page.getByText('Je ne peux pas scanner le QR code',{exact:true}).click();
+  assert.equal(await page.getByLabel('Clé de configuration confidentielle').inputValue(),'JBSWY3DPEHPK3PXPJBSWY3DPEHPK3PXP');
+  await page.setViewportSize({width:375,height:812});
+  assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth),false);
+  await page.screenshot({path:'artifacts/admin-mfa-qr-fixture.png',fullPage:true});
+  await page.setViewportSize({width:1280,height:900});
   await page.getByLabel('Code de sécurité',{exact:true}).fill('123456');await page.getByRole('button',{name:'Vérifier',exact:true}).click();
   await page.getByRole('heading',{name:'Conserver vos codes de secours'}).waitFor();await page.getByLabel('J’ai conservé mes codes dans un endroit sûr.').check();
   await page.getByRole('button',{name:'Accéder à l’administration'}).click();

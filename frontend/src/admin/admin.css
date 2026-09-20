@@ -14,3 +14,5 @@
 .admin-finess-dates dt { font-size: 12px; color: #4b5f75; margin-bottom: 5px; }
 .admin-finess-dates dd { margin: 0; font-size: 14px; overflow-wrap: anywhere; }
 .admin-finess > a { font-size: 13px; }
+
+.admin-mfa-steps{padding-left:22px;font-size:14px;line-height:1.7}.admin-mfa-steps li+li{margin-top:10px}.admin-mfa-qr{display:flex;justify-content:center;background:#fff;padding:12px;border-radius:8px}.admin-mfa-qr svg{display:block;max-width:100%;height:auto}
