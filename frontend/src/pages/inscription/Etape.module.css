@@ -8,6 +8,8 @@
 }
 
 .champs {
+  min-width: 0;
+  grid-template-columns: minmax(0, 1fr);
   display: grid;
   gap: var(--space-5);
 }
@@ -25,6 +27,8 @@
 }
 
 .bloc {
+  min-width: 0;
+  grid-template-columns: minmax(0, 1fr);
   display: grid;
   gap: var(--space-4);
   padding: var(--space-5);

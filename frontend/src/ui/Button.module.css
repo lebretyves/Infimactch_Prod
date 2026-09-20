@@ -147,3 +147,14 @@
     padding: 0 var(--space-4);
   }
 }
+
+/* Allow labels to wrap only when the user requests larger or more spaced text. */
+:global(html[data-a11y-text]:not([data-a11y-text="normal"])) .button,
+:global(html[data-a11y-spacing="wide"]) .button {
+ white-space: normal;
+ height: auto;
+ min-height: 44px;
+ max-width: 100%;
+ padding-block: .65em;
+ overflow-wrap: anywhere;
+}

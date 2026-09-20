@@ -1,3 +1,4 @@
+import { externalProvenanceDates, FRANCE_TRAVAIL_DOCUMENTATION_URL } from "@/services/offer-provenance";
 import { ConfirmationButton } from "@/components/ConfirmationButton";
 import { api } from "@/services/api";
 import { PersonalMatching } from "@/components/PersonalMatching";
@@ -134,6 +135,12 @@ export default function MissionDetail() {
             </span>
           </div>
         </div>
+        {external && <section aria-label="Provenance de l’offre" className={s.muted}>
+          <p>Source : {sourceLabel(m)}</p>
+          {externalProvenanceDates(m).map(item => <p key={item.label}>{item.label} : <time dateTime={item.iso}>{item.display}</time></p>)}
+          {!externalProvenanceDates(m).length && <p>Dates de provenance non communiquées.</p>}
+          {m.source === "FRANCE_TRAVAIL" && <a href={FRANCE_TRAVAIL_DOCUMENTATION_URL} target="_blank" rel="noopener noreferrer">Documentation de l’API France Travail (nouvel onglet)</a>}
+        </section>}
       </header>
       {!external && nurse && <>
         {assignments.error && <section className={s.card} role="alert"><h2>Confirmation de mission</h2><p>Impossible de charger votre confirmation.</p><Button onClick={assignments.reload}>Réessayer</Button></section>}

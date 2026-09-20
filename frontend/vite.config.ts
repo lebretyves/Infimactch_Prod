@@ -23,6 +23,6 @@ export default defineConfig(({ mode }) => {
         },
       },
     },
-    build: { target: "es2022", cssCodeSplit: true },
+    build: { manifest: true, target: "es2022", cssCodeSplit: true },
   };
 });

@@ -1,0 +1,116 @@
+/* Préférences d’accessibilité utilisateur (data-a11y-* sur <html>).
+   Complément d’usage — ne constitue pas une conformité RGAA. */
+
+@font-face {
+  font-family: "Lexend";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/Lexend-400.woff2") format("woff2");
+}
+
+@font-face {
+  font-family: "Lexend";
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url("/fonts/Lexend-700.woff2") format("woff2");
+}
+
+/* CSS enlargement also scales controls. No DOM rewriting or mutation observer. */
+html[data-a11y-text="large"] { zoom: 1.15; }
+html[data-a11y-text="xlarge"] { zoom: 1.3; }
+@supports not (zoom: 1.15) {
+ html[data-a11y-text="large"] { font-size: 115%; }
+ html[data-a11y-text="xlarge"] { font-size: 130%; }
+}
+@media print { html[data-a11y-text] { zoom: 1; } }
+
+html[data-a11y-contrast="high"] {
+  --ink-900: #000000;
+  --ink-700: #121212;
+  --ink-600: #1a1a1a;
+  --ink-400: #333333;
+  --brand-900: #000000;
+  --brand-800: #002266;
+  --brand-700: #003399;
+  --brand-600: #0044cc;
+  --line: #000000;
+  --line-strong: #000000;
+  --page: #ffffff;
+  --white: #ffffff;
+  --sky-50: #ffffff;
+  --sky-100: #f5f5f5;
+  --sky-200: #e8e8e8;
+  color-scheme: light;
+}
+
+html[data-a11y-contrast="high"] body {
+  background: #ffffff;
+  color: #000000;
+}
+
+html[data-a11y-contrast="high"] a {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+html[data-a11y-contrast="high"] :focus-visible {
+  outline: 3px solid #000000;
+  outline-offset: 3px;
+}
+
+html[data-a11y-font="readable"] body {
+  font-family: "Lexend", Verdana, "Segoe UI", Arial, sans-serif;
+  letter-spacing: 0.02em;
+  word-spacing: 0.08em;
+}
+
+html[data-a11y-font="readable"] h1,
+html[data-a11y-font="readable"] h2,
+html[data-a11y-font="readable"] h3,
+html[data-a11y-font="readable"] h4 {
+  font-family: "Lexend", Verdana, "Segoe UI", Arial, sans-serif;
+  letter-spacing: 0.01em;
+}
+
+html[data-a11y-spacing="wide"] body {
+  line-height: 1.85;
+  letter-spacing: 0.04em;
+  word-spacing: 0.12em;
+}
+
+html[data-a11y-spacing="wide"] p,
+html[data-a11y-spacing="wide"] li,
+html[data-a11y-spacing="wide"] label,
+html[data-a11y-spacing="wide"] td,
+html[data-a11y-spacing="wide"] th {
+  line-height: 1.85;
+}
+
+html[data-a11y-spacing="wide"] p {
+  max-width: 62ch;
+}
+
+html[data-a11y-links="underline"] a {
+  text-decoration: underline;
+  text-decoration-thickness: 2px;
+  text-underline-offset: 4px;
+}
+
+html[data-a11y-motion="reduce"] *,
+html[data-a11y-motion="reduce"] *::before,
+html[data-a11y-motion="reduce"] *::after {
+  animation: none !important;
+  transition: none !important;
+  scroll-behavior: auto !important;
+}
+
+html[data-a11y-contrast="high"] { --teal-700: #004650; --success-700: #00502e; --danger-700: #8c1010; --warning-700: #663900; }
+html[data-a11y-font="readable"] :is(button, input, select, textarea) { font-family: inherit; }
+html[data-a11y-spacing="wide"] :is(button, input, select, textarea) { letter-spacing: .04em; word-spacing: .12em; }
+html[data-a11y-text]:not([data-a11y-text="normal"]) body { overflow-wrap: anywhere; }
+
+html[data-a11y-text] { scroll-padding-bottom: 90px; }
+html[data-a11y-text] body { padding-bottom: 70px; }
+html[data-a11y-text] :focus-visible { scroll-margin-block: 90px; }

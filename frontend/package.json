@@ -5,14 +5,14 @@
   "type": "module",
   "scripts": {
     "dev": "node scripts/prepare-ocr-assets.mjs && vite",
-    "build": "node scripts/prepare-ocr-assets.mjs && tsc -b && vite build && node scripts/public-pages.mjs",
+    "build": "node scripts/prepare-ocr-assets.mjs && tsc -b && vite build && node scripts/public-pages.mjs && node scripts/measure-build.mjs",
     "preview": "vite preview",
     "typecheck": "tsc -b",
     "icons": "node scripts/build-icon-sprite.mjs",
     "screenshots": "node scripts/screenshots.mjs",
     "audit:a11y": "node scripts/audit-a11y.mjs",
     "build:demo": "node scripts/prepare-ocr-assets.mjs && tsc -b && vite build --base ./ --outDir dist-demo --mode demo",
-    "test": "node --test scripts/test-api.mjs && node --experimental-strip-types --test scripts/test-idle-session.mjs scripts/test-registration-diplomas.mjs scripts/test-bank-fields.mjs scripts/test-cv-review.mjs scripts/test-help-guides.mjs scripts/test-contract-preparation.mjs",
+    "test": "node --test scripts/test-api.mjs && node --experimental-strip-types --test scripts/test-idle-session.mjs scripts/test-registration-diplomas.mjs scripts/test-bank-fields.mjs scripts/test-cv-review.mjs scripts/test-help-guides.mjs scripts/test-contract-preparation.mjs && npm run test:branches",
     "test:integration": "node scripts/test-integration.mjs",
     "test:signup": "node scripts/test-signup.mjs",
     "test:availability": "node --experimental-strip-types scripts/test-availability-slots.mjs",
@@ -20,7 +20,10 @@
     "test:pwa": "node --test scripts/test-pwa.mjs",
     "test:quality": "node scripts/test-quality.mjs",
     "build:admin": "tsc -b && vite build --config vite.admin.config.ts",
-    "test:seo": "node scripts/test-seo-build.mjs && node --test scripts/test-help-routes.mjs"
+    "test:seo": "node scripts/test-seo-build.mjs && node --test scripts/test-help-routes.mjs",
+    "measure:build": "node scripts/measure-build.mjs",
+    "test:branches": "node --test scripts/test-build-measure.mjs && node --experimental-strip-types --test scripts/test-branch-services.mjs",
+    "measure:transfers": "node scripts/measure-transfers.mjs"
   },
   "dependencies": {
     "pdfjs-dist": "^6.3.289",

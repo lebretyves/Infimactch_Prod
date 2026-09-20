@@ -39,6 +39,9 @@ export type Listing = {
   source?: string;
   active?: boolean;
   expires_at?: string;
+  imported_at?: string;
+  provenance?: { publishedAt?: string | null; sourceUpdatedAt?: string | null; provider?: string | null; originalPublisher?: string | null };
+  freshness?: { lastSeenAt?: string | null; staleAfterDays?: number; state?: string };
   search_unverified_filters?: string[];
   url?: string;
   salary?: {
@@ -313,7 +316,7 @@ export const facilityFavorite = (id: string, remove: boolean) =>
 export const sourceLabel = (m: Listing) =>
   m.source === "FRANCE_TRAVAIL"
     ? "France Travail"
-    : m.source || "Site de l’annonceur";
+    : m.source === "JOBSPIPE" ? "JobsPipe" : m.source || "Site de l’annonceur";
 export const externalExpired = (m: Listing) =>
   m.active === false ||
   !!(m.expires_at && Date.parse(m.expires_at) <= Date.now());
