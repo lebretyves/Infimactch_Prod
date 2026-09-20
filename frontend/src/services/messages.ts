@@ -2,7 +2,7 @@
   SERVICE_NOT_PREFERRED: "Le service de cette mission ne fait pas partie de vos choix pour ce métier.",
   SCHEDULE_UNCONFIRMED: "Horaires précis à confirmer.",
   QUALIFICATION_MISSING: "Le diplôme requis n’est pas renseigné.",
-  RPPS_NOT_CHECKED: "Vérifiez votre numéro professionnel dans Mon dossier.",
+  RPPS_NOT_CHECKED: "Vérifiez votre numéro RPPS dans « Documents et vérifications », rubrique « Vérification RPPS ».",
   RPPS_PENDING: "La vérification professionnelle est encore en attente.",
   RPPS_NOT_FOUND: "Le numéro professionnel n’a pas été retrouvé.",
   REQUIRED_SKILLS_MISSING: "Certaines compétences requises sont manquantes.",

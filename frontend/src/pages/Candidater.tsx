@@ -150,8 +150,8 @@ export default function Candidater() {
         <ButtonLink to="/profil" variant="ghost">
           Vérifier mon profil
         </ButtonLink>
-        <ButtonLink to="/dossier" variant="ghost">
-          Mon dossier professionnel
+        <ButtonLink to="/dossier#verification" variant="ghost">
+          Documents et vérifications
         </ButtonLink>
       </section>
       </div>
@@ -165,6 +165,7 @@ export default function Candidater() {
       {!!check.data?.blockingReasons.length && <section role="alert">
         <h2>Points à régulariser avant l’envoi</h2>
         <ul>{check.data.blockingReasons.map(code => <li key={code}>{reasonLabels[code] || "Cette candidature ne peut pas encore être envoyée."}</li>)}</ul>
+        {check.data.blockingReasons.some(code => code.startsWith("RPPS_")) && <ButtonLink to="/dossier#verification" variant="outline">Vérifier mon numéro RPPS</ButtonLink>}
       </section>}
       <label>
         <input

@@ -1,3 +1,4 @@
+import { Link } from "react-router";
 import {matchingScoreLabel, indicativeScoreNotice} from "@/lib/matchingScore";
 import { useRemote } from "@/lib/useRemote";
 import { api } from "@/services/api";
@@ -11,6 +12,7 @@ export function PersonalMatching({id, userId}: {id: string; userId: string}) {
       <p aria-live="polite"><strong>{matchingScoreLabel(r.data.score,r.data.indicativeScore)}</strong></p>
       {r.data.score == null && r.data.indicativeScore != null && <p>{indicativeScoreNotice}</p>}
       {!!r.data.reasons.length && <ul>{r.data.reasons.map(reason => <li key={reason}>{reasonLabels[reason] || "Une condition reste à vérifier."}</li>)}</ul>}
+      {r.data.reasons.some(reason => reason.startsWith("RPPS_")) && <Link to="/dossier#verification">Vérifier mon numéro RPPS</Link>}
     </>}
     <MatchingRules />
   </section>;
