@@ -1,10 +1,13 @@
 import { useEffect, useRef, useState } from "react";
 import { useAccessibility } from "@/context/AccessibilityContext";
-import { isSpeechSynthesisAvailable, pageTextForSpeech, selectionTextForSpeech, speakText, stopSpeech } from "@/services/pageSpeech";
+import { LOCAL_VOICE_HELP, prepareSpeechVoices, type SpeechVoiceState, isSpeechSynthesisAvailable, pageTextForSpeech, selectionTextForSpeech, speakText, stopSpeech } from "@/services/pageSpeech";
 import s from "./AccessibilityPanel.module.css";
 import preferencesStyle from "./SitePreferences.module.css";
 export function AccessibilityPanel() {
  const a=useAccessibility(), dialog=useRef<HTMLDialogElement>(null),trigger=useRef<HTMLButtonElement>(null);
+ const [voiceState,setVoiceState]=useState<SpeechVoiceState>("loading");
+ const [retryText,setRetryText]=useState("");
+ useEffect(()=>{if(a.panelOpen)return prepareSpeechVoices(setVoiceState);},[a.panelOpen]);
  const [message,setMessage]=useState(""),[speaking,setSpeaking]=useState(false),[selectionMode,setSelectionMode]=useState(false);
  useEffect(()=>{
   const el=dialog.current;if(!el)return;
@@ -12,7 +15,7 @@ export function AccessibilityPanel() {
   if(!a.panelOpen&&el.open)el.close();
  },[a.panelOpen]);
  useEffect(()=>{
-  const stopped=()=>{setSpeaking(false);setSelectionMode(false);setMessage("");};
+  const stopped=()=>{setSpeaking(false);setSelectionMode(false);setMessage("");setRetryText("");};
   const hidden=()=>{if(document.hidden)stopSpeech();};
   window.addEventListener("infimatch:speech-stop",stopped);
   window.addEventListener("infimatch:session-expired",stopSpeech);
@@ -20,15 +23,22 @@ export function AccessibilityPanel() {
   return ()=>{window.removeEventListener("infimatch:speech-stop",stopped);window.removeEventListener("infimatch:session-expired",stopSpeech);window.removeEventListener("pagehide",stopSpeech);document.removeEventListener("visibilitychange",hidden);stopSpeech();};
  },[]);
  const read=(text:string)=>{
-  const result=speakText(text,()=>{setSpeaking(false);setMessage("Lecture terminée.");},reason=>{setSpeaking(false);setMessage(reason);});
-  if(result.ok){setSpeaking(true);setMessage("Lecture demandée avec une voix française locale…");}
-  else {setSpeaking(false);setMessage(result.reason);}
+  let reported=false;
+  const result=speakText(text,()=>{reported=true;setSpeaking(false);setMessage("Lecture terminée.");},reason=>{reported=true;setSpeaking(false);setRetryText(text);setMessage(reason);},()=>{reported=true;setSpeaking(true);setRetryText("");setMessage("Lecture en cours. Si vous n’entendez rien, vérifiez le volume multimédia et la sortie audio du téléphone.");});
+  if(!result.ok){setSpeaking(false);setRetryText(text);setMessage(result.reason);}
+  else if(!reported){setSpeaking(true);setRetryText("");setMessage("Démarrage de la lecture…");}
+ };
+ const readPage=()=>{
+  // Close the native modal synchronously: its background is inert on mobile browsers.
+  dialog.current?.close();a.closePanel();
+  read(pageTextForSpeech());
  };
  return <>
   <button ref={trigger} type="button" className={preferencesStyle.trigger} aria-haspopup="dialog" aria-expanded={a.panelOpen} aria-controls="a11y-preferences" onClick={a.openPanel}>Accessibilité</button>
   {(speaking||selectionMode||message) && !a.panelOpen && <div className={s.speechBar} role="region" aria-label="Lecture vocale">
    <p role="status" className={s.speechBarText}>{message || "Sélectionnez du texte puis choisissez Lire la sélection."}</p>
    <div className={s.speechBarActions}>
+    {retryText && <button type="button" onClick={()=>read(retryText)}>Réessayer la lecture</button>}
     {selectionMode && <button type="button" onClick={()=>read(selectionTextForSpeech())}>Lire la sélection</button>}
     <button type="button" onClick={stopSpeech}>Arrêter et fermer</button>
    </div>
@@ -49,8 +59,9 @@ export function AccessibilityPanel() {
     <label><input type="checkbox" checked={a.preferences.reduceMotion} onChange={e=>a.setReduceMotion(e.target.checked)} /> Réduire les animations</label>
    </div></fieldset>
    <fieldset className={s.group}><legend>Lecture vocale facultative</legend><p className={s.help}>La lecture démarre uniquement à votre demande, avec une voix déclarée locale par votre navigateur. Les champs de formulaire ne sont pas lus. La lecture s’arrête lorsque vous changez de page ou masquez cet onglet.</p>
+    {isSpeechSynthesisAvailable() && <p role="status" className={s.help}>{voiceState==="loading" ? "Préparation de la voix française…" : voiceState==="ready" ? "Voix française locale disponible. Appuyez sur Lire la page pour démarrer." : LOCAL_VOICE_HELP}</p>}
     {isSpeechSynthesisAvailable()?<div className={s.speechActions}>
-     <button type="button" onClick={()=>{const text=pageTextForSpeech();a.closePanel();read(text);}}>Lire la page</button>
+     <button type="button" onClick={readPage} disabled={voiceState==="loading"}>Lire la page</button>
      <button type="button" onClick={()=>{stopSpeech();setSelectionMode(true);a.closePanel();}}>Choisir une sélection à lire</button>
      <button type="button" onClick={stopSpeech} disabled={!speaking}>Arrêter la lecture</button>
     </div>:<p role="status">Lecture vocale indisponible dans ce navigateur. Utilisez votre lecteur d’écran.</p>}
