@@ -6,30 +6,20 @@
   isolation: isolate;
 }
 .cadre img {
-  position: absolute;
   display: block;
-  max-width: none;
-  height: auto;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 .accueil {
   aspect-ratio: 632 / 370;
   border-radius: 70px 12px 70px 12px;
-}
-.accueil img {
-  width: calc(1448 / 632 * 100%);
-  left: calc(-760 / 632 * 100%);
-  top: calc(-230 / 370 * 100%);
 }
 .soignantes {
   aspect-ratio: 656 / 528;
   border-radius: 45% 45% 8px 8px;
   max-width: 480px;
   margin-inline: auto;
-}
-.soignantes img {
-  width: calc(1448 / 656 * 100%);
-  left: calc(-56 / 656 * 100%);
-  top: calc(-448 / 528 * 100%);
 }
 .inscription { max-width: 340px; }
 @media (max-width: 767px) {

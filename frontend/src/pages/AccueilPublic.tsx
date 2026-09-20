@@ -7,6 +7,7 @@ import { Icon } from '@/ui/Icon';
 import { Logo } from '@/ui/Logo';
 import { usePageTitle } from '@/lib/usePageTitle';
 import s from './AccueilPublic.module.css';
+import media from '@/assets/public-media.json';
 
 const LIENS = [
   { id: 'notre-mission', libelle: 'Notre mission' },
@@ -141,7 +142,7 @@ export default function AccueilPublic() {
         <section id="pour-qui" className={`${s.conteneur} ${s.section}`} tabIndex={-1} aria-labelledby="titre-parcours">
           <div className={s.enteteSection}><p className={s.surtitre}>Pour qui ?</p><h2 id="titre-parcours">À chacun son parcours.</h2></div>
           <div className={s.parcours}>
-            <PhotoMaquette variante="connexion" className={s.photoParcours} />
+            <PhotoMaquette variante="connexion" className={s.photoParcours} loading="lazy" />
             <div className={s.parcoursTexte}>
               <article id="soignants" className={s.role} tabIndex={-1}>
                 <h3>Soignants</h3>
@@ -182,7 +183,7 @@ export default function AccueilPublic() {
             <p>InfiMatch est un projet de plateforme dédié à l’intérim infirmier. Notre approche : des parcours clairs pour les soignants et les organisations, au service de décisions humaines.</p>
             <p className={s.transparence}>Un projet en développement, réalisé dans un cadre pédagogique.</p>
           </div>
-          <img className={s.photoCoordination} src="/images/coordination-soins-v1.jpg" width={1536} height={1024} loading="lazy" decoding="async" alt="Illustration : une soignante et une coordinatrice préparent un planning ensemble." />
+          <img className={s.photoCoordination} src={media.coordination.src} srcSet={media.coordination.srcSet} sizes={media.coordination.sizes} width={media.coordination.width} height={media.coordination.height} loading="lazy" decoding="async" alt="Illustration : une soignante et une coordinatrice préparent un planning ensemble." />
         </section>
 
         <section id="questions-frequentes" className={s.faq} tabIndex={-1} aria-labelledby="titre-faq">

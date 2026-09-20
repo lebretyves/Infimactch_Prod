@@ -42,6 +42,6 @@ export function QualityRoot() {
     {draftExpired && location.pathname.startsWith('/inscription') && <p role="status" className="qualityNotice">Votre brouillon d’inscription a expiré et a été effacé de cet appareil. Vous pouvez recommencer.</p>}
     {!online && <p role="status" className="qualityNotice">Hors connexion. Les données affichées peuvent être anciennes. Les modifications et candidatures nécessitent le réseau.</p>}
     {updateAvailable() && <div className="qualityNotice" role="status"><p>Une mise à jour est disponible. Terminez et enregistrez vos formulaires avant de recharger.</p><Button variant="outline" onClick={applyUpdate}>Mettre à jour et recharger</Button></div>}
-    <Suspense fallback={<main id="contenu" tabIndex={-1} className="qualityNotice" aria-busy="true"><p role="status">Chargement de la page…</p></main>}><Outlet key={draftVersion} /></Suspense>
+    <Suspense fallback={<main id="contenu" tabIndex={-1} className="qualityNotice" style={{ minHeight: "100dvh" }} aria-busy="true"><p role="status">Chargement de la page…</p></main>}><Outlet key={draftVersion} /></Suspense>
   </>;
 }
