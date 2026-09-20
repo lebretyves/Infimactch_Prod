@@ -4,7 +4,7 @@ const {importOffers}=require('../backend/dist/public-data/offers');
 const {writeFileSync,mkdirSync}=require('node:fs');
 const {resolve}=require('node:path');
 // Proof paths belong to this checkout, regardless of the caller's working directory.
-const docsDirectory=resolve(__dirname,'../docs');
+const docsDirectory=resolve(__dirname,'../docs_intern');
 const proofsDirectory=resolve(docsDirectory,'proofs');
 mkdirSync(proofsDirectory,{recursive:true});
 const {createHash}=require('node:crypto');
