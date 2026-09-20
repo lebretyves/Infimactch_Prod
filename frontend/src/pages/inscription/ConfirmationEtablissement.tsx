@@ -1,3 +1,4 @@
+import { DiscordInvitation } from './DiscordInvitation';
 import { useAuth } from '@/context/AuthContext';
 import { usePageTitle } from '@/lib/usePageTitle';
 import { Button, ButtonLink } from '@/ui/Button';
@@ -52,9 +53,7 @@ export default function ConfirmationEtablissement() {
         </div>
       </dl>
       <p className={e.precision}>L’inscription ne constitue pas une certification de l’établissement.</p>
-      <div className={s.actions}>
-        <ButtonLink to="/accueil" size="lg" block>Accéder à mon espace <span aria-hidden="true">→</span></ButtonLink>
-      </div>
+      <DiscordInvitation />
     </ConfirmationLayout>
   );
 }
