@@ -29,7 +29,7 @@ export default function Identite() {
       <div className={s.paire}>
         <TextField
           label="Date de naissance" required
-          type="date" max={new Date().toISOString().slice(0,10)}
+          type="date" autoComplete="bday" max={new Date().toISOString().slice(0,10)}
           width="md"
           value={valeurs.naissance}
           onChange={(e) => modifier({ naissance: e.target.value })}

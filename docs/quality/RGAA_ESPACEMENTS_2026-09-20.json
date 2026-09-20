@@ -1,0 +1,98 @@
+[
+  {
+    "route": "/inscription/identite",
+    "width": 320,
+    "scroll": 320,
+    "clipped": []
+  },
+  {
+    "route": "/inscription/identite",
+    "width": 375,
+    "scroll": 375,
+    "clipped": []
+  },
+  {
+    "route": "/inscription/identite",
+    "width": 768,
+    "scroll": 768,
+    "clipped": []
+  },
+  {
+    "route": "/inscription/identite",
+    "width": 1280,
+    "scroll": 1280,
+    "clipped": []
+  },
+  {
+    "route": "/inscription/localisation",
+    "width": 320,
+    "scroll": 320,
+    "clipped": []
+  },
+  {
+    "route": "/inscription/localisation",
+    "width": 375,
+    "scroll": 375,
+    "clipped": []
+  },
+  {
+    "route": "/inscription/localisation",
+    "width": 768,
+    "scroll": 768,
+    "clipped": []
+  },
+  {
+    "route": "/inscription/localisation",
+    "width": 1280,
+    "scroll": 1280,
+    "clipped": []
+  },
+  {
+    "route": "/connexion",
+    "width": 320,
+    "scroll": 320,
+    "clipped": []
+  },
+  {
+    "route": "/connexion",
+    "width": 375,
+    "scroll": 375,
+    "clipped": []
+  },
+  {
+    "route": "/connexion",
+    "width": 768,
+    "scroll": 768,
+    "clipped": []
+  },
+  {
+    "route": "/connexion",
+    "width": 1280,
+    "scroll": 1280,
+    "clipped": []
+  },
+  {
+    "route": "/profil",
+    "width": 320,
+    "scroll": 320,
+    "clipped": []
+  },
+  {
+    "route": "/profil",
+    "width": 375,
+    "scroll": 375,
+    "clipped": []
+  },
+  {
+    "route": "/profil",
+    "width": 768,
+    "scroll": 768,
+    "clipped": []
+  },
+  {
+    "route": "/profil",
+    "width": 1280,
+    "scroll": 1280,
+    "clipped": []
+  }
+]
