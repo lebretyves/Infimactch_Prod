@@ -22,9 +22,19 @@ export function EmailDeliveryItems({items}:{items:EmailDelivery[]}) {
   </>;
 }
 export function EmailDeliveryJournal({userId}:{userId:string}) {
-  const request=useRemote(signal=>api<EmailJournal>('/me/email-deliveries',{signal}),userId);
+  const request=useRemote(async signal=>{
+    const data=await api<EmailJournal>('/me/email-deliveries',{signal});
+    const record=(v:unknown):v is Record<string,unknown>=>!!v&&typeof v==='object'&&!Array.isArray(v);
+    const validDate=(v:unknown)=>typeof v==='string'&&Number.isFinite(Date.parse(v));
+    if(!record(data)||!Array.isArray(data.items)||!data.items.every(item=>record(item)&&
+      (['id','kind','sendStatus','deliveryStatus'] as const).every(k=>typeof item[k]==='string')&&validDate(item.createdAt)&&
+      [item.acceptedAt,item.deliveryEventAt].every(v=>v===null||validDate(v))&&Array.isArray(item.events)&&
+      item.events.every(e=>record(e)&&typeof e.event==='string'&&validDate(e.happenedAt)&&validDate(e.receivedAt)&&
+        (e.bounceType===null||typeof e.bounceType==='string'))))throw new Error('Suivi des emails indisponible. Réessayez dans un instant.');
+    return data;
+  },userId);
   return <section aria-label="Suivi de mes emails" style={{padding:24,border:'1px solid var(--line)',borderRadius:16,background:'white'}}>
     <h2>Suivi de mes emails</h2><Button variant="outline" onClick={request.reload} disabled={request.loading}>Actualiser les emails</Button>
-    {request.loading?<p role="status">Chargement du suivi des emails…</p>:request.error?<p role="alert">{request.error}</p>:request.data&&<EmailDeliveryItems items={request.data.items}/>}
+    {request.loading?<p role="status">Chargement du suivi des emails…</p>:request.error?<p role="alert">Suivi des emails indisponible. Vous pouvez réessayer avec « Actualiser les emails ».</p>:request.data&&<EmailDeliveryItems items={request.data.items}/>}
   </section>;
 }

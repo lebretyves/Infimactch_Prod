@@ -4,7 +4,13 @@ import { useAuth } from "@/context/AuthContext";
 import { MatchingReminder } from "./MatchingReminder";
 export function MatchingRules() {
   const { user } = useAuth();
-  const r = useRemote(signal => api<{weights: Record<"C" | "Z" | "D" | "E", number>}>("/matching/rules", {signal}), "matching-rules");
+  const r = useRemote(async signal => {
+    const data=await api<{weights: Record<"C" | "Z" | "D" | "E", number>}>("/matching/rules", {signal});
+    const weights=data?.weights;
+    if(!weights||![weights.C,weights.Z,weights.D,weights.E].every(v=>typeof v==='number'&&Number.isFinite(v)&&v>=0&&v<=1)||
+      Math.abs(weights.C+weights.Z+weights.D+weights.E-1)>0.000001)throw new Error('Pondérations indisponibles.');
+    return data;
+  }, "matching-rules");
   return <div><details style={{border: "1px solid var(--line)", borderRadius: 12, padding: 16, marginBlock: 16}}>
     <summary style={{cursor: "pointer", fontWeight: 600}}>Comprendre les règles du matching</summary>
     <p>Le taux compare une personne et une mission. Les mêmes règles s’appliquent aux intérimaires et aux entreprises.</p>

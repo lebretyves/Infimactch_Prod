@@ -1,3 +1,4 @@
+import { RouteError } from "./components/RouteError";
 import { lazy } from "react";
 const Aide = lazy(() => import("./pages/Aide"));
 import { QualityRoot } from "./components/QualityRoot";
@@ -48,7 +49,7 @@ const creerRouteur =
     ? createHashRouter
     : createBrowserRouter;
 
-export const router = creerRouteur([{ element: <QualityRoot />, children: [
+export const router = creerRouteur([{ element: <QualityRoot />, errorElement: <RouteError />, children: [
   {
     path: "*",
     element: (

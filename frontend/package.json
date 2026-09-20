@@ -23,7 +23,8 @@
     "test:seo": "node scripts/test-seo-build.mjs && node --test scripts/test-help-routes.mjs && node scripts/test-page-metadata.mjs",
     "measure:build": "node scripts/measure-build.mjs",
     "test:branches": "node --test scripts/test-build-measure.mjs && node --experimental-strip-types --test scripts/test-branch-services.mjs scripts/test-page-speech.mjs",
-    "measure:transfers": "node scripts/measure-transfers.mjs"
+    "measure:transfers": "node scripts/measure-transfers.mjs",
+    "test:browser": "node scripts/run-browser-checks.mjs"
   },
   "dependencies": {
     "pdfjs-dist": "^6.3.289",
