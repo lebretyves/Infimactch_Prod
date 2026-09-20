@@ -1,6 +1,6 @@
 import {test} from "node:test";
 import assert from "node:assert/strict";
-import {parseOffer, currentParsedOffer} from "../../src/public-data/offer-parser";
+import {parseOffer, currentParsedOffer, hourPairsFromText, PARSER_VERSION} from "../../src/public-data/offer-parser";
 const parse=(description:string)=>parseOffer({title:"IDE en intérim",description},"2026-09-16T00:00:00.000Z");
 test("parser retains exact evidence offsets and deterministic input hash",()=>{
  const row={title:"IDE",description:"Diplôme infirmier requis. Horaires de 7h à 19h. Salaire : 2750€ brut/mois."};
@@ -66,4 +66,34 @@ test("an explicit service assignment remains and nearby diploma requirement is n
  assert.ok(r.fields.some(f=>f.key==='service'&&f.value==='URGENCES'));
  assert.ok(r.fields.some(f=>f.key==='specialite'&&f.value==='CARDIOLOGIE'));
  assert.ok(r.fields.filter(f=>['service','specialite','competence'].includes(f.key)).every(f=>f.state!=='REQUIRED'));
+});
+
+test("hour ranges retain both bounds including compact, overnight and spaced source text",()=>{
+ for(const [text,start,end] of [["Horaires :8h00-20h00","08:00","20:00"],["Mission de8h00-20h00","08:00","20:00"],["20h à 8h","20:00","08:00"],["8 H 15 — 20 H 30","08:15","20:30"],["08:00 – 20:00","08:00","20:00"]]) {
+  const pairs=hourPairsFromText(text!);assert.equal(pairs.length,1,text);
+  assert.deepEqual([pairs[0]!.start,pairs[0]!.end],[start,end]);
+  const parsed=parse(text!),ranges=parsed.fields.filter(f=>f.key==="horaires_detail");
+  assert.equal(ranges.length,1,text);assert.deepEqual(ranges[0]!.value,{start,end});
+  assert.equal(text!.slice(ranges[0]!.evidence.start,ranges[0]!.evidence.end),ranges[0]!.evidence.text);
+  assert.equal(ranges[0]!.state,"REVIEW_REQUIRED");
+ }
+});
+test("invalid times do not create valid-looking ranges; ambiguous alternatives stay separate",()=>{
+ for(const text of ["28h-20h","8h80-20h","8h-24h","8h-20h80","108h-20h","8h00","800-2000"])assert.deepEqual(hourPairsFromText(text),[],text);
+ const fields=parse("8h-12h ou 14h-20h. 8h-12h.").fields.filter(f=>f.key==="horaires_detail");
+ assert.equal(fields.length,2);assert(fields.every(f=>f.state==="REVIEW_REQUIRED"));
+});
+test("range patch preserves qualification and care evidence, invalidates previous parser cache",()=>{
+ const description="Diplôme infirmier obligatoire. Expérience en pédiatrie souhaitée. Horaires de8h-20h.";
+ const result=parse(description);assert(result.fields.some(f=>f.key==="certification"));
+ assert.equal(result.parserVersion,PARSER_VERSION);
+ assert.equal(currentParsedOffer({title:"IDE en intérim",description,parsed_offer:{...result,parserVersion:"4.1.0"}}),null);
+ assert(!result.fields.some(f=>f.key==="availability"||f.key==="qualification"));
+});
+
+test("time evidence keeps alternatives and negative wording for display",()=>{
+ for(const text of ["Pas de poste de 8h-20h.","8h-12h ou 14h-20h"]) {
+  const fields=parse(text).fields.filter(f=>f.key==="horaires_detail");
+  assert(fields.length>0);assert(fields.every(f=>f.evidence.text===text));
+ }
 });

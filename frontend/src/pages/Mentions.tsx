@@ -185,6 +185,11 @@ export default function Mentions() {
             être documentés dans le dossier du projet. Cette liste ne constitue
             pas une garantie de résidence exclusivement française des données.</p>
         </section>
+        <section aria-labelledby="titre-accessibilite-stockage">
+          <h2 id="titre-accessibilite-stockage">Préférences d’accessibilité</h2>
+          <p>Vos choix d’affichage, leur version et leur date sont conservés dans le stockage local de cet appareil, jusqu’à leur réinitialisation ou à l’effacement des données du navigateur. Ils ne sont pas associés à votre compte. Le bouton « Réinitialiser » du panneau Accessibilité permet de les effacer. Si le stockage est bloqué, les choix restent utilisables pendant la visite.</p>
+          <p>La lecture vocale est facultative et démarre à votre demande. InfiMatch utilise uniquement les voix françaises déclarées locales par le navigateur ; aucun texte n’est envoyé à une API vocale d’InfiMatch. La lecture s’arrête lorsque vous changez de page ou masquez l’onglet.</p>
+        </section>
         <section aria-labelledby="titre-cookies" id="cookies">
           <h2 id="titre-cookies">Cookies et stockage dans votre navigateur</h2>
           <p>

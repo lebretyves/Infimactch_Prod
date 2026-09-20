@@ -2,7 +2,7 @@ import {isJobServiceEvidence} from './service-evidence';
 import { createHash } from "node:crypto";
 import { parseOfferV3 } from "./parser/legacy-v3";
 import { fold } from "./parser/legacy-v2";
-export const PARSER_VERSION = "4.1.0";
+export const PARSER_VERSION = "4.1.1";
 export type ParsedField = { key: string; label: string; value: unknown; display: string; state: "REPORTED" | "MENTION" | "DESIRED" | "REQUIRED" | "NEGATED" | "REVIEW_REQUIRED"; evidence: { origin: "TITLE" | "DESCRIPTION"; text: string; start: number; end: number } };
 export type ParsedOffer = { schemaVersion: 1; parserVersion: string; inputHash: string; parsedAt: string; fields: ParsedField[]; warnings: string[]; reviewQueue: string[] };
 export type ParserInput = { title?: string; description?: string; location_label?: string; qualification?: string | null; source?: string; provenance?: any };
@@ -26,6 +26,14 @@ function displayValue(key: string, value: any, evidence: string): string {
  if(key === "experience_duree") return `${value.amount} ${value.unit === "MOIS" ? "mois" : "an(s)"}`;
  if(typeof value === "string") return values[value] || (/^[A-Z_]+$/.test(value) && value.length > 5 ? value.toLowerCase().replace(/_/g," ") : value);
  return evidence;
+}
+/** Text ranges are display evidence, never dated availability or matching constraints. */
+export function hourPairsFromText(text: string) {
+ const pairs: { start: string; end: string; evidence: string }[] = [];
+ for (const m of text.matchAll(/(?<!\d)(?<!\d:)([01]?\d|2[0-3])\s*(?:[hH]\s*([0-5]\d)?|:([0-5]\d))\s*(?:-|–|—|à|a)\s*([01]?\d|2[0-3])\s*(?:[hH]\s*([0-5]\d)?|:([0-5]\d))(?!\d)/g)) {
+  pairs.push({start:m[1]!.padStart(2,"0")+":"+(m[2]||m[3]||"00"),end:m[4]!.padStart(2,"0")+":"+(m[5]||m[6]||"00"),evidence:m[0].trim()});
+ }
+ return pairs;
 }
 function clauses(text: string): string[] { return text.split(/\n|;|[.!?](?=\s+[A-ZÀ-Ý])|\s+-\s+(?=[A-ZÀ-Ý])/).map(x=>x.trim()).filter(Boolean); }
 export function parseOffer(row: ParserInput, at = new Date().toISOString()): ParsedOffer {
@@ -51,7 +59,19 @@ export function parseOffer(row: ParserInput, at = new Date().toISOString()): Par
   // A service/population label is not a mandatory skill inferred from nearby diploma wording.
   if(["service","specialite","population","equipement"].includes(f.field)&&state==="REQUIRED")state="MENTION";
   if(f.field==="competence"&&state==="REQUIRED"&&/diplome|certification|rpps/.test(s)&&!/maitrise|competences? (?:requises?|obligatoires?)/.test(s))state="MENTION";
+  if(f.field === "horaires_detail" && hourPairsFromText(f.evidence).length) continue;
   add(f.field,f.value,f.evidence,f.origin,state);
+ }
+ for(const origin of ["TITLE", "DESCRIPTION"] as const) {
+  const source = origin === "TITLE" ? row.title || "" : row.description || "";
+  for(const pair of hourPairsFromText(source)) {
+   // Keep alternatives and negations in the original clause, not a decontextualized time pair.
+   const context = clauses(source).find(text => text.includes(pair.evidence)) || pair.evidence;
+   const value = {start:pair.start,end:pair.end};
+   const state = legacy.fields.some((f: {field: string; state: string; evidence: string}) => f.field === "horaires_detail" && f.state === "NEGATION" && f.evidence.includes(pair.evidence)) ? "NEGATED" : "REVIEW_REQUIRED";
+   if(result.fields.some(f => f.key === "horaires_detail" && f.evidence.origin === origin && f.state === state && JSON.stringify(f.value) === JSON.stringify(value))) continue;
+   add("horaires_detail",value,context,origin,state);
+  }
  }
  for(const text of clauses(row.description || "")) {
   const s=fold(text);

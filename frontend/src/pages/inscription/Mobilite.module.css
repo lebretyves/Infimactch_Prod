@@ -1,4 +1,6 @@
 .rayon {
+  min-width: 0;
+  grid-template-columns: minmax(0, 1fr);
   display: grid;
   gap: var(--space-3);
   padding: var(--space-5);
@@ -18,6 +20,8 @@
 }
 
 .curseur {
+  min-width: 0;
+  width: 100%;
   flex: 1;
   height: 6px;
   appearance: none;
