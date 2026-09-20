@@ -1,0 +1,889 @@
+{
+  "createdAt": "2026-09-20T21:03:54.150Z",
+  "commit": "f364cacd4c746b75fa27b728c1ac6afa5677c2fc",
+  "sourceFiles": {
+    "backend/src/database/distance.ts": "62d83c26f41b45f35ac6ac75f2e9f98c0743c024e8f17fc606b7ca19137f486b",
+    "backend/src/matching/matching.module.ts": "535ee948eb65c1ce25fda3113a4e0b27b4f6fef0f146349c7a13f9396484bd97"
+  },
+  "environment": {
+    "node": "v24.14.0",
+    "platform": "win32",
+    "cpu": "AMD Ryzen AI 7 350 w/ Radeon 860M              ",
+    "logicalCpus": 16,
+    "hostMemoryBytes": 33413779456,
+    "postgres": "PostgreSQL 17.5 (Debian 17.5-1.pgdg110+1) on x86_64-pc-linux-gnu, compiled by gcc (Debian 10.2.1-6) 10.2.1 20210110, 64-bit",
+    "poolMax": 12
+  },
+  "scope": "Direct service calls, real isolated PostGIS and MongoDB; no HTTP/auth/network latency to production, no provider requests. Seed excluded from measurement. Three serial runs and one wave of five simultaneous calls, after warmup. PostgreSQL container CPU and memory include background activity; memory includes cache.",
+  "results": [
+    {
+      "size": 100,
+      "mode": "forNurse",
+      "concurrency": 1,
+      "wallMs": 296.5047999999997,
+      "nodeCpuMs": 125,
+      "nodeRssStartBytes": 169037824,
+      "nodeRssPeakBytes": 174649344,
+      "postgresCpuMs": 51.559,
+      "postgresCpuCorePercent": 17.388925912835155,
+      "postgresMemoryStartBytes": 158130176,
+      "postgresMemoryEndBytes": 157388800,
+      "runs": [
+        {
+          "sql": 65,
+          "distance": 1,
+          "conflicts": 1,
+          "transactionStatements": 40,
+          "sqlElapsedMs": 59.14590000000044,
+          "responseMs": 102.26380000000017,
+          "total": 80,
+          "excluded": 20,
+          "returned": 20
+        },
+        {
+          "sql": 65,
+          "distance": 1,
+          "conflicts": 1,
+          "transactionStatements": 40,
+          "sqlElapsedMs": 55.88390000000118,
+          "responseMs": 97.33230000000003,
+          "total": 80,
+          "excluded": 20,
+          "returned": 20
+        },
+        {
+          "sql": 65,
+          "distance": 1,
+          "conflicts": 1,
+          "transactionStatements": 40,
+          "sqlElapsedMs": 55.70280000000048,
+          "responseMs": 96.6558,
+          "total": 80,
+          "excluded": 20,
+          "returned": 20
+        }
+      ]
+    },
+    {
+      "size": 100,
+      "mode": "forNurse",
+      "concurrency": 5,
+      "wallMs": 164.33300000000008,
+      "nodeCpuMs": 203,
+      "nodeRssStartBytes": 174669824,
+      "nodeRssPeakBytes": 177692672,
+      "postgresCpuMs": 137.556,
+      "postgresCpuCorePercent": 83.70564646175748,
+      "postgresMemoryStartBytes": 158232576,
+      "postgresMemoryEndBytes": 188280832,
+      "runs": [
+        {
+          "sql": 65,
+          "distance": 1,
+          "conflicts": 1,
+          "transactionStatements": 40,
+          "sqlElapsedMs": 90.49779999999737,
+          "responseMs": 143.88880000000017,
+          "total": 80,
+          "excluded": 20,
+          "returned": 20
+        },
+        {
+          "sql": 65,
+          "distance": 1,
+          "conflicts": 1,
+          "transactionStatements": 40,
+          "sqlElapsedMs": 114.44739999999865,
+          "responseMs": 157.0282000000002,
+          "total": 80,
+          "excluded": 20,
+          "returned": 20
+        },
+        {
+          "sql": 65,
+          "distance": 1,
+          "conflicts": 1,
+          "transactionStatements": 40,
+          "sqlElapsedMs": 118.55659999999943,
+          "responseMs": 161.01639999999998,
+          "total": 80,
+          "excluded": 20,
+          "returned": 20
+        },
+        {
+          "sql": 65,
+          "distance": 1,
+          "conflicts": 1,
+          "transactionStatements": 40,
+          "sqlElapsedMs": 117.77199999999993,
+          "responseMs": 161.0867000000003,
+          "total": 80,
+          "excluded": 20,
+          "returned": 20
+        },
+        {
+          "sql": 65,
+          "distance": 1,
+          "conflicts": 1,
+          "transactionStatements": 40,
+          "sqlElapsedMs": 111.2239999999997,
+          "responseMs": 164.17700000000013,
+          "total": 80,
+          "excluded": 20,
+          "returned": 20
+        }
+      ]
+    },
+    {
+      "size": 100,
+      "mode": "forMission",
+      "concurrency": 1,
+      "wallMs": 37.96289999999999,
+      "nodeCpuMs": 16,
+      "nodeRssStartBytes": 177573888,
+      "nodeRssPeakBytes": 177614848,
+      "postgresCpuMs": 22.246,
+      "postgresCpuCorePercent": 58.59931670130576,
+      "postgresMemoryStartBytes": 188350464,
+      "postgresMemoryEndBytes": 188096512,
+      "runs": [
+        {
+          "sql": 8,
+          "distance": 1,
+          "conflicts": 1,
+          "transactionStatements": 2,
+          "sqlElapsedMs": 10.184200000000146,
+          "responseMs": 12.270700000000033,
+          "total": 70,
+          "excluded": 30,
+          "returned": 20
+        },
+        {
+          "sql": 8,
+          "distance": 1,
+          "conflicts": 1,
+          "transactionStatements": 2,
+          "sqlElapsedMs": 10.888600000000224,
+          "responseMs": 13.318000000000211,
+          "total": 70,
+          "excluded": 30,
+          "returned": 20
+        },
+        {
+          "sql": 8,
+          "distance": 1,
+          "conflicts": 1,
+          "transactionStatements": 2,
+          "sqlElapsedMs": 10.296800000000985,
+          "responseMs": 12.235699999999724,
+          "total": 70,
+          "excluded": 30,
+          "returned": 20
+        }
+      ]
+    },
+    {
+      "size": 100,
+      "mode": "forMission",
+      "concurrency": 5,
+      "wallMs": 28.45380000000023,
+      "nodeCpuMs": 16,
+      "nodeRssStartBytes": 177328128,
+      "nodeRssPeakBytes": 183128064,
+      "postgresCpuMs": 61.076,
+      "postgresCpuCorePercent": 214.6497128678753,
+      "postgresMemoryStartBytes": 188526592,
+      "postgresMemoryEndBytes": 188088320,
+      "runs": [
+        {
+          "sql": 8,
+          "distance": 1,
+          "conflicts": 1,
+          "transactionStatements": 2,
+          "sqlElapsedMs": 24.435799999999745,
+          "responseMs": 27.364700000000084,
+          "total": 70,
+          "excluded": 30,
+          "returned": 20
+        },
+        {
+          "sql": 8,
+          "distance": 1,
+          "conflicts": 1,
+          "transactionStatements": 2,
+          "sqlElapsedMs": 24.66220000000021,
+          "responseMs": 27.45410000000038,
+          "total": 70,
+          "excluded": 30,
+          "returned": 20
+        },
+        {
+          "sql": 8,
+          "distance": 1,
+          "conflicts": 1,
+          "transactionStatements": 2,
+          "sqlElapsedMs": 24.996399999999994,
+          "responseMs": 27.505800000000363,
+          "total": 70,
+          "excluded": 30,
+          "returned": 20
+        },
+        {
+          "sql": 8,
+          "distance": 1,
+          "conflicts": 1,
+          "transactionStatements": 2,
+          "sqlElapsedMs": 24.192199999999957,
+          "responseMs": 27.559200000000146,
+          "total": 70,
+          "excluded": 30,
+          "returned": 20
+        },
+        {
+          "sql": 8,
+          "distance": 1,
+          "conflicts": 1,
+          "transactionStatements": 2,
+          "sqlElapsedMs": 26.69439999999986,
+          "responseMs": 28.398799999999937,
+          "total": 70,
+          "excluded": 30,
+          "returned": 20
+        }
+      ]
+    },
+    {
+      "size": 1000,
+      "mode": "forNurse",
+      "concurrency": 1,
+      "wallMs": 371.1716000000006,
+      "nodeCpuMs": 188,
+      "nodeRssStartBytes": 217079808,
+      "nodeRssPeakBytes": 250654720,
+      "postgresCpuMs": 68.794,
+      "postgresCpuCorePercent": 18.534284411846137,
+      "postgresMemoryStartBytes": 199372800,
+      "postgresMemoryEndBytes": 199356416,
+      "runs": [
+        {
+          "sql": 83,
+          "distance": 10,
+          "conflicts": 1,
+          "transactionStatements": 40,
+          "sqlElapsedMs": 82.16609999999582,
+          "responseMs": 131.83330000000024,
+          "total": 800,
+          "excluded": 200,
+          "returned": 20
+        },
+        {
+          "sql": 83,
+          "distance": 10,
+          "conflicts": 1,
+          "transactionStatements": 40,
+          "sqlElapsedMs": 72.08500000000095,
+          "responseMs": 116.29739999999947,
+          "total": 800,
+          "excluded": 200,
+          "returned": 20
+        },
+        {
+          "sql": 83,
+          "distance": 10,
+          "conflicts": 1,
+          "transactionStatements": 40,
+          "sqlElapsedMs": 75.51740000000063,
+          "responseMs": 122.96249999999964,
+          "total": 800,
+          "excluded": 200,
+          "returned": 20
+        }
+      ]
+    },
+    {
+      "size": 1000,
+      "mode": "forNurse",
+      "concurrency": 5,
+      "wallMs": 221.33820000000014,
+      "nodeCpuMs": 281,
+      "nodeRssStartBytes": 250576896,
+      "nodeRssPeakBytes": 268267520,
+      "postgresCpuMs": 114.929,
+      "postgresCpuCorePercent": 51.92461129619736,
+      "postgresMemoryStartBytes": 199483392,
+      "postgresMemoryEndBytes": 199262208,
+      "runs": [
+        {
+          "sql": 83,
+          "distance": 10,
+          "conflicts": 1,
+          "transactionStatements": 40,
+          "sqlElapsedMs": 167.2767999999951,
+          "responseMs": 216.17609999999968,
+          "total": 800,
+          "excluded": 200,
+          "returned": 20
+        },
+        {
+          "sql": 83,
+          "distance": 10,
+          "conflicts": 1,
+          "transactionStatements": 40,
+          "sqlElapsedMs": 170.13699999999244,
+          "responseMs": 216.3102000000008,
+          "total": 800,
+          "excluded": 200,
+          "returned": 20
+        },
+        {
+          "sql": 83,
+          "distance": 10,
+          "conflicts": 1,
+          "transactionStatements": 40,
+          "sqlElapsedMs": 170.59140000000116,
+          "responseMs": 217.30040000000008,
+          "total": 800,
+          "excluded": 200,
+          "returned": 20
+        },
+        {
+          "sql": 83,
+          "distance": 10,
+          "conflicts": 1,
+          "transactionStatements": 40,
+          "sqlElapsedMs": 174.10179999999946,
+          "responseMs": 217.60940000000028,
+          "total": 800,
+          "excluded": 200,
+          "returned": 20
+        },
+        {
+          "sql": 83,
+          "distance": 10,
+          "conflicts": 1,
+          "transactionStatements": 40,
+          "sqlElapsedMs": 171.94889999999668,
+          "responseMs": 221.20870000000014,
+          "total": 800,
+          "excluded": 200,
+          "returned": 20
+        }
+      ]
+    },
+    {
+      "size": 1000,
+      "mode": "forMission",
+      "concurrency": 1,
+      "wallMs": 177.89969999999994,
+      "nodeCpuMs": 93,
+      "nodeRssStartBytes": 272187392,
+      "nodeRssPeakBytes": 277319680,
+      "postgresCpuMs": 63.689,
+      "postgresCpuCorePercent": 35.800510062692645,
+      "postgresMemoryStartBytes": 199213056,
+      "postgresMemoryEndBytes": 199356416,
+      "runs": [
+        {
+          "sql": 35,
+          "distance": 10,
+          "conflicts": 10,
+          "transactionStatements": 2,
+          "sqlElapsedMs": 46.021099999999024,
+          "responseMs": 60.6867000000002,
+          "total": 700,
+          "excluded": 300,
+          "returned": 20
+        },
+        {
+          "sql": 35,
+          "distance": 10,
+          "conflicts": 10,
+          "transactionStatements": 2,
+          "sqlElapsedMs": 41.798500000000786,
+          "responseMs": 56.168800000000374,
+          "total": 700,
+          "excluded": 300,
+          "returned": 20
+        },
+        {
+          "sql": 35,
+          "distance": 10,
+          "conflicts": 10,
+          "transactionStatements": 2,
+          "sqlElapsedMs": 45.987599999998565,
+          "responseMs": 60.94679999999971,
+          "total": 700,
+          "excluded": 300,
+          "returned": 20
+        }
+      ]
+    },
+    {
+      "size": 1000,
+      "mode": "forMission",
+      "concurrency": 5,
+      "wallMs": 142.95060000000012,
+      "nodeCpuMs": 157,
+      "nodeRssStartBytes": 277331968,
+      "nodeRssPeakBytes": 292835328,
+      "postgresCpuMs": 97.752,
+      "postgresCpuCorePercent": 68.38166471494343,
+      "postgresMemoryStartBytes": 199086080,
+      "postgresMemoryEndBytes": 199442432,
+      "runs": [
+        {
+          "sql": 35,
+          "distance": 10,
+          "conflicts": 10,
+          "transactionStatements": 2,
+          "sqlElapsedMs": 125.81600000000071,
+          "responseMs": 141.9434000000001,
+          "total": 700,
+          "excluded": 300,
+          "returned": 20
+        },
+        {
+          "sql": 35,
+          "distance": 10,
+          "conflicts": 10,
+          "transactionStatements": 2,
+          "sqlElapsedMs": 124.44870000000265,
+          "responseMs": 141.95679999999993,
+          "total": 700,
+          "excluded": 300,
+          "returned": 20
+        },
+        {
+          "sql": 35,
+          "distance": 10,
+          "conflicts": 10,
+          "transactionStatements": 2,
+          "sqlElapsedMs": 126.30989999999929,
+          "responseMs": 142.0028999999995,
+          "total": 700,
+          "excluded": 300,
+          "returned": 20
+        },
+        {
+          "sql": 35,
+          "distance": 10,
+          "conflicts": 10,
+          "transactionStatements": 2,
+          "sqlElapsedMs": 124.69089999999505,
+          "responseMs": 142.10400000000027,
+          "total": 700,
+          "excluded": 300,
+          "returned": 20
+        },
+        {
+          "sql": 35,
+          "distance": 10,
+          "conflicts": 10,
+          "transactionStatements": 2,
+          "sqlElapsedMs": 126.03540000000157,
+          "responseMs": 142.83740000000034,
+          "total": 700,
+          "excluded": 300,
+          "returned": 20
+        }
+      ]
+    }
+  ],
+  "plans": [
+    {
+      "label": "conflict-lookup",
+      "plan": [
+        {
+          "QUERY PLAN": [
+            {
+              "Plan": {
+                "Node Type": "Seq Scan",
+                "Parallel Aware": false,
+                "Async Capable": false,
+                "Relation Name": "assignment",
+                "Alias": "assignment",
+                "Startup Cost": 0,
+                "Total Cost": 3.5,
+                "Plan Rows": 1,
+                "Plan Width": 16,
+                "Actual Startup Time": 0.011,
+                "Actual Total Time": 0.015,
+                "Actual Rows": 1,
+                "Actual Loops": 1,
+                "Filter": "((nurse_id = '00000003-0000-4000-8000-000000000001'::uuid) AND (status = 'ACTIVE'::text))",
+                "Rows Removed by Filter": 99,
+                "Shared Hit Blocks": 2,
+                "Shared Read Blocks": 0,
+                "Shared Dirtied Blocks": 0,
+                "Shared Written Blocks": 0,
+                "Local Hit Blocks": 0,
+                "Local Read Blocks": 0,
+                "Local Dirtied Blocks": 0,
+                "Local Written Blocks": 0,
+                "Temp Read Blocks": 0,
+                "Temp Written Blocks": 0
+              },
+              "Planning": {
+                "Shared Hit Blocks": 0,
+                "Shared Read Blocks": 0,
+                "Shared Dirtied Blocks": 0,
+                "Shared Written Blocks": 0,
+                "Local Hit Blocks": 0,
+                "Local Read Blocks": 0,
+                "Local Dirtied Blocks": 0,
+                "Local Written Blocks": 0,
+                "Temp Read Blocks": 0,
+                "Temp Written Blocks": 0
+              },
+              "Planning Time": 0.078,
+              "Triggers": [],
+              "Execution Time": 0.028
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "label": "candidate-batch",
+      "plan": [
+        {
+          "QUERY PLAN": [
+            {
+              "Plan": {
+                "Node Type": "Limit",
+                "Parallel Aware": false,
+                "Async Capable": false,
+                "Startup Cost": 0.87,
+                "Total Cost": 17.01,
+                "Plan Rows": 100,
+                "Plan Width": 351,
+                "Actual Startup Time": 0.017,
+                "Actual Total Time": 0.075,
+                "Actual Rows": 100,
+                "Actual Loops": 1,
+                "Shared Hit Blocks": 10,
+                "Shared Read Blocks": 0,
+                "Shared Dirtied Blocks": 0,
+                "Shared Written Blocks": 0,
+                "Local Hit Blocks": 0,
+                "Local Read Blocks": 0,
+                "Local Dirtied Blocks": 0,
+                "Local Written Blocks": 0,
+                "Temp Read Blocks": 0,
+                "Temp Written Blocks": 0,
+                "Plans": [
+                  {
+                    "Node Type": "Merge Join",
+                    "Parent Relationship": "Outer",
+                    "Parallel Aware": false,
+                    "Async Capable": false,
+                    "Join Type": "Inner",
+                    "Startup Cost": 0.87,
+                    "Total Cost": 162.32,
+                    "Plan Rows": 1000,
+                    "Plan Width": 351,
+                    "Actual Startup Time": 0.016,
+                    "Actual Total Time": 0.07,
+                    "Actual Rows": 100,
+                    "Actual Loops": 1,
+                    "Inner Unique": true,
+                    "Merge Cond": "(p.user_id = a.id)",
+                    "Shared Hit Blocks": 10,
+                    "Shared Read Blocks": 0,
+                    "Shared Dirtied Blocks": 0,
+                    "Shared Written Blocks": 0,
+                    "Local Hit Blocks": 0,
+                    "Local Read Blocks": 0,
+                    "Local Dirtied Blocks": 0,
+                    "Local Written Blocks": 0,
+                    "Temp Read Blocks": 0,
+                    "Temp Written Blocks": 0,
+                    "Plans": [
+                      {
+                        "Node Type": "Index Scan",
+                        "Parent Relationship": "Outer",
+                        "Parallel Aware": false,
+                        "Async Capable": false,
+                        "Scan Direction": "Forward",
+                        "Index Name": "profile_pkey",
+                        "Relation Name": "profile",
+                        "Alias": "p",
+                        "Startup Cost": 0.28,
+                        "Total Cost": 86.03,
+                        "Plan Rows": 1000,
+                        "Plan Width": 351,
+                        "Actual Startup Time": 0.007,
+                        "Actual Total Time": 0.039,
+                        "Actual Rows": 100,
+                        "Actual Loops": 1,
+                        "Index Cond": "(user_id > '00000000-0000-0000-0000-000000000000'::uuid)",
+                        "Rows Removed by Index Recheck": 0,
+                        "Filter": "(visible AND ('IDE'::text = ANY (qualifications)))",
+                        "Rows Removed by Filter": 0,
+                        "Shared Hit Blocks": 6,
+                        "Shared Read Blocks": 0,
+                        "Shared Dirtied Blocks": 0,
+                        "Shared Written Blocks": 0,
+                        "Local Hit Blocks": 0,
+                        "Local Read Blocks": 0,
+                        "Local Dirtied Blocks": 0,
+                        "Local Written Blocks": 0,
+                        "Temp Read Blocks": 0,
+                        "Temp Written Blocks": 0
+                      },
+                      {
+                        "Node Type": "Index Only Scan",
+                        "Parent Relationship": "Inner",
+                        "Parallel Aware": false,
+                        "Async Capable": false,
+                        "Scan Direction": "Forward",
+                        "Index Name": "account_active_idx",
+                        "Relation Name": "account",
+                        "Alias": "a",
+                        "Startup Cost": 0.28,
+                        "Total Cost": 61.29,
+                        "Plan Rows": 1001,
+                        "Plan Width": 16,
+                        "Actual Startup Time": 0.007,
+                        "Actual Total Time": 0.017,
+                        "Actual Rows": 101,
+                        "Actual Loops": 1,
+                        "Heap Fetches": 101,
+                        "Shared Hit Blocks": 4,
+                        "Shared Read Blocks": 0,
+                        "Shared Dirtied Blocks": 0,
+                        "Shared Written Blocks": 0,
+                        "Local Hit Blocks": 0,
+                        "Local Read Blocks": 0,
+                        "Local Dirtied Blocks": 0,
+                        "Local Written Blocks": 0,
+                        "Temp Read Blocks": 0,
+                        "Temp Written Blocks": 0
+                      }
+                    ]
+                  }
+                ]
+              },
+              "Planning": {
+                "Shared Hit Blocks": 15,
+                "Shared Read Blocks": 0,
+                "Shared Dirtied Blocks": 0,
+                "Shared Written Blocks": 0,
+                "Local Hit Blocks": 0,
+                "Local Read Blocks": 0,
+                "Local Dirtied Blocks": 0,
+                "Local Written Blocks": 0,
+                "Temp Read Blocks": 0,
+                "Temp Written Blocks": 0
+              },
+              "Planning Time": 0.22,
+              "Triggers": [],
+              "Execution Time": 0.1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "label": "mission-batch",
+      "plan": [
+        {
+          "QUERY PLAN": [
+            {
+              "Plan": {
+                "Node Type": "Limit",
+                "Parallel Aware": false,
+                "Async Capable": false,
+                "Startup Cost": 0.28,
+                "Total Cost": 9.87,
+                "Plan Rows": 100,
+                "Plan Width": 284,
+                "Actual Startup Time": 0.007,
+                "Actual Total Time": 0.053,
+                "Actual Rows": 100,
+                "Actual Loops": 1,
+                "Shared Hit Blocks": 6,
+                "Shared Read Blocks": 0,
+                "Shared Dirtied Blocks": 0,
+                "Shared Written Blocks": 0,
+                "Local Hit Blocks": 0,
+                "Local Read Blocks": 0,
+                "Local Dirtied Blocks": 0,
+                "Local Written Blocks": 0,
+                "Temp Read Blocks": 0,
+                "Temp Written Blocks": 0,
+                "Plans": [
+                  {
+                    "Node Type": "Index Scan",
+                    "Parent Relationship": "Outer",
+                    "Parallel Aware": false,
+                    "Async Capable": false,
+                    "Scan Direction": "Forward",
+                    "Index Name": "mission_pkey",
+                    "Relation Name": "mission",
+                    "Alias": "m",
+                    "Startup Cost": 0.28,
+                    "Total Cost": 96.15,
+                    "Plan Rows": 1000,
+                    "Plan Width": 284,
+                    "Actual Startup Time": 0.006,
+                    "Actual Total Time": 0.048,
+                    "Actual Rows": 100,
+                    "Actual Loops": 1,
+                    "Index Cond": "(id > '00000000-0000-0000-0000-000000000000'::uuid)",
+                    "Rows Removed by Index Recheck": 0,
+                    "Filter": "((qualification = ANY ('{IDE}'::text[])) AND (status = 'OPEN'::text) AND (start_at > now()))",
+                    "Rows Removed by Filter": 0,
+                    "Shared Hit Blocks": 6,
+                    "Shared Read Blocks": 0,
+                    "Shared Dirtied Blocks": 0,
+                    "Shared Written Blocks": 0,
+                    "Local Hit Blocks": 0,
+                    "Local Read Blocks": 0,
+                    "Local Dirtied Blocks": 0,
+                    "Local Written Blocks": 0,
+                    "Temp Read Blocks": 0,
+                    "Temp Written Blocks": 0
+                  }
+                ]
+              },
+              "Planning": {
+                "Shared Hit Blocks": 3,
+                "Shared Read Blocks": 0,
+                "Shared Dirtied Blocks": 0,
+                "Shared Written Blocks": 0,
+                "Local Hit Blocks": 0,
+                "Local Read Blocks": 0,
+                "Local Dirtied Blocks": 0,
+                "Local Written Blocks": 0,
+                "Temp Read Blocks": 0,
+                "Temp Written Blocks": 0
+              },
+              "Planning Time": 0.09,
+              "Triggers": [],
+              "Execution Time": 0.067
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "indexes": [
+    {
+      "tablename": "account",
+      "indexname": "account_active_idx",
+      "indexdef": "CREATE INDEX account_active_idx ON public.account USING btree (id) WHERE active"
+    },
+    {
+      "tablename": "account",
+      "indexname": "account_email_key",
+      "indexdef": "CREATE UNIQUE INDEX account_email_key ON public.account USING btree (email)"
+    },
+    {
+      "tablename": "account",
+      "indexname": "account_pkey",
+      "indexdef": "CREATE UNIQUE INDEX account_pkey ON public.account USING btree (id)"
+    },
+    {
+      "tablename": "assignment",
+      "indexname": "assignment_nurse_idx",
+      "indexdef": "CREATE INDEX assignment_nurse_idx ON public.assignment USING btree (nurse_id, start_at)"
+    },
+    {
+      "tablename": "assignment",
+      "indexname": "assignment_pkey",
+      "indexdef": "CREATE UNIQUE INDEX assignment_pkey ON public.assignment USING btree (id)"
+    },
+    {
+      "tablename": "assignment",
+      "indexname": "no_overlapping_active_assignments",
+      "indexdef": "CREATE INDEX no_overlapping_active_assignments ON public.assignment USING gist (nurse_id, tstzrange(start_at, end_at, '[)'::text)) WHERE (status = 'ACTIVE'::text)"
+    },
+    {
+      "tablename": "assignment",
+      "indexname": "one_active_assignment_per_mission",
+      "indexdef": "CREATE UNIQUE INDEX one_active_assignment_per_mission ON public.assignment USING btree (mission_id) WHERE (status = 'ACTIVE'::text)"
+    },
+    {
+      "tablename": "mission",
+      "indexname": "mission_agency_idx",
+      "indexdef": "CREATE INDEX mission_agency_idx ON public.mission USING btree (agency_id, status)"
+    },
+    {
+      "tablename": "mission",
+      "indexname": "mission_location_idx",
+      "indexdef": "CREATE INDEX mission_location_idx ON public.mission USING gist (location)"
+    },
+    {
+      "tablename": "mission",
+      "indexname": "mission_pkey",
+      "indexdef": "CREATE UNIQUE INDEX mission_pkey ON public.mission USING btree (id)"
+    },
+    {
+      "tablename": "mission",
+      "indexname": "mission_reminders_due",
+      "indexdef": "CREATE INDEX mission_reminders_due ON public.mission USING btree (first_published_at, last_reminder_at) WHERE (reminders_enabled AND (status = 'OPEN'::text) AND (reminder_count < 3))"
+    },
+    {
+      "tablename": "mission",
+      "indexname": "mission_staffing_request",
+      "indexdef": "CREATE INDEX mission_staffing_request ON public.mission USING btree (staffing_request_id)"
+    },
+    {
+      "tablename": "profile",
+      "indexname": "profile_pkey",
+      "indexdef": "CREATE UNIQUE INDEX profile_pkey ON public.profile USING btree (user_id)"
+    }
+  ],
+  "businessResults": [
+    {
+      "size": 100,
+      "mode": "forNurse",
+      "first": "a1e257166884ab88770b087371559ea92f3f244ffe760732b6c7fd2424740d4c",
+      "second": "9f6dbf870beed9ecb1ab00433908bef051878c89a3667dd5cf92be51d6f64f58"
+    },
+    {
+      "size": 100,
+      "mode": "recent",
+      "offset": 0,
+      "digest": "f8f3973207a5516f1d8af1ed644ec33d671c627049a644d32b9085918ed0d139"
+    },
+    {
+      "size": 100,
+      "mode": "recent",
+      "offset": 20,
+      "digest": "b6cbc4d45d15f471c36dd11143073127a2f23608f226307a6e80cad62ec7d959"
+    },
+    {
+      "size": 100,
+      "mode": "forMission",
+      "first": "fe791098d16357ba42f3d86b97670b413cdf0e35284c42cc956b92f55ac7ef55",
+      "second": "e9a77e51d25d1b4247e538156dca57c2e635cfc69d3892b3ac926839993aaa9e"
+    },
+    {
+      "size": 1000,
+      "mode": "forNurse",
+      "first": "f7a6df19b7f71b6660a1c223d096692c1dd398fbaf3aa4044f2a7cb8d6cd75eb",
+      "second": "f361fee1681084aed948f668c0a98754e0074329d96c62e75fc4af098d7e874a"
+    },
+    {
+      "size": 1000,
+      "mode": "recent",
+      "offset": 0,
+      "digest": "b6327e079331f6cf211edd7b4147a9c599517df91aee4f3b5e03c25cf6febf1a"
+    },
+    {
+      "size": 1000,
+      "mode": "recent",
+      "offset": 20,
+      "digest": "da72569cf5f92109e6488fc535f7b5cda77cfc50ecdc2ffa79b3b023b8570153"
+    },
+    {
+      "size": 1000,
+      "mode": "forMission",
+      "first": "5851ab99d159b6187fbf1481386b21bc9c96a30124251fa0026676ab080bdad4",
+      "second": "9371aa06cec700574a3bddac2d3f9f8f315218309421f6c465ea06b0ac5ad476"
+    }
+  ],
+  "baselineComparison": "PASS: exact business fingerprints for first and second pages, both directions and recent sorting"
+}

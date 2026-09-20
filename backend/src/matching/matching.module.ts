@@ -1,6 +1,6 @@
 import { displayMatch } from "../domain/matching-display";
 import { MATCH_RULES } from "../domain/rules";
-import { geodesicKm } from "../database/distance";
+import { geodesicKm, geodesicKmBatch } from "../database/distance";
 import { PageDto } from "../common/page.dto";
 import {
   Controller,
@@ -70,11 +70,11 @@ export class MatchingService implements OnModuleDestroy {
   async onModuleDestroy() {
     await this.connection.close();
   }
-  async calculate(owner: string, m: any, p: any, conflicts: any[]) {
+  async calculate(owner: string, m: any, p: any, conflicts: any[], distance?: number | null) {
     const result = match(
       professional(p, conflicts),
       matchingMission(m),
-      await geodesicKm(this.db, p, m),
+      distance === undefined ? await geodesicKm(this.db, p, m) : distance,
     );
     try {
       await this.ready();
@@ -149,17 +149,18 @@ export class MatchingService implements OnModuleDestroy {
         [p.qualifications, cursor],
       );
       if (!batch.length) break;
-      for (const m of batch) {
+      const distances = await geodesicKmBatch(this.db, batch.map((m: any) => [p, m] as const));
+      for (const [index, m] of batch.entries()) {
         const result = match(
           professional(p, conflicts),
           matchingMission(m),
-          await geodesicKm(this.db, p, m),
+          distances[index],
         );
         if (!result.eligible) {
           excluded++;
           continue;
         }
-        top.push({ m, result });
+        top.push({ m, result, distance: distances[index] });
         top.sort(compare);
         if (top.length > page.offset + page.limit) top.pop();
         scanned++;
@@ -168,7 +169,7 @@ export class MatchingService implements OnModuleDestroy {
     }
     const items = [];
     for (const item of top.slice(page.offset))
-      items.push({...await this.calculate(actor, item.m, p, conflicts),...(ranking === "recent" ? {publishedAt:item.m.published_at?new Date(item.m.published_at).toISOString():null,missionVersion:item.m.version} : {})});
+      items.push({...await this.calculate(actor, item.m, p, conflicts, item.distance),...(ranking === "recent" ? {publishedAt:item.m.published_at?new Date(item.m.published_at).toISOString():null,missionVersion:item.m.version} : {})});
     return {
       items,
       limit: page.limit,
@@ -195,15 +196,23 @@ export class MatchingService implements OnModuleDestroy {
         [m.qualification, cursor],
       );
       if (!batch.length) break;
-      for (const p of batch) {
-        const conflicts = await this.db.query(
-          "SELECT start_at,end_at FROM assignment WHERE nurse_id=$1 AND status='ACTIVE'",
-          [p.user_id],
-        );
+      const assignments = await this.db.query(
+        "SELECT nurse_id,start_at,end_at FROM assignment WHERE nurse_id=ANY($1::uuid[]) AND status='ACTIVE'",
+        [batch.map((p: any) => p.user_id)],
+      );
+      const conflictsByNurse = new Map<string, any[]>();
+      for (const assignment of assignments) {
+        const conflicts = conflictsByNurse.get(assignment.nurse_id) ?? [];
+        conflicts.push(assignment);
+        conflictsByNurse.set(assignment.nurse_id, conflicts);
+      }
+      const distances = await geodesicKmBatch(this.db, batch.map((p: any) => [p, m] as const));
+      for (const [index, p] of batch.entries()) {
+        const conflicts = conflictsByNurse.get(p.user_id) ?? [];
         const result = match(
           professional(p, conflicts),
           matchingMission(m),
-          await geodesicKm(this.db, p, m),
+          distances[index],
         );
         if (!result.eligible || new Date(m.start_at).getTime() <= Date.now()) {
           excluded++;
