@@ -34,14 +34,15 @@ try{
   nodes.push(call('Backend',action==='reminders'?'https://infimactch-prod-backend.vercel.app/api/v1/internal/automation/reminders':'={{ "https://infimactch-prod-backend.vercel.app/api/v1/internal/automation/'+action+'/" + $json.eventId }}',[440,0]));
   connections[previous]={main:[[{node:'Backend',type:'main',index:0}]]};workflows.push({name:'InfiMatch production - '+action,nodes,connections,settings});
  }
- const schedule={id:randomUUID(),name:'Toutes les 30 minutes',type:'n8n-nodes-base.scheduleTrigger',typeVersion:1.2,position:[0,0],parameters:{rule:{interval:[{field:'minutes',minutesInterval:30}]}}};
- workflows.push({name:'InfiMatch production - reprise et rappels',nodes:[schedule,call('Traiter la file','https://infimactch-prod-backend.vercel.app/api/v1/internal/automation/jobs/dispatch',[240,0]),call('Rappels','https://infimactch-prod-backend.vercel.app/api/v1/internal/automation/reminders',[480,0])],connections:{'Toutes les 30 minutes':{main:[[{node:'Traiter la file',type:'main',index:0}]]},'Traiter la file':{main:[[{node:'Rappels',type:'main',index:0}]]}},settings});
+ const schedule={id:randomUUID(),name:'Toutes les 4 heures',type:'n8n-nodes-base.scheduleTrigger',typeVersion:1.2,position:[0,0],parameters:{rule:{interval:[{field:'hours',hoursInterval:4}]}}};
+ workflows.push({name:'InfiMatch production - reprise et rappels',nodes:[schedule,call('Traiter la file','https://infimactch-prod-backend.vercel.app/api/v1/internal/automation/jobs/dispatch',[240,0]),call('Rappels','https://infimactch-prod-backend.vercel.app/api/v1/internal/automation/reminders',[480,0])],connections:{'Toutes les 4 heures':{main:[[{node:'Traiter la file',type:'main',index:0}]]},'Traiter la file':{main:[[{node:'Rappels',type:'main',index:0}]]}},settings});
  const daily={id:randomUUID(),name:'Chaque jour',type:'n8n-nodes-base.scheduleTrigger',typeVersion:1.2,position:[0,0],parameters:{rule:{interval:[{field:'days',daysInterval:1,triggerAtHour:4,triggerAtMinute:15}]}}};
  if(process.argv.includes('--enable-maintenance'))workflows.push({name:'InfiMatch production - maintenance quotidienne',nodes:[daily,call('Maintenance','https://infimactch-prod-backend.vercel.app/api/v1/internal/automation/jobs/maintenance',[240,0])],connections:{'Chaque jour':{main:[[{node:'Maintenance',type:'main',index:0}]]}},settings:{...settings,timezone:'Europe/Paris'}});
  workflows.push(offerSchedule('FRANCE_TRAVAIL',credential),offerSchedule('JOBSPIPE',credential));
  const periodic=workflows.find(w=>w.name==='InfiMatch production - reprise et rappels');
+ periodic.settings={...periodic.settings,timezone:'Europe/Paris'};
  periodic.nodes.splice(1,0,{id:randomUUID(),name:'Verifier disponibilite API',type:'n8n-nodes-base.httpRequest',typeVersion:4.2,position:[120,-160],parameters:{method:'GET',url:'https://infimactch-prod-backend.vercel.app/api/v1/health',options:{timeout:30000}}});
- periodic.connections['Toutes les 30 minutes']={main:[[{node:'Verifier disponibilite API',type:'main',index:0}]]};
+ periodic.connections['Toutes les 4 heures']={main:[[{node:'Verifier disponibilite API',type:'main',index:0}]]};
  periodic.connections['Verifier disponibilite API']={main:[[{node:'Traiter la file',type:'main',index:0}]]};
  resilientReminders(periodic);
  await mkdir(resolve(root,'docs/n8n'),{recursive:true});
