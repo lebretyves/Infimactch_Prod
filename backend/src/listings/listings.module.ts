@@ -1,6 +1,7 @@
 import {ConversionController,ConversionService} from './conversions';
 import {rankedListingPage} from './listing-order';
 import {LocationsController} from './locations';
+import {ReverseLocationController} from './reverse-location';
 import {RecommendationsController} from './recommendations';
 import {MatchingModule} from '../matching/matching.module';
 import { partialOfferMatch } from "../public-data/partial-matching";
@@ -369,5 +370,5 @@ export class ListingsController {
     return { ok: true };
   }
 }
-@Module({ imports:[MatchingModule], controllers: [LocationsController,ListingsController,RecommendationsController,ConversionController], providers:[ConversionService] })
+@Module({ imports:[MatchingModule], controllers: [ReverseLocationController,LocationsController,ListingsController,RecommendationsController,ConversionController], providers:[ConversionService] })
 export class ListingsModule {}
