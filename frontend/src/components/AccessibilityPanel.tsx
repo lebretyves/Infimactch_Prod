@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { useAccessibility } from "@/context/AccessibilityContext";
 import { isSpeechSynthesisAvailable, pageTextForSpeech, selectionTextForSpeech, speakText, stopSpeech } from "@/services/pageSpeech";
 import s from "./AccessibilityPanel.module.css";
+import preferencesStyle from "./SitePreferences.module.css";
 export function AccessibilityPanel() {
  const a=useAccessibility(), dialog=useRef<HTMLDialogElement>(null),trigger=useRef<HTMLButtonElement>(null);
  const [message,setMessage]=useState(""),[speaking,setSpeaking]=useState(false),[selectionMode,setSelectionMode]=useState(false);
@@ -24,7 +25,7 @@ export function AccessibilityPanel() {
   else {setSpeaking(false);setMessage(result.reason);}
  };
  return <>
-  <button ref={trigger} type="button" className={s.trigger} aria-haspopup="dialog" aria-expanded={a.panelOpen} aria-controls="a11y-preferences" onClick={a.openPanel}>Accessibilité</button>
+  <button ref={trigger} type="button" className={preferencesStyle.trigger} aria-haspopup="dialog" aria-expanded={a.panelOpen} aria-controls="a11y-preferences" onClick={a.openPanel}>Accessibilité</button>
   {(speaking||selectionMode||message) && !a.panelOpen && <div className={s.speechBar} role="region" aria-label="Lecture vocale">
    <p role="status" className={s.speechBarText}>{message || "Sélectionnez du texte puis choisissez Lire la sélection."}</p>
    <div className={s.speechBarActions}>

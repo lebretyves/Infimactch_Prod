@@ -16,6 +16,8 @@ import {
 } from "@/services/cookiePreferences";
 import { setGoogleIdentityPermission } from "@/services/googleIdentity";
 import { CookiePreferencesPanel } from "@/components/CookiePreferencesPanel";
+import { AccessibilityPanel } from "@/components/AccessibilityPanel";
+import preferencesStyle from "@/components/SitePreferences.module.css";
 type ConsentContext = {
   googleAllowed: boolean;
   preferences: CookiePreferences | null;
@@ -88,15 +90,21 @@ export function CookieConsentProvider({
       value={{ googleAllowed, preferences, openPreferences, savePreferences }}
     >
       {children}
-      <CookiePreferencesPanel
-        open={open}
-        preferences={preferences}
-        storageNotice={storageNotice}
-        onOpen={openPreferences}
-        onPolicyNavigate={onPolicyNavigate}
-        onSave={savePreferences}
-        onClose={() => (preferences ? setOpen(false) : savePreferences(false))}
-      />
+      <div className={preferencesStyle.bar} role="group" aria-label="Préférences du site">
+        <span className={preferencesStyle.label}>Préférences du site</span>
+        <div className={preferencesStyle.controls}>
+          <AccessibilityPanel />
+          <CookiePreferencesPanel
+            open={open}
+            preferences={preferences}
+            storageNotice={storageNotice}
+            onOpen={openPreferences}
+            onPolicyNavigate={onPolicyNavigate}
+            onSave={savePreferences}
+            onClose={() => (preferences ? setOpen(false) : savePreferences(false))}
+          />
+        </div>
+      </div>
     </Context>
   );
 }

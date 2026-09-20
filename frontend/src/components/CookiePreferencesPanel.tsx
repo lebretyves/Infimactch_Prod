@@ -4,6 +4,7 @@ import { Icon } from "@/ui/Icon";
 import { Checkbox } from "@/ui/Choice";
 import type { CookiePreferences } from "@/services/cookiePreferences";
 import s from "./CookiePreferencesPanel.module.css";
+import preferencesStyle from "./SitePreferences.module.css";
 type Props = {
   open: boolean;
   preferences: CookiePreferences | null;
@@ -43,9 +44,10 @@ export function CookiePreferencesPanel({
     <>
       <button
         ref={trigger}
-        className={s.trigger}
+        className={preferencesStyle.trigger}
         type="button"
         onClick={onOpen}
+        aria-expanded={open}
         aria-haspopup="dialog"
         aria-controls="cookie-preferences"
       >
