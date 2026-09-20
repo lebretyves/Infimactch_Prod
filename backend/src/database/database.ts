@@ -1,3 +1,4 @@
+import {AdminMfaRecovery1789905600000} from './admin-mfa-recovery';
 import {ContractPreparation1789855200000} from './contract-preparation';
 import {SupportTickets1789851600000} from "./support-tickets";
 import { SharedRateLimit1789848000000 } from "./shared-rate-limit";
@@ -75,6 +76,7 @@ export class Database implements OnModuleDestroy {
       SupportTickets1789851600000,
       SharedRateLimit1789848000000,
       ContractPreparation1789855200000,
+      AdminMfaRecovery1789905600000,
     ],
     logging: false,
     extra: { max: 12 },

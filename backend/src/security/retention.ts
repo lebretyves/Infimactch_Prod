@@ -111,7 +111,7 @@ export async function inspectRetention(
   };
 }
 
-export async function applyRetention(em: SqlClient): Promise<RetentionSummary> {
+export async function applyRetention(em: SqlClient, options: {includeBusinessHistory?:boolean} = {}): Promise<RetentionSummary> {
   const before = await inspectRetention(em);
   const staging = await em.query(
     "SELECT id FROM document WHERE status='STAGING' AND kind<>'CONFIRMATION' AND created_at<now()-make_interval(hours=>$1) FOR UPDATE",
@@ -153,7 +153,7 @@ export async function applyRetention(em: SqlClient): Promise<RetentionSummary> {
     await em.query("DELETE FROM outbox WHERE id=ANY($1::uuid[])", [ids]);
   }
   // POC fictional history only: preserve open missions and every active assignment.
-  const history=await em.query("SELECT id FROM mission m WHERE $1::integer IS NOT NULL AND status IN('COMPLETED','CANCELLED') AND end_at<now()-make_interval(days=>$1) AND NOT EXISTS(SELECT 1 FROM assignment a WHERE a.mission_id=m.id AND a.status='ACTIVE') FOR UPDATE",[businessHistoryDays()]);
+  const history=await em.query("SELECT id FROM mission m WHERE $1::integer IS NOT NULL AND status IN('COMPLETED','CANCELLED') AND end_at<now()-make_interval(days=>$1) AND NOT EXISTS(SELECT 1 FROM assignment a WHERE a.mission_id=m.id AND a.status='ACTIVE') FOR UPDATE",[options.includeBusinessHistory===false?null:businessHistoryDays()]);
   const missionIds=history.map((row:{id:string})=>row.id);
   const historicalDocuments=missionIds.length?await em.query("SELECT d.id FROM document d JOIN assignment a ON a.id=d.assignment_id WHERE a.mission_id=ANY($1::uuid[])",[missionIds]):[];
   if(missionIds.length){

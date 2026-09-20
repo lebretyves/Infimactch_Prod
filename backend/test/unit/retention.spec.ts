@@ -118,3 +118,10 @@ test("business history has no automatic duration for real users", async()=>{
  process.env.BUSINESS_HISTORY_RETENTION_DAYS='0';assert.throws(()=>businessHistoryDays());
  }finally{if(previous===undefined)delete process.env.BUSINESS_HISTORY_RETENTION_DAYS;else process.env.BUSINESS_HISTORY_RETENTION_DAYS=previous;}
 });
+
+
+test('automatic maintenance excludes business history even when a duration exists',async()=>{
+ const old=process.env.BUSINESS_HISTORY_RETENTION_DAYS;process.env.BUSINESS_HISTORY_RETENTION_DAYS='1';
+ try{const em=client();await applyRetention(em,{includeBusinessHistory:false});const query=em.queries.find(q=>q.sql.includes('SELECT id FROM mission m'));assert.deepEqual(query?.parameters,[null]);}
+ finally{if(old===undefined)delete process.env.BUSINESS_HISTORY_RETENTION_DAYS;else process.env.BUSINESS_HISTORY_RETENTION_DAYS=old;}
+});

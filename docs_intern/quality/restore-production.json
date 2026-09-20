@@ -1,8 +1,8 @@
 {
-  "date": "2026-09-19T19:52:02.900Z",
+  "date": "2026-09-20T05:47:07.879Z",
   "status": "PASS",
   "synthetic": false,
-  "elapsedMs": 8593,
+  "elapsedMs": 7474,
   "sqlCounts": {
     "accounts": 2,
     "missions": 3092,

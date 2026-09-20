@@ -1,24 +1,32 @@
+import {backupRoot} from './backup-key.mjs';
+import {productionBackupBase} from './production-backup-paths.mjs';
 import {RESTORE_POSTGRES_IMAGE} from '../security/restore-images.mjs';
 import {withRole,request,root} from './common.mjs';
 import {createDecipheriv,hkdfSync} from 'node:crypto';
-import {readFile} from 'node:fs/promises';
+import {readFile,realpath} from 'node:fs/promises';
 import {createReadStream} from 'node:fs';
 import {pipeline} from 'node:stream/promises';
-import {spawn} from 'node:child_process';
+import {spawnSync} from 'node:child_process';
 import {resolve,sep} from 'node:path';
-const base=resolve(root,'data/backups/production'),folder=resolve(process.argv[2]||base);
+const base=await productionBackupBase(),folder=await realpath(resolve(process.argv[2]||base));
 if(!folder.startsWith(base+sep))throw Error('Expected a production backup folder');
 try{await withRole('operator',async token=>{
  const values=(await request('kv/data/infimatch/v1/production',{token})).data.data;
  const manifest=JSON.parse(await readFile(resolve(folder,'manifest.json'),'utf8'));
- if(manifest.status!=='COMPLETE'||manifest.version!==1)throw Error('Incomplete backup');
+ if(manifest.status!=='COMPLETE'||![1,2].includes(manifest.version))throw Error('Incomplete backup');
+ if(!Array.isArray(manifest.files)||manifest.files.length!==3)throw Error('Invalid manifest');
  for(const file of manifest.files){
   if(!/^[a-z.]+\.enc$/.test(file.file))throw Error('Invalid backup file name');
-  const key=hkdfSync('sha256',Buffer.from(values.DOCUMENT_KEY,'base64'),Buffer.from(file.salt,'base64'),'infimatch-production-backup-v1',32);
+  const fullPath=await realpath(resolve(folder,file.file));if(!fullPath.startsWith(folder+sep))throw Error('BACKUP_PATH_ESCAPE');
+  const key=hkdfSync('sha256',backupRoot(values,manifest),Buffer.from(file.salt,'base64'),'infimatch-production-backup-v1',32);
   const decipher=createDecipheriv('aes-256-gcm',key,Buffer.from(file.iv,'base64'));decipher.setAuthTag(Buffer.from(file.tag,'base64'));
-  if(file.file==='postgres.dump.enc'){
-   const child=spawn('docker',['run','--rm','-i','--network','none',RESTORE_POSTGRES_IMAGE,'pg_restore','--list'],{stdio:['pipe','pipe','pipe'],shell:false});let size=0;child.stdout.on('data',x=>{size+=x.length;});child.stderr.resume();const done=new Promise((ok,fail)=>{child.on('error',fail);child.on('exit',c=>c===0?ok():fail(Error('Invalid PostgreSQL archive')));});await pipeline(createReadStream(resolve(folder,file.file)),decipher,child.stdin);await done;if(size<100)throw Error('Empty PostgreSQL archive');
-  }else{const chunks=[];await pipeline(createReadStream(resolve(folder,file.file)),decipher,async source=>{for await(const chunk of source)chunks.push(chunk);});JSON.parse(Buffer.concat(chunks).toString());}
+  // Authenticate every encrypted byte before pg_restore can stop after reading its TOC.
+  const chunks=[];let size=0;await pipeline(createReadStream(fullPath),decipher,async source=>{for await(const chunk of source){size+=chunk.length;if(size>512*1024*1024)throw Error('BACKUP_EXCEEDS_PROBE_LIMIT');chunks.push(chunk);}});
+  const clear=Buffer.concat(chunks);
+  try{if(file.file==='postgres.dump.enc'){
+   const child=spawnSync('docker',['run','--rm','-i','--network','none',RESTORE_POSTGRES_IMAGE,'pg_restore','--list'],{input:clear,maxBuffer:8*1024*1024,timeout:120000,windowsHide:true});
+   if(child.status!==0||!child.stdout||child.stdout.length<100)throw Error('Invalid PostgreSQL archive');
+  }else JSON.parse(clear.toString());}finally{clear.fill(0);for(const chunk of chunks)chunk.fill(0);}
   console.log(file.file+' authenticated and readable');
  }
  console.log('Backup integrity PASS; no database restored or modified');
