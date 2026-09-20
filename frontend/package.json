@@ -22,7 +22,7 @@
     "build:admin": "tsc -b && vite build --config vite.admin.config.ts",
     "test:seo": "node scripts/test-seo-build.mjs && node --test scripts/test-help-routes.mjs",
     "measure:build": "node scripts/measure-build.mjs",
-    "test:branches": "node --test scripts/test-build-measure.mjs && node --experimental-strip-types --test scripts/test-branch-services.mjs",
+    "test:branches": "node --test scripts/test-build-measure.mjs && node --experimental-strip-types --test scripts/test-branch-services.mjs scripts/test-page-speech.mjs",
     "measure:transfers": "node scripts/measure-transfers.mjs"
   },
   "dependencies": {
