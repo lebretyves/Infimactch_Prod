@@ -1,3 +1,4 @@
+import { validRadius } from "@/lib/searchArea";
 import { MobilityLocation } from "@/components/MobilityLocation";
 import { validCoordinates } from "@/components/SearchPlace";
 import { useEffect, useRef, useState, type FormEvent } from "react";
@@ -8,6 +9,7 @@ import {
   getProfile,
   saveProfile,
   updateAvailability,
+  updateSearchArea,
   type ProfessionalProfile,
   type Period,
   type AvailabilityState,
@@ -54,8 +56,8 @@ function Editor({
     [busy, setBusy] = useState(""),
     [error, setError] = useState(""),
     [message, setMessage] = useState("");
-  const [city, setCity] = useState(initial.details?.mobilityCity || ""),
-    [radius, setRadius] = useState(initial.radius_km?.toString() || ""),
+  const [city, setCity] = useState(initial.details?.mobilityCity || (validCoordinates(initial.latitude, initial.longitude) ? "Ma position" : initial.details?.city || "")),
+    [radius, setRadius] = useState(initial.radius_km?.toString() || "25"),
     [transport, setTransport] = useState(initial.details?.transport || ""),
     [latitude, setLatitude] = useState(initial.latitude?.toString() || ""),
     [longitude, setLongitude] = useState(initial.longitude?.toString() || "");
@@ -314,7 +316,7 @@ function Editor({
     <div className={`${u.page} ${s.calendarPage}`}>
       <header className={u.header}>
         <div>
-          <p className={u.eyebrow}>Disponibilités et mobilité</p>
+          <p className={u.eyebrow}>Disponibilités et zone de recherche</p>
           <h1>Mon planning</h1>
           <p className={u.subtitle}>
             Indiquez quand et où vous souhaitez travailler.
@@ -326,7 +328,7 @@ function Editor({
       </header>
       <nav className={u.tabs} aria-label="Planning">
         <NavLink to="/calendrier">Disponibilités</NavLink>
-        <a href="#zone-mobilite">Ma zone de mobilité</a>
+        <a href="#zone-mobilite">Ma zone de recherche et d’alertes</a>
         <NavLink to="/historique">Mes missions</NavLink>
       </nav>
       {error && (
@@ -604,38 +606,20 @@ function Editor({
         className={u.card}
         onSubmit={(e) => {
           e.preventDefault();
-          void persist(
-            "mobility",
-            (latest) => {
-              if (Boolean(latitude) !== Boolean(longitude))
-                throw new Error(
-                  "Renseignez ensemble la latitude et la longitude, ou effacez les deux.",
-                );
-              if (city.trim() && !validCoordinates(latitude, longitude))
-                throw new Error("Choisissez une commune dans les suggestions avant d’enregistrer.");
-              if (radius !== "" && !validCoordinates(latitude, longitude))
-                throw new Error("Choisissez une commune ou renseignez votre position pour utiliser un rayon.");
-              const details = { ...latest.details };
-              if (city.trim()) details.mobilityCity = city.trim();
-              else delete details.mobilityCity;
-              if (transport) details.transport = transport;
-              else delete details.transport;
-              return {
-                ...latest,
-                details,
-                radius_km: radius === "" ? null : Number(radius),
-                latitude: latitude === "" ? null : Number(latitude),
-                longitude: longitude === "" ? null : Number(longitude),
-              };
-            },
-            "Zone de mobilité enregistrée.",
-          );
+          void run("mobility", async () => {
+            const center = validCoordinates(latitude, longitude);
+            if (!center || !radius.trim() || !validRadius(radius))
+              throw new Error("Choisissez une commune ou une position valide et un rayon entre 0,1 et 1 000 km.");
+            const area = await updateSearchArea({...center, radiusKm:Number(radius), city:city.trim() || "Ma position"});
+            setP(current => ({...current, ...area}));
+          }, "Zone de recherche et d’alertes enregistrée.");
         }}
       >
         <h2 className={u.cardHeading}>
           <Icon name="map-pin" />
-          Ma zone de mobilité
+          Ma zone de recherche et d’alertes
         </h2>
+        <p className={s.help}>Choisissez la ville autour de laquelle vous souhaitez travailler et votre rayon. Cette zone est enregistrée sur votre compte pour la recherche par défaut et les alertes. Votre domicile et vos préférences de notifications restent inchangés.</p>
         <fieldset disabled={!!busy} className={s.fields}>
           <div className={s.mobility}>
             <MobilityLocation
@@ -648,7 +632,8 @@ function Editor({
               }}
             />
             <TextField
-              label="Distance maximale (km)"
+              label="Rayon de recherche et d’alertes (km)"
+              required
               type="number"
               min={0.1}
               max={1000}
@@ -661,7 +646,7 @@ function Editor({
               loading={busy === "mobility"}
               variant="outline"
             >
-              Enregistrer ma mobilité
+              Enregistrer ma zone
             </Button>
           </div>
           <SelectField
@@ -676,6 +661,7 @@ function Editor({
               ),
             )}
           </SelectField>
+          <Button type="button" variant="outline" loading={busy === "transport"} onClick={() => void persist("transport", latest => ({...latest, details:{...latest.details, transport}}), "Moyen de transport enregistré.")}>Enregistrer mon transport</Button>
           <div className={u.actions}>
             <Button
               type="button"
@@ -692,7 +678,7 @@ function Editor({
                     setLatitude(String(position.coords.latitude));
                     setLongitude(String(position.coords.longitude));
                     setMessage(
-                      "Position obtenue. Enregistrez votre mobilité pour la conserver.",
+                      "Position obtenue. Enregistrez votre zone pour la conserver.",
                     );
                   },
                   () =>

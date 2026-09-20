@@ -13,3 +13,10 @@ export function readSearchArea(id:string):SearchArea|null {
 export function saveSearchArea(id:string, area:SearchArea) {
  try {localStorage.setItem(key(id),JSON.stringify(area));}catch { /* Storage is optional. */ }
 }
+
+// A saved account area takes precedence over the residence proposal, never over a local search.
+export function profileSearchArea(profile: {latitude: number | null; longitude: number | null; radius_km: number | null; details?: {mobilityCity?: string}}): SearchArea | null {
+ const {latitude, longitude, radius_km} = profile;
+ if (latitude == null || longitude == null || !Number.isFinite(latitude) || !Number.isFinite(longitude) || Math.abs(latitude)>90 || Math.abs(longitude)>180 || radius_km == null || !validRadius(String(radius_km))) return null;
+ return {place: profile.details?.mobilityCity?.trim() || 'Ma zone enregistrée', lat:String(latitude), lon:String(longitude), radius:String(radius_km)};
+}

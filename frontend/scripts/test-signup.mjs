@@ -45,9 +45,10 @@ async function candidate(page, address, { navigation = false } = {}) {
     checks.push('back_to_first_step_preserves_draft');
   }
   await step(page, '/inscription/localisation');
-  await page.getByLabel(/^Adresse/).fill('1 rue Fictive');
-  await page.getByLabel(/^Code postal/).fill('75001');
-  await page.getByLabel(/^Ville/).fill('Paris');
+  assert.equal(await page.getByLabel(/^Adresse/).getAttribute('required'), null);
+  assert.equal(await page.getByLabel(/^Code postal/).getAttribute('required'), null);
+  assert.equal(await page.getByLabel(/^Ville/).getAttribute('required'), null);
+  checks.push('signup_without_residence_address_or_gps');
   await step(page, '/inscription/qualification');
   await page.getByRole('checkbox', {name:/^IDE —/}).check();
   await page.getByLabel(/^Année d’obtention du diplôme IDE/).fill('2015');
@@ -64,10 +65,10 @@ async function candidate(page, address, { navigation = false } = {}) {
 }
 async function consent(page) {
   await page.getByRole('checkbox').first().waitFor();
-  assert.equal(await page.getByRole('checkbox').count(), 3);
+  assert.equal(await page.getByRole('checkbox').count(), 1);
   for (const checkbox of await page.getByRole('checkbox').all())
     await checkbox.check();
-  assert.equal(await page.locator('input[type=checkbox]:checked').count(), 3);
+  assert.equal(await page.locator('input[type=checkbox]:checked').count(), 1);
 }
 async function login(page, address) {
   await page.goto(base + '/connexion');

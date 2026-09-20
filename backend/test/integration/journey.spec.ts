@@ -1343,7 +1343,7 @@ test('partner origin filtering is applied before pagination even with an incompl
  const recommended=await n.agent.get('/api/v1/me/recommendations?origine=partenaires').expect(200);expect(recommended.body.external.status).toBe('HIDDEN');expect(recommended.body.internal.personalization).toBe('GENERAL_PROFILE_INCOMPLETE');expect(recommended.body.internal.items.length).toBeGreaterThan(0);
  const externalOnly=await n.agent.get('/api/v1/me/recommendations?origine=externes').expect(200);expect(externalOnly.body.internal.status).toBe('HIDDEN');
 });
-test('bank file uploads are private, validated, replaceable and satisfy the mission reminder',async()=>{
+test('bank file uploads are private, validated, replaceable and remain optional after the first mission',async()=>{
  const n=await account('NURSE'),other=await account('NURSE');
  const send=(body:any,key=randomUUID())=>n.agent.put('/api/v1/me/bank-document').set('Origin',process.env.APP_ORIGIN!).set('X-CSRF-Token',n.token).set('Idempotency-Key',key).send(body);
  const content=Buffer.from('%PDF-1.4 fictional bank fixture');const body={mime:'application/pdf',contentBase64:content.toString('base64'),iban:'FR1420041010050500013M02606',bic:'BNPAFRPPXXX',holder:'Titulaire de test',bankName:'Banque exemple',reviewed:true},key=randomUUID();
@@ -1363,7 +1363,7 @@ test('bank file uploads are private, validated, replaceable and satisfy the miss
  const [application]=await em.query("INSERT INTO application(mission_id,nurse_id,status,consent_version) VALUES($1,$2,'ACCEPTED',1) RETURNING id",[m.id,other.id]);
  await em.query("INSERT INTO assignment(mission_id,nurse_id,application_id,start_at,end_at) VALUES($1,$2,$3,'2038-01-01T08:00Z','2038-01-01T16:00Z')",[m.id,other.id,application.id]);
  });
- expect((await other.agent.get('/api/v1/me/bank-details')).body.required).toBe(true);
+ const optionalBank=(await other.agent.get('/api/v1/me/bank-details')).body;expect(optionalBank.required).toBe(false);expect(optionalBank.suggested).toBe(true);
  await other.agent.put('/api/v1/me/bank-document').set('Origin',process.env.APP_ORIGIN!).set('X-CSRF-Token',other.token).set('Idempotency-Key',randomUUID()).send(body).expect(200);
  expect((await other.agent.get('/api/v1/me/bank-details')).body.required).toBe(false);
 });

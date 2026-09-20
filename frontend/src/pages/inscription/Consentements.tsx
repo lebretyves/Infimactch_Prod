@@ -17,7 +17,7 @@ export default function Consentements() {
     [emailManquant] = useState(!valeurs.email);
   const [googleExpire, setGoogleExpire] = useState(false);
   const [compteCree, setCompteCree] = useState(false);
-  const complet = valeurs.cgu && valeurs.confidentialite && valeurs.traitement;
+  const complet = valeurs.cgu;
   async function handleValider() {
     if (!valeurs.google && (!valeurs.email || !valeurs.motDePasse))
       throw new Error(
@@ -60,7 +60,7 @@ export default function Consentements() {
     );
   return (
     <Etape
-      titre="Consentements"
+      titre="Conditions et données personnelles"
       chapeau="Création de votre compte InfiMatch."
       suivant="/inscription/confirmation"
       libelleSuivant="Créer mon compte"
@@ -110,20 +110,8 @@ export default function Consentements() {
           </Link>
           .
         </Checkbox>
-        <Checkbox
-          required
-          checked={valeurs.confidentialite}
-          onChange={(e) => modifier({ confidentialite: e.target.checked })}
-        >
-          J’ai lu la politique de confidentialité.
-        </Checkbox>
-        <Checkbox
-          required
-          checked={valeurs.traitement}
-          onChange={(e) => modifier({ traitement: e.target.checked })}
-        >
-          J’autorise le traitement de mes données pour la mise en relation.
-        </Checkbox>
+        <p>Les données nécessaires au service demandé servent à créer votre compte et à vous mettre en relation avec les agences. Consultez la <Link to="/mentions-legales#confidentialite" state={{ retourInscription: '/inscription/consentements' }}>politique de confidentialité</Link> pour connaître les usages de vos données et vos droits.</p>
+        <p>Les choix facultatifs, notamment la géolocalisation et l’ajout d’un RIB, restent indépendants de l’acceptation des conditions. Vous pouvez créer votre compte sans les utiliser.</p>
       </div>
     </Etape>
   );

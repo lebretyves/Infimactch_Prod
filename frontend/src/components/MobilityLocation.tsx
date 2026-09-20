@@ -60,6 +60,6 @@ export function MobilityLocation({ value, selected, onChange }: {
         className={active === index ? s.active : undefined} onMouseDown={e => e.preventDefault()}
         onClick={() => choose(item)}>{item.label}</li>)}
     </ul>}
-    <p role="status" className={s.status}>{selected && value ? 'Commune sélectionnée. Enregistrez votre mobilité pour la conserver.' : status}</p>
+    <p role="status" className={s.status}>{selected && value ? 'Commune sélectionnée. Enregistrez votre zone de recherche pour la conserver.' : status}</p>
   </div>;
 }

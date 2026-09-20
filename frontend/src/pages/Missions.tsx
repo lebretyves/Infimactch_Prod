@@ -1,4 +1,4 @@
-import { readSearchArea, saveSearchArea, validRadius, type SearchArea } from "@/lib/searchArea";
+import { readSearchArea, saveSearchArea, profileSearchArea, validRadius, type SearchArea } from "@/lib/searchArea";
 import { MatchingRules } from "@/components/MatchingRules";
 import { jobSearch, changeJobText } from "@/lib/jobSearch";
 import { SearchPlace, validCoordinates } from "@/components/SearchPlace";
@@ -17,7 +17,7 @@ import {
 } from "@/services/market";
 import { api } from "@/services/api";
 import { labelCode } from "@/data/professional";
-import { getProfile } from "@/services/profile";
+import { getProfile, updateSearchArea, type SavedSearchArea } from "@/services/profile";
 import { MissionCard } from "@/ui/MissionCard";
 import { Button, ButtonLink } from "@/ui/Button";
 import { TextField, SelectField } from "@/ui/Field";
@@ -99,6 +99,9 @@ function NurseMissions() {
   const p = useRemote(getProfile, "mission-profile:" + user?.id),
     saved = useRemote(favorites, "mission-favorites:" + user?.id),
     facilities = useRemote(allFacilities, "mission-facilities");
+  const [savedArea, setSavedArea] = useState<SavedSearchArea | null>(null);
+  const [areaBusy, setAreaBusy] = useState(false), [areaError, setAreaError] = useState(""), [areaMessage, setAreaMessage] = useState("");
+  const accountArea = savedArea || p.data;
   const reference = useRemote(
     (signal) =>
       api<{ ideServices: string[]; blockSpecialties: string[] }>(
@@ -122,6 +125,8 @@ function NurseMissions() {
     if (zoneInitialized || !p.data || !user) return null;
     const previous = readSearchArea(user.id);
     if (previous) return previous;
+    const permanent = profileSearchArea(p.data);
+    if (permanent) return permanent;
     const city = p.data.details?.city?.trim() || user.ville?.trim();
     if (!city) return {place:"",lat:"",lon:"",radius:""};
     const query = [city, p.data.details?.postalCode].filter(Boolean).join(" ");
@@ -134,7 +139,7 @@ function NurseMissions() {
       return {place:city.slice(0,150),lat:"",lon:"",radius:"25"};
     const radius = String(p.data.radius_km || 25);
     return {place:place.label.slice(0,150),lat:String(place.latitude),lon:String(place.longitude),radius:validRadius(radius)?radius:"25"};
-  }, JSON.stringify([user?.id, p.data?.details?.city, p.data?.details?.postalCode, !!p.data, zoneInitialized]));
+  }, JSON.stringify([user?.id, p.data?.details?.city, p.data?.details?.postalCode, p.data?.latitude, p.data?.longitude, p.data?.radius_km, p.data?.details?.mobilityCity, !!p.data, zoneInitialized]));
   useEffect(() => {
     if (zoneInitialized || !initialZone.data) return;
     const next = new URLSearchParams(params);
@@ -149,11 +154,11 @@ function NurseMissions() {
     if (validRadius(area.radius) && (validCoordinates(area.lat,area.lon) || (params.has("zone") && Object.values(area).every(value => !value))))
       saveSearchArea(user.id,area);
   }, [params, zoneInitialized, user?.id]);
-  const homeCoordinates = validCoordinates(p.data?.latitude, p.data?.longitude);
+  const homeCoordinates = validCoordinates(accountArea?.latitude, accountArea?.longitude);
   const home = homeCoordinates
     ? {
         ...homeCoordinates,
-        label: p.data?.details?.mobilityCity || "Ma zone de mobilité",
+        label: accountArea?.details?.mobilityCity || "Ma zone enregistrée",
       }
     : null;
   const qualifications = p.data?.qualifications || [];
@@ -286,6 +291,23 @@ function NurseMissions() {
     focusResults.current = true;
     setParams(next);
   }
+  async function saveAlertArea() {
+    if (areaBusy) return;
+    setAreaError(""); setAreaMessage("");
+    const center = validCoordinates(draft.lat, draft.lon);
+    if (!center || !draft.place.trim() || !draft.radius.trim() || !validRadius(draft.radius)) {
+      setAreaError("Choisissez un lieu dans les suggestions et un rayon pour vos alertes.");
+      return;
+    }
+    setAreaBusy(true);
+    try {
+      const area = await updateSearchArea({...center, city:draft.place.trim(), radiusKm:Number(draft.radius)});
+      setSavedArea(area);
+      p.reload();
+      setAreaMessage("Zone de recherche et d’alertes enregistrée sur votre compte.");
+    } catch(e) { setAreaError((e as Error).message); }
+    finally { setAreaBusy(false); }
+  }
   function search(e: FormEvent) {
     e.preventDefault();
     setFormError("");
@@ -308,7 +330,7 @@ function NurseMissions() {
           !validRadius(draft.radius))
       ) {
         setFormError(
-          "Choisissez explicitement un lieu parmi les propositions ou votre zone de mobilité avant de rechercher par distance.",
+          "Choisissez explicitement un lieu parmi les propositions ou votre zone de recherche avant de rechercher par distance.",
         );
         return;
       }
@@ -415,6 +437,13 @@ function NurseMissions() {
             <Icon name="search" size={18} />
             Rechercher
           </Button>
+        </div>
+        <div className={s.searchHelp}>
+          <p><strong>Ma zone de recherche et d’alertes :</strong> {accountArea && profileSearchArea(accountArea) ? `${accountArea.details?.mobilityCity || "Ma zone enregistrée"} · ${accountArea.radius_km} km` : "Aucune zone enregistrée."}</p>
+          <p className={s.help}>Une recherche ponctuelle ne change pas vos alertes. Enregistrez le lieu et le rayon ci-dessus pour les utiliser sur votre compte. Vos préférences de notifications restent inchangées.</p>
+          <Button type="button" variant="outline" loading={areaBusy} disabled={!p.data || areaBusy} onClick={() => void saveAlertArea()}>Utiliser cette zone pour mes alertes</Button>
+          {areaError && <p className={u.error} role="alert">{areaError}</p>}
+          {areaMessage && <p role="status">{areaMessage}</p>}
         </div>
         <div className={s.refinements}>
           <details className={s.filterGroup}>
@@ -636,7 +665,7 @@ function NurseMissions() {
         </div>
         <details className={s.searchHelp}>
           <summary>Comment fonctionne la localisation ?</summary>
-          <p>Choisissez une ville, un code postal ou une adresse dans les suggestions. La distance est mesurée à vol d’oiseau ; les offres sans coordonnées connues sont exclues lorsqu’un rayon est choisi. Cette ville et ce rayon filtrent uniquement votre recherche. Le taux de matching et les alertes de missions compatibles utilisent la position et le rayon de mobilité de votre profil : une recherche dans une autre ville ne les modifie pas. Pour changer la zone des alertes, ouvrez « Disponibilités et mobilité ».</p>
+          <p>Choisissez une ville, un code postal ou une adresse dans les suggestions. La distance est mesurée à vol d’oiseau ; les offres sans coordonnées connues sont exclues lorsqu’un rayon est choisi. Cette ville et ce rayon filtrent uniquement votre recherche. Le taux de matching et les alertes de missions compatibles utilisent la zone de recherche et d’alertes enregistrée sur votre compte : une recherche dans une autre ville ne les modifie pas. Pour changer la zone des alertes, utilisez « Utiliser cette zone pour mes alertes » ou modifiez-la depuis votre profil.</p>
         </details>
         {formError && (
           <p className={u.error} role="alert">

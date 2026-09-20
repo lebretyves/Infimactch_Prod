@@ -22,6 +22,7 @@ jobs:
         with:
           name: v1-test-evidence
           path: |
+            docs_intern/openapi.json
             docs_intern/proofs/v1-hardening
             docs_intern/proofs/coverage
   frontend:

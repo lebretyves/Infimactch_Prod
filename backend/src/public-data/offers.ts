@@ -1,3 +1,4 @@
+import { DateTime } from "luxon";
 import {FranceTravailClient,FT_KEYWORDS,advanceFtQuery,type FtQuery} from "./france-travail-client";
 import { parseOffer, currentParsedOffer } from "./offer-parser";
 import { guardCrossSourceDuplicates } from "./offer-deduplication";
@@ -10,6 +11,13 @@ import { createHash } from "node:crypto";
 import { Database } from "../database/database";
 import { clean, cleanDescription, offerFacts } from "./offer-quality";
 export { clean, cleanDescription } from "./offer-quality";
+// Provider dates are optional. Normalize valid ISO instants in UTC, independent
+// of the import worker timezone; an invalid value must not reject the offer.
+function providerDate(value: unknown): string | null {
+  if (typeof value !== "string") return null;
+  const parsed = DateTime.fromISO(value, { zone: "utc" });
+  return parsed.isValid ? parsed.toUTC().toISO() : null;
+}
 export function normalizeOffer(raw: any, fetchedAt = new Date().toISOString()) {
   if (
     !raw ||
@@ -38,7 +46,7 @@ export function normalizeOffer(raw: any, fetchedAt = new Date().toISOString()) {
     qualification,
     rawHash: createHash("sha256").update(JSON.stringify(raw)).digest("hex"),
     provenance: {
-      normalizationVersion: 2,
+      normalizationVersion: 3,
       facts,
       provider: "FRANCE_TRAVAIL",
       externalId: raw.id,
@@ -46,9 +54,8 @@ export function normalizeOffer(raw: any, fetchedAt = new Date().toISOString()) {
       originalPublisher:
         clean(raw.origineOffre?.origine, 100) || "France Travail / partenaire",
       fetchedAt,
-      publishedAt:
-        typeof raw.dateCreation === "string" ? raw.dateCreation : null,
-      sourceUpdatedAt: typeof raw.dateActualisation === "string" ? raw.dateActualisation : null,
+      publishedAt: providerDate(raw.dateCreation),
+      sourceUpdatedAt: providerDate(raw.dateActualisation),
       rawTitle: clean(raw.intitule, 300),
       locationPrecision: facts.location.precision,
       salaryRaw: clean(raw.salaire?.libelle, 300) || null,

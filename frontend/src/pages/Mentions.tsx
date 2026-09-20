@@ -39,7 +39,7 @@ export default function Mentions() {
         <p className={s.chapeau}>
           InfiMatch est un projet étudiant réalisé dans le cadre du MBA / MSc2 Epitech. Il propose un
           espace de recherche de missions, de candidature et de suivi pour les
-          professionnels de santé et les organisations.
+          professionnels de santé et les organisations. InfiMatch assure la mise en relation ; les agences sont les employeurs et assurent la rémunération des intérimaires.
         </p>
         <section aria-labelledby="titre-mentions">
           <h2 id="titre-mentions">À propos du projet</h2>
@@ -78,8 +78,7 @@ export default function Mentions() {
             contrat de travail signé.
           </p>
           <p>
-            Le RIB est facultatif à l’inscription. Si vous choisissez de le
-            renseigner dans votre dossier, vérifiez les données proposées par
+            Le RIB reste facultatif, y compris après une première mission. Une invitation peut alors vous être proposée, sans bloquer votre compte, vos candidatures ou vos missions. InfiMatch ne verse pas les salaires. Si vous choisissez de renseigner un RIB dans votre dossier, vérifiez les données proposées par
             la lecture automatique avant de les enregistrer. Le contrôle du
             format de l’IBAN ne prouve ni l’existence du compte ni sa propriété.
             Ne déposez aucune donnée de patient. Pour les démonstrations,
@@ -121,8 +120,7 @@ export default function Mentions() {
             anonymisées. La durée maximale hors clôture reste à formaliser.
           </p>
           <p>
-            Vos dossiers et coordonnées bancaires sont accessibles selon les
-            droits du compte et des organisations concernées. Les journaux
+            Les candidatures sont accessibles aux organisations concernées selon leurs habilitations. Les coordonnées bancaires et leur pièce jointe sont consultables par leur titulaire dans son espace ; elles ne sont pas transmises automatiquement aux agences par cette fonction. Les journaux
             d’envoi distinguent l’acceptation par le prestataire et, lorsqu’un
             retour est disponible, la livraison au serveur destinataire. Ils ne
             prouvent pas la lecture du message.
@@ -139,12 +137,13 @@ export default function Mentions() {
             réclamation à la <a href="https://www.cnil.fr/fr/plaintes">CNIL</a>.
           </p>
           <p>
-            Les bases juridiques de chaque traitement et la durée de conservation
-            de l’historique métier restent à formaliser. Les fonctions demandées
-            par l’utilisateur, la sécurité du service et le consentement aux
-            services facultatifs seront distingués dans cette décision. Aucune
-            conformité juridique globale n’est revendiquée.
+            Les traitements nécessaires à la création du compte et aux fonctions de mise en relation demandées relèvent de l’exécution du service. L’acceptation des conditions d’utilisation ne vaut pas consentement général à tous les usages de vos données. Les fonctions facultatives sont choisies séparément. La sécurité du service poursuit un intérêt légitime de protection des comptes ; son analyse et les règles propres aux archives métier doivent être documentées par le responsable du traitement.
           </p>
+        </section>
+        <section aria-labelledby="titre-localisation">
+          <h2 id="titre-localisation">Domicile et zone de recherche</h2>
+          <p>Votre adresse, votre code postal et votre ville de résidence sont facultatifs à l’inscription. La recherche de missions et les alertes utilisent la zone de travail que vous choisissez : une ville et un rayon modifiables, distincts du domicile. Une recherche ponctuelle ne modifie pas votre zone d’alertes enregistrée.</p>
+          <p>Le bouton de localisation est facultatif. À votre demande, le navigateur fournit une position que notre serveur transmet au service de géocodage de l’IGN pour proposer une adresse. Vous pouvez la vérifier, la corriger ou saisir votre zone manuellement. Aucun suivi continu de vos déplacements n’est effectué par ce bouton.</p>
         </section>
         <section aria-labelledby="titre-conservation">
           <h2 id="titre-conservation">Conservation et suppression</h2>
@@ -158,7 +157,7 @@ export default function Mentions() {
             pseudonymisée de l’adresse réseau ou de la session, avec une fenêtre
             de 1 à 15 minutes selon le parcours. Les compteurs expirés sont
             nettoyés par la maintenance. Les sauvegardes locales de production
-            sont chiffrées ; leur politique maximale retenue est de 30 jours.</p>
+            sont chiffrées ; la rotation vise 30 jours et conserve au moins deux copies complètes. L’arrêt des sauvegardes peut prolonger la présence de copies anciennes : leur suppression et le respect des effacements lors d’une restauration doivent être contrôlés.</p>
           <p>La suppression automatique générale des missions, affectations et
             documents métier historiques n’est pas activée sans décision sur
             leur conservation. La clôture du compte n’efface donc pas
@@ -176,6 +175,7 @@ export default function Mentions() {
             <li>Google, uniquement si vous l’autorisez : connexion facultative.</li>
             <li>Discord, si vous configurez cette liaison : notifications facultatives.</li>
             <li>Agence du Numérique en Santé : contrôle RPPS demandé dans le dossier.</li>
+            <li>IGN (Géoplateforme) : recherche d’adresses et conversion de la position en adresse lorsque vous utilisez la localisation.</li>
           </ul>
           <p>France Travail et JobsPipe fournissent les annonces externes, dont
             la source est indiquée sur chaque offre. La candidature à une offre

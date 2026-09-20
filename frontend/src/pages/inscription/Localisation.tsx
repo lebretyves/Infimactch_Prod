@@ -27,7 +27,7 @@ export default function Localisation() {
     const controller=new AbortController();
     request.current=controller;
     setError('');setNotice('');
-    if(!navigator.geolocation){setError('La géolocalisation est indisponible sur cet appareil. Saisissez votre adresse manuellement.');return;}
+    if(!navigator.geolocation){setError('La géolocalisation est indisponible sur cet appareil. Vous pouvez continuer sans position ou saisir une ville.');return;}
     setBusy(true);
     try {
       const position=await new Promise<GeolocationPosition>((resolve,reject)=>
@@ -43,17 +43,17 @@ export default function Localisation() {
           modifier({...coordinates,adresse:result.address.address,codePostal:result.address.postalCode,ville:result.address.city});
           setNotice(result.address.address
             ? 'Adresse proposée à partir de votre position. Vérifiez qu’elle correspond à votre domicile et corrigez-la si nécessaire.'
-            : 'Ville et code postal trouvés. Complétez le numéro et la rue de votre domicile.');
+            : 'Ville et code postal trouvés. Le numéro et la rue restent facultatifs.');
         }else{
-          setNotice('Position obtenue, mais aucune adresse trouvée à proximité. Saisissez votre adresse manuellement.');
+          setNotice('Position obtenue, mais aucune adresse trouvée à proximité. Vous pouvez continuer sans position ou saisir une ville.');
         }
       }catch{
-        if(!controller.signal.aborted)setNotice('Position obtenue, mais la recherche d’adresse est indisponible. Saisissez votre adresse manuellement.');
+        if(!controller.signal.aborted)setNotice('Position obtenue, mais la recherche d’adresse est indisponible. Vous pouvez continuer sans position ou saisir une ville.');
       }
     }catch(e){
       if(!controller.signal.aborted)setError((e as GeolocationPositionError).code===1
-        ? 'Autorisez la localisation dans votre navigateur ou saisissez votre adresse manuellement.'
-        : 'Position indisponible. Réessayez ou saisissez votre adresse manuellement.');
+        ? 'Localisation refusée. Vous pouvez continuer sans position ou saisir une ville.'
+        : 'Position indisponible. Vous pouvez continuer sans position ou saisir une ville.');
     }finally{
       if(!controller.signal.aborted)setBusy(false);
     }
@@ -62,11 +62,11 @@ export default function Localisation() {
   return (
     <Etape
       titre="Localisation"
-      chapeau="Renseignez votre ville et votre adresse. Votre position permet de calculer les distances des missions."
+      chapeau="Ces informations sont facultatives. Vous pouvez chercher des missions sans fournir votre adresse de domicile ni utiliser le GPS."
       suivant="/inscription/qualification"
     >
       <TextField
-        label="Adresse" required
+        label="Adresse" optional
         autoComplete="street-address"
         placeholder="12 rue des Olivettes"
         value={valeurs.adresse}
@@ -75,7 +75,7 @@ export default function Localisation() {
 
       <div className={s.paire}>
         <TextField
-          label="Code postal" required pattern="[0-9]{5}"
+          label="Code postal" optional pattern="[0-9]{5}"
           inputMode="numeric"
           autoComplete="postal-code"
           width="sm"
@@ -84,7 +84,7 @@ export default function Localisation() {
           onChange={(e) => edit({ codePostal: e.target.value })}
         />
         <TextField
-          label="Ville" required
+          label="Ville" optional
           autoComplete="address-level2"
           placeholder="Nantes"
           value={valeurs.ville}
@@ -98,7 +98,7 @@ export default function Localisation() {
       <p role="status">{notice}</p>
       {valeurs.latitude!==null&&valeurs.longitude!==null&&<p>Position enregistrée pour le calcul des distances.</p>}
       {error&&<p role="alert">{error}</p>}
-      <p>Vous pouvez poursuivre sans position ; les critères de distance resteront à compléter.</p>
+      <p>Votre zone de recherche et d’alertes peut être différente de votre domicile. Vous pourrez choisir une ville et un rayon dans votre profil ou les annonces, sans activer le GPS.</p>
     </Etape>
   );
 }

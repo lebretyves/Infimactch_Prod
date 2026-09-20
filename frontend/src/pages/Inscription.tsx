@@ -95,7 +95,6 @@ export default function Inscription() {
   const [motDePasse, setMotDePasse] = useState(() => charger().motDePasse);
   const [confirmation, setConfirmation] = useState(() => charger().motDePasse);
   const [cgu, setCgu] = useState(false);
-  const [rgpd, setRgpd] = useState(false);
   const [erreurs, setErreurs] = useState<Erreurs>({});
   const [enCours, setEnCours] = useState(false);
   const [compteCree, setCompteCree] = useState(false);
@@ -328,9 +327,6 @@ export default function Inscription() {
       }
       if (!referentTelephone.trim())
         trouvees.referentTelephone = "Numéro de téléphone direct requis.";
-      if (!rgpd)
-        trouvees.rgpd =
-          "Veuillez accepter le traitement des données de santé (RGPD).";
     }
 
     return trouvees;
@@ -882,22 +878,7 @@ export default function Inscription() {
               </div>
             )}
 
-            <div className={s.consentement}>
-              <Checkbox
-                name="rgpd"
-                checked={rgpd}
-                onChange={(e) => setRgpd(e.currentTarget.checked)}
-                required
-              >
-                J'autorise le traitement des données de l'établissement
-                conformément à la réglementation RGPD santé.
-              </Checkbox>
-              {erreurs.rgpd && (
-                <p className={s.erreur} role="alert">
-                  {erreurs.rgpd}
-                </p>
-              )}
-            </div>
+            <p className={s.aide}>Les informations nécessaires au service demandé servent à créer le compte de votre organisation et à faciliter la mise en relation. Ne transmettez aucune donnée permettant d’identifier un patient ni aucune donnée de santé concernant un patient.</p>
 
             <div className={s.consentement}>
               <Checkbox

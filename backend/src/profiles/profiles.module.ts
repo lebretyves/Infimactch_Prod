@@ -1,4 +1,5 @@
 import {CvController} from './cv.controller';
+import { SearchAreaDto } from './search-area';
 import {assertPersonalInformationUnchanged} from './personal-information';
 import {
   changeAvailability,
@@ -6,7 +7,7 @@ import {
 } from "../domain/availability";
 import { ProfileDetailsDto } from "./profile-details";
 import { worsensCommittedAvailability } from "../domain/assignment-profile";
-import { ApiProperty } from "@nestjs/swagger";
+import { ApiProperty, ApiOperation, ApiOkResponse } from "@nestjs/swagger";
 import {
   Body,
   Controller,
@@ -249,6 +250,24 @@ export function validateProfile(b: ProfileDto) {
 @Injectable()
 export class ProfilesService {
   constructor(private readonly db: Database) {}
+  async changeSearchArea(actor: string, b: SearchAreaDto) {
+    return this.db.transaction(async (em) => {
+      const current = await nurse(em, actor);
+      const city = b.city.trim();
+      if (current.latitude === b.latitude && current.longitude === b.longitude &&
+          current.radius_km === b.radiusKm && current.details?.mobilityCity === city)
+        return { latitude: current.latitude, longitude: current.longitude,
+          radius_km: current.radius_km, details: current.details };
+      const [updated] = await em.query(
+        "UPDATE profile SET latitude=$2,longitude=$3,radius_km=$4,details=jsonb_set(COALESCE(details,'{}'::jsonb),'{mobilityCity}',to_jsonb($5::text)),updated_at=now() WHERE user_id=$1 RETURNING latitude,longitude,radius_km,details",
+        [actor, b.latitude, b.longitude, b.radiusKm, city],
+      );
+      await audit(em, actor, "SEARCH_AREA_UPDATED", actor);
+      await queueProfileMatches(em, actor);
+      return updated;
+    });
+  }
+
   async changeAvailability(actor: string, b: AvailabilityPatchDto) {
     try {
       for (const change of b.changes) interval(change);
@@ -344,7 +363,7 @@ export class ProfilesService {
 }
 @Controller("profile")
 @UseGuards(SessionGuard)
-class ProfilesController {
+export class ProfilesController {
   constructor(
     private readonly db: Database,
     private readonly profiles: ProfilesService,
@@ -362,6 +381,18 @@ class ProfilesController {
     @Body() b: AvailabilityPatchDto,
   ) {
     return this.profiles.changeAvailability(user(req), b);
+  }
+  @Patch("search-area")
+  @ApiOperation({ summary: 'Enregistrer la zone de recherche et d’alertes', description: 'Modifie uniquement la position, le rayon et le libellé de mobilité du profil connecté. Préserve le domicile, les disponibilités et les préférences de notifications.' })
+  @ApiOkResponse({ schema: { type: 'object', required: ['latitude', 'longitude', 'radius_km', 'details'], properties: {
+    latitude: { type: 'number' }, longitude: { type: 'number' }, radius_km: { type: 'number' },
+    details: { type: 'object', additionalProperties: true },
+  } } })
+  searchArea(
+    @Req() req: Request,
+    @Body() b: SearchAreaDto,
+  ) {
+    return this.profiles.changeSearchArea(user(req), b);
   }
   @Put() update(@Req() req: Request, @Body() b: ProfileDto) {
     return this.profiles.update(user(req), b);

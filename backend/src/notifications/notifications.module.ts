@@ -1,3 +1,4 @@
+import { matchAreaStillValid } from './match-area';
 import { demoNoticeSuppressed } from "./demo-suppression";
 import { BadRequestException, Body, ConflictException, Controller, Delete, Get, Injectable, Module, Param, ParseUUIDPipe, Post, Put, Req, UseGuards } from "@nestjs/common";
 import { ArrayMaxSize, ArrayUnique, IsArray, IsBoolean, IsIn, IsOptional, IsString, Matches } from "class-validator";
@@ -120,7 +121,7 @@ export class NotificationsService {
               obsolete=!a || a.status!=='CANCELLED';
             } else obsolete ||= m.status!=='CANCELLED';
           }
-          if(row.kind==='MATCH') { const [p]=await em.query("SELECT 1 FROM profile WHERE user_id=$1 AND notifications_enabled",[row.user_id]); obsolete ||= !p; }
+          if(row.kind==='MATCH') obsolete ||= !(await matchAreaStillValid(em,row.user_id,row.context.missionId));
         }
         if(!active || !owner || !row.enabled || row.version!==row.destination_version || !row.events.includes(row.kind) || (!row.organization_id && muted) || obsolete) {
           await em.query("UPDATE notification_delivery SET status='CANCELLED',last_error='DESTINATION_OR_EVENT_CHANGED' WHERE id=$1",[row.id]);return {skip:true};
