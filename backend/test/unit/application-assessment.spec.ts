@@ -14,7 +14,7 @@ test('preferences and unknown or distant mobility only warn for applications',()
 });
 test('hard restrictions survive alongside soft differences',()=>{
  const p={...profile,qualifications:[],rppsStatus:'PENDING' as const,conflicts:[slot]};
- const r=assessApplication(p,{...mission,status:'CANCELLED'},0,Date.parse(slot.end));assert.deepEqual(r.blockingReasons,['MISSION_NOT_OPEN','QUALIFICATION_MISSING','RPPS_PENDING','ASSIGNMENT_CONFLICT','MISSION_ALREADY_STARTED']);assert.equal(r.warnings.length,3);
+ const r=assessApplication(p,{...mission,status:'CANCELLED'},0,Date.parse(slot.end));assert.deepEqual(r.blockingReasons,['MISSION_NOT_OPEN','ASSIGNMENT_CONFLICT','MISSION_ALREADY_STARTED']);assert.ok(r.warnings.includes('QUALIFICATION_MISSING'));assert.ok(r.warnings.includes('RPPS_PENDING'));
 });
 test('implicit specialized skills are included and duplicates are removed',()=>{
  const r=assessApplication({...profile,qualifications:['IBODE']},{...mission,qualification:'IBODE',population:'MIXED',block:'SPECIALIZED',specialty:'CARDIAC',requiredSkills:['POPULATION_ADULT','TRIAGE']},0);
@@ -29,10 +29,17 @@ test('date-only application warns without assuming full-day unavailability or co
  assert.equal(match(p,m,0).eligible,false);assert.equal(match(p,m,0).score,null);
  assert.deepEqual(assessApplication(p,m,0,Date.parse(slot.end)).blockingReasons,['MISSION_ALREADY_STARTED']);
 });
-test('date-only schedule warning never bypasses qualification or RPPS requirements',()=>{
+test('date-only applications keep profile and schedule issues as warnings',()=>{
  const r=assessApplication({...profile,qualifications:[],rppsStatus:'NOT_FOUND'},{...mission,schedulePrecision:'DATE',shift:'UNKNOWN'},0,0);
- assert.deepEqual(r.blockingReasons,['QUALIFICATION_MISSING','RPPS_NOT_FOUND']);assert.ok(r.warnings.includes('SCHEDULE_UNCONFIRMED'));
+ assert.deepEqual(r.blockingReasons,[]);assert.ok(r.warnings.includes('QUALIFICATION_MISSING'));assert.ok(r.warnings.includes('RPPS_NOT_FOUND'));assert.ok(r.warnings.includes('SCHEDULE_UNCONFIRMED'));
 });
 test('exact applications remain closed after the actual start time',()=>{
  assert.ok(assessApplication(profile,{...mission,schedulePrecision:'EXACT'},0,Date.parse(slot.start)).blockingReasons.includes('MISSION_ALREADY_STARTED'));
+});
+
+for(const rppsStatus of ['NOT_CHECKED','PENDING','NOT_FOUND'] as const)test('empty profile can apply with warnings: '+rppsStatus,()=>{
+ const incomplete={...profile,qualifications:[],rppsStatus,latitude:null,longitude:null,radiusKm:null,acceptedShifts:[]};
+ const result=assessApplication(incomplete,mission,null);
+ assert.deepEqual(result.blockingReasons,[]);assert.ok(result.warnings.includes('QUALIFICATION_MISSING'));assert.ok(result.warnings.includes('RPPS_'+rppsStatus));
+ assert.equal(match(incomplete,mission,null).eligible,false);
 });

@@ -1,6 +1,7 @@
 import { MATCH_RULES } from "../domain/rules";
 import {experienceMonths, match, MatchMission, Professional, requiredMissionSkills} from '../domain/matching';
 const applicationWarnings = new Set([
+  'QUALIFICATION_MISSING', 'RPPS_NOT_CHECKED', 'RPPS_PENDING', 'RPPS_NOT_FOUND',
   'SERVICE_NOT_PREFERRED', 'REQUIRED_SKILLS_MISSING', 'EXPERIENCE_INSUFFICIENT', 'NOT_FULLY_AVAILABLE',
   'SHIFT_NOT_ACCEPTED', 'MOBILITY_INCOMPLETE', 'OUTSIDE_RADIUS', 'SCHEDULE_UNCONFIRMED',
 ]);

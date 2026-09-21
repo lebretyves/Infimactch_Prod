@@ -3,6 +3,7 @@ import { match, MatchMission, Professional } from '../domain/matching';
 
 // Confirmation of a voluntary application is distinct from matching eligibility.
 const assignmentWarnings = new Set([
+  'QUALIFICATION_MISSING', 'RPPS_NOT_CHECKED', 'RPPS_PENDING', 'RPPS_NOT_FOUND',
   'SERVICE_NOT_PREFERRED', 'REQUIRED_SKILLS_MISSING', 'EXPERIENCE_INSUFFICIENT',
   'NOT_FULLY_AVAILABLE', 'SHIFT_NOT_ACCEPTED', 'MOBILITY_INCOMPLETE', 'OUTSIDE_RADIUS',
 ]);

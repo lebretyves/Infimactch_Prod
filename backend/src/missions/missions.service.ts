@@ -418,9 +418,9 @@ export class MissionsService {
         throw new ConflictException("Invalid application transition");
       if (
         action !== "WITHDRAWN" &&
-        (m.status !== "OPEN" || a.consent_version !== m.version)
+        m.status !== "OPEN"
       )
-        throw new ConflictException("Fresh consent required");
+        throw new ConflictException("Mission not open");
       await em.query(
         "UPDATE application SET status=$2,updated_at=now() WHERE id=$1",
         [id, action],

@@ -41,9 +41,7 @@ test('confirmed overlap remains blocking even when the agenda is empty',async()=
 test('adjacent confirmed missions do not conflict',async()=>{
   assert.equal((await eligible(db([{start_at:new Date(Date.parse(start)-3600000).toISOString(),end_at:start}]),p,m)).eligible,true);
 });
-test('qualification, RPPS, mission state and exact schedule remain mandatory',async()=>{
-  await assert.rejects(eligible(db(),{...p,qualifications:[]},m),rejectsWith('QUALIFICATION_MISSING'));
-  await assert.rejects(eligible(db(),{...p,rpps_status:'PENDING'},m),rejectsWith('RPPS_PENDING'));
+test('mission state and exact schedule remain mandatory',async()=>{
   await assert.rejects(eligible(db(),p,{...m,status:'FILLED'}),rejectsWith('MISSION_NOT_OPEN'));
   await assert.rejects(eligible(db(),p,{...m,schedule_precision:'DATE'}),rejectsWith('SCHEDULE_UNCONFIRMED'));
   await assert.rejects(eligible(db(),p,{...m,shift:'UNKNOWN'}),rejectsWith('SCHEDULE_UNCONFIRMED'));
@@ -60,7 +58,7 @@ for(const pendingStatus of ['SUBMITTED','SELECTED'])test('direct acceptance crea
     if(sql.includes('SELECT o.kind FROM membership'))return [{kind:'ESTABLISHMENT'}];
     if(sql.startsWith('SELECT nurse_id FROM application'))return [{nurse_id:'nurse'}];
     if(sql.startsWith('SELECT id FROM account'))return [{id:'nurse'}];
-    if(sql.startsWith('SELECT * FROM profile'))return [p];
+    if(sql.startsWith('SELECT * FROM profile'))return [{...p,qualifications:[],rpps_status:'PENDING'}];
     if(sql.startsWith('SELECT * FROM application'))return [{id:'application',status:pendingStatus,consent_version:1}];
     if(sql.startsWith('INSERT INTO assignment'))return [{id:'assignment',status:'ACTIVE'}];
     return [];
@@ -71,4 +69,28 @@ for(const pendingStatus of ['SUBMITTED','SELECTED'])test('direct acceptance crea
   assert.ok(calls.some(c=>c.sql.includes("UPDATE mission SET status='FILLED'")));
   assert.equal(calls.filter(c=>c.sql.startsWith('INSERT INTO outbox(event,payload)')&&c.values[0]==='AssignmentCreated').length,1);
   assert.equal(calls.some(c=>c.values.includes('APPLICATION_SELECTED')),false);
+});
+
+for(const rpps_status of ['NOT_CHECKED','PENDING','NOT_FOUND'])test('incomplete profile can be accepted with visible qualification and RPPS warnings: '+rpps_status,async()=>{
+ const incomplete={...p,qualifications:[],rpps_status};
+ const result=await eligible(db(),incomplete,m);
+ assert.equal(result.eligible,true);assert.ok(result.warnings.includes('QUALIFICATION_MISSING'));
+ assert.ok(result.warnings.some(w=>w==='RPPS_'+rpps_status||w==='RPPS_OPTIONAL_DEMO'));
+ await assert.rejects(eligible(db([{start_at:start,end_at:end}]),incomplete,m),rejectsWith('ASSIGNMENT_CONFLICT'));
+});
+
+test('rejection does not require a complete profile or renewed consent',async()=>{
+ const writes:any[]=[];
+ const em={query:async(sql:string,values:any[]=[])=>{
+  if(sql.startsWith('SELECT mission_id,nurse_id'))return [{mission_id:'mission',nurse_id:'nurse'}];
+  if(sql.startsWith('SELECT m.*'))return [{...m,id:'mission',version:2,establishment_id:'org'}];
+  if(sql.startsWith('SELECT * FROM profile'))return [{...p,qualifications:[],rpps_status:'PENDING'}];
+  if(sql.startsWith('SELECT * FROM application'))return [{id:'application',status:'SUBMITTED',consent_version:1,nurse_id:'nurse'}];
+  if(sql.startsWith('SELECT organization_id FROM membership'))return [{organization_id:'org'}];
+  if(sql.startsWith('UPDATE application SET status=$2'))writes.push(values);
+  return [];
+ }};
+ const service=new MissionsService({transaction:async(fn:any)=>fn(em)} as any);
+ assert.equal((await service.applicationAction('owner','application','REJECTED','unique-key')).status,'REJECTED');
+ assert.deepEqual(writes,[['application','REJECTED']]);
 });

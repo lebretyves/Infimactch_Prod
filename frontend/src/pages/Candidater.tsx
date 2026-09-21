@@ -143,7 +143,7 @@ export default function Candidater() {
         </p>
         <p>{user.qualification || "Qualification à renseigner"}</p>
         <p>
-          Les écarts de compétences, d’expérience, de disponibilités ou de mobilité
+          Les informations de diplôme ou RPPS manquantes et les écarts de compétences, d’expérience, de disponibilités ou de mobilité
           vous sont signalés. Vous pouvez envoyer votre candidature malgré ces écarts.
           L’agence ou l’établissement examine ensuite votre candidature.
         </p>

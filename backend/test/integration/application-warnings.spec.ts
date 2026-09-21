@@ -27,14 +27,21 @@ test('soft mismatch preview, application, audit and idempotent receipt agree; re
  const assigned=await service.assign(actor,mission,a.id,randomUUID());assert.equal(assigned.status,'ACTIVE');
  const [confirmationAudit]=await db.query("SELECT details FROM audit WHERE resource_id=$1 AND event='ASSIGNMENT_CREATED'",[assigned.id]);assert.deepEqual(confirmationAudit.details.profileWarnings,preview.warnings);
 });
-test('version, mission lifecycle, qualification, RPPS and account restrictions remain enforced',async()=>{
+test('version, mission lifecycle and account restrictions remain enforced',async()=>{
  const {actor,mission}=await fixture();await assert.rejects(service.apply(actor,mission,2,randomUUID()),conflict);
- for(const [sql,reason] of [["UPDATE profile SET rpps_status='PENDING' WHERE user_id=$1",'RPPS_PENDING'],["UPDATE profile SET rpps_status='FOUND',qualifications=ARRAY['IADE'] WHERE user_id=$1",'QUALIFICATION_MISSING']] as [string,string][]){
-  await db.query(sql,[actor]);const preview=await service.applicationCheck(actor,mission);assert.ok(preview.blockingReasons.includes(reason));await assert.rejects(service.apply(actor,mission,1,randomUUID()),(e:any)=>e.getResponse().reasons.includes(reason));
- }
- await db.query("UPDATE profile SET qualifications=ARRAY['IDE'] WHERE user_id=$1",[actor]);
  await db.query("UPDATE mission SET status='CANCELLED' WHERE id=$1",[mission]);await assert.rejects(service.apply(actor,mission,1,randomUUID()),conflict);
  await db.query("UPDATE mission SET status='OPEN',start_at=now()-interval '1 hour',end_at=now()+interval '1 hour' WHERE id=$1",[mission]);assert.ok((await service.applicationCheck(actor,mission)).blockingReasons.includes('MISSION_ALREADY_STARTED'));await assert.rejects(service.apply(actor,mission,1,randomUUID()),conflict);
  await db.query('UPDATE account SET active=false WHERE id=$1',[actor]);await assert.rejects(service.applicationCheck(actor,mission),(e:any)=>e.getStatus()===404);
  assert.equal((await db.query('SELECT id FROM application WHERE mission_id=$1',[mission])).length,0);
+});
+
+test('incomplete profile can apply then be accepted or rejected despite warnings',async()=>{
+ for(const decision of ['accept','reject']){
+  const {actor,mission}=await fixture();
+  await db.query("UPDATE profile SET qualifications='{}',rpps_status='PENDING',latitude=NULL,longitude=NULL,radius_km=NULL,accepted_shifts='{}' WHERE user_id=$1",[actor]);
+  const preview=await service.applicationCheck(actor,mission);assert.deepEqual(preview.blockingReasons,[]);assert.ok(preview.warnings.includes('QUALIFICATION_MISSING'));
+  const a=await service.apply(actor,mission,1,randomUUID());assert.equal(a.status,'SUBMITTED');assert.deepEqual(a.warnings,preview.warnings);
+  if(decision==='accept')assert.equal((await service.assign(actor,mission,a.id,randomUUID())).status,'ACTIVE');
+  else {await db.query('UPDATE mission SET version=2 WHERE id=$1',[mission]);assert.equal((await service.applicationAction(actor,a.id,'REJECTED',randomUUID())).status,'REJECTED');}
+ }
 });
