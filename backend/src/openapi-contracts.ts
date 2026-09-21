@@ -64,7 +64,7 @@ export const additionalResponses:Record<string,any>={
  "GET /api/v1/me/email-deliveries":emailDeliveryJournal,
  "GET /api/v1/admin/accounts/{id}/email-deliveries":emailDeliveryJournal,
  "GET /api/v1/me/matches/mission/{id}":match,
- "GET /api/v1/matching/rules":obj({version:str,weights:obj({C:num,Z:num,D:num,E:num},['C','Z','D','E'])},['version','weights']),
+ "GET /api/v1/matching/rules":obj({version:str,weights:obj({C:num,Z:num,D:num,E:num},['C','Z','D','E']),rppsRequired:bool},['version','weights','rppsRequired']),
  "GET /api/v1/assignments/{id}/cancellation":obj({status:str,document_id:nullable(uuid),created_at:date},['status','document_id']),
 
  "GET /api/v1/listings/locations":obj({provider:str,items:array(obj({label:str,latitude:num,longitude:num}))}),

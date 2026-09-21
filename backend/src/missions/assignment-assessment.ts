@@ -1,3 +1,4 @@
+import { MATCH_RULES } from "../domain/rules";
 import { match, MatchMission, Professional } from '../domain/matching';
 
 // Confirmation of a voluntary application is distinct from matching eligibility.
@@ -13,6 +14,7 @@ export function assessAssignment(p: Professional, m: MatchMission, distance: num
     ...result,
     eligible: blockingReasons.length === 0,
     blockingReasons,
-    warnings: result.reasons.filter(reason => assignmentWarnings.has(reason)),
+    warnings: [...result.reasons.filter(reason => assignmentWarnings.has(reason)),
+      ...(!MATCH_RULES.rppsRequired && p.rppsStatus !== "FOUND" ? ["RPPS_OPTIONAL_DEMO"] : [])],
   };
 }

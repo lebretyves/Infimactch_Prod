@@ -116,7 +116,7 @@ export function match(
   if (m.status !== "OPEN") reasons.push("MISSION_NOT_OPEN");
   if (!p.qualifications.includes(m.qualification))
     reasons.push("QUALIFICATION_MISSING");
-  if (p.rppsStatus !== "FOUND") reasons.push("RPPS_" + p.rppsStatus);
+  if (MATCH_RULES.rppsRequired && p.rppsStatus !== "FOUND") reasons.push("RPPS_" + p.rppsStatus);
   const preferredServices = p.practiceServices?.[m.qualification];
   if (preferredServices?.length && !preferredServices.includes(m.service))
     reasons.push("SERVICE_NOT_PREFERRED");

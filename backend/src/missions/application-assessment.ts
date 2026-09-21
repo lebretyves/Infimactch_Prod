@@ -1,3 +1,4 @@
+import { MATCH_RULES } from "../domain/rules";
 import {experienceMonths, match, MatchMission, Professional, requiredMissionSkills} from '../domain/matching';
 const applicationWarnings = new Set([
   'SERVICE_NOT_PREFERRED', 'REQUIRED_SKILLS_MISSING', 'EXPERIENCE_INSUFFICIENT', 'NOT_FULLY_AVAILABLE',
@@ -8,7 +9,8 @@ export function assessApplication(p: Professional, m: MatchMission, distance: nu
   const blockingReasons = result.reasons.filter(reason => !applicationWarnings.has(reason));
   if (new Date(m.schedulePrecision === 'DATE' ? m.end : m.start).getTime() <= now) blockingReasons.push('MISSION_ALREADY_STARTED');
   return {
-    warnings: result.reasons.filter(reason => applicationWarnings.has(reason)),
+    warnings: [...result.reasons.filter(reason => applicationWarnings.has(reason)),
+      ...(!MATCH_RULES.rppsRequired && p.rppsStatus !== "FOUND" ? ["RPPS_OPTIONAL_DEMO"] : [])],
     blockingReasons,
     missingSkills: requiredMissionSkills(m).filter(skill => !p.skills.includes(skill)),
     experienceMonths: experienceMonths(p.experience, m.service, m.start),

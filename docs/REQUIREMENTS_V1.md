@@ -41,7 +41,7 @@ InfiMatch assure la mise en relation. Les agences emploient et paient. Hors pér
 | P01 | RIB facultatif | Aucun blocage d'inscription, de candidature ou de mission causé uniquement par son absence ; proposition après première mission |
 | P02 | Domicile distinct de la zone d'alertes | Ville et rayon enregistrés modifiables ; une recherche ponctuelle ne change pas les alertes |
 | P03 | Discord facultatif après création | Choix Configurer / Passer ; aucune nouvelle préférence cochée automatiquement ; réglages accessibles ensuite |
-| P04 | Vérification professionnelle | État RPPS réel, attente et échec explicites ; pas de validation fictive ou de certification d'identité déduite |
+| P04 | Vérification professionnelle | État RPPS réel, attente et échec explicites ; RPPS facultatif en démonstration via DEMO_OPTIONAL_RPPS=true, sans validation fictive |
 | P05 | Décision humaine | Matching et avertissements aident la décision ; les permissions et critères bloquants sont appliqués côté serveur |
 | P06 | Documents privés | Accès autorisé, métadonnées maîtrisées, chiffrement et distinction confirmation/contrat |
 | P07 | Traçabilité honnête | Acceptation d'un email distincte de sa livraison ; configuration d'un service distincte de son fonctionnement prouvé |
@@ -68,3 +68,9 @@ Diagnostic détaillé des connexions, chronologie admin centralisée et tableau 
 ## Documentation de référence
 
 [Architecture technique](SCHEMA_ARCHITECTURE_V1.md), [flux métier](FLUX_V1.md), [automatisations et preuves](AUTOMATISATIONS.md), [guide utilisateur](GUIDE_UTILISATEUR.md) et [inventaire documentaire](INVENTAIRE_DOCUMENTAIRE.md). Les six tutoriels vidéo ont été réenregistrés et contrôlés le 21 septembre 2026 : [périmètre et preuves](quality/TUTORIELS_VIDEO_2026-09-21.md). La répétition humaine du support oral reste à faire.
+
+### RPPS dans la démonstration scolaire
+
+Le réglage serveur `DEMO_OPTIONAL_RPPS=true` permet le matching interne, la candidature et l’affectation sans RPPS vérifié. Le statut existant est conservé ; les écrans de candidature signalent cette dérogation. La qualification déclarée, les conflits d’affectation et les règles de dates restent contrôlés. En l’absence de ce réglage, le contrôle RPPS strict revient. La version des règles de matching change avec cette option pour invalider les anciennes explications. Les offres externes gardent leur comparaison partielle et leurs propres conditions.
+
+Validation : `backend/test/unit/rpps-demo-policy.spec.ts` et `frontend/scripts/test-rpps-demo.mjs` couvrent les modes facultatif et strict sans modifier de statut RPPS ni soumettre une candidature réelle.
