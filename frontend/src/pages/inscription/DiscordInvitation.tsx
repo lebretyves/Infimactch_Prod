@@ -6,7 +6,7 @@ export function DiscordInvitation() {
     <div className={s.prochaineEtape}>
       <p className={s.etapeLabel}>Étape facultative</p>
       <h2 className={s.etapeTitre}>Recevoir mes notifications sur Discord</h2>
-      <p>Configurez Discord pour recevoir les événements que vous choisissez. Votre compte est déjà utilisable sans Discord et vos notifications restent disponibles dans InfiMatch.</p>
+      <p>Activez Discord pour recevoir tous les événements disponibles par défaut. Vous pourrez décocher ceux qui ne vous intéressent pas avant d’enregistrer. Votre compte est déjà utilisable sans Discord et vos notifications restent disponibles dans InfiMatch.</p>
       <p>Vous pourrez modifier ce choix plus tard dans la rubrique Notifications.</p>
     </div>
     <div className={s.actions}>

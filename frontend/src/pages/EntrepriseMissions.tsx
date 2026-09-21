@@ -5,6 +5,7 @@ import { useRemote } from "@/lib/useRemote";
 import { enterpriseMissionSearch, missionDate, statusLabels } from "@/services/market";
 import { missionPages, missionReturnTo } from "@/lib/missionNavigation";
 import { Button, ButtonLink } from "@/ui/Button";
+import { LegacyMissionDrafts } from "@/components/LegacyMissionDrafts";
 import s from "./MesEtablissements.module.css";
 import p from "./EntrepriseMissions.module.css";
 const keys = ['q','qualification','location','date','status','shift','sort'] as const;
@@ -74,5 +75,6 @@ export default function EntrepriseMissions() {
       {outOfRange?<div className={s.empty}><p>Cette page n’est plus disponible pour les critères sélectionnés.</p><Button onClick={()=>move(1)}>Revenir à la première page</Button></div>:<div className={s.list}>{r.data?.items.map(m=><article key={m.id} className={s.mission}><p className={s.site}>{m.establishment_name||(establishmentId?establishmentName:'Établissement non renseigné')}</p><h2>{m.title}</h2><p>{statusLabels[m.status||'']||'État à vérifier'} · {m.qualification}</p><p>{missionDate(m)} → {missionDate(m,true)} · {m.schedule_precision==='DATE'?'Horaires précis à confirmer':'heure locale'}</p><div className={s.actions}>{editMode&&m.can_manage&&['OPEN','DRAFT'].includes(m.status||'')&&<ButtonLink to={'/gestion/missions/'+m.id+'/modifier?'+returnQuery} size="sm">Modifier cette offre</ButtonLink>}<ButtonLink to={'/gestion/missions/'+m.id+'?'+returnQuery} variant="outline" size="sm">Mission et candidatures</ButtonLink></div></article>)}{!r.data?.items.length&&<p className={s.empty}>Aucune mission ne correspond à cette recherche.{offset>0&&<Button variant="ghost" onClick={()=>move(1)}>Revenir à la première page</Button>}</p>}</div>}
       {total>0&&!outOfRange&&<MissionPagination current={current} count={pages} move={move}/>}
     </>}
+    <LegacyMissionDrafts key={establishmentId || "all"} userId={user!.id} establishmentId={establishmentId} returnTo={returnTo}/>
   </div>;
 }

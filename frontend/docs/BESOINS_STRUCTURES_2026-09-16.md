@@ -1,5 +1,7 @@
 # Besoins de personnel structurés — 16 septembre 2026
 
+> Note historique : depuis le 21 septembre 2026, ce formulaire séparé est retiré. Le parcours courant est décrit dans [Création et suivi des missions](../../docs/ENTERPRISE_FOLLOW_UP.md). Les résultats ci-dessous concernent la version du 16 septembre.
+
 ## Correction
 
 La page `/besoins` ne permettait auparavant de sauvegarder qu’un intitulé et une description. Le formulaire, le contrat API et PostgreSQL prennent maintenant en charge :

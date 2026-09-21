@@ -23,7 +23,7 @@ const pages: Record<string, [string, string]> = {
  '/mot-de-passe-oublie': ['Mot de passe oublié', 'Demandez un lien pour réinitialiser votre mot de passe.'],
  '/reinitialiser-mot-de-passe': ['Réinitialiser mon mot de passe', 'Définissez un nouveau mot de passe pour votre compte.'],
  '/organisation': ['Mon organisation', 'Gérez les informations de votre organisation.'],
- '/besoins': ['Besoins de recrutement', 'Suivez les besoins et les missions de votre organisation.'],
+ '/besoins': ['Missions et suivi', 'Retrouvez la création et le suivi des missions de votre organisation.'],
 };
 export function pageMetadata(path: string) {
  const data = pages[path] || (/^\/missions\/[^/]+\/candidater$/.test(path) ? ['Envoyer ma candidature', 'Vérifiez les conditions et confirmez votre candidature.']
