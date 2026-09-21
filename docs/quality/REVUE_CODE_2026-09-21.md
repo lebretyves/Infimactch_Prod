@@ -22,7 +22,7 @@ Les commentaires techniques et les licences sont conservés. Aucun auteur humain
 
 ## Validation locale obtenue
 
-- Backend : compilation réussie, **333 tests unitaires réussis**.
+- Backend : compilation réussie, **332 tests unitaires réussis**.
 - Intégrations : **160 tests réussis dans 24 fichiers**, bases PostgreSQL/MongoDB isolées, trois workflows réellement publiés et exécutés sur n8n local ; cinq contrôles supplémentaires de sécurité PostgreSQL réussis. Aucun appel à n8n Cloud pour ces contrôles.
 - Frontend : tests réguliers réussis, dont 18 tests des adaptateurs API public/admin ; compilation publique et administration réussies.
 - Navigateur : notifications lues, recommandations mixtes, erreurs réseau/serveur/données et chargement lent ; écran de secours et récupération. Recette admin : activation/MFA simulés, rôles, confirmation explicite, mobile, déconnexion et réponse de rendu incohérente récupérée.
