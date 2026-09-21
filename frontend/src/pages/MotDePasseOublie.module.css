@@ -22,9 +22,9 @@
 .alerte {
   padding: var(--space-3) var(--space-4);
   border-radius: var(--radius-md);
-  background: var(--rose-50);
-  border: 1px solid var(--rose-200);
-  color: var(--rose-800);
+  background: var(--danger-50);
+  border: 1px solid var(--danger-200);
+  color: var(--danger-700);
   font-size: var(--font-body-sm);
   font-weight: 500;
 }
@@ -32,9 +32,9 @@
 .succes {
   padding: var(--space-4);
   border-radius: var(--radius-md);
-  background: var(--teal-50);
+  background: var(--teal-100);
   border: 1px solid var(--teal-200);
-  color: var(--teal-900);
+  color: var(--teal-700);
   font-size: var(--font-body-sm);
   display: grid;
   gap: var(--space-2);
@@ -43,7 +43,7 @@
 .succes h2 {
   font-size: var(--font-h3);
   font-weight: 700;
-  color: var(--teal-900);
+  color: var(--teal-700);
 }
 
 .bascule {

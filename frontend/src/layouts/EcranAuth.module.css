@@ -13,7 +13,7 @@
   display: flex;
   align-items: center;
   padding: clamp(var(--space-8), 4vw, var(--space-16)) clamp(var(--space-5), 4vw, var(--space-10));
-  background: linear-gradient(170deg, #e8f5fb 0%, #f4fbfd 78%);
+  background: var(--sky-200);
 }
 
 .promoInterieur {
@@ -26,6 +26,7 @@
 }
 
 .formulaire {
+  background: var(--white);
   display: flex;
   align-items: center;
   padding: clamp(var(--space-8), 4vw, var(--space-16)) clamp(var(--space-5), 4vw, var(--space-10));

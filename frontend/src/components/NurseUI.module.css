@@ -35,7 +35,7 @@
   text-transform: uppercase;
   letter-spacing: 1.2px;
   font-weight: 800;
-  color: var(--teal-700);
+  color: var(--brand-700);
   margin-bottom: 10px !important;
 }
 .subtitle,
@@ -47,7 +47,7 @@
 }
 .card {
   background: #fff;
-  border: 1px solid #e8f0f6;
+  border: 1px solid var(--line);
   border-radius: 8px;
   padding: 24px;
   min-width: 0;
@@ -99,7 +99,7 @@
   align-items: center;
   gap: 6px;
   padding: 6px 10px;
-  background: #e5f7f6;
+  background: var(--teal-100);
   color: #0b6776;
   border-radius: 6px;
   font-size: 12px;
@@ -126,7 +126,7 @@
 }
 .feedback[role="status"] {
   color: var(--teal-700);
-  background: #e5f7f6;
+  background: var(--teal-100);
 }
 .tabs {
   display: flex;

@@ -78,13 +78,13 @@
 }
 
 .outline {
-  background: transparent;
-  border-color: var(--blue-500);
+  background: var(--brand-100);
+  border-color: transparent;
   color: var(--blue-700);
 }
 
 .outline:hover:not(:disabled) {
-  background: var(--tint);
+  background: var(--brand-200);
   color: var(--blue-900);
 }
 
@@ -94,7 +94,7 @@
 }
 
 .ghost:hover:not(:disabled) {
-  background: var(--grey-100);
+  background: var(--brand-50);
   color: var(--blue-900);
 }
 

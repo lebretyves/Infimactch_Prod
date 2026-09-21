@@ -7,9 +7,19 @@ export function missionCrushs(data: Recommendations, origin: 'toutes' | 'partena
   const external = origin !== 'partenaires' && data.external.status !== 'HIDDEN'
     ? data.external.items.map(item => ({ item, external: true })) : [];
   const seen = new Set<string>();
-  return [...partners, ...external].filter(({ item }) => {
+  const available = [...partners, ...external].filter(({ item }) => {
     if (seen.has(item.id)) return false;
     seen.add(item.id);
     return true;
-  }).slice(0, 3);
+  });
+  if (origin === 'toutes') {
+    const partnerCards = available.filter(card => !card.external);
+    const externalCards = available.filter(card => card.external);
+    if (partnerCards.length && externalCards.length) {
+      // Keep each source ranking, while reserving a place for an external offer.
+      // External partial correspondence is never compared to a partner percentage.
+      return [...partnerCards.slice(0, 2), externalCards[0], ...partnerCards.slice(2), ...externalCards.slice(1)].slice(0, 3);
+    }
+  }
+  return available.slice(0, 3);
 }
