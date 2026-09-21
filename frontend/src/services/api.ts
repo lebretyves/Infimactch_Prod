@@ -207,7 +207,7 @@ export async function downloadDocument(id: string) {
   link.download =
     "infimatch-" +
     id +
-    (blob.type.includes("pdf")
+    (blob.type.includes("wordprocessingml") ? ".docx" : blob.type.includes("pdf")
       ? ".pdf"
       : blob.type.includes("png")
         ? ".png"

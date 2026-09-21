@@ -1,3 +1,4 @@
+import {CV_MIMES,cvFileMime} from './cv-file';
 import { PageDto } from "../common/page.dto";
 import { Query } from "@nestjs/common";
 import { ApiProperty } from "@nestjs/swagger";
@@ -65,6 +66,11 @@ class UploadDto {
   @ApiProperty({ type: () => Boolean, required: true })
   @Equals(true)
   fictional!: boolean;
+}
+export class CvUploadDto {
+ @ApiProperty({enum:CV_MIMES}) @IsIn(CV_MIMES) mime!:string;
+ @ApiProperty() @IsString() @Length(4,4200000) contentBase64!:string;
+ @ApiProperty() @Equals(true) reviewed!:boolean;
 }
 class BankDto {
   @ApiProperty() @IsIBAN() iban!: string;
@@ -143,7 +149,7 @@ export class DocumentsService {
       // Replaced bank details remain retained but only the active version consumes user quota.
       if (!["CONFIRMATION","CANCELLATION"].includes(kind)) {
         const [storage] = await em.query(
-          "SELECT COALESCE(sum(size_bytes),0)::text AS bytes FROM document WHERE owner_id=$1 AND kind IN('EVIDENCE','BANK') AND superseded_at IS NULL AND status IN('STAGING','READY') AND NOT ($2::boolean AND kind=$3)",
+          "SELECT COALESCE(sum(size_bytes),0)::text AS bytes FROM document WHERE owner_id=$1 AND kind IN('EVIDENCE','BANK','CV') AND superseded_at IS NULL AND status IN('STAGING','READY') AND NOT ($2::boolean AND kind=$3)",
           [actor, replacePrevious, kind],
         );
         if (Number(storage.bytes) + data.length > documentQuotaBytes())
@@ -364,6 +370,13 @@ export class DocumentsController {
       key,
       content: b,
     });
+  }
+  @Post("cv-document") async uploadCv(@Req() r:Request,@Headers("idempotency-key") key:string|undefined,@Body() b:CvUploadDto) {
+    await this.db.transaction(em=>nurse(em,user(r)));
+    const data=Buffer.from(b.contentBase64,'base64');
+    if(b.reviewed!==true||!CV_MIMES.includes(b.mime)||!data.length||data.length>3*1024*1024||cvFileMime(data)!==b.mime)
+      throw new BadRequestException('Choisissez un CV PDF, DOCX, JPEG ou PNG valide de 3 Mo maximum.');
+    return this.documents.store(user(r),'CV',b.mime,data,null,{operation:'cv-document.upload',key,content:b});
   }
   @Get("documents") list(@Req() r: Request, @Query() page: PageDto) {
     return this.db.query(

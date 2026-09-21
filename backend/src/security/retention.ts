@@ -190,7 +190,7 @@ export async function anonymizeAccount(em: SqlClient, accountId: string) {
   );
   if (!account) throw new Error("Account not found");
   const documents = await em.query(
-    "SELECT id FROM document WHERE owner_id=$1 AND kind IN('EVIDENCE','BANK')",
+    "SELECT id FROM document WHERE owner_id=$1 AND kind IN('EVIDENCE','BANK','CV')",
     [accountId],
   );
   await em.query("DELETE FROM session WHERE sess->>'userId'=$1", [accountId]);

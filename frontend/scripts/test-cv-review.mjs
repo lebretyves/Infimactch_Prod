@@ -16,4 +16,11 @@ test('DOCX rejects DTD and damaged checksum',async()=>{await assert.rejects(docx
 test('DOCX honours cancellation and file limits',async()=>{const c=new AbortController();c.abort();await assert.rejects(docxDocumentXml(zipDocument('x'),c.signal));assert.equal(acceptsCv({name:'cv.docx',type:'',size:100}),true);assert.equal(acceptsCv({name:'cv.docm',type:'',size:100}),false);assert.equal(acceptsCv({name:'cv.docx',type:DOCX_MIME,size:6*1024*1024}),false);});
 const profile={display_name:'Existant',details:{firstName:'Existant',lastName:'Protégé',ideDiplomaYear:2010},qualifications:['IDE'],skills:['SKILL_EXISTING'],rpps_status:'VERIFIED'};
 test('review preserves personal identity, RPPS, existing skills and independent IDE year',()=>{const patch=reviewedCvProfile(profile,[{qualification:'IADE',year:2018}], [{code:'NEW'}]);assert.deepEqual(patch.qualifications,['IDE','IADE']);assert.equal(patch.details.ideDiplomaYear,2010);assert.equal(patch.details.iadeDiplomaYear,2018);assert.equal(patch.details.firstName,'Existant');assert.equal(patch.rpps_status,undefined);assert.deepEqual(patch.skills,['SKILL_EXISTING','NEW']);assert.equal(profile.details.iadeDiplomaYear,undefined);});
-test('review rejects missing, future or reversed diploma years and leaves original untouched',()=>{for(const year of [null,1899,2100,2009])assert.throws(()=>reviewedCvProfile(profile,[{qualification:'IADE',year}],[]));assert.equal(profile.details.ideDiplomaYear,2010);});
+test('review rejects invalid, future or reversed diploma years and leaves original untouched',()=>{for(const year of [1899,2100,2009])assert.throws(()=>reviewedCvProfile(profile,[{qualification:'IADE',year}],[]));assert.equal(profile.details.ideDiplomaYear,2010);});
+
+test('missing OCR years preserve existing years and allow incomplete new diplomas without inventing IDE year',()=>{
+ const patch=reviewedCvProfile(profile,[{qualification:'IDE',year:null},{qualification:'IADE',year:null}],[]);
+ assert.equal(patch.details.ideDiplomaYear,2010);assert.equal(patch.details.iadeDiplomaYear,undefined);assert.deepEqual(patch.qualifications,['IDE','IADE']);
+ const fresh=reviewedCvProfile({...profile,details:{},qualifications:[]},[{qualification:'IADE',year:2012}],[]);
+ assert.equal(fresh.details.ideDiplomaYear,undefined);assert.equal(fresh.details.iadeDiplomaYear,2012);assert.deepEqual(fresh.qualifications,['IDE','IADE']);
+});

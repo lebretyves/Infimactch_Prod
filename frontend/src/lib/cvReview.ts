@@ -9,6 +9,8 @@ export const cvDiplomaField={IDE:'ideDiplomaYear',IADE:'iadeDiplomaYear',IBODE:'
 export function reviewedCvProfile(profile:ProfessionalProfile,diplomas:CvDiploma[],skills:CvSkill[]):Partial<ProfessionalProfile> {
   const details={...profile.details};
   for(const diploma of diplomas) {
+    // Missing OCR years remain optional; never erase an existing year or invent one.
+    if(diploma.year===null) continue;
     if(!Number.isInteger(diploma.year)||diploma.year!<1900||diploma.year!>new Date().getFullYear()) throw Error(`Renseignez une année passée valide pour le diplôme ${diploma.qualification}.`);
     details[cvDiplomaField[diploma.qualification]]=diploma.year!;
   }

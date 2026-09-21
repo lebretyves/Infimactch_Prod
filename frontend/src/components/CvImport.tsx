@@ -1,6 +1,7 @@
 ﻿import {useEffect,useRef,useState} from 'react';
 import {api} from '@/services/api';
-import {acceptsCv} from '@/lib/cvDocx';
+import {Link} from 'react-router';
+import {acceptsCv,DOCX_MIME,isCvDocx} from '@/lib/cvDocx';
 import {CvProfileReview} from './CvProfileReview';
 import type {CvSuggestions} from '@/lib/cvReview';
 import type {ProfessionalProfile} from '@/services/profile';
@@ -14,10 +15,25 @@ type Result={experiences:Omit<Suggestion,'selected'>[];warnings:string[];suggest
 export function CvImport({services,existing,onAdd,addBlocked=false,profile,onProfileApply}:{profile?:ProfessionalProfile;onProfileApply?:(value:Partial<ProfessionalProfile>)=>void;addBlocked?:boolean;services:string[];existing:Experience[];onAdd:(values:Experience[])=>void}){
  const [busy,setBusy]=useState(false),[progress,setProgress]=useState(''),[error,setError]=useState(''),[message,setMessage]=useState(''),[rows,setRows]=useState<Suggestion[]>([]),[warnings,setWarnings]=useState<string[]>([]),[reviewed,setReviewed]=useState(false);
  const [textPreview,setTextPreview]=useState('');
+ const [cvFile,setCvFile]=useState<File|null>(null),[saving,setSaving]=useState(false),[saved,setSaved]=useState(false),[saveError,setSaveError]=useState('');
+ const saveKey=useRef(''),savingRef=useRef(false);
+ async function saveCv(){
+  if(!cvFile||savingRef.current||saved)return;
+  if(cvFile.size>3*1024*1024){setSaveError('Pour conserver le CV dans Mes documents, choisissez un fichier de 3 Mo maximum.');return;}
+  savingRef.current=true;setSaving(true);setSaveError('');
+  try{
+   const contentBase64=await new Promise<string>((resolve,reject)=>{const reader=new FileReader();reader.onload=()=>resolve(String(reader.result).split(',')[1]);reader.onerror=()=>reject(Error('Lecture du CV impossible.'));reader.readAsDataURL(cvFile);});
+   const mime=isCvDocx(cvFile)?DOCX_MIME:cvFile.type;
+   await api('/me/cv-document',{method:'POST',key:saveKey.current,body:{mime,contentBase64,reviewed:true}});
+   setSaved(true);
+  }catch(e){setSaveError(e instanceof Error?e.message:'Enregistrement du CV impossible. Réessayez.');}
+  finally{savingRef.current=false;setSaving(false);}
+ }
+
  const [suggestions,setSuggestions]=useState<CvSuggestions|null>(null),[reviewVersion,setReviewVersion]=useState(0);
  const current=useRef<AbortController|null>(null);useEffect(()=>()=>current.current?.abort(),[]);
  function cancel(){setTextPreview('');current.current?.abort();current.current=null;setBusy(false);setProgress('');}
- async function choose(file:File|undefined){if(!file)return;cancel();setSuggestions(null);setRows([]);setWarnings([]);setReviewed(false);setError('');setMessage('');if(!acceptsCv(file)){setError('Choisissez un CV PDF, DOCX, JPEG ou PNG de 5 Mo maximum.');return;}const controller=new AbortController();current.current=controller;setBusy(true);setProgress('Préparation du CV…');
+ async function choose(file:File|undefined){if(!file||savingRef.current)return;setCvFile(null);setSaved(false);setSaveError('');cancel();setSuggestions(null);setRows([]);setWarnings([]);setReviewed(false);setError('');setMessage('');if(!acceptsCv(file)){setError('Choisissez un CV PDF, DOCX, JPEG ou PNG de 5 Mo maximum.');return;}setCvFile(file);saveKey.current=crypto.randomUUID();const controller=new AbortController();current.current=controller;setBusy(true);setProgress('Préparation du CV…');
   let timeout:number|undefined,extractedPreview='';
   try{const result=await Promise.race([(async()=>{const {extractCvText}=await import('@/lib/cvText');if(controller.signal.aborted)throw Error('Analyse interrompue.');const text=await extractCvText(file,controller.signal,value=>{if(current.current===controller)setProgress(value);});extractedPreview=text.slice(0,4000);if(!text.trim())throw Error('Aucun texte lisible dans ce CV. Essayez un fichier plus net.');if(text.length>60000)throw Error('Le CV contient trop de texte.');if(controller.signal.aborted)throw Error('Analyse interrompue.');setProgress('Repérage des informations du CV…');return api<Result>('/profile/cv/parse',{method:'POST',body:{text},signal:controller.signal});})(),new Promise<never>((_,reject)=>{timeout=window.setTimeout(()=>{controller.abort();reject(Error('L’analyse a dépassé une minute. Essayez un CV plus court ou saisissez vos expériences.'));},60000);})]);if(current.current!==controller)return;setRows(result.experiences.map(row=>({...row,selected:true})));setWarnings(result.warnings);setSuggestions(result.suggestions||null);setReviewVersion(v=>v+1);setTextPreview(result.experiences.length?'':extractedPreview);}
   catch(e){if(current.current===controller)setError(e instanceof Error?e.message:'Analyse impossible.');}
@@ -30,8 +46,9 @@ export function CvImport({services,existing,onAdd,addBlocked=false,profile,onPro
   onAdd(additions);setRows([]);setReviewed(false);setMessage(`${additions.length} expérience(s) ajoutée(s) au formulaire${duplicates?`, ${duplicates} doublon(s) ignoré(s)`:''}. Enregistrez votre profil pour les conserver.`);
  }
  return <section aria-label="Import des informations depuis un CV" style={{display:'grid',gridTemplateColumns:'minmax(0,1fr)',minWidth:0,gap:12,marginBlock:20,overflowWrap:'anywhere'}}>
- <h3>Préremplir mon profil avec mon CV</h3>{addBlocked&&<p role="status">Vous pouvez analyser votre CV. Enregistrez ou annulez l’expérience en cours de modification avant d’ajouter les expériences proposées.</p>}<p>Importez votre CV : les informations reconnues seront proposées pour vérification, correction et sélection. Le texte est analysé par InfiMatch, sans service tiers ; le fichier n’est pas conservé par cet import. Aucune donnée n’est enregistrée automatiquement. Votre identité reste protégée et les diplômes proposés ne sont pas certifiés.</p>
- <label>Importer mon CV (PDF, DOCX, JPEG ou PNG)<input type="file" accept="application/pdf,application/vnd.openxmlformats-officedocument.wordprocessingml.document,.docx,image/jpeg,image/png" disabled={busy} style={{display:'block',maxWidth:'100%',width:'100%'}} onChange={e=>{void choose(e.target.files?.[0]);e.target.value='';}}/></label><p>5 Mo maximum · 5 pages PDF · une minute d’analyse maximum.</p>
+ <h3>Préremplir mon profil avec mon CV</h3>{addBlocked&&<p role="status">Vous pouvez analyser votre CV. Enregistrez ou annulez l’expérience en cours de modification avant d’ajouter les expériences proposées.</p>}<p>Importez votre CV : les informations reconnues seront proposées pour vérification, correction et sélection. Le texte est analysé par InfiMatch, sans service tiers ; vous pouvez ensuite conserver le fichier avec « Enregistrer le CV dans mes documents ». Aucune donnée n’est enregistrée automatiquement. Votre identité reste protégée et les diplômes proposés ne sont pas certifiés.</p>
+ <label>Importer mon CV (PDF, DOCX, JPEG ou PNG)<input type="file" accept="application/pdf,application/vnd.openxmlformats-officedocument.wordprocessingml.document,.docx,image/jpeg,image/png" disabled={busy||saving} style={{display:'block',maxWidth:'100%',width:'100%'}} onChange={e=>{void choose(e.target.files?.[0]);e.target.value='';}}/></label><p>5 Mo maximum · 5 pages PDF · une minute d’analyse maximum.</p>
+ {cvFile&&<div><p>CV sélectionné : {cvFile.name}</p><Button type="button" variant="outline" disabled={busy||saving||saved} onClick={()=>void saveCv()}>{saved?'CV enregistré':saving?'Enregistrement du CV…':'Enregistrer le CV dans mes documents'}</Button><p>Le stockage du fichier est indépendant des informations appliquées au profil. 3 Mo maximum pour l’enregistrement.</p>{saved&&<p role="status">Votre CV est enregistré. <Link to="/dossier#justificatifs">Voir mes documents</Link></p>}{saveError&&<p role="alert">{saveError}</p>}</div>}
  {busy&&<><p role="status">{progress}</p><Button type="button" variant="outline" onClick={cancel}>Annuler l’analyse du CV</Button></>}{error&&<p role="alert">{error}</p>}{message&&<p role="status">{message}</p>}
  {suggestions&&profile&&onProfileApply&&<><CvProfileReview key={reviewVersion} suggestions={suggestions} profile={profile} onApply={onProfileApply}/><Button type="button" variant="ghost" style={{whiteSpace:'normal'}} onClick={()=>setSuggestions(null)}>Abandonner les propositions de diplômes, coordonnées et compétences</Button></>}
  {warnings.length>0&&<ul>{warnings.map((w,i)=><li key={i}>{w}</li>)}</ul>}

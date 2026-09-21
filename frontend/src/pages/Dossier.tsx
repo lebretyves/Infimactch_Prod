@@ -316,7 +316,7 @@ export default function Dossier() {
                       <div className={u.row}>
                         <div>
                           <strong>
-                            {d.kind === "CONFIRMATION"
+                            {d.kind === "CV" ? "CV" : d.kind === "CONFIRMATION"
                               ? "Confirmation de mission"
                               : "Justificatif de démonstration"}
                           </strong>
