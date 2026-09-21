@@ -3,12 +3,12 @@
 .heading h1 { margin: 0 0 8px; }
 .heading p, .note { margin: 0; color: var(--ink-700); line-height: 1.6; }
 .heading > div { min-width: 0; }
-.search { display: flex; align-items: end; gap: 12px; padding: 20px; border: 1px solid #dce8f3; border-radius: 12px; background: white; }
+.search { display: flex; align-items: end; gap: 12px; padding: 20px; border: 1px solid #e5eef6; border-radius: 8px; background: white; }
 .search > div { flex: 1; }
 .search label { display: block; font-weight: 600; margin-bottom: 7px; }
 .search input { width: 100%; min-height: 46px; padding: 10px 14px; border: 1px solid #c7d9ec; border-radius: 8px; font: inherit; }
 .result { margin: 0; font-size: 14px; font-weight: 600; }
-.list { background: white; border: 1px solid #dce8f3; border-radius: 12px; overflow: hidden; }
+.list { background: white; border: 1px solid #e5eef6; border-radius: 8px; overflow: hidden; }
 .row { display: grid; grid-template-columns: minmax(220px,1fr) auto; gap: 14px 24px; padding: 20px; align-items: center; }
 .row + .row { border-top: 1px solid #e1eaf2; }
 .identity { min-width: 0; }
@@ -31,7 +31,7 @@
 .site { font-size: 13px; font-weight: 600; color: #08717f; }
 .srOnly { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0; }
 @media(max-width: 760px) { .heading, .search { align-items: stretch; flex-direction: column; } .row { grid-template-columns: 1fr; } .row > a { grid-column: 1; grid-row: 3; justify-self: start; } .counts { gap: 16px; flex-wrap: wrap; } .page { gap: 16px; } .row, .search, .mission { padding: 16px; } }
-.missionSearch { display: grid; grid-template-columns: minmax(135px,.7fr) minmax(180px,1.2fr) minmax(155px,.8fr); gap: 14px 18px; padding: 20px; background: #fff; border: 1px solid #dce8f3; border-radius: 12px; align-items: end; }
+.missionSearch { display: grid; grid-template-columns: minmax(135px,.7fr) minmax(180px,1.2fr) minmax(155px,.8fr); gap: 14px 18px; padding: 20px; background: #fff; border: 1px solid #e5eef6; border-radius: 8px; align-items: end; }
 .missionSearch label { display: block; font-weight: 600; margin-bottom: 7px; }
 .missionSearch input, .missionSearch select { width: 100%; min-width: 0; min-height: 46px; padding: 10px 12px; border: 1px solid #c7d9ec; border-radius: 8px; font: inherit; background: #fff; color: var(--ink-900); }
 .missionSearch > .actions { grid-column: 1 / -1; justify-content: end; }
@@ -39,7 +39,7 @@
 @media(max-width: 760px) { .missionSearch { grid-template-columns: 1fr; padding: 16px; } .missionSearch > .actions { justify-content: start; } }
 
 .actions { display:flex; flex-wrap:wrap; gap:12px; align-items:center; }
-.addPanel { display:grid; gap:24px; padding:24px; border:1px solid var(--line); border-radius:12px; background:white; }
+.addPanel { display:grid; gap:24px; padding:24px; border:1px solid var(--line); border-radius:8px; background:white; }
 .addPanel h2, .addPanel p { margin:0; line-height:1.6; }
 .addFields { display:grid; gap:20px; min-width:0; border:0; padding:0; margin:0; }
 .finessResults { display:grid; gap:16px; }
@@ -47,12 +47,3 @@
 .removeActions { grid-column:1/-1; display:grid; gap:12px; }
 .removeActions section { display:grid; justify-items:start; gap:12px; padding:16px; margin-top:12px; background:var(--brand-50); border-radius:8px; }
 @media(max-width:600px) { .heading { align-items:stretch; flex-direction:column; } .actions { align-items:stretch; flex-direction:column; } .addPanel { padding:20px 16px; } }
-
-/* Establishments and their missions share the workspace's framed sections. */
-.heading { padding: 24px; border: 1px solid #c9def3; border-left: 4px solid var(--brand-800); border-radius: 14px; background: #e1effc; }
-.search, .missionSearch { border-color: #c9dfee; border-top: 3px solid #219ba9; background: #f7fbfe; }
-.list { border-color: #c9dfee; box-shadow: 0 5px 18px #07215205; }
-.row, .mission { padding: 24px; }
-.row:nth-child(2n), .mission:nth-child(2n) { background: #f6fafE; }
-.addPanel { border-color: #c9dfee; border-top: 3px solid var(--brand-800); }
-@media (max-width: 760px) { .heading { padding: 20px 16px; } .row, .mission { padding: 20px 16px; } }

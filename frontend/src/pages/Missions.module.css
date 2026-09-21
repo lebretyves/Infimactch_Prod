@@ -1,5 +1,5 @@
 .searchPanel {
-  padding: 22px !important;
+  padding: 20px !important;
 }
 .topFilters {
   display: grid;
@@ -330,5 +330,3 @@
  .activeFilters button { min-height: 44px; }
 }
 :global([data-space="candidate"]) .numbers button { width: 44px; height: 44px; }
-
-.searchPanel { border-top: 3px solid #219ba9; background: #f7fbfe; }

@@ -1,15 +1,15 @@
-﻿.report { display: grid; gap: 24px; min-width: 0; padding: 32px; background: #fff; border: 1px solid var(--line); border-radius: 16px; font-size: 15px; }
+﻿.report { display: grid; gap: 20px; min-width: 0; padding: 20px; background: #fff; border: 1px solid #e8f0f6; border-radius: 8px; font-size: 15px; }
 .heading { display: grid; gap: 10px; max-width: 850px; }
 .heading > p:last-child { color: var(--ink-600); }
 .report .eyebrow { color: var(--teal-700); font-size: 12px; font-weight: 800; letter-spacing: 1px; text-transform: uppercase; }
-.filters { display: grid; grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr) minmax(0, 1fr) auto; gap: 20px; align-items: end; padding: 24px 0; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+.filters { display: grid; grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr) minmax(0, 1fr) auto; gap: 20px; align-items: end; padding: 18px 0; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
 .filters > * { min-width: 0; }
 .filters input, .filters select { min-width: 0; width: 100%; min-height: 44px; }
 .report .hint { font-size: 14px; color: var(--ink-600); margin-top: -12px; }
 .observed { padding-left: 16px; border-left: 3px solid var(--teal-700); color: var(--ink-700); font-size: 14px; }
-.metrics { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 24px 32px; margin: 0; }
-.metric { min-width: 0; padding: 24px; background: #f5f8fc; border-radius: 8px; }
-.metric dt { font-size: 16px; font-weight: 700; line-height: 1.55; margin-bottom: 18px; }
+.metrics { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px; margin: 0; }
+.metric { min-width: 0; padding: 18px; background: #f3f9fd; border-radius: 6px; }
+.metric dt { font-size: 15px; font-weight: 700; line-height: 1.5; margin-bottom: 12px; }
 .metric dd { display: grid; gap: 10px; margin: 0; }
 .metricValue { font-size: 32px; letter-spacing: -1px; line-height: 1.2; color: var(--ink-900); }
 .metricCount { font-size: 15px; color: var(--brand-700); font-weight: 600; }
@@ -32,9 +32,4 @@
   .metricValue { font-size: 30px; }
 }
 
-/* Reporting remains a distinct, quieter section of the agency workspace. */
-.report { border-color: #c8ddeb; border-top: 4px solid #219ba9; box-shadow: 0 5px 18px #07215205; }
-.filters { padding: 24px 18px; background: #f0f6fc; border: 1px solid #d4e3ef; border-radius: 10px; }
-.metric { border: 1px solid #d0e0ef; border-left: 3px solid var(--brand-800); background: #edf4fc; }
-.metric:nth-child(2n) { background: #edf9fa; border-color: #c9e5e8; border-left-color: #219ba9; }
-@media (max-width: 700px) { .filters { padding: 20px 14px; } }
+.metric:nth-child(2n) { background: #f0fafb; }

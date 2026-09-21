@@ -3,7 +3,7 @@
   grid-template-columns: 232px minmax(0, 1fr);
   grid-template-rows: 76px 1fr;
   min-height: 100dvh;
-  background: #f3f9fc;
+  background: #f2f9fc;
 }
 .header {
   grid-column: 1/-1;
@@ -73,7 +73,7 @@
   display: flex;
   flex-direction: column;
   gap: 6px;
-  padding: 28px 12px 24px;
+  padding: 20px 12px;
   border-right: 1px solid #e0eaf3;
   background: #fff;
   position: sticky;
@@ -137,7 +137,7 @@
 }
 .main {
   min-width: 0;
-  padding: 36px clamp(20px, 3vw, 44px) 20px;
+  padding: 26px clamp(20px, 2.2vw, 32px) 20px;
 }
 .footer {
   display: flex;
@@ -243,16 +243,3 @@
 
 .headerRight > .identity,.headerRight > .menu{flex-shrink:0}
 @media(max-width:380px){.identity{display:none}}
-
-/* Authenticated spaces: sky canvas and crisp blue/teal navigation frames. */
-.shell { background: #edf5fc; }
-.header { border-bottom-color: #cbdff1; box-shadow: 0 2px 12px #07215205; }
-.nav { border-right-color: #cbdff1; background: linear-gradient(180deg, #fff 72%, #f0f9fa); }
-.link { border-radius: 8px; }
-.active { background: #deebfc; }
-.active:before { background: var(--brand-800); }
-.groupLabel { color: #176578; }
-.secondary { border-top-color: #cddfe9; }
-.main { padding-top: 30px; }
-.footer { border-top-color: #c7dceb; }
-@media (max-width: 600px) { .main { padding-top: 20px; } }
