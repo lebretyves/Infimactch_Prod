@@ -6,7 +6,7 @@ const pages: Record<string, [string, string]> = {
  '/': ['L’intérim infirmier, pensé pour le soin', 'Découvrez InfiMatch : un projet de plateforme reliant infirmiers IDE, IADE, IBODE, établissements de santé et agences d’intérim.'],
  '/installer': ['Installer l’application', 'Retrouvez InfiMatch depuis votre écran d’accueil, avec le même compte et les mêmes fonctions.'],
  '/accessibilite': ['Accessibilité : état des travaux', 'Périmètre, méthode et limites des contrôles d’accessibilité du projet InfiMatch.'],
- '/ecoconception': ['Notre démarche d’écoconception', 'Actions et limites de la démarche d’écoconception InfiMatch.'],
+ '/ecoconception': ['Écoconception : on prend soin des ressources aussi', 'Les petits choix concrets d’InfiMatch pour limiter les ressources utilisées, et les mesures de chaque version.'],
  '/mentions-legales': ['Mentions légales et données personnelles', 'Fonctionnement du projet InfiMatch, données de compte et préférences cookies.'],
  '/accueil': ['Vue d’ensemble', 'Consultez vos missions, vos démarches et les accès à votre espace InfiMatch.'],
  '/profil': ['Mon profil', 'Consultez vos informations personnelles et gérez vos qualifications, compétences et expériences.'],

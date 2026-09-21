@@ -1,0 +1,20 @@
+.disclosure { color: var(--eco-green, #315746); }
+.disclosure summary { width: fit-content; max-width: 100%; cursor: pointer; padding: var(--space-2) 0; font-size: 14px; font-weight: 700; text-underline-offset: 4px; }
+.disclosure summary::marker { font-size: 12px; }
+.disclosure summary:hover { text-decoration: underline; }
+.disclosure summary:focus-visible { outline: var(--focus-ring); outline-offset: 5px; border-radius: 2px; }
+.report { margin-top: var(--space-5); padding-top: var(--space-5); border-top: 1px solid var(--eco-line, #d8dfd7); color: var(--ink-700); font-size: 14px; line-height: 1.75; }
+.date { font-size: 13px; }
+.figures { display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-6); margin: var(--space-6) 0; }
+.figures > div + div { padding-left: var(--space-6); border-left: 1px solid var(--eco-line, #d8dfd7); }
+.figures dt { color: var(--eco-green, #315746); font-weight: 650; }
+.figures dd { margin: var(--space-2) 0 0; }
+.figures strong { display: block; margin-bottom: var(--space-3); color: var(--ink-900); font-size: 30px; line-height: 1.25; letter-spacing: -.03em; font-variant-numeric: tabular-nums; }
+.network { margin-bottom: var(--space-5); }
+.network h3 { margin-bottom: var(--space-2); font-size: 14px; font-weight: 700; color: var(--eco-green, #315746); }
+.report > a { display: inline-block; margin-top: var(--space-3); color: var(--eco-green, #315746); text-underline-offset: 4px; overflow-wrap: anywhere; }
+.report > a:hover { color: var(--ink-900); }
+@media (max-width: 600px) {
+  .figures { grid-template-columns: 1fr; }
+  .figures > div + div { padding: var(--space-5) 0 0; border-left: 0; border-top: 1px solid var(--eco-line, #d8dfd7); }
+}

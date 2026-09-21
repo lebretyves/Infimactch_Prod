@@ -5,6 +5,7 @@ import { EcranPublic } from '@/layouts/EcranPublic';
 import { Logo } from '@/ui/Logo';
 import { usePageTitle } from '@/lib/usePageTitle';
 import s from './Mentions.module.css';
+import eco from './Ecoconception.module.css';
 export function QualityPage({ title, description, children }: {title: string; description: string; children: ReactNode}) {
   usePageTitle(title, description);
   return <EcranPublic entete={<><Link to="/" aria-label="InfiMatch, accueil"><Logo size={38} withWordmark /></Link><Link to="/">Retour à l’accueil</Link></>}>
@@ -21,10 +22,62 @@ export function Accessibilite() {
   </QualityPage>;
 }
 export function Ecoconception() {
-  return <QualityPage title="Notre démarche d’écoconception" description="Réduire les ressources utilisées tout en conservant des parcours utiles et accessibles.">
-    <section><h2>Actions dans cette version</h2><p>Les écrans sont chargés à la demande pour éviter de transférer tous les formulaires dès l’accueil. Les polices sont hébergées sur le site ; la police de lecture Lexend est chargée lorsqu’elle est choisie. Les images de sections secondaires utilisent le chargement différé.</p><p>Le mode hors connexion conserve uniquement une courte page d’aide et les icônes. Il ne duplique pas vos documents, votre session ni les réponses de l’API dans un cache persistant.</p></section>
-    <BuildMetrics />
-    <section><h2>Mesurer sans surpromettre</h2><p>Le RGESN 2024, qui comporte 78 critères, sert de cadre. Le poids des fichiers produits par le build est suivi avant et après modification. Il ne mesure ni la consommation énergétique réelle ni les Core Web Vitals des utilisateurs.</p><p>Aucun score RGESN, label ou gain de CO₂ n’est revendiqué. Le cycle de vie du matériel, les engagements des hébergeurs et la gouvernance restent à documenter. Les imports sont regroupés à 7 h et 15 h pour France Travail, et à 7 h pour JobsPipe, heure de Paris. La reprise technique est programmée toutes les 4 heures, soit six passages par jour. Elle ne relance pas ces imports. Les anciennes notifications fictives sont neutralisées et les relances de missions non pourvues sont plafonnées. Ces choix réduisent les appels inutiles sans constituer une mesure de gain carbone.</p></section>
-    <section><h2>Référence</h2><p><a href="https://www.arcep.fr/mes-demarches-et-services/entreprises/fiches-pratiques/referentiel-general-ecoconception-services-numeriques.html">Référentiel général d’écoconception des services numériques</a>.</p></section>
-  </QualityPage>;
+  usePageTitle('Écoconception', 'Les petits choix concrets d’InfiMatch pour limiter les ressources utilisées.');
+  return <EcranPublic entete={<><Link to="/" aria-label="InfiMatch, accueil"><Logo size={38} withWordmark /></Link><Link to="/">Retour à l’accueil</Link></>}>
+    <main id="contenu" tabIndex={-1} className={eco.page}>
+      <div className={eco.content}>
+        <header className={eco.intro}>
+          <p className={eco.eyebrow}>
+            <svg className={eco.leaf} viewBox="0 0 40 40" fill="none" aria-hidden="true" focusable="false">
+              <path d="M11 25C7 13 17 7 32 7c1 14-5 23-16 20" fill="currentColor" fillOpacity=".12" />
+              <path d="M11 25C7 13 17 7 32 7c1 14-5 23-16 20M8 33 25 16M15 26l-1-8M19 22l7-1" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
+            </svg>
+            Écoconception
+          </p>
+          <h1>On prend soin<br />des ressources aussi.</h1>
+          <p>Un site utile, c’est aussi un site qui évite le superflu. Voici les petits choix que nous avons faits pour InfiMatch.</p>
+        </header>
+
+        <section aria-labelledby="eco-choices">
+          <h2 id="eco-choices" className={eco.sectionLabel}>Trois choix au quotidien</h2>
+          <ol className={eco.rows}>
+            <li>
+              <span className={eco.number} aria-hidden="true">01</span>
+              <h3>Charger ce qui<br className={eco.desktopBreak} /> vous sert</h3>
+              <p>Les écrans se chargent quand vous les ouvrez. Les outils de lecture de documents attendent, eux aussi, que vous en ayez besoin.</p>
+            </li>
+            <li>
+              <span className={eco.number} aria-hidden="true">02</span>
+              <h3>Espacer les<br className={eco.desktopBreak} /> vérifications</h3>
+              <p>Les nouvelles offres sont importées à heures fixes. Une vérification technique passe toutes les 4 heures, sans relancer ces imports.</p>
+            </li>
+            <li>
+              <span className={eco.number} aria-hidden="true">03</span>
+              <h3>Garder peu de choses<br className={eco.desktopBreak} /> hors connexion</h3>
+              <p>Une courte page d’aide et quelques icônes : c’est ce que le mode hors connexion conserve. Vos documents personnels et les réponses du serveur n’y sont pas enregistrés.</p>
+            </li>
+          </ol>
+        </section>
+
+        <section className={eco.measurements} aria-labelledby="eco-measures">
+          <h2 id="eco-measures">Et le poids du site ?</h2>
+          <p>Nous suivons le poids des fichiers à chaque nouvelle version. Les chiffres et leur explication sont disponibles ici.</p>
+          <BuildMetrics />
+        </section>
+
+        <section className={eco.ending} aria-labelledby="eco-progress">
+          <h2 id="eco-progress">On avance, pas à pas.</h2>
+          <p>InfiMatch est un projet étudiant qui continue de s’améliorer. Nous ne mesurons pas encore sa consommation d’énergie réelle et ne revendiquons aucune certification environnementale.</p>
+          <a href="https://www.arcep.fr/mes-demarches-et-services/entreprises/fiches-pratiques/referentiel-general-ecoconception-services-numeriques.html">Notre repère : le référentiel public d’écoconception (RGESN)<span aria-hidden="true"> ↗</span></a>
+        </section>
+
+        <nav className={eco.navigation} aria-label="Qualité et installation">
+          <Link to="/installer">Installer l’application</Link>
+          <Link to="/accessibilite">Accessibilité</Link>
+          <Link to="/ecoconception" aria-current="page">Écoconception</Link>
+          <Link to="/mentions-legales">Mentions légales</Link>
+        </nav>
+      </div>
+    </main>
+  </EcranPublic>;
 }
