@@ -1,11 +1,19 @@
+import { createPortal } from "react-dom";
 import { AccessibilityIcon } from "./AccessibilityIcon";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { useAccessibility } from "@/context/AccessibilityContext";
 import { LOCAL_VOICE_HELP, prepareSpeechVoices, type SpeechVoiceState, isSpeechSynthesisAvailable, pageTextForSpeech, selectionTextForSpeech, speakText, stopSpeech } from "@/services/pageSpeech";
 import s from "./AccessibilityPanel.module.css";
 import preferencesStyle from "./SitePreferences.module.css";
 export function AccessibilityPanel({ returnToCookies = false }: { returnToCookies?: boolean }) {
  const a=useAccessibility(), dialog=useRef<HTMLDialogElement>(null),trigger=useRef<HTMLButtonElement>(null),title=useRef<HTMLHeadingElement>(null);
+ const restoreTriggerFocus=useRef(false),currentSlot=useRef<Element|null>(null);
+ const [slot,setSlot]=useState<Element|null>(null);
+ useLayoutEffect(()=>{
+  const locate=()=>{const next=document.querySelector('[data-accessibility-slot]');if(next===currentSlot.current)return;restoreTriggerFocus.current=document.activeElement===trigger.current;currentSlot.current=next;setSlot(next);};
+  locate();const observer=new MutationObserver(locate);observer.observe(document.getElementById('root')??document.body,{childList:true,subtree:true});return ()=>observer.disconnect();
+ },[]);
+ useLayoutEffect(()=>{if(restoreTriggerFocus.current){trigger.current?.focus({preventScroll:true});restoreTriggerFocus.current=false;}},[slot]);
  const returnFocus=useRef<HTMLElement | null>(null);
  const [voiceState,setVoiceState]=useState<SpeechVoiceState>("loading");
  const [retryText,setRetryText]=useState("");
@@ -35,8 +43,9 @@ export function AccessibilityPanel({ returnToCookies = false }: { returnToCookie
   dialog.current?.close();a.closePanel();
   read(pageTextForSpeech());
  };
+ const accessibilityButton = <button ref={trigger} type="button" className={`${preferencesStyle.trigger} ${preferencesStyle.accessibilityTrigger}`} aria-haspopup="dialog" aria-expanded={a.panelOpen} aria-controls="a11y-preferences" onClick={a.openPanel} aria-label="Accessibilité" title="Accessibilité"><AccessibilityIcon /></button>;
  return <>
-  <button ref={trigger} type="button" className={`${preferencesStyle.trigger} ${preferencesStyle.accessibilityTrigger} ${preferencesStyle.footerAccessibility}`} aria-haspopup="dialog" aria-expanded={a.panelOpen} aria-controls="a11y-preferences" onClick={a.openPanel} aria-label="Accessibilité" title="Accessibilité"><AccessibilityIcon /></button>
+  {slot ? createPortal(accessibilityButton,slot) : <div className={preferencesStyle.accessibilityFallback}>{accessibilityButton}</div>}
   {(speaking||selectionMode||message) && !a.panelOpen && <div className={s.speechBar} role="region" aria-label="Lecture vocale">
    <p role="status" className={s.speechBarText}>{message || "Sélectionnez du texte puis choisissez Lire la sélection."}</p>
    <div className={s.speechBarActions}>

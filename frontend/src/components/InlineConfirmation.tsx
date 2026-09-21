@@ -1,5 +1,6 @@
 import { useId, useState } from 'react';
 import { Button } from '@/ui/Button';
+import s from './InlineConfirmation.module.css';
 
 export function InlineConfirmation({ children, explanation, confirmLabel, disabled, onConfirm }: {
   children: React.ReactNode; explanation: string; confirmLabel: string;
@@ -7,12 +8,12 @@ export function InlineConfirmation({ children, explanation, confirmLabel, disabl
 }) {
   const [open, setOpen] = useState(false);
   const id = useId();
-  return <div>
+  return <div className={s.root}>
     <Button variant="outline" disabled={disabled} aria-expanded={open} aria-controls={id} onClick={() => setOpen(!open)}>{children}</Button>
-    {open && <section id={id} aria-label="Validation de votre choix">
+    {open && <section className={s.panel} id={id} aria-label="Validation de votre choix">
       <p>{explanation}</p>
-      <Button disabled={disabled} onClick={async () => { if (await onConfirm()) setOpen(false); }}>{disabled ? 'Enregistrement…' : confirmLabel}</Button>
-      <Button variant="ghost" disabled={disabled} onClick={() => setOpen(false)}>Revenir sans modifier</Button>
+      <div className={s.actions}><Button disabled={disabled} onClick={async () => { if (await onConfirm()) setOpen(false); }}>{disabled ? 'Enregistrement…' : confirmLabel}</Button>
+      <Button variant="ghost" disabled={disabled} onClick={() => setOpen(false)}>Revenir sans modifier</Button></div>
     </section>}
   </div>;
 }

@@ -1,0 +1,4 @@
+.root { min-width: 0; max-width: 100%; display: grid; grid-template-columns: minmax(0, 1fr); justify-items: start; gap: 12px; }
+.panel { width: 100%; min-width: 0; padding: 16px; border: 1px solid var(--line); border-radius: 8px; background: var(--white); display: grid; gap: 12px; }
+.actions { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; }
+@media(max-width:600px) { .actions { flex-direction: column; align-items: stretch; width: 100%; } }

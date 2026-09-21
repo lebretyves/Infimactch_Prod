@@ -1,3 +1,4 @@
+import { NotificationSection } from "@/components/NotificationSection";
 import {EmailDeliveryJournal} from '@/components/EmailDeliveryJournal';
 import { useRef, useState } from "react";
 import { Link, useSearchParams } from "react-router";
@@ -34,6 +35,7 @@ export default function Notifications() {
   const onboarding = params.get("bienvenue") === "1";
   usePageTitle(onboarding ? "Configurer Discord — étape facultative" : "Notifications");
   const {user}=useAuth();
+  const collapsible = (user?.role === "etablissement" || user?.role === "entreprise") && !onboarding;
   const [offset,setOffset]=useState(0),[discordId,setDiscordId]=useState(""),[code,setCode]=useState(""),[busy,setBusy]=useState(false),[error,setError]=useState(""),[message,setMessage]=useState("");
   const [discordIdError,setDiscordIdError]=useState("");
   const [challengeError,setChallengeError]=useState(""),[challengeMessage,setChallengeMessage]=useState(""),[sendingCode,setSendingCode]=useState(false);
@@ -60,12 +62,12 @@ export default function Notifications() {
     {error&&<p role="alert">{error}</p>}{message&&<p role="status">{message}</p>}
     {!onboarding && user?.role === "interimaire" && <nav className={s.sectionNav} aria-label="Sections des notifications"><a href="#notice-list">Votre activité</a><a href="#discord-settings">Réglages Discord</a></nav>}
     {user?.role === "interimaire" && <p>Les alertes de missions compatibles suivent votre zone de recherche et d’alertes, ainsi que vos qualifications et critères d’admissibilité. La dernière ville utilisée dans la recherche ne change pas cette zone. <Link to="/calendrier#zone-mobilite">Vérifier ma zone de recherche et d’alertes</Link>.</p>}
-    {!onboarding && <section className={s.card} aria-labelledby="notice-list"><h2 id="notice-list">Votre activité</h2>
+    {!onboarding && <NotificationSection title="Votre activité" headingId="notice-list" className={s.card} collapsible={collapsible}>
       {notices.loading?<p role="status">Chargement…</p>:notices.error?<p role="alert">{notices.error} <Button onClick={notices.reload}>Réessayer</Button></p>:<>
       {notices.data?.length?<ul className={s.noticeList}>{notices.data.map(n=><li className={s.noticeItem} key={n.id} style={user?.role === "interimaire" ? undefined : {paddingBlock:14}}><strong>{data?.catalog[n.kind]||"Notification"}{!n.read_at?" — Non lue":""}</strong><p>{n.message}</p><time dateTime={n.created_at}>{new Date(n.created_at).toLocaleString("fr-FR")}</time><div className={s.actions}><Link to={notificationHref(n.href,n.id)}>Consulter</Link></div></li>)}</ul>:<p>Aucune notification pour cette page.</p>}
       <div className={s.actions}><Button variant="outline" disabled={offset===0} onClick={()=>setOffset(v=>Math.max(0,v-20))}>Précédent</Button><Button variant="outline" disabled={(notices.data?.length??0)<20} onClick={()=>setOffset(v=>v+20)}>Suivant</Button></div></>}
-    </section>}
-    <section className={s.card} aria-labelledby="discord-settings"><h2 id="discord-settings">Notifications Discord</h2>
+    </NotificationSection>}
+    <NotificationSection title="Notifications Discord" headingId="discord-settings" className={s.card} collapsible={collapsible}>
       <p>Besoin d’aide pour trouver votre identifiant ? <a href="/aide/discord/retrouver-identifiant-discord.pdf" target="_blank" rel="noopener noreferrer">Ouvrir le guide illustré (PDF, 2 pages)</a> · <a href="/aide/discord/retrouver-identifiant-discord.pdf" download>Télécharger le PDF</a></p>
       {settings.loading?<p role="status">Chargement…</p>:settings.error?<p role="alert">{settings.error} <Button onClick={settings.reload}>Réessayer</Button></p>:data&&!data.configured?<p>Discord n’est pas encore disponible. Vos notifications restent consultables dans cette page.</p>:data&&<>
         {!data.link?<>
@@ -103,10 +105,10 @@ export default function Notifications() {
           {orgs.error&&<p role="alert">{orgs.error}</p>}{orgs.data?.organizations.map(org=><section key={org.id}><h3>{org.name} — salon de l’organisation</h3><DestinationEditor key={JSON.stringify(data.destinations.find(d=>d.organization_id===org.id))} org={org.id} destination={data.destinations.find(d=>d.organization_id===org.id)} catalog={Object.fromEntries(Object.entries(data.catalog).filter(([k])=>data.organizationKinds.includes(k)))} save={(id,body)=>action(()=>api(base+"/organizations/"+id+"/discord",{method:"PUT",body}),"Salon et préférences enregistrés.")}/></section>)}
         </>}
       </>}
-    </section>
+    </NotificationSection>
     {onboarding && <ButtonLink to="/accueil">Continuer vers mon espace</ButtonLink>}
-    {!onboarding && <><EmailDeliveryJournal userId={user?.id||"anonymous"}/>
-    <section className={s.card}><h2>Suivi des envois Discord</h2><Button variant="outline" onClick={deliveries.reload}>Actualiser</Button>{deliveries.error?<p role="alert">{deliveries.error}</p>:deliveries.data?.length?<ul>{deliveries.data.map(d=><li key={d.id}>{data?.catalog[d.kind]||d.kind} : {deliveryLabels[d.status]||d.status}</li>)}</ul>:<p>Aucun envoi pour le moment.</p>}</section>
+    {!onboarding && <><EmailDeliveryJournal userId={user?.id||"anonymous"} collapsible={collapsible}/>
+    <NotificationSection title="Suivi des envois Discord" className={s.card} collapsible={collapsible}><Button variant="outline" onClick={deliveries.reload}>Actualiser</Button>{deliveries.error?<p role="alert">{deliveries.error}</p>:deliveries.data?.length?<ul>{deliveries.data.map(d=><li key={d.id}>{data?.catalog[d.kind]||d.kind} : {deliveryLabels[d.status]||d.status}</li>)}</ul>:<p>Aucun envoi pour le moment.</p>}</NotificationSection>
     </>}
   </div>;
 }

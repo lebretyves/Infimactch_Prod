@@ -30,9 +30,9 @@
 .admin-badge[data-state=unavailable],.admin-badge[data-state=failed],.admin-badge[data-state=CANCELLED]{background:#fbece9;color:#943c31;border-color:#f0cbc5}
 .admin-badge[data-state=unknown],.admin-badge[data-state=missing]{background:#fff4df;color:#775019;border-color:#ecd9b4}
 .admin-status-strip{display:flex;flex-wrap:wrap;gap:14px}
-.admin-status-strip>a{display:flex;gap:24px;align-items:center;text-decoration:none;padding:14px 18px;background:var(--sky-100);border:1px solid transparent;border-radius:8px}
+.admin-status-strip>a{display:flex;gap:24px;align-items:center;text-decoration:none;padding:14px 18px;background:var(--brand-100);border:1px solid transparent;border-radius:8px}
 .admin-status-strip strong{font-size:28px;color:var(--brand-900);font-variant-numeric:tabular-nums}
-.admin-filters{display:flex;flex-wrap:wrap;align-items:end;gap:20px;margin-bottom:20px;padding:20px;border:1px solid var(--sky-200);border-radius:8px;background:#fff}
+.admin-filters{display:flex;flex-wrap:wrap;align-items:end;gap:12px;margin-bottom:20px;padding:20px;border:1px solid var(--sky-200);border-radius:8px;background:#fff}
 .admin-shell label,.admin-auth label{display:grid;gap:8px;font-size:13px;font-weight:700;color:var(--ink-900)}
 .admin-shell input,.admin-shell select,.admin-shell textarea,.admin-auth input,.admin-auth textarea{border:1px solid #92accb;background:#fff;border-radius:8px;padding:11px 12px;font-size:14px;line-height:1.5;max-width:100%;color:var(--ink-900)}
 .admin-shell textarea,.admin-auth textarea{resize:vertical}
@@ -44,7 +44,7 @@
 .admin-table-scroll tr:hover td{background:var(--sky-50)}
 .admin-pagination{display:flex;justify-content:flex-end;gap:12px;align-items:center;margin-top:18px;font-size:12px}
 .admin-pagination p{margin-right:auto;color:var(--ink-600)}
-.admin-actions{display:flex;flex-wrap:wrap;align-items:center;gap:12px;margin:16px 0}
+.admin-actions{display:flex;flex-wrap:wrap;align-items:flex-end;gap:12px;margin:16px 0}
 .admin-inline-label{min-width:140px}
 .admin-message{padding:18px 20px;border:1px solid #b3dcd7;background:#dcf3ef;border-radius:8px;margin:18px 0;font-size:13px;line-height:1.8;color:var(--ink-900)}
 .admin-message h3{font-size:16px;margin-bottom:8px}
@@ -196,7 +196,7 @@
 
 .admin-alerts li>span:not(.admin-badge){min-width:0;overflow-wrap:anywhere}
 
-.admin-status-strip>div{display:flex;flex-wrap:wrap;align-items:center;gap:16px;padding:14px 18px;background:var(--sky-100);border:1px solid transparent;border-radius:8px}
+.admin-status-strip>div{display:flex;flex-wrap:wrap;align-items:center;gap:16px;padding:14px 18px;background:var(--brand-100);border:1px solid transparent;border-radius:8px}
 
 .admin-status-strip>div small{flex-basis:100%;font-size:12px;color:var(--ink-600)}
 
@@ -232,8 +232,26 @@
 
 .admin-metric:nth-child(3n+2){background:#fff}
 .admin-metric:nth-child(3n+2):hover{background:var(--brand-50)}
-.admin-status-strip>a:hover{background:var(--sky-200)}
+.admin-status-strip>a:hover{box-shadow:inset 0 0 0 2px currentColor}
 .admin-auth-choices button:not([aria-pressed=true]):hover{background:var(--brand-100)}
 .admin-auth-choices button[aria-pressed=true]:hover{background:var(--brand-700)}
 .admin-shell input:focus-visible,.admin-shell select:focus-visible,.admin-shell textarea:focus-visible,.admin-auth input:focus-visible,.admin-auth textarea:focus-visible,.admin-dialog input:focus-visible,.admin-dialog select:focus-visible,.admin-dialog textarea:focus-visible{outline:3px solid var(--brand-600);outline-offset:2px}
 .admin-workstation-image{display:block;width:100%;height:200px;object-fit:cover;object-position:center 40%;border-radius:6px;margin-top:18px}
+
+/* Status belongs to the whole card, with one frame and one colour. */
+.admin-status-strip>a,.admin-status-strip>div{color:var(--brand-800)}
+.admin-status-strip>:has(>.admin-badge[data-state=OPEN]){background:#e5f4ee;color:#1c6047}
+.admin-status-strip>:has(>.admin-badge[data-state=CANCELLED]){background:#fbece9;color:#943c31}
+.admin-status-strip .admin-badge{background:transparent;border:0;border-radius:0;padding:0;color:inherit}
+.admin-status-strip strong{color:inherit}
+/* Keep controls aligned when their labels or available width vary. */
+.admin-shell button,.admin-auth button,.admin-dialog button{min-height:44px;max-width:100%}
+.admin-actions>button,.admin-filters>button,.admin-heading>button{flex:0 0 auto}
+.admin-actions>label,.admin-filters>label{min-width:0;max-width:100%}
+.admin-shell input:not([type=checkbox]):not([type=radio]),.admin-shell select,.admin-dialog input:not([type=checkbox]):not([type=radio]),.admin-dialog select{min-height:44px}
+.admin-dialog input[type=checkbox],.admin-dialog input[type=radio]{width:auto;justify-self:start}
+.admin-dialog label:has(>input[type=checkbox]){grid-template-columns:auto minmax(0,1fr);align-items:start}
+.admin-table-scroll .admin-actions{margin:0;min-width:180px}
+.admin-filters select{width:100%}
+.admin-panel,.admin-dialog-body{min-width:0}
+@media(max-width:480px){.admin-dialog .admin-actions>button{flex:1 1 100%;width:100%}}

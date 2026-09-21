@@ -243,3 +243,7 @@
 
 .headerRight > .identity,.headerRight > .menu{flex-shrink:0}
 @media(max-width:380px){.identity{display:none}}
+
+.header { gap:12px; }
+.brand { margin-right:auto; min-width:0; }
+@media(max-width:480px){.header{gap:4px;padding-inline:8px}.brand svg{max-width:100%;height:auto}}

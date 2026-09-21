@@ -55,15 +55,16 @@ try {
       await consent.waitFor({state:'hidden'});
       const topButton=first.getByRole('button',{name:'Accessibilité',exact:true});
       await first.evaluate(()=>scrollTo(0,0));
+      assert.equal(await topButton.count(),1);
       const box=await topButton.boundingBox();
-      assert.ok(box&&box.y>=0&&box.y<100&&box.x+box.width>width-60&&box.x+box.width<=width,JSON.stringify({width,path,box}));
+      assert.ok(box&&box.y>=0&&box.y<100&&box.x>=0&&box.x<150&&box.width>=44&&box.height>=44,JSON.stringify({width,path,box}));
       assert.equal(await first.evaluate(()=>document.documentElement.scrollWidth>innerWidth),false);
       await first.reload();
       await first.getByRole('button',{name:'Accessibilité',exact:true}).waitFor();
       assert.equal(await first.locator('#cookie-preferences').evaluate(el=>el.open),false,'An explicit saved choice remains effective');
       assert.equal(await first.evaluate(()=>JSON.parse(localStorage.getItem('infimatch:cookie-preferences')).google),false);
       assert.deepEqual(googleRequests,[],'Google does not load before consent or after refusal');
-      console.log('PASS first visit',path,width,'automatic cookies, accessibility without consent, top-right control and saved choice');
+      console.log('PASS first visit',path,width,'automatic cookies, accessibility without consent, top-left control and saved choice');
     } finally {await firstContext.close();}
   }
   await page.goto(base + '/mentions-legales', { waitUntil: 'domcontentloaded' });

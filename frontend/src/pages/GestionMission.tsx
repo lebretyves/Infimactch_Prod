@@ -15,6 +15,7 @@ import { labelCode } from "@/data/professional";
 import { Button, ButtonLink } from "@/ui/Button";
 import { ConfirmationButton } from "@/components/ConfirmationButton";
 import page from "./Candidater.module.css";
+import layout from "./GestionMission.module.css";
 import s from "./inscription/Etape.module.css";
 type Candidate = {
   matching?: CandidateMatching | null;
@@ -122,7 +123,7 @@ export default function GestionMission() {
   const m = r.data.mission,
     agency = m.can_manage;
   return (
-    <div className={page.page}>
+    <div className={`${page.page} ${layout.page}`}>
       <MatchingRules />
       <ButtonLink to={returnTo} variant="ghost">
         Retour aux missions
@@ -148,6 +149,7 @@ export default function GestionMission() {
       {agency && (
         <section className={s.bloc}>
           <h2>Gestion de la mission</h2>
+          <div className={layout.actions}>
           {["DRAFT", "OPEN"].includes(m.status || "") && (
             <ButtonLink
               to={"/gestion/missions/" + id + "/modifier?" + new URLSearchParams({ returnTo })}
@@ -188,6 +190,7 @@ export default function GestionMission() {
               Terminer la mission
             </Button>
           )}
+          </div>
         </section>
       )}
       <section className={s.bloc} id="candidatures">
@@ -301,7 +304,7 @@ export default function GestionMission() {
               {!proposed.data?.items.length && (
                 <p>Aucun profil admissible proposé pour le moment.</p>
               )}
-              <nav aria-label="Pages des profils proposés">
+              <nav className={layout.pagination} aria-label="Pages des profils proposés">
                 <Button variant="ghost" disabled={proposed.loading || proposedOffset===0} onClick={()=>setProposedPage({id,offset:Math.max(0,proposedOffset-20)})}>Profils précédents</Button>
                 <span role="status">Page {Math.floor(proposedOffset/20)+1} sur {Math.max(1,Math.ceil((proposed.data?.total || 0)/20))} · {proposed.data?.total || 0} profils</span>
                 <Button variant="ghost" disabled={proposed.loading || proposedOffset+20 >= (proposed.data?.total || 0)} onClick={()=>setProposedPage({id,offset:proposedOffset+20})}>Profils suivants</Button>

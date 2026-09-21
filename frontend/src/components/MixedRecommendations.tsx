@@ -158,7 +158,7 @@ export function MixedRecommendations({
       </header>
       <p className={s.intro}>Jusqu’à 3 missions à découvrir. Un coup de cœur ? Gardez-le dans vos favoris.</p>
       <div className={s.toolbar}>
-        <OfferOriginChoices value={origin} onChange={(origine) => {
+        <OfferOriginChoices partnersFirst value={origin} onChange={(origine) => {
           const next = new URLSearchParams(params);
           next.set("origine", origine);
           setParams(next);

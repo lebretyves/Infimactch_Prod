@@ -14,7 +14,7 @@ export function EcranPublic({ entete, children }: Props) {
       </a>
 
       <header className={s.entete}>
-        <div className={s.barre}>{entete}</div>
+        <div className={s.barre}><span data-accessibility-slot /><div className={s.headerContent}>{entete}</div></div>
       </header>
 
       {children}

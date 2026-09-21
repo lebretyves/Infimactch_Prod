@@ -203,3 +203,6 @@
 @media print { .dialog { display: none; } }
 
 .dialogTools { display: flex; justify-content: flex-end; margin-bottom: 16px; }
+
+.dialog .close { border:0; border-radius:0; background:transparent; box-shadow:none; }
+.close:focus-visible { outline:3px solid var(--brand-700); outline-offset:2px; }
