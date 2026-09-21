@@ -1,4 +1,5 @@
 import {effacerBrouillon} from '../pages/inscription/state';
+import { clearSearchAreas } from '../lib/searchArea';
 import { clearAppCaches } from '../lib/pwa';
 import { profilePayload,type ProfessionalProfile,type ProfileDetails } from './profile';
 import { api, ApiError, resetCsrf } from './api';
@@ -133,6 +134,7 @@ export async function fetchCurrentUser(
   }
 }
 export async function login(data: LoginCredentials): Promise<AuthResponse> {
+  clearSearchAreas();
   clearAuth();
   await api('/auth/login', {
     method: 'POST',
@@ -184,6 +186,7 @@ export async function register(data: RegisterData): Promise<AuthResponse> {
   }
 }
 export async function logout() {
+  clearSearchAreas();
   effacerBrouillon();
   await api('/auth/logout', { method: 'POST' });
   await clearAppCaches().catch(() => undefined);

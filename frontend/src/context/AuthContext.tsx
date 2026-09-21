@@ -1,3 +1,4 @@
+import { clearSearchAreas } from '@/lib/searchArea';
 import {effacerBrouillon} from '@/pages/inscription/state';
 import { SessionInactivity } from "@/components/SessionInactivity";
 import {
@@ -39,7 +40,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   authenticated.current=!!user;
   const generation = useRef(0),
     pending = useRef<AbortController | null>(null);
-  const expireIdle = useCallback(() => { effacerBrouillon(); pending.current?.abort(); ++generation.current; clearAuth(); setUser(null); setLoading(false); setError(""); }, []);
+  const expireIdle = useCallback(() => { clearSearchAreas(); effacerBrouillon(); pending.current?.abort(); ++generation.current; clearAuth(); setUser(null); setLoading(false); setError(""); }, []);
   const refresh = useCallback(async () => {
     pending.current?.abort();
     const controller = new AbortController();
@@ -49,7 +50,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     setError("");
     try {
       const current = await fetchCurrentUser(controller.signal);
-      if (attempt === generation.current) setUser(current);
+      if (attempt === generation.current) {
+        if (!current) clearSearchAreas();
+        setUser(current);
+      }
     } catch (e) {
       if (attempt === generation.current && !controller.signal.aborted) {
         setUser(null);
@@ -62,7 +66,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     clearAuth();
     void refresh();
-    const expire = () => {if(authenticated.current)effacerBrouillon();setUser(null);};
+    const expire = () => {clearSearchAreas();if(authenticated.current)effacerBrouillon();setUser(null);};
     window.addEventListener("infimatch:session-expired", expire);
     return () => {
       ++generation.current;
@@ -73,7 +77,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   async function refreshIdentity() {
     const attempt = generation.current;
     const current = await fetchCurrentUser();
-    if (attempt === generation.current) setUser(current);
+    if (attempt === generation.current) {
+      if (!current) clearSearchAreas();
+      setUser(current);
+    }
   }
   async function authenticate(action: () => Promise<{ user: User }>) {
     pending.current?.abort();

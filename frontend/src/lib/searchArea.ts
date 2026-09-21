@@ -1,6 +1,7 @@
 export type SearchArea = {place:string;lat:string;lon:string;radius:string};
 export const validRadius = (v:string) => v === '' || (Number.isFinite(Number(v)) && Number(v)>=0.1 && Number(v)<=1000);
-const key=(id:string)=>'infimatch:search-area:v1:'+id;
+const prefix = 'infimatch:search-area:';
+const key=(id:string)=>prefix+'v1:'+id;
 export function readSearchArea(id:string):SearchArea|null {
  try {
   const a=JSON.parse(localStorage.getItem(key(id)) || 'null');
@@ -19,4 +20,14 @@ export function profileSearchArea(profile: {latitude: number | null; longitude: 
  const {latitude, longitude, radius_km} = profile;
  if (latitude == null || longitude == null || !Number.isFinite(latitude) || !Number.isFinite(longitude) || Math.abs(latitude)>90 || Math.abs(longitude)>180 || radius_km == null || !validRadius(String(radius_km))) return null;
  return {place: profile.details?.mobilityCity?.trim() || 'Ma zone enregistrée', lat:String(latitude), lon:String(longitude), radius:String(radius_km)};
+}
+
+/** Remove every locally cached area on this browser, including older accounts. */
+export function clearSearchAreas(): void {
+ try {
+  for (let index = localStorage.length - 1; index >= 0; index--) {
+   const name = localStorage.key(index);
+   if (name?.startsWith(prefix)) localStorage.removeItem(name);
+  }
+ } catch { /* Storage can be disabled; the server account area is untouched. */ }
 }
