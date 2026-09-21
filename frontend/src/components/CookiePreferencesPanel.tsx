@@ -4,6 +4,41 @@ import { Icon } from "@/ui/Icon";
 import type { CookiePreferences } from "@/services/cookiePreferences";
 import s from "./CookiePreferencesPanel.module.css";
 import preferencesStyle from "./SitePreferences.module.css";
+// A first-visit choice can close before the lazy page has finished loading.
+function focusPageWhenReady() {
+  let waiting: HTMLElement | null = null;
+  const stop = () => {
+    observer.disconnect();
+    document.removeEventListener("keydown", stop, true);
+    document.removeEventListener("pointerdown", stop, true);
+  };
+  const focus = () => {
+    const heading = document.querySelector<HTMLElement>("main h1");
+    if (heading) {
+      stop();
+      heading.tabIndex = -1;
+      heading.focus();
+    } else {
+      waiting = document.querySelector<HTMLElement>("main");
+      if (waiting) { waiting.tabIndex = -1; waiting.focus(); }
+    }
+  };
+  const observer = new MutationObserver(() => {
+    const active = document.activeElement;
+    if (document.querySelector("dialog[open]") || (active !== document.body && active !== waiting)) {
+      stop();
+      return;
+    }
+    focus();
+  });
+  observer.observe(document.getElementById("root") ?? document.body, { childList: true, subtree: true });
+  // If the person continues navigating, do not move their focus later.
+  document.addEventListener("keydown", stop, true);
+  document.addEventListener("pointerdown", stop, true);
+  focus();
+  return stop;
+}
+
 type Props = {
   open: boolean;
   preferences: CookiePreferences | null;
@@ -26,6 +61,8 @@ export function CookiePreferencesPanel({
   const trigger = useRef<HTMLButtonElement>(null);
   const title = useRef<HTMLHeadingElement>(null);
   const returnFocus = useRef<HTMLElement | null>(null);
+  const cancelPageFocus = useRef<(() => void) | null>(null);
+  useEffect(() => () => cancelPageFocus.current?.(), []);
   const [custom, setCustom] = useState(false);
   const [google, setGoogle] = useState(false);
   useEffect(() => {
@@ -35,6 +72,7 @@ export function CookiePreferencesPanel({
       setGoogle(preferences?.google === true);
       setCustom(false);
       if (!element.open) {
+        cancelPageFocus.current?.();
         const active = document.activeElement;
         returnFocus.current = active instanceof HTMLElement && !element.contains(active)
           ? active : trigger.current;
@@ -81,11 +119,10 @@ export function CookiePreferencesPanel({
           if (open) onClose();
           const previous = returnFocus.current;
           if (previous) {
-            const target = previous !== document.body && previous.isConnected
-              ? previous : document.querySelector<HTMLElement>("main h1") ?? document.querySelector<HTMLElement>("main");
-            if (target) {
-              if (target.matches("h1, main")) target.tabIndex = -1;
-              target.focus();
+            if (previous !== document.body && previous.isConnected && previous.getAttribute("aria-busy") !== "true") {
+              previous.focus();
+            } else {
+              cancelPageFocus.current = focusPageWhenReady();
             }
           }
         }}
