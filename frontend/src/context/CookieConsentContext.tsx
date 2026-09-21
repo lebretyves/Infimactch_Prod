@@ -14,6 +14,7 @@ import {
   storeCookiePreferences,
   type CookiePreferences,
 } from "@/services/cookiePreferences";
+import { useAccessibility } from "@/context/AccessibilityContext";
 import { setGoogleIdentityPermission } from "@/services/googleIdentity";
 import { CookiePreferencesPanel } from "@/components/CookiePreferencesPanel";
 import { AccessibilityPanel } from "@/components/AccessibilityPanel";
@@ -32,6 +33,7 @@ export function CookieConsentProvider({
   children: ReactNode;
   onPolicyNavigate: () => void;
 }) {
+  const accessibility = useAccessibility();
   const [preferences, setPreferences] = useState(readCookiePreferences);
   const [open, setOpen] = useState(() => !readCookiePreferences());
   const [storageNotice, setStorageNotice] = useState("");
@@ -89,13 +91,12 @@ export function CookieConsentProvider({
     <Context
       value={{ googleAllowed, preferences, openPreferences, savePreferences }}
     >
-      {children}
       <div className={preferencesStyle.bar} role="group" aria-label="Préférences du site">
-        <span className={preferencesStyle.label}>Préférences du site</span>
         <div className={preferencesStyle.controls}>
-          <AccessibilityPanel />
           <CookiePreferencesPanel
             open={open}
+            suspended={accessibility.panelOpen}
+            onAccessibilityOpen={accessibility.openPanel}
             preferences={preferences}
             storageNotice={storageNotice}
             onOpen={openPreferences}
@@ -103,8 +104,10 @@ export function CookieConsentProvider({
             onSave={savePreferences}
             onClose={() => (preferences ? setOpen(false) : savePreferences(false))}
           />
+          <AccessibilityPanel returnToCookies={open} />
         </div>
       </div>
+      {children}
     </Context>
   );
 }

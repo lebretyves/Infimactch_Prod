@@ -164,23 +164,20 @@
 }
 @media (max-width: 900px) {
   .shell {
-    grid-template-columns: 1fr;
-    grid-template-rows: 68px 1fr;
+    display: block;
   }
   .header {
-    padding: 0 20px;
+    padding: 12px 20px;
+    min-height: 68px;
   }
   .nav {
     display: none;
-    position: fixed;
-    top: 68px;
-    left: 0;
-    bottom: 0;
-    width: 270px;
-    max-width: calc(100vw - 28px);
-    height: calc(100dvh - 68px);
-    z-index: 30;
-    box-shadow: 20px 0 80px #07215225;
+    position: static;
+    width: auto;
+    max-width: 100%;
+    height: auto;
+    border-right: 0;
+    border-bottom: 1px solid #e0eaf3;
   }
   .nav.open {
     display: flex;
@@ -201,7 +198,7 @@
 }
 @media (max-width: 480px) {
   .header {
-    padding: 0 14px;
+    padding: 12px 14px;
     gap: 10px;
   }
   .brand svg {

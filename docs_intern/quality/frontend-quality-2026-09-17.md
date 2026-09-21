@@ -80,3 +80,5 @@ Le build produit cinq résumés publics lisibles sans JavaScript, correspondant 
 `test-quality-refinements.mjs` : cinq pages sans JavaScript PASS; bouton Cookies statique et réouverture du dialogue à 375 et 768 px PASS; espacement Google >=20px PASS. Build et 18 contrôles adaptatifs/PWA repassés avec succès.
 
 Contrôle public final : URL inconnue HTTP 404 confirmée, cinq résumés noscript disponibles. Les 18 contrôles adaptatifs ont aussi passé sur le domaine Vercel publié avec API fictives interceptées ; voir la recette de production.
+
+Actualisation du 21 septembre 2026 : la barre Cookies/Accessibilité a été déplacée en haut de page ; les observations précédentes sur le pied de page décrivent la version du 17 septembre. Voir [Préférences visibles dès l’arrivée](PREFERENCES_VISIBLES_2026-09-21.md).
