@@ -96,6 +96,7 @@ test("anonymize closes the account and removes private documents", async () => {
   });
   const result = await anonymizeAccount(em, id);
   assert.deepEqual(result, { id, documents: 1, documentIds: [doc] });
+  assert.ok(em.queries.some(q=>q.sql.includes("FROM document WHERE owner_id")&&q.sql.includes("'CV'")));
   assert.ok(em.queries.some((q) => q.sql.includes("DELETE FROM session")));
   assert.ok(em.queries.some((q) => q.sql.includes("DELETE FROM google_identity")));
   assert.ok(em.queries.some((q) => q.sql.includes("Compte clôturé")));

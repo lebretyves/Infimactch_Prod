@@ -172,7 +172,7 @@ export function configureOpenApi(doc: OpenAPIObject) {
     DocumentMetadata: object(
       {
         id: uuid,
-        kind: { type: "string", enum: ["EVIDENCE", "CONFIRMATION", "CANCELLATION"] },
+        kind: { type: "string", enum: ["EVIDENCE", "CONFIRMATION", "CANCELLATION", "CV"] },
         mime: text,
         size_bytes: integer,
         status: { type: "string", enum: ["STAGING", "READY"] },
@@ -266,6 +266,7 @@ export function configureOpenApi(doc: OpenAPIObject) {
     "POST /api/v1/staffing-requests": "StaffingRequest",
     "PUT /api/v1/staffing-requests/{id}": "StaffingRequest",
     "POST /api/v1/me/documents": "DocumentCommand",
+    "POST /api/v1/me/cv-document": "DocumentCommand",
     "PUT /api/v1/me/bank-details": "DocumentCommand",
     "PUT /api/v1/me/bank-document": "DocumentCommand",
     "POST /api/v1/assignments/{id}/cancel": "Assignment",

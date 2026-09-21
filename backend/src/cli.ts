@@ -262,7 +262,7 @@ cli
         );
         if (!account) throw new Error("Account not found");
         const [documents] = await db.query(
-          "SELECT count(*)::int AS n FROM document WHERE owner_id=$1 AND kind IN('EVIDENCE','BANK')",
+          "SELECT count(*)::int AS n FROM document WHERE owner_id=$1 AND kind IN('EVIDENCE','BANK','CV')",
           [opts.account],
         );
         console.log(
