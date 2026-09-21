@@ -37,3 +37,13 @@
 .missionSearch > .actions { grid-column: 1 / -1; justify-content: end; }
 .searchHint { grid-column: 1 / -1; margin: 0; color: var(--ink-700); font-size: 12px; line-height: 1.5; }
 @media(max-width: 760px) { .missionSearch { grid-template-columns: 1fr; padding: 16px; } .missionSearch > .actions { justify-content: start; } }
+
+.actions { display:flex; flex-wrap:wrap; gap:12px; align-items:center; }
+.addPanel { display:grid; gap:24px; padding:24px; border:1px solid var(--line); border-radius:12px; background:white; }
+.addPanel h2, .addPanel p { margin:0; line-height:1.6; }
+.addFields { display:grid; gap:20px; min-width:0; border:0; padding:0; margin:0; }
+.finessResults { display:grid; gap:16px; }
+.finessResults > div { display:flex; flex-wrap:wrap; gap:16px; align-items:center; justify-content:space-between; padding-bottom:16px; border-bottom:1px solid var(--line); }
+.removeActions { grid-column:1/-1; display:grid; gap:12px; }
+.removeActions section { display:grid; justify-items:start; gap:12px; padding:16px; margin-top:12px; background:var(--brand-50); border-radius:8px; }
+@media(max-width:600px) { .heading { align-items:stretch; flex-direction:column; } .actions { align-items:stretch; flex-direction:column; } .addPanel { padding:20px 16px; } }
