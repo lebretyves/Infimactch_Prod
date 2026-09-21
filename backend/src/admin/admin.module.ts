@@ -9,7 +9,7 @@ import {RefreshModule} from '../public-data/refresh.service';
 import {Body,Controller,Get,Post,Req,Param,Query,Module,UseGuards,ParseUUIDPipe,ConflictException,NotFoundException} from '@nestjs/common';
 import {Request} from 'express';
 import {IsBoolean,IsEmail,IsIn,IsOptional,IsString,Length} from 'class-validator';
-import {randomBytes} from 'node:crypto';
+import {randomBytes,randomUUID} from 'node:crypto';
 import {Database,audit,SqlClient} from '../database/database';
 import {PageDto} from '../common/page.dto';
 import {MatchingService,MatchingModule} from '../matching/matching.module';
@@ -22,7 +22,7 @@ class Access extends State {@IsIn(['OWNER','SUPPORT','OPS','AUDITOR']) role!:Adm
 class Invite extends Reason {@IsEmail() @Length(3,254) email!:string;@IsIn(['OWNER','SUPPORT','OPS','AUDITOR']) role!:AdminRole;}
 const scalar=(rows:any[])=>Number(rows[0]?.count??0);
 async function lockAccess(em:SqlClient){await em.query("SELECT pg_advisory_xact_lock(1789381700)");}
-async function protectOwner(em:SqlClient,id:string,losesOwner:boolean){if(!losesOwner)return;const [p]=await em.query("SELECT role,active FROM platform_admin WHERE user_id=$1",[id]);if(p?.role==='OWNER'&&p.active&&scalar(await em.query("SELECT count(*) FROM platform_admin p JOIN account a ON a.id=p.user_id WHERE p.role='OWNER' AND p.active AND a.active AND a.password_hash<>'ADMIN_ACTIVATION_PENDING' AND p.invitation_hash IS NULL"))<=1)throw new ConflictException('Le dernier responsable doit conserver son accès.');}
+async function protectOwner(em:SqlClient,id:string,losesOwner:boolean){if(!losesOwner)return;const [p]=await em.query("SELECT p.role,p.active FROM platform_admin p JOIN account a ON a.id=p.user_id WHERE p.user_id=$1 AND a.active AND a.password_hash<>'ADMIN_ACTIVATION_PENDING' AND p.invitation_hash IS NULL",[id]);if(p?.role==='OWNER'&&p.active&&scalar(await em.query("SELECT count(*) FROM platform_admin p JOIN account a ON a.id=p.user_id WHERE p.role='OWNER' AND p.active AND a.active AND a.password_hash<>'ADMIN_ACTIVATION_PENDING' AND p.invitation_hash IS NULL"))<=1)throw new ConflictException('Le dernier responsable doit conserver son accès.');}
 @Controller('admin') @UseGuards(AdminGuard)
 export class AdminController {
  constructor(private readonly db:Database,private readonly matching:MatchingService){}
@@ -45,8 +45,52 @@ export class AdminController {
  const [heartbeat]=await this.db.query("SELECT checked_at FROM operational_check WHERE service='cloud-dispatch' ORDER BY checked_at DESC LIMIT 1");
  return {observedAt:new Date().toISOString(),version:process.env.VERCEL_GIT_COMMIT_SHA??'local',services:[...services,{name:'SMTP2GO — emails de mission',state:process.env.SMTP2GO_API_KEY&&process.env.SMTP2GO_FROM?'configured':'missing',message:process.env.SMTP2GO_API_KEY&&process.env.SMTP2GO_FROM?'Clé SMTP2GO_API_KEY et expéditeur SMTP2GO_FROM présents dans les variables du serveur. Envoi des confirmations et annulations avec PDF ; configuration détectée, réception non vérifiée.':'Configuration incomplète : renseigner SMTP2GO_API_KEY et SMTP2GO_FROM depuis Vault dans les variables du serveur.'},{name:'Documents',state:process.env.DOCUMENT_STORAGE==='postgres'?'configured':'local',message:process.env.DOCUMENT_STORAGE==='postgres'?'Stockage chiffré PostgreSQL ; ouverture à vérifier par recette.':'Stockage local.'},{name:'Vault',state:'local',message:'Coffre conservé sur le PC ; secrets serveur copiés dans Vercel conformément au choix du propriétaire.'},{name:'n8n / Discord',state:discordState,message:discordMessage},{name:'Traitement cloud',state:dispatchHealth(heartbeat?.checked_at),message:heartbeat?'Dernier traitement : '+new Date(heartbeat.checked_at).toISOString():'Aucun traitement cloud observe.'}]};}
  @Get('audit') logs(@Req() r:Request,@Query() p:Search){authorizeAdmin(r,'audit');return this.page("SELECT id,actor_id,event,resource_id,created_at FROM audit WHERE ($1='' OR event=$1) ORDER BY created_at DESC,id DESC",[p.event??''],p);}
- @Get('access') async access(@Req() r:Request){authorizeAdmin(r,'access');return {items:await this.db.query("SELECT p.user_id,a.email,p.role,p.active,(a.password_hash<>'ADMIN_ACTIVATION_PENDING' AND p.invitation_hash IS NULL) activation_completed,(p.totp_secret IS NOT NULL) mfa_enrolled,p.created_at FROM platform_admin p JOIN account a ON a.id=p.user_id ORDER BY p.created_at")};}
- @Post('access/invite') async invite(@Req() r:Request,@Body() b:Invite){const actor=authorizeAdmin(r,'access:write',true),invitation=randomBytes(32).toString('base64url');await this.db.transaction(async em=>{await lockAccess(em);const [a]=await em.query('SELECT id FROM account WHERE lower(email)=lower($1) AND active',[b.email]);if(!a)throw new NotFoundException('Compte existant actif nécessaire.');if((await em.query('SELECT 1 FROM platform_admin WHERE user_id=$1',[a.id])).length)throw new ConflictException('Cet accès existe déjà.');await em.query("INSERT INTO platform_admin(user_id,role,invitation_hash,invitation_expires_at) VALUES($1,$2,$3,now()+interval '24 hours')",[a.id,b.role,hashInvitation(invitation)]);await audit(em,actor,'ADMIN_INVITED',a.id,{role:b.role,reason:b.reason});});return {invitation,expiresAt:new Date(Date.now()+86400000).toISOString()};}
+ @Get('access') async access(@Req() r:Request){authorizeAdmin(r,'access');return {items:await this.db.query("SELECT p.user_id,a.email,a.platform_only,p.role,p.active,p.invitation_expires_at,(p.invitation_hash IS NOT NULL) invitation_pending,(a.password_hash<>'ADMIN_ACTIVATION_PENDING' AND p.invitation_hash IS NULL) activation_completed,(p.totp_secret IS NOT NULL) mfa_enrolled,p.created_at FROM platform_admin p JOIN account a ON a.id=p.user_id ORDER BY p.created_at")};}
+ @Post('access/invite') async invite(@Req() r:Request,@Body() b:Invite){
+  const actor=authorizeAdmin(r,'access:write',true),invitation=randomBytes(32).toString('base64url'),email=b.email.trim().toLowerCase();
+  return this.db.transaction(async em=>{
+   await lockAccess(em);
+   // ON CONFLICT also covers a concurrent public registration for the same address.
+   if(!(await em.query('SELECT 1 FROM account WHERE lower(email)=lower($1)',[email])).length)await em.query("INSERT INTO account(email,password_hash,family,terms_version,platform_only) VALUES($1,'ADMIN_ACTIVATION_PENDING','ENTERPRISE','ADMIN_INVITATION',true) ON CONFLICT DO NOTHING",[email]);
+   const [a]=await em.query('SELECT id,active FROM account WHERE lower(email)=lower($1) FOR UPDATE',[email]);
+   if(!a?.active)throw new ConflictException('Ce compte est désactivé. Vérifiez sa situation avant de l’inviter.');
+   if((await em.query('SELECT 1 FROM platform_admin WHERE user_id=$1',[a.id])).length)throw new ConflictException('Cet accès existe déjà. Vous pouvez renouveler une invitation en attente depuis la liste.');
+   const [access]=await em.query("INSERT INTO platform_admin(user_id,role,invitation_hash,invitation_expires_at) VALUES($1,$2,$3,now()+interval '24 hours') RETURNING invitation_expires_at",[a.id,b.role,hashInvitation(invitation)]);
+   await audit(em,actor,'ADMIN_INVITED',a.id,{role:b.role,reason:b.reason});
+   return {invitation,expiresAt:new Date(access.invitation_expires_at).toISOString(),email};
+  });
+ }
+ @Post('access/:id/invitation') async renewInvitation(@Req() r:Request,@Param('id',ParseUUIDPipe) id:string,@Body() b:Reason){
+  const actor=authorizeAdmin(r,'access:write',true),invitation=randomBytes(32).toString('base64url');
+  return this.db.transaction(async em=>{
+   await lockAccess(em);
+   const [a]=await em.query('SELECT a.email,a.active AS account_active,p.active,p.invitation_hash FROM account a JOIN platform_admin p ON p.user_id=a.id WHERE a.id=$1 FOR UPDATE OF a,p',[id]);
+   if(!a)throw new NotFoundException();
+   if(!a.active||!a.account_active||!a.invitation_hash)throw new ConflictException('Seule une invitation en attente sur un compte actif peut être renouvelée.');
+   const [access]=await em.query("UPDATE platform_admin SET invitation_hash=$2,invitation_expires_at=now()+interval '24 hours',version=version+1 WHERE user_id=$1 RETURNING invitation_expires_at",[id,hashInvitation(invitation)]);
+   await em.query("DELETE FROM admin_session WHERE sess->>'adminId'=$1 OR sess->'adminChallenge'->>'userId'=$1",[id]);
+   await audit(em,actor,'ADMIN_INVITATION_RENEWED',id,{reason:b.reason});
+   return {invitation,expiresAt:new Date(access.invitation_expires_at).toISOString(),email:a.email};
+  });
+ }
+ @Post('access/:id/delete') async deleteAccess(@Req() r:Request,@Param('id',ParseUUIDPipe) id:string,@Body() b:Reason){
+  const actor=authorizeAdmin(r,'access:write',true);
+  return this.db.transaction(async em=>{
+   await lockAccess(em);
+   if(actor===id)throw new ConflictException('Vous ne pouvez pas supprimer votre propre accès.');
+   const [a]=await em.query('SELECT a.platform_only FROM account a JOIN platform_admin p ON p.user_id=a.id WHERE a.id=$1 FOR UPDATE OF a,p',[id]);
+   if(!a)throw new NotFoundException();
+   await protectOwner(em,id,true);
+   await em.query('DELETE FROM platform_admin WHERE user_id=$1',[id]);
+   // Keep the account identifier for audit foreign keys, remove dedicated credentials and identity.
+   if(a.platform_only)await em.query("UPDATE account SET active=false,email=$2,password_hash='ADMIN_DELETED',session_version=session_version+1 WHERE id=$1",[id,'deleted-admin-'+randomUUID()+'@example.invalid']);
+   else await em.query('UPDATE account SET session_version=session_version+1 WHERE id=$1',[id]);
+   await em.query("DELETE FROM admin_session WHERE sess->>'adminId'=$1 OR sess->'adminChallenge'->>'userId'=$1",[id]);
+   await em.query("DELETE FROM session WHERE sess->>'userId'=$1",[id]);
+   await audit(em,actor,'ADMIN_ACCESS_DELETED',id,{dedicatedAccount:a.platform_only,reason:b.reason});
+   return {ok:true};
+  });
+ }
  @Post('access/:id') async updateAccess(@Req() r:Request,@Param('id',ParseUUIDPipe) id:string,@Body() b:Access){const actor=authorizeAdmin(r,'access:write',true);return this.db.transaction(async em=>{await lockAccess(em);await protectOwner(em,id,!b.active||b.role!=='OWNER');if(!(await em.query('UPDATE platform_admin SET role=$2,active=$3,version=version+1 WHERE user_id=$1 RETURNING user_id',[id,b.role,b.active])).length)throw new NotFoundException();await em.query("DELETE FROM admin_session WHERE sess->>'adminId'=$1",[id]);await audit(em,actor,'ADMIN_ACCESS_CHANGED',id,{role:b.role,active:b.active,reason:b.reason});return {ok:true};});}
  @Get('quality') quality(@Req() r:Request){authorizeAdmin(r,'quality');return {items:[{domain:'RGAA',status:'non audité',detail:'Contrôles ciblés à distinguer d’un audit RGAA complet.',evidence:'/accessibilite'},{domain:'RGESN',status:'démarche en cours',detail:'Aucun score ni certification déclaré.',evidence:'/ecoconception'},{domain:'Recommandations',status:'mixte validé',detail:'Missions internes compatibles et offres externes : pertinence puis date de publication connue, dans deux groupes distincts.',evidence:null}]};}
  @Get('backups') async backups(@Req() r:Request){authorizeAdmin(r,'backups');const [proof]=await this.db.query("SELECT state,checked_at,summary FROM operational_check WHERE service='backup-restore' ORDER BY checked_at DESC LIMIT 1");return {state:proof?.state??'unknown',message:proof?'Restauration isolee verifiee. Aucune restauration en production ni sauvegarde quotidienne automatique.':'Aucune preuve de restauration enregistree.',lastVerifiedAt:proof?.checked_at??null,proof:proof?.summary??null};}

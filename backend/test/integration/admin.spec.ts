@@ -283,3 +283,78 @@ test('invitation guidance rejects unknown, expired, consumed, suspended and lock
  await check({email:existing.email}).expect(400);await check({...input,invitation:'short'}).expect(400);
  await check({...input,passwordSetupRequired:true}).expect(400);
 });
+
+
+test('owner invitation creates a dedicated account, renews, activates with MFA and deletes it',async()=>{
+ const owner=await enroll(),email=randomUUID()+'@example.invalid';
+ const issued=await post(owner.agent,'access/invite',owner.csrf,{email,role:'SUPPORT',reason:'Invite fictional secondary admin'}).expect(201);
+ const [a]=await db.query('SELECT id,platform_only,password_hash FROM account WHERE email=$1',[email]);
+ assert.equal(a.platform_only,true);assert.equal(a.password_hash,'ADMIN_ACTIVATION_PENDING');
+ const agent=request.agent(app.getHttpServer()),c=await agent.get('/api/v1/admin/csrf');
+ const oldInput={email,invitation:issued.body.invitation};
+ assert.equal((await post(agent,'invitation/check',c.body.csrfToken,oldInput).expect(201)).body.passwordSetupRequired,true);
+ await post(owner.agent,'access/invite',owner.csrf,{email:email.toUpperCase(),role:'OPS',reason:'Duplicate invitation rejected'}).expect(409);
+ const renewed=await post(owner.agent,'access/'+a.id+'/invitation',owner.csrf,{reason:'Renew fictional invitation'}).expect(201);
+ await post(agent,'invitation/check',c.body.csrfToken,oldInput).expect(401);
+ const input={email,invitation:renewed.body.invitation,password};
+ const activated=await post(agent,'activate',c.body.csrfToken,input).expect(201);
+ await agent.get('/api/v1/admin/me').expect(401);
+ const mfa=await post(agent,'mfa',activated.body.csrfToken,{code:totp(activated.body.secret,Math.floor(Date.now()/30000))}).expect(201);
+ assert.equal(mfa.body.recoveryCodes.length,8);
+ assert.equal((await agent.get('/api/v1/admin/me').expect(200)).body.role,'SUPPORT');
+ await post(owner.agent,'access/'+a.id+'/invitation',owner.csrf,{reason:'Activated invitation cannot renew'}).expect(409);
+ await post(owner.agent,'access/'+a.id+'/delete',owner.csrf,{reason:'Remove fictional secondary admin'}).expect(201);
+ await agent.get('/api/v1/admin/me').expect(401);
+ const [removed]=await db.query('SELECT active,email,password_hash FROM account WHERE id=$1',[a.id]);
+ assert.equal(removed.active,false);assert.notEqual(removed.email,email);assert.equal(removed.password_hash,'ADMIN_DELETED');
+ assert.equal((await db.query('SELECT 1 FROM platform_admin WHERE user_id=$1',[a.id])).length,0);
+ assert.equal((await db.query("SELECT 1 FROM audit WHERE resource_id=$1 AND event='ADMIN_ACCESS_DELETED'",[a.id])).length,1);
+ await post(owner.agent,'access/invite',owner.csrf,{email,role:'AUDITOR',reason:'Invite same address again'}).expect(201);
+ const [replacement]=await db.query('SELECT id FROM account WHERE email=$1',[email]);assert.notEqual(replacement.id,a.id);
+});
+
+test('deletion preserves a business account and invalidates old MFA challenges after reinvitation',async()=>{
+ const owner=await enroll(),client=await account(),agent=request.agent(app.getHttpServer());
+ const [before]=await db.query('SELECT password_hash FROM account WHERE id=$1',[client.id]);
+ const invite=()=>post(owner.agent,'access/invite',owner.csrf,{email:client.email.toUpperCase(),role:'SUPPORT',reason:'Existing client invited as admin'});
+ const issued=await invite().expect(201),c=await agent.get('/api/v1/admin/csrf');
+ assert.equal((await post(agent,'invitation/check',c.body.csrfToken,{email:client.email,invitation:issued.body.invitation}).expect(201)).body.passwordSetupRequired,false);
+ const login=await post(agent,'login',c.body.csrfToken,{email:client.email,password,invitation:issued.body.invitation}).expect(201);
+ await post(owner.agent,'access/'+client.id+'/delete',owner.csrf,{reason:'Remove only administrative access'}).expect(201);
+ const [after]=await db.query('SELECT active,password_hash,platform_only FROM account WHERE id=$1',[client.id]);
+ assert.equal(after.active,true);assert.equal(after.platform_only,false);assert.equal(after.password_hash,before.password_hash);
+ assert.equal((await db.query('SELECT 1 FROM profile WHERE user_id=$1',[client.id])).length,1);
+ await invite().expect(201);
+ await post(agent,'mfa',login.body.csrfToken,{code:totp(login.body.secret,Math.floor(Date.now()/30000))}).expect(res=>assert.ok([401,403].includes(res.status)));
+ await agent.get('/api/v1/admin/me').expect(401);
+});
+
+test('invitation and deletion require owner permissions, recent authentication and protect the last owner',async()=>{
+ const owner=await enroll(),ops=await enroll('OPS'),email=randomUUID()+'@example.invalid';
+ await post(ops.agent,'access/invite',ops.csrf,{email,role:'OWNER',reason:'Unauthorized invitation test'}).expect(403);
+ await post(ops.agent,'access/'+owner.id+'/delete',ops.csrf,{reason:'Unauthorized deletion test'}).expect(403);
+ await post(owner.agent,'access/'+owner.id+'/delete',owner.csrf,{reason:'Own access deletion forbidden'}).expect(409);
+ await post(owner.agent,'access/'+randomUUID()+'/delete',owner.csrf,{reason:'Missing admin deletion test'}).expect(404);
+ const others=await db.query("UPDATE platform_admin SET role='AUDITOR' WHERE role='OWNER' AND user_id<>$1 RETURNING user_id",[owner.id]);
+ // Invoke the protection with a second authenticated owner that is excluded as a usable owner.
+ const second=await enroll();await db.query("UPDATE platform_admin SET invitation_hash='pending' WHERE user_id=$1",[second.id]);
+ try {await post(second.agent,'access/'+owner.id+'/delete',second.csrf,{reason:'Last usable owner protected'}).expect(409);}
+ finally {await db.query("UPDATE platform_admin SET invitation_hash=NULL WHERE user_id=$1",[second.id]);await db.query("UPDATE platform_admin SET role='OWNER' WHERE user_id=ANY($1::uuid[])",[others.map(a=>a.user_id)]);}
+ await db.query("UPDATE admin_session SET sess=jsonb_set(sess::jsonb,'{adminVerifiedAt}',to_jsonb($2::bigint))::json WHERE sess->>'adminId'=$1",[owner.id,Date.now()-6*60000]);
+ await post(owner.agent,'access/'+ops.id+'/delete',owner.csrf,{reason:'Stale authentication deletion test'}).expect(403);
+ assert.equal((await db.query('SELECT 1 FROM platform_admin WHERE user_id=$1',[ops.id])).length,1);
+});
+
+
+test('pending owner invitations can be deleted and inactive accounts cannot be invited',async()=>{
+ const owner=await enroll(),email=randomUUID()+'@example.invalid';
+ const others=await db.query("UPDATE platform_admin SET role='AUDITOR' WHERE role='OWNER' AND user_id<>$1 RETURNING user_id",[owner.id]);
+ try {
+  await post(owner.agent,'access/invite',owner.csrf,{email,role:'OWNER',reason:'Pending owner invitation test'}).expect(201);
+  const [pending]=await db.query('SELECT id FROM account WHERE email=$1',[email]);
+  await post(owner.agent,'access/'+pending.id+'/delete',owner.csrf,{reason:'Cancel unused owner invitation'}).expect(201);
+ } finally {await db.query("UPDATE platform_admin SET role='OWNER' WHERE user_id=ANY($1::uuid[])",[others.map(a=>a.user_id)]);}
+ const client=await account();await db.query('UPDATE account SET active=false WHERE id=$1',[client.id]);
+ await post(owner.agent,'access/invite',owner.csrf,{email:client.email,role:'SUPPORT',reason:'Inactive account cannot be invited'}).expect(409);
+ assert.equal((await db.query('SELECT 1 FROM platform_admin WHERE user_id=$1',[client.id])).length,0);
+});

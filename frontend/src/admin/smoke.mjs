@@ -19,6 +19,7 @@ const browser = await chromium.launch({ headless: true, channel: process.env.BRO
 try {
   const page = await browser.newPage(); const errors = [];
   page.on('pageerror', e => errors.push(e.message));
+  let accessRows=[];let accessInvites=0;let accessDeletes=0;let accessRenewals=0;
   let invitationResponse='new'; let invitationChecks=0; let failPassword=false; let invitationLogins=0; let sessionExpiredEvents=0;
   const invitation='fixture-private-invitation-000000000000000000';
   let enrolling=false; let activations = 0; let authenticated = false; let fresh = false; let mutations = 0;
@@ -43,6 +44,10 @@ try {
     else if (path === '/accounts/fixture-account') body = { account: { id: 'fixture-account', email: 'client@example.invalid', active: true, family:'NURSE' }, organizations: [{name: 'Organisation fictive', kind: 'ESTABLISHMENT', active: true}], profile: {display_name: 'Profil fictif', qualifications: ['IDE', 'IADE'], rpps_status: 'FOUND', rpps_checked_at: '2026-09-17T10:00:00Z'}, documents: [], audit: [{event: 'FIXTURE_AUDIT', created_at: '2026-09-17T10:00:00Z'}] };
     else if (path === '/accounts/fixture-account/state') { assert.equal(route.request().headers()['x-csrf-token'], 'isolated-fixture-csrf'); if (!fresh) { status = 403; body = { code: 'ADMIN_REAUTH_REQUIRED' }; } else { mutations++; body = { ok: true }; } }
     else if (path === '/reauth') {assert.deepEqual(route.request().postDataJSON(), {password:'test-only-password',code:'654321'});fresh = true;}
+    else if (path === '/access') body={items:accessRows};
+    else if (path === '/access/invite') {const payload=route.request().postDataJSON();assert.equal(payload.email,'secondary@example.invalid');assert.equal(payload.role,'SUPPORT');assert.ok(payload.reason.length>=8);accessInvites++;accessRows=[{user_id:'secondary',email:payload.email,platform_only:true,role:payload.role,active:true,invitation_pending:true,activation_completed:false,invitation_expires_at:'2030-01-01T12:00:00Z'}];body={email:payload.email,invitation,expiresAt:'2030-01-01T12:00:00Z'};}
+    else if (path === '/access/secondary/invitation') {accessRenewals++;body={email:'secondary@example.invalid',invitation:'renewed-'+invitation,expiresAt:'2030-01-02T12:00:00Z'};}
+    else if (path === '/access/secondary/delete') {assert.ok(route.request().postDataJSON().reason.length>=8);accessDeletes++;accessRows=[];body={ok:true};}
     else if (path === '/logout') authenticated = false;
     else throw new Error(`Unexpected fixture endpoint: ${path}`);
     await route.fulfill({ status, json: body });
@@ -167,6 +172,36 @@ try {
   await page.getByText('fixture-execution', {exact: true}).waitFor();
   assert.equal(await page.getByRole('link', {name: 'Voir le workflow n8n (nouvel onglet)'}).getAttribute('href'), 'https://infimatch.app.n8n.cloud/workflow/fixture%2Funsafe%3Ffragment');
   assert.deepEqual(errors, []);
+  user.role='OWNER';user.permissions=['overview','access','access:write'];
+  await page.reload();
+  await page.getByRole('link',{name:'Accès administrateurs',exact:true}).click();
+  await page.getByRole('button',{name:'Inviter un administrateur',exact:true}).click();
+  await page.getByText(/un compte administrateur sera créé si nécessaire/).waitFor();
+  await page.getByLabel('Adresse e-mail',{exact:true}).fill('secondary@example.invalid');
+  await page.getByLabel('Justification (journalisée)').fill('Création du compte secondaire de test');
+  await page.getByRole('button',{name:'Confirmer l’opération',exact:true}).click();
+  await page.getByRole('button',{name:'Copier les instructions',exact:true}).waitFor();
+  assert.equal(await page.getByLabel('Code confidentiel affiché une seule fois').inputValue(),invitation);
+  assert.equal(accessInvites,1);
+  await page.getByRole('button',{name:'Fermer et masquer le code',exact:true}).click();
+  await page.getByRole('cell',{name:'secondary@example.invalid',exact:true}).waitFor();
+  assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth),false,'Access list fits mobile');
+  await page.getByRole('button',{name:'Renouveler l’invitation',exact:true}).click();
+  await page.getByLabel('Justification (journalisée)').fill('Renouvellement de test');
+  await page.getByRole('button',{name:'Confirmer l’opération',exact:true}).click();
+  await page.getByRole('button',{name:'Fermer et masquer le code',exact:true}).waitFor();
+  assert.equal(await page.getByLabel('Code confidentiel affiché une seule fois').inputValue(),'renewed-'+invitation);
+  await page.getByRole('button',{name:'Fermer et masquer le code',exact:true}).click();
+  await page.getByRole('button',{name:'Supprimer',exact:true}).click();
+  await page.getByText(/Le compte dédié sera désactivé et anonymisé/).waitFor();
+  await page.getByRole('button',{name:'Annuler',exact:true}).click();assert.equal(accessDeletes,0);
+  await page.getByRole('button',{name:'Supprimer',exact:true}).click();
+  await page.getByLabel('Justification (journalisée)').fill('Suppression du compte secondaire de test');
+  await page.getByRole('button',{name:'Confirmer l’opération',exact:true}).click();
+  await page.getByRole('heading',{name:'Aucun résultat',exact:true}).waitFor();
+  assert.equal(accessDeletes,1);assert.equal(accessRenewals,1);
+  assert.deepEqual(errors,[]);
+  console.log('PASS admin management: invite without existing account, instructions, renew, cancel deletion, confirm deletion, mobile.');
   let broken = true;
   await page.route('**/api/v1/admin/overview',route=>route.fulfill({json:broken?{counts:{accounts:{unexpected:true}}}:{counts:{accounts:0,organizations:0,missions:{}},alerts:[]}}));
   await page.getByRole('link',{name:'Vue d’ensemble',exact:true}).click();
