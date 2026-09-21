@@ -58,6 +58,18 @@ try {
   await page.getByRole('heading',{name:'Mes dernières offres'}).waitFor();
   assert.equal(await page.getByRole('link',{name:'Besoins',exact:true}).count(),0);
   assert.equal(await page.getByRole('heading',{name:'Mes derniers besoins'}).count(),0);
+  if(scenario==='known'){
+   await page.setViewportSize({width:375,height:812});await page.evaluate(()=>scrollTo(0,0));
+   const access=await page.getByRole('button',{name:'Accessibilité',exact:true}).boundingBox();
+   assert.ok(access&&access.y>=0&&access.y<100&&access.x+access.width>315,'Connected accessibility is visible top-right');
+   await page.getByRole('button',{name:'Ouvrir le menu',exact:true}).click();
+   const navigation=page.getByRole('navigation',{name:'Navigation principale',exact:true});await navigation.waitFor();
+   const navBox=await navigation.boundingBox(),headerBox=await page.locator('header').first().boundingBox();
+   assert.ok(navBox&&headerBox&&navBox.y>=headerBox.y+headerBox.height-1,'Mobile menu does not cover the header after the preferences bar');
+   assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth),false);
+   await page.getByRole('button',{name:'Fermer le menu',exact:true}).click();await page.setViewportSize({width:1280,height:720});
+  }
+
   await page.getByRole('link',{name:'Missions et suivi',exact:true}).click();
   await page.getByRole('heading',{name:'Mes missions et leur suivi'}).waitFor();
   await page.getByRole('link',{name:'Créer une mission',exact:true}).click();

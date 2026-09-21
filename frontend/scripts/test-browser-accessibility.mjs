@@ -32,6 +32,40 @@ async function choice() {
   return page.evaluate(() => JSON.parse(localStorage.getItem('infimatch:cookie-preferences')).google);
 }
 try {
+  for (const width of [375,1440]) for (const path of ['/', '/inscription', '/inscription/identite']) {
+    const firstContext = await browser.newContext({viewport:{width,height:812}});
+    await firstContext.route('**/api/**', route => route.fulfill({status:401,json:{code:'UNAUTHORIZED'}}));
+    const first = await firstContext.newPage();const googleRequests=[];
+    first.on('request',r=>{if(/accounts\.google\.com\/gsi/.test(r.url()))googleRequests.push(r.url());});
+    first.on('pageerror',e=>errors.push(e.message));
+    try {
+      await first.goto(base+path);
+      const consent=first.getByRole('dialog',{name:'Cookies et connexion Google',exact:true});
+      await consent.waitFor();
+      assert.equal(await first.evaluate(()=>localStorage.getItem('infimatch:cookie-preferences')),null);
+      await consent.getByRole('button',{name:'Accessibilité',exact:true}).click();
+      const aids=first.getByRole('dialog',{name:'Options d’accessibilité',exact:true});await aids.waitFor();
+      assert.equal(await consent.isVisible(),false);
+      assert.equal(await first.evaluate(()=>localStorage.getItem('infimatch:cookie-preferences')),null,'Opening accessibility must not save a cookie choice');
+      await aids.getByRole('button',{name:'Fermer les options d’accessibilité',exact:true}).click();
+      await consent.waitFor();
+      await first.waitForFunction(()=>document.activeElement?.id==='cookie-title');
+      assert.equal(await first.evaluate(()=>localStorage.getItem('infimatch:cookie-preferences')),null,'Returning from accessibility must keep the first choice pending');
+      await consent.getByRole('button',{name:'Tout refuser',exact:true}).click();
+      await consent.waitFor({state:'hidden'});
+      const topButton=first.getByRole('button',{name:'Accessibilité',exact:true});
+      await first.evaluate(()=>scrollTo(0,0));
+      const box=await topButton.boundingBox();
+      assert.ok(box&&box.y>=0&&box.y<100&&box.x+box.width>width-60&&box.x+box.width<=width,JSON.stringify({width,path,box}));
+      assert.equal(await first.evaluate(()=>document.documentElement.scrollWidth>innerWidth),false);
+      await first.reload();
+      await first.getByRole('button',{name:'Accessibilité',exact:true}).waitFor();
+      assert.equal(await first.locator('#cookie-preferences').evaluate(el=>el.open),false,'An explicit saved choice remains effective');
+      assert.equal(await first.evaluate(()=>JSON.parse(localStorage.getItem('infimatch:cookie-preferences')).google),false);
+      assert.deepEqual(googleRequests,[],'Google does not load before consent or after refusal');
+      console.log('PASS first visit',path,width,'automatic cookies, accessibility without consent, top-right control and saved choice');
+    } finally {await firstContext.close();}
+  }
   await page.goto(base + '/mentions-legales', { waitUntil: 'domcontentloaded' });
   await focused(cookies.getByRole('heading'));
   for (let i = 0; i < 4; i++) {

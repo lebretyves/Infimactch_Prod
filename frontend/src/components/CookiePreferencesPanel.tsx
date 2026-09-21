@@ -41,6 +41,8 @@ function focusPageWhenReady() {
 
 type Props = {
   open: boolean;
+  suspended?: boolean;
+  onAccessibilityOpen: () => void;
   preferences: CookiePreferences | null;
   storageNotice: string;
   onOpen: () => void;
@@ -50,6 +52,8 @@ type Props = {
 };
 export function CookiePreferencesPanel({
   open,
+  suspended = false,
+  onAccessibilityOpen,
   preferences,
   storageNotice,
   onOpen,
@@ -61,27 +65,51 @@ export function CookiePreferencesPanel({
   const trigger = useRef<HTMLButtonElement>(null);
   const title = useRef<HTMLHeadingElement>(null);
   const returnFocus = useRef<HTMLElement | null>(null);
+  const suspendedCloseEvents = useRef(0);
+  const resumePending = useRef(false);
   const cancelPageFocus = useRef<(() => void) | null>(null);
   useEffect(() => () => cancelPageFocus.current?.(), []);
   const [custom, setCustom] = useState(false);
   const [google, setGoogle] = useState(false);
   useEffect(() => {
-    const element = dialog.current;
-    if (!element) return;
     if (open) {
       setGoogle(preferences?.google === true);
       setCustom(false);
+    }
+  }, [open, preferences]);
+  useEffect(() => {
+    const element = dialog.current;
+    if (!element) return;
+    if (open && suspended) {
+      resumePending.current = true;
+      cancelPageFocus.current?.();
+      if (element.open) {
+        // Native close events arrive later: suspension must never save a choice.
+        suspendedCloseEvents.current += 1;
+        element.close();
+      }
+      return;
+    }
+    if (open) {
       if (!element.open) {
         cancelPageFocus.current?.();
-        const active = document.activeElement;
-        returnFocus.current = active instanceof HTMLElement && !element.contains(active)
-          ? active : trigger.current;
+        if (!resumePending.current) {
+          const active = document.activeElement;
+          returnFocus.current = active instanceof HTMLElement && !element.contains(active)
+            ? active : trigger.current;
+        }
+        resumePending.current = false;
         element.showModal();
         element.scrollTop = 0;
         title.current?.focus();
+        // A sibling accessibility dialog may finish closing in this effect pass.
+        queueMicrotask(() => { if (element.open) title.current?.focus(); });
       }
-    } else if (element.open) element.close();
-  }, [open, preferences]);
+    } else {
+      resumePending.current = false;
+      if (element.open) element.close();
+    }
+  }, [open, suspended]);
   const policy =
     import.meta.env.VITE_ROUTER === "hash"
       ? `${import.meta.env.BASE_URL}#/mentions-legales#cookies`
@@ -93,7 +121,7 @@ export function CookiePreferencesPanel({
         className={preferencesStyle.trigger}
         type="button"
         onClick={onOpen}
-        aria-expanded={open}
+        aria-expanded={open && !suspended}
         aria-haspopup="dialog"
         aria-controls="cookie-preferences"
       >
@@ -116,6 +144,11 @@ export function CookiePreferencesPanel({
           onClose();
         }}
         onClose={() => {
+          if (suspendedCloseEvents.current > 0) {
+            suspendedCloseEvents.current -= 1;
+            return;
+          }
+          if (suspended) return;
           if (open) onClose();
           const previous = returnFocus.current;
           if (previous) {
@@ -127,6 +160,11 @@ export function CookiePreferencesPanel({
           }
         }}
       >
+        <div className={s.dialogTools}>
+          <button type="button" className={`${preferencesStyle.trigger} ${preferencesStyle.accessibilityTrigger}`} aria-haspopup="dialog" aria-controls="a11y-preferences" onClick={onAccessibilityOpen}>
+            Accessibilité
+          </button>
+        </div>
         <div className={s.heading}>
           <span className={s.icon}>
             <Icon name="lock" size={24} />

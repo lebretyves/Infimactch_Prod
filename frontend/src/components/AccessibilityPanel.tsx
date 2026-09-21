@@ -3,7 +3,7 @@ import { useAccessibility } from "@/context/AccessibilityContext";
 import { LOCAL_VOICE_HELP, prepareSpeechVoices, type SpeechVoiceState, isSpeechSynthesisAvailable, pageTextForSpeech, selectionTextForSpeech, speakText, stopSpeech } from "@/services/pageSpeech";
 import s from "./AccessibilityPanel.module.css";
 import preferencesStyle from "./SitePreferences.module.css";
-export function AccessibilityPanel() {
+export function AccessibilityPanel({ returnToCookies = false }: { returnToCookies?: boolean }) {
  const a=useAccessibility(), dialog=useRef<HTMLDialogElement>(null),trigger=useRef<HTMLButtonElement>(null),title=useRef<HTMLHeadingElement>(null);
  const [voiceState,setVoiceState]=useState<SpeechVoiceState>("loading");
  const [retryText,setRetryText]=useState("");
@@ -34,7 +34,7 @@ export function AccessibilityPanel() {
   read(pageTextForSpeech());
  };
  return <>
-  <button ref={trigger} type="button" className={preferencesStyle.trigger} aria-haspopup="dialog" aria-expanded={a.panelOpen} aria-controls="a11y-preferences" onClick={a.openPanel}>Accessibilité</button>
+  <button ref={trigger} type="button" className={`${preferencesStyle.trigger} ${preferencesStyle.accessibilityTrigger}`} aria-haspopup="dialog" aria-expanded={a.panelOpen} aria-controls="a11y-preferences" onClick={a.openPanel}>Accessibilité</button>
   {(speaking||selectionMode||message) && !a.panelOpen && <div className={s.speechBar} role="region" aria-label="Lecture vocale">
    <p role="status" className={s.speechBarText}>{message || "Sélectionnez du texte puis choisissez Lire la sélection."}</p>
    <div className={s.speechBarActions}>
@@ -45,7 +45,7 @@ export function AccessibilityPanel() {
   </div>}
   <dialog ref={dialog} id="a11y-preferences" className={s.dialog} aria-labelledby="a11y-title" aria-describedby="a11y-summary"
    onCancel={e=>{e.preventDefault();a.closePanel();}}
-   onClose={()=>{a.closePanel();trigger.current?.focus();}}>
+   onClose={()=>{a.closePanel();if(!returnToCookies)trigger.current?.focus();}}>
    <div className={s.heading}><h2 id="a11y-title" ref={title} tabIndex={-1}>Options d’accessibilité</h2><button type="button" className={s.close} aria-label="Fermer les options d’accessibilité" onClick={a.closePanel}>×</button></div>
    <p id="a11y-summary">Adaptez l’affichage sur cet appareil. Ces aides complètent votre navigateur et votre lecteur d’écran.</p>
    <fieldset className={s.group}><legend>Agrandissement des textes et commandes</legend><div className={s.radios}>

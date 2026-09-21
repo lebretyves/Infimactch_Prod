@@ -1,7 +1,7 @@
 .dialog {
   position: fixed;
-  inset: auto 24px 24px auto;
-  margin: 0;
+  inset: 0;
+  margin: auto;
   width: min(590px, calc(100% - 48px));
   max-height: calc(100% - 48px);
   overflow-wrap: anywhere;
@@ -160,8 +160,8 @@
 }
 @media (max-width: 600px) {
   .dialog {
-    inset: auto 12px 12px;
-    margin: 0;
+    inset: 0;
+    margin: auto;
     width: calc(100% - 24px);
     max-height: calc(100% - 24px);
     padding: 20px;
@@ -201,3 +201,5 @@
   grid-template-columns: repeat(auto-fit, minmax(min(100%, 150px), 1fr));
 }
 @media print { .dialog { display: none; } }
+
+.dialogTools { display: flex; justify-content: flex-end; margin-bottom: 16px; }
