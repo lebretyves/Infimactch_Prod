@@ -17,6 +17,8 @@ jobs:
       - name: Check documentation and workflow consistency
         run: python3 scripts/check-repository-consistency.py
       - run: npm ci
+      - name: Check encrypted archive authentication
+        run: node --test scripts/security/legacy-archive.test.mjs
       - run: npm run typecheck && npm run build
       - run: npm run test:isolated
       - uses: actions/upload-artifact@v4
