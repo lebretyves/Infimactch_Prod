@@ -244,7 +244,7 @@ export default function GestionMission() {
               ["SUBMITTED", "SELECTED"].includes(c.status) && (
                 <>
                   <p>
-                    Les compétences et disponibilités incomplètes restent des avertissements. Le diplôme requis, les horaires précis et l’absence de mission concurrente restent nécessaires.
+                    Un profil incomplet, un diplôme non renseigné ou un RPPS non vérifié restent des avertissements : vous pouvez accepter ou refuser la candidature. Vérifiez les informations utiles avec le candidat. Les horaires précis et l’absence de mission concurrente restent nécessaires.
                     En confirmant, vous validez avec le candidat ses compétences et sa
                     disponibilité. La mission sera ajoutée en bleu à son agenda et
                     bloquera le créneau. Une autre mission déjà confirmée sur ce

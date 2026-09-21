@@ -23,14 +23,14 @@ test('RPPS demonstration policy is explicit, versioned, reversible and does not 
   const expected=optional||status==='FOUND';
   assert.equal(match(p,mission,0).eligible,expected);
   const application=assessApplication(p,mission,0,0);
-  assert.equal(application.blockingReasons.length===0,expected);
+  assert.equal(application.blockingReasons.length===0,true);
   const assignment=assessAssignment(p,mission,0);
-  assert.equal(assignment.eligible,expected);
+  assert.equal(assignment.eligible,true);
   assert.equal(application.warnings.includes('RPPS_OPTIONAL_DEMO'),optional&&status!=='FOUND');
   assert.equal(assignment.warnings.includes('RPPS_OPTIONAL_DEMO'),optional&&status!=='FOUND');
-  if(!expected)assert.ok(application.blockingReasons.includes('RPPS_'+status));
+  if(!expected){assert.ok(application.warnings.includes('RPPS_'+status));assert.ok(assignment.warnings.includes('RPPS_'+status));}
   assert.equal(JSON.stringify(p),before);
-  assert.ok(assessApplication({...p,qualifications:[]},mission,0,0).blockingReasons.includes('QUALIFICATION_MISSING'));
+  assert.ok(assessApplication({...p,qualifications:[]},mission,0,0).warnings.includes('QUALIFICATION_MISSING'));
   assert.ok(assessAssignment({...p,conflicts:[slot]},mission,0).blockingReasons.includes('ASSIGNMENT_CONFLICT'));
   assert.ok(assessAssignment(p,{...mission,schedulePrecision:'DATE'},0).blockingReasons.includes('SCHEDULE_UNCONFIRMED'));
   assert.ok(assessApplication(p,{...mission,status:'CANCELLED'},0,0).blockingReasons.includes('MISSION_NOT_OPEN'));
