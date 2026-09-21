@@ -64,3 +64,6 @@ Les anciennes annonces à compléter et la reprise d'un besoin ont finalement é
 - Tableau de bord intérimaire : missions à venir et disponibilités/profil sur une seule colonne pleine largeur ; état sans mission compact sur ordinateur pour éviter le vide latéral. Textes, liens et accordéon conservés.
 - Dossier : bloc RIB déplacé sous la vérification professionnelle dans la colonne gauche ; justificatifs à droite, passage à une colonne sur mobile. Aucun changement aux traitements de documents.
 - Compilation utilisateur réussie ; huit tests existants de coordonnées bancaires et de lecture/révision de CV réussis.
+
+## Emplacement de l’accessibilité révisé
+À la demande suivante de l’utilisateur, dans les espaces connectés le bouton d’accessibilité est désormais à droite, immédiatement avant l’identité du compte. Le logo reprend la première position à gauche. Cette demande remplace le placement à gauche précédemment demandé pour ces en-têtes. L’avatar reste visible sur petit écran. Les en-têtes publics et d’inscription ne changent pas.
