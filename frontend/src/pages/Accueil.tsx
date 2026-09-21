@@ -112,8 +112,8 @@ export default function Accueil() {
     );
   }
   return (
-    <div className={`${u.page} ${nurse ? s.nursePage : ""}`}>
-      <header className={u.header}>
+    <div className={`${u.page} ${nurse ? s.nursePage : s.enterprisePage}`}>
+      <header className={`${u.header} ${!nurse ? s.enterpriseHeader : ""}`}>
         <div>
           <p className={u.eyebrow}>
             {nurse ? "Espace intérimaire" : "Espace entreprise"}
@@ -125,10 +125,15 @@ export default function Accueil() {
               : "Vos missions et vos démarches, au même endroit."}
           </p>
         </div>
-        {nurse && (
+        {nurse ? (
           <ButtonLink to="/missions">
             <Icon name="search" size={18} />
             Rechercher une offre
+          </ButtonLink>
+        ) : (
+          <ButtonLink to="/gestion/missions/nouvelle">
+            <Icon name="file-text" size={18} />
+            Créer une offre
           </ButtonLink>
         )}
       </header>
@@ -263,64 +268,50 @@ export default function Accueil() {
             </>
           ) : (
             <>
-              <section className={u.card}>
-                <h2>Mon activité</h2><p>Gérez vos missions et leurs candidatures par établissement.</p>
-                <div className={u.actions}>
-                  <ButtonLink to="/gestion/missions/nouvelle">
-                    Créer une offre
-                  </ButtonLink>
-                  <ButtonLink to="/missions?mode=edit" variant="outline">
-                    Modifier une offre
-                  </ButtonLink>
-                  <Button variant="ghost" onClick={r.reload}>
-                    Actualiser
-                  </Button>
+              <section className={s.enterpriseSection} aria-labelledby="activity-title">
+                <div className={s.sectionHeading}>
+                  <div><h2 id="activity-title">Mon activité</h2><p>Une vue d’ensemble de vos missions et candidatures.</p></div>
+                  <Button variant="ghost" onClick={r.reload}>Actualiser</Button>
                 </div>
-                <div className={s.stats}>
-                  <Link to="/candidatures">
-                    <strong>
-                      {r.data?.dashboard.activity?.applications ?? 0}
-                    </strong>
-                    <p>Candidatures à traiter</p>
-                  </Link>
-                  {Object.entries(r.data?.dashboard.counts || {}).map(
-                    ([key, value]) => (
-                      <div key={key}>
-                        <strong>{value}</strong>
-                        <p>{labels[key] || key}</p>
-                      </div>
-                    ),
+                <Link to="/candidatures" className={s.applicationsPriority}>
+                  <span className={s.priorityIcon}><Icon name="file-text" /></span>
+                  <span className={s.priorityContent}><strong>{r.data?.dashboard.activity?.applications ?? 0}</strong><span>Candidatures à traiter</span></span>
+                  <span className={s.priorityAction}>Voir les candidatures <Icon name="chevron" size={18} /></span>
+                </Link>
+                <dl className={s.enterpriseCounts}>
+                  {Object.entries(r.data?.dashboard.counts || {}).map(([key, value]) => (
+                    <div key={key}><dt>{labels[key] || key}</dt><dd>{value}</dd></div>
+                  ))}
+                </dl>
+                <nav className={s.managementActions} aria-label="Gérer mon activité">
+                  <ButtonLink to="/missions" variant="outline"><Icon name="briefcase" size={18} />Toutes les missions</ButtonLink>
+                  <ButtonLink to="/missions?mode=edit" variant="ghost">Modifier une offre</ButtonLink>
+                  <ButtonLink to="/mes-etablissements" variant="ghost"><Icon name="building" size={18} />Mes établissements</ButtonLink>
+                </nav>
+              </section>
+              <div className={s.enterpriseDaily}>
+                <section className={s.enterpriseSection} aria-labelledby="recent-offers-title">
+                  <div className={s.sectionHeading}><div><h2 id="recent-offers-title">Mes dernières offres</h2><p>Retrouvez vos missions et gérez les candidatures.</p></div></div>
+                  {r.data?.dashboard.recentMissions?.length ? (
+                    <div className={s.recentOffers}>
+                      {r.data.dashboard.recentMissions.map((m) => (
+                        <article key={m.id} className={s.recentOffer}>
+                          <div className={s.offerHeading}><h3>{m.title}</h3><span className={s.offerStatus}>{labels[m.status] || m.status}</span></div>
+                          <p className={s.offerDate}><Icon name="calendar" size={17} />{date(m.start_at, m.timezone)}</p>
+                          <div className={s.offerFooter}><p><strong>{m.application_count}</strong> candidature(s) à traiter</p><ButtonLink to={"/gestion/missions/" + m.id} variant="outline">Gérer l’offre et les candidatures</ButtonLink></div>
+                        </article>
+                      ))}
+                    </div>
+                  ) : (
+                    <div className={s.enterpriseEmpty}><Icon name="briefcase" size={28} /><h3>Votre première offre commence ici</h3><p>Aucune mission créée. Créez une offre et validez le formulaire pour la publier dans l’espace intérimaire.</p><ButtonLink to="/gestion/missions/nouvelle" variant="outline">Créer une offre</ButtonLink></div>
                   )}
-                </div>
-                <div className={u.actions}><ButtonLink to="/mes-etablissements">Mes établissements</ButtonLink><ButtonLink to="/missions" variant="outline">Toutes les missions</ButtonLink></div>
-              </section>
+                </section>
+                <section className={`${s.enterpriseSection} ${s.notificationsSection}`} aria-labelledby="recent-notifications-title">
+                  <div className={s.sectionHeading}><div><h2 id="recent-notifications-title">Notifications récentes</h2><p>Les dernières nouvelles de votre activité.</p></div><Icon name="bell" size={22} /></div>
+                  {notificationList()}
+                </section>
+              </div>
               <EnterpriseConversion userId={user!.id}/>
-              <section className={u.card}>
-                <h2>Mes dernières offres</h2>
-                {r.data?.dashboard.recentMissions?.length ? (
-                  r.data.dashboard.recentMissions.map((m) => (
-                    <article key={m.id}>
-                      <h3>{m.title}</h3>
-                      <p>
-                        {labels[m.status] || m.status} · {date(m.start_at, m.timezone)} ·{" "}
-                        {m.application_count} candidature(s) à traiter
-                      </p>
-                      <ButtonLink to={"/gestion/missions/" + m.id}>
-                        Gérer l’offre et les candidatures
-                      </ButtonLink>
-                    </article>
-                  ))
-                ) : (
-                  <p>
-                    Aucune mission créée. Créez une offre et validez le formulaire
-                    pour la publier dans l’espace intérimaire.
-                  </p>
-                )}
-              </section>
-              <section className={u.card}>
-                <h2>Notifications récentes</h2>
-                {notificationList()}
-              </section>
             </>
           )}
         </>
