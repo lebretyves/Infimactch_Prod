@@ -389,3 +389,51 @@ test('unfinished dedicated enrollment can choose its password again and invalida
  await post(two,'mfa',second.body.csrfToken,{code:totp(second.body.secret,Math.floor(Date.now()/30000))}).expect(201);
  await post(two,'activate',(await two.get('/api/v1/admin/csrf')).body.csrfToken,{...input,password}).expect(401);
 });
+
+
+test('real browser creates admin passwords from email and invitation against the isolated API',async()=>{
+ const http=require('node:http'),fs=require('node:fs/promises'),path=require('node:path');
+ const {chromium}=require(path.resolve(process.cwd(),'../frontend/node_modules/playwright'));
+ const owner=await enroll(),business=await account(),root=path.resolve(process.cwd(),'../frontend/dist-admin');
+ const apiPort=(app.getHttpServer().address() as {port:number}).port;const calls:string[]=[];
+ const server=http.createServer(async(req:any,res:any)=>{
+  if(req.url.startsWith('/api/')){
+   calls.push(req.url);
+   const upstream=http.request({hostname:'127.0.0.1',port:apiPort,path:req.url,method:req.method,headers:req.headers},(response:any)=>{res.writeHead(response.statusCode,response.headers);response.pipe(res);});
+   upstream.on('error',()=>{res.writeHead(502);res.end();});req.pipe(upstream);return;
+  }
+  try{const file=path.resolve(root,'.'+new URL(req.url,origin).pathname);if(req.url!=='/'&&!file.startsWith(root+path.sep))throw Error('path');const target=req.url==='/'?path.join(root,'index.html'):file;const data=await fs.readFile(target);res.setHeader('Content-Type',target.endsWith('.js')?'text/javascript':target.endsWith('.css')?'text/css':'text/html');res.end(data);}catch{res.writeHead(404);res.end();}
+ });
+ await new Promise<void>((resolve,reject)=>{server.once('error',reject);server.listen(5174,'127.0.0.1',resolve);});
+ let browser:any;
+ try{
+  browser=await chromium.launch({headless:true,...(process.platform==='win32'?{channel:'msedge'}:{})});
+  for(const email of [randomUUID()+'@example.invalid',business.email]){
+   const issued=await post(owner.agent,'access/invite',owner.csrf,{email,role:'SUPPORT',reason:'Real browser invitation test'}).expect(201);
+   const page=await browser.newPage();
+   await page.goto(origin+'/#/activation');
+   await page.getByRole('heading',{name:'Vérifier votre invitation',exact:true}).waitFor();
+   await page.getByLabel('Adresse e-mail',{exact:true}).fill(email);
+   await page.getByLabel('Code d’invitation administrateur',{exact:true}).fill(issued.body.invitation);
+   await page.getByRole('button',{name:'Vérifier mon invitation',exact:true}).click();
+   await page.getByRole('heading',{name:'Créer votre mot de passe',exact:true}).waitFor();
+   await page.getByLabel('Nouveau mot de passe (12 caractères minimum)',{exact:true}).fill('Browser-admin-password-123');
+   await page.getByLabel('Confirmer le nouveau mot de passe',{exact:true}).fill('Mismatch-password-123');
+   await page.getByRole('button',{name:'Créer mon mot de passe',exact:true}).click();
+   await page.getByText('Les deux mots de passe doivent être identiques.',{exact:true}).waitFor();
+   await page.getByLabel('Confirmer le nouveau mot de passe',{exact:true}).fill('Browser-admin-password-123');
+   await page.getByRole('button',{name:'Créer mon mot de passe',exact:true}).click();
+   await page.getByRole('heading',{name:'Configurer la double authentification',exact:true}).waitFor();
+   await page.getByText('Je ne peux pas scanner le QR code',{exact:true}).click();
+   const secret=await page.getByLabel('Clé de configuration confidentielle',{exact:true}).inputValue();
+   await page.getByLabel('Code de sécurité',{exact:true}).fill(totp(secret,Math.floor(Date.now()/30000)));
+   await page.getByRole('button',{name:'Vérifier',exact:true}).click();
+   await page.getByLabel('J’ai conservé mes codes dans un endroit sûr.',{exact:true}).check();
+   await page.getByRole('button',{name:'Accéder à l’administration',exact:true}).click();
+   await page.getByRole('heading',{name:'Vue d’ensemble',exact:true}).waitFor();
+   await page.close();
+  }
+  assert.equal(calls.filter(p=>p==='/api/v1/admin/activate').length,2);
+  assert.equal(calls.filter(p=>p==='/api/v1/admin/login').length,0);
+ }finally{await browser?.close();await new Promise<void>(resolve=>server.close(()=>resolve()));}
+});
