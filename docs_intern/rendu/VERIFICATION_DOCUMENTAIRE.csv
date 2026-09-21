@@ -117,3 +117,5 @@ frontend/public/guides/tutorials/profil-cv.vtt,vtt,Tutoriel réenregistré ; ét
 frontend/public/guides/tutorials/recherche-matching.vtt,vtt,Tutoriel réenregistré ; étapes et sous-titres contrôlés,Lecture navigateur et vérification des médias
 scripts/SAFE_DEMO_IMPORT.md,md,Document spécialisé : portée propre,Lecture UTF-8 et liens locaux
 docs_intern/quality/TUTORIELS_VIDEO_2026-09-21.md,md,Réenregistrement et contrôle des six tutoriels,Parcours fictifs et médias vérifiés
+docs_intern/rendu/LIVRAISON_VERIFIEE.json,json,Registre de livraison datée,JSON et références des preuves existantes
+docs_intern/quality/COHERENCE_BRANCHES_2026-09-21.md,md,Comparaison exhaustive des branches,Comparaison de contenu et liens locaux

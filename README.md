@@ -112,9 +112,11 @@ Pour le développement API avec recompilation : `npm run dev`. Le worker utilise
 
 Les intégrations utilisent des bases isolées ; préparer leur environnement avant exécution. Les recettes navigateur nécessitent leurs serveurs et fixtures. Le contrôle des secrets connus ne constitue pas un audit exhaustif de l'historique.
 
+Contrôle documentaire et comparaison des branches : `python scripts/check-repository-consistency.py` ; ajouter `--compare CHEMIN_AUTRE_DEPOT` depuis la copie de production pour comparer chaque fichier et chaque ligne, en tenant compte des chemins documentaires propres à Epitech.
+
 ## État de livraison et limites
 
-État documentaire : **21 septembre 2026**. Dernière livraison vérifiée avant cette seconde revue : `d2de5b8` (site et API signalés réussis) ; administration publiée séparément. Le manifeste du rendu identifie la version effectivement remise. Les preuves conservées portent leur date et leur périmètre ; elles ne valident pas automatiquement toute modification ultérieure.
+État documentaire : **21 septembre 2026**. Les versions applicatives vérifiées, les déploiements et les résultats CI sont regroupés dans [le registre de livraison](docs_intern/rendu/LIVRAISON_VERIFIEE.json). Le manifeste du rendu identifie le commit effectivement remis. Une mise à jour documentaire ne constitue pas une nouvelle recette métier ; les preuves datées conservent leur périmètre.
 
 - Optimisation du matching testée sur bases isolées ; résultats et comparaisons conservés.
 - Étape Discord facultative testée sur les trois familles de comptes avec API fictive ; aucune réception Discord réelle n'en est déduite.

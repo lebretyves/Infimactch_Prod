@@ -1,0 +1,26 @@
+{
+  "checkedAt": "2026-09-21",
+  "scope": "Dernière livraison applicative vérifiée ; les corrections documentaires suivantes ne constituent pas une nouvelle recette métier.",
+  "production": {
+    "branch": "Main",
+    "commit": "48e03c1eea64019192b670f93d15a4f30102769f",
+    "ci": "https://github.com/lebretyves/Infimactch_Prod/actions/runs/35556388272",
+    "ciStatus": "success",
+    "siteDeployment": "success",
+    "apiDeployment": "success"
+  },
+  "epitech": {
+    "branch": "Backend",
+    "commit": "20c3e0b4cf1667f3f8a0d56e76d21b2a88780c1c",
+    "ci": "https://github.com/EpitechMscProPromo2027/D-WEB-901-PAR-9-1-InteriMatch-1/actions/runs/35556399359",
+    "ciStatus": "not_started_actions_budget"
+  },
+  "admin": {
+    "deployment": "dpl_keg63sxJFpncmsyZJMz5sh7URtTj",
+    "status": "READY"
+  },
+  "limits": [
+    "Recette métier finale non attestée par ce manifeste",
+    "Les preuves historiques conservent leur version et leur date"
+  ]
+}
