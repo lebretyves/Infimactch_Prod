@@ -10,8 +10,9 @@
 .lien:hover, .connexion:hover { color: var(--brand-600); text-decoration: underline; text-underline-offset: 6px; }
 .actions { gap: 20px; }
 .inscription { font-size: 13px; padding-inline: 18px; }
-.burger { display: none; place-items: center; width: 44px; height: 44px; padding: 0; border: 1px solid var(--line); border-radius: var(--radius-control); background: var(--white); color: var(--ink-900); cursor: pointer; }
-.burger:hover { background: var(--brand-50); }
+.burger { display: none; place-items: center; width: 44px; height: 44px; padding: 0; border: 0; border-radius: var(--radius-control); background: transparent; box-shadow: none; color: var(--ink-900); cursor: pointer; }
+.burger:hover, .burger:active { border: 0; background: transparent; box-shadow: none; }
+.burger:focus-visible { outline: 3px solid var(--brand-700); outline-offset: 3px; }
 .hero { display: grid; grid-template-columns: .95fr 1.25fr; align-items: center; gap: 48px; padding-block: 64px 60px; }
 .discours { display: grid; gap: 24px; }
 .surtitre { color: var(--teal-700); font-size: 11px; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; }
