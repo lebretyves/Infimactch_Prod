@@ -20,4 +20,4 @@ PostgreSQL de production utilise Supabase ; MongoDB, stockage documentaire et n8
 4. Vérifier HTTP, santé API, cookies/CSRF et parcours concernés sur l'adresse publiée.
 5. Conserver les preuves et limites ; READY ne signifie pas recette complète.
 
-Dernière livraison vérifiée avant cette seconde revue documentaire : d2de5b8, frontend et backend signalés réussis. Administration publiée séparément. Identifier le commit effectivement remis dans le manifeste du rendu. La CI Epitech était bloquée par le budget Actions au dernier constat. Ne pas changer un abonnement pour contourner ce blocage sans décision du propriétaire.
+Les derniers commits applicatifs vérifiés et leurs états CI/déploiement sont consignés dans [le registre de livraison](rendu/LIVRAISON_VERIFIEE.json). Le manifeste du rendu fixe le commit remis. La dernière CI production a réussi ; la CI Epitech n’a pas démarré à cause du budget Actions. Les correctifs documentaires ultérieurs ne prouvent pas une nouvelle recette de production.

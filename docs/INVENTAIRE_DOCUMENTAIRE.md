@@ -121,3 +121,9 @@ Revue du 21 septembre 2026. Ce classement distingue les références actuelles d
 | [scripts/SAFE_DEMO_IMPORT.md](../scripts/SAFE_DEMO_IMPORT.md) | Document spécialisé : portée propre |
 | [Revue du code du 21 septembre](quality/REVUE_CODE_2026-09-21.md) | Nettoyage et validation locale datés |
 | [Vérification des six tutoriels](quality/TUTORIELS_VIDEO_2026-09-21.md) | Parcours filmés, médias et sous-titres actualisés |
+
+## Contrôle des branches et des versions
+
+- [Registre de livraison vérifiée](rendu/LIVRAISON_VERIFIEE.json) : commits applicatifs, CI et déploiements attestés.
+- [Comparaison exhaustive des branches](quality/COHERENCE_BRANCHES_2026-09-21.md) : périmètre, corrections et limites.
+- `scripts/check-repository-consistency.py` : contrôle reproductible, également exécuté dans la CI.

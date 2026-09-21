@@ -45,7 +45,7 @@ Les heures effectivement consacrées au projet sont à renseigner par l’équip
 
 ## État des versions et preuves techniques
 
-La livraison `d2de5b8` (production) / `ff0dddb` (Epitech) a actualisé la documentation et les aides. Les déploiements site et API étaient signalés réussis ; le portail admin a été publié séparément. Ce sont les références de la livraison précédente, pas une recette métier complète. Le manifeste du rendu identifie la version documentaire remise. La [matrice des 42 scénarios](../quality/MATRICE_42_TESTS_2026-09-19.md) reste une campagne historique.
+Les versions applicatives et déploiements vérifiés figurent dans [le registre de livraison](../rendu/LIVRAISON_VERIFIEE.json). Le manifeste du rendu identifie le commit remis ; la [matrice des 42 scénarios](../quality/MATRICE_42_TESTS_2026-09-19.md) reste une campagne historique, distincte de la recette finale.
 
 | Lot | Preuve locale | Réserve de présentation |
 |---|---|---|

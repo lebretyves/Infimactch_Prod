@@ -13,3 +13,7 @@ Les anciennes vues Next.js / backend local, le générateur de cible et les guid
 ## Seconde vérification documentaire
 
 Les anciens plans V2 et les notes de maquettes remplacées ont été retirés des branches actives et sauvegardés dans `E:/Interimatch/archive/documentation-2026-09-21/second-documentation-review/`. Les versions précédentes des guides corrigés et des supports binaires y sont également conservées.
+
+## Comparaison des branches du 21 septembre
+
+Les trois doubles d’exports n8n présents seulement dans `docs_intern/n8n` côté Epitech ont été sauvegardés hors Git dans `E:/Interimatch/archive/branch-parity-2026-09-21/`, puis retirés. Les exports courants de reprise et d’import restent dans `docs/n8n` sur les deux branches. Le double de reprise était encore à 30 minutes ; la référence conservée est à quatre heures. Le document de cadrage propre au dépôt Epitech est conservé.

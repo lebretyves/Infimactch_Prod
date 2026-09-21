@@ -7,8 +7,8 @@ Dossier préparé avec réserves, état au 21 septembre 2026. Le [sujet](../refe
 | Livrable | Pièces | À finaliser |
 | --- | --- | --- |
 | Cahier des charges J+2 | [Exigences](../REQUIREMENTS_V1.md), [planning](../PLANNING_4_PERSONNES_11_JOURS.md), [estimation](../CHIFFRAGE_V1.csv) | Preuve de présentation/validation J+2 |
-| Code | [README](../../README.md), backend et frontend du dépôt | Identifier la version effectivement remise |
-| Workflows nocode | [Matching](../../workflows/matches.json), [confirmation](../../workflows/confirmation.json), [relances](../../workflows/reminders.json) | Deux résultats réels documentés |
+| Code | [README](../../README.md), backend et frontend du dépôt | Voir le registre de livraison et le manifeste du rendu |
+| Workflows nocode | [Matching](../../workflows/matches.json), [confirmation](../../workflows/confirmation.json), [relances](../../workflows/reminders.json) | Rassembler les traces des deux essais réussis et leurs résultats |
 | Données publiques | [Contrat](../OFFRES_EXTERNES_V1.md), [CLI](../../backend/src/cli.ts), backend/src/public-data | Montrer leur usage dans le produit |
 | Étude de marché | [Étude sourcée](../presentation/DOSSIER_SOUTENANCE.md) | Hypothèses terrain à présenter comme telles |
 | Chiffrage réel | [Formulaire humain](TEMPS_HUMAINS.csv), [estimation](../CHIFFRAGE_V1.csv) | Heures de l'équipe et écarts ; ne pas utiliser les durées agent comme heures humaines |
@@ -16,11 +16,15 @@ Dossier préparé avec réserves, état au 21 septembre 2026. Le [sujet](../refe
 
 ## Automatisations
 
-Le [rapport du 18 septembre](../AUTOMATIONS_VALIDATION_2026-09-18.md) décrit matching, confirmation PDF et relances sur un scénario fictif. Il atteste sa campagne, pas l'état de toute la file ni une réception Discord actuelle. Les exports du dépôt sont des modèles sans credentials. La recette finale doit conserver l'exécution et le résultat effectivement observé.
+Le [rapport du 18 septembre](../AUTOMATIONS_VALIDATION_2026-09-18.md) décrit matching, confirmation PDF et relances sur un scénario fictif. Il atteste sa campagne, pas l'état de toute la file ni une réception Discord actuelle. Le porteur confirme que les automatisations ont déjà fonctionné ; retrouver les traces existantes avant de décider de les rejouer. Les exports du dépôt sont des modèles sans credentials. La recette finale doit conserver l'exécution et le résultat effectivement observé.
 
 ## Qualité et gains
 
 Deux pratiques documentées : [requêtes de matching regroupées](../quality/OPTIMISATION_MATCHING_2026-09-20.md) et [imports bornés / parsing réutilisé](../quality/IMPORTS_SOBRIETE_2026-09-19.md). Les gains locaux de requêtes ne se convertissent pas directement en euros ou en CO2. [Accessibilité ciblée](../quality/RGAA_CORRECTIONS_2026-09-20.md) : aucune conformité complète revendiquée.
+
+## Versions et recette
+
+Le [registre de livraison](LIVRAISON_VERIFIEE.json) fixe les dernières versions applicatives vérifiées. Dans [la recette finale](RECETTE_FINALE.csv), la version reste vide tant que le scénario n’a pas été exécuté et documenté : renseigner le SHA réellement testé, la date et la preuve, sans préremplir une ancienne version. Les preuves historiques réussies peuvent être utilisées avec leur date et leur périmètre ; elles ne deviennent pas une recette de la version actuelle.
 
 ## Clôture
 
