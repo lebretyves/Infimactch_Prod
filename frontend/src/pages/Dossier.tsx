@@ -255,6 +255,7 @@ export default function Dossier() {
                 </div>
               </div>
             </form>
+            <BankDocument document={r.data?.bank.document||null} details={r.data?.bank.details||null} onSaved={r.reload} />
           </div>
           <div className={s.documentStack}>
             <section id="justificatifs" tabIndex={-1} className={u.card}>
@@ -373,8 +374,6 @@ export default function Dossier() {
                 Vos documents sont accessibles aux personnes autorisées.
               </p>
             </section>
-            <BankDocument document={r.data?.bank.document||null} details={r.data?.bank.details||null} onSaved={r.reload} />
-
           </div>
         </div>
       )}
