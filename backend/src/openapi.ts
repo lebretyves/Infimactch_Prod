@@ -136,6 +136,7 @@ export function configureOpenApi(doc: OpenAPIObject) {
     SourceState: object({reason:adminReason,enabled:{type:"boolean"}},["reason","enabled"]),
     Incident: object({reason:adminReason,service:{type:"string",enum:["API","POSTGRES","MONGODB","N8N","DISCORD","IMPORTS","DOCUMENTS","VAULT"]},impact:boundedText(8,500),ownerLabel:boundedText(2,100)},["reason","service","impact","ownerLabel"]),
     IncidentState: object({reason:adminReason,state:{type:"string",enum:["OPEN","INVESTIGATING","RESOLVED"]}},["reason","state"]),
+    ClosureGoogle: object({credential:{...boundedText(1,10000),writeOnly:true},nonce:{...boundedText(64,64),writeOnly:true},confirmed:{type:"boolean",enum:[true]}},["credential","nonce","confirmed"]),
     ClosurePassword: object({password:{...boundedText(1,128),format:"password",writeOnly:true}},["password"]),
     ChallengeDto: object({discordUserId:{type:"string",pattern:"^[0-9]{17,20}$"}},["discordUserId"]),
     VerifyDto: object({code:{type:"string",pattern:"^[0-9]{6}$",writeOnly:true}},["code"]),

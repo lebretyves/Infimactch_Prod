@@ -168,3 +168,9 @@
 }
 .installation { margin-top: 20px; }
 .installation a { white-space: normal; }
+
+.mobileControls { display: flex; align-items: center; gap: 8px; }
+.mobileControls .mobileAccessibility { display: none; }
+@media (max-width: 1199px) {
+  .mobileControls .mobileAccessibility { display: inline-flex; }
+}

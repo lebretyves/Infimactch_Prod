@@ -1,3 +1,6 @@
+import { AccessibilityIcon } from "@/components/AccessibilityIcon";
+import { useAccessibility } from "@/context/AccessibilityContext";
+import preferencesStyle from "@/components/SitePreferences.module.css";
 import { useEffect, useRef, useState, type MouseEvent } from 'react';
 import { Link } from 'react-router';
 import { PhotoMaquette } from '@/components/PhotoMaquette';
@@ -40,6 +43,7 @@ export default function AccueilPublic() {
     'L’intérim infirmier, pensé pour le soin',
     'Découvrez InfiMatch : un projet de plateforme reliant infirmiers IDE, IADE, IBODE, établissements de santé et agences d’intérim.',
   );
+  const accessibility = useAccessibility();
   const [menuOuvert, setMenuOuvert] = useState(false);
   const boutonMenu = useRef<HTMLButtonElement>(null);
   const navigation = useRef<HTMLDivElement>(null);
@@ -80,6 +84,10 @@ export default function AccueilPublic() {
         <Link to="/" className={s.marque} aria-label="InfiMatch, accueil">
           <Logo size={38} withWordmark />
         </Link>
+        <div className={s.mobileControls}>
+          <button data-home-accessibility type="button" className={`${preferencesStyle.trigger} ${preferencesStyle.accessibilityTrigger} ${s.mobileAccessibility}`} aria-label="Accessibilité" title="Accessibilité" aria-haspopup="dialog" aria-controls="a11y-preferences" aria-expanded={accessibility.panelOpen} onClick={() => { setMenuOuvert(false); accessibility.openPanel(); }}>
+            <AccessibilityIcon />
+          </button>
         <button
           ref={boutonMenu}
           type="button"
@@ -91,6 +99,7 @@ export default function AccueilPublic() {
         >
           <Icon name={menuOuvert ? 'close' : 'menu'} size={22} />
         </button>
+        </div>
       </div>
       <div
         ref={navigation}

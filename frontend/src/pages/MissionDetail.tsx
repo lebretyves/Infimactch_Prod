@@ -1,3 +1,4 @@
+import { InlineConfirmation } from "@/components/InlineConfirmation";
 import { externalProvenanceDates, FRANCE_TRAVAIL_DOCUMENTATION_URL } from "@/services/offer-provenance";
 import { ConfirmationButton } from "@/components/ConfirmationButton";
 import { api } from "@/services/api";
@@ -148,12 +149,11 @@ export default function MissionDetail() {
           <h2>{assignment.status === "CANCELLED" ? "Annulation de mission" : "Confirmation de mission"}</h2>
           <p>{statusLabels[assignment.status] || assignment.status}</p>
           <ConfirmationButton assignmentId={assignment.id} cancelled={assignment.status === "CANCELLED"} />
-          {assignment.status === "ACTIVE" && <Button variant="outline" disabled={!!busy} onClick={async()=>{
-            if(!window.confirm("Annuler votre affectation ? L’entreprise sera avertie, le créneau sera libéré et un PDF d’annulation sera généré."))return;
+          {assignment.status === "ACTIVE" && <InlineConfirmation disabled={!!busy} explanation="L’entreprise sera avertie, le créneau sera libéré et un PDF d’annulation sera généré." confirmLabel="Confirmer l’annulation" onConfirm={async()=>{
             setBusy("cancel");setError("");
-            try {await api("/assignments/"+assignment.id+"/cancel",{method:"POST",key:crypto.randomUUID()});assignments.reload();r.reload();}
-            catch(e){setError((e as Error).message);}finally{setBusy("");}
-          }}>{busy === "cancel" ? "Annulation…" : "Annuler mon affectation"}</Button>}
+            try {await api("/assignments/"+assignment.id+"/cancel",{method:"POST",key:crypto.randomUUID()});assignments.reload();r.reload();return true;}
+            catch(e){setError((e as Error).message);return false;}finally{setBusy("");}
+          }}>{busy === "cancel" ? "Annulation…" : "Annuler mon affectation"}</InlineConfirmation>}
         </section>)}
       </>}
 

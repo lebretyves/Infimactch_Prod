@@ -1,9 +1,10 @@
+import { InlineConfirmation } from "@/components/InlineConfirmation";
 import { MatchingRules } from "@/components/MatchingRules";
 import { missionReturnTo } from "@/lib/missionNavigation";
 import { CandidateMatch } from "@/components/CandidateMatch";
 import type { CandidateMatching } from "@/services/enterpriseApplications";
 import {missionDate} from "@/services/market";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useParams, useSearchParams } from "react-router";
 import { useAuth } from "@/context/AuthContext";
 import { useRemote } from "@/lib/useRemote";
@@ -48,6 +49,7 @@ export default function GestionMission() {
     [busy, setBusy] = useState(""),
     [error, setError] = useState(""),
     [message, setMessage] = useState("");
+  const feedback = useRef<HTMLParagraphElement>(null);
   const keys = useRef(new Map<string, string>());
   const r = useRemote(
     async (signal) => {
@@ -62,6 +64,9 @@ export default function GestionMission() {
     },
     id + ":" + offset,
   );
+  useEffect(() => {
+    if (!r.loading && (error || message)) feedback.current?.focus();
+  }, [error, message, r.loading]);
   const [proposedPage, setProposedPage] = useState({id, offset:0});
   const proposedOffset = proposedPage.id === id ? proposedPage.offset : 0;
   const proposed = useRemote(
@@ -80,7 +85,7 @@ export default function GestionMission() {
     user?.id + ":" + id + ":" + proposedOffset,
   );
   async function action(path: string, body?: unknown) {
-    if (busy) return;
+    if (busy) return false;
     const operation = path + JSON.stringify(body || {});
     if (!keys.current.has(operation))
       keys.current.set(operation, crypto.randomUUID());
@@ -94,11 +99,13 @@ export default function GestionMission() {
         key: keys.current.get(operation),
       });
       keys.current.delete(operation);
-      setMessage("Action enregistrée.");
+      setMessage(path.endsWith("/assignments") ? "Mission confirmée : le candidat est affecté et son agenda a été mis à jour." : "Action enregistrée.");
       r.reload();
       proposed.reload();
+      return true;
     } catch (e) {
       setError((e as Error).message);
+      return false;
     } finally {
       setBusy("");
     }
@@ -135,8 +142,8 @@ export default function GestionMission() {
           <ButtonLink to={"/affectations/" + a.id + "/preparation-contrat"} variant="outline">{agency && a.status === "ACTIVE" ? "Préparer le contrat" : "Consulter la préparation"}</ButtonLink>
         </section>
       ))}
-      {error && <p role="alert">{error}</p>}
-      {message && <p role="status">{message}</p>}
+      {error && <p ref={feedback} tabIndex={-1} role="alert">{error}</p>}
+      {message && <p ref={feedback} tabIndex={-1} role="status">{message}</p>}
       {!!m.events?.length && <section className={s.bloc}><h2>Suivi de l’offre</h2><ul>{m.events.map((e,index)=><li key={index}>{({MISSION_CREATED:"Mission créée",MISSION_OPEN:"Offre publiée",MISSION_REVISED:"Conditions modifiées",MISSION_CANCELLED:"Offre annulée",MISSION_COMPLETED:"Mission terminée",MISSION_DRAFT:"Retour en brouillon"} as Record<string,string>)[e.event] || "Mise à jour de la mission"} · {date(e.created_at)}</li>)}</ul></section>}
       {agency && (
         <section className={s.bloc}>
@@ -158,20 +165,12 @@ export default function GestionMission() {
             </Button>
           )}
           {["DRAFT", "OPEN", "FILLED"].includes(m.status || "") && (
-            <Button
-              variant="outline"
-              disabled={!!busy}
-              onClick={() => {
-                if (
-                  window.confirm(
-                    "Annuler cette mission ? Les affectations concernées seront annulées.",
-                  )
-                )
-                  void action("/missions/" + id + "/cancel");
-              }}
-            >
+            <InlineConfirmation disabled={!!busy}
+              explanation="Les affectations concernées seront annulées. Confirmez-vous l’annulation de cette mission ?"
+              confirmLabel="Confirmer l’annulation"
+              onConfirm={() => action("/missions/" + id + "/cancel")}>
               Annuler la mission
-            </Button>
+            </InlineConfirmation>
           )}
           {m.status === "CANCELLED" && (
             <Button
@@ -226,8 +225,7 @@ export default function GestionMission() {
             <ButtonLink to={"/candidatures/" + c.id} variant="ghost">
               Voir le suivi
             </ButtonLink>
-            {!agency &&
-              m.status === "OPEN" &&
+            {m.status === "OPEN" &&
               ["SUBMITTED", "SELECTED"].includes(c.status) && (
                 <>
                   {c.status === "SUBMITTED" && (
@@ -256,27 +254,18 @@ export default function GestionMission() {
               ["SUBMITTED", "SELECTED"].includes(c.status) && (
                 <>
                   <p>
-                    Les informations de profil incomplètes restent des avertissements.
+                    Les compétences et disponibilités incomplètes restent des avertissements. Le diplôme requis, les horaires précis et l’absence de mission concurrente restent nécessaires.
                     En confirmant, vous validez avec le candidat ses compétences et sa
                     disponibilité. La mission sera ajoutée en bleu à son agenda et
                     bloquera le créneau. Une autre mission déjà confirmée sur ce
                     créneau empêche l’affectation.
                   </p>
-                  <Button
-                    disabled={!!busy}
-                    onClick={() => {
-                      if (
-                        window.confirm(
-                          "Avez-vous vérifié avec le candidat ses compétences et sa disponibilité ? Confirmer l’affectation ajoutera la mission à son agenda et bloquera ce créneau.",
-                        )
-                      )
-                        void action("/missions/" + id + "/assignments", {
-                          applicationId: c.id,
-                        });
-                    }}
-                  >
+                  <InlineConfirmation disabled={!!busy}
+                    explanation="Je confirme avoir vérifié avec le candidat ses compétences et sa disponibilité. La mission sera ajoutée à son agenda et bloquera ce créneau."
+                    confirmLabel="Valider la mission avec ce candidat"
+                    onConfirm={() => action("/missions/" + id + "/assignments", { applicationId: c.id })}>
                     Confirmer l’affectation
-                  </Button>
+                  </InlineConfirmation>
                 </>
               )}
           </article>

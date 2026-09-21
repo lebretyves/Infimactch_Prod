@@ -1,3 +1,4 @@
+import { AccessibilityIcon } from "./AccessibilityIcon";
 import { useEffect, useRef, useState } from "react";
 import { Button } from "@/ui/Button";
 import { Icon } from "@/ui/Icon";
@@ -118,14 +119,13 @@ export function CookiePreferencesPanel({
     <>
       <button
         ref={trigger}
-        className={preferencesStyle.trigger}
+        className={`${preferencesStyle.trigger} ${preferencesStyle.cookieTrigger}`}
         type="button"
         onClick={onOpen}
         aria-expanded={open && !suspended}
         aria-haspopup="dialog"
         aria-controls="cookie-preferences"
       >
-        <Icon name="settings" size={15} />
         Cookies
       </button>
       {storageNotice && (
@@ -161,8 +161,8 @@ export function CookiePreferencesPanel({
         }}
       >
         <div className={s.dialogTools}>
-          <button type="button" className={`${preferencesStyle.trigger} ${preferencesStyle.accessibilityTrigger}`} aria-haspopup="dialog" aria-controls="a11y-preferences" onClick={onAccessibilityOpen}>
-            Accessibilité
+          <button type="button" className={`${preferencesStyle.trigger} ${preferencesStyle.accessibilityTrigger}`} aria-haspopup="dialog" aria-controls="a11y-preferences" onClick={onAccessibilityOpen} aria-label="Accessibilité" title="Accessibilité">
+            <AccessibilityIcon />
           </button>
         </div>
         <div className={s.heading}>

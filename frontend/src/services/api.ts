@@ -136,6 +136,9 @@ export async function api<T>(
       ? data.message.join(" · ")
       : data.message;
     const googleMessages: Record<string, string> = {
+      CLOSURE_GOOGLE_EXPIRED: "La confirmation a expiré. Relancez la confirmation Google.",
+      CLOSURE_GOOGLE_MISMATCH: "Choisissez le compte Google associé à votre compte InfiMatch.",
+      CLOSURE_GOOGLE_INVALID: "La réponse Google est invalide. Relancez la confirmation Google.",
       GOOGLE_UNAVAILABLE: "La vérification Google est temporairement indisponible. Votre formulaire est conservé ; réessayez dans un instant.",
       GOOGLE_REGISTRATION_EXPIRED: "Votre vérification Google a expiré. Reprenez avec Google ; votre brouillon est conservé.",
       GOOGLE_LINK_REQUIRED: "Un compte InfiMatch existe déjà avec cette adresse. Confirmez son mot de passe InfiMatch pour associer Google.",
@@ -147,7 +150,7 @@ export async function api<T>(
     throw new ApiError(
       r.status,
       data.code || "REQUEST_FAILED",
-      path.startsWith("/auth/google") && googleMessages[data.code]
+      (path.startsWith("/auth/google") || path.startsWith("/me/closure-request/google")) && googleMessages[data.code]
         ? googleMessages[data.code]
         : path === "/auth/google" && r.status === 401
           ? "Connexion Google refusée. Vérifiez que votre compte InfiMatch utilise exactement la même adresse Google et saisissez votre mot de passe InfiMatch pour la première association."

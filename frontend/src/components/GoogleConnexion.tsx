@@ -12,10 +12,14 @@ import s from "./GoogleConnexion.module.css";
 export function GoogleConnexion({
   password = "",
   mode = "signin",
+  onClosureComplete,
 }: {
   password?: string;
-  mode?: "signin" | "signup";
+  mode?: "signin" | "signup" | "closure";
+  onClosureComplete?: () => void;
 }) {
+  const completeRef = useRef(onClosureComplete);
+  completeRef.current = onClosureComplete;
   const target = useRef<HTMLDivElement>(null);
   const passwordRef = useRef(password);
   const pending = useRef(false);
@@ -65,7 +69,7 @@ export function GoogleConnexion({
         await loadGoogleIdentity();
         if (!active || !isGoogleIdentityAllowed()) return;
         const { nonce } = await api<{ nonce: string }>(
-          "/auth/google/challenge",
+          mode === "closure" ? "/me/closure-request/google/challenge" : "/auth/google/challenge",
           { method: "POST", signal: controller.signal },
         );
         if (
@@ -88,11 +92,12 @@ export function GoogleConnexion({
             setLinkRequired(false);
             try {
               const result = await api<{ registrationRequired?: boolean }>(
-                "/auth/google",
+                mode === "closure" ? "/me/closure-request/google" : "/auth/google",
                 {
                   method: "POST",
                   signal: controller.signal,
                   body: {
+                    ...(mode === "closure" ? { confirmed: true } : {}),
                     credential,
                     nonce,
                     ...(passwordRef.current
@@ -102,6 +107,7 @@ export function GoogleConnexion({
                 },
               );
               if (!active || !isGoogleIdentityAllowed()) return;
+              if (mode === "closure") { completeRef.current?.(); return; }
               passwordRef.current = "";
               if (result.registrationRequired) {
                 const params = new URLSearchParams(search);
@@ -180,7 +186,7 @@ export function GoogleConnexion({
     <section
       className={s.section}
       aria-label={
-        mode === "signup" ? "Inscription avec Google" : "Connexion avec Google"
+        mode === "closure" ? "Confirmer la clôture avec Google" : mode === "signup" ? "Inscription avec Google" : "Connexion avec Google"
       }
       hidden={!enabled && !error}
       aria-busy={busy}
@@ -192,7 +198,7 @@ export function GoogleConnexion({
           </p>
           <p>
             Pour l’utiliser, autorisez le service Google à charger son bouton et
-            ses cookies. Vous pouvez aussi continuer avec votre adresse e-mail.
+            ses cookies.
           </p>
           <Button
             type="button"
@@ -212,7 +218,7 @@ export function GoogleConnexion({
       ) : (
         enabled && (
           <p>
-            {mode === "signup"
+            {mode === "closure" ? "Confirmez avec le compte Google associé à InfiMatch pour envoyer votre demande de clôture. Votre compte Google ne sera pas supprimé." : mode === "signup"
               ? "Commencez avec Google, puis complétez votre profil. Aucun mot de passe InfiMatch à créer."
               : "Connectez-vous avec Google ou commencez votre inscription."}
           </p>

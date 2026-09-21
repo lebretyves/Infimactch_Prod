@@ -170,6 +170,8 @@ export const additionalResponses:Record<string,any>={
  "POST /api/v1/internal/automation/jobs/maintenance":ok,
  "POST /api/v1/internal/automation/reminders":obj({status:str,notifications:int},["status","notifications"]),
  "POST /api/v1/internal/automation/confirmation/{id}":obj({status:str,documentId:uuid,done:bool},["status"]),
- "GET /api/v1/me/closure-request":obj({request:nullable(closure)},["request"]),
+ "GET /api/v1/me/closure-request":obj({request:nullable(closure),googleLinked:bool},["request","googleLinked"]),
+ "POST /api/v1/me/closure-request/google/challenge":obj({nonce:str},["nonce"]),
+ "POST /api/v1/me/closure-request/google":closure,
  "POST /api/v1/me/closure-request":closure,"DELETE /api/v1/me/closure-request":closure,
 };

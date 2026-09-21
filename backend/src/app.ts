@@ -173,6 +173,7 @@ export async function createApp() {
   });
   app.use(idleSession);
   app.use("/api/v1/auth", authRateLimit(limiterDb, "auth"));
+  app.use("/api/v1/me/closure-request/google", authRateLimit(limiterDb, "auth"));
   app.use("/api/v1/listings/locations",sharedRateLimit(limiterDb,"locations",{windowMs:60000,limit:30,standardHeaders:"draft-8",legacyHeaders:false}));
   app.use("/api/v1/auth/activity", sharedRateLimit(limiterDb,"activity",{windowMs: 60_000, limit: 20, keyGenerator: req => req.sessionID, standardHeaders: "draft-8", legacyHeaders: false}));
   app.use(
