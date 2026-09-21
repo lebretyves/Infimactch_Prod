@@ -2,8 +2,10 @@
   position: fixed;
   inset: auto 24px 24px auto;
   margin: 0;
-  width: min(590px, calc(100vw - 48px));
-  max-height: calc(100dvh - 48px);
+  width: min(590px, calc(100% - 48px));
+  max-height: calc(100% - 48px);
+  overflow-wrap: anywhere;
+  overscroll-behavior: contain;
   overflow: auto;
   border: 1px solid #dce6ef;
   border-radius: 14px;
@@ -51,13 +53,18 @@
 .close {
   background: transparent;
   border: 0;
-  padding: 6px;
+  padding: 10px;
+  min-width: 44px;
+  min-height: 44px;
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
   color: var(--ink-600);
   align-self: flex-start;
   cursor: pointer;
 }
 .dialog > p {
-  font-size: 13px;
+  font-size: 15px;
   line-height: 1.7;
 }
 .note {
@@ -83,7 +90,10 @@
 }
 .links a,
 .textButton {
-  font-size: 12px;
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  font-size: 14px;
   color: var(--brand-800);
   text-decoration: underline;
   text-underline-offset: 3px;
@@ -107,10 +117,10 @@
   gap: 9px;
 }
 .categories h3 {
-  font-size: 13px;
+  font-size: 14px;
 }
 .categories p {
-  font-size: 12px;
+  font-size: 14px;
   line-height: 1.7;
   color: var(--ink-600);
 }
@@ -119,6 +129,7 @@
   justify-content: space-between;
   gap: 12px;
   align-items: center;
+  flex-wrap: wrap;
 }
 .row span {
   font-size: 11px;
@@ -128,8 +139,8 @@
   padding: 4px 8px;
   border-radius: 5px;
 }
-.footnote {
-  font-size: 10px !important;
+.dialog > .footnote {
+  font-size: 13px;
   color: var(--ink-600);
   padding-top: 16px;
   margin-top: 18px;
@@ -151,8 +162,8 @@
   .dialog {
     inset: auto 12px 12px;
     margin: 0;
-    width: calc(100vw - 24px);
-    max-height: calc(100dvh - 24px);
+    width: calc(100% - 24px);
+    max-height: calc(100% - 24px);
     padding: 20px;
   }
   .heading {
@@ -168,13 +179,25 @@
     gap: 8px;
   }
   .actions button {
-    font-size: 12px;
+    font-size: 14px;
     padding-inline: 10px;
   }
   .links {
     gap: 12px;
   }
   .dialog > p {
-    font-size: 12px;
+    font-size: 14px;
   }
 }
+
+.categories[hidden] { display: none; }
+.choice { display: flex; align-items: center; gap: 12px; min-height: 44px; cursor: pointer; }
+.choice input { width: 20px; height: 20px; margin: 0; flex: 0 0 auto; accent-color: var(--brand-800); }
+.choice span { font-size: 14px; font-weight: 600; }
+@media (max-width: 360px) {
+  .actions { grid-template-columns: minmax(0, 1fr); }
+}
+:global(html[data-a11y-text]:not([data-a11y-text="normal"])) .actions {
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 150px), 1fr));
+}
+@media print { .dialog { display: none; } }
