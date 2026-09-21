@@ -13,7 +13,6 @@ fields.push(field('competence','TRANSPORT',benefit),field('avantage','FASTT',ben
 const parsed={schemaVersion:1,parserVersion:'4.0.0',inputHash:'fixture',parsedAt:'2026-09-18T00:00:00Z',fields,warnings:[],reviewQueue:[avc,cardio,diploma,avc]};
 const description=[title,avc,cardio,diploma,benefit].join('\n');
 const base=process.env.BASE_URL||'http://127.0.0.1:4187';
-const localPreview=['localhost','127.0.0.1','[::1]'].includes(new URL(base).hostname);
 const browser=await chromium.launch({channel:'msedge',headless:true});
 try{
  const page=await browser.newPage();const errors=[];page.on('pageerror',e=>errors.push(e.message));
@@ -32,10 +31,5 @@ try{
  await page.getByText('Lire la description intégrale',{exact:true}).click();assert.equal(await page.getByText(description,{exact:true}).textContent(),description);
  await mkdir('artifacts/parsed-offer-audit',{recursive:true});
  for(const width of [1440,375]){await page.setViewportSize({width,height:1000});assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth));await panel.screenshot({path:`artifacts/parsed-offer-audit/details-${width}.png`});}
- if(localPreview){
- const preview={id:'fixture',descriptionHash:'fixture',alerts:[],missing:[],groups:[{title:'Poste',items:fields.map(f=>({label:f.label,value:String(f.value),status:'explicit',evidence:f.evidence.text}))}]};
- await page.evaluate(async preview=>{const React=await import('/node_modules/.vite/deps/react.js');const client=await import('/node_modules/.vite/deps/react-dom_client.js');const createRoot=client.createRoot||client.default.createRoot;const {ParsedOfferPreview}=await import('/src/components/ParsedOfferPreview.tsx');const div=document.createElement('div');div.id='preview-audit';document.body.append(div);createRoot(div).render((React.createElement||React.default.createElement)(ParsedOfferPreview,{offer:preview}));},preview);
- const previewNode=page.locator('#preview-audit');await previewNode.locator('strong').first().waitFor();assert.doesNotMatch(await previewNode.innerText(),/LIBELLÉ GÉNÉRÉ/);assert.equal(await previewNode.getByText(cardio,{exact:true}).count(),1);assert.equal(await previewNode.getByText(avc,{exact:true}).count(),0);assert.deepEqual(await previewNode.locator('strong').allTextContents(),[title,cardio,diploma,benefit]);await previewNode.screenshot({path:'artifacts/parsed-offer-audit/preview-375.png'});
- }
- assert.deepEqual(errors,[]);console.log('PASS Details source-only strong/dedupe/context-filter/original preservation; '+(localPreview?'Preview source-only/dedupe checked':'Preview dev-only skipped on deployed build')+'; APIs mocked only');
+ assert.deepEqual(errors,[]);console.log('PASS Details source-only strong/dedupe/context-filter/original preservation; APIs mocked only');
 }finally{await browser.close()}

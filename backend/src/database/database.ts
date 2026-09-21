@@ -30,7 +30,7 @@ import { GoogleIdentity1789380400000 } from "./google-identity";
 import { Finess1789380300000 } from "./finess";
 import { retryTransaction } from "../common/retry";
 import { Global, Injectable, Module, OnModuleDestroy } from "@nestjs/common";
-import { DataSource, EntityManager } from "typeorm";
+import { DataSource } from "typeorm";
 import { Harden1789380200000 } from "./harden";
 import { Extended1789380100000 } from "./extended";
 import { InitialSchema1789380000000 } from "./schema";
@@ -121,7 +121,7 @@ export async function audit(
     "INSERT INTO audit(actor_id,event,resource_id,details) VALUES($1,$2,$3,$4)",
     [actor, event, id, JSON.stringify(details)],
   );
-  await notifyAudit(em, actor, event, id, details);
+  await notifyAudit(em, event, id, details);
 }
 export async function event(em: SqlClient, name: string, payload: unknown) {
   await em.query("INSERT INTO outbox(event,payload) VALUES($1,$2)", [

@@ -43,4 +43,5 @@ jobs:
             npx playwright install --with-deps chromium
             npm run test:browser
             npm run build:admin
+            npm run test:admin
           fi

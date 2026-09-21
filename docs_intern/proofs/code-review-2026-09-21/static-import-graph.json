@@ -1,0 +1,18 @@
+{
+  "backend": {
+    "files": 147,
+    "unreachableFromProductionRoots": [
+      "backend/src/notifications/purge-demo-alerts.ts"
+    ]
+  },
+  "frontend": {
+    "files": 158,
+    "unreachableFromProductionRoots": [
+      "frontend/src/admin/expanded-smoke.mjs",
+      "frontend/src/admin/finess-smoke.mjs",
+      "frontend/src/admin/requests-smoke.mjs",
+      "frontend/src/admin/routes-smoke.mjs",
+      "frontend/src/admin/smoke.mjs"
+    ]
+  }
+}

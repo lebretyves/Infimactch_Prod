@@ -8,6 +8,6 @@ La capacité quotidienne réelle n’a pas été fournie. À titre de calcul, qu
 
 L’organisation retient quatre périmètres simultanés : backend métier ; backend données/intégrations ; frontend ; intégration/documents/automatisations. Les tests sont répartis entre les auteurs, la recette est collective. L’intégration quotidienne et les contrats communs limitent le travail refait ; le parallélisme ne réduit pas mécaniquement les heures-personnes.
 
-Ne pas compter deux fois le même travail : Q01 correspond aux tests dédiés au-delà des vérifications courantes des modules ; Q03 à la recette intégrée et ses corrections. Consigner les heures réellement passées dans TEMPS_REELS.csv, sans remplir le réalisé avec l’estimation.
+Ne pas compter deux fois le même travail : Q01 correspond aux tests dédiés au-delà des vérifications courantes des modules ; Q03 à la recette intégrée et ses corrections. Consigner les heures réellement passées dans [le relevé des temps humains](rendu/TEMPS_HUMAINS.csv), sans remplir le réalisé avec l’estimation.
 
 Au cadrage J+2, confronter charge, avancement et dépendances à cette contrainte fixe. Aucun report de date ni retrait de fonctionnalité validée n’est présumé autorisé. Les difficultés sont traitées tôt et leur état est déclaré honnêtement ; une fonction bloquée ne devient pas livrée parce que l’échéance est atteinte.

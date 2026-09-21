@@ -6,7 +6,25 @@ import {permitted} from '../../src/admin/permissions';
 const secret='GEZDGNBVGY3TQOJQGEZDGNBVGY3TQOJQ';
 test('TOTP matches RFC6238 SHA1 vectors',()=>{for(const [time,expected] of [[59,'94287082'],[1111111109,'07081804'],[1111111111,'14050471'],[1234567890,'89005924'],[2000000000,'69279037'],[20000000000,'65353130']] as const)assert.equal(totp(secret,Math.floor(time/30),8),expected);});
 test('MFA rejects replay, expired code and invalid input',()=>{const now=1234567890000,counter=Math.floor(now/30000),code=totp(secret,counter);assert.equal(verifyTotp(secret,code,counter-1,now),counter);assert.equal(verifyTotp(secret,code,counter,now),null);assert.equal(verifyTotp(secret,code,-1,now+120000),null);assert.equal(verifyTotp(secret,'000x00',-1,now),null);});
-test('MFA secret encryption authenticates ciphertext',()=>{const value=newTotpSecret(),sealed=sealSecret(value);assert.equal(openSecret(sealed),value);const bytes=Buffer.from(sealed,'base64');bytes[30]=bytes[30]!^1;assert.throws(()=>openSecret(bytes.toString('base64')));});
+test('MFA secret encryption authenticates ciphertext',()=>{
+ const names=['ADMIN_MFA_KEY','ADMIN_MFA_KEY_VERSION'];
+ const saved=Object.fromEntries(names.map(name=>[name,process.env[name]]));
+ try {
+  process.env.ADMIN_MFA_KEY=randomBytes(32).toString('base64');
+  process.env.ADMIN_MFA_KEY_VERSION='1';
+  const value=newTotpSecret(),sealed=sealSecret(value);
+  assert.equal(openSecret(sealed),value);
+  const [family,version,payload]=sealed.split('.');
+  assert.equal(family,'mfa');
+  const bytes=Buffer.from(payload!,'base64');
+  bytes[30]=bytes[30]!^1;
+  assert.throws(()=>openSecret(`${family}.${version}.${bytes.toString('base64')}`));
+ } finally {
+  for(const [name,value] of Object.entries(saved)) {
+   if(value===undefined)delete process.env[name];else process.env[name]=value;
+  }
+ }
+});
 test('platform roles never grant arbitrary document or assignment access',()=>{for(const role of ['OWNER','SUPPORT','OPS','AUDITOR'] as const){assert.equal(permitted(role,'documents:download'),false);assert.equal(permitted(role,'assignments:force'),false);}assert.equal(permitted('OPS','accounts'),false);assert.equal(permitted('SUPPORT','access:write'),false);assert.equal(permitted('AUDITOR','jobs:retry'),false);});
 
 

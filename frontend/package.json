@@ -12,7 +12,7 @@
     "screenshots": "node scripts/screenshots.mjs",
     "audit:a11y": "node scripts/audit-a11y.mjs",
     "build:demo": "node scripts/prepare-ocr-assets.mjs && tsc -b && vite build --base ./ --outDir dist-demo --mode demo",
-    "test": "node --test scripts/test-api.mjs && node --experimental-strip-types --test scripts/test-idle-session.mjs scripts/test-registration-diplomas.mjs scripts/test-bank-fields.mjs scripts/test-cv-review.mjs scripts/test-help-guides.mjs scripts/test-contract-preparation.mjs scripts/test-search-area.mjs && npm run test:branches",
+    "test": "node --test scripts/test-api.mjs scripts/test-admin-api.mjs && node --experimental-strip-types --test scripts/test-idle-session.mjs scripts/test-registration-diplomas.mjs scripts/test-bank-fields.mjs scripts/test-cv-review.mjs scripts/test-help-guides.mjs scripts/test-contract-preparation.mjs scripts/test-search-area.mjs && npm run test:branches",
     "test:integration": "node scripts/test-integration.mjs",
     "test:signup": "node scripts/test-signup.mjs",
     "test:availability": "node --experimental-strip-types scripts/test-availability-slots.mjs",
@@ -24,7 +24,8 @@
     "measure:build": "node scripts/measure-build.mjs",
     "test:branches": "node --test scripts/test-build-measure.mjs && node --experimental-strip-types --test scripts/test-branch-services.mjs scripts/test-page-speech.mjs",
     "measure:transfers": "node scripts/measure-transfers.mjs",
-    "test:browser": "node scripts/run-browser-checks.mjs"
+    "test:browser": "node scripts/run-browser-checks.mjs",
+    "test:admin": "node src/admin/smoke.mjs"
   },
   "dependencies": {
     "pdfjs-dist": "^6.3.289",

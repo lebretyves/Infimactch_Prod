@@ -10,12 +10,10 @@ import { seedDemo } from "./demo/seed";
 import "reflect-metadata";
 import "./config";
 import { fetchOffers, importOffers } from "./public-data/offers";
-import { fetchJobsPipe, normalizeJobsPipe } from "./public-data/jobspipe";
 import { Command } from "commander";
 import { Database, audit } from "./database/database";
 import {
   cleanupRemovedDocuments,
-  anonymizeAccount,
   applyRetention,
   inspectRetention,
 } from "./security/retention";

@@ -119,3 +119,4 @@ Revue du 21 septembre 2026. Ce classement distingue les références actuelles d
 | [frontend/public/guides/tutorials/profil-cv.vtt](../frontend/public/guides/tutorials/profil-cv.vtt) | Sous-titres présents ; vidéo non intégralement revue |
 | [frontend/public/guides/tutorials/recherche-matching.vtt](../frontend/public/guides/tutorials/recherche-matching.vtt) | Sous-titres présents ; vidéo non intégralement revue |
 | [scripts/SAFE_DEMO_IMPORT.md](../scripts/SAFE_DEMO_IMPORT.md) | Document spécialisé : portée propre |
+| [Revue du code du 21 septembre](quality/REVUE_CODE_2026-09-21.md) | Nettoyage et validation locale datés |

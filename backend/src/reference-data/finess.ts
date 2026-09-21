@@ -98,7 +98,7 @@ export async function importFiness(
     throw new Error("Official FINESS resource URL required");
   const hash = createHash("sha256");
   const hashing = new Transform({
-    transform(chunk, encoding, callback) {
+    transform(chunk, _encoding, callback) {
       hash.update(chunk);
       callback(null, chunk);
     },

@@ -1,0 +1,973 @@
+{
+  "sha256": "fc292229c16c0a1405a9f40bd235f2c14e68c7b99b713292717a407e5b24682d",
+  "files": [
+    {
+      "path": "backend/package.json",
+      "sha256": "953a14c74e77f4fb8f6333a264da54c706ff7482cfe11e10b3009d94a6ea49f2"
+    },
+    {
+      "path": "backend/src/admin/admin-auth.ts",
+      "sha256": "91e8d72685f2e1d682f238a9491a591a6510909dff6977f590f96ba45a6d81ba"
+    },
+    {
+      "path": "backend/src/admin/admin.module.ts",
+      "sha256": "0b54873476df7eb5fbb3e4794442f59d86cee91b6d7b7d02b9f72c5d89608245"
+    },
+    {
+      "path": "backend/src/admin/client-requests.ts",
+      "sha256": "3c4c93b9b857f11fb12f7b4c4e3dbb7c1140c3c84a32f9842fb92ab24a6be537"
+    },
+    {
+      "path": "backend/src/admin/mfa.ts",
+      "sha256": "11d5ada9eabcd70579e241a8b622e85b8c27391f8731773ad95aad5aac215c8c"
+    },
+    {
+      "path": "backend/src/admin/operations.ts",
+      "sha256": "c513a717f23921aa2f1d06494fa0f9588de3b7246d3d1072ce1bac0bb9514497"
+    },
+    {
+      "path": "backend/src/admin/permissions.ts",
+      "sha256": "094d9e3c4b5fa47905b07e4c7e26519538dd2bf6df87a77b054bcca82856c52c"
+    },
+    {
+      "path": "backend/src/app.ts",
+      "sha256": "ecbd8d76584ec2666d44fcbeb633b6410574ce8acdfa067c0d04aa957bbe8d76"
+    },
+    {
+      "path": "backend/src/auth/auth-rate-limit.ts",
+      "sha256": "f91787a3bbef7f44edf2ff524910685abb744735c3a36587ea1c217409ae4303"
+    },
+    {
+      "path": "backend/src/auth/auth.module.ts",
+      "sha256": "d4931a059083fcd378eac34d3deaf6095b5e3c48382e68395fd5830409941108"
+    },
+    {
+      "path": "backend/src/auth/google.ts",
+      "sha256": "a4d010093fabfbac2f66f6c80ebe695c5b1ff5fa9fed3e783e32656220ebebd9"
+    },
+    {
+      "path": "backend/src/auth/idle-session.ts",
+      "sha256": "a7f7e00c41132f253fdc6ce401ebd594713648dc0201197683eca3aaceafbd73"
+    },
+    {
+      "path": "backend/src/auth/psc.module.ts",
+      "sha256": "3b73af07865a95ae6095060f42fe0f834f01e9714c2c541468d66366f13ef4d9"
+    },
+    {
+      "path": "backend/src/auth/psc.ts",
+      "sha256": "22945032b8ac9b821fb5a7989d9bfa47b2bd79b28ab8a2a23893f6ecaad1d80c"
+    },
+    {
+      "path": "backend/src/auth/recovery-mail.ts",
+      "sha256": "271796893533308a28f78046f9626a2bbc5c8b39f4625875a1d1a353cd38e3c8"
+    },
+    {
+      "path": "backend/src/auth/recovery.ts",
+      "sha256": "f0508f828d2dd6a1d4603a5354b683db0ed91239946690dcd4ba5b017f3a80b5"
+    },
+    {
+      "path": "backend/src/automation/automation.module.ts",
+      "sha256": "7bbe4abf087c22a83cf4d2b8b4b5af654c2084ebc2f78012b9857e4f852c92bb"
+    },
+    {
+      "path": "backend/src/automation/cloud-jobs.module.ts",
+      "sha256": "1a240a98918592b4321b06c4bfde5e6b33a12a1ae1d7138cd0a1e42d54117e4f"
+    },
+    {
+      "path": "backend/src/automation/confirmation-pdf.ts",
+      "sha256": "c7a30e3f22b903b0cf444e64c38be65f7de19bc2c7c4604bcd242a1367542a9d"
+    },
+    {
+      "path": "backend/src/automation/dispatch-health.ts",
+      "sha256": "6d87147fed94b63dfb773fc45aa3ebc66d1d34e548c4af7a8c1bc5ed0d721262"
+    },
+    {
+      "path": "backend/src/automation/email-delivery.module.ts",
+      "sha256": "01f104d54afdddb3b931f07e389029215b1a3480b32d17e788386ffe842f75a5"
+    },
+    {
+      "path": "backend/src/automation/email-delivery.ts",
+      "sha256": "c6271603c2c69031eaec943a8dd7cdf2a8dc408f35b24dac1058dd55601b5b9d"
+    },
+    {
+      "path": "backend/src/automation/execution-trace.ts",
+      "sha256": "fb9444431f98aa26395137d9d9eec2ef1d4fe04d0f0433a3f3ec8d3b601920f4"
+    },
+    {
+      "path": "backend/src/automation/mission-mail.ts",
+      "sha256": "813301b579606082f27077892be19dcbdb29a691862c37695bdc3a109159a170"
+    },
+    {
+      "path": "backend/src/automation/reminders.ts",
+      "sha256": "de1244e3c90e4898ffd4c2fd7cebccfff7c31b16e2a69da5f61ef4cb5ee2b86e"
+    },
+    {
+      "path": "backend/src/cli.ts",
+      "sha256": "af2a511e9280faa3f1f2f36d10078dd132d2a932db6e17f3f5808e5e252b934c"
+    },
+    {
+      "path": "backend/src/common/access.ts",
+      "sha256": "c74c2b29b8e42c4445f3b1c6536411f32a9d091c7b991c4ae6f15e88fe2d98d6"
+    },
+    {
+      "path": "backend/src/common/idempotency.ts",
+      "sha256": "76a6c3fc8c3cf688b9c5b8576b82a9b90990498a58f7001e52382431020c1681"
+    },
+    {
+      "path": "backend/src/common/page.dto.ts",
+      "sha256": "579e040747520452258d6185c86c95421053afa1d5cbfeafb0dfab04c33916df"
+    },
+    {
+      "path": "backend/src/common/private-cache.ts",
+      "sha256": "44e2f0581130118e31f72d9e1a4512840dc6e3313bd9db4dc2a91ae0521512e7"
+    },
+    {
+      "path": "backend/src/common/retry.ts",
+      "sha256": "d846ee30826f5a511c4667d377af584230327ba0f42e15eb3aac550feaaadcf4"
+    },
+    {
+      "path": "backend/src/config.ts",
+      "sha256": "1683c35e0b2d4429282a629f4a287ef834c20f87a7649e0b855c4e398d24630c"
+    },
+    {
+      "path": "backend/src/contracts/contracts.module.ts",
+      "sha256": "16b56d85d2cb8c94ae3fdb2d6bb5938525dc3f7a5ad9890f2afb987a3bf042c4"
+    },
+    {
+      "path": "backend/src/contracts/contracts.service.ts",
+      "sha256": "248b92544a07602830ab33a1254b34ad17c59af7565a59f97549f14976d8f023"
+    },
+    {
+      "path": "backend/src/database/account-security.ts",
+      "sha256": "7e878e762cde7786d3587bffa83075dbea42b48039906ce4ae458ae90c2e0be0"
+    },
+    {
+      "path": "backend/src/database/admin-mfa-recovery.ts",
+      "sha256": "4c6725f49a5787f28e49cd8b5b18189f3ae869a7c171c7a0915734ab007ae4a1"
+    },
+    {
+      "path": "backend/src/database/admin-operations.ts",
+      "sha256": "bfa91eccf7ffea606639872bc9bd0dcaa3382526528632b33927d2f319ffbd44"
+    },
+    {
+      "path": "backend/src/database/client-requests.ts",
+      "sha256": "b013aee03949b627cc394c40af98006bc4410651501903683604c9c5bdac62a8"
+    },
+    {
+      "path": "backend/src/database/cloud-storage.ts",
+      "sha256": "21269acedea13bf7efdbbdd613138db1b827c98d753d9fd98e41bd52c50da909"
+    },
+    {
+      "path": "backend/src/database/connection.ts",
+      "sha256": "fbb9978ddd4f865d6cb7c739e39e0380245370025c4772305efe51baf4b00391"
+    },
+    {
+      "path": "backend/src/database/contract-preparation.ts",
+      "sha256": "7960eb92ee0713a9ff2c8d14d4204ec5d9b0b62b754d8d57a51fdc75d877ca66"
+    },
+    {
+      "path": "backend/src/database/database.ts",
+      "sha256": "6a8720f4aae71d7b80fc563e8fad293aece989560a5778415221fc939d85ec0e"
+    },
+    {
+      "path": "backend/src/database/discord-notifications.ts",
+      "sha256": "a252765b4d7102f26689c422a04f09172fc343bcebbcb4463f0e2334817c6078"
+    },
+    {
+      "path": "backend/src/database/distance.ts",
+      "sha256": "62d83c26f41b45f35ac6ac75f2e9f98c0743c024e8f17fc606b7ca19137f486b"
+    },
+    {
+      "path": "backend/src/database/document-security.ts",
+      "sha256": "3668fcfb6b65cd0d31a471defa62852713f1b45797a4e13e743e0dc98df8a929"
+    },
+    {
+      "path": "backend/src/database/email-delivery.ts",
+      "sha256": "6eb6678f8eabd3dfde0cca71f4b866e4792ac4e088b4fb504c444ef4f8a1195f"
+    },
+    {
+      "path": "backend/src/database/enterprise-follow-up.ts",
+      "sha256": "9deddbf2be13eb4c97fb9e5fbfcd51c6ba08d9246474399e37b4906bd4ef3df1"
+    },
+    {
+      "path": "backend/src/database/erasure-recovery.ts",
+      "sha256": "1e7d4bb3f4dcbec3f87efe703a95ba6c6641bda2e82af71a44e61ade5857b11f"
+    },
+    {
+      "path": "backend/src/database/extended.ts",
+      "sha256": "a3111e26fe09c7f2480643f02d1e78868cbfdfb1a7a1c6b07bde5264322d4173"
+    },
+    {
+      "path": "backend/src/database/external-collection.ts",
+      "sha256": "698d7f65400e8ba6efd73db7a9814f4f967a0e10ee40410a01970064c896b8a7"
+    },
+    {
+      "path": "backend/src/database/finess.ts",
+      "sha256": "3f6704fe0163f7b72a04d3663a16730d90a37e83837209d7dec2069233fce5a6"
+    },
+    {
+      "path": "backend/src/database/frontend-fields.ts",
+      "sha256": "656866b291493412ebf58348ce461cf9d765964c5123671cb06a6005e8226a2a"
+    },
+    {
+      "path": "backend/src/database/google-identity.ts",
+      "sha256": "4c43b836070625468edd6712f7eb1ea99115d1a8862825f9409ed798b237d0ea"
+    },
+    {
+      "path": "backend/src/database/harden.ts",
+      "sha256": "cbb0149f32c69f2a45f8748650ca428b85c605efdcd9dafbf2569d0a6f951350"
+    },
+    {
+      "path": "backend/src/database/jobspipe-credits.ts",
+      "sha256": "e3446b45c5187ddc9ee48fde259af97b3ab395a3ec6db807645772b3f386a0b4"
+    },
+    {
+      "path": "backend/src/database/mission-guardrails.ts",
+      "sha256": "35c025abf1fd285f1fda666a4bf7ab6a226d69b8aa496b66af1cb9a56b83318d"
+    },
+    {
+      "path": "backend/src/database/mission-mail.ts",
+      "sha256": "83c2e9c64917664fa696d5a840df9446175ffb9baddc337c8c0fe62fa309a22c"
+    },
+    {
+      "path": "backend/src/database/mission-schedule-precision.ts",
+      "sha256": "252df4b26191b760db24417c3fd2da09d2eb6f0a35c8b049af19e580a1b40e0f"
+    },
+    {
+      "path": "backend/src/database/notification-center.ts",
+      "sha256": "546f4bae49fe8fa4abe6b484ac3e97f27dc7898cf64c1c96332f77a378d462f3"
+    },
+    {
+      "path": "backend/src/database/offer-parsing.ts",
+      "sha256": "c58ca1fa031201562038bc89ea7c476e15aef77cf0d3e765b7f3dc4218832e2d"
+    },
+    {
+      "path": "backend/src/database/personal-corrections.ts",
+      "sha256": "b082b903fbb46551dee18a98dfe128c20b17104eacf4afda4d63ae035d85f62e"
+    },
+    {
+      "path": "backend/src/database/platform-admin.ts",
+      "sha256": "86677d3420668242ccf7e0a39337cf6411854e41afe4425d9c68a0f0905bf818"
+    },
+    {
+      "path": "backend/src/database/privacy-requests.ts",
+      "sha256": "27e7ec4dbeceae0aa5c7b8cfea0474eebde1d6b7a526e485e12b62340ba4d833"
+    },
+    {
+      "path": "backend/src/database/professional-identity.ts",
+      "sha256": "fbb4a929e63adfdd98db7a0fb8d50ea4d005186f18edfcdeb36f6ceaa46d8345"
+    },
+    {
+      "path": "backend/src/database/recovery-email.ts",
+      "sha256": "cbc9bd6eb9363048282e4cb817b8f3f7f5231cfcf7ec2bc17ff0ca5de9c35be2"
+    },
+    {
+      "path": "backend/src/database/schema.ts",
+      "sha256": "1419a186b0690daec92b0bab436fc4479b856509bf125803b5db7c2cdf3d5a21"
+    },
+    {
+      "path": "backend/src/database/shared-rate-limit.ts",
+      "sha256": "d520df8291fdfa4950878ddbd6028dce03b327b0b0a617e784cacca2632cc4f1"
+    },
+    {
+      "path": "backend/src/database/staffing-request-details.ts",
+      "sha256": "9784d29876d22df65bf73f0dc16641c25808458003b6837c0507c8e2357250be"
+    },
+    {
+      "path": "backend/src/database/support-tickets.ts",
+      "sha256": "cabe4c26b51ca88175452dd17d2cae8c45a126105f2313e52049e54505f9c727"
+    },
+    {
+      "path": "backend/src/demo/seed.ts",
+      "sha256": "f3342cabb4b5212993a3c3fca3842534dcd297cc736bd7c205c7c992253649f9"
+    },
+    {
+      "path": "backend/src/documents/crypto.ts",
+      "sha256": "b79955fe5f92b68fe44e6aba6f19547588309e1ce19688095a744e14efccb436"
+    },
+    {
+      "path": "backend/src/documents/documents.module.ts",
+      "sha256": "4b598c9fc32d32a8cbee9f85deefdd5314e58b8041d501f4289ae86190a1e9ce"
+    },
+    {
+      "path": "backend/src/domain/assignment-profile.ts",
+      "sha256": "26a7f6ccc9440c27570c427cc25abc322965371767e8539d681096386ea6eda3"
+    },
+    {
+      "path": "backend/src/domain/availability.ts",
+      "sha256": "308b7448467f49c73bd35df5711d4952fa05ccd783317e0ad896bb91245fc112"
+    },
+    {
+      "path": "backend/src/domain/matching-display.ts",
+      "sha256": "db793e0c22aff0898a6450080cddfe6475655b944ad9df1bd067dc2e9e1d93c9"
+    },
+    {
+      "path": "backend/src/domain/matching.ts",
+      "sha256": "0dd1e442a398c48f221d9e108129ce7732de8a81eb2fa387f3323f3d148574c4"
+    },
+    {
+      "path": "backend/src/domain/notification-messages.ts",
+      "sha256": "715e642e75b9dc4bce8c8cf93241335f4883baa607674434bf058d51273547c5"
+    },
+    {
+      "path": "backend/src/domain/rules.ts",
+      "sha256": "7e26230ea70c71441f1904a8fd1b0f1d1ae4adc5932e83c5731af0d61e7d82c4"
+    },
+    {
+      "path": "backend/src/domain/schedule-period.ts",
+      "sha256": "a6efe2b55c40373196161f174aa5376226f081fec6936507d5d90ba11aaa3b4c"
+    },
+    {
+      "path": "backend/src/listings/conversions.ts",
+      "sha256": "3a8b3d8f75084559612e66b7ad6c7ca816df34744b4607fff8ec9f9e2bff5687"
+    },
+    {
+      "path": "backend/src/listings/listing-order.ts",
+      "sha256": "e1da68881092bf8543731f9f054bcc689e663cf69dce1e08fa5908b6b5b584f2"
+    },
+    {
+      "path": "backend/src/listings/listing-page.ts",
+      "sha256": "c0ec36c7de8071b5776bfed899d1cf5a60188a68b2e7e81c502f490cf59ef540"
+    },
+    {
+      "path": "backend/src/listings/listings.module.ts",
+      "sha256": "c9d343229642b1a26c43087bdf5069664f26a6023497ed91ec4105c77bbd41ba"
+    },
+    {
+      "path": "backend/src/listings/locations.ts",
+      "sha256": "4ccef8ad0297b104466996778bd7bd40fa934f63e87a4cbf8975927ef9e16cdd"
+    },
+    {
+      "path": "backend/src/listings/recommendations.ts",
+      "sha256": "1cbf5783db1db9c512b2b18e4415a9d9a3b846219b010775337fb75028188fea"
+    },
+    {
+      "path": "backend/src/listings/reverse-location.ts",
+      "sha256": "95346b6d9e1ff09bc11b0ae3a58ebe6a4c52f2ae5af100d7b3ef2ae259315e32"
+    },
+    {
+      "path": "backend/src/listings/search.ts",
+      "sha256": "b4aa2b90566424c1bc41a83756cd565ccd197275b9e3264a459ff2cb0a278cde"
+    },
+    {
+      "path": "backend/src/main.ts",
+      "sha256": "6159433949928f2de5a1ebf036e1eaa877822f4b77c071f7dc40a983c73ea014"
+    },
+    {
+      "path": "backend/src/matching/matching.module.ts",
+      "sha256": "535ee948eb65c1ce25fda3113a4e0b27b4f6fef0f146349c7a13f9396484bd97"
+    },
+    {
+      "path": "backend/src/missions/application-assessment.ts",
+      "sha256": "c27756e7e3ed1137c79e075f51a9fb0501b483de66a3b15a79a6aaa282cdd0ac"
+    },
+    {
+      "path": "backend/src/missions/application-inbox.ts",
+      "sha256": "9954dd2dcffac4c4a5c3817943d82ea491a305cd1ea05cbd91f8e714588925e5"
+    },
+    {
+      "path": "backend/src/missions/assignment-assessment.ts",
+      "sha256": "69cc0d0e7a6890ed3c323582dfaaf915a846d4abd6fbe95a54f37dd6acf4d317"
+    },
+    {
+      "path": "backend/src/missions/mission.dto.ts",
+      "sha256": "b96aa957320c06a4827573cf5597d78e4d6329cc4a23b978e53fc8a0b386ee3d"
+    },
+    {
+      "path": "backend/src/missions/missions.module.ts",
+      "sha256": "6ef31b188310b660990b8400f29bc551e77add0974571da09badf7b10e04b4ac"
+    },
+    {
+      "path": "backend/src/missions/missions.service.ts",
+      "sha256": "0d439225b73d44ef66fd3dbdb8d579c1f08244ab7b2ad702f403f82362e76542"
+    },
+    {
+      "path": "backend/src/notifications/catalog.ts",
+      "sha256": "31693a3fdfeccd50273695d8da6d7df51e0319c6a1dffa5f739667b3312d9b91"
+    },
+    {
+      "path": "backend/src/notifications/demo-suppression.ts",
+      "sha256": "af7b1ccfabbc5c4fea3e5571c3b55c2a2935ad6e9dd294c722d20567e4e3eebf"
+    },
+    {
+      "path": "backend/src/notifications/discord-client.ts",
+      "sha256": "7b73f70f40e5b7f0055a6ba1282f8785a3b041fbb721ba5652d96a718f8cb768"
+    },
+    {
+      "path": "backend/src/notifications/events.ts",
+      "sha256": "72083bfad779f89c2c3570b37843b85f8de4e3945c735e4d9848e5427745e6f1"
+    },
+    {
+      "path": "backend/src/notifications/match-area.ts",
+      "sha256": "facfff12b162a193cd5cf3834411b08610d3e817307e1a8d03a05e8dfb858f85"
+    },
+    {
+      "path": "backend/src/notifications/muted-demo-missions.json",
+      "sha256": "e7245e3e6be358a2bc1fd7bd88a0106bf2f8ffc8842ebd25b859bce2865ee8bd"
+    },
+    {
+      "path": "backend/src/notifications/notifications.module.ts",
+      "sha256": "63b5f60e1139576479aac4dc2888009dc37035e9e08a2e75d59779c9b1052b67"
+    },
+    {
+      "path": "backend/src/notifications/purge-demo-alerts.ts",
+      "sha256": "74d6d40489264678e6f051e8c392a176a1174683f53c1e231503f2c09692e681"
+    },
+    {
+      "path": "backend/src/openapi-contracts.ts",
+      "sha256": "a27eea19c7e84ec61c5dbb8e3e8a82bb60f0ff9a3d123110f7e108383fbfda17"
+    },
+    {
+      "path": "backend/src/openapi.ts",
+      "sha256": "85de4e900357be24bd70009305d3ce2fdfd97bebcaa236b54914c8c8d92355b8"
+    },
+    {
+      "path": "backend/src/organizations/establishment-directory.ts",
+      "sha256": "c3c4a9a30d4f95afa16f141e7f93893bd963e3ca033c264157ff66b69a2f5ad1"
+    },
+    {
+      "path": "backend/src/organizations/need.dto.ts",
+      "sha256": "57828792d814551e35283f6fcb63795cd23f2b47c11a5f9be0504cb1c151d510"
+    },
+    {
+      "path": "backend/src/organizations/organizations.module.ts",
+      "sha256": "ba300d9c351aec384fa335993ec6efde772896aaa30989ea6b499a025becb706"
+    },
+    {
+      "path": "backend/src/profiles/cv-parser.ts",
+      "sha256": "4f36e0f06e5cc2747aedddf8f2d54042548c7a78ed512d06b4654362c4c84133"
+    },
+    {
+      "path": "backend/src/profiles/cv.controller.ts",
+      "sha256": "d4c46d202828cb35067cce8e13de60f57c1c405d4c2d8d1edc3bc86ecc79a43c"
+    },
+    {
+      "path": "backend/src/profiles/personal-corrections.ts",
+      "sha256": "df17bbe3f7f6d960c31ae469af057acce9f526e2cb8d5ef7d85994190b36b61a"
+    },
+    {
+      "path": "backend/src/profiles/personal-information.ts",
+      "sha256": "531a6b1de71a80713b4cb8eb183d289820bf723fdd9ef572f4b245e3ccced495"
+    },
+    {
+      "path": "backend/src/profiles/profile-details.ts",
+      "sha256": "f1a94c0d4dc4f273b9e6b5abdfab0c206f80378054797932c991fc56d8863c03"
+    },
+    {
+      "path": "backend/src/profiles/profiles.module.ts",
+      "sha256": "8e9ebdec975361cb352499b6ed012e4dd6c3b322926888dba0d1567cc18bd453"
+    },
+    {
+      "path": "backend/src/profiles/rpps.ts",
+      "sha256": "c8b7e8e67735f832f017dc5d62e04f88558c5099aa76c3b14efb55820e972885"
+    },
+    {
+      "path": "backend/src/profiles/search-area.ts",
+      "sha256": "fd396104630059ba936cfb55b76605728d47ff50ea57ac6cf60b026281ab0e68"
+    },
+    {
+      "path": "backend/src/public-data/contract-policy.ts",
+      "sha256": "2c2702e69a28465c02c73ed5c40638e64559a01f65d5e7a8bfce01b825c8a64b"
+    },
+    {
+      "path": "backend/src/public-data/france-travail-client.ts",
+      "sha256": "bb49edb127f1f71d3617240206c973774bdbf9779932c90f86dcacbd46183d54"
+    },
+    {
+      "path": "backend/src/public-data/france-travail-collection.ts",
+      "sha256": "5e9ff30fcf2aabc8ed82354824f4e339db1dda450383fb8ca228ef744a9abc14"
+    },
+    {
+      "path": "backend/src/public-data/freshness.ts",
+      "sha256": "7227129ffef119263a05af7666c23e3f485f4d5472303b205fb33aba0d0bb4a9"
+    },
+    {
+      "path": "backend/src/public-data/jobspipe-collection.ts",
+      "sha256": "c6a1c69cf5e0eacb19f7e18fbb8e514bafbdb4423cc36f9b1ef57d73ae71d3e1"
+    },
+    {
+      "path": "backend/src/public-data/jobspipe-geolocation.ts",
+      "sha256": "a63ea95bcfab9b7cf7f34c63b88fb32d636402b230465dcc2efe8c0f38a723c0"
+    },
+    {
+      "path": "backend/src/public-data/jobspipe.ts",
+      "sha256": "c7a548ff390b04d61c06a43a9dd61dbc083e019b00e6871d7430f822f6188e38"
+    },
+    {
+      "path": "backend/src/public-data/offer-deduplication.ts",
+      "sha256": "f407f5c5a3e33c63811d2b6e9ab8da0be9da3a8fdb867f840c9e4dd165c65b9c"
+    },
+    {
+      "path": "backend/src/public-data/offer-geolocation.ts",
+      "sha256": "2614df0247f906214065cd8bad48f1ec91245ec42b25c3d9c05711d75a54911e"
+    },
+    {
+      "path": "backend/src/public-data/offer-parser.ts",
+      "sha256": "f3a27a37e177e5f1190b2dccf82dde53f93749a34a29c95ee9dbc37ea1781fb6"
+    },
+    {
+      "path": "backend/src/public-data/offer-quality.ts",
+      "sha256": "1b926dd4609569a81ba0f86cc8f72b9cf998823ba107c358e8758e9ec2e55dd5"
+    },
+    {
+      "path": "backend/src/public-data/offers.ts",
+      "sha256": "e97dcd0dc7f6cf6cebe274ee5c320242945a78513f3a9b6fa5a2d3ca2ba524cf"
+    },
+    {
+      "path": "backend/src/public-data/parser/legacy-v2.ts",
+      "sha256": "b0766ea73151b5b0f475f1aa1c6f02c4111cfe14a94be856e3fee75adb115fd7"
+    },
+    {
+      "path": "backend/src/public-data/parser/legacy-v3.ts",
+      "sha256": "127a50851d7bfef67f8054f48923fac00fca0487c7606c6460cbce31db6420c1"
+    },
+    {
+      "path": "backend/src/public-data/parser/structured-details.ts",
+      "sha256": "837a56197c98d33ece8a4b1cc84098883e1370ba6fb18e9982f9f75d04f4433e"
+    },
+    {
+      "path": "backend/src/public-data/partial-matching.ts",
+      "sha256": "af7ed5c7c746fc6e8facf0ab9277ef6d5937da39374c972937665fd129ca1bf0"
+    },
+    {
+      "path": "backend/src/public-data/refresh.service.ts",
+      "sha256": "a50b9804b0bc8702c7687966d8f8a459a4d1c4b54189a88135722d1d850e8e13"
+    },
+    {
+      "path": "backend/src/public-data/repair-geolocation.ts",
+      "sha256": "d623626341f7d340c6b8fa373ca0f96519341738da8a2f3029532d1c9182feef"
+    },
+    {
+      "path": "backend/src/public-data/reparse-offers.ts",
+      "sha256": "fac71b98c55cd489598d8efc84431cdf1d59e835a669fab3f298cb6ee2b2ce70"
+    },
+    {
+      "path": "backend/src/public-data/service-evidence.ts",
+      "sha256": "3f11651e9244dc3aae444b9ce2acf1a654c65701eb333db34fc1f9e394d19ca2"
+    },
+    {
+      "path": "backend/src/reference-data/clinical-skills.json",
+      "sha256": "e724886326d9e8019e325640e67358415f5ce573b6451abd70b8e1e7506e155e"
+    },
+    {
+      "path": "backend/src/reference-data/finess-freshness.ts",
+      "sha256": "916d857f82f5128da518591e9a747b89bfc66229d9fb5c72c7f90646a789e9e2"
+    },
+    {
+      "path": "backend/src/reference-data/finess.module.ts",
+      "sha256": "539b6bcbcaab566f4d6582d9eabf4e67582a01ac451e972dd891d1d60d2a3e5e"
+    },
+    {
+      "path": "backend/src/reference-data/finess.ts",
+      "sha256": "a98d3343d68e6eb6e724c945125d354b1bb6b072231b56453fa53fba9ee28d0d"
+    },
+    {
+      "path": "backend/src/reference-data/reference-data.module.ts",
+      "sha256": "8e3d1d9be9747dcd7d5e4f29b33ba04bc89346bebed5170b8c86b43e3bfc39ab"
+    },
+    {
+      "path": "backend/src/security/closure-blockers.ts",
+      "sha256": "535f781aca56ecc9fb9d2aae60d624b0afe068360b934b98aee7cc1374ce7200"
+    },
+    {
+      "path": "backend/src/security/closure.ts",
+      "sha256": "203ab755f11d63077555a9b2011b2984ba48687182f83a478d2dc208a995d474"
+    },
+    {
+      "path": "backend/src/security/maintenance-status.ts",
+      "sha256": "bf7d6bcad93b503a79e89f42b07a4df02232f2cee886211da9481b535b3207bc"
+    },
+    {
+      "path": "backend/src/security/privacy.module.ts",
+      "sha256": "efdcdf17afab1c6922fdba5d061558b2d9f9cc5b9a50b3ae0f152eb6840a179a"
+    },
+    {
+      "path": "backend/src/security/retention.ts",
+      "sha256": "22f33bb16c35602c19bad828afc1569969f49ba506d599f5c37bef053211952e"
+    },
+    {
+      "path": "backend/src/security/shared-rate-limit.ts",
+      "sha256": "66d986c06b4cb7dba319cda08e91c3e4b0747cb35587e5cb98228e28c0fbffbb"
+    },
+    {
+      "path": "backend/src/support/support.module.ts",
+      "sha256": "a38115c0e3248df28bf61e4eabc68c47e54ef735a97d30c2374dd58c372fc50b"
+    },
+    {
+      "path": "backend/src/support/support.service.ts",
+      "sha256": "a9a08381142dc3e52f9d2101fee2b1874a2b1f9cffda9a1700362c27a421a0ad"
+    },
+    {
+      "path": "backend/src/worker.ts",
+      "sha256": "db5593c08a8739a11e3a906e24c662be1ae9f3cf1ec1a7668bac4440860734cb"
+    },
+    {
+      "path": "backend/test/integration/admin.spec.ts",
+      "sha256": "99260b561c0cbc4aab137f7a102761ec797bc5db8aded5e32ea24f347dfe0d14"
+    },
+    {
+      "path": "backend/test/integration/application-warnings.spec.ts",
+      "sha256": "805d1fac6a0318acf8b50271baf216f38f9ac46db2815ed729331448448eba14"
+    },
+    {
+      "path": "backend/test/integration/cloud-storage.spec.ts",
+      "sha256": "0ff227970e9b6ca47e822480490130e44f7f8d71b114747e4efb97c13b84f46b"
+    },
+    {
+      "path": "backend/test/integration/contract-preparation.spec.ts",
+      "sha256": "71e241ea13552a7493fafc02044e5867f02aac3406c5ee1a05e5588576e79c8a"
+    },
+    {
+      "path": "backend/test/integration/conversions.spec.ts",
+      "sha256": "f9cb0470085ebd7f6088d5de3c36773b8c46c8c5033a26d3abe77f6d7501b41d"
+    },
+    {
+      "path": "backend/test/integration/demo-notification-suppression.spec.ts",
+      "sha256": "5e38af11805cd19700a0c74fd6bbe8fda5e1348e1d8073330e791c2b0361c540"
+    },
+    {
+      "path": "backend/test/integration/email-delivery.spec.ts",
+      "sha256": "82c3fa31189eb6d069562f6aba87cee88a73ce3a2b54f2f1a34a4d109d0d5f91"
+    },
+    {
+      "path": "backend/test/integration/enterprise-flow.spec.ts",
+      "sha256": "e53381c2b706610402742070cc569c7879d9ba9bd5ba62d9adb2d03e522f1aa1"
+    },
+    {
+      "path": "backend/test/integration/establishment-directory.spec.ts",
+      "sha256": "49b272fcbf367a5e49bb000e91439789025339d123b97d7e8bcfd943b06f8c97"
+    },
+    {
+      "path": "backend/test/integration/external-collection.spec.ts",
+      "sha256": "cc8922b242522670986db01dae12c0d242e5b0c9c8cb7fa87f51c018576fcfe8"
+    },
+    {
+      "path": "backend/test/integration/fixture-dates.ts",
+      "sha256": "31e20fc6ba0d1150339b5c31b631ea02f4a32eddf0cae9e7ceafb6ada900f7ed"
+    },
+    {
+      "path": "backend/test/integration/jobspipe-credits.spec.ts",
+      "sha256": "cec3dccb63a4c6816bb488d18ec270a5571ff6d611611036ca222f354cb1654e"
+    },
+    {
+      "path": "backend/test/integration/journey.spec.ts",
+      "sha256": "bf8d2ade869a9a78f80e6a44edec99506a8af0446c93ecb540f249b4dbc0cda2"
+    },
+    {
+      "path": "backend/test/integration/listing-order.spec.ts",
+      "sha256": "8d53f83f97eb5a20fd8f278f71c07d9037d83a6ff2adc07eb50a106e62331378"
+    },
+    {
+      "path": "backend/test/integration/matching-distance.spec.ts",
+      "sha256": "eeb77800b83051920a9c48ce44e990c1f1119314684da5eb090664217f5b566d"
+    },
+    {
+      "path": "backend/test/integration/mission-guardrails.spec.ts",
+      "sha256": "c10a6c19af61012e342cfbe51d1fb370ddaa91fcf97d7e66e0eccf290ae9a1b0"
+    },
+    {
+      "path": "backend/test/integration/mission-mail.spec.ts",
+      "sha256": "c3b4fff101b10f63045492dfcf0fb8037e026cdffd111c1bf179d2d31a837640"
+    },
+    {
+      "path": "backend/test/integration/notifications.spec.ts",
+      "sha256": "d6b8b99d70f939a38b12663d3c6a74ff236231688dbd78a467d4b3f55de710ad"
+    },
+    {
+      "path": "backend/test/integration/offer-freshness.spec.ts",
+      "sha256": "cce558a81f4b673f6d85cc33756f1aae76cb3d2088de6e3e503008c40dfc67c9"
+    },
+    {
+      "path": "backend/test/integration/personal-corrections.spec.ts",
+      "sha256": "fa52a55bb8948d9bac2337d937c5ae71e520b8d3cd7dffa4b17873764d0267c1"
+    },
+    {
+      "path": "backend/test/integration/profile-after-assignment.spec.ts",
+      "sha256": "bb9cdd6beca06e763197f4822620d5a989dac6cff62514f8c5552f41d8386166"
+    },
+    {
+      "path": "backend/test/integration/purge-demo-alerts.spec.ts",
+      "sha256": "20a7eb52ff31871cbdd4f262ca46c3e0f2c316b0657dbbd1e3ed07b6654f72bd"
+    },
+    {
+      "path": "backend/test/integration/recovery.spec.ts",
+      "sha256": "d7b690d7839d6409624d8ba113dfee7b8b1ab115a44cf06c3163509c789912db"
+    },
+    {
+      "path": "backend/test/integration/shared-rate-limit.spec.ts",
+      "sha256": "30a879122b7d60f2b9e561f41fc751778bdae44a4886870018de9c90d4977d10"
+    },
+    {
+      "path": "backend/test/integration/support.spec.ts",
+      "sha256": "a015e1d2fb18756883423f5e0a4ca1cccd8ef9d3f973807316c695c59d0f938b"
+    },
+    {
+      "path": "backend/test/unit/admin-mfa.spec.ts",
+      "sha256": "9eac01b3ade828188c1f1cad18ff8b0da5dd5844061225e9b07906fd4b70d19a"
+    },
+    {
+      "path": "backend/test/unit/application-assessment.spec.ts",
+      "sha256": "2d04d93d6b70189f9bd0af2a92d380ee2660def50f47c5aedbaf6de62b4add7a"
+    },
+    {
+      "path": "backend/test/unit/assignment-assessment.spec.ts",
+      "sha256": "fb227cd03f495b011561995a36f13c82e371bb45c2818b2355460329357e8f65"
+    },
+    {
+      "path": "backend/test/unit/assignment-profile.spec.ts",
+      "sha256": "1122a077dc9fe3cd2e68815858cfd289f439b9f00e455f3c35b8ee5f11be7206"
+    },
+    {
+      "path": "backend/test/unit/auth-rate-limit.spec.ts",
+      "sha256": "66e47fce9f8be274dca2af72f32b91fb926148c628a5741be9ff82ed7940fdb5"
+    },
+    {
+      "path": "backend/test/unit/availability.spec.ts",
+      "sha256": "ea7530609c65ed251df7a172d5d77ec1e067b8351eb23968fe6224be00450b76"
+    },
+    {
+      "path": "backend/test/unit/bank-optional-bic.spec.ts",
+      "sha256": "9834beac3383f3de00353cc142a763eebbc28a1427f8d27c7d33f46f113c0740"
+    },
+    {
+      "path": "backend/test/unit/bank-optional.spec.ts",
+      "sha256": "a1b0e2cb0296655a109f431fad0262c0ac6cd02e79a597dbc96a2f9a1d28b9e1"
+    },
+    {
+      "path": "backend/test/unit/clinical-skills.spec.ts",
+      "sha256": "61e270d954c78787394c0dffbb80532d261a1e2c5c0cf1879bc835d5c99cecb2"
+    },
+    {
+      "path": "backend/test/unit/cloud-jobs.spec.ts",
+      "sha256": "c515e3e9199041e9f6f83139d6d463fa4c5570e97c10a8d1293b75b5eda816cf"
+    },
+    {
+      "path": "backend/test/unit/config.spec.ts",
+      "sha256": "53a6a779151f6e515ab7789edeb9e74d8151e4b73e6710bbd39cfac24e652566"
+    },
+    {
+      "path": "backend/test/unit/contract-policy.spec.ts",
+      "sha256": "deb802b3e1bbaaca325bbb597cf5ef80be9ef7a4b8ec1594da13df73e3668736"
+    },
+    {
+      "path": "backend/test/unit/contract-preparation.spec.ts",
+      "sha256": "33e4a755c6471ac1c6f27eae90073f297ec11924e92d4cfab2c16f2dbe4c8f23"
+    },
+    {
+      "path": "backend/test/unit/conversions.spec.ts",
+      "sha256": "d71d40c5bdd1fd614d0baa69a1cbe2417c98c9478666e07a762ecb79d0bf4b88"
+    },
+    {
+      "path": "backend/test/unit/crypto-search.spec.ts",
+      "sha256": "8ac3acc1967d553a987aecfa3c11bb2ec27c4e7b46706bba53b29ed8273daa5b"
+    },
+    {
+      "path": "backend/test/unit/cv-controller.spec.ts",
+      "sha256": "9b10b875e14c00c695ffe9d75a6596f61cc3dbab18181b70775a1ab8f9af746b"
+    },
+    {
+      "path": "backend/test/unit/cv-parser.spec.ts",
+      "sha256": "d857c9656e46244d78be770929e0165115631cccce6ddea08e4189cf747317c2"
+    },
+    {
+      "path": "backend/test/unit/dispatch-health.spec.ts",
+      "sha256": "2575b37557dd4dae525799483aad5b767c22d56523327c3537d9f9d2726a3982"
+    },
+    {
+      "path": "backend/test/unit/email-delivery.spec.ts",
+      "sha256": "a131943e0fca8a98682c03e88709d3e7e7bf7620875f1ff2b1389dad08530956"
+    },
+    {
+      "path": "backend/test/unit/execution-trace.spec.ts",
+      "sha256": "595a715652de939458562984896f2ae931e2839f4ff05d9f51d82ba06781e8e6"
+    },
+    {
+      "path": "backend/test/unit/finess-freshness.spec.ts",
+      "sha256": "d94508acf172b508294a728bee0968714b91796df3b109b8c22d3fdcbdb15373"
+    },
+    {
+      "path": "backend/test/unit/finess.spec.ts",
+      "sha256": "f297503bba09d7594b8c9e13ab0156d377b368cdb2091075586cd9a1a4ac168e"
+    },
+    {
+      "path": "backend/test/unit/france-travail-pagination.spec.ts",
+      "sha256": "5459b9a50f37898a5cf6fb7909c5604b902fe85ab2d75f4ce7bacf4a33f861ff"
+    },
+    {
+      "path": "backend/test/unit/google-auth.spec.ts",
+      "sha256": "8d9c089a7d1269924c25f2eeb2a42bd6ef1da18dc3dfe4b30d7de45a66c03562"
+    },
+    {
+      "path": "backend/test/unit/idle-session.spec.ts",
+      "sha256": "cc3d71eb66b8c344960b5077e6b8325075e099e6bfa730d211374a30b6b240fd"
+    },
+    {
+      "path": "backend/test/unit/jobspipe-collection.spec.ts",
+      "sha256": "1345a0c3d5e867e37a914b62398bf6dc3a94c71fbf03d3837491cc06493bc2ab"
+    },
+    {
+      "path": "backend/test/unit/jobspipe.spec.ts",
+      "sha256": "b33f5c46c5525c4ca30db7dcd17936b7d9af5891b48de3945896c06d92a7592e"
+    },
+    {
+      "path": "backend/test/unit/listing-order.spec.ts",
+      "sha256": "025957526ee8e5c87e24acae689daef2396e6fb57f0524ff0629950075552f12"
+    },
+    {
+      "path": "backend/test/unit/locations.spec.ts",
+      "sha256": "c3b48d13edf4206fde4be8c866d174869ec72c4aefb49d518e3aca097cbe2713"
+    },
+    {
+      "path": "backend/test/unit/maintenance-status.spec.ts",
+      "sha256": "25ee7a13bcc688fb9f632c0a0c628b2effac5d2b662f25f1d6f6a4ac4dd84e77"
+    },
+    {
+      "path": "backend/test/unit/matching-display.spec.ts",
+      "sha256": "dad103af4a0dfaef644d97b70d17d210119b8694a89caae74e9f6adf509d28b4"
+    },
+    {
+      "path": "backend/test/unit/matching-pair.spec.ts",
+      "sha256": "716c36d9d47e6c8c3808c66e52f63d2047b5a6bdd8c5e198965d41080c736aa4"
+    },
+    {
+      "path": "backend/test/unit/matching.spec.ts",
+      "sha256": "bab932d96660eec1a1aff34cea8812e4b7f19099ca4aac436e1da2cbbd7cb643"
+    },
+    {
+      "path": "backend/test/unit/mission-confirmations.spec.ts",
+      "sha256": "1c38ad9263277f053a786fb6a7174a848a660366d2772cb016c45ea4a5f7d1b5"
+    },
+    {
+      "path": "backend/test/unit/mission-horizon.spec.ts",
+      "sha256": "7fe7005b8b628c7420749a22884b56a007dc1d345631cbcb5f8a8f9c8532d849"
+    },
+    {
+      "path": "backend/test/unit/mission-professional-name.spec.ts",
+      "sha256": "3f47e1bb2b51b9817cc19cc6a3d5b92877505fc875f68ad885d1a6e7bfe3e79e"
+    },
+    {
+      "path": "backend/test/unit/mission-timezone.spec.ts",
+      "sha256": "02578a29866a75bc5cfe354cfea013f47b31c49cac1dd1117c53d0ba37a8f876"
+    },
+    {
+      "path": "backend/test/unit/notification-permissions.spec.ts",
+      "sha256": "8fb9609601dc2b94de23e83c9893b7b82f110b1a72425b9eb32a1a1544e79de8"
+    },
+    {
+      "path": "backend/test/unit/offer-deduplication.spec.ts",
+      "sha256": "b93b7e9b5d3e69c294f2bd7d64c2d9b8a5aad5446f424cc296187775fa3de1d6"
+    },
+    {
+      "path": "backend/test/unit/offer-freshness.spec.ts",
+      "sha256": "ba65dff4923cf91bb0df18315b2d5f9928ed70b2193be0586b96e141b508e693"
+    },
+    {
+      "path": "backend/test/unit/offer-geolocation.spec.ts",
+      "sha256": "26712534db541d2ebda3318211d48b647fba4f3b1a16cf952e98a74fea09d964"
+    },
+    {
+      "path": "backend/test/unit/offer-parser.spec.ts",
+      "sha256": "2e6ad2970c015820ef9571996c93523c9dd14fb7d07a98e82bfdd66de484cefd"
+    },
+    {
+      "path": "backend/test/unit/offer-quality.spec.ts",
+      "sha256": "8f9cf7222e7723e0373903a6a353f615acd217564a1fefc45263bc466347eac0"
+    },
+    {
+      "path": "backend/test/unit/offer-schedule.spec.ts",
+      "sha256": "737e222148c7ae2538f237d7c5577476c8c85aeb6f2af81fb7625b91342d0742"
+    },
+    {
+      "path": "backend/test/unit/offers.spec.ts",
+      "sha256": "828dc3979a520469282758531d5b9acec9346173de909ec890c3ef1d127a8b63"
+    },
+    {
+      "path": "backend/test/unit/partial-matching.spec.ts",
+      "sha256": "9f73e501bb9a1b5f16621630302594b3eb039cbf86ca4cb74585c179fd65d872"
+    },
+    {
+      "path": "backend/test/unit/personal-information.spec.ts",
+      "sha256": "52ee9fd8a71308edb6ad91c14f665605ff2eae11cfcb8b04a4a0f1ea8d1bc25a"
+    },
+    {
+      "path": "backend/test/unit/postgres-connection.spec.ts",
+      "sha256": "2a17f2ede1a4291f2b29d185b5bcdcc915344f53d307c01f42a32dee3c8f9f3c"
+    },
+    {
+      "path": "backend/test/unit/practice-services.spec.ts",
+      "sha256": "8ac1fb6417a1598953af554b82c56443085f8aefbc47564ab9ca9acdb91571df"
+    },
+    {
+      "path": "backend/test/unit/private-cache.spec.ts",
+      "sha256": "fe4cd09f51707806625ad87ccec36a677d7d493028c84c747a22becd34f3e381"
+    },
+    {
+      "path": "backend/test/unit/profile-details.spec.ts",
+      "sha256": "8b3a2ace2f5d19be6707abfb757d2b25f83016442825a82d4c79e9529797bd6d"
+    },
+    {
+      "path": "backend/test/unit/psc.spec.ts",
+      "sha256": "f57f1f9c9ecc38ed04c348e9ae51df5a52c1ea6eaa8972f51387d511d7c2e539"
+    },
+    {
+      "path": "backend/test/unit/recommendations.spec.ts",
+      "sha256": "d4be91a4cbdeacff3e76a1ef866c51c7a843adb97ab29365acd2c05fc03cd554"
+    },
+    {
+      "path": "backend/test/unit/recovery-mail.spec.ts",
+      "sha256": "663f6ba1beeb7593527467e2b516168f3bcb23680e7797580baa2d0956420733"
+    },
+    {
+      "path": "backend/test/unit/refresh.spec.ts",
+      "sha256": "fe2a31755fe103e94a11f645a38fcc876c560f204a1b634bcf95c57f031adcd4"
+    },
+    {
+      "path": "backend/test/unit/repair-geolocation.spec.ts",
+      "sha256": "114d1de340cf4c879433f1e95f11ace291a0f8071dec2671932384e04acf2b83"
+    },
+    {
+      "path": "backend/test/unit/retention.spec.ts",
+      "sha256": "e5abcc99296c38b845a4599ee8c44b8c5a1902d20a0b9a64643f71be12b00872"
+    },
+    {
+      "path": "backend/test/unit/reverse-location-openapi.spec.ts",
+      "sha256": "f6bbd3382d9b87cf77a699daf21f2e9f3955e7f12f84515a4a4f248fd80313a3"
+    },
+    {
+      "path": "backend/test/unit/reverse-location.spec.ts",
+      "sha256": "7a707b3d4668615483eb711ef11a1f02943ff1d939d10d9ef594d0d261228a18"
+    },
+    {
+      "path": "backend/test/unit/rpps.spec.ts",
+      "sha256": "14e6fbc31862fe3a7bff939978cd298a479f4ed8566dc26c5ca445dd585ca1ce"
+    },
+    {
+      "path": "backend/test/unit/search-area-http.spec.ts",
+      "sha256": "b04071743370144242820bf931137d11d9df97688c53f4d9ea67665dee60ce51"
+    },
+    {
+      "path": "backend/test/unit/search-area.spec.ts",
+      "sha256": "41fd4f9b37755e857a77cf99a0e94c5aa19cdffeeb214f195b8fe717ed736b54"
+    },
+    {
+      "path": "backend/test/unit/session-security.spec.ts",
+      "sha256": "e35211c51fe898376bcd067e1a93ba74dc870b8b5620622dcb1ea2fd7445d366"
+    },
+    {
+      "path": "backend/test/unit/shared-rate-limit.spec.ts",
+      "sha256": "535a49131040737aa3f42b33366d0117793b990d55e60d3f58423cb5b8cb351b"
+    },
+    {
+      "path": "backend/test/unit/staffing-request.spec.ts",
+      "sha256": "e43ad729789f9cae12a2b079d5def346d51e1443c8fd90b350fcc9c8d0c0e1ff"
+    },
+    {
+      "path": "backend/test/unit/support.spec.ts",
+      "sha256": "0d245f7eb672959dd63cbec11604fc31e6c10502dea76d3c589012dbdb0d6e95"
+    },
+    {
+      "path": "backend/test/unit/transactions.spec.ts",
+      "sha256": "4d82a13d9ce698251b073e4abe309749af7ad7dc3f974a898d1afaea7ce5cd53"
+    }
+  ]
+}

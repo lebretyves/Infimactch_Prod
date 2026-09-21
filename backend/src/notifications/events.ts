@@ -20,7 +20,7 @@ export async function notify(em: SqlClient, kind: NoticeKind, users: string[], o
 }
 
 /** Called within the business transaction: a rollback also rolls back all notices. */
-export async function notifyAudit(em: SqlClient, actor: string | null, action: string, id: string | null, details: any = {}) {
+export async function notifyAudit(em: SqlClient, action: string, id: string | null, details: any = {}) {
   if (!id) return;
   if (action === "ACCOUNT_CREATED") return notify(em,"WELCOME",[id]);
   if (action === "RPPS_RESULT") return notify(em,"RPPS_RESULT",[id],[],{detail:details.status});
