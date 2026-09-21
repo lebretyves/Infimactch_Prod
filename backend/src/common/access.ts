@@ -12,6 +12,7 @@ declare module "express-session" {
     userId: string;
     family: "NURSE" | "ENTERPRISE";
     csrf: string;
+    googleClosureChallenge?: { nonce: string; expires: number; accountId: string };
     googleChallenge?: { nonce: string; expires: number };
     googleChallenges?: { nonce: string; expires: number }[];
     googleRegistration?: { subject: string; email: string; firstName?: string; lastName?: string; expires: number };

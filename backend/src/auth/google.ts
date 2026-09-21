@@ -33,7 +33,7 @@ export class GoogleAuth {
       clientId: process.env.GOOGLE_CLIENT_ID || null,
     };
   }
-  async login(credential: string, nonce: string, password?: string): Promise<GoogleLogin> {
+  async verifyIdentity(credential: string, nonce: string): Promise<GoogleIdentity> {
     const audience = process.env.GOOGLE_CLIENT_ID;
     if (!audience)
       throw new ServiceUnavailableException("Connexion Google non configurée.");
@@ -50,6 +50,10 @@ export class GoogleAuth {
         throw new ServiceUnavailableException({ code: "GOOGLE_UNAVAILABLE", message: "Le serveur ne peut pas vérifier Google pour le moment. Réessayez dans un instant ou utilisez votre mot de passe InfiMatch." });
       throw new UnauthorizedException({code: "GOOGLE_TOKEN_INVALID", message: "La réponse de Google est invalide ou expirée. Relancez la connexion Google."});
     }
+    return identity;
+  }
+  async login(credential: string, nonce: string, password?: string): Promise<GoogleLogin> {
+    const identity = await this.verifyIdentity(credential, nonce);
     return this.db.transaction(async (em) => {
       const [linked] = await em.query(
         "SELECT a.id,a.family,a.active,a.session_version,a.platform_only FROM google_identity g JOIN account a ON a.id=g.account_id WHERE g.subject=$1",

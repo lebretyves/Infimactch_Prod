@@ -91,6 +91,8 @@ export function CookieConsentProvider({
     <Context
       value={{ googleAllowed, preferences, openPreferences, savePreferences }}
     >
+      <div className={preferencesStyle.page}>
+      <div className={preferencesStyle.content}>{children}</div>
       <div className={preferencesStyle.bar} role="group" aria-label="Préférences du site">
         <div className={preferencesStyle.controls}>
           <CookiePreferencesPanel
@@ -107,7 +109,7 @@ export function CookieConsentProvider({
           <AccessibilityPanel returnToCookies={open} />
         </div>
       </div>
-      {children}
+      </div>
     </Context>
   );
 }
