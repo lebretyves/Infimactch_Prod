@@ -618,7 +618,7 @@ function NurseMissions() {
                 onChange={(e) => set("shift", e.target.value)}
               >
                 <option value="">Tous les horaires</option>
-                <option value="DAY">Jour</option>
+                <option value="MORNING">Matin</option><option value="AFTERNOON">Après-midi</option><option value="DAY">Jour</option>
                 <option value="NIGHT">Nuit</option>
                 <option value="MIXED">Alternance jour et nuit</option>
               </SelectField>

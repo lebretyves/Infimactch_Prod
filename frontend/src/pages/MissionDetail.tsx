@@ -290,7 +290,7 @@ export default function MissionDetail() {
           {parsedOffer && <p className={s.muted} style={{ fontSize: 11 }}>Informations extraites du texte, à confirmer</p>}
           {m.schedule_precision === "DATE" && <p>Horaires précis à confirmer avec l’établissement.</p>}
           {parsedSummary.schedules.length ? parsedSummary.schedules.map(item => <p key={item.key+item.evidence.start}><strong>{item.label} :</strong> {item.display}</p>) : <p>
-            {{ DAY: "Jour", NIGHT: "Nuit", MIXED: "Alternance jour et nuit" }[
+            {{ MORNING: "Matin", AFTERNOON: "Après-midi", DAY: "Jour", NIGHT: "Nuit", MIXED: "Alternance jour et nuit" }[
               m.shift || ""
             ] || "Horaires non précisés"}
           </p>}

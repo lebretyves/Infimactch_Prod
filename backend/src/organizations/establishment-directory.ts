@@ -28,8 +28,8 @@ export class EnterpriseMissionsPageDto extends PageDto {
   @ApiProperty({required:false,enum:['OPEN','DRAFT','FILLED','COMPLETED','CANCELLED']})
   @IsOptional() @IsIn(['OPEN','DRAFT','FILLED','COMPLETED','CANCELLED'])
   status?: string;
-  @ApiProperty({required:false,enum:['DAY','NIGHT','MIXED','UNKNOWN']})
-  @IsOptional() @IsIn(['DAY','NIGHT','MIXED','UNKNOWN'])
+  @ApiProperty({required:false,enum:['MORNING','AFTERNOON','DAY','NIGHT','MIXED','UNKNOWN']})
+  @IsOptional() @IsIn(['MORNING','AFTERNOON','DAY','NIGHT','MIXED','UNKNOWN'])
   shift?: string;
   @ApiProperty({required:false,enum:['created_desc','start_asc','start_desc']})
   @IsOptional() @IsIn(['created_desc','start_asc','start_desc'])
