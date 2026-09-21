@@ -238,3 +238,48 @@ test('technical maintenance really purges expired notifications and records succ
   assert.ok((await db.query("SELECT 1 FROM audit WHERE event='RETENTION_PURGED'")).length);
  }finally{if(old===undefined)delete process.env.BUSINESS_HISTORY_RETENTION_DAYS;else process.env.BUSINESS_HISTORY_RETENTION_DAYS=old;}
 });
+
+
+test('invitation guidance distinguishes existing password and new dedicated access without authentication or mutation',async()=>{
+ const existing=await account(),invitation=randomBytes(32).toString('hex');
+ await db.query("INSERT INTO platform_admin(user_id,role,invitation_hash,invitation_expires_at) VALUES($1,'SUPPORT',$2,now()+interval '1 hour')",[existing.id,hashInvitation(invitation)]);
+ const email=randomUUID()+'@example.invalid',newInvitation=randomBytes(32).toString('hex');
+ const [dedicated]=await db.query("INSERT INTO account(email,password_hash,family,terms_version,platform_only) VALUES($1,'ADMIN_ACTIVATION_PENDING','ENTERPRISE','ADMIN_INVITATION',true) RETURNING id",[email]);
+ await db.query("INSERT INTO platform_admin(user_id,role,invitation_hash,invitation_expires_at) VALUES($1,'SUPPORT',$2,now()+interval '1 hour')",[dedicated.id,hashInvitation(newInvitation)]);
+ const agent=request.agent(app.getHttpServer()),c=await agent.get('/api/v1/admin/csrf');
+ const input={email:existing.email,invitation};
+ await agent.post('/api/v1/admin/invitation/check').set('Origin',origin).send(input).expect(403);
+ const snapshot=()=>db.query('SELECT a.password_hash,a.session_version,p.invitation_hash,p.version,p.totp_secret FROM account a JOIN platform_admin p ON p.user_id=a.id WHERE a.id=ANY($1::uuid[]) ORDER BY a.id',[[existing.id,dedicated.id]]);
+ const before=await snapshot();
+ for(let i=0;i<2;i++){
+  const r=await post(agent,'invitation/check',c.body.csrfToken,input).expect(201);assert.deepEqual(r.body,{passwordSetupRequired:false});assert.match(r.headers['cache-control']||'',/no-store/);
+  assert.deepEqual((await post(agent,'invitation/check',c.body.csrfToken,{email,invitation:newInvitation}).expect(201)).body,{passwordSetupRequired:true});
+ }
+ assert.deepEqual(await snapshot(),before);await agent.get('/api/v1/admin/me').expect(401);
+ await post(agent,'mfa',c.body.csrfToken,{code:'123456'}).expect(401);
+ await post(agent,'login',c.body.csrfToken,{...input,password:'wrong-fixture-password'}).expect(401);
+ assert.deepEqual(await snapshot(),before);
+ const login=await post(agent,'login',c.body.csrfToken,{...input,password}).expect(201);assert.equal(login.body.status,'MFA_ENROLLMENT_REQUIRED');
+ await agent.get('/api/v1/admin/overview').expect(401);
+ await post(agent,'mfa',login.body.csrfToken,{code:totp(login.body.secret,Math.floor(Date.now()/30000))}).expect(201);
+ await agent.get('/api/v1/admin/overview').expect(200);
+});
+
+test('invitation guidance rejects unknown, expired, consumed, suspended and locked invitations uniformly',async()=>{
+ const existing=await account(),invitation=randomBytes(32).toString('hex');
+ await db.query("INSERT INTO platform_admin(user_id,role,invitation_hash,invitation_expires_at) VALUES($1,'SUPPORT',$2,now()+interval '1 hour')",[existing.id,hashInvitation(invitation)]);
+ const agent=request.agent(app.getHttpServer()),c=await agent.get('/api/v1/admin/csrf');
+ const check=(body:object)=>post(agent,'invitation/check',c.body.csrfToken,body);
+ const input={email:existing.email,invitation};
+ const publicError=(body:any)=>{assert.equal(typeof body.requestId,'string');const {requestId,...rest}=body;return rest;};
+ const unknown=await check({email:randomUUID()+'@example.invalid',invitation}).expect(401);
+ assert.deepEqual(publicError((await check({...input,invitation:'x'.repeat(64)}).expect(401)).body),publicError(unknown.body));
+ for(const change of ["invitation_expires_at=now()-interval '1 second'","invitation_hash=NULL","active=false","locked_until=now()+interval '15 minutes'"]){
+  await db.query("UPDATE platform_admin SET invitation_hash=$2,invitation_expires_at=now()+interval '1 hour',active=true,locked_until=NULL WHERE user_id=$1",[existing.id,hashInvitation(invitation)]);
+  await db.query('UPDATE platform_admin SET '+change+' WHERE user_id=$1',[existing.id]);assert.deepEqual(publicError((await check(input).expect(401)).body),publicError(unknown.body));
+ }
+ await db.query("UPDATE platform_admin SET locked_until=NULL WHERE user_id=$1",[existing.id]);await db.query('UPDATE account SET active=false WHERE id=$1',[existing.id]);
+ assert.deepEqual(publicError((await check(input).expect(401)).body),publicError(unknown.body));
+ await check({email:existing.email}).expect(400);await check({...input,invitation:'short'}).expect(400);
+ await check({...input,passwordSetupRequired:true}).expect(400);
+});
