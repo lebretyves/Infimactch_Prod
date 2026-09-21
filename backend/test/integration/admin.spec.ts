@@ -240,7 +240,7 @@ test('technical maintenance really purges expired notifications and records succ
 });
 
 
-test('invitation guidance distinguishes existing password and new dedicated access without authentication or mutation',async()=>{
+test('invitation guidance offers admin password creation for existing and dedicated accounts without mutation',async()=>{
  const existing=await account(),invitation=randomBytes(32).toString('hex');
  await db.query("INSERT INTO platform_admin(user_id,role,invitation_hash,invitation_expires_at) VALUES($1,'SUPPORT',$2,now()+interval '1 hour')",[existing.id,hashInvitation(invitation)]);
  const email=randomUUID()+'@example.invalid',newInvitation=randomBytes(32).toString('hex');
@@ -252,7 +252,7 @@ test('invitation guidance distinguishes existing password and new dedicated acce
  const snapshot=()=>db.query('SELECT a.password_hash,a.session_version,p.invitation_hash,p.version,p.totp_secret FROM account a JOIN platform_admin p ON p.user_id=a.id WHERE a.id=ANY($1::uuid[]) ORDER BY a.id',[[existing.id,dedicated.id]]);
  const before=await snapshot();
  for(let i=0;i<2;i++){
-  const r=await post(agent,'invitation/check',c.body.csrfToken,input).expect(201);assert.deepEqual(r.body,{passwordSetupRequired:false});assert.match(r.headers['cache-control']||'',/no-store/);
+  const r=await post(agent,'invitation/check',c.body.csrfToken,input).expect(201);assert.deepEqual(r.body,{passwordSetupRequired:true});assert.match(r.headers['cache-control']||'',/no-store/);
   assert.deepEqual((await post(agent,'invitation/check',c.body.csrfToken,{email,invitation:newInvitation}).expect(201)).body,{passwordSetupRequired:true});
  }
  assert.deepEqual(await snapshot(),before);await agent.get('/api/v1/admin/me').expect(401);
@@ -318,7 +318,7 @@ test('deletion preserves a business account and invalidates old MFA challenges a
  const [before]=await db.query('SELECT password_hash FROM account WHERE id=$1',[client.id]);
  const invite=()=>post(owner.agent,'access/invite',owner.csrf,{email:client.email.toUpperCase(),role:'SUPPORT',reason:'Existing client invited as admin'});
  const issued=await invite().expect(201),c=await agent.get('/api/v1/admin/csrf');
- assert.equal((await post(agent,'invitation/check',c.body.csrfToken,{email:client.email,invitation:issued.body.invitation}).expect(201)).body.passwordSetupRequired,false);
+ assert.equal((await post(agent,'invitation/check',c.body.csrfToken,{email:client.email,invitation:issued.body.invitation}).expect(201)).body.passwordSetupRequired,true);
  const login=await post(agent,'login',c.body.csrfToken,{email:client.email,password,invitation:issued.body.invitation}).expect(201);
  await post(owner.agent,'access/'+client.id+'/delete',owner.csrf,{reason:'Remove only administrative access'}).expect(201);
  const [after]=await db.query('SELECT active,password_hash,platform_only FROM account WHERE id=$1',[client.id]);
@@ -357,4 +357,35 @@ test('pending owner invitations can be deleted and inactive accounts cannot be i
  const client=await account();await db.query('UPDATE account SET active=false WHERE id=$1',[client.id]);
  await post(owner.agent,'access/invite',owner.csrf,{email:client.email,role:'SUPPORT',reason:'Inactive account cannot be invited'}).expect(409);
  assert.equal((await db.query('SELECT 1 FROM platform_admin WHERE user_id=$1',[client.id])).length,0);
+});
+
+
+test('invited business account creates an independent admin password and uses it for login and reauthentication',async()=>{
+ const owner=await enroll(),client=await account(),adminPassword='Separate-admin-password-123';
+ const issued=await post(owner.agent,'access/invite',owner.csrf,{email:client.email,role:'SUPPORT',reason:'Independent admin password test'}).expect(201);
+ const agent=request.agent(app.getHttpServer()),c=await agent.get('/api/v1/admin/csrf');
+ const [before]=await db.query('SELECT password_hash,session_version FROM account WHERE id=$1',[client.id]);
+ const activated=await post(agent,'activate',c.body.csrfToken,{email:client.email,invitation:issued.body.invitation,password:adminPassword}).expect(201);
+ const [after]=await db.query('SELECT password_hash,session_version FROM account WHERE id=$1',[client.id]);assert.deepEqual(after,before);
+ await client.agent.get('/api/v1/auth/me').expect(200);
+ const verified=await post(agent,'mfa',activated.body.csrfToken,{code:totp(activated.body.secret,Math.floor(Date.now()/30000))}).expect(201);
+ await post(agent,'reauth',verified.body.csrfToken,{password:adminPassword,code:totp(activated.body.secret,Math.floor(Date.now()/30000)+1)}).expect(201);
+ await post(agent,'logout',verified.body.csrfToken,{}).expect(201);
+ const next=await agent.get('/api/v1/admin/csrf');
+ await post(agent,'login',next.body.csrfToken,{email:client.email,password}).expect(401);
+ assert.equal((await post(agent,'login',next.body.csrfToken,{email:client.email,password:adminPassword}).expect(201)).body.status,'MFA_REQUIRED');
+});
+
+test('unfinished dedicated enrollment can choose its password again and invalidates the previous challenge',async()=>{
+ const owner=await enroll(),email=randomUUID()+'@example.invalid';
+ const issued=await post(owner.agent,'access/invite',owner.csrf,{email,role:'SUPPORT',reason:'Resume unfinished activation test'}).expect(201);
+ const one=request.agent(app.getHttpServer()),two=request.agent(app.getHttpServer());
+ const c1=await one.get('/api/v1/admin/csrf'),c2=await two.get('/api/v1/admin/csrf');
+ const input={email,invitation:issued.body.invitation};
+ const first=await post(one,'activate',c1.body.csrfToken,{...input,password}).expect(201);
+ assert.equal((await post(two,'invitation/check',c2.body.csrfToken,input).expect(201)).body.passwordSetupRequired,true);
+ const second=await post(two,'activate',c2.body.csrfToken,{...input,password:'Replacement-admin-password-123'}).expect(201);
+ await post(one,'mfa',first.body.csrfToken,{code:totp(first.body.secret,Math.floor(Date.now()/30000))}).expect(res=>assert.ok([401,403].includes(res.status)));
+ await post(two,'mfa',second.body.csrfToken,{code:totp(second.body.secret,Math.floor(Date.now()/30000))}).expect(201);
+ await post(two,'activate',(await two.get('/api/v1/admin/csrf')).body.csrfToken,{...input,password}).expect(401);
 });

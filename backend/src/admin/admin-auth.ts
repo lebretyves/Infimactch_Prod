@@ -34,7 +34,7 @@ export class AdminAuthController {
  constructor(private readonly db:Database){}
  @Get('csrf') csrf(@Req() req:Request){if(!adminConfigured())throw new NotFoundException();req.session.csrf??=randomBytes(32).toString('hex');return {csrfToken:req.session.csrf};}
  @Post('login') async login(@Req() req:Request,@Body() b:LoginDto){if(!adminConfigured())throw new NotFoundException();
- const [a]=await this.db.query('SELECT a.id,a.password_hash,a.active AS account_active,a.session_version,a.platform_only,a.terms_version,p.* FROM account a JOIN platform_admin p ON p.user_id=a.id WHERE lower(a.email)=lower($1)',[b.email]);
+ const [a]=await this.db.query('SELECT a.id,a.password_hash,a.active AS account_active,a.session_version,a.platform_only,a.terms_version,p.*,COALESCE(p.admin_password_hash,a.password_hash) AS password_hash FROM account a JOIN platform_admin p ON p.user_id=a.id WHERE lower(a.email)=lower($1)',[b.email]);
  if(!a||!a.active||!a.account_active||new Date(a.locked_until??0).getTime()>Date.now())throw new UnauthorizedException('Connexion indisponible. Vérifiez vos identifiants.');
  const valid=await argon2.verify(a.password_hash,b.password).catch(()=>false);
  if(!valid){await this.failed(a.id);throw new UnauthorizedException('Connexion indisponible. Vérifiez vos identifiants.');}
@@ -91,18 +91,20 @@ export class AdminAuthController {
  // This read never activates access, consumes the invitation or starts an MFA challenge.
  @Post('invitation/check') async checkInvitation(@Body() b:InvitationCheckDto){
   if(!adminConfigured())throw new NotFoundException();
-  const [a]=await this.db.query('SELECT a.active AS account_active,a.platform_only,a.password_hash,p.active,p.invitation_hash,p.invitation_expires_at,p.locked_until FROM account a JOIN platform_admin p ON p.user_id=a.id WHERE lower(a.email)=lower($1)',[b.email]);
+  const [a]=await this.db.query('SELECT a.active AS account_active,a.platform_only,a.password_hash,p.totp_secret,p.active,p.invitation_hash,p.invitation_expires_at,p.locked_until FROM account a JOIN platform_admin p ON p.user_id=a.id WHERE lower(a.email)=lower($1)',[b.email]);
   if(!a||!a.account_active||!a.active||!a.invitation_hash||a.invitation_hash!==hashInvitation(b.invitation)||!a.invitation_expires_at||new Date(a.invitation_expires_at).getTime()<=Date.now()||new Date(a.locked_until??0).getTime()>Date.now())throw new UnauthorizedException('Invitation indisponible.');
-  return {passwordSetupRequired:a.platform_only&&a.password_hash==='ADMIN_ACTIVATION_PENDING'};
+  return {passwordSetupRequired:!a.totp_secret};
  }
  @Post('activate') async activate(@Req() req:Request,@Body() b:LoginDto){
   if(!adminConfigured())throw new NotFoundException();
   if(!b.invitation)throw new UnauthorizedException('Invitation valide necessaire.');
   await this.db.transaction(async em=>{
    const [a]=await em.query('SELECT a.id,a.password_hash,a.active AS account_active,a.platform_only,p.active,p.totp_secret,p.invitation_hash,p.invitation_expires_at FROM account a JOIN platform_admin p ON p.user_id=a.id WHERE lower(a.email)=lower($1) FOR UPDATE OF a,p',[b.email]);
-   if(!a||!a.account_active||!a.active||!a.platform_only||a.totp_secret||a.password_hash!=='ADMIN_ACTIVATION_PENDING'||a.invitation_hash!==hashInvitation(b.invitation!)||new Date(a.invitation_expires_at).getTime()<Date.now())throw new UnauthorizedException('Activation indisponible. Verifiez votre invitation.');
+   if(!a||!a.account_active||!a.active||a.totp_secret||a.invitation_hash!==hashInvitation(b.invitation!)||!a.invitation_expires_at||new Date(a.invitation_expires_at).getTime()<=Date.now())throw new UnauthorizedException('Activation indisponible. Verifiez votre invitation.');
    const hash=await argon2.hash(b.password,{type:argon2.argon2id,memoryCost:65536,timeCost:3,parallelism:1});
-   await em.query("UPDATE account SET password_hash=$2,session_version=session_version+1,terms_version='ADMIN_ACTIVATED',terms_at=now() WHERE id=$1",[a.id,hash]);
+   if(a.platform_only)await em.query("UPDATE account SET password_hash=$2,session_version=session_version+1,terms_version='ADMIN_ACTIVATED',terms_at=now() WHERE id=$1",[a.id,hash]);
+   await em.query('UPDATE platform_admin SET admin_password_hash=$2,version=version+1 WHERE user_id=$1',[a.id,hash]);
+   await em.query("DELETE FROM admin_session WHERE sess->>'adminId'=$1 OR sess->'adminChallenge'->>'userId'=$1",[a.id]);
    await audit(em,a.id,'ADMIN_ACCOUNT_ACTIVATED',a.id);
   });
   return this.login(req,b);
@@ -112,7 +114,7 @@ export class AdminAuthController {
  @Post('reauth') @UseGuards(AdminGuard) async reauth(@Req() req:Request,@Body() b:PasswordDto){
  const id=req.session.adminId!;
  const ok=await this.db.transaction(async em=>{
-  const [a]=await em.query('SELECT a.password_hash,a.session_version,p.* FROM account a JOIN platform_admin p ON p.user_id=a.id WHERE a.id=$1 AND a.active AND p.active FOR UPDATE OF a,p',[id]);
+  const [a]=await em.query('SELECT a.password_hash,a.session_version,p.*,COALESCE(p.admin_password_hash,a.password_hash) AS password_hash FROM account a JOIN platform_admin p ON p.user_id=a.id WHERE a.id=$1 AND a.active AND p.active FOR UPDATE OF a,p',[id]);
   if(!a||a.version!==req.session.adminVersion||a.session_version!==req.session.adminAccountVersion||!a.totp_secret||new Date(a.locked_until??0).getTime()>Date.now())return false;
   const passwordValid=await argon2.verify(a.password_hash,b.password).catch(()=>false);
   const counter=passwordValid?verifyTotp(openSecret(a.totp_secret),b.code,Number(a.last_counter)):null;
