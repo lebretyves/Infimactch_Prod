@@ -231,7 +231,7 @@ export const statusLabels: Record<string, string> = {
   ACCEPTED: "Affectée",
   ACTIVE: "Confirmée",
   SUBMITTED: "En attente",
-  SELECTED: "Sélectionnée",
+  SELECTED: "En attente de décision",
   REJECTED: "Refusée",
   WITHDRAWN: "Retirée",
   UNAVAILABLE: "Indisponible : autre mission confirmée",

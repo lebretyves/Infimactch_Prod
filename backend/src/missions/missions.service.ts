@@ -388,7 +388,7 @@ export class MissionsService {
   async applicationAction(
     actor: string,
     id: string,
-    action: "WITHDRAWN" | "SELECTED" | "REJECTED",
+    action: "WITHDRAWN" | "REJECTED",
     key?: string,
   ) {
     return this.db.transaction(async (em) => {
@@ -398,7 +398,6 @@ export class MissionsService {
       );
       if (!ref) throw new NotFoundException();
       const m = await lockMission(em, ref.mission_id);
-      if (action === "SELECTED") await requireActiveAccount(em, ref.nurse_id);
       await nurse(em, ref.nurse_id);
       const [a] = await em.query(
         "SELECT * FROM application WHERE id=$1 FOR UPDATE",

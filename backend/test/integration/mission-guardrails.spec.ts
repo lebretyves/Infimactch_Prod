@@ -65,7 +65,8 @@ test('assignment closes overlapping applications only, records reason and keeps 
  const start=new Date(Date.now()+10*86400000);start.setUTCHours(8,0,0,0);const at=(hours:number)=>new Date(start.getTime()+hours*3600000).toISOString();
  const a=await mission(at(0),at(8)),b=await mission(at(4),at(12)),c=await mission(at(8),at(16)),d=await mission(at(24),at(32));
  const apps:any[]=[];for(const m of [a,b,c,d])apps.push(await service.apply(nurseId,m.id,1,randomUUID()));
- await service.applicationAction(actor,apps[1].id,'SELECTED',randomUUID());
+ // Legacy pending application remains accept/reject compatible. No selection action exists.
+ await db.query("UPDATE application SET status='SELECTED' WHERE id=$1",[apps[1].id]);
  const key=randomUUID(),assigned=await service.assign(actor,a.id,apps[0].id,key);
  assert.equal((await service.assign(actor,a.id,apps[0].id,key)).id,assigned.id);
  const rows=await db.query('SELECT id,status,closure_reason,closed_at FROM application WHERE id=ANY($1::uuid[])',[apps.map(a=>a.id)]);

@@ -112,13 +112,6 @@ class MissionsController {
   ) {
     return this.service.applicationAction(user(r), id, "WITHDRAWN", key);
   }
-  @Post("applications/:id/selection") select(
-    @Req() r: Request,
-    @Headers("idempotency-key") key: string,
-    @Param("id", ParseUUIDPipe) id: string,
-  ) {
-    return this.service.applicationAction(user(r), id, "SELECTED", key);
-  }
   @Post("applications/:id/rejection") reject(
     @Req() r: Request,
     @Headers("idempotency-key") key: string,

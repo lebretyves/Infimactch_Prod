@@ -42,8 +42,8 @@ test('enterprise need becomes a tracked direct mission visible to nurses only af
  const matches=await nurse.agent.get('/api/v1/me/matches?limit=50').expect(200);assert.ok(matches.body.items.some((m:any)=>m.missionId===id));
  const application=await post(nurse,'missions/'+id+'/applications',{version:1}).expect(201);
  const activity=await owner.agent.get('/api/v1/dashboards').expect(200);assert.equal(activity.body.activity.applications,1);
- await post(other,'applications/'+application.body.id+'/selection').expect(404);
- await post(owner,'applications/'+application.body.id+'/selection').expect(201);
+ await post(owner,'applications/'+application.body.id+'/selection').expect(404);
+ await post(other,'missions/'+id+'/assignments',{applicationId:application.body.id}).expect(404);
  const assigned=await post(owner,'missions/'+id+'/assignments',{applicationId:application.body.id}).expect(201);assert.ok(assigned.body.id);
  const [event]=await db.query("SELECT id FROM outbox WHERE event='AssignmentCreated' AND payload->>'missionId'=$1",[id]);
  assert.equal((await app.get(AutomationService).confirmation(event.id)).status,'READY');
