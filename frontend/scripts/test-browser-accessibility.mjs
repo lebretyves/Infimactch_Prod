@@ -6,6 +6,10 @@ const browser = await chromium.launch(process.env.BROWSER_CHANNEL ? { channel: p
 const context = await browser.newContext();
 await context.route('**/api/**', route => route.fulfill({ status: 401, json: { code: 'UNAUTHORIZED' } }));
 const page = await context.newPage();
+let releasePage;
+let pageGate = new Promise(resolve => { releasePage = resolve; });
+const legalChunk = /\/assets\/Mentions-[^/]+\.js$/;
+await context.route(legalChunk, async route => { await pageGate; await route.continue(); });
 const errors = [];
 page.on('pageerror', error => errors.push(error.message));
 const cookies = page.getByRole('dialog', { name: 'Cookies et connexion Google', exact: true });
@@ -28,7 +32,7 @@ async function choice() {
   return page.evaluate(() => JSON.parse(localStorage.getItem('infimatch:cookie-preferences')).google);
 }
 try {
-  await page.goto(base + '/mentions-legales');
+  await page.goto(base + '/mentions-legales', { waitUntil: 'domcontentloaded' });
   await focused(cookies.getByRole('heading'));
   for (let i = 0; i < 4; i++) {
     await page.keyboard.press('Tab');
@@ -37,8 +41,11 @@ try {
   await page.keyboard.press('Escape');
   await cookies.waitFor({ state: 'hidden' });
   assert.equal(await choice(), false);
+  assert.equal(await page.locator('main[aria-busy="true"]').isVisible(), true);
+  releasePage();
   await focused(page.getByRole('heading', { level: 1 }));
-  console.log('PASS initial focus, keyboard navigation and Escape without Google consent');
+  await context.unroute(legalChunk);
+  console.log('PASS initial focus, keyboard navigation and Escape during delayed page loading without Google consent');
 
   const mainTrigger = page.getByRole('button', { name: 'Modifier mes préférences cookies', exact: true });
   await mainTrigger.click();
@@ -77,6 +84,23 @@ try {
     assert.equal(await page.locator('#cookies').evaluate(element => element.getBoundingClientRect().top >= 0), true);
   }
   console.log('PASS policy destination focused from another page and repeated anchor');
+
+  // Finishing a delayed page must not steal focus after another keyboard action.
+  pageGate = new Promise(resolve => { releasePage = resolve; });
+  await context.route(legalChunk, async route => { await pageGate; await route.continue(); });
+  await page.evaluate(() => localStorage.removeItem('infimatch:cookie-preferences'));
+  await page.goto(base + '/mentions-legales', { waitUntil: 'domcontentloaded' });
+  await focused(cookies.getByRole('heading'));
+  await page.locator('main[aria-busy="true"]').waitFor();
+  await page.keyboard.press('Escape');
+  await focused(page.locator('main[aria-busy="true"]'));
+  await page.keyboard.press('Tab');
+  const continuedFocus = await page.evaluateHandle(() => document.activeElement);
+  releasePage();
+  await page.locator('main h1').waitFor();
+  assert.equal(await page.evaluate(element => document.activeElement === element, continuedFocus), true);
+  await context.unroute(legalChunk);
+  console.log('PASS deferred focus cancelled when keyboard navigation continues');
 
   for (const width of [320, 375, 1440]) {
     await page.setViewportSize({ width, height: 640 });
@@ -129,6 +153,7 @@ try {
   console.log('PASS enlarged viewport with text spacing, native checkbox in forced colors, no accidental consent');
   assert.deepEqual(errors, []);
 } finally {
+  releasePage();
   await context.close();
   await browser.close();
 }
