@@ -1,0 +1,198 @@
+{
+  "revision": "2026-09-21",
+  "applicationBaseCommit": "609af0dc44c39e654e6a55f1a9c85256597ecae4",
+  "scope": "Recorded user tutorials with fictional data and intercepted API responses; not evidence of live message delivery",
+  "localBrowserChecks": {
+    "widths": [
+      1440,
+      390,
+      320
+    ],
+    "noVideoBeforeOpening": true,
+    "oneOpenPlayer": true,
+    "javascriptErrors": [],
+    "axeViolations": []
+  },
+  "media": [
+    {
+      "id": "annulation-emails",
+      "durationSeconds": 22.24,
+      "width": 1280,
+      "height": 800,
+      "captionCount": 5,
+      "captionsParsedByBrowser": 5,
+      "allFramesDecoded": true,
+      "chapterFramesReviewed": 5,
+      "apiMocked": true,
+      "unexpectedRequests": 0,
+      "javascriptErrors": 0,
+      "files": [
+        {
+          "path": "frontend/public/guides/tutorials/annulation-emails.webm",
+          "bytes": 1848982,
+          "sha256": "059a95c3102944bda649cd289f84d4a86cd2f3cc101475cb265efd26a38a0d80"
+        },
+        {
+          "path": "frontend/public/guides/tutorials/annulation-emails.jpg",
+          "bytes": 87373,
+          "sha256": "98da28a53183b7b8638c976a5bde8878ef5e9b5fd7e92270cd2c5810ee30b34f"
+        },
+        {
+          "path": "frontend/public/guides/tutorials/annulation-emails.vtt",
+          "bytes": 527,
+          "sha256": "50869f09e6e0acfa2241686e029541894dd6ed8dbede501dc8449a9f7a4e0fde"
+        }
+      ]
+    },
+    {
+      "id": "candidature-agenda",
+      "durationSeconds": 21.08,
+      "width": 1280,
+      "height": 800,
+      "captionCount": 5,
+      "captionsParsedByBrowser": 5,
+      "allFramesDecoded": true,
+      "chapterFramesReviewed": 5,
+      "apiMocked": true,
+      "unexpectedRequests": 0,
+      "javascriptErrors": 0,
+      "files": [
+        {
+          "path": "frontend/public/guides/tutorials/candidature-agenda.webm",
+          "bytes": 1738234,
+          "sha256": "28234f6c7167ace8174da9741b7071276d859d85b1b66c670297e55602cdc7a9"
+        },
+        {
+          "path": "frontend/public/guides/tutorials/candidature-agenda.jpg",
+          "bytes": 99329,
+          "sha256": "5d5c2b1e5391e45ae92d066a812ef03dbc10ccb00da71df745b4e93eb1480a0d"
+        },
+        {
+          "path": "frontend/public/guides/tutorials/candidature-agenda.vtt",
+          "bytes": 537,
+          "sha256": "98acb2e2ab419a9dc629290bdb7bdf7bd9ece20be5f0d7acc222525caa6bd124"
+        }
+      ]
+    },
+    {
+      "id": "confirmation-pdf",
+      "durationSeconds": 21.36,
+      "width": 1280,
+      "height": 800,
+      "captionCount": 5,
+      "captionsParsedByBrowser": 5,
+      "allFramesDecoded": true,
+      "chapterFramesReviewed": 5,
+      "apiMocked": true,
+      "unexpectedRequests": 0,
+      "javascriptErrors": 0,
+      "files": [
+        {
+          "path": "frontend/public/guides/tutorials/confirmation-pdf.webm",
+          "bytes": 1613764,
+          "sha256": "b19e5be78f93d349e648ee10a8627d0650b67643d9f8571130b31ebbdee3e4b1"
+        },
+        {
+          "path": "frontend/public/guides/tutorials/confirmation-pdf.jpg",
+          "bytes": 80093,
+          "sha256": "5eb468da79d2deaf98e9ebf1a189af432ff37b43b49a030faee6059e2b9d061c"
+        },
+        {
+          "path": "frontend/public/guides/tutorials/confirmation-pdf.vtt",
+          "bytes": 530,
+          "sha256": "aa38ee7037dc9e3e55a4884fc2d62638bdff1c9b462c509127d7ced1927472fa"
+        }
+      ]
+    },
+    {
+      "id": "inscription-diplomes",
+      "durationSeconds": 76.24,
+      "width": 1280,
+      "height": 800,
+      "captionCount": 16,
+      "captionsParsedByBrowser": 16,
+      "allFramesDecoded": true,
+      "chapterFramesReviewed": 16,
+      "apiMocked": true,
+      "unexpectedRequests": 0,
+      "javascriptErrors": 0,
+      "files": [
+        {
+          "path": "frontend/public/guides/tutorials/inscription-diplomes.webm",
+          "bytes": 6434179,
+          "sha256": "809226582fd62f9111ba786d81320f56e303805b1d81d5c76bdea96bc99b6fce"
+        },
+        {
+          "path": "frontend/public/guides/tutorials/inscription-diplomes.jpg",
+          "bytes": 78850,
+          "sha256": "e3511afd983828ce96dea9ca3701b9e61a2b2677776f4b5f4ee327928daf18b9"
+        },
+        {
+          "path": "frontend/public/guides/tutorials/inscription-diplomes.vtt",
+          "bytes": 1809,
+          "sha256": "782c4a6c96292b4aa590444fb8ab16cc9ab7bad7261db5a6b9e6a27fc41b823b"
+        }
+      ]
+    },
+    {
+      "id": "profil-cv",
+      "durationSeconds": 27.88,
+      "width": 1280,
+      "height": 800,
+      "captionCount": 7,
+      "captionsParsedByBrowser": 7,
+      "allFramesDecoded": true,
+      "chapterFramesReviewed": 7,
+      "apiMocked": true,
+      "unexpectedRequests": 0,
+      "javascriptErrors": 0,
+      "files": [
+        {
+          "path": "frontend/public/guides/tutorials/profil-cv.webm",
+          "bytes": 2076480,
+          "sha256": "591bed3c7c35aad4385cb55c738e682268867cd264e7b485afedb445b676870c"
+        },
+        {
+          "path": "frontend/public/guides/tutorials/profil-cv.jpg",
+          "bytes": 96063,
+          "sha256": "e6c91270fe0efa47d2b6a694006d2e505caf8b800fb2ea541498a72097022411"
+        },
+        {
+          "path": "frontend/public/guides/tutorials/profil-cv.vtt",
+          "bytes": 737,
+          "sha256": "ad506958a5b7792d1fad0de2b206e96ddca1ed33db49edc997fca81baf9af233"
+        }
+      ]
+    },
+    {
+      "id": "recherche-matching",
+      "durationSeconds": 44,
+      "width": 1280,
+      "height": 800,
+      "captionCount": 8,
+      "captionsParsedByBrowser": 8,
+      "allFramesDecoded": true,
+      "chapterFramesReviewed": 8,
+      "apiMocked": true,
+      "unexpectedRequests": 0,
+      "javascriptErrors": 0,
+      "files": [
+        {
+          "path": "frontend/public/guides/tutorials/recherche-matching.webm",
+          "bytes": 3332194,
+          "sha256": "32c283c629ce72d1a4475e95d0eefb8e775d2ca900de42d363b865c1ce91d7c0"
+        },
+        {
+          "path": "frontend/public/guides/tutorials/recherche-matching.jpg",
+          "bytes": 174735,
+          "sha256": "68068a4995d3530122bb68e6eaa046539f6f2ecb16c12979704502dab39b64b1"
+        },
+        {
+          "path": "frontend/public/guides/tutorials/recherche-matching.vtt",
+          "bytes": 952,
+          "sha256": "8816111370f2319df662041321d2c7c6e8409061f99ecd90b0294e0dd9e32f53"
+        }
+      ]
+    }
+  ]
+}

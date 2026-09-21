@@ -109,10 +109,11 @@ frontend/docs/COOKIES_FINESS_2026-09-16.md,md,Note historique de conception ou r
 frontend/docs/INTEGRATION_BACKEND.md,md,Référence courante revue ou corrigée,Lecture UTF-8 et liens locaux
 frontend/docs/PHOTOS_MAQUETTES.md,md,Note historique de conception ou recette,Lecture UTF-8 et liens locaux
 frontend/public/aide/discord/retrouver-identifiant-discord.pdf,pdf,Document spécialisé : portée propre,Fichier présent
-frontend/public/guides/tutorials/annulation-emails.vtt,vtt,Sous-titres présents ; vidéo non intégralement revue,Entête et fichier présents
-frontend/public/guides/tutorials/candidature-agenda.vtt,vtt,Sous-titres présents ; vidéo non intégralement revue,Entête et fichier présents
-frontend/public/guides/tutorials/confirmation-pdf.vtt,vtt,Sous-titres présents ; vidéo non intégralement revue,Entête et fichier présents
-frontend/public/guides/tutorials/inscription-diplomes.vtt,vtt,Sous-titres présents ; vidéo non intégralement revue,Entête et fichier présents
-frontend/public/guides/tutorials/profil-cv.vtt,vtt,Sous-titres présents ; vidéo non intégralement revue,Entête et fichier présents
-frontend/public/guides/tutorials/recherche-matching.vtt,vtt,Sous-titres présents ; vidéo non intégralement revue,Entête et fichier présents
+frontend/public/guides/tutorials/annulation-emails.vtt,vtt,Tutoriel réenregistré ; étapes et sous-titres contrôlés,Lecture navigateur et vérification des médias
+frontend/public/guides/tutorials/candidature-agenda.vtt,vtt,Tutoriel réenregistré ; étapes et sous-titres contrôlés,Lecture navigateur et vérification des médias
+frontend/public/guides/tutorials/confirmation-pdf.vtt,vtt,Tutoriel réenregistré ; étapes et sous-titres contrôlés,Lecture navigateur et vérification des médias
+frontend/public/guides/tutorials/inscription-diplomes.vtt,vtt,Tutoriel réenregistré ; étapes et sous-titres contrôlés,Lecture navigateur et vérification des médias
+frontend/public/guides/tutorials/profil-cv.vtt,vtt,Tutoriel réenregistré ; étapes et sous-titres contrôlés,Lecture navigateur et vérification des médias
+frontend/public/guides/tutorials/recherche-matching.vtt,vtt,Tutoriel réenregistré ; étapes et sous-titres contrôlés,Lecture navigateur et vérification des médias
 scripts/SAFE_DEMO_IMPORT.md,md,Document spécialisé : portée propre,Lecture UTF-8 et liens locaux
+docs_intern/quality/TUTORIELS_VIDEO_2026-09-21.md,md,Réenregistrement et contrôle des six tutoriels,Parcours fictifs et médias vérifiés

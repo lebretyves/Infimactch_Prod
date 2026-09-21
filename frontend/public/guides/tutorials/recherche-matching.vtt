@@ -1,21 +1,33 @@
 WEBVTT
 
 1
-00:00:01.311 --> 00:00:04.057
-3 · Recherche : vérifiez votre zone et votre rayon. Exemple fictif.
+00:00:01.485 --> 00:00:06.805
+3 · La zone d’alertes est enregistrée sur votre compte. Ici : Paris, 30 km.
 
 2
-00:00:04.057 --> 00:00:07.811
-Le rayon limite la recherche autour de la ville choisie.
+00:00:06.805 --> 00:00:13.175
+La recherche reprend vos derniers critères sur cet appareil, ou votre zone enregistrée.
 
 3
-00:00:07.811 --> 00:00:11.526
-Les résultats suivent cette recherche, sans changer votre zone d’alertes.
+00:00:13.175 --> 00:00:18.396
+Choisissez une ville dans les propositions et son rayon. Exemple : Rennes, 30 km.
 
 4
-00:00:11.526 --> 00:00:16.676
-Consultez les composantes du score et les conditions de disponibilité.
+00:00:18.396 --> 00:00:23.370
+Cette recherche ponctuelle ne change pas les alertes : elles restent sur Paris.
 
 5
-00:00:16.676 --> 00:00:20.680
-Consultez la fiche pour comprendre le score et les informations manquantes.
+00:00:23.370 --> 00:00:28.381
+Pour conserver Rennes comme zone d’alertes, confirmez avec ce bouton.
+
+6
+00:00:28.381 --> 00:00:33.885
+Rennes, 30 km, est enregistré. Le domicile et les préférences de notification sont conservés.
+
+7
+00:00:33.885 --> 00:00:39.488
+Le matching utilise la zone du compte, les compétences, les disponibilités et l’expérience.
+
+8
+00:00:39.488 --> 00:00:43.703
+Le score aide à comparer. Relisez les conditions et les informations manquantes.

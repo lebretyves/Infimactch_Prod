@@ -22,4 +22,4 @@ Utiliser le portail séparé. À la première activation, l'invitation et la con
 
 ## Tutoriels vidéo : limite connue
 
-Les six vidéos existantes restent des illustrations de parcours antérieurs. Elles n'ont pas été réenregistrées ni entièrement revues visuellement dans cette mise à jour. En cas de différence de libellé, utiliser ce guide et l'aide textuelle actualisée. Les sous-titres d'inscription et de recherche ont été rectifiés. Les images des vidéos doivent encore être revues avant de présenter les enregistrements comme des tutoriels actuels au jury.
+Les six tutoriels ont été réenregistrés le 21 septembre 2026 sur l’interface actuelle, avec données fictives et réponses API simulées. Ils couvrent notamment Discord facultatif après inscription et l’enregistrement explicite de la zone d’alertes. Chaque vidéo possède des explications à l’écran, des sous-titres français et des étapes écrites. Voir [la vérification des vidéos](quality/TUTORIELS_VIDEO_2026-09-21.md). Ces démonstrations ne prouvent pas un envoi réel de notification.
