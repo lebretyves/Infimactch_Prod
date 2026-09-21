@@ -1,0 +1,117 @@
+fichier,format,portee,controle
+README.md,md,Référence courante revue ou corrigée,Lecture UTF-8 et liens locaux
+docs_intern/ACQUISITION_REELLE.md,md,"Preuve historique, résultats non réactualisés",Lecture UTF-8 et liens locaux
+docs_intern/ADAPTATEURS_EXTERNES.md,md,Référence courante revue ou corrigée,Lecture UTF-8 et liens locaux
+docs_intern/ARCHIVES.md,md,Référence courante revue ou corrigée,Lecture UTF-8 et liens locaux
+docs_intern/AUTOMATIONS_VALIDATION_2026-09-18.md,md,Document spécialisé : portée propre,Lecture UTF-8 et liens locaux
+docs_intern/AUTOMATISATIONS.md,md,Référence courante revue ou corrigée,Lecture UTF-8 et liens locaux
+docs_intern/CATALOGUE_FONCTIONNALITES_V1_ACTUALISE.docx,docx,Référence courante revue ou corrigée,Archive Office et XML lisibles
+docs_intern/CHIFFRAGE_V1.md,md,Document spécialisé : portée propre,Lecture UTF-8 et liens locaux
+docs/CLINICAL_SKILLS_2026-09-18.md,md,Document spécialisé : portée propre,Lecture UTF-8 et liens locaux
+docs_intern/CONSERVATION_UTILISATEURS_REELS.md,md,Référence courante revue ou corrigée,Lecture UTF-8 et liens locaux
+docs_intern/CONTENU_VAULT_V1.docx,docx,Référence courante revue ou corrigée,Archive Office et XML lisibles
+docs_intern/DECISIONS_V1.md,md,Document spécialisé : portée propre,Lecture UTF-8 et liens locaux
+docs_intern/DEPLOIEMENT_INVENTAIRE.md,md,Document spécialisé : portée propre,Lecture UTF-8 et liens locaux
+docs_intern/DEPLOIEMENT_PRODUCTION.md,md,Référence courante revue ou corrigée,Lecture UTF-8 et liens locaux
+docs_intern/EMAILS_LIVRAISON.md,md,Document spécialisé : portée propre,Lecture UTF-8 et liens locaux
+docs_intern/EMAILS_MISSIONS.md,md,Document spécialisé : portée propre,Lecture UTF-8 et liens locaux
+docs_intern/ENTERPRISE_FOLLOW_UP.md,md,Document spécialisé : portée propre,Lecture UTF-8 et liens locaux
+docs/ENTERPRISE_MISSION_SEARCH_2026-09-18.md,md,Document spécialisé : portée propre,Lecture UTF-8 et liens locaux
+docs_intern/EXPLICATION_MATCHING_DONNEES_MANQUANTES.docx,docx,Référence courante revue ou corrigée,Archive Office et XML lisibles
+docs_intern/EXPLICATION_MATCHING_DONNEES_MANQUANTES.md,md,Document spécialisé : portée propre,Lecture UTF-8 et liens locaux
+docs_intern/FLUX_V1.md,md,Document spécialisé : portée propre,Lecture UTF-8 et liens locaux
+docs_intern/FRONTEND_AUTH_GOOGLE.md,md,Document spécialisé : portée propre,Lecture UTF-8 et liens locaux
+docs_intern/GARDE_FOU_DOUBLONS_OFFRES.md,md,Document spécialisé : portée propre,Lecture UTF-8 et liens locaux
+docs_intern/GUIDE_UTILISATEUR.md,md,Référence courante revue ou corrigée,Lecture UTF-8 et liens locaux
+docs_intern/INVENTAIRE_DOCUMENTAIRE.md,md,Document spécialisé : portée propre,Lecture UTF-8 et liens locaux
+docs_intern/JOBSPIPE_V1.md,md,Référence courante revue ou corrigée,Lecture UTF-8 et liens locaux
+docs_intern/NOTIFICATIONS_DISCORD.md,md,Référence courante revue ou corrigée,Lecture UTF-8 et liens locaux
+docs_intern/OFFRES_EXTERNES_V1.md,md,Document spécialisé : portée propre,Lecture UTF-8 et liens locaux
+docs_intern/PLANNING_4_PERSONNES_11_JOURS.md,md,Document spécialisé : portée propre,Lecture UTF-8 et liens locaux
+docs_intern/PRACTICE_SERVICES_2026-09-18.md,md,Document spécialisé : portée propre,Lecture UTF-8 et liens locaux
+docs_intern/README.md,md,Document spécialisé : portée propre,Lecture UTF-8 et liens locaux
+docs_intern/RECETTE_BACKEND_V1.md,md,"Preuve historique, résultats non réactualisés",Lecture UTF-8 et liens locaux
+docs_intern/RECTIFICATIF_CATALOGUE_V1.docx,docx,Référence courante revue ou corrigée,Archive Office et XML lisibles
+docs_intern/RECTIFICATIF_CATALOGUE_V1.md,md,Document spécialisé : portée propre,Lecture UTF-8 et liens locaux
+docs_intern/REQUIREMENTS_V1.md,md,Référence courante revue ou corrigée,Lecture UTF-8 et liens locaux
+docs_intern/SCHEMA_ARCHITECTURE_V1.md,md,Référence courante revue ou corrigée,Lecture UTF-8 et liens locaux
+docs_intern/VAULT_V1.md,md,Référence courante revue ou corrigée,Lecture UTF-8 et liens locaux
+docs_intern/architecture-v1.mmd,mmd,Document spécialisé : portée propre,Fichier présent
+docs_intern/diagrams/architecture-infimatch-v1.pdf,pdf,Document spécialisé : portée propre,Fichier présent
+docs/n8n/legacy-demo-suppression.md,md,Document spécialisé : portée propre,Lecture UTF-8 et liens locaux
+docs_intern/presentation/DEMONSTRATION.md,md,"Support technique actualisé, répétition humaine à faire",Lecture UTF-8 et liens locaux
+docs_intern/presentation/DOSSIER_SOUTENANCE.md,md,"Support technique actualisé, répétition humaine à faire",Lecture UTF-8 et liens locaux
+docs_intern/presentation/InfiMatch_Soutenance.pdf,pdf,"Support technique actualisé, répétition humaine à faire",Fichier présent
+docs_intern/presentation/InfiMatch_Soutenance.pptx,pptx,"Support technique actualisé, répétition humaine à faire",Archive Office et XML lisibles
+docs_intern/proofs/parser-pilot-v2/COMPARAISON.md,md,"Preuve historique, résultats non réactualisés",Lecture UTF-8 et liens locaux
+docs_intern/proofs/parser-pilot-v3/COMPARAISON.md,md,"Preuve historique, résultats non réactualisés",Lecture UTF-8 et liens locaux
+docs_intern/proofs/parser-pilot/BILAN_PARSEUR.md,md,"Preuve historique, résultats non réactualisés",Lecture UTF-8 et liens locaux
+docs_intern/quality/ADMIN_NOTIFICATIONS_DISCORD.md,md,Document spécialisé : portée propre,Lecture UTF-8 et liens locaux
+docs_intern/quality/ADMIN_PSC_EXPLOITATION.md,md,Référence courante revue ou corrigée,Lecture UTF-8 et liens locaux
+docs_intern/quality/AIDE_SUPPORT_GUIDES_2026-09-19.md,md,"Preuve historique, résultats non réactualisés",Lecture UTF-8 et liens locaux
+docs_intern/quality/AUDIT_FRANCE_TRAVAIL_2026-09-17.md,md,"Preuve historique, résultats non réactualisés",Lecture UTF-8 et liens locaux
+docs_intern/quality/CAMPAGNE_FINALE_2026-09-19.md,md,"Preuve historique, résultats non réactualisés",Lecture UTF-8 et liens locaux
+docs_intern/quality/CATEGORISATION_ANNONCES_2026-09-18.md,md,"Preuve historique, résultats non réactualisés",Lecture UTF-8 et liens locaux
+docs_intern/quality/COLLECTE_NATIONALE_PRODUCTION_2026-09-17.md,md,"Preuve historique, résultats non réactualisés",Lecture UTF-8 et liens locaux
+docs_intern/quality/CONCURRENCE_ACTIONS.md,md,Document spécialisé : portée propre,Lecture UTF-8 et liens locaux
+docs_intern/quality/CONFIGURATION.md,md,Référence courante revue ou corrigée,Lecture UTF-8 et liens locaux
+docs_intern/quality/CONVERSIONS_ENTREPRISE_2026-09-19.md,md,"Preuve historique, résultats non réactualisés",Lecture UTF-8 et liens locaux
+docs_intern/quality/CORRECTIONS_SECURITE_PWA_2026-09-18.md,md,"Preuve historique, résultats non réactualisés",Lecture UTF-8 et liens locaux
+docs_intern/quality/DIAGNOSTIC_MATCHING_2026-09-20.md,md,"Preuve historique, résultats non réactualisés",Lecture UTF-8 et liens locaux
+docs_intern/quality/DISCORD_VERIFICATION_2026-09-17.md,md,"Preuve historique, résultats non réactualisés",Lecture UTF-8 et liens locaux
+docs_intern/quality/EXPLOITATION_REPRISE.md,md,Référence courante revue ou corrigée,Lecture UTF-8 et liens locaux
+docs_intern/quality/IMPORTS_EXTERNES_PAGINATION_2026-09-17.md,md,"Preuve historique, résultats non réactualisés",Lecture UTF-8 et liens locaux
+docs_intern/quality/IMPORTS_SOBRIETE_2026-09-19.md,md,"Preuve historique, résultats non réactualisés",Lecture UTF-8 et liens locaux
+docs_intern/quality/IMPORT_CV_EXPERIENCES_2026-09-17.md,md,"Preuve historique, résultats non réactualisés",Lecture UTF-8 et liens locaux
+docs_intern/quality/INFORMATIONS_PERSONNELLES_VERROUILLEES_2026-09-17.md,md,"Preuve historique, résultats non réactualisés",Lecture UTF-8 et liens locaux
+docs_intern/quality/INVENTAIRE_MISSIONS_FICTIVES_2026-09-17.md,md,"Preuve historique, résultats non réactualisés",Lecture UTF-8 et liens locaux
+docs_intern/quality/Inventaire_49_missions_fictives_2026-09-17.pdf,pdf,"Preuve historique, résultats non réactualisés",Fichier présent
+docs_intern/quality/LECTURE_CV_ENRICHIE_2026-09-19.md,md,"Preuve historique, résultats non réactualisés",Lecture UTF-8 et liens locaux
+docs_intern/quality/LIMITEURS_PARTAGES_2026-09-19.md,md,"Preuve historique, résultats non réactualisés",Lecture UTF-8 et liens locaux
+docs_intern/quality/LIVRAISON_ADMIN_MIXTE_2026-09-17.md,md,"Preuve historique, résultats non réactualisés",Lecture UTF-8 et liens locaux
+docs_intern/quality/LIVRAISON_DEMANDES_PARTENAIRES_RIB_2026-09-17.md,md,"Preuve historique, résultats non réactualisés",Lecture UTF-8 et liens locaux
+docs_intern/quality/MATCHING_ACCESSIBILITE_SEO_2026-09-19.md,md,"Preuve historique, résultats non réactualisés",Lecture UTF-8 et liens locaux
+docs_intern/quality/MATRICE_42_TESTS_2026-09-19.md,md,"Preuve historique, résultats non réactualisés",Lecture UTF-8 et liens locaux
+docs_intern/quality/MISSIONS_DEMONSTRATION_2026-09-18.md,md,"Preuve historique, résultats non réactualisés",Lecture UTF-8 et liens locaux
+docs_intern/quality/MISSION_GUARDRAILS_2026-09-19.md,md,"Preuve historique, résultats non réactualisés",Lecture UTF-8 et liens locaux
+docs_intern/quality/N8N_CONTINUITE_2026-09-19.md,md,"Preuve historique, résultats non réactualisés",Lecture UTF-8 et liens locaux
+docs_intern/quality/OPTIMISATION_MATCHING_2026-09-20.md,md,"Preuve historique, résultats non réactualisés",Lecture UTF-8 et liens locaux
+docs_intern/quality/PDF_MISSIONS_UNE_PAGE_2026-09-19.md,md,"Preuve historique, résultats non réactualisés",Lecture UTF-8 et liens locaux
+docs_intern/quality/PREPARATION_CONTRAT_RETRAIT_CATALOGUE_2026-09-19.md,md,"Preuve historique, résultats non réactualisés",Lecture UTF-8 et liens locaux
+docs_intern/quality/PROFIL_CANDIDAT_DESIGN_SEO_2026-09-18.md,md,"Preuve historique, résultats non réactualisés",Lecture UTF-8 et liens locaux
+docs_intern/quality/RECETTE_CONTRAT_PAGES_ADMIN_2026-09-19.md,md,"Preuve historique, résultats non réactualisés",Lecture UTF-8 et liens locaux
+docs_intern/quality/RECETTE_PARCOURS_CLIENT_2026-09-19.md,md,"Preuve historique, résultats non réactualisés",Lecture UTF-8 et liens locaux
+docs_intern/quality/RECETTE_PRODUCTION_2026-09-17.md,md,"Preuve historique, résultats non réactualisés",Lecture UTF-8 et liens locaux
+docs_intern/quality/RECHERCHE_LIEU_INDEPENDANT_2026-09-17.md,md,"Preuve historique, résultats non réactualisés",Lecture UTF-8 et liens locaux
+docs_intern/quality/RECOMMANDATIONS_DIAGNOSTIC.md,md,Document spécialisé : portée propre,Lecture UTF-8 et liens locaux
+docs_intern/quality/RECUPERATION_AUTONOME_2026-09-19.md,md,"Preuve historique, résultats non réactualisés",Lecture UTF-8 et liens locaux
+docs_intern/quality/RGAA_CORRECTIONS_2026-09-20.md,md,"Preuve historique, résultats non réactualisés",Lecture UTF-8 et liens locaux
+docs_intern/quality/RIB_ANALYSE_AUTOMATIQUE_2026-09-17.md,md,"Preuve historique, résultats non réactualisés",Lecture UTF-8 et liens locaux
+docs_intern/quality/RIB_CAMERA_ANALYSE_2026-09-17.md,md,"Preuve historique, résultats non réactualisés",Lecture UTF-8 et liens locaux
+docs_intern/quality/SAUVEGARDES_OPERATIONNELLES_2026-09-19.md,md,"Preuve historique, résultats non réactualisés",Lecture UTF-8 et liens locaux
+docs_intern/quality/SECURITE_CORRECTIONS_2026-09-20.md,md,"Preuve historique, résultats non réactualisés",Lecture UTF-8 et liens locaux
+docs_intern/quality/TESTS_NAVIGATEUR_ERREURS_2026-09-20.md,md,"Preuve historique, résultats non réactualisés",Lecture UTF-8 et liens locaux
+docs_intern/quality/TICKET_DATES_PREUVES_2026-09-19.md,md,"Preuve historique, résultats non réactualisés",Lecture UTF-8 et liens locaux
+docs_intern/quality/ZONE_RECHERCHE_ALERTES_2026-09-20.md,md,"Preuve historique, résultats non réactualisés",Lecture UTF-8 et liens locaux
+docs_intern/quality/frontend-quality-2026-09-17.md,md,"Preuve historique, résultats non réactualisés",Lecture UTF-8 et liens locaux
+docs_intern/references/D-WEB-901-project.pdf,pdf,"Source de cadrage originale, conservée",Fichier présent
+docs_intern/references/Interimatch_Sante_Catalogue_Complet_Fonctionnalites.docx,docx,"Source de cadrage originale, conservée",Archive Office et XML lisibles
+docs_intern/references/README.md,md,"Source de cadrage originale, conservée",Lecture UTF-8 et liens locaux
+docs_intern/rendu/README.md,md,Document spécialisé : portée propre,Lecture UTF-8 et liens locaux
+docs/supabase-migration.md,md,Document spécialisé : portée propre,Lecture UTF-8 et liens locaux
+frontend/DESIGN.md,md,Document spécialisé : portée propre,Lecture UTF-8 et liens locaux
+frontend/INTERFACES.md,md,Référence courante revue ou corrigée,Lecture UTF-8 et liens locaux
+frontend/README.md,md,Document spécialisé : portée propre,Lecture UTF-8 et liens locaux
+frontend/docs/AGENDA_CRENEAUX_2026-09-16.md,md,Note historique de conception ou recette,Lecture UTF-8 et liens locaux
+frontend/docs/BESOINS_STRUCTURES_2026-09-16.md,md,Note historique de conception ou recette,Lecture UTF-8 et liens locaux
+frontend/docs/COOKIES_FINESS_2026-09-16.md,md,Note historique de conception ou recette,Lecture UTF-8 et liens locaux
+frontend/docs/INTEGRATION_BACKEND.md,md,Référence courante revue ou corrigée,Lecture UTF-8 et liens locaux
+frontend/docs/PHOTOS_MAQUETTES.md,md,Note historique de conception ou recette,Lecture UTF-8 et liens locaux
+frontend/public/aide/discord/retrouver-identifiant-discord.pdf,pdf,Document spécialisé : portée propre,Fichier présent
+frontend/public/guides/tutorials/annulation-emails.vtt,vtt,Sous-titres présents ; vidéo non intégralement revue,Entête et fichier présents
+frontend/public/guides/tutorials/candidature-agenda.vtt,vtt,Sous-titres présents ; vidéo non intégralement revue,Entête et fichier présents
+frontend/public/guides/tutorials/confirmation-pdf.vtt,vtt,Sous-titres présents ; vidéo non intégralement revue,Entête et fichier présents
+frontend/public/guides/tutorials/inscription-diplomes.vtt,vtt,Sous-titres présents ; vidéo non intégralement revue,Entête et fichier présents
+frontend/public/guides/tutorials/profil-cv.vtt,vtt,Sous-titres présents ; vidéo non intégralement revue,Entête et fichier présents
+frontend/public/guides/tutorials/recherche-matching.vtt,vtt,Sous-titres présents ; vidéo non intégralement revue,Entête et fichier présents
+scripts/SAFE_DEMO_IMPORT.md,md,Document spécialisé : portée propre,Lecture UTF-8 et liens locaux

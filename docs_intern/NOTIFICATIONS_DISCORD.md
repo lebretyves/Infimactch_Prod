@@ -1,31 +1,36 @@
-# Notifications InfiMatch
+# Notifications internes et Discord
 
-Les notifications internes sont disponibles dans `/notifications` pour les int?rimaires, agences et ?tablissements. Discord est facultatif et d?sactiv? par d?faut. L?association personnelle demande un code re?u par message priv?. Les salons d?organisation doivent ?tre priv?s et configur?s par un membre poss?dant les droits Discord requis.
+État documentaire au 21 septembre 2026, vérifié contre le code. Une configuration présente ne prouve pas une réception réelle.
 
-## ?v?nements
+## Parcours utilisateur
 
-- Mission compatible, affectation confirm?e, annulation, mission non pourvue.
-- Besoin cr?? ou modifi? ; mission publi?e, modifi?e, pourvue par un autre candidat ou termin?e.
-- Candidature envoy?e, pr?s?lectionn?e, refus?e ou retir?e.
-- Bienvenue, r?sultat RPPS, association Discord.
-- Demande de cl?ture re?ue, annul?e ou approuv?e.
+Les notifications internes sont accessibles dans `/notifications`. Après création du compte candidat, établissement ou agence, la configuration Discord est proposée avec une option pour passer cette étape. Discord reste facultatif ; l'inscription ne coche pas automatiquement les préférences de notification.
 
-Les messages d?pendent du r?le et des destinataires concern?s par l?action. Les ?v?nements de compte restent personnels. Le message de bienvenue est interne puisque Discord n?est pas encore associ? ? l?inscription. Aucun email de bienvenue ou de r?initialisation n?est configur?. Apr?s effacement du compte, aucun message Discord suppl?mentaire n?est envoy?.
+L'association personnelle vérifie un identifiant Discord par un code reçu en message privé. L'utilisateur choisit ensuite ses événements. Les salons d'organisation exigent les droits appropriés et une destination autorisée ; les préférences peuvent être modifiées après l'inscription. Le message de bienvenue initial reste interne. Les emails transactionnels et de récupération de mot de passe utilisent un mécanisme séparé : voir [les emails](EMAILS_LIVRAISON.md).
 
-## Ex?cution
+## Livraison et reprise
 
-Appliquer les migrations puis lancer API et worker avec les scripts Vault existants. Le worker traite la file persistante, contr?le les pr?f?rences et la version de la destination, puis appelle le relais n8n. Les r?sultats incertains ne sont pas renvoy?s automatiquement afin de limiter les doublons.
+```mermaid
+flowchart LR
+    event["Événement métier"] --> internal["Notification interne persistée"]
+    internal --> settings["Préférences et destination Discord"]
+    settings --> queue["notification_delivery : file persistante"]
+    queue --> checks["Recontrôler compte, droits, version et actualité"]
+    checks --> client["Client Discord côté serveur"]
+    client --> relay["Relais n8n authentifié si configuré"]
+    relay --> discord["Discord"]
+    client -->|"Alternative : token bot serveur"| discord
+    discord --> receipt["Identifiant du message ou état d'échec"]
+```
 
-`workflows/discord-relay.template.json` est un mod?le sans identifiants ni secrets. Configurer une authentification d?en-t?te et le credential Discord dans n8n avant activation. `scripts/vault/configure-discord-relay.mjs` peut provisionner le relais du projet depuis une session n8n authentifi?e dans le navigateur d?di?, accessible sur le port local 9223.
+Le client choisit le bot direct si `DISCORD_BOT_TOKEN` est fourni ; sinon il utilise le relais HTTPS `DISCORD_RELAY_URL` avec `DISCORD_RELAY_TOKEN`. Le modèle [discord-relay.template.json](../workflows/discord-relay.template.json) ne contient pas les credentials réels.
 
-Secrets backend dans Vault : `DISCORD_RELAY_TOKEN` et les secrets existants de bases, sessions et services. Configuration : `DISCORD_RELAY_URL`, `NOTIFICATION_APP_ORIGIN`, `N8N_WEBHOOK_BASE`. Le credential du bot est conserv? dans n8n ; `DISCORD_BOT_TOKEN` reste une alternative serveur facultative. Ne jamais exposer ces valeurs dans une variable `VITE_*`.
+Le traitement recontrôle les préférences et la validité de l'événement au moment de l'envoi. Une destination modifiée ou un événement périmé peut annuler une livraison. Les états `PENDING`, `SENDING`, `SENT`, `FAILED`, `UNCERTAIN` et `CANCELLED` distinguent attente, envoi, reçu et échec. Un résultat incertain ne doit pas être renvoyé aveuglément. La reprise après limitation de débit est bornée.
 
-## Validation et d?ploiement
+En production, les tentatives immédiates et la reprise cloud à quatre heures traitent une file bornée ; elles ne garantissent pas une livraison instantanée. En local, le worker peut traiter les files. Les règles métier restent côté API. Les services cloud courants ne nécessitent pas que le PC hébergeant Vault soit allumé.
 
-- Tests isol?s PostgreSQL, MongoDB, n8n, unitaires, int?gration et r?gressions s?curit? : PASS.
-- Compilation TypeScript et Vite : PASS.
-- Envoi technique avec donn?es fictives backend ? n8n Cloud ? salon Discord priv? : r?ussi.
-- Le relais n8n Cloud est actif ; les services et bases de l?application restent locaux.
-- Frontend Vercel : variable publique `VITE_API_URL=/api/v1` configur?e. Le backend public renvoie encore 500 ; les bases et Vault ne sont pas h?berg?s. La configuration du routage API et le d?ploiement public restent ? terminer avec cette infrastructure.
+## Secrets et preuves
 
-Une sauvegarde Git contient le code, les migrations et le mod?le de workflow ; elle ne remplace pas une sauvegarde des bases, des documents, de Vault ou des credentials n8n.
+Les secrets restent dans Vault, les variables serveur et les credentials n8n autorisés. Aucun token dans `VITE_*`, Git ou une capture. Ne pas publier les identifiants personnels de destinataires comme exemples.
+
+Pour une preuve de soutenance, associer un événement fictif à son exécution et à un message effectivement reçu. Les tests isolés ne prouvent pas une réception actuelle. [Automatisations](AUTOMATISATIONS.md), [configuration](quality/CONFIGURATION.md), [client Discord](../backend/src/notifications/discord-client.ts) et [file de livraison](../backend/src/notifications/notifications.module.ts).

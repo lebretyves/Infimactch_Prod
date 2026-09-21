@@ -1,6 +1,6 @@
 # Configuration du site et de l'administration
 
-Inventaire au 17 septembre 2026, issu du code et des scripts de configuration. Les noms ci-dessous ne constituent pas une preuve de présence ou de validité d'un secret. Aucune valeur réelle ne doit être copiée dans ce document. Les exemples restent des placeholders.
+Inventaire documentaire revu le 21 septembre 2026, issu du code et des scripts de configuration. Les noms ci-dessous ne constituent pas une preuve de présence ou de validité d'un secret. Aucune valeur réelle ne doit être copiée dans ce document. Les exemples restent des placeholders.
 
 | Variables | Composant / environnement | Nature | Emplacement | Vérification |
 |---|---|---|---|---|
@@ -25,6 +25,8 @@ Inventaire au 17 septembre 2026, issu du code et des scripts de configuration. L
 | `RPPS_ENABLED`, `RPPS_API_KEY` | Annuaire Santé | Activation / secret | Vault / serveur | Succès, vide, panne, quota, noms discordants |
 | `FT_CLIENT_ID`, `FT_CLIENT_SECRET` | Import France Travail | Identifiant serveur / secret | Vault / Vercel | Import borné, dédoublonnage, état de source |
 | `JOBSPIPE_API_KEY` | Import JobsPipe | Secret | Vault / Vercel | Import borné et tests de normalisation |
+| `SMTP2GO_WEBHOOK_SECRET` | États email | Secret dédié | Serveur et webhook fournisseur | Authentification et dédoublonnage des reçus |
+| `SMTP2GO_API_KEY`, `SMTP2GO_FROM` | Emails transactionnels | Secret / expéditeur | Variables serveur autorisées | Envoi et réception réels à distinguer |
 | `N8N_WEBHOOK_BASE` | API vers n8n | URL interne, potentiellement sensible | Vault / Vercel | Webhooks actifs et appels de recette |
 | `N8N_EDITOR_BASE_URL` | Exploitation | URL publique de console | Configuration locale / n8n | Lien de console ; authentification indépendante |
 | `N8N_ENCRYPTION_KEY` | n8n local | Secret | Vault infrastructure ; n8n Cloud géré par fournisseur | Récupération locale ; non requis dans Vercel |
@@ -34,7 +36,7 @@ Inventaire au 17 septembre 2026, issu du code et des scripts de configuration. L
 | `DISCORD_CLIENT_ID`, `DISCORD_TEST_GUILD_ID`, `DISCORD_TEST_CHANNEL_ID`, `DISCORD_TEST_USER_ID` | Configuration et recette Discord | Identifiants internes | Vault / environnement de recette | Destination fictive explicitement choisie |
 | `REMINDER_DELAY_MINUTES` | Worker | Configuration métier | Vault / serveur | Tests de relance et obsolescence |
 | `MATCHING_WEIGHTS_JSON` | Matching | Configuration métier | Vault / serveur | Éligibilité bloquante indépendante du score |
-| `MATCHING_RETENTION_DAYS`, `BUSINESS_HISTORY_RETENTION_DAYS` | Conservation | Politique interne | Vault / serveur | Maintenance destructive en attente de décision ; pas de durée inventée |
+| `MATCHING_RETENTION_DAYS`, `BUSINESS_HISTORY_RETENTION_DAYS` | Conservation | Politique interne | Vault / serveur | Nettoyage technique distinct de la conservation des historiques métier, dont la politique reste à valider |
 | `ERASURE_LEDGER_DIRECTORY` | Effacement local | Chemin interne | Configuration locale | Registre cloud dans MongoDB ; procédures de restauration |
 | `POSTGRES_PASSWORD`, `MONGO_PASSWORD` | Docker local | Secrets | Vault infrastructure, injectés dans le processus | Démarrage local ; non utilisés par Supabase/Atlas |
 | `VITE_API_URL` | Frontend | Public uniquement | Vercel frontend / exemple local | `/api/v1`, proxy vers API |
@@ -48,7 +50,7 @@ Les variables d'outillage (`INFIMATCH_VERCEL_CLI`, paramètres de scripts de tes
 1. Modifier les secrets via Vault, avec le rôle opérateur existant, sans token root quotidien.
 2. Valider la liste avec `scripts/vault/sync-production-vercel.mjs`, appliquer seulement les variables serveur autorisées, puis redéployer.
 3. Compiler le backend, passer `npm run test:isolated`, appliquer les migrations additives via `scripts/vault/migrate-production.mjs`.
-4. Déployer le frontend et l'API depuis `Main`. Pour l'admin, exécuter `npm run build:admin`, lier `dist-admin` au projet `infimatch-admin`, puis déployer cet artefact.
+4. Déployer le frontend et l'API depuis `Main`. Pour l'admin, exécuter `npm run build:admin --prefix frontend`, lier `dist-admin` au projet `infimatch-admin`, puis déployer cet artefact.
 5. Exécuter les scripts `verify-production*.mjs`. Ils utilisent des comptes fictifs et ne doivent pas afficher de données personnelles ou de secrets.
 
 Le retour arrière applicatif consiste à promouvoir les derniers déploiements Vercel validés. Les migrations de ce lot ajoutent des tables et colonnes ; conserver ces ajouts lors d'un retour arrière, ne pas supprimer les données. Une restauration de base est une opération distincte nécessitant sauvegarde vérifiée et périmètre explicite.

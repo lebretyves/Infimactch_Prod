@@ -1,6 +1,6 @@
 # Conservation, cloture et restauration ? preparation pour utilisateurs reels
 
-Statut : mecanismes techniques prepares ; politique a faire valider par le responsable du traitement avant exploitation reelle. Aucune purge automatique activee pendant ce lot. Ce document ne certifie pas la conformite du service.
+Statut : mecanismes techniques prepares ; politique a faire valider par le responsable du traitement avant exploitation reelle. Cette mention concerne le lot historique : la maintenance technique dispose depuis de son propre parcours cloud ; la suppression des historiques métier reste exclue de ce traitement. Ce document ne certifie pas la conformite du service.
 
 
 ## Décisions confirmées le 20 septembre 2026
@@ -84,7 +84,7 @@ Le test --verify-erasure-replay choisit un compte dans la base restauree et ajou
 
 ## Avant ouverture reelle
 
-Nommer le responsable et l operateur ; valider le tableau et les textes utilisateur ; ajouter un moyen visible de demander la cloture ; definir suivi et reponse des demandes ; gerer les exceptions/contentieux ; etablir les droits sur archives et sauvegardes ; configurer une copie hors machine ; tester le parcours complet avec les dernieres migrations. Les envois Teams doivent rester minimaux et soumis aux regles de conservation du tenant Microsoft.
+Nommer le responsable et l operateur ; valider le tableau et les textes utilisateur ; recetter le moyen visible de demander la cloture dans Mon compte ; definir suivi et reponse des demandes ; gerer les exceptions/contentieux ; etablir les droits sur archives et sauvegardes ; configurer une copie hors machine ; tester le parcours complet avec les dernieres migrations. Les copies envoyées dans des services externes nécessitent un traitement distinct de la suppression des données InfiMatch.
 
 ## Sources consultees
 

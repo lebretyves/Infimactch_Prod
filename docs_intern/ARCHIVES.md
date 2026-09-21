@@ -9,3 +9,7 @@ Les liens historiques encore utiles ciblent une version Git figée antérieure a
 ## Complément du 21 septembre : architecture et anciens guides
 
 Les anciennes vues Next.js / backend local, le générateur de cible et les guides remplacés sont sauvegardés hors dépôt dans `E:/Interimatch/archive/documentation-2026-09-21/architecture-before-update/` et `obsolete-guides/`. Un manifeste relie les guides retirés à leur remplacement. Les résultats historiques utiles restent datés ; ils ne servent pas de consignes courantes.
+
+## Seconde vérification documentaire
+
+Les anciens plans V2 et les notes de maquettes remplacées ont été retirés des branches actives et sauvegardés dans `E:/Interimatch/archive/documentation-2026-09-21/second-documentation-review/`. Les versions précédentes des guides corrigés et des supports binaires y sont également conservées.
