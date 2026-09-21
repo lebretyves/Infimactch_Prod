@@ -137,6 +137,7 @@ export const enterpriseMissionSearch = (offset: number, signal?: AbortSignal, es
   return api<ListingPage>("/enterprise/missions?" + params, { signal });
 };
 export type ManagedEstablishment = {
+  agencies?: {id:string;name:string}[];
   id: string; name: string; address: string; finess: string | null;
   counts: Record<"DRAFT" | "OPEN" | "FILLED" | "COMPLETED" | "CANCELLED", number>;
   total: number;

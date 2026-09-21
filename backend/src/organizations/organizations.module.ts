@@ -1,3 +1,4 @@
+import {AgencyEstablishmentsController, AgencyEstablishmentsService} from './agency-establishments';
 import { establishmentPage, EstablishmentsPageDto } from "./establishment-directory";
 import { NeedDto, normalizeNeedDetails } from "./need.dto";
 import { commandReceipt } from "../common/idempotency";
@@ -216,5 +217,5 @@ class OrganizationsController {
     });
   }
 }
-@Module({ controllers: [OrganizationsController] })
+@Module({ controllers: [OrganizationsController, AgencyEstablishmentsController], providers: [AgencyEstablishmentsService] })
 export class OrganizationsModule {}

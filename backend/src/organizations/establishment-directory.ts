@@ -66,7 +66,7 @@ export async function enterpriseMissionSearch(db: SqlClient, actor: string, page
 }
 export async function establishmentPage(db: SqlClient, actor: string, page: EstablishmentsPageDto) {
   const [result] = await db.query(`WITH accessible AS (
-    SELECT o.id,o.name,o.address,o.finess FROM organization o WHERE o.kind='ESTABLISHMENT'
+    SELECT o.id,o.name,o.address,o.finess,COALESCE((SELECT jsonb_agg(jsonb_build_object('id',a.id,'name',a.name) ORDER BY a.name,a.id) FROM agency_link l JOIN organization a ON a.id=l.agency_id JOIN membership z ON z.organization_id=a.id AND z.user_id=$1 AND z.active WHERE l.establishment_id=o.id),'[]'::jsonb) AS agencies FROM organization o WHERE o.kind='ESTABLISHMENT'
     AND (EXISTS(SELECT 1 FROM membership member WHERE member.user_id=$1 AND member.active AND member.organization_id=o.id)
       OR EXISTS(SELECT 1 FROM agency_link link JOIN membership member ON member.organization_id=link.agency_id WHERE link.establishment_id=o.id AND member.user_id=$1 AND member.active))
     AND ($2='' OR strpos(lower(concat_ws(' ',o.name,o.address,o.finess)),lower($2))>0)
