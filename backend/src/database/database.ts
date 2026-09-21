@@ -1,3 +1,4 @@
+import {MissionTimeSlots1790006600000} from './mission-time-slots';
 import {AdminPassword1790006500000} from './admin-password';
 import {MissionLocationOptional1790006400000} from "./mission-location-optional";
 import {AdminMfaRecovery1789905600000} from './admin-mfa-recovery';
@@ -81,6 +82,7 @@ export class Database implements OnModuleDestroy {
       AdminMfaRecovery1789905600000,
       MissionLocationOptional1790006400000,
       AdminPassword1790006500000,
+      MissionTimeSlots1790006600000,
     ],
     logging: false,
     extra: { max: 12 },

@@ -139,7 +139,7 @@ function Form({
           timezone: need?.details?.timezone || "Europe/Paris",
           start: need?.details ? localDate(need.details.start, need.details.timezone) : "",
           end: need?.details ? inclusiveEndDate(need.details.end, need.details.timezone) : "",
-          shift: need?.details?.shift || "UNKNOWN",
+          shift: need?.details?.shift || "",
           address: initialAddress,
           latitude: initialPosition?.latitude ?? null,
           longitude: initialPosition?.longitude ?? null,
@@ -165,6 +165,7 @@ function Form({
     setBusy(true);
     setError("");
     try {
+      if (!v.shift) throw new Error("Choisissez un créneau : matin, après-midi ou nuit.");
       const years = Number(experienceYears);
       if (!experienceYears.trim() || !Number.isFinite(years) || years < 0 || years > 50)
         throw new Error("Renseignez une expérience entre 0 et 50 ans.");
@@ -438,12 +439,16 @@ function Form({
           />
         </div>
         <SelectField
-          label="Horaires de la mission"
+          label="Créneau de la mission"
+          required
           value={v.shift}
           onChange={(e) => set({ shift: e.target.value })}
         >
-          <option value="UNKNOWN">Non connu</option>
-          <option value="DAY">Jour</option>
+          <option value="" disabled>Choisissez un créneau</option>
+          <option value="MORNING">Matin</option>
+          <option value="AFTERNOON">Après-midi</option>
+          {v.shift === "UNKNOWN" && <option value="UNKNOWN">Non connu (déjà enregistré)</option>}
+          {v.shift === "DAY" && <option value="DAY">Jour (déjà enregistré)</option>}
           <option value="NIGHT">Nuit</option>
           {v.shift === "MIXED" && <option value="MIXED">Alternance jour et nuit (déjà enregistrée)</option>}
         </SelectField>

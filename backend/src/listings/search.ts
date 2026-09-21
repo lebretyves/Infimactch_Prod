@@ -129,12 +129,12 @@ export class SearchDto {
     type: () => String,
     required: false,
     isArray: true,
-    enum: ["DAY", "NIGHT", "MIXED"],
+    enum: ["MORNING", "AFTERNOON", "DAY", "NIGHT", "MIXED"],
   })
   @IsOptional()
   @IsArray()
   @ArrayMaxSize(3)
-  @IsIn(["DAY", "NIGHT", "MIXED"], { each: true })
+  @IsIn(["MORNING", "AFTERNOON", "DAY", "NIGHT", "MIXED"], { each: true })
   shifts?: string[];
   @ApiProperty({ type: () => String, required: false })
   @IsOptional()
@@ -220,7 +220,7 @@ export function searchSql(b: SearchDto) {
   if (!branches.length)
     throw new BadRequestException("At least one qualification required");
   const filters = ["m.status='OPEN'", "(" + branches.join(" OR ") + ")"];
-  if (b.shifts?.length) filters.push("m.shift=ANY(" + bind(b.shifts) + ")");
+  if (b.shifts?.length) filters.push("m.shift=ANY(" + bind([...new Set(b.shifts.flatMap(shift => shift === "DAY" ? ["DAY", "MORNING", "AFTERNOON"] : [shift]))]) + ")");
   if (b.establishmentId)
     filters.push("m.establishment_id=" + bind(b.establishmentId));
   if (b.start || b.end) {

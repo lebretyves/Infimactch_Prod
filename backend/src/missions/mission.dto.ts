@@ -97,9 +97,9 @@ export class MissionDto {
   @ApiProperty({
     type: () => String,
     required: true,
-    enum: ["DAY", "NIGHT", "MIXED", "UNKNOWN"],
+    enum: ["MORNING", "AFTERNOON", "DAY", "NIGHT", "MIXED", "UNKNOWN"],
   })
-  @IsIn(["DAY", "NIGHT", "MIXED", "UNKNOWN"])
+  @IsIn(["MORNING", "AFTERNOON", "DAY", "NIGHT", "MIXED", "UNKNOWN"])
   shift!: string;
   @ApiProperty({ type: () => String, required: true })
   @IsString()

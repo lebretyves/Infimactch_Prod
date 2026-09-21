@@ -154,3 +154,13 @@ test("empty and missing service preferences preserve existing matching", () => {
   for (const practiceServices of [undefined, {}, { IDE: [] }, { IADE: ["ANESTHESIE"] }])
     expect(match({ ...p, practiceServices }, m)).toEqual(match(p, m));
 });
+
+for (const shift of ["MORNING", "AFTERNOON"]) {
+  test(shift + " is compatible with existing day preferences but not night-only profiles", () => {
+    expect(match({ ...p, acceptedShifts: ["DAY"], preferredShifts: ["DAY"] }, { ...m, shift }).eligible).toBe(true);
+    expect(match(p, { ...m, shift }).reasons).toContain("SHIFT_NOT_ACCEPTED");
+    const datesOnly = match({ ...p, acceptedShifts: ["DAY"] }, { ...m, shift, schedulePrecision: "DATE" });
+    expect(datesOnly.reasons).toContain("SCHEDULE_UNCONFIRMED");
+    expect(datesOnly.reasons).not.toContain("SHIFT_NOT_ACCEPTED");
+  });
+}

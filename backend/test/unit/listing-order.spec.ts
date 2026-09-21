@@ -52,3 +52,13 @@ test('matching sort ranks displayed percentages, including incomplete profiles, 
  const external=listingOrder({id:'e_1',kind:'EXTERNAL_OFFER'},p,search,now);
  assert.ok(compareListingOrder(low,external,'relevance')<0);
 });
+
+test('morning and afternoon filters are valid and a day search includes both slots',()=>{
+ for(const shift of ['MORNING','AFTERNOON']) {
+  assert.equal(validateSync(plainToInstance(SearchDto,{...search,shifts:[shift]})).length,0);
+  assert.ok(JSON.stringify(searchSql({...search,shifts:[shift]})).includes(shift));
+ }
+ const day=JSON.stringify(searchSql({...search,shifts:['DAY']}));
+ assert.ok(day.includes('MORNING'));assert.ok(day.includes('AFTERNOON'));
+ assert.ok(validateSync(plainToInstance(SearchDto,{...search,shifts:['INVALID']})).length);
+});

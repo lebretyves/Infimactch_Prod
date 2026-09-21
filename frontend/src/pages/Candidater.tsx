@@ -24,7 +24,7 @@ function warningText(code: string, check: ApplicationCheck | null, mission: List
     case "NOT_FULLY_AVAILABLE":
       return `Vos disponibilités enregistrées ne couvrent pas toute la mission, du ${missionDate(mission)} au ${missionDate(mission, true)}.`;
     case "SHIFT_NOT_ACCEPTED":
-      return `Les horaires de cette mission (${({ DAY: "jour", NIGHT: "nuit", MIXED: "jour et nuit" } as Record<string, string>)[mission.shift || ""] || "voir les conditions"}) ne figurent pas parmi vos horaires acceptés.`;
+      return `Les horaires de cette mission (${({ MORNING: "matin", AFTERNOON: "après-midi", DAY: "jour", NIGHT: "nuit", MIXED: "jour et nuit" } as Record<string, string>)[mission.shift || ""] || "voir les conditions"}) ne figurent pas parmi vos horaires acceptés.`;
     case "OUTSIDE_RADIUS":
       return check?.distanceKm != null
         ? `Cette mission se trouve à environ ${Math.round(check.distanceKm)} km de votre position de référence, au-delà de votre rayon de mobilité.`

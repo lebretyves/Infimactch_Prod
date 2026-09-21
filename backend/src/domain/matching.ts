@@ -33,6 +33,10 @@ export interface MatchMission extends Interval {
   latitude: number | null;
   longitude: number | null;
 }
+// Existing day preferences include both daytime mission slots.
+function acceptsShift(shifts: string[], shift: string): boolean {
+  return shifts.includes(shift) || ((shift === "MORNING" || shift === "AFTERNOON") && shifts.includes("DAY"));
+}
 export function instant(value: string): number {
   if (!/(Z|[+-]\d{2}:\d{2})$/.test(value)) throw new Error("TIMEZONE_REQUIRED");
   const parsed = DateTime.fromISO(value, { setZone: true });
@@ -134,7 +138,7 @@ export function match(
     if (p.conflicts.some((i) => overlaps(m, i)))
       reasons.push("ASSIGNMENT_CONFLICT");
   }
-  if (m.shift !== "UNKNOWN" && !p.acceptedShifts.includes(m.shift))
+  if (m.shift !== "UNKNOWN" && !acceptsShift(p.acceptedShifts, m.shift))
     reasons.push("SHIFT_NOT_ACCEPTED");
   let distance: number | null = null;
   if (
@@ -182,7 +186,7 @@ export function scoreDetails(p: Professional, m: MatchMission, distance: number 
     : 1;
   const Z = distance !== null && Number.isFinite(distance) && p.radiusKm !== null && p.radiusKm > 0 ? Math.max(0, 1 - distance / p.radiusKm) : 0;
   const D = m.schedulePrecision === "DATE" || m.shift === "UNKNOWN" ? 0 :
-    p.preferredShifts.length === 0 || p.preferredShifts.includes(m.shift)
+    p.preferredShifts.length === 0 || acceptsShift(p.preferredShifts, m.shift)
       ? 1
       : 0.5;
   const E = Math.min(months / 24, 1);
