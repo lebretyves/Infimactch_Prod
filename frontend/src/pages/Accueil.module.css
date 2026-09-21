@@ -268,7 +268,7 @@
   }
 }
 /* Keep preparation short; let recommendation groups use the full content width. */
-.preparation { display: grid; grid-template-columns: minmax(0,1fr) minmax(0,1.2fr); gap: 20px; align-items: start; }
+.preparation { display: grid; grid-template-columns: minmax(0, 1fr); gap: 20px; align-items: start; }
 .preparationTools { padding: 18px !important; }
 .preparationTools>summary { cursor: pointer; color: var(--ink-900); font-weight: 700; font-size: 15px; min-height: 44px; display: flex; align-items: center; gap: 8px; list-style: none; }
 .preparationTools>summary::before { content: '›'; font-size: 21px; }
@@ -386,7 +386,12 @@
 /* Match the reference's compact summary strip and main/support workspace. */
 .nursePage .stat { border-color: var(--line); border-radius: 6px; padding: 16px; gap: 12px; }
 .nursePage .stat .icon { width: 42px; height: 42px; }
-.nursePage .preparation { grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr); gap: 20px; align-items: start; }
+.nursePage .preparation { grid-template-columns: minmax(0, 1fr); gap: 20px; align-items: start; }
+.nursePage .preparation > section { gap: 12px; }
+@media (min-width: 901px) {
+  .nursePage .preparation > section:not(:has(ul)) { grid-template-columns: minmax(0, 1fr) auto; align-items: center; }
+  .nursePage .preparation > section:not(:has(ul)) > a { grid-column: 2; grid-row: 1 / 3; margin-top: 0; }
+}
 .preparationTools { border-radius: 8px; }
 .toolsContent { gap: 18px; }
 .toolsContent > section { gap: 12px; }

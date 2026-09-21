@@ -58,3 +58,9 @@ Les anciennes annonces à compléter et la reprise d'un besoin ont finalement é
 - Accessibilité : évaluation indépendante PASS, 36 vues à quatre largeurs, aucun chevauchement dans les en-têtes, clavier et retour du focus contrôlés ; neuf vues de premier consentement.
 - Historique : évaluation indépendante PASS, 51 missions sur deux pages API, fuseau navigateur différent de Paris, filtres mois/année/statut et état vide.
 - Sur le build local final : tests accessibilité, historique et notifications agence/établissement réussis. Sources modifiées valides en UTF-8, sans caractère de remplacement.
+
+## Corrections après captures utilisateur
+- Centre d’aide : suppression du doublon du menu latéral, lien conservé dans l’en-tête sur mobile et ordinateur.
+- Tableau de bord intérimaire : missions à venir et disponibilités/profil sur une seule colonne pleine largeur ; état sans mission compact sur ordinateur pour éviter le vide latéral. Textes, liens et accordéon conservés.
+- Dossier : bloc RIB déplacé sous la vérification professionnelle dans la colonne gauche ; justificatifs à droite, passage à une colonne sur mobile. Aucun changement aux traitements de documents.
+- Compilation utilisateur réussie ; huit tests existants de coordonnées bancaires et de lecture/révision de CV réussis.
