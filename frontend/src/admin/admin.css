@@ -230,8 +230,8 @@
 .admin-metric:nth-child(3n+2) strong{color:var(--teal-700)}
 @media(max-width:1200px){.admin-content>div:has(>.admin-metrics){grid-template-columns:minmax(0,1fr)}}
 
-.admin-metric:nth-child(3n+2){background:#e1f4f2}
-.admin-metric:nth-child(3n+2):hover{background:#d3eeeb}
+.admin-metric:nth-child(3n+2){background:#fff}
+.admin-metric:nth-child(3n+2):hover{background:var(--brand-50)}
 .admin-status-strip>a:hover{background:var(--sky-200)}
 .admin-auth-choices button:not([aria-pressed=true]):hover{background:var(--brand-100)}
 .admin-auth-choices button[aria-pressed=true]:hover{background:var(--brand-700)}

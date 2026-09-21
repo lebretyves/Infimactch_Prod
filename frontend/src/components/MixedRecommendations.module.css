@@ -5,7 +5,7 @@
   padding: 20px;
   border: 1px solid var(--line);
   border-radius: 8px;
-  background: var(--sky-100);
+  background: var(--white);
   color: var(--ink-900);
   box-shadow: 0 3px 12px #07215208;
 }
@@ -21,7 +21,7 @@
 .toolbar { padding-block: 18px; border-block: 1px solid var(--line); }
 .toolbar p { color: var(--ink-700); font-size: 13px; }
 .recommendations [role="group"][aria-label="Origine des offres"] { gap: 8px; }
-.recommendations [role="group"][aria-label="Origine des offres"] button { min-height: 44px; background: var(--white); border: 1px solid transparent; color: var(--brand-800); font-size: 14px; padding-inline: 16px; }
+.recommendations [role="group"][aria-label="Origine des offres"] button { min-height: 44px; background: var(--brand-50); border: 1px solid transparent; color: var(--brand-800); font-size: 14px; padding-inline: 16px; }
 .recommendations [role="group"][aria-label="Origine des offres"] button[aria-pressed="true"] { background: var(--brand-600); border-color: transparent; color: var(--white); }
 .recommendations [role="group"][aria-label="Origine des offres"] button:hover { background: var(--brand-700); color: var(--white); }
 .cards { list-style: none; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; margin: 0; padding: 0; align-items: stretch; }
@@ -40,8 +40,8 @@
 .match small { font-size: 16px; margin-left: 2px; font-weight: 600; }
 .match .matchNote { display: block; margin: 4px 0 0; font-size: 12px; font-weight: 400; }
 .actions { display: flex; align-items: center; gap: 10px; }
-.actions > a { flex: 1; min-height: 48px; background: var(--brand-800); color: var(--white); padding: 10px; font-size: 14px; }
-.actions > a:hover { background: var(--brand-900); }
+.actions > a { flex: 1; min-height: 48px; background: var(--brand-600); color: var(--white); padding: 10px; font-size: 14px; }
+.actions > a:hover { background: var(--brand-700); }
 .recommendations .favorite { width: 48px; height: 48px; min-width: 48px; min-height: 48px; flex-shrink: 0; border: 1px solid transparent; color: var(--brand-800); background: var(--brand-100); }
 .recommendations .favorite:hover:not(:disabled) { background: var(--brand-200); color: var(--brand-900); }
 .recommendations .favorite[aria-pressed="true"] { background: var(--brand-800); color: var(--white); border-color: var(--brand-800); }

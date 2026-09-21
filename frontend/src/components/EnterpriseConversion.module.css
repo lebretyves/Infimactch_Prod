@@ -32,4 +32,4 @@
   .metricValue { font-size: 30px; }
 }
 
-.metric:nth-child(2n) { background: var(--teal-100); }
+.metric:nth-child(2n) { background: var(--brand-50); }

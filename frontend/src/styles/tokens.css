@@ -4,9 +4,9 @@
   --brand-700: #064bbb;
   --brand-600: #005bd8;
   --brand-500: #2477e8;
-  --brand-200: #b4cefb;
-  --brand-100: #dce9ff;
-  --brand-50: #eaf2ff;
+  --brand-200: #c7d8f3;
+  --brand-100: #e8effa;
+  --brand-50: #f2f6fc;
 
   --teal-700: #006875;
   --teal-100: #d7f2f1;
@@ -19,14 +19,14 @@
   --ink-600: #40557b;
   --ink-400: #607397;
 
-  --line: #cbddef;
+  --line: #d9e3ee;
   --line-strong: #9cbad8;
 
   --white: #ffffff;
-  --sky-50: #edf8fd;
-  --sky-100: #dff2fb;
-  --sky-200: #c8e8f5;
-  --page: #e0f2ff;
+  --sky-50: #f6f9fc;
+  --sky-100: #eef3f9;
+  --sky-200: #dde7f2;
+  --page: #f3f7fb;
 
   /* Noms hérités du premier jeu de maquettes : ils pointent désormais sur la
      palette InfiMatch pour que les écrans déjà livrés suivent la marque. */
@@ -37,8 +37,8 @@
   --blue-700: var(--brand-800);
   --blue-900: var(--brand-900);
   --blue: var(--brand-600);
-  --tint: var(--sky-100);
-  --tint-200: var(--sky-200);
+  --tint: var(--brand-100);
+  --tint-200: var(--brand-200);
   --grey-50: var(--sky-50);
   --grey-100: #eef3f9;
   --grey-300: var(--line);
