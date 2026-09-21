@@ -1,0 +1,10 @@
+{
+  "date": "2026-09-21T21:09:43.326Z",
+  "mode": "integration",
+  "results": [
+    {
+      "file": "journey.spec.js",
+      "passed": true
+    }
+  ]
+}

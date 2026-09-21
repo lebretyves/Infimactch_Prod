@@ -1,0 +1,35 @@
+{
+  "date": "2026-09-21",
+  "backendUnit": {
+    "passed": 367,
+    "failed": 0
+  },
+  "journeyIntegration": {
+    "passed": 32,
+    "failed": 0
+  },
+  "pwa": {
+    "passed": 4,
+    "failed": 0
+  },
+  "cvAndHelp": {
+    "passed": 11,
+    "failed": 0
+  },
+  "manualProfileBrowser": {
+    "status": "PASS",
+    "unappliedFutureCvYearAllowsSave": true,
+    "actualFutureProfileYearBlocksSave": true,
+    "cvStoragePdfDocxRetryAndDownload": "PASS"
+  },
+  "videos": {
+    "count": 6,
+    "audio": "French Opus",
+    "widths": [
+      1440,
+      390,
+      320
+    ],
+    "status": "PASS"
+  }
+}

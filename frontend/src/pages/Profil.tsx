@@ -71,13 +71,18 @@ function Editor({ initial }: { initial: ProfessionalProfile }) {
         : p.skills.filter((v) => v !== code),
     });
   }
-  async function submit(e: FormEvent) {
+  async function submit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
     if (busy) return;
     if (experienceEdit) {
       setExperienceError("Enregistrez ou annulez cette expérience avant de sauvegarder le profil.");
       return;
     }
+    // CV proposals are a separate draft: only applied profile fields participate in this save.
+    const invalid = Array.from(e.currentTarget.elements).find((control): control is HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement =>
+      (control instanceof HTMLInputElement || control instanceof HTMLSelectElement || control instanceof HTMLTextAreaElement) &&
+      !control.closest('[data-cv-proposals]') && !control.checkValidity());
+    if (invalid) { invalid.reportValidity(); return; }
     setBusy(true);
     setError("");
     setMessage("");
@@ -143,7 +148,7 @@ function Editor({ initial }: { initial: ProfessionalProfile }) {
       ? "PEDIATRIC"
       : "";
   return (
-    <form className={`${u.page} ${s.profilePage}`} onSubmit={submit} onInvalidCapture={event=>{(event.target as HTMLElement).closest("details")?.setAttribute("open","");}}>
+    <form noValidate className={`${u.page} ${s.profilePage}`} onSubmit={submit} onInvalidCapture={event=>{(event.target as HTMLElement).closest("details")?.setAttribute("open","");}}>
       <header className={u.header}>
         <div>
           <p className={u.eyebrow}>Mon parcours</p>
@@ -232,7 +237,7 @@ function Editor({ initial }: { initial: ProfessionalProfile }) {
                 })}
               </div>
               <h3 id="experiences" tabIndex={-1}>Expérience par service</h3>
-              <fieldset className={s.cvImport}>
+              <fieldset className={s.cvImport} data-cv-proposals>
               <details open className={s.cvDisclosure} onToggle={event=>{const panel=event.currentTarget;if(!panel.open&&panel.querySelector('[role="alert"],[role="status"]'))panel.open=true;}}>
                 <summary>Importer un CV <span>Préremplir mes expériences</span></summary>
               <CvImport profile={p} onProfileApply={change} addBlocked={Boolean(experienceEdit)} services={experienceServices.map(option => option.value)} existing={p.experience} onAdd={values=>change({experience:[...p.experience,...values]})}/>
