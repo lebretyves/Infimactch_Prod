@@ -113,7 +113,7 @@ Les intégrations utilisent des bases isolées ; préparer leur environnement av
 
 ## État de livraison et limites
 
-État documentaire : **21 septembre 2026**. Dernier lot applicatif observé avant ce rangement : `fd68a37` ; déploiements frontend et API signalés réussis. Le QR code admin a été livré séparément. Les preuves conservées portent leur date et leur périmètre ; elles ne valident pas automatiquement toute modification ultérieure.
+État documentaire : **21 septembre 2026**. Dernière livraison vérifiée avant cette seconde revue : `d2de5b8` (site et API signalés réussis) ; administration publiée séparément. Le manifeste du rendu identifie la version effectivement remise. Les preuves conservées portent leur date et leur périmètre ; elles ne valident pas automatiquement toute modification ultérieure.
 
 - Optimisation du matching testée sur bases isolées ; résultats et comparaisons conservés.
 - Étape Discord facultative testée sur les trois familles de comptes avec API fictive ; aucune réception Discord réelle n'en est déduite.
@@ -136,3 +136,5 @@ Conserver les tests et preuves adaptés au changement. Mettre à jour les exigen
 Licence : [LICENSE](LICENSE).
 
 [Guide utilisateur](docs/GUIDE_UTILISATEUR.md) · [Inventaire documentaire](docs/INVENTAIRE_DOCUMENTAIRE.md).
+
+[Seconde vérification documentaire et réserves restantes](docs/VERIFICATION_DOCUMENTAIRE_2026-09-21.md).

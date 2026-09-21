@@ -23,11 +23,11 @@
     "title": "Une promesse volontairement précise.",
     "subtitle": "Aider à décider, conserver une décision humaine.",
     "leftTitle": "Pour le professionnel",
-    "left": "Profil IDE / IADE / IBODE, services d’exercice, zone de mobilité, recherche, candidatures et agenda. Le CV suggère des informations à relire ; il ne certifie aucun diplôme.",
+    "left": "Profil IDE / IADE / IBODE, services, disponibilités et zone de recherche enregistrée, distincte du domicile. Recherche ponctuelle libre et Discord facultatif après inscription.",
     "rightTitle": "Pour le recruteur",
     "right": "Besoins et missions structurés, profils proposés, explication du score, affectation, historique et documents. Une donnée manquante doit être visible ; elle ne doit jamais être inventée.",
     "tag": "03 / VALEUR",
-    "notes": "La lecture CV enrichie est un lot local testé, en cours d’intégration frontend. Ne pas annoncer sa disponibilité en production avant recette."
+    "notes": "Le CV propose des données à vérifier ; aucune qualification ni identité certifiée automatiquement. Le parcours est implémenté, la recette complète publiée reste à documenter."
   },
   {
     "title": "Trois acteurs, des droits distincts.",
@@ -67,7 +67,7 @@
     "rightTitle": "Document → suivi",
     "right": "Ouvrir le PDF de confirmation puis celui d’annulation. Distinguer email accepté, livré au serveur et réellement lu. L’annulation applicative n’établit pas la légalité d’une rupture.",
     "tag": "07 / PARCOURS",
-    "notes": "PDF refondus : preuve de déploiement connue. Suivi email enrichi et correctifs profil : locaux selon l’instantané du dossier. Source juridique S4 ; aucun conseil individuel."
+    "notes": "Les documents et états email sont implémentés. Distinguer code livré, reçu fournisseur et réception réelle. Recetter le parcours complet sur la version remise."
   },
   {
     "title": "La donnée publique devient exploitable.",
@@ -75,7 +75,7 @@
     "leftTitle": "Chaîne de données",
     "left": "FINESS enrichit les établissements ; les offres externes gardent leur source. PostgreSQL / PostGIS porte l’état métier et la géographie ; MongoDB conserve les traces de matching.",
     "rightTitle": "Sobriété mesurable",
-    "right": "Planning prévu : France Travail à 7 h et 15 h ; JobsPipe à 7 h, heure de Paris. Reprises bornées et arrêt au quota. Le succès des nouveaux créneaux reste à observer.",
+    "right": "Exports : France Travail à 7 h et 15 h ; JobsPipe à 7 h, heure de Paris. Reprises et pagination bornées. Les exécutions réussies doivent être montrées avec leur date.",
     "tag": "08 / DONNÉES",
     "notes": "Source locale IMPORTS_SOBRIETE_2026-09-19. Une exécution comprend plusieurs appels paginés. Ne pas annoncer un quota fournisseur restant sans mesure récente."
   },
@@ -87,7 +87,7 @@
     "rightTitle": "Confirmation et relance",
     "right": "Affectation → confirmation PDF. Mission non pourvue → rappel encadré : 24 h, intervalle 24 h, trois au maximum. Les anciennes missions fictives restent exclues.",
     "tag": "09 / NO-CODE",
-    "notes": "Les imports ne tournent plus dans le workflow de rappels toutes les 30 minutes. Vérifier versions actives/exécutions avant soutenance ; scénario de secours dans DEMONSTRATION.md."
+    "notes": "Reprise et rappels publiés toutes les quatre heures ; imports séparés. Préserver le quota, réutiliser les preuves datées pertinentes. Montrer matching et confirmation comme deux workflows distincts."
   },
   {
     "title": "La qualité se montre avec des preuves.",
@@ -95,7 +95,7 @@
     "leftTitle": "Sécurité et continuité",
     "left": "Droits serveur, transactions, documents protégés, récupération sécurisée et limiteurs partagés testés localement. Restauration isolée réussie ; déchiffrement prouvé sur fixture synthétique.",
     "rightTitle": "Accessibilité et sobriété",
-    "right": "Parcours clavier et responsive à rejouer sur la version remise. Réduire appels et doublons ; privilégier le matériel existant ou reconditionné. Pas de certification RGAA ou de bilan carbone revendiqué.",
+    "right": "Matching local, 1 000 profils : 2 015 requêtes SQL deviennent 35, mêmes résultats comparés. Imports bornés et parsing réutilisé. Essais humains RGAA à compléter ; aucun gain CO₂ ou euros calculé.",
     "tag": "10 / QUALITÉ",
     "notes": "La matrice 42 scénarios décrit des états partiels. Les campagnes de tests ne s’additionnent pas en un total unique. Pas de couverture finale annoncée sans rapport du SHA livré."
   },
@@ -105,7 +105,7 @@
     "leftTitle": "348–528 h-personnes",
     "left": "Fourchette initiale de conception conservée dans CHIFFRAGE_V1. Ce n’est pas un temps mesuré. Quatre personnes × onze jours = 44 journées-personnes, sans durée productive supposée.",
     "rightTitle": "Réalisé à compléter",
-    "right": "Les heures humaines ne sont pas renseignées. Le journal contient 0,921 h d’agent historique, outils et attente inclus ; ce relevé ne représente ni l’équipe ni le travail total.",
+    "right": "Les heures humaines doivent être renseignées dans TEMPS_HUMAINS.csv. Aucun écart estimé/réel ni coût humain fiable sans ce relevé. Le temps d’un agent ne mesure pas le travail de l’équipe.",
     "tag": "11 / PILOTAGE",
     "notes": "Rôles proposés A backend métier, B données, C frontend, D intégration. Les noms, disponibilités, temps réels et écarts sont reportés à l’équipe, sans nouvelle demande ni estimation inventée."
   },
@@ -113,9 +113,9 @@
     "title": "Une démonstration solide, des limites assumées.",
     "subtitle": "Le support accompagne les preuves de la version effectivement remise.",
     "leftTitle": "À terminer avant remise",
-    "left": "Publier et recetter les lots locaux ; vérifier emails et nouveaux créneaux ; joindre couverture finale et SHA. Répéter le scénario et renseigner les éléments humains reportés.",
+    "left": "Recetter le parcours publié et les deux workflows, attester le MFA réel, compléter les heures et répéter à quatre. Préserver le quota n8n. Le manifeste identifie la version remise.",
     "rightTitle": "À décider séparément",
-    "right": "MFA administrateur, contrat complet et signature, fiches mission publiques / JobPosting, continuité d’hébergement n8n. Aucun de ces choix n’est activé par ce dossier.",
+    "right": "Responsable des données et durées à formaliser ; restauration indépendante et rotation à prouver ; hébergement n8n après essai. Le MFA est implémenté, pas une proposition future.",
     "tag": "12 / SUITE",
     "notes": "Conclure sur une valeur démontrable et les réserves précises. Le PDF de confirmation n’est pas un contrat ; le RPPS facultatif à l’inscription ne constitue pas une vérification professionnelle."
   }

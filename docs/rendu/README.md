@@ -29,3 +29,5 @@ Compléter [la recette finale](RECETTE_FINALE.csv), les heures humaines, les dé
 ## Schémas et dossier technique
 
 - [Architecture](../SCHEMA_ARCHITECTURE_V1.md), [flux métier](../FLUX_V1.md) et [automatisations](../AUTOMATISATIONS.md).
+
+[Seconde vérification documentaire et réserves restantes](../VERIFICATION_DOCUMENTAIRE_2026-09-21.md).

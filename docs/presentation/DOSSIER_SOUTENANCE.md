@@ -1,6 +1,6 @@
 # Dossier de soutenance InfiMatch
 
-Instantané documentaire du 19 septembre 2026. Ce dossier ne constitue ni un procès-verbal de recette globale, ni une preuve de publication des derniers correctifs.
+Actualisation technique du 21 septembre 2026 ; étude de marché et références externes conservées avec leur date du 19 septembre, sans nouvelle recherche marché dans cette passe. Ce dossier ne constitue ni un procès-verbal de recette globale, ni une preuve de publication des derniers correctifs.
 
 ## Livrables utilisables
 
@@ -45,14 +45,14 @@ Le [journal réel](../TEMPS_REELS.csv) ne contient qu’un relevé historique de
 
 ## État des versions et preuves techniques
 
-Le dernier état de production cité dans la [matrice datée des 42 scénarios](../quality/MATRICE_42_TESTS_2026-09-19.md) pointe sur le SHA production `41706fe97ce6ca51358bb96c44d5a173a4b56d87` et inclut la refonte des PDF. Cette référence historique doit être remplacée par le SHA effectivement remis après la publication coordonnée ; elle ne prouve pas que les nouveaux lots ci-dessous sont déjà déployés.
+La livraison `d2de5b8` (production) / `ff0dddb` (Epitech) a actualisé la documentation et les aides. Les déploiements site et API étaient signalés réussis ; le portail admin a été publié séparément. Ce sont les références de la livraison précédente, pas une recette métier complète. Le manifeste du rendu identifie la version documentaire remise. La [matrice des 42 scénarios](../quality/MATRICE_42_TESTS_2026-09-19.md) reste une campagne historique.
 
 | Lot | Preuve locale | Réserve de présentation |
 |---|---|---|
-| CV enrichi | [Contrat et 17 tests ciblés](../quality/LECTURE_CV_ENRICHIE_2026-09-19.md) | Intégration frontend et publication à confirmer ; jamais une certification |
+| CV enrichi | [Contrat et 17 tests ciblés](../quality/LECTURE_CV_ENRICHIE_2026-09-19.md) | Parcours intégré dans le frontend ; recette actuelle et qualité des extractions à vérifier, jamais une certification |
 | Récupération autonome | [Parcours et contrôles](../quality/RECUPERATION_AUTONOME_2026-09-19.md) | Configurer et recetter le canal réel avant promesse d’envoi |
 | Livraison email | [Modèle des statuts et webhook](../EMAILS_LIVRAISON.md) | Accepté ≠ livré au serveur ≠ lu ; webhook fournisseur à vérifier |
-| Limiteurs partagés | [Tests atomiques multi-instance](../quality/LIMITEURS_PARTAGES_2026-09-19.md) | Migration et déploiement du lot à confirmer |
+| Limiteurs partagés | [Tests atomiques multi-instance](../quality/LIMITEURS_PARTAGES_2026-09-19.md) | Contrôles présents dans le code livré ; la recette ciblée reste datée |
 | Sauvegarde | [Restauration de copie réelle](../quality/restore-production.json) et [fixture chiffrée](../quality/restore-synthetic.json) | La copie réelle ne contient aucun document ; le déchiffrement est prouvé sur fixture, pas sur d’anciens PDF absents |
 | Imports sobres | [Créneaux et limites](../quality/IMPORTS_SOBRIETE_2026-09-19.md) | Nouveau succès fournisseur→base→interface à observer |
 | API | [Contrat OpenAPI](../openapi.json) | Réexporter si les dernières réponses changent avant remise |
@@ -61,17 +61,17 @@ Les nombres de tests de campagnes différentes ne sont pas additionnés. Aucun p
 
 ## Écoconception, accessibilité et achats responsables
 
-Deux pratiques concrètes sont démontrables dans le code : espacer les imports et réutiliser les résultats de parsing inchangés ; limiter les reprises, les lots et les relances, en excluant les anciennes missions fictives. Montrer les limites avant/après et les journaux d’exécution, sans transformer le nombre d’appels évités en quantité de CO₂ sans méthode.
+Deux pratiques concrètes sont documentées : regrouper les requêtes de matching et limiter les imports avec réutilisation du parsing. Sur le banc local de 1 000 profils côté recruteur, 2 015 requêtes SQL sont devenues 35 avec les mêmes résultats métier comparés. La reprise n8n est publiée toutes les quatre heures ; les imports gardent leurs créneaux séparés. Montrer les limites avant/après et les journaux d’exécution, sans transformer le nombre d’appels évités en quantité de CO₂ sans méthode.
 
 Pour l’achat et le réemploi : privilégier le matériel déjà disponible, entretenir et réparer, puis examiner le reconditionné si un achat est nécessaire. Cette orientation n’est pas la preuve d’un achat réalisé ; aucun inventaire matériel ni gain environnemental mesuré n’est disponible. La prolongation de durée de vie est un choix proposé, pas une obligation déjà exécutée.
 
 Présenter les contrôles clavier, responsive, focus et erreurs réellement rejoués. Ne pas assimiler une série de contrôles ciblés à un audit RGAA complet, ni un PDF lisible à une certification PDF/UA. La recette sur lecteurs d’écran et appareils physiques doit garder son état réel.
 
-## Registre des propositions non activées par ce dossier
+## Décisions et validations restantes
 
 | Proposition | État / décision attendue |
 |---|---|
-| MFA administrateur et secours | [Proposition séparée — archive](https://github.com/lebretyves/Infimactch_Prod/blob/fd68a377da28a76151483529ac62473eed99d264/docs/quality/MFA_ADMIN_PROPOSITION_2026-09-19.md), non activée |
+| MFA administrateur et secours | Implémenté et portail publié avec QR de configuration ; enrôlement réel du propriétaire et récupération à attester séparément |
 | Contrat complet et signature | Cadrer le rôle opérateur, le modèle, les données et le prestataire avant développement/publication |
 | Fiches mission publiques, pages métier/ville et JobPosting | Décision éditoriale et confidentialité à valider avant exposition ; aucun candidat publié |
 | Hébergement pérenne n8n | Comparer continuité après essai, coûts, maintenance et sauvegarde ; aucune migration implicite |

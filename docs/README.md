@@ -29,3 +29,5 @@ Les documents d'exploitation gardent leur contexte de validation. En cas de cont
 - [Automatisations : catalogue, reprise et preuves](AUTOMATISATIONS.md).
 
 [Guide utilisateur](GUIDE_UTILISATEUR.md) · [Inventaire documentaire](INVENTAIRE_DOCUMENTAIRE.md).
+
+[Seconde vérification documentaire et réserves restantes](VERIFICATION_DOCUMENTAIRE_2026-09-21.md).

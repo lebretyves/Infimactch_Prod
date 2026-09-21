@@ -6,6 +6,8 @@ Scénario proposé, à répéter ; il n’a pas été exécuté par la création
 
 Utiliser un environnement isolé, des comptes fictifs et un destinataire de test autorisé. Les appels fournisseur sont remplacés par des fixtures ou un instantané daté lorsque l’accès est indisponible. Ne pas afficher mots de passe, clés, CV réels, RPPS de tiers ou adresses personnelles dans les captures. Le portail réel ne devient pas une sandbox parce qu’une mission est intitulée « démo ».
 
+La reprise périodique n8n est à quatre heures : ne pas attendre ce délai sur scène ni déclencher des essais répétés sans compter le quota. Préparer les résultats datés des deux workflows. La configuration Discord après inscription est facultative.
+
 Consigner le SHA backend, le SHA frontend, les migrations, la date des données et les versions n8n. Ouvrir le PDF du support avant de commencer. Répartition proposée : A auth/missions ; B données/matching ; C interface ; D automatisations/exploitation. Les noms et le temps de parole restent à attribuer par l’équipe.
 
 ## Parcours en huit étapes

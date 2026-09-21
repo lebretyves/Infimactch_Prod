@@ -22,4 +22,4 @@ Utiliser le portail séparé. À la première activation, l'invitation et la con
 
 ## Tutoriels vidéo : limite connue
 
-Les six vidéos existantes restent des illustrations de parcours antérieurs. Elles n'ont pas été réenregistrées ni entièrement revues visuellement dans cette mise à jour. En cas de différence de libellé, utiliser ce guide et l'aide textuelle actualisée. La vidéo d'inscription peut encore confondre domicile et zone de recherche ; elle doit être revue avant d'être présentée comme un tutoriel actuel au jury.
+Les six vidéos existantes restent des illustrations de parcours antérieurs. Elles n'ont pas été réenregistrées ni entièrement revues visuellement dans cette mise à jour. En cas de différence de libellé, utiliser ce guide et l'aide textuelle actualisée. Les sous-titres d'inscription et de recherche ont été rectifiés. Les images des vidéos doivent encore être revues avant de présenter les enregistrements comme des tutoriels actuels au jury.

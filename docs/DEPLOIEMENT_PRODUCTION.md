@@ -20,4 +20,4 @@ PostgreSQL de production utilise Supabase ; MongoDB, stockage documentaire et n8
 4. Vérifier HTTP, santé API, cookies/CSRF et parcours concernés sur l'adresse publiée.
 5. Conserver les preuves et limites ; READY ne signifie pas recette complète.
 
-Dernier lot applicatif observé avant le rangement documentaire : fd68a37, frontend et backend signalés réussis. QR admin publié dans un lot distinct. La CI Epitech était bloquée par le budget Actions au dernier constat. Ne pas changer un abonnement pour contourner ce blocage sans décision du propriétaire.
+Dernière livraison vérifiée avant cette seconde revue documentaire : d2de5b8, frontend et backend signalés réussis. Administration publiée séparément. Identifier le commit effectivement remis dans le manifeste du rendu. La CI Epitech était bloquée par le budget Actions au dernier constat. Ne pas changer un abonnement pour contourner ce blocage sans décision du propriétaire.
