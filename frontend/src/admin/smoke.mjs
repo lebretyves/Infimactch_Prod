@@ -13,19 +13,26 @@ const server = createServer(async (req, res) => {
     const data = await readFile(path); for(const h of security)res.setHeader(h.key,h.value); res.setHeader('Content-Type', ({ '.html': 'text/html', '.js': 'application/javascript', '.css': 'text/css' })[extname(path)] || 'application/octet-stream'); res.end(data);
   } catch { res.writeHead(404); res.end(); }
 });
-await new Promise(r => server.listen(0, '127.0.0.1', r));
+if (!process.env.BASE_URL) await new Promise(r => server.listen(0, '127.0.0.1', r));
+const baseUrl=process.env.BASE_URL||`http://127.0.0.1:${server.address().port}/`;
 const browser = await chromium.launch({ headless: true, channel: process.env.BROWSER_CHANNEL || (process.platform === 'win32' ? 'msedge' : undefined) });
 try {
   const page = await browser.newPage(); const errors = [];
   page.on('pageerror', e => errors.push(e.message));
+  let invitationResponse='new'; let invitationChecks=0; let failPassword=false; let invitationLogins=0; let sessionExpiredEvents=0;
+  const invitation='fixture-private-invitation-000000000000000000';
   let enrolling=false; let activations = 0; let authenticated = false; let fresh = false; let mutations = 0;
   const user = { id: 'fixture-admin', email: 'admin@example.invalid', role: 'SUPPORT', permissions: ['overview', 'accounts', 'accounts:write', 'organizations', 'missions', 'quality'], confirmedAt: new Date().toISOString() };
+  await page.exposeFunction('recordSessionExpired',()=>sessionExpiredEvents++);
+  await page.addInitScript(()=>window.addEventListener('admin-session-expired',()=>window.recordSessionExpired()));
   await page.route('**/api/v1/admin/**', async route => {
     const path = new URL(route.request().url()).pathname.replace('/api/v1/admin', ''); let status = 200; let body = {};
     if (path === '/me') { status = authenticated ? 200 : 401; body = authenticated ? user : {}; }
     else if (path === '/csrf') body = { csrfToken: 'isolated-fixture-csrf' };
-    else if (path === '/activate') { activations++; const payload = route.request().postDataJSON(); assert.equal(payload.invitation, 'fixture-private-invitation'); assert.equal(payload.password, 'fixture-password-123'); assert.equal('passwordConfirmation' in payload, false); enrolling=true; body = {status:'MFA_ENROLLMENT_REQUIRED',secret:'JBSWY3DPEHPK3PXPJBSWY3DPEHPK3PXP',otpauthUri:'otpauth://totp/InfiMatch%20Admin%3Aadmin%40example.invalid?secret=JBSWY3DPEHPK3PXPJBSWY3DPEHPK3PXP&issuer=InfiMatch%20Admin&algorithm=SHA1&digits=6&period=30',csrfToken:'isolated-fixture-csrf'}; }
-    else if (path === '/login') { enrolling=false;body = { status: 'MFA_REQUIRED', csrfToken: 'isolated-fixture-csrf' }; }
+    else if (path === '/invitation/check') { invitationChecks++; const payload=route.request().postDataJSON(); assert.equal(payload.email,user.email); assert.equal(payload.invitation,invitation); if(invitationResponse==='invalid') {status=401;} else body=invitationResponse==='malformed'?{passwordSetupRequired:'false'}:{passwordSetupRequired:invitationResponse==='new',csrfToken:'must-not-replace-csrf'}; }
+    else if (path === '/activate') { activations++; const payload = route.request().postDataJSON(); assert.equal(payload.invitation, invitation); assert.equal(route.request().headers()['x-csrf-token'],'isolated-fixture-csrf'); assert.equal(payload.password, 'fixture-password-123'); assert.equal('passwordConfirmation' in payload, false); enrolling=true; body = {status:'MFA_ENROLLMENT_REQUIRED',secret:'JBSWY3DPEHPK3PXPJBSWY3DPEHPK3PXP',otpauthUri:'otpauth://totp/InfiMatch%20Admin%3Aadmin%40example.invalid?secret=JBSWY3DPEHPK3PXPJBSWY3DPEHPK3PXP&issuer=InfiMatch%20Admin&algorithm=SHA1&digits=6&period=30',csrfToken:'isolated-fixture-csrf'}; }
+    else if (path === '/login') { const payload=route.request().postDataJSON(); if(payload.invitation){invitationLogins++;assert.equal(payload.invitation,invitation);} enrolling=false; if(failPassword){status=401;}else body = { status: 'MFA_REQUIRED', csrfToken: 'isolated-fixture-csrf' }; }
+    else if(path==='/mfa/recover'){assert.deepEqual(route.request().postDataJSON(),{code:'a'.repeat(32)});enrolling=true;body={status:'MFA_ENROLLMENT_REQUIRED',secret:'JBSWY3DPEHPK3PXPJBSWY3DPEHPK3PXP',otpauthUri:'otpauth://totp/Fixture?secret=JBSWY3DPEHPK3PXPJBSWY3DPEHPK3PXP&issuer=Fixture'};}
     else if(path==='/mfa'){assert.deepEqual(route.request().postDataJSON(),{code:'123456'});authenticated=true;body={status:'AUTHENTICATED',csrfToken:'isolated-fixture-csrf',...(enrolling?{recoveryCodes:Array.from({length:8},(_,i)=>String(i).repeat(32))}:{})};}
     else if (path === '/overview') body = { observedAt: new Date().toISOString(), counts: { accounts: 1, organizations: 0, applications: 0, pendingEvents: 0, failedEvents: 0, documents: 0, missions: { OPEN: 0 } }, alerts: [{kind: 'backup', message: 'Fixture backup status', href: '/backups'}] };
     else if (path === '/executions') body = {items: [{id: 'fixture-run', state: 'completed', checked_at: '2026-09-17T10:00:00Z', execution_id: 'fixture-execution', workflow_id: 'fixture/unsafe?fragment', action: 'confirmation', duration_ms: 125}], total: 1, limit: 20, offset: 0};
@@ -40,17 +47,55 @@ try {
     else throw new Error(`Unexpected fixture endpoint: ${path}`);
     await route.fulfill({ status, json: body });
   });
-  await page.goto(`http://127.0.0.1:${server.address().port}/`);
-  await page.getByRole('button', {name:'Activer mon accès administrateur',exact:true}).click();
-  await page.getByLabel('Adresse e-mail',{exact:true}).fill('admin@example.invalid');
+  await page.goto(baseUrl);
+  await page.getByRole('heading',{name:'Connexion sécurisée',exact:true}).waitFor();
+  await page.setViewportSize({width:375,height:812});
+  assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth),false,'No overflow on the mobile connection form');
+  await page.getByLabel('Adresse e-mail',{exact:true}).fill(user.email);
+  await page.getByRole('button', {name:'J’ai reçu une invitation',exact:true}).focus();
+  await page.keyboard.press('Enter');
+  assert.equal(await page.getByRole('heading',{name:'Vérifier votre invitation',exact:true}).evaluate(el=>el===document.activeElement),true,'The invitation heading receives focus after keyboard navigation');
+  assert.equal(await page.getByRole('button',{name:'J’ai reçu une invitation',exact:true}).getAttribute('aria-pressed'),'true');
+  assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth),false,'No overflow on the mobile invitation form');
+  assert.equal(await page.getByLabel('Adresse e-mail',{exact:true}).inputValue(),user.email,'Switching paths retains email');
+  assert.equal(await page.getByLabel('Mot de passe',{exact:true}).count(),0,'No password before invitation check');
+  await page.getByLabel('Code d’invitation administrateur',{exact:true}).fill(invitation);
+  invitationResponse='invalid';
+  const expiredBefore=sessionExpiredEvents;
+  await page.getByRole('button',{name:'Vérifier mon invitation',exact:true}).click();
+  await page.getByRole('alert').filter({hasText:'Invitation invalide, expirée ou déjà utilisée.'}).waitFor();
+  assert.equal(sessionExpiredEvents,expiredBefore,'Invalid invitation never expires an existing admin session');
+  invitationResponse='malformed';
+  await page.getByRole('button',{name:'Vérifier mon invitation',exact:true}).click();
+  await page.getByRole('alert').filter({hasText:'La réponse du service est inattendue.'}).waitFor();
+  assert.equal(await page.getByLabel('Mot de passe',{exact:true}).count(),0,'Malformed response cannot choose a password path');
+  invitationResponse='existing';
+  await page.getByRole('button',{name:'Vérifier mon invitation',exact:true}).click();
+  await page.getByRole('heading',{name:'Utiliser votre mot de passe',exact:true}).waitFor();
+  assert.equal(await page.getByLabel('Adresse e-mail',{exact:true}).count(),0,'Verified email is no longer editable');
+  assert.equal(await page.getByLabel('Confirmer le nouveau mot de passe',{exact:true}).count(),0);
+  await page.getByLabel('Mot de passe',{exact:true}).fill('wrong-fixture-password');
+  failPassword=true;
+  await page.getByRole('button',{name:'Continuer',exact:true}).click();
+  await page.getByRole('alert').filter({hasText:'Connexion impossible.'}).waitFor();
+  assert.equal(invitationChecks,3,'Wrong password does not recheck or reactivate the account');
+  assert.equal(invitationLogins,1);assert.equal(activations,0);
+  failPassword=false;
+  await page.getByRole('button',{name:'Corriger l’invitation',exact:true}).click();
+  assert.equal(await page.getByLabel('Mot de passe',{exact:true}).count(),0);
+  invitationResponse='new';
+  await page.getByRole('button',{name:'Vérifier mon invitation',exact:true}).click();
+  await page.getByRole('heading',{name:'Créer votre mot de passe',exact:true}).waitFor();
+  assert.equal(await page.getByRole('heading',{name:'Créer votre mot de passe',exact:true}).evaluate(el=>el===document.activeElement),true,'The password step announces its heading');
+  assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth),false,'No overflow on the mobile password form');
+  assert.equal(await page.getByLabel('Nouveau mot de passe (12 caractères minimum)',{exact:true}).inputValue(),'','Correcting invitation clears old passwords');
   await page.getByLabel('Nouveau mot de passe (12 caractères minimum)',{exact:true}).fill('fixture-password-123');
   await page.getByLabel('Confirmer le nouveau mot de passe',{exact:true}).fill('fixture-mismatch-123');
-  await page.getByLabel('Code d’invitation administrateur',{exact:true}).fill('fixture-private-invitation');
-  await page.getByRole('button',{name:'Activer mon accès',exact:true}).click();
+  await page.getByRole('button',{name:'Continuer',exact:true}).click();
   await page.getByText('Les deux mots de passe doivent être identiques.').waitFor();
   assert.equal(activations,0,'Mismatched confirmation never calls activation');
   await page.getByLabel('Confirmer le nouveau mot de passe',{exact:true}).fill('fixture-password-123');
-  await page.getByRole('button',{name:'Activer mon accès',exact:true}).click();
+  await page.getByRole('button',{name:'Continuer',exact:true}).click();
   await page.getByRole('heading',{name:'Configurer la double authentification',exact:true}).waitFor();
   assert.equal(await page.getByRole('heading',{name:'Vue d’ensemble',exact:true}).count(),0);
   const qr=page.getByRole('img',{name:'QR code à scanner dans votre application d’authentification'});await qr.waitFor();
@@ -72,6 +117,23 @@ try {
   await page.getByRole('heading',{name:'Vue d’ensemble',exact:true}).waitFor();
   assert.equal(await page.getByLabel('Lien de configuration',{exact:true}).count(),0);
   await page.getByRole('button',{name:'Se déconnecter'}).click();
+  await page.getByRole('button',{name:'J’ai reçu une invitation',exact:true}).click();
+  await page.getByLabel('Adresse e-mail',{exact:true}).fill(user.email);
+  await page.getByLabel('Code d’invitation administrateur',{exact:true}).fill(invitation);
+  invitationResponse='existing';
+  await page.getByRole('button',{name:'Vérifier mon invitation',exact:true}).click();
+  await page.getByLabel('Mot de passe',{exact:true}).fill('fixture-password-123');
+  await page.getByRole('button',{name:'Continuer',exact:true}).click();
+  await page.getByRole('heading',{name:'Vérifier votre identité',exact:true}).waitFor();
+  assert.equal(activations,1,'An existing account never calls activation');
+  assert.equal(invitationLogins,2);
+  await page.getByRole('button',{name:'Utiliser un code de secours',exact:true}).click();
+  await page.getByLabel('Code de secours',{exact:true}).fill('a'.repeat(32));
+  await page.getByRole('button',{name:'Vérifier',exact:true}).click();
+  await page.getByRole('heading',{name:'Configurer la double authentification',exact:true}).waitFor();
+  assert.equal(await page.getByRole('heading',{name:'Vue d’ensemble',exact:true}).count(),0,'Recovery does not bypass reenrollment');
+  await page.getByRole('button',{name:'Revenir à la connexion',exact:true}).click();
+  await page.getByRole('heading',{name:'Connexion sécurisée',exact:true}).waitFor();
   await page.getByLabel('Adresse e-mail', { exact: true }).fill('admin@example.invalid');
   await page.getByLabel('Mot de passe', { exact: true }).fill('test-only-password');
   await page.getByRole('button', { name: 'Se connecter', exact: true }).click();
@@ -114,5 +176,6 @@ try {
   await page.getByRole('button',{name:'Réessayer',exact:true}).click();
   await page.getByRole('heading',{name:'Vue d’ensemble',exact:true}).waitFor();
   console.log('PASS admin malformed response: accessible fallback and recovery without mutation replay');
+  console.log('PASS invitation: new/existing accounts, invalid and malformed responses, password retry, recovery reenrollment, no CSRF replacement or activation replay.');
   console.log('PASS isolated admin UI: MFA enrollment/login, recovery-code acknowledgement, role navigation, reason, CSRF, explicit reauth retry, mobile, logout. Backend authentication not tested by this fixture.');
-} finally { await browser.close(); await new Promise(r => server.close(r)); }
+} finally { await browser.close(); if(server.listening) await new Promise(r => server.close(r)); }

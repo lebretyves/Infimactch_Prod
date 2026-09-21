@@ -123,6 +123,7 @@ export function configureOpenApi(doc: OpenAPIObject) {
     Approval: object({reason:adminReason,identityVerified:verifiedIdentity},["reason","identityVerified"]),
     Issue: object({reason:adminReason,identityVerified:verifiedIdentity},["reason","identityVerified"]),
     LoginDto: object({email:adminEmail,password,invitation},["email","password"]),
+    InvitationCheckDto: object({email:adminEmail,invitation},["email","invitation"]),
     AdminActivationRequest: object({email:adminEmail,password,invitation},["email","password","invitation"]),
     MfaDto: object({code:{...boundedText(6,64),writeOnly:true}},["code"]),
     PasswordDto: object({password,code:{...boundedText(6,64),writeOnly:true}},["password","code"]),
@@ -277,6 +278,7 @@ export function configureOpenApi(doc: OpenAPIObject) {
       // DTO decorators do not describe these command bodies without the Swagger compiler plugin.
       // Activation enforces invitation at runtime; client support cannot supply admin status.
       const commandBody = key === "POST /api/v1/admin/activate" ? "AdminActivationRequest"
+        : key === "POST /api/v1/admin/invitation/check" ? "InvitationCheckDto"
         : key === "POST /api/v1/me/support-tickets/{id}/replies" ? "ClientReplyTicket" : undefined;
       if(commandBody) op.requestBody={required:true,content:{"application/json":{schema:ref(commandBody)}}};
       for (const code of [400, 401, 403, 404, 409, 413, 429, 500, 503])

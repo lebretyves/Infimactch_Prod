@@ -26,6 +26,7 @@ export class AdminGuard implements CanActivate {
 }
 export function authorizeAdmin(req:Request,permission:string,write=false){const role=(req as any).adminRole as AdminRole;if(!permitted(role,permission))throw new ForbiddenException();if(write&&Date.now()-(req.session.adminVerifiedAt??0)>5*60000)throw new ForbiddenException({code:'ADMIN_REAUTH_REQUIRED',message:'Confirmez votre mot de passe et votre code de sécurité.'});return req.session.adminId!;}
 class LoginDto {@IsEmail() @Length(3,254) email!:string;@IsString() @Length(12,128) password!:string;@IsOptional() @IsString() @Length(32,128) invitation?:string;}
+class InvitationCheckDto {@IsEmail() @Length(3,254) email!:string;@IsString() @Length(32,128) invitation!:string;}
 class MfaDto {@IsString() @Length(6,64) code!:string;}
 class PasswordDto extends MfaDto {@IsString() @Length(12,128) password!:string;}
 @Controller('admin')
@@ -85,6 +86,14 @@ export class AdminAuthController {
   await regenerate(req);const secret=newTotpSecret();
   req.session.adminChallenge={userId:c.userId,version:a.version+1,accountVersion:a.session_version,expires:Date.now()+5*60000,enrollment:sealSecret(secret),reset:true};
   await saveSession(req);return {status:'MFA_ENROLLMENT_REQUIRED',secret,otpauthUri:otpUri(a.email,secret),csrfToken:req.session.csrf};
+ }
+ // Only possession of a current invitation reveals which password step is needed.
+ // This read never activates access, consumes the invitation or starts an MFA challenge.
+ @Post('invitation/check') async checkInvitation(@Body() b:InvitationCheckDto){
+  if(!adminConfigured())throw new NotFoundException();
+  const [a]=await this.db.query('SELECT a.active AS account_active,a.platform_only,a.password_hash,p.active,p.invitation_hash,p.invitation_expires_at,p.locked_until FROM account a JOIN platform_admin p ON p.user_id=a.id WHERE lower(a.email)=lower($1)',[b.email]);
+  if(!a||!a.account_active||!a.active||!a.invitation_hash||a.invitation_hash!==hashInvitation(b.invitation)||!a.invitation_expires_at||new Date(a.invitation_expires_at).getTime()<=Date.now()||new Date(a.locked_until??0).getTime()>Date.now())throw new UnauthorizedException('Invitation indisponible.');
+  return {passwordSetupRequired:a.platform_only&&a.password_hash==='ADMIN_ACTIVATION_PENDING'};
  }
  @Post('activate') async activate(@Req() req:Request,@Body() b:LoginDto){
   if(!adminConfigured())throw new NotFoundException();
