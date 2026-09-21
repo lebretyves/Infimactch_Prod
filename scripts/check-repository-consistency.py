@@ -48,7 +48,7 @@ def normalized(root, name, text):
             return "[" + match[1] + "](@/" + canonical(rel) + (sep + anchor if sep else "") + ")"
         text = re.sub(r"\[([^\]]+)\]\(([^)]+)\)", link, text)
     # These are the documented checkout-specific paths, not runtime behavior changes.
-    text = text.replace("docs_intern/", "docs/")
+    text = re.sub(r"(?<![A-Za-z0-9_-])docs_intern/", "docs/", text)
     if name in {"scripts/verify-finess.cjs", "scripts/verify-france-travail.cjs",
                 "scripts/verify-france-travail-rectification.cjs", "scripts/verify-partial-matching-live.cjs"}:
         text = text.replace("'../docs_intern'", "'../docs'")
