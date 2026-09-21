@@ -21,7 +21,6 @@ import {
   BadRequestException,
 } from "@nestjs/common";
 import {
-  IsUUID,
   IsString,
   IsOptional,
   Matches,
@@ -29,7 +28,7 @@ import {
   IsBoolean,
 } from "class-validator";
 import { Request } from "express";
-import { Database, audit, event } from "../database/database";
+import { Database, audit } from "../database/database";
 import { SessionGuard, user, member, nurse } from "../common/access";
 class OrganizationDto {
   @ApiProperty({ type: () => String, required: true })

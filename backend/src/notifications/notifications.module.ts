@@ -1,7 +1,7 @@
 import { matchAreaStillValid } from './match-area';
 import { demoNoticeSuppressed } from "./demo-suppression";
 import { BadRequestException, Body, ConflictException, Controller, Delete, Get, Injectable, Module, Param, ParseUUIDPipe, Post, Put, Req, UseGuards } from "@nestjs/common";
-import { ArrayMaxSize, ArrayUnique, IsArray, IsBoolean, IsIn, IsOptional, IsString, Matches } from "class-validator";
+import { ArrayMaxSize, ArrayUnique, IsArray, IsBoolean, IsIn, IsOptional, Matches } from "class-validator";
 import { Request } from "express";
 import { createHash, randomInt, randomUUID } from "node:crypto";
 import { Database } from "../database/database";

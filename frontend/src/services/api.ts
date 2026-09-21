@@ -64,7 +64,10 @@ async function getCsrf() {
           "CSRF_UNAVAILABLE",
           "Impossible de préparer la connexion.",
         );
-      csrf = (await r.json()).csrfToken;
+      const data = await r.json().catch(() => null);
+      if (!data || typeof data.csrfToken !== "string" || !data.csrfToken.trim())
+        throw new ApiError(r.status, "INVALID_RESPONSE", "Impossible de préparer la connexion. Réessayez.");
+      csrf = data.csrfToken;
     })().finally(() => {
       pendingCsrf = null;
     });
@@ -109,11 +112,15 @@ export async function api<T>(
         "Serveur indisponible. Réessayez : aucune confirmation reçue.",
       );
     }
-    const data = await r.json().catch(() => ({}));
+    const received = await r.json().catch(() => null);
+    const data = received !== null && typeof received === "object" ? received : {};
     if (options.signal?.aborted)
       throw new DOMException("Request aborted", "AbortError");
     if (r.ok) {
-      if (data.csrfToken) acceptCsrf(data.csrfToken);
+      if (r.status === 204) return undefined as T;
+      if (received === null || typeof received !== "object")
+        throw new ApiError(r.status, "INVALID_RESPONSE", "La réponse du service est inattendue. Réessayez ; aucune confirmation reçue.");
+      if (typeof data.csrfToken === "string" && data.csrfToken.trim()) acceptCsrf(data.csrfToken);
       return data as T;
     }
     if (r.status === 403 && data.code === "CSRF_INVALID" && attempt === 0) {

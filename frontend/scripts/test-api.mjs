@@ -209,3 +209,27 @@ test('Rate-limit durations handle seconds, HTTP dates and invalid headers', asyn
     assert.match(format(value), /quelques minutes/);
   }
 });
+
+
+test('Malformed successful responses never confirm a mutation or trigger a retry', async () => {
+  for (const value of [null, 'unexpected', 42]) {
+    let calls = 0;
+    globalThis.fetch = async () => { calls++; return response(200, value); };
+    const {api, acceptCsrf} = await load(); acceptCsrf('fixture');
+    await assert.rejects(api('/write', {method:'POST'}), e => e.code === 'INVALID_RESPONSE');
+    assert.equal(calls, 1);
+  }
+  globalThis.fetch = async () => new Response('<html>gateway</html>', {status:200});
+  const {api} = await load();
+  await assert.rejects(api('/read'), e => e.code === 'INVALID_RESPONSE');
+});
+
+test('Malformed CSRF response prevents the write and malformed errors remain readable', async () => {
+  let calls = 0;
+  globalThis.fetch = async () => { calls++; return response(200, {csrfToken:42}); };
+  const {api} = await load();
+  await assert.rejects(api('/write', {method:'POST'}), e => e.code === 'INVALID_RESPONSE');
+  assert.equal(calls, 1);
+  globalThis.fetch = async () => response(503, null);
+  await assert.rejects(api('/read'), e => e.status === 503 && e.code === 'REQUEST_FAILED');
+});

@@ -1,6 +1,6 @@
 import { displayMatch } from '../domain/matching-display';
 import { Database } from '../database/database';
-import { covers, distanceKm, match, overlaps, Professional } from '../domain/matching';
+import { covers, distanceKm, overlaps, Professional } from '../domain/matching';
 import { matchingMission } from '../missions/missions.service';
 import { professional } from '../profiles/profiles.module';
 import { partialOfferMatch } from '../public-data/partial-matching';

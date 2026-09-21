@@ -24,7 +24,7 @@ La documentation ne pouvait pas être annoncée entièrement à jour après la p
 | Deux workflows et parcours publié | Preuves actuelles et recette finale à compléter ; aucun appel fournisseur lancé par ce contrôle |
 | MFA réel, récupération, sauvegarde et rotation | Code et procédures documentés ; validations réelles distinctes |
 | Conservation / responsable / accessibilité humaine | Décisions et essais encore ouverts, aucune conformité globale déclarée |
-| Indicateur admin de reprise | Le code considère le dernier passage ancien après 70 minutes alors que le cron est à quatre heures : état « inconnu » possible entre deux passages. Code non modifié dans ce lot |
+| Indicateur admin de reprise | Corrigé lors de la [revue du code](quality/REVUE_CODE_2026-09-21.md) : seuil de cinq heures pour le cycle de quatre heures, avec cas limites testés |
 
 ## Reproduction et versions
 

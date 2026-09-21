@@ -14,7 +14,7 @@ const server = createServer(async (req, res) => {
   } catch { res.writeHead(404); res.end(); }
 });
 await new Promise(r => server.listen(0, '127.0.0.1', r));
-const browser = await chromium.launch({ headless: true, channel: 'msedge' });
+const browser = await chromium.launch({ headless: true, channel: process.env.BROWSER_CHANNEL || (process.platform === 'win32' ? 'msedge' : undefined) });
 try {
   const page = await browser.newPage(); const errors = [];
   page.on('pageerror', e => errors.push(e.message));
@@ -105,5 +105,14 @@ try {
   await page.getByText('fixture-execution', {exact: true}).waitFor();
   assert.equal(await page.getByRole('link', {name: 'Voir le workflow n8n (nouvel onglet)'}).getAttribute('href'), 'https://infimatch.app.n8n.cloud/workflow/fixture%2Funsafe%3Ffragment');
   assert.deepEqual(errors, []);
+  let broken = true;
+  await page.route('**/api/v1/admin/overview',route=>route.fulfill({json:broken?{counts:{accounts:{unexpected:true}}}:{counts:{accounts:0,organizations:0,missions:{}},alerts:[]}}));
+  await page.getByRole('link',{name:'Vue d’ensemble',exact:true}).click();
+  await page.getByRole('heading',{name:'L’administration ne peut pas afficher cette page',exact:true}).waitFor();
+  assert.ok(!(await page.locator('body').innerText()).includes('Objects are not valid'));
+  broken = false;
+  await page.getByRole('button',{name:'Réessayer',exact:true}).click();
+  await page.getByRole('heading',{name:'Vue d’ensemble',exact:true}).waitFor();
+  console.log('PASS admin malformed response: accessible fallback and recovery without mutation replay');
   console.log('PASS isolated admin UI: MFA enrollment/login, recovery-code acknowledgement, role navigation, reason, CSRF, explicit reauth retry, mobile, logout. Backend authentication not tested by this fixture.');
 } finally { await browser.close(); await new Promise(r => server.close(r)); }

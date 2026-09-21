@@ -107,6 +107,7 @@ Pour le développement API avec recompilation : `npm run dev`. Le worker utilise
 | Build public | `npm run build --prefix frontend` |
 | Build administration | `npm run build:admin --prefix frontend` |
 | Recettes navigateur configurées | `npm run test:browser --prefix frontend` |
+| Recette navigateur administration (après build admin) | `npm run test:admin --prefix frontend` |
 | Contrôle local des secrets connus | `npm run check:secrets` |
 
 Les intégrations utilisent des bases isolées ; préparer leur environnement avant exécution. Les recettes navigateur nécessitent leurs serveurs et fixtures. Le contrôle des secrets connus ne constitue pas un audit exhaustif de l'historique.
@@ -138,3 +139,5 @@ Licence : [LICENSE](LICENSE).
 [Guide utilisateur](docs/GUIDE_UTILISATEUR.md) · [Inventaire documentaire](docs/INVENTAIRE_DOCUMENTAIRE.md).
 
 [Seconde vérification documentaire et réserves restantes](docs/VERIFICATION_DOCUMENTAIRE_2026-09-21.md).
+
+La [revue du code du 21 septembre](docs/quality/REVUE_CODE_2026-09-21.md) décrit le nettoyage, les corrections et les limites des vérifications.

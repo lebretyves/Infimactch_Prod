@@ -8,7 +8,6 @@ import {
   Injectable,
   Controller,
   Post,
-  Get,
   Param,
   Headers,
   Module,
@@ -19,7 +18,7 @@ import {
 } from "@nestjs/common";
 import { timingSafeEqual, randomUUID } from "node:crypto";
 import { createConfirmationPdf } from "./confirmation-pdf";
-import { Database, audit, event } from "../database/database";
+import { Database, audit } from "../database/database";
 import { required } from "../config";
 import {
   DocumentsModule,
@@ -27,7 +26,6 @@ import {
 } from "../documents/documents.module";
 import {
   lockMission,
-  missionSelect,
   matchingMission,
 } from "../missions/missions.service";
 import { professional } from "../profiles/profiles.module";

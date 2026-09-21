@@ -41,7 +41,7 @@ Le RPPS facultatif lors de l’inscription ne vaut pas vérification professionn
 
 Ce tableau compare des jalons prévus à des preuves disponibles ; il n’invente aucune date réelle de réalisation. Le [chiffrage de référence](../CHIFFRAGE_V1.md) reste 348–528 heures-personnes, détail dans [le CSV](../CHIFFRAGE_V1.csv). Il remplace pour cette présentation l’ancienne hypothèse de 288 heures figurant dans le document de travail initial. La capacité de quatre personnes sur onze jours vaut 44 journées-personnes ; leur durée productive n’a pas été fournie.
 
-Le [journal réel](../TEMPS_REELS.csv) ne contient qu’un relevé historique de 0,921 heure écoulée d’agent, avec outils et attente. Ce chiffre n’est ni un temps humain ni le total des interventions d’agents. Aucun écart estimé/réel, coût humain ou gain de productivité fiable ne peut être calculé à partir de ce journal. Les colonnes humaines restent à compléter par l’équipe, sans conversion du nombre de commits en heures.
+Les heures effectivement consacrées au projet sont à renseigner par l’équipe dans [le relevé des temps humains](../rendu/TEMPS_HUMAINS.csv). Le réalisé reste inconnu tant que ce relevé n’est pas complété : ni les commits ni les durées d’exécution des outils ne remplacent ces heures. Aucun coût humain ou gain de productivité n’est présenté comme mesuré.
 
 ## État des versions et preuves techniques
 

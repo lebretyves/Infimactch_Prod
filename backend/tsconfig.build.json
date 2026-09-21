@@ -7,5 +7,9 @@
     "test",
     "dist",
     "node_modules"
-  ]
+  ],
+  "compilerOptions": {
+    "noUnusedLocals": true,
+    "noUnusedParameters": true
+  }
 }
