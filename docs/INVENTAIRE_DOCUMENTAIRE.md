@@ -112,11 +112,12 @@ Revue du 21 septembre 2026. Ce classement distingue les références actuelles d
 | [frontend/docs/INTEGRATION_BACKEND.md](../frontend/docs/INTEGRATION_BACKEND.md) | Référence courante revue ou corrigée |
 | [frontend/docs/PHOTOS_MAQUETTES.md](../frontend/docs/PHOTOS_MAQUETTES.md) | Note historique de conception ou recette |
 | [frontend/public/aide/discord/retrouver-identifiant-discord.pdf](../frontend/public/aide/discord/retrouver-identifiant-discord.pdf) | Document spécialisé : portée propre |
-| [frontend/public/guides/tutorials/annulation-emails.vtt](../frontend/public/guides/tutorials/annulation-emails.vtt) | Sous-titres présents ; vidéo non intégralement revue |
-| [frontend/public/guides/tutorials/candidature-agenda.vtt](../frontend/public/guides/tutorials/candidature-agenda.vtt) | Sous-titres présents ; vidéo non intégralement revue |
-| [frontend/public/guides/tutorials/confirmation-pdf.vtt](../frontend/public/guides/tutorials/confirmation-pdf.vtt) | Sous-titres présents ; vidéo non intégralement revue |
-| [frontend/public/guides/tutorials/inscription-diplomes.vtt](../frontend/public/guides/tutorials/inscription-diplomes.vtt) | Sous-titres présents ; vidéo non intégralement revue |
-| [frontend/public/guides/tutorials/profil-cv.vtt](../frontend/public/guides/tutorials/profil-cv.vtt) | Sous-titres présents ; vidéo non intégralement revue |
-| [frontend/public/guides/tutorials/recherche-matching.vtt](../frontend/public/guides/tutorials/recherche-matching.vtt) | Sous-titres présents ; vidéo non intégralement revue |
+| [frontend/public/guides/tutorials/annulation-emails.vtt](../frontend/public/guides/tutorials/annulation-emails.vtt) | Tutoriel réenregistré ; étapes et sous-titres contrôlés |
+| [frontend/public/guides/tutorials/candidature-agenda.vtt](../frontend/public/guides/tutorials/candidature-agenda.vtt) | Tutoriel réenregistré ; étapes et sous-titres contrôlés |
+| [frontend/public/guides/tutorials/confirmation-pdf.vtt](../frontend/public/guides/tutorials/confirmation-pdf.vtt) | Tutoriel réenregistré ; étapes et sous-titres contrôlés |
+| [frontend/public/guides/tutorials/inscription-diplomes.vtt](../frontend/public/guides/tutorials/inscription-diplomes.vtt) | Tutoriel réenregistré ; étapes et sous-titres contrôlés |
+| [frontend/public/guides/tutorials/profil-cv.vtt](../frontend/public/guides/tutorials/profil-cv.vtt) | Tutoriel réenregistré ; étapes et sous-titres contrôlés |
+| [frontend/public/guides/tutorials/recherche-matching.vtt](../frontend/public/guides/tutorials/recherche-matching.vtt) | Tutoriel réenregistré ; étapes et sous-titres contrôlés |
 | [scripts/SAFE_DEMO_IMPORT.md](../scripts/SAFE_DEMO_IMPORT.md) | Document spécialisé : portée propre |
 | [Revue du code du 21 septembre](quality/REVUE_CODE_2026-09-21.md) | Nettoyage et validation locale datés |
+| [Vérification des six tutoriels](quality/TUTORIELS_VIDEO_2026-09-21.md) | Parcours filmés, médias et sous-titres actualisés |

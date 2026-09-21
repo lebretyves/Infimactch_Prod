@@ -67,4 +67,4 @@ Diagnostic détaillé des connexions, chronologie admin centralisée et tableau 
 
 ## Documentation de référence
 
-[Architecture technique](SCHEMA_ARCHITECTURE_V1.md), [flux métier](FLUX_V1.md), [automatisations et preuves](AUTOMATISATIONS.md), [guide utilisateur](GUIDE_UTILISATEUR.md) et [inventaire documentaire](INVENTAIRE_DOCUMENTAIRE.md). Les tutoriels vidéo et les supports oraux historiques doivent être revus avant leur présentation comme état actuel.
+[Architecture technique](SCHEMA_ARCHITECTURE_V1.md), [flux métier](FLUX_V1.md), [automatisations et preuves](AUTOMATISATIONS.md), [guide utilisateur](GUIDE_UTILISATEUR.md) et [inventaire documentaire](INVENTAIRE_DOCUMENTAIRE.md). Les six tutoriels vidéo ont été réenregistrés et contrôlés le 21 septembre 2026 : [périmètre et preuves](quality/TUTORIELS_VIDEO_2026-09-21.md). La répétition humaine du support oral reste à faire.

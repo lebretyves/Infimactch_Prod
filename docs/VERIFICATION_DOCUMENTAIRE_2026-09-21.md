@@ -12,13 +12,13 @@ La documentation ne pouvait pas être annoncée entièrement à jour après la p
 - Guides Discord, JobsPipe, Vault, intégration frontend, interfaces, récupération MFA et configuration rectifiés. Sources de preuve et état déployé distingués.
 - Plans V2 et notes de maquettes remplacées archivés hors branches actives. Sujet du kick-off et catalogue original conservés comme références historiques, non réécrits.
 - OpenAPI : contrôle structurel sans réponse de succès manquante ni corps vide ; cette vérification ne remplace pas une recette de chaque route.
-- Aide textuelle et deux sous-titres corrigés. Présence des six ressources de tutoriels vérifiée par les tests existants.
+- Aide textuelle et six tutoriels vidéo réenregistrés ; sous-titres synchronisés sur les nouveaux parcours. Voir le [contrôle des médias](quality/TUTORIELS_VIDEO_2026-09-21.md).
 
 ## Réserves qui restent réelles
 
 | Élément | État exact |
 | --- | --- |
-| Six vidéos | Non réenregistrées et non intégralement revues ; l'aide affiche leur caractère antérieur et renvoie aux guides écrits |
+| Six vidéos | Réenregistrées avec données fictives ; contrôle des étapes filmées, sous-titres, décodage et lecture navigateur |
 | Étude de marché / sources externes | Recherche historique datée, pas une nouvelle vérification web de chaque affirmation |
 | Heures, membres et répétition | À renseigner et attester par l'équipe ; aucun chiffre inventé |
 | Deux workflows et parcours publié | Preuves actuelles et recette finale à compléter ; aucun appel fournisseur lancé par ce contrôle |

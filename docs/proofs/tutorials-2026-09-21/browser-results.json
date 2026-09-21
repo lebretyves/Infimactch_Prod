@@ -1,0 +1,147 @@
+{
+  "passed": true,
+  "reports": [
+    {
+      "width": 1440,
+      "helpNavigation": true,
+      "noInitialVideos": true,
+      "overflow": false,
+      "axe": []
+    },
+    {
+      "width": 390,
+      "helpNavigation": true,
+      "noInitialVideos": true,
+      "overflow": false,
+      "axe": []
+    },
+    {
+      "width": 320,
+      "helpNavigation": true,
+      "noInitialVideos": true,
+      "overflow": false,
+      "axe": []
+    },
+    {
+      "video": "inscription-diplomes",
+      "duration": 76.24,
+      "width": 1280,
+      "height": 800,
+      "preload": "none",
+      "captions": "http://127.0.0.1:4249/guides/tutorials/inscription-diplomes.vtt?v=2026-09-21",
+      "cueCount": 16,
+      "captionsWithinDuration": true,
+      "browserCueCount": 16
+    },
+    {
+      "video": "profil-cv",
+      "duration": 27.88,
+      "width": 1280,
+      "height": 800,
+      "preload": "none",
+      "captions": "http://127.0.0.1:4249/guides/tutorials/profil-cv.vtt?v=2026-09-21",
+      "cueCount": 7,
+      "captionsWithinDuration": true,
+      "browserCueCount": 7
+    },
+    {
+      "video": "recherche-matching",
+      "duration": 44,
+      "width": 1280,
+      "height": 800,
+      "preload": "none",
+      "captions": "http://127.0.0.1:4249/guides/tutorials/recherche-matching.vtt?v=2026-09-21",
+      "cueCount": 8,
+      "captionsWithinDuration": true,
+      "browserCueCount": 8
+    },
+    {
+      "video": "candidature-agenda",
+      "duration": 21.08,
+      "width": 1280,
+      "height": 800,
+      "preload": "none",
+      "captions": "http://127.0.0.1:4249/guides/tutorials/candidature-agenda.vtt?v=2026-09-21",
+      "cueCount": 5,
+      "captionsWithinDuration": true,
+      "browserCueCount": 5
+    },
+    {
+      "video": "confirmation-pdf",
+      "duration": 21.36,
+      "width": 1280,
+      "height": 800,
+      "preload": "none",
+      "captions": "http://127.0.0.1:4249/guides/tutorials/confirmation-pdf.vtt?v=2026-09-21",
+      "cueCount": 5,
+      "captionsWithinDuration": true,
+      "browserCueCount": 5
+    },
+    {
+      "video": "annulation-emails",
+      "duration": 22.24,
+      "width": 1280,
+      "height": 800,
+      "preload": "none",
+      "captions": "http://127.0.0.1:4249/guides/tutorials/annulation-emails.vtt?v=2026-09-21",
+      "cueCount": 5,
+      "captionsWithinDuration": true,
+      "browserCueCount": 5
+    },
+    {
+      "route": "/",
+      "metadata": {
+        "title": "L’intérim infirmier, pensé pour le soin — InfiMatch",
+        "description": "Découvrez InfiMatch : un projet de plateforme reliant infirmiers IDE, IADE, IBODE, établissements de santé et agences d’intérim.",
+        "ogTitle": "L’intérim infirmier, pensé pour le soin — InfiMatch",
+        "ogDescription": "Découvrez InfiMatch : un projet de plateforme reliant infirmiers IDE, IADE, IBODE, établissements de santé et agences d’intérim."
+      }
+    },
+    {
+      "route": "/installer",
+      "metadata": {
+        "title": "Installer l’application — InfiMatch",
+        "description": "Retrouvez InfiMatch depuis votre écran d’accueil, avec le même compte et les mêmes fonctions.",
+        "ogTitle": "Installer l’application — InfiMatch",
+        "ogDescription": "Retrouvez InfiMatch depuis votre écran d’accueil, avec le même compte et les mêmes fonctions."
+      }
+    },
+    {
+      "route": "/accessibilite",
+      "metadata": {
+        "title": "Accessibilité : état des travaux — InfiMatch",
+        "description": "Périmètre, méthode et limites des contrôles d’accessibilité du projet InfiMatch.",
+        "ogTitle": "Accessibilité : état des travaux — InfiMatch",
+        "ogDescription": "Périmètre, méthode et limites des contrôles d’accessibilité du projet InfiMatch."
+      }
+    },
+    {
+      "route": "/ecoconception",
+      "metadata": {
+        "title": "Notre démarche d’écoconception — InfiMatch",
+        "description": "Actions et limites de la démarche d’écoconception InfiMatch.",
+        "ogTitle": "Notre démarche d’écoconception — InfiMatch",
+        "ogDescription": "Actions et limites de la démarche d’écoconception InfiMatch."
+      }
+    },
+    {
+      "route": "/mentions-legales",
+      "metadata": {
+        "title": "Mentions légales et données personnelles — InfiMatch",
+        "description": "Fonctionnement du projet InfiMatch, données de compte et préférences cookies.",
+        "ogTitle": "Mentions légales et données personnelles — InfiMatch",
+        "ogDescription": "Fonctionnement du projet InfiMatch, données de compte et préférences cookies."
+      }
+    },
+    {
+      "route": "/aide",
+      "metadata": {
+        "title": "Centre d’aide — InfiMatch",
+        "description": "Consultez les guides et retrouvez vos demandes de support après connexion.",
+        "ogTitle": "Centre d’aide — InfiMatch",
+        "ogDescription": "Consultez les guides et retrouvez vos demandes de support après connexion."
+      }
+    }
+  ],
+  "errors": []
+}

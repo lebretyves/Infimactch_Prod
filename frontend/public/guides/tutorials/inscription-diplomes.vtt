@@ -1,25 +1,65 @@
 WEBVTT
 
 1
-00:00:00.971 --> 00:00:03.730
+00:00:00.778 --> 00:00:03.542
 1 · Inscription : renseignez votre identité. Exemple fictif.
 
 2
-00:00:03.730 --> 00:00:07.489
+00:00:03.542 --> 00:00:07.262
 Le nom complet permet de vous identifier dans les documents.
 
 3
-00:00:07.489 --> 00:00:12.290
-Le domicile et la zone de recherche sont deux informations distinctes.
+00:00:07.262 --> 00:00:11.995
+Votre domicile est facultatif. Il reste distinct de votre future zone d’alertes.
 
 4
-00:00:12.290 --> 00:00:15.556
+00:00:11.995 --> 00:00:15.210
 IADE sélectionne aussi IDE : ce sont deux diplômes distincts.
 
 5
-00:00:15.556 --> 00:00:20.191
+00:00:15.210 --> 00:00:19.788
 Chaque diplôme conserve sa propre année : IDE 2015, IADE 2020.
 
 6
-00:00:20.191 --> 00:00:22.909
-Poursuivez avec votre mobilité, vos disponibilités et vos consentements.
+00:00:19.788 --> 00:00:24.600
+Choisissez votre rayon de mobilité. Vous pourrez modifier votre zone après inscription.
+
+7
+00:00:24.600 --> 00:00:29.257
+Indiquez vos horaires et vos disponibilités, si vous les connaissez.
+
+8
+00:00:29.257 --> 00:00:34.529
+Lisez les conditions. Le RIB et la géolocalisation restent facultatifs.
+
+9
+00:00:34.529 --> 00:00:39.406
+Discord est proposé après création du compte. Cette étape est facultative.
+
+10
+00:00:39.406 --> 00:00:44.838
+Configurer Discord, ou passer cette étape : le compte est déjà utilisable.
+
+11
+00:00:44.838 --> 00:00:49.731
+Dans Notifications, associez Discord puis choisissez les événements souhaités.
+
+12
+00:00:49.731 --> 00:00:54.514
+Rejoignez le serveur InfiMatch et autorisez ses messages privés, puis revenez ici.
+
+13
+00:00:54.514 --> 00:01:00.304
+Copiez votre identifiant utilisateur depuis Discord. Ici, nous utilisons un exemple fictif.
+
+14
+00:01:00.304 --> 00:01:06.389
+Le code arrive en message privé et expire après 10 minutes. Aucun message réel n’est envoyé ici.
+
+15
+00:01:06.389 --> 00:01:11.728
+L’association seule n’active aucun événement. Choisissez vos préférences.
+
+16
+00:01:11.728 --> 00:01:16.240
+Préférences enregistrées : les missions compatibles seulement. Vous pourrez modifier ce choix.
