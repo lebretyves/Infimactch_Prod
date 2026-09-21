@@ -41,12 +41,12 @@
   height: 48px;
   flex-shrink: 0;
   border-radius: 50%;
-  background: #e7f2fd;
-  color: #1466e0;
+  background: var(--brand-100);
+  color: var(--brand-600);
 }
 .teal {
-  background: #e4f6f6;
-  color: #0e7684;
+  background: var(--teal-100);
+  color: var(--teal-700);
 }
 .dashboard {
   display: grid;
@@ -303,14 +303,14 @@
 .enterprisePage .enterpriseHeader { align-items: center; padding: 8px 0 4px; gap: 24px; }
 .enterpriseHeader > div { min-width: 0; }
 .enterpriseHeader > a { flex-shrink: 0; }
-.enterprisePage .enterpriseSection { min-width: 0; background: #fff; border: 1px solid #e8f0f6; border-radius: 8px; padding: 20px; display: grid; align-content: start; gap: 18px; }
+.enterprisePage .enterpriseSection { min-width: 0; background: #fff; border: 1px solid var(--line); border-radius: 8px; padding: 20px; display: grid; align-content: start; gap: 18px; }
 .enterprisePage h2 { font-size: 22px; line-height: 1.35; letter-spacing: -.45px; }
 .enterprisePage h3 { font-size: 17px; line-height: 1.5; }
 .sectionHeading { display: flex; justify-content: space-between; align-items: flex-start; gap: 20px; }
 .sectionHeading > div { min-width: 0; display: grid; gap: 8px; }
 .sectionHeading p { color: var(--ink-600); font-size: 15px; }
 .sectionHeading > svg { flex-shrink: 0; color: var(--brand-600); margin-top: 4px; }
-.applicationsPriority { display: flex; align-items: center; gap: 20px; padding: 18px; background: #edf6ff; border: 1px solid #e3eef8; border-radius: 6px; color: var(--ink-900); text-decoration: none; }
+.applicationsPriority { display: flex; align-items: center; gap: 20px; padding: 18px; background: var(--brand-100); border: 1px solid var(--brand-200); border-radius: 6px; color: var(--ink-900); text-decoration: none; }
 .applicationsPriority:hover { background: #e2efff; }
 .applicationsPriority:focus-visible { outline: 3px solid var(--brand-600); outline-offset: 4px; }
 .priorityIcon { color: var(--brand-700); display: flex; flex-shrink: 0; }
@@ -380,7 +380,7 @@
 }
 
 /* Match the reference's compact summary strip and main/support workspace. */
-.nursePage .stat { border-color: #e8f0f6; border-radius: 6px; padding: 16px; gap: 12px; }
+.nursePage .stat { border-color: var(--line); border-radius: 6px; padding: 16px; gap: 12px; }
 .nursePage .stat .icon { width: 42px; height: 42px; }
 .nursePage .preparation { grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr); gap: 20px; align-items: start; }
 .preparationTools { border-radius: 8px; }
@@ -390,7 +390,7 @@
 .enterpriseCounts > div { padding: 12px 0; gap: 6px; }
 .enterpriseCounts dd { font-size: 26px; }
 .enterpriseCounts dt { font-size: 13px; }
-.enterpriseCounts > div:nth-child(2n) dd { color: #087784; }
+.enterpriseCounts > div:nth-child(2n) dd { color: var(--teal-700); }
 .enterprisePage > .enterpriseSection { background: transparent; border: 0; padding: 0; }
 .enterprisePage > .enterpriseSection > .sectionHeading { align-items: center; }
 .enterprisePage > .enterpriseSection .managementActions { padding-top: 14px; }
@@ -404,12 +404,12 @@
   .applicationsPriority { flex-wrap: wrap; align-content: center; }
   .priorityContent { gap: 10px; }
   .priorityAction { width: 100%; padding-left: 44px; }
-  .enterpriseCounts { padding: 4px 20px; background: #fff; border: 1px solid #e8f0f6; border-radius: 6px; }
+  .enterpriseCounts { padding: 4px 20px; background: #fff; border: 1px solid var(--line); border-radius: 6px; }
 }
 @media (max-width: 900px) { .nursePage .preparation { grid-template-columns: 1fr; } }
 @media (max-width: 600px) {
   .nursePage .stat { padding: 12px 6px; }
   .enterpriseCounts { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
-  .enterpriseCounts > div, .enterpriseCounts > div:last-child { flex-direction: column; align-items: flex-start; justify-content: flex-start; padding: 14px; gap: 6px; border: 1px solid #e8f0f6; background: #fff; border-radius: 6px; }
+  .enterpriseCounts > div, .enterpriseCounts > div:last-child { flex-direction: column; align-items: flex-start; justify-content: flex-start; padding: 14px; gap: 6px; border: 1px solid var(--line); background: #fff; border-radius: 6px; }
   .enterpriseCounts dd { order: -1; }
 }

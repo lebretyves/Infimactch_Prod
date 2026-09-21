@@ -3,7 +3,7 @@
   grid-template-columns: 232px minmax(0, 1fr);
   grid-template-rows: 76px 1fr;
   min-height: 100dvh;
-  background: #f2f9fc;
+  background: var(--page);
 }
 .header {
   grid-column: 1/-1;
@@ -63,7 +63,7 @@
   display: grid;
   place-items: center;
   border-radius: 50%;
-  background: #e8f4fc;
+  background: var(--teal-100);
   color: var(--brand-700);
   font-weight: 700;
   font-size: 13px;
@@ -102,7 +102,7 @@
   background: var(--brand-50);
 }
 .active {
-  background: #e6f1ff;
+  background: var(--brand-100);
   color: var(--brand-700);
 }
 .active:before {
@@ -225,7 +225,7 @@
 /* Candidate navigation is grouped without changing the enterprise workspace. */
 .shell[data-space="candidate"] .nav { padding: 16px 12px; gap: 4px; }
 .navGroup { display: grid; gap: 2px; margin-top: 12px; }
-.groupLabel { margin: 0 12px 4px; font-size: 11px; font-weight: 800; letter-spacing: .07em; text-transform: uppercase; color: var(--ink-600); }
+.groupLabel { margin: 0 12px 4px; font-size: 11px; font-weight: 800; letter-spacing: .07em; text-transform: uppercase; color: var(--brand-700); }
 .shell[data-space="candidate"] .link { min-height: 44px; padding: 10px 12px; font-size: 12px; gap: 10px; }
 .shell[data-space="candidate"] .bottom { padding-top: 16px; gap: 4px; align-items: stretch; justify-items: stretch; }
 .shell[data-space="candidate"] .catalogue { min-height: 44px; display: flex; align-items: center; font-size: 12px; padding: 10px 12px; }

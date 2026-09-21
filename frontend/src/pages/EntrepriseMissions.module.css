@@ -1,16 +1,16 @@
 ﻿.search { display: grid; grid-template-columns: repeat(4,minmax(0,1fr)); gap: 16px; padding: 20px; border: 1px solid var(--line); border-radius: 8px; background: #fff; }
 .search label { display: block; margin-bottom: 7px; font-size: 14px; font-weight: 600; }
-.search input,.search select { width: 100%; min-width: 0; min-height: 46px; padding: 10px 12px; border: 1px solid #c7d9ec; border-radius: 8px; font: inherit; color: var(--ink-900); background: #fff; }
+.search input,.search select { width: 100%; min-width: 0; min-height: 46px; padding: 10px 12px; border: 1px solid var(--line-strong); border-radius: 8px; font: inherit; color: var(--ink-900); background: #fff; }
 .searchActions { grid-column: 1/-1; display: flex; justify-content: space-between; align-items: end; gap: 16px; }
 .searchActions p { font-size: 12px; color: var(--ink-700); max-width: 580px; margin: 0; line-height: 1.6; }
 .result { font-size: 14px; margin: 0; color: var(--ink-700); }
 .result strong { color: var(--ink-900); }
 .pagination { display: grid; gap: 16px; margin-top: 4px; }
 .pageButtons,.jump { display: flex; align-items: center; justify-content: center; gap: 8px; flex-wrap: wrap; }
-.pageNumber { border: 1px solid #c7d9ec; border-radius: 7px; background: #fff; color: var(--brand-700); min-width: 42px; min-height: 42px; font: inherit; font-weight: 600; cursor: pointer; }
+.pageNumber { border: 1px solid var(--line-strong); border-radius: 7px; background: #fff; color: var(--brand-700); min-width: 42px; min-height: 42px; font: inherit; font-weight: 600; cursor: pointer; }
 .pageNumber[aria-current="page"] { background: var(--brand-600); border-color: var(--brand-600); color: #fff; }
 .pageNumber:hover { border-color: var(--brand-600); }
 .jump { font-size: 13px; }
-.jump input { width: 76px; min-height: 42px; border: 1px solid #c7d9ec; border-radius: 7px; font: inherit; padding: 8px; }
+.jump input { width: 76px; min-height: 42px; border: 1px solid var(--line-strong); border-radius: 7px; font: inherit; padding: 8px; }
 @media(max-width:1000px) { .search { grid-template-columns: repeat(2,minmax(0,1fr)); } }
 @media(max-width:550px) { .search { grid-template-columns: 1fr; padding: 16px; } .searchActions { flex-direction: column; align-items: stretch; } .pageButtons { gap: 6px; } .pageButtons > button:first-child,.pageButtons > button:last-child { flex-basis: 42%; order: 2; } }

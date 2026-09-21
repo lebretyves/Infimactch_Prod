@@ -34,7 +34,7 @@
   min-height: 52px;
   height: auto;
   padding: .65em var(--space-4);
-  border: 1px solid var(--line);
+  border: 1px solid var(--line-strong);
   border-radius: var(--radius-control);
   background: var(--white);
   color: var(--ink-900);
