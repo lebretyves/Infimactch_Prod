@@ -33,6 +33,7 @@ export function InscriptionLayout() {
       </a>
 
       <header className={s.header}>
+        <span data-accessibility-slot />
         <Logo size={32} withWordmark />
         <p className={s.compteur}>
           Étape {index + 1} sur {etapes.length}

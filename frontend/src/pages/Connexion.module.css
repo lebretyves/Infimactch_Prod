@@ -103,3 +103,6 @@
 .legal span {
   color: var(--line-strong);
 }
+
+.aideConnexion { margin-top: var(--space-3); }
+.aideConnexion a { display: inline-flex; align-items: center; min-height: 44px; }

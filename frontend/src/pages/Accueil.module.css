@@ -348,7 +348,11 @@
 .notificationsSection li p { font-size: 15px; overflow-wrap: anywhere; }
 .notificationsSection .textLink { display: inline-flex; align-items: center; min-height: 44px; font-size: 14px; text-decoration: underline; text-underline-offset: 4px; }
 @media (min-width: 1180px) {
-  .enterpriseDaily { grid-template-columns: minmax(0, 1.55fr) minmax(0, 1fr); }
+  .enterpriseDaily { grid-template-columns: minmax(0, 1fr); }
+  .recentOffers { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px 24px; }
+  .recentOffer, .recentOffer:first-child, .recentOffer:last-child { border-top: 0; padding: 0; align-content: start; }
+  .notificationsSection ul { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px 24px; }
+  .notificationsSection li, .notificationsSection li:first-child, .notificationsSection li:last-child { border: 0; padding: 0; }
   .enterpriseDaily .sectionHeading { gap: 12px; }
   .enterpriseDaily h2 { font-size: 20px; }
   .enterpriseDaily .offerHeading { flex-direction: column; gap: 10px; }

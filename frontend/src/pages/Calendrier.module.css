@@ -255,9 +255,9 @@
 }
 .mobility {
   display: grid;
-  grid-template-columns: 1fr 1fr auto;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 20px;
-  align-items: end;
+  align-items: start;
 }
 .saving {
   font-size: 12px;
@@ -438,3 +438,7 @@
 .calendarPage nav a { min-height: 44px; display: inline-flex; align-items: center; }
 
 .calendarPage button { min-height: 44px; min-width: 44px; }
+
+/* Keep location help below its input without displacing the radius field. */
+.mobility > button { grid-column: 1 / -1; justify-self: start; }
+@media (min-width: 601px) { .mobility label { min-height: 3em; } }

@@ -1,0 +1,14 @@
+.page { min-width: 0; }
+.page > a, .page section > a, .page section > button, .page article > button { justify-self: start; }
+.actions { display: flex; flex-wrap: wrap; align-items: flex-start; gap: 12px; min-width: 0; }
+.actions > * { min-width: 0; max-width: 100%; }
+.actions > :has(> section) { flex-basis: 100%; }
+@media (max-width: 600px) {
+ .actions { flex-direction: column; align-items: stretch; }
+  .actions > :has(> section) { flex-basis: auto; width: 100%; }
+ .actions > a, .actions > button, .actions > div > button { width: 100%; }
+}
+
+.pagination { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; }
+.pagination > span { white-space: nowrap; }
+@media (max-width: 600px) { .pagination { flex-direction: column; align-items: stretch; } .pagination > span { text-align: center; } }

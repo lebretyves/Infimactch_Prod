@@ -6,7 +6,7 @@
 .eyebrow { font-size: .78rem; font-weight: 800; letter-spacing: .09em; text-transform: uppercase; color: var(--teal-700, #0e6c7c); margin: 0 0 8px; }
 .notice { display: flex; gap: 12px; align-items: flex-start; background: #e4f3f7; border-left: 3px solid var(--teal-700, #0e6c7c); padding: 16px 20px; margin-bottom: 28px; line-height: 1.6; }
 .notice svg { flex-shrink: 0; margin-top: 3px; }.notice p { margin: 0; }
-.columns { display: grid; grid-template-columns: minmax(260px, .85fr) minmax(0, 1.4fr); gap: 32px; align-items: start; }
+.columns { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 320px), 1fr)); gap: 32px; align-items: start; }
 .recap { padding: 26px; border: 1px solid var(--line, #dbe4f0); border-top: 4px solid var(--brand-600, #1466e0); border-radius: 4px 4px 16px 16px; background: #fff; overflow-wrap: anywhere; }
 .recap h2,.missing h2,.form h2 { font-size: 1.25rem; letter-spacing: -.025em; line-height: 1.4; margin: 0 0 16px; }
 .missionTitle { font-size: 1.05rem; line-height: 1.6; font-weight: 700; margin: 0 0 24px; }

@@ -72,6 +72,6 @@
 .cookieTrigger { border: 0; background: transparent; padding-inline: 8px; font-weight: 400; text-decoration: underline; text-underline-offset: 4px; }
 .cookieTrigger:hover { color: var(--brand-800); background: transparent; }
 
-@media (max-width: 1199px) {
-  :global(body:has([data-home-accessibility])) .footerAccessibility { display: none; }
-}
+.accessibilityFallback { display: flex; align-items: center; padding: 0 12px; background: var(--white); }
+:global([data-accessibility-slot]) { display: inline-flex; flex: 0 0 44px; align-items: center; }
+@media print { .accessibilityFallback, :global([data-accessibility-slot]) { display: none; } }

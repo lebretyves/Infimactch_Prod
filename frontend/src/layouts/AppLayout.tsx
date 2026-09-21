@@ -74,6 +74,7 @@ export function AppLayout() {
         Aller au contenu principal
       </a>
       <header className={s.header}>
+        <span data-accessibility-slot />
         <Link
           to="/accueil"
           className={s.brand}

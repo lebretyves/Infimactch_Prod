@@ -92,6 +92,7 @@ export function CookieConsentProvider({
       value={{ googleAllowed, preferences, openPreferences, savePreferences }}
     >
       <div className={preferencesStyle.page}>
+      <AccessibilityPanel returnToCookies={open} />
       <div className={preferencesStyle.content}>{children}</div>
       <div className={preferencesStyle.bar} role="group" aria-label="Préférences du site">
         <div className={preferencesStyle.controls}>
@@ -106,7 +107,6 @@ export function CookieConsentProvider({
             onSave={savePreferences}
             onClose={() => (preferences ? setOpen(false) : savePreferences(false))}
           />
-          <AccessibilityPanel returnToCookies={open} />
         </div>
       </div>
       </div>

@@ -9,6 +9,8 @@ import { SelectField } from "@/ui/Field";
 import { ConfirmationButton } from "@/components/ConfirmationButton";
 import { Icon } from "@/ui/Icon";
 import s from "./MarketPages.module.css";
+import periodStyles from "./Historique.module.css";
+import { historyMonths, historyYears, inHistoryPeriod } from "./historyPeriod";
 type Item = {
   id: string;
   mission_id: string;
@@ -44,7 +46,8 @@ const labels: Record<string, string> = {
   cancelled: "Annulée",
 };
 export default function Historique() {
-  const [period, setPeriod] = useState(""),
+  const [month, setMonth] = useState(""),
+    [year, setYear] = useState(""),
     [status, setStatus] = useState(""),
     [selected, setSelected] = useState("");
   const r = useRemote(history, "history");
@@ -59,35 +62,10 @@ export default function Historique() {
         : null,
     "history-events:" + selectedItem?.application_id,
   );
-  const periods = [
-    ...new Set(
-      (r.data || []).flatMap((m) => {
-        const start = new Date(m.start_at),
-          end = new Date(m.end_at);
-        const result: string[] = [];
-        const cursor = new Date(start.getFullYear(), start.getMonth(), 1);
-        for (let i = 0; cursor <= end && i < 120; i++) {
-          result.push(
-            cursor.getFullYear() +
-              "-" +
-              String(cursor.getMonth() + 1).padStart(2, "0"),
-          );
-          cursor.setMonth(cursor.getMonth() + 1);
-        }
-        return result;
-      }),
-    ),
-  ]
-    .sort()
-    .reverse();
-  const items = (r.data || []).filter((m) => {
-    const within =
-      !period ||
-      (new Date(m.start_at) <
-        new Date(Number(period.slice(0, 4)), Number(period.slice(5, 7)), 1) &&
-        new Date(m.end_at) >= new Date(period + "-01T00:00:00"));
-    return within && (!status || position(m) === status);
-  });
+  const years = historyYears(r.data || []);
+  const items = (r.data || []).filter((m) =>
+    inHistoryPeriod(m, month, year) && (!status || position(m) === status),
+  );
   return (
     <div className={s.page}>
       <header className={s.header}>
@@ -121,24 +99,22 @@ export default function Historique() {
         </div>
       ) : (
         <section className={s.card}>
-          <div className={s.filters}>
+          <div className={periodStyles.filters}>
             <SelectField
-              label="Période"
-              value={period}
-              onChange={(e) => {
-                setPeriod(e.target.value);
-                setSelected("");
-              }}
+              label="Mois"
+              value={month}
+              onChange={(e) => { setMonth(e.target.value); setSelected(""); }}
             >
-              <option value="">Toutes les périodes</option>
-              {periods.map((p) => (
-                <option key={p} value={p}>
-                  {new Intl.DateTimeFormat("fr-FR", {
-                    month: "long",
-                    year: "numeric",
-                  }).format(new Date(p + "-01T12:00:00"))}
-                </option>
-              ))}
+              <option value="">Tous les mois</option>
+              {historyMonths.map((m) => <option key={m.value} value={m.value}>{m.label}</option>)}
+            </SelectField>
+            <SelectField
+              label="Année"
+              value={year}
+              onChange={(e) => { setYear(e.target.value); setSelected(""); }}
+            >
+              <option value="">Toutes les années</option>
+              {years.map((value) => <option key={value} value={value}>{value}</option>)}
             </SelectField>
             <SelectField
               label="Statut dans le planning"

@@ -1,0 +1,14 @@
+.panel { min-width: 0; background: var(--white); border: 1px solid var(--line); border-radius: 8px; }
+.heading { display: flex; align-items: center; justify-content: space-between; gap: 20px; min-height: 64px; padding: 20px 24px; cursor: pointer; list-style: none; color: var(--ink-900); }
+.heading::-webkit-details-marker { display: none; }
+.heading h2 { margin: 0; font-size: 20px; line-height: 1.4; }
+.heading:hover { background: var(--brand-50); border-radius: 8px; }
+.heading:focus-visible { outline: var(--focus-ring); outline-offset: 3px; border-radius: 8px; }
+.chevron { width: 9px; height: 9px; flex: 0 0 9px; border-right: 2px solid var(--brand-700); border-bottom: 2px solid var(--brand-700); transform: rotate(45deg); margin: -4px 3px 0; }
+.panel[open] > .heading .chevron { transform: rotate(225deg); margin-top: 4px; }
+.panel[open] > .heading { border-bottom: 1px solid var(--line); }
+.content { display: grid; gap: 20px; padding: 24px; min-width: 0; overflow-wrap: anywhere; }
+.content form { display: grid; gap: 16px; min-width: 0; }
+.content fieldset { min-width: 0; }
+.content form > button, .content > button { justify-self: start; }
+@media(max-width: 600px) { .heading { padding: 18px 16px; } .heading h2 { font-size: 18px; } .content { padding: 20px 16px; } }

@@ -32,7 +32,7 @@
 }
 
 .sm {
-  min-height: 36px;
+  min-height: 44px;
   padding: .4em var(--space-4);
   font-size: var(--font-body-sm);
 }
@@ -108,8 +108,9 @@
 }
 
 .icon {
-  width: 40px;
-  height: 40px;
+  width: 44px;
+  height: 44px;
+  flex-shrink: 0;
   padding: 0;
   border-radius: 50%;
   background: var(--tint);
