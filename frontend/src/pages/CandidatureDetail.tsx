@@ -18,10 +18,10 @@ type Application = {
 const events: Record<string, string> = {
   APPLICATION_UNAVAILABLE: "Candidature fermée automatiquement : autre mission confirmée sur ce créneau",
   APPLICATION_SUBMITTED: "Candidature envoyée ou reconfirmée",
-  APPLICATION_SELECTED: "Candidature sélectionnée par l’établissement",
+  APPLICATION_SELECTED: "Candidature en attente de décision",
   APPLICATION_REJECTED: "Candidature refusée",
   APPLICATION_WITHDRAWN: "Candidature retirée",
-  ASSIGNMENT_CREATED: "Affectation confirmée par l’agence",
+  ASSIGNMENT_CREATED: "Candidature acceptée et mission confirmée",
   ASSIGNMENT_CANCELLED: "Affectation annulée",
   MISSION_COMPLETED: "Mission terminée",
 };
@@ -74,8 +74,7 @@ export default function CandidatureDetail() {
               {r.data.status === "SELECTED" &&
                 !r.data.assignments.some((a) => a.status === "ACTIVE") && (
                   <p className={s.notice}>
-                    Votre candidature a été retenue. La mission sera confirmée
-                    après validation de l’affectation par l’agence.
+                    Votre candidature attend une acceptation ou un refus.
                   </p>
                 )}
               {r.data.requires_reconsent && ["SUBMITTED","SELECTED"].includes(r.data.status) && (

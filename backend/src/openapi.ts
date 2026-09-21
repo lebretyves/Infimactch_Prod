@@ -262,7 +262,6 @@ export function configureOpenApi(doc: OpenAPIObject) {
     "POST /api/v1/missions/{id}/applications": "Application",
     "POST /api/v1/missions/{id}/assignments": "Assignment",
     "POST /api/v1/applications/{id}/withdrawal": "Application",
-    "POST /api/v1/applications/{id}/selection": "Application",
     "POST /api/v1/applications/{id}/rejection": "Application",
     "POST /api/v1/staffing-requests": "StaffingRequest",
     "PUT /api/v1/staffing-requests/{id}": "StaffingRequest",

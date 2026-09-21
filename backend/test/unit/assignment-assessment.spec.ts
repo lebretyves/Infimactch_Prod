@@ -49,3 +49,26 @@ test('qualification, RPPS, mission state and exact schedule remain mandatory',as
   await assert.rejects(eligible(db(),p,{...m,shift:'UNKNOWN'}),rejectsWith('SCHEDULE_UNCONFIRMED'));
   await assert.rejects(eligible(db(),p,{...m,start_at:new Date(Date.now()-1000).toISOString()}),/Mission already started/);
 });
+
+
+import {MissionsService} from '../../src/missions/missions.service';
+for(const pendingStatus of ['SUBMITTED','SELECTED'])test('direct acceptance creates assignment and confirmation event from '+pendingStatus,async()=>{
+  const calls:{sql:string;values:any[]}[]=[];
+  const em={query:async(sql:string,values:any[]=[])=>{
+    calls.push({sql,values});
+    if(sql.startsWith('SELECT m.*'))return [{...m,id:'mission',version:1,agency_id:null,establishment_id:'org'}];
+    if(sql.includes('SELECT o.kind FROM membership'))return [{kind:'ESTABLISHMENT'}];
+    if(sql.startsWith('SELECT nurse_id FROM application'))return [{nurse_id:'nurse'}];
+    if(sql.startsWith('SELECT id FROM account'))return [{id:'nurse'}];
+    if(sql.startsWith('SELECT * FROM profile'))return [p];
+    if(sql.startsWith('SELECT * FROM application'))return [{id:'application',status:pendingStatus,consent_version:1}];
+    if(sql.startsWith('INSERT INTO assignment'))return [{id:'assignment',status:'ACTIVE'}];
+    return [];
+  }};
+  const service=new MissionsService({transaction:async(fn:any)=>fn(em)} as any);
+  assert.equal((await service.assign('owner','mission','application','unique-key')).id,'assignment');
+  assert.ok(calls.some(c=>c.sql.includes("UPDATE application SET status='ACCEPTED'")));
+  assert.ok(calls.some(c=>c.sql.includes("UPDATE mission SET status='FILLED'")));
+  assert.equal(calls.filter(c=>c.sql.startsWith('INSERT INTO outbox(event,payload)')&&c.values[0]==='AssignmentCreated').length,1);
+  assert.equal(calls.some(c=>c.values.includes('APPLICATION_SELECTED')),false);
+});

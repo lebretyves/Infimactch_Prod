@@ -138,8 +138,7 @@ function NurseCandidatures() {
                   </span>
                   {a.status === "SELECTED" && !a.assignment_id && (
                     <p>
-                      Votre candidature est retenue. L’agence doit encore
-                      confirmer l’affectation.
+                      Votre candidature attend une acceptation ou un refus.
                     </p>
                   )}
                   {a.requires_reconsent && (

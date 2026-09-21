@@ -228,16 +228,6 @@ export default function GestionMission() {
             {m.status === "OPEN" &&
               ["SUBMITTED", "SELECTED"].includes(c.status) && (
                 <>
-                  {c.status === "SUBMITTED" && (
-                    <Button
-                      disabled={!!busy}
-                      onClick={() =>
-                        void action("/applications/" + c.id + "/selection")
-                      }
-                    >
-                      Sélectionner ce candidat
-                    </Button>
-                  )}
                   <Button
                     variant="outline"
                     disabled={!!busy}
@@ -262,9 +252,9 @@ export default function GestionMission() {
                   </p>
                   <InlineConfirmation disabled={!!busy}
                     explanation="Je confirme avoir vérifié avec le candidat ses compétences et sa disponibilité. La mission sera ajoutée à son agenda et bloquera ce créneau."
-                    confirmLabel="Valider la mission avec ce candidat"
+                    confirmLabel="Confirmer l’acceptation"
                     onConfirm={() => action("/missions/" + id + "/assignments", { applicationId: c.id })}>
-                    Confirmer l’affectation
+                    Accepter la candidature
                   </InlineConfirmation>
                 </>
               )}

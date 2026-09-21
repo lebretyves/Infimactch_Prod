@@ -33,7 +33,7 @@ export async function notifyAudit(em: SqlClient, action: string, id: string | nu
     const rows = await em.query("SELECT establishment_id AS agency_id FROM staffing_request WHERE id=$1 UNION SELECT l.agency_id FROM staffing_request s JOIN agency_link l ON l.establishment_id=s.establishment_id WHERE s.id=$1",[id]);
     return notify(em,action === "STAFFING_REQUEST_CREATED" ? "NEED_CREATED" : "NEED_UPDATED",[],rows.map(r=>r.agency_id),{needId:id});
   }
-  if (["APPLICATION_SUBMITTED","APPLICATION_SELECTED","APPLICATION_REJECTED","APPLICATION_WITHDRAWN"].includes(action)) {
+  if (["APPLICATION_SUBMITTED","APPLICATION_REJECTED","APPLICATION_WITHDRAWN"].includes(action)) {
     const [a] = await em.query("SELECT a.*,m.version,m.agency_id,m.establishment_id FROM application a JOIN mission m ON m.id=a.mission_id WHERE a.id=$1",[id]);
     if (a) await notify(em,action as NoticeKind,[a.nurse_id],[a.agency_id,a.establishment_id],{missionId:a.mission_id,version:a.version,applicationId:id});
     return;
