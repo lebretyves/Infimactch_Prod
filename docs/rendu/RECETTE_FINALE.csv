@@ -1,7 +1,7 @@
 ﻿scenario;version;etat;preuve;date;observateur
 Inscription candidat et entreprise;;A_RECETTER_SUR_VERSION_PUBLIEE;;;
 Discord facultatif et passage sans activation;;A_RECETTER_SUR_VERSION_PUBLIEE;;;
-Connexion admin et MFA réel;;A_RECETTER_SUR_VERSION_PUBLIEE;;;
+Connexion admin et MFA réel;b16ad70;PARTIEL_MFA_REEL_CONFIRME_RECETTE_INTERACTIVE_A_REJOUER;docs/quality/REVUE_SECURITE_18_SCENARIOS_2026-09-21.md;2026-09-21;Lecture seule audit production
 Création et consultation mission;;A_RECETTER_SUR_VERSION_PUBLIEE;;;
 Matching et candidature;;A_RECETTER_SUR_VERSION_PUBLIEE;;;
 Confirmation et agenda;;A_RECETTER_SUR_VERSION_PUBLIEE;;;

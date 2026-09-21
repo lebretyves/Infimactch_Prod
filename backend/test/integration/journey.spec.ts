@@ -174,7 +174,10 @@ test("full internal journey and concurrency, with isolated fixture RPPS", async 
   const created = await post(agency, "missions", dto).expect(201),
     id = created.body.id;
   await post(agency, "missions/" + id + "/publish").expect(201);
-  await post(n, "missions/" + id + "/applications", { version: 1 }).expect(409);
+  // Incomplete professional declarations warn; they do not prohibit an explicit application.
+  const incompleteApplication = await post(n, "missions/" + id + "/applications", { version: 1 }).expect(201);
+  expect(incompleteApplication.body.warnings.length).toBeGreaterThan(0);
+  await post(n, "applications/" + incompleteApplication.body.id + "/withdrawal").expect(201);
   // Integration fixture only: no public endpoint can set FOUND. No real RPPS lookup claimed.
   await db.query(
     "UPDATE profile SET rpps_status='FOUND',rpps_number='10000000001' WHERE user_id IN($1,$2)",
@@ -674,10 +677,7 @@ test("document key rotation reads previous versions and writes the active versio
   const original = process.env.DOCUMENT_KEY!,
     version = process.env.DOCUMENT_KEY_VERSION,
     previous = process.env.DOCUMENT_KEY_V1;
-  const [old] = await db.query(
-    "SELECT id FROM document WHERE owner_id=$1 AND kind='EVIDENCE' AND status='READY' LIMIT 1",
-    [actor],
-  );
+  const old = await new DocumentsService(db).store(actor, 'EVIDENCE', 'application/pdf', Buffer.from('%PDF-1.7 FICTIONAL OLD KEY FIXTURE'));
   let created: string | undefined;
   try {
     process.env.DOCUMENT_KEY_VERSION = "2";

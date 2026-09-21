@@ -19,9 +19,10 @@ try{
  cli('disable-account');assert.equal((await db.query("SELECT * FROM session WHERE sess->>'userId'=$1",[n.id])).length,0);
  assert.equal((await matching.forMission(actor.id,m.id)).items.some(x=>x.candidateId===n.id),false);
  await assert.rejects(missions.assign(actor.id,m.id,a.id,randomUUID()),e=>e.getStatus()===404);
- await assert.rejects(missions.applicationAction(actor.id,a.id,'SELECTED',randomUUID()),e=>e.getStatus()===404);
+ // Preselection no longer exists: assignment above is the acceptance path.
+ assert.equal((await db.query('SELECT status FROM application WHERE id=$1',[a.id]))[0].status,'SUBMITTED');
  const [event]=await db.query("SELECT id FROM outbox WHERE event='MissionOPEN' AND payload->>'missionId'=$1",[m.id]);await automation.matches(event.id);
- assert.equal((await db.query('SELECT id FROM notification WHERE user_id=$1 AND event_id=$2',[n.id,event.id])).length,0);checks.push('disabled account excluded from candidates, notifications, selection and assignment; CLI removes multiple sessions');
+ assert.equal((await db.query('SELECT id FROM notification WHERE user_id=$1 AND event_id=$2',[n.id,event.id])).length,0);checks.push('disabled account excluded from candidates, notifications and assignment; CLI removes multiple sessions');
  cli('enable-account');const assigned=await missions.assign(actor.id,m.id,a.id,randomUUID());cli('disable-account');assert.equal((await db.query('SELECT status FROM assignment WHERE id=$1',[assigned.id]))[0].status,'ACTIVE');cli('enable-account');cli('revoke-account-sessions');checks.push('reactivation, session revocation and confirmed assignment preservation');
  await db.query("INSERT INTO document(id,owner_id,kind,mime,status,key_version,size_bytes) VALUES($1,$2,'EVIDENCE','application/pdf','READY',1,26214400)",[randomUUID(),n.id]);
  await assert.rejects(docs.store(n.id,'EVIDENCE','application/pdf',Buffer.from('%PDF extra')),e=>e.getStatus()===413);

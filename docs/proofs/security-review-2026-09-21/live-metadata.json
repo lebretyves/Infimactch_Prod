@@ -1,0 +1,96 @@
+{
+  "checkedAt": "2026-09-21T20:50:53.997Z",
+  "businessWrites": false,
+  "vault": {
+    "keys": {
+      "ADMIN_MFA_KEY": {
+        "present": true,
+        "bytes32": true
+      },
+      "ADMIN_MFA_KEY_VERSION": {
+        "present": true,
+        "version": "1"
+      },
+      "DOCUMENT_KEY": {
+        "present": true,
+        "bytes32": true
+      },
+      "DOCUMENT_KEY_VERSION": {
+        "present": true,
+        "version": "2"
+      },
+      "DOCUMENT_KEY_V1": {
+        "present": true,
+        "bytes32": true
+      },
+      "BACKUP_KEY": {
+        "present": true,
+        "bytes32": true
+      },
+      "BACKUP_KEY_VERSION": {
+        "present": true,
+        "version": "1"
+      }
+    },
+    "distinctKeys": true,
+    "sys/auth": {
+      "httpStatus": 403,
+      "verified": false
+    },
+    "sys/policies/acl": {
+      "httpStatus": 403,
+      "verified": false
+    }
+  },
+  "mfa": [
+    {
+      "role": "OWNER",
+      "accounts": 3,
+      "enrolled": 3,
+      "pending_activation": 0,
+      "with_recovery_codes": 3
+    }
+  ],
+  "adminAudit": [
+    {
+      "event": "ADMIN_LOGIN",
+      "occurrences": 16,
+      "latest": "2026-09-21T20:49:30.496Z"
+    },
+    {
+      "event": "ADMIN_MFA_ENROLLED",
+      "occurrences": 4,
+      "latest": "2026-09-21T10:08:39.825Z"
+    },
+    {
+      "event": "ADMIN_MFA_RECOVERY_STARTED",
+      "occurrences": 2,
+      "latest": "2026-09-21T08:56:00.012Z"
+    },
+    {
+      "event": "ADMIN_MFA_VERIFIED",
+      "occurrences": 10,
+      "latest": "2026-09-21T20:49:29.985Z"
+    }
+  ],
+  "documents": [
+    {
+      "kind": "CANCELLATION",
+      "status": "READY",
+      "key_version": 2,
+      "count": 1
+    },
+    {
+      "kind": "CONFIRMATION",
+      "status": "READY",
+      "key_version": 2,
+      "count": 2
+    }
+  ],
+  "incidents": [],
+  "incidentAudit": [],
+  "backendVaultIsolation": {
+    "kv/data/infimatch/v1/migration": "DENIED_403",
+    "kv/data/infimatch/v1/production": "DENIED_403"
+  }
+}

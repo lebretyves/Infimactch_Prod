@@ -60,7 +60,12 @@ test('source controls and incident lifecycle are permission checked and audited'
  try {assert.equal((await app.get(RefreshService).run('JOBSPIPE')).status,'PAUSED');const operations=await owner.agent.get('/api/v1/admin/operations').expect(200);assert.equal(operations.body.sources.find((x:any)=>x.provider==='JOBSPIPE').enabled,false);}finally{await db.query("UPDATE source_control SET enabled=true,last_started_at=NULL WHERE provider='JOBSPIPE'");}
  const incident=await post(owner.agent,'incidents',owner.csrf,{service:'IMPORTS',impact:'Fictional import interruption',ownerLabel:'Fictional operator',reason:'Isolated incident lifecycle'}).expect(201);
  await post(auditor.agent,'incidents/'+incident.body.id,auditor.csrf,{state:'RESOLVED',reason:'Forbidden incident mutation'}).expect(403);
+ await post(owner.agent,'incidents/'+incident.body.id,owner.csrf,{state:'INVESTIGATING',reason:'Fictional diagnosis in progress'}).expect(201);
  await post(owner.agent,'incidents/'+incident.body.id,owner.csrf,{state:'RESOLVED',reason:'Fictional service recovered'}).expect(201);
+ const traces=await db.query('SELECT actor_id,event,details FROM audit WHERE resource_id=$1 ORDER BY created_at,id',[incident.body.id]);
+ assert.equal(traces.length,3);assert.ok(traces.every((trace:any)=>trace.actor_id===owner.id));
+ assert.equal(traces.filter((trace:any)=>trace.event==='ADMIN_INCIDENT_OPENED').length,1);
+ assert.deepEqual(traces.filter((trace:any)=>trace.event==='ADMIN_INCIDENT_UPDATED').map((trace:any)=>trace.details.state).sort(),['INVESTIGATING','RESOLVED']);
  const [row]=await db.query('SELECT state,resolved_at FROM operational_incident WHERE id=$1',[incident.body.id]);assert.equal(row.state,'RESOLVED');assert.ok(row.resolved_at);
  await owner.agent.get('/api/v1/admin/privacy-requests').expect(200);await auditor.agent.get('/api/v1/admin/privacy-requests').expect(403);
 });

@@ -1,21 +1,25 @@
 WEBVTT
 
 1
-00:00:00.981 --> 00:00:04.172
+00:00:00.958 --> 00:00:07.337
 6 · Annulation et emails : exemple simulé depuis l’espace agence.
 
 2
-00:00:04.172 --> 00:00:09.047
+00:00:07.337 --> 00:00:13.350
 L’annulation concerne aussi les affectations de cette mission.
 
 3
-00:00:09.047 --> 00:00:14.211
-Le suivi indique l’annulation et permet de récupérer son document.
+00:00:13.350 --> 00:00:19.477
+Relisez la confirmation avant de valider l’annulation.
 
 4
-00:00:14.211 --> 00:00:17.767
-Dans Notifications, consultez le journal des emails de mission.
+00:00:19.477 --> 00:00:28.349
+Le suivi indique l’annulation et permet de récupérer son document.
 
 5
-00:00:17.767 --> 00:00:22.273
+00:00:28.349 --> 00:00:33.874
+Dans Notifications, consultez le journal des emails de mission.
+
+6
+00:00:33.874 --> 00:00:40.585
 « Livré » confirme une remise au serveur destinataire, pas la lecture du message.
