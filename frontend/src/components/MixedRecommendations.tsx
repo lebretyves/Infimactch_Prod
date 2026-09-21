@@ -3,13 +3,12 @@ import { Link, useSearchParams } from "react-router";
 import { useRemote } from "@/lib/useRemote";
 import {
   getRecommendations,
-  type Recommendation,
 } from "@/services/recommendations";
 import { date, salary, sourceLabel, type Listing } from "@/services/market";
 import { labelCode } from "@/data/professional";
 import { Button, ButtonLink } from "@/ui/Button";
 import { Icon } from "@/ui/Icon";
-import u from "./NurseUI.module.css";
+import { missionCrushs } from "@/lib/missionCrushs";
 import s from "./MixedRecommendations.module.css";
 function contractLabel(value: string) {
   const labels: Record<string, string> = {
@@ -42,15 +41,16 @@ export function MixedRecommendations({
     userId + ":" + origin,
   );
   const data = result.data;
-  function cards(items: Recommendation[], external: boolean) {
+  const selected = data ? missionCrushs(data, origin) : [];
+  function cards() {
     return (
-      <ul>
-        {items.map((item) => (
+      <ul className={s.cards}>
+        {selected.map(({ item, external }, index) => (
           <li className={s.item} key={item.id}>
-            <span className={s.source}>
+            <div className={s.cardTop}><span className={s.rank} aria-label={`Suggestion ${index + 1}`}>{String(index + 1).padStart(2, "0")}</span><span className={s.source}>
               {external ? sourceLabel(item) : "Partenaire InfiMatch"}
-            </span>
-            <h4>{item.title}</h4>
+            </span></div>
+            <h3>{item.title}</h3>
             <p>
               {item.qualification || "Qualification non précisée"}
               {item.service ? ` · ${labelCode(item.service)}` : ""} ·{" "}
@@ -75,7 +75,7 @@ export function MixedRecommendations({
               )}
               {item.shift && (
                 <span>
-                  {item.shift === "DAY"
+                  {item.shift === "MORNING" ? "Matin" : item.shift === "AFTERNOON" ? "Après-midi" : item.shift === "DAY"
                     ? "Jour"
                     : item.shift === "NIGHT"
                       ? "Nuit"
@@ -83,7 +83,7 @@ export function MixedRecommendations({
                 </span>
               )}
             </div>
-            <p className={u.muted}>
+            <p className={s.publication}>
               {item.publicationDate
                 ? `Publiée le ${date(item.publicationDate)}`
                 : "Date de publication non renseignée"}
@@ -105,6 +105,11 @@ export function MixedRecommendations({
                   Critères en écart : vérifier le détail avant de candidater.
                 </p>
               )}
+            <div className={s.match}>
+              {!external && data?.internal.personalization === "COMPATIBLE" && typeof item.matching_score === "number" && Number.isFinite(item.matching_score) && item.matching_score >= 0 && item.matching_score <= 100 ? (
+                <><span>Matching</span><strong>{Math.round(item.matching_score)}<small> %</small></strong></>
+              ) : <span>Matching non calculable<small className={s.matchNote}>{external ? "Correspondance partielle" : "Correspondance non confirmée"}</small></span>}
+            </div>
             <div className={s.actions}>
               <ButtonLink
                 to={
@@ -118,8 +123,8 @@ export function MixedRecommendations({
                 size="sm"
               >
                 {external
-                  ? "Voir l’offre externe"
-                  : "Voir la mission partenaire"}
+                  ? "Voir l’offre"
+                  : "Voir la mission"}
               </ButtonLink>
               <Button
                 variant="icon"
@@ -143,122 +148,58 @@ export function MixedRecommendations({
     );
   }
   return (
-    <section className={`${u.card} ${s.recommendations}`} aria-labelledby="recommendations-heading">
-      <div className={u.row}>
-        <h2 id="recommendations-heading">Vos pistes de mission</h2>
-        <Link to={`/missions?origine=${origin}`}>Toutes les offres →</Link>
-      </div>
-      <OfferOriginChoices
-        value={origin}
-        onChange={(origine) => {
+    <section className={s.recommendations} aria-labelledby="recommendations-heading">
+      <header className={s.header}>
+        <div className={s.heading}>
+          <span className={s.emblem} aria-hidden="true"><Icon name="heart-outline" size={26} /></span>
+          <div><p className={s.eyebrow}>LE BON MATCH, CÔTÉ MISSION</p><h2 id="recommendations-heading">Vos crushs</h2></div>
+        </div>
+        <Link className={s.allOffers} to={`/missions?origine=${origin}`}>Toutes les offres <span aria-hidden="true">→</span></Link>
+      </header>
+      <p className={s.intro}>Jusqu’à 3 missions à découvrir. Un coup de cœur ? Gardez-le dans vos favoris.</p>
+      <div className={s.toolbar}>
+        <OfferOriginChoices value={origin} onChange={(origine) => {
           const next = new URLSearchParams(params);
           next.set("origine", origine);
           setParams(next);
-        }}
-      />
+        }} />
+        <p>{origin === "toutes" ? "Partenaires en priorité, puis offres externes." : origin === "partenaires" ? "Votre sélection partenaire InfiMatch." : "Des offres externes à explorer."}</p>
+      </div>
       {result.loading ? (
-        <p role="status">
-          Recherche de missions compatibles et d’offres externes…
-        </p>
+        <p role="status" className={s.state}>Recherche de vos prochaines missions…</p>
       ) : result.error ? (
-        <div role="alert" className={s.notice}>
-          <p>
-            Les suggestions ne sont pas disponibles pour le moment. Vos autres
-            informations restent accessibles.
-          </p>
-          <Button variant="outline" onClick={result.reload}>
-            Réessayer les suggestions
-          </Button>
-        </div>
-      ) : (
-        data && (
-          <div className={`${s.groups} ${!data.internal.items.length || !data.external.items.length ? s.singleGroup : ""}`}>
-            {origin !== "externes" && (
-              <section className={s.group} data-empty={!data.internal.items.length} aria-labelledby="compatible-heading">
-                <h3 id="compatible-heading">Offres partenaires InfiMatch</h3>
-                {data.internal.personalization ===
-                "GENERAL_PROFILE_INCOMPLETE" ? (
-                  <p className={s.notice}>
-                    Ces missions partenaires sont consultables. Votre profil ou
-                    votre vérification professionnelle est incomplet : leur
-                    compatibilité n’est pas confirmée.{" "}
-                    <Link to="/profil">Compléter mon profil</Link>.
-                  </p>
-                ) : (
-                  <p>Classées selon la correspondance avec votre profil.</p>
-                )}
-                {data.internal.status === "UNAVAILABLE" ? (
-                  <div className={s.notice} role="status">
-                    <p>
-                      La recherche de missions compatibles est temporairement
-                      indisponible.
-                    </p>
-                    <Button variant="outline" onClick={result.reload}>
-                      Réessayer les missions compatibles
-                    </Button>
-                  </div>
-                ) : data.internal.items.length ? (
-                  cards(data.internal.items, false)
-                ) : (
-                  <p className={u.muted}>
-                    Aucune mission partenaire disponible dans cette sélection.{" "}
-                    <Link to="/profil">Vérifiez votre profil</Link>, votre
-                    dossier RPPS et vos{" "}
-                    <Link to="/calendrier">disponibilités</Link>.
-                  </p>
-                )}
-              </section>
-            )}
-            {origin !== "partenaires" && (
-              <section className={s.group} data-empty={!data.external.items.length} aria-labelledby="external-heading">
-                <h3 id="external-heading">Offres externes à explorer</h3>
-                {data.external.personalization ===
-                "GENERAL_PROFILE_INCOMPLETE" ? (
-                  <p className={s.notice}>
-                    Votre profil est incomplet : ces offres générales ne sont
-                    pas des recommandations personnalisées.{" "}
-                    <Link to="/profil">Compléter mon profil</Link>.
-                  </p>
-                ) : (
-                  <p>
-                    Correspondance partielle : horaires, prérequis et
-                    disponibilité à vérifier auprès de l’annonceur. Candidature
-                    sur le site source.
-                  </p>
-                )}
-                {data.external.sources.some(
-                  (source) =>
-                    !["SUCCESS", "SUCCEEDED", "READY"].includes(source.status),
-                ) && (
-                  <p className={s.notice} role="status">
-                    La dernière actualisation d’au moins une source est
-                    indisponible ou incomplète. Les offres déjà enregistrées
-                    peuvent être présentées ; vérifiez leur disponibilité sur le
-                    site source.
-                  </p>
-                )}
-                {data.external.status === "UNAVAILABLE" && (
-                  <div role="status" className={s.notice}>
-                    <p>
-                      Les suggestions externes sont temporairement
-                      indisponibles.
-                    </p>
-                    <Button variant="outline" onClick={result.reload}>
-                      Réessayer les offres externes
-                    </Button>
-                  </div>
-                )}
-                {data.external.items.length
-                  ? cards(data.external.items, true)
-                  : data.external.status === "READY" && (
-                      <p className={u.muted}>
-                        Aucune offre externe disponible pour le moment.
-                      </p>
-                    )}
-              </section>
-            )}
-          </div>
-        )
+        <div role="alert" className={s.notice}><p>Les suggestions ne sont pas disponibles pour le moment. Vos autres informations restent accessibles.</p><Button variant="outline" onClick={result.reload}>Réessayer les suggestions</Button></div>
+      ) : data && (
+        <>
+          {origin !== "externes" && data.internal.personalization === "GENERAL_PROFILE_INCOMPLETE" && (
+            <p className={s.notice}>Ces missions partenaires sont consultables. Votre profil ou votre vérification professionnelle est incomplet : leur compatibilité n’est pas confirmée. <Link to="/profil">Compléter mon profil</Link>.</p>
+          )}
+          {origin !== "partenaires" && data.external.personalization === "GENERAL_PROFILE_INCOMPLETE" && (
+            <p className={s.notice}>Votre profil est incomplet : ces offres externes générales ne sont pas des recommandations personnalisées. <Link to="/profil">Compléter mon profil</Link>.</p>
+          )}
+          {origin !== "externes" && data.internal.status === "UNAVAILABLE" && (
+            <div className={s.notice} role="status"><p>La recherche de missions compatibles est temporairement indisponible.</p><Button variant="outline" onClick={result.reload}>Réessayer les missions compatibles</Button></div>
+          )}
+          {origin !== "partenaires" && data.external.status === "UNAVAILABLE" && (
+            <div className={s.notice} role="status"><p>Les suggestions externes sont temporairement indisponibles.</p><Button variant="outline" onClick={result.reload}>Réessayer les offres externes</Button></div>
+          )}
+          {origin !== "partenaires" && data.external.sources.some(source => !["SUCCESS", "SUCCEEDED", "READY"].includes(source.status)) && (
+            <p className={s.notice} role="status">La dernière actualisation d’au moins une source est indisponible ou incomplète. Les offres déjà enregistrées peuvent être présentées ; vérifiez leur disponibilité sur le site source.</p>
+          )}
+          {selected.length > 0 ? cards() : <div className={s.state}><h3>Votre prochain crush se prépare</h3><p>Aucune offre disponible dans cette sélection pour le moment.</p></div>}
+          {origin !== "externes" && data.internal.status === "READY" && !data.internal.items.length && (
+            <p className={s.emptyNote}>Aucune mission partenaire disponible dans cette sélection. <Link to="/profil">Vérifiez votre profil</Link>, votre dossier RPPS et vos <Link to="/calendrier">disponibilités</Link>.</p>
+          )}
+          {origin !== "partenaires" && data.external.status === "READY" && !data.external.items.length && (
+            <p className={s.emptyNote}>Aucune offre externe disponible pour le moment.</p>
+          )}
+          <details className={s.explanation}>
+            <summary>Comment sont choisis vos crushs ?</summary>
+            {origin !== "externes" && <p>Les missions partenaires sont classées selon la correspondance avec votre profil lorsque celui-ci permet de la confirmer.</p>}
+            {origin !== "partenaires" && <p>Les offres externes complètent la sélection : leur correspondance est partielle. Horaires, prérequis et disponibilité sont à vérifier auprès de l’annonceur. La candidature se fait sur le site source.</p>}
+            <p>Le cœur ajoute uniquement l’offre à vos favoris : il n’envoie pas de candidature.</p>
+          </details>
+        </>
       )}
     </section>
   );
