@@ -1,3 +1,4 @@
+import {AdminPassword1790006500000} from './admin-password';
 import {MissionLocationOptional1790006400000} from "./mission-location-optional";
 import {AdminMfaRecovery1789905600000} from './admin-mfa-recovery';
 import {ContractPreparation1789855200000} from './contract-preparation';
@@ -79,6 +80,7 @@ export class Database implements OnModuleDestroy {
       ContractPreparation1789855200000,
       AdminMfaRecovery1789905600000,
       MissionLocationOptional1790006400000,
+      AdminPassword1790006500000,
     ],
     logging: false,
     extra: { max: 12 },
