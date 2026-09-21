@@ -219,3 +219,22 @@
   :global([data-space="candidate"]) .card { padding: 16px; }
 }
 :global([data-space="candidate"]) .actions[aria-label="Origine des offres"] > button { min-height: 44px; height: auto; padding-block: 10px; }
+
+/* Shared workspace surfaces; controls retain their existing styles. */
+.page { gap: 28px; }
+.header { padding: 24px; background: #e1effc; border: 1px solid #c9def3; border-left: 4px solid var(--brand-800); border-radius: 14px; }
+.card { border-color: #cddfec; border-radius: 14px; box-shadow: 0 5px 18px #07215206; }
+.cardHeading { padding-bottom: 14px; border-bottom: 1px solid #d9e8f2; }
+.cardHeading svg { color: var(--brand-800); }
+.twoColumns, .stack { gap: 26px; }
+:global([data-space="candidate"]) .page { gap: 24px; }
+:global([data-space="candidate"]) .card { padding: 24px; }
+:global([data-space="candidate"]) .stack,
+:global([data-space="candidate"]) .twoColumns { gap: 24px; }
+@media (max-width: 600px) {
+  .header { padding: 20px 16px; border-radius: 12px; }
+  .page, :global([data-space="candidate"]) .page { gap: 20px; }
+  .card, :global([data-space="candidate"]) .card { padding: 18px 16px; }
+  .twoColumns, .stack, :global([data-space="candidate"]) .stack,
+  :global([data-space="candidate"]) .twoColumns { gap: 20px; }
+}

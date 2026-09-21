@@ -378,3 +378,27 @@
   .offerFooter { align-items: stretch; flex-direction: column; }
   .offerFooter > a { width: 100%; }
 }
+
+/* Dashboard hierarchy inspired by the supplied InfiMatch mockups. */
+.nursePage .stat { border-color: #ccdef1; border-top: 3px solid var(--brand-800); padding: 18px 14px; }
+.nursePage .stat:nth-child(2) { border-top-color: #219ba9; background: #f3fbfc; }
+.nursePage .stat:nth-child(3) { border-top-color: #4d77d2; background: #f5f8ff; }
+.nursePage .preparation { gap: 24px; }
+.nursePage .dossier { background: #eef9fa; border-color: #bedfe4; }
+.enterprisePage .enterpriseHeader { padding: 26px; }
+.enterprisePage .enterpriseSection { border-color: #c8ddeb; box-shadow: 0 5px 18px #07215205; }
+.enterprisePage > .enterpriseSection { border-top: 4px solid var(--brand-800); }
+.enterprisePage .sectionHeading { padding-bottom: 18px; border-bottom: 1px solid #d7e6f0; }
+.enterpriseCounts { gap: 16px; }
+.enterpriseCounts > div { padding: 20px; background: #eaf3fd; border: 1px solid #cfe0f2; border-radius: 10px; }
+.enterpriseCounts > div:nth-child(2n) { background: #ebf8f9; border-color: #c7e3e7; }
+.enterpriseDaily > .enterpriseSection { border-top: 4px solid var(--brand-800); }
+.enterpriseDaily > .notificationsSection { border-top-color: #219ba9; background: #f8fcfd; }
+.recentOffer { padding: 24px 0; }
+@media (max-width: 600px) {
+  .nursePage .stat { padding: 14px 6px; }
+  .nursePage .preparation { gap: 16px; }
+  .enterprisePage .enterpriseHeader { padding: 22px 18px; }
+  .enterpriseCounts { gap: 10px; }
+  .enterpriseCounts > div, .enterpriseCounts > div:last-child { padding: 16px; border: 1px solid #cfe0f2; }
+}
