@@ -1,11 +1,40 @@
-# Suivi des besoins et publication directe
+# Création et suivi des missions
 
-Un ?tablissement peut pr?parer et publier une mission pour son organisation sans agence interm?diaire. Le parcours agence avec rattachement reste disponible. Seul le propri?taire de la publication peut modifier, publier, s?lectionner, affecter ou annuler ; les autres organisations restent exclues.
+Mise à jour : 21 septembre 2026.
 
-Le tableau de bord affiche les besoins enregistr?s, les offres r?centes et les candidatures ? traiter. Chaque besoin liste ses missions et leur statut. Un besoin ne devient visible aux int?rimaires qu?apr?s cr?ation d?une mission compl?te et publication explicite ; les brouillons restent priv?s. La r?mun?ration et les conditions ne sont jamais invent?es pour convertir les besoins existants.
+## Parcours actuel
 
-Migration EnterpriseFollowUp1789381600000 : agence facultative et lien mission ? besoin. Recette isol?e : 180 tests r?ussis, contr?les PostgreSQL r?ussis, compilation frontend r?ussie. Le test enterprise-flow couvre les droits entre entreprises, le brouillon priv?, la publication, le matching, la candidature, la s?lection, l?affectation, la confirmation et l?annulation.
+Les agences et les établissements utilisent un seul espace : **Missions et suivi**.
+Le bouton **Créer une mission** ouvre le formulaire complet. La validation
+**Créer et publier la mission** appelle `POST /missions/open` et publie directement
+l’annonce. Le salaire, le lieu et les conditions nécessaires sont renseignés avant
+la publication. Les droits de l’organisation et les contrôles du serveur restent
+applicables.
 
-La recette publique verify-production-enterprise.mjs cr?e uniquement un compte fictif et un brouillon, puis les supprime. Elle ne publie aucune mission r?elle.
+L’onglet et le formulaire séparés « Besoins » ont été retirés, ainsi que les blocs
+« Besoins à préparer » et « Mes derniers besoins » de l’accueil. Le suivi utilise
+les missions publiées, leurs candidatures et leurs affectations.
 
-Recette publique du 17 septembre 2026 : inscription entreprise, session s?curis?e, contexte organisation, besoin persistant dans le tableau de bord, cr?ation directe du brouillon, liaison au besoin, droit de gestion et invisibilit? publique du brouillon valid?s. Donn?es fictives nettoy?es apr?s contr?le.
+## Reprise des données antérieures
+
+Aucune donnée métier n’est supprimée ou publiée automatiquement. Les anciennes
+saisies sans mission associée peuvent être complétées depuis la liste des missions,
+dans « Annonces à compléter ». Cette rubrique disparaît lorsqu’il n’existe aucun
+ancien enregistrement à reprendre sur une liste vide. La navigation paginée conserve
+l’accès aux enregistrements plus anciens.
+
+L’adresse historique `/besoins` redirige vers `/missions`. Un ancien lien précis
+`/besoins#besoin-UUID` ouvre la mission associée si elle existe, sinon le formulaire
+prérempli. Une erreur d’accès n’entraîne jamais une création automatique.
+Les relations et les API historiques sont conservées pour la compatibilité ;
+le nouveau parcours ne crée plus de `staffing_request`.
+
+## Validation
+
+`frontend/scripts/test-mission-publication.mjs`, exécuté par
+`npm run test:browser`, vérifie la publication en un formulaire pour les deux
+rôles, la clé d’idempotence, l’absence d’écriture dans les anciennes demandes,
+la reprise des données, la pagination, les erreurs et les redirections sans doublon.
+
+Les API sont simulées dans cette recette navigateur : elle ne crée aucune annonce
+en production. La publication serveur existante n’a pas été modifiée.

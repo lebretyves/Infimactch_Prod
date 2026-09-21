@@ -8,7 +8,7 @@ const Installer = lazy(() => import("./pages/Installer"));
 const Accessibilite = lazy(() => import("./pages/Qualite").then(m => ({ default: m.Accessibilite })));
 const Ecoconception = lazy(() => import("./pages/Qualite").then(m => ({ default: m.Ecoconception })));
 const Notifications = lazy(() => import("./pages/Notifications"));
-const Besoins = lazy(() => import("./pages/Besoins"));
+const LegacyNeedRedirect = lazy(() => import("./pages/LegacyNeedRedirect"));
 const Etablissement = lazy(() => import("./pages/Etablissement"));
 const Dossier = lazy(() => import("./pages/Dossier"));
 const Favoris = lazy(() => import("./pages/Favoris"));
@@ -111,7 +111,7 @@ export const router = creerRouteur([{ element: <QualityRoot />, errorElement: <R
           { path: "/affectations/:id/preparation-contrat", element: <ContractPreparation /> },
           { path: "/organisation", element: <Organisation /> },
           { path: "/mes-etablissements", element: <MesEtablissements /> },
-          { path: "/besoins", element: <Besoins /> },
+          { path: "/besoins", element: <LegacyNeedRedirect /> },
           { path: "/gestion/missions/nouvelle", element: <MissionForm /> },
           { path: "/gestion/missions/:id", element: <GestionMission /> },
           { path: "/gestion/missions/:id/modifier", element: <MissionForm /> },

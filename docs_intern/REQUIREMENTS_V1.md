@@ -11,7 +11,7 @@ Le [sujet Epitech D-WEB-901](references/D-WEB-901-project.pdf) fixe les exigence
 | Acteur | Usage |
 | --- | --- |
 | Professionnel de santé | Profil, disponibilités, recherche, candidatures, agenda et documents personnels |
-| Établissement / agence | Besoins, missions, examen des candidatures et affectations autorisées |
+| Établissement / agence | Création et publication directe des missions, examen des candidatures et affectations autorisées |
 | Administration | Assistance et exploitation selon les permissions du rôle |
 
 InfiMatch assure la mise en relation. Les agences emploient et paient. Hors périmètre validé : paie, signature électronique et contrat complet. Le PDF de confirmation n'est pas présenté comme un contrat signé.

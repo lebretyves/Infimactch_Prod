@@ -25,13 +25,7 @@ import s from "./Accueil.module.css";
 type Dashboard = {
   family: string;
   counts: Record<string, number | string>;
-  activity?: { needs: number; applications: number };
-  recentNeeds?: {
-    id: string;
-    title: string;
-    created_at: string;
-    mission_count: number;
-  }[];
+  activity?: { applications: number };
   recentMissions?: {
     id: string;
     title: string;
@@ -283,10 +277,6 @@ export default function Accueil() {
                   </Button>
                 </div>
                 <div className={s.stats}>
-                  <Link to="/besoins">
-                    <strong>{r.data?.dashboard.activity?.needs ?? 0}</strong>
-                    <p>Besoins à préparer</p>
-                  </Link>
                   <Link to="/candidatures">
                     <strong>
                       {r.data?.dashboard.activity?.applications ?? 0}
@@ -306,29 +296,6 @@ export default function Accueil() {
               </section>
               <EnterpriseConversion userId={user!.id}/>
               <section className={u.card}>
-                <h2>Mes derniers besoins</h2>
-                {r.data?.dashboard.recentNeeds?.length ? (
-                  r.data.dashboard.recentNeeds.map((n) => (
-                    <article key={n.id}>
-                      <h3>{n.title}</h3>
-                      <p>
-                        {n.mission_count
-                          ? `${n.mission_count} mission(s) préparée(s) — consulter leur état`
-                          : "À compléter — aucune mission créée"}
-                      </p>
-                      <ButtonLink
-                        variant="outline"
-                        to={"/besoins#besoin-" + n.id}
-                      >
-                        Voir le besoin et son suivi
-                      </ButtonLink>
-                    </article>
-                  ))
-                ) : (
-                  <p>Aucun besoin enregistré.</p>
-                )}
-              </section>
-              <section className={u.card}>
                 <h2>Mes dernières offres</h2>
                 {r.data?.dashboard.recentMissions?.length ? (
                   r.data.dashboard.recentMissions.map((m) => (
@@ -345,9 +312,8 @@ export default function Accueil() {
                   ))
                 ) : (
                   <p>
-                    Aucune mission créée. Les besoins ci-dessus doivent être
-                    complétés puis publiés pour apparaître dans l’espace
-                    intérimaire.
+                    Aucune mission créée. Créez une offre et validez le formulaire
+                    pour la publier dans l’espace intérimaire.
                   </p>
                 )}
               </section>

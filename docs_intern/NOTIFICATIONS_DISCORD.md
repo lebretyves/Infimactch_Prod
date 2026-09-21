@@ -6,7 +6,7 @@
 
 Les notifications internes sont accessibles dans `/notifications`. Après création du compte candidat, établissement ou agence, la configuration Discord est proposée avec une option pour passer cette étape. Discord reste facultatif ; l'inscription ne coche pas automatiquement les préférences de notification.
 
-L'association personnelle vérifie un identifiant Discord par un code reçu en message privé. L'utilisateur choisit ensuite ses événements. Les salons d'organisation exigent les droits appropriés et une destination autorisée ; les préférences peuvent être modifiées après l'inscription. Le message de bienvenue initial reste interne. Les emails transactionnels et de récupération de mot de passe utilisent un mécanisme séparé : voir [les emails](EMAILS_LIVRAISON.md).
+L'association personnelle vérifie un identifiant Discord par un code reçu en message privé. Lorsque l’utilisateur coche « Recevoir les notifications Discord » sans sélection préalable, tous les événements disponibles pour cette destination sont présélectionnés. Il peut en décocher avant de cliquer sur « Enregistrer les préférences ». Une sélection personnalisée existante est conservée ; l’association seule n’active toujours aucun envoi. Les salons d'organisation exigent les droits appropriés et une destination autorisée ; les préférences peuvent être modifiées après l'inscription. Le message de bienvenue initial reste interne. Les emails transactionnels et de récupération de mot de passe utilisent un mécanisme séparé : voir [les emails](EMAILS_LIVRAISON.md).
 
 ## Livraison et reprise
 
@@ -34,3 +34,7 @@ En production, les tentatives immédiates et la reprise cloud à quatre heures t
 Les secrets restent dans Vault, les variables serveur et les credentials n8n autorisés. Aucun token dans `VITE_*`, Git ou une capture. Ne pas publier les identifiants personnels de destinataires comme exemples.
 
 Pour une preuve de soutenance, associer un événement fictif à son exécution et à un message effectivement reçu. Les tests isolés ne prouvent pas une réception actuelle. [Automatisations](AUTOMATISATIONS.md), [configuration](quality/CONFIGURATION.md), [client Discord](../backend/src/notifications/discord-client.ts) et [file de livraison](../backend/src/notifications/notifications.module.ts).
+
+## Vérification des réglages par défaut
+
+La recette navigateur `frontend/scripts/test-discord-defaults.mjs` vérifie la sélection initiale, la sauvegarde explicite, la conservation des choix personnalisés et la séparation entre messages privés et salons d’organisation. Les API sont simulées : aucun message Discord réel n’est envoyé par ces tests.

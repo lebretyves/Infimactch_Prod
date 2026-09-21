@@ -126,7 +126,6 @@ export default function GestionMission() {
         → {missionDate(m, true)}
       </p>
       <p>{m.status === "DRAFT" ? "Brouillon : cette offre n’est pas encore visible aux intérimaires. Complétez-la puis publiez-la." : m.status === "OPEN" ? "Offre publiée : les intérimaires peuvent la consulter et candidater selon leurs critères." : "Cette offre n’est plus ouverte aux nouvelles candidatures."}</p>
-      {m.staffing_request_id && <ButtonLink to={"/besoins#besoin-"+m.staffing_request_id} variant="outline">Voir le besoin d’origine</ButtonLink>}
       <p>{m.application_count} candidature(s) reçue(s) · {m.assignments.filter(a=>a.status==='ACTIVE').length} affectation(s) confirmée(s)</p>
       {m.assignments.map((a) => (
         <section key={a.id} className={s.bloc}>

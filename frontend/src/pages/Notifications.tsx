@@ -20,9 +20,10 @@ const base="/me/notifications-settings";
 const discordInvite=import.meta.env.VITE_DISCORD_INVITE_URL || "https://discord.gg/Ed73jG3pRd";
 const deliveryLabels:Record<string,string>={PENDING:"En attente",SENDING:"Envoi en cours",SENT:"Envoyé",FAILED:"Échec — notification disponible ici",CANCELLED:"Envoi annulé : événement ou préférences modifiés",UNCERTAIN:"Réception non confirmée — notification disponible ici"};
 function DestinationEditor({destination,org,catalog,save}:{destination?:Destination;org?:string;catalog:Record<string,string>;save:(org:string|undefined,body:unknown)=>Promise<void>}) {
-  const [enabled,setEnabled]=useState(destination?.enabled??false),[events,setEvents]=useState(destination?.events??[]),[channelId,setChannelId]=useState(destination?.target_id??""),[busy,setBusy]=useState(false);
+  const [enabled,setEnabled]=useState(destination?.enabled??false),[events,setEvents]=useState(destination?.events??Object.keys(catalog)),[channelId,setChannelId]=useState(destination?.target_id??""),[busy,setBusy]=useState(false);
   return <form onSubmit={e=>{e.preventDefault();setBusy(true);void save(org,{enabled,events,...(org&&enabled?{channelId}:{})}).finally(()=>setBusy(false));}}>
-    <label><input type="checkbox" checked={enabled} onChange={e=>setEnabled(e.target.checked)}/> Recevoir les notifications Discord</label>
+    <label><input type="checkbox" checked={enabled} disabled={busy} onChange={e=>{const checked=e.target.checked;setEnabled(checked);if(checked&&!events.length)setEvents(Object.keys(catalog));}}/> Recevoir les notifications Discord</label>
+    <p>À la première activation, tous les événements disponibles sont sélectionnés. Vous pouvez en décocher avant d’enregistrer ; vos choix déjà enregistrés sont conservés.</p>
     {org&&<><TextField label="Identifiant du salon privé" value={channelId} onChange={e=>setChannelId(e.target.value)} required={enabled} pattern="[0-9]{17,20}"/><p>Réservez un salon à cette organisation, masquez-le à @everyone et donnez au bot accès au salon. Vous devez pouvoir gérer le serveur.</p></>}
     <fieldset disabled={!enabled||busy}><legend>Événements à recevoir</legend>{Object.entries(catalog).map(([kind,label])=><label key={kind} style={{display:"block",marginBlock:8}}><input type="checkbox" checked={events.includes(kind)} onChange={e=>setEvents(v=>e.target.checked?[...v,kind]:v.filter(k=>k!==kind))}/> {label}</label>)}</fieldset>
     <Button type="submit" disabled={busy}>{busy?"Enregistrement…":"Enregistrer les préférences"}</Button>

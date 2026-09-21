@@ -18,6 +18,7 @@ InfiMatch facilite la recherche et le suivi des missions. Les agences assurent l
 
 - Inscription et connexion des candidats, établissements et agences ; profils et droits distincts.
 - Qualifications, vérification RPPS, disponibilités et zone de recherche enregistrée.
+- Création et publication directe des annonces depuis « Missions et suivi », pour les établissements et les agences.
 - Recherche de missions, favoris, candidatures et matching explicable ; affectation après décision humaine.
 - Agenda, documents privés et confirmations/annulations PDF.
 - Notifications internes ; configuration Discord facultative après inscription et modifiable ensuite. Emails selon les services configurés.

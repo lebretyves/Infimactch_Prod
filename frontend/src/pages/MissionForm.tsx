@@ -209,11 +209,11 @@ function Form({
       <section className={u.card}>
         <p>
           {need
-            ? "Aucune de vos agences actives n’est rattachée à l’établissement de ce besoin. La préparation de la mission est indisponible."
+            ? "Aucune de vos agences actives n’est rattachée à l’établissement de cette annonce. La publication est indisponible."
             : "Votre compte doit être rattaché à une entreprise pour créer une mission."}
         </p>
-        <ButtonLink to="/besoins" variant="outline">
-          Retour aux besoins
+        <ButtonLink to="/missions" variant="outline">
+          Retour aux missions
         </ButtonLink>
       </section>
     );
@@ -222,18 +222,18 @@ function Form({
       {need && (
         <section
           className={u.card}
-          aria-label="Besoin à l’origine de la mission"
+          aria-label="Annonce à compléter"
         >
-          <h2>À partir du besoin : {need.title}</h2>
+          <h2>Reprendre l’annonce : {need.title}</h2>
           {need.details ? (
             <p>
-              Besoin de {need.details.headcount} professionnel
+              Demande initiale de {need.details.headcount} professionnel
               {need.details.headcount > 1 ? "s" : ""}. Cette mission concerne une
               vacation pour un professionnel.
             </p>
           ) : (
             <p>
-              Critères à compléter : ce besoin ancien fournit seulement
+              Critères à compléter : cette ancienne saisie fournit seulement
               l’intitulé, la description et l’établissement.
             </p>
           )}
@@ -241,8 +241,8 @@ function Form({
             Vérifiez les informations préremplies et complétez le salaire et la
             position du lieu de travail. La validation publie directement la mission et la rend visible aux intérimaires.
           </p>
-          <ButtonLink to="/besoins" variant="ghost">
-            Retour aux besoins
+          <ButtonLink to="/missions" variant="ghost">
+            Retour aux missions
           </ButtonLink>
         </section>
       )}
@@ -504,9 +504,7 @@ function Form({
         to={
           mission
             ? "/gestion/missions/" + mission.id + "?" + new URLSearchParams({ returnTo })
-            : need
-              ? "/besoins"
-              : returnTo
+            : returnTo
         }
         variant="ghost"
       >
@@ -538,9 +536,10 @@ export default function MissionForm() {
         {id
           ? "Modifier la mission"
           : needId
-            ? "Préparer une mission"
+            ? "Compléter et publier une mission"
             : "Créer une mission"}
       </h1>
+      {!id && <p>Renseignez les conditions de la mission, puis validez « Créer et publier la mission » pour rendre l’annonce visible aux intérimaires.</p>}
       {r.loading ? (
         <p role="status">Chargement…</p>
       ) : r.error ? (
@@ -548,8 +547,8 @@ export default function MissionForm() {
           {r.error}
           <Button onClick={r.reload}>Réessayer</Button>
           {needId && (
-            <ButtonLink to="/besoins" variant="ghost">
-              Retour aux besoins
+            <ButtonLink to="/missions" variant="ghost">
+              Retour aux missions
             </ButtonLink>
           )}
         </div>

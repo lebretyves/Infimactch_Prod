@@ -33,7 +33,6 @@ const enterpriseNavigation: { to: string; label: string; icon: IconName }[] = [
   { to: "/mes-etablissements", label: "Mes établissements", icon: "building" },
   { to: "/missions", label: "Missions et suivi", icon: "search" },
   { to: "/candidatures", label: "Candidatures à traiter", icon: "file-text" },
-  { to: "/besoins", label: "Besoins", icon: "briefcase" },
   { to: "/organisation", label: "Organisation", icon: "building" },
 ];
 export function AppLayout() {

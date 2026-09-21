@@ -61,10 +61,10 @@ for(const group of ['etablissement','agence']) {
  add('missions-'+group,'Missions · '+name,group,'/missions','Liste des missions accessibles à cette organisation.',['Liste et états','Accès à la gestion',...(group==='agence'?['Créer une mission']:[])]);
  add('gestion-'+group,'Gestion de mission · '+name,group,'/gestion/missions/:id',group==='agence'?'Pilotage de la mission, candidats et affectation.':'Consultation des candidats et sélection pour la mission.',['Détail de la mission','Candidats reçus',group==='agence'?'Affectation et profils proposés':'Sélection et refus des candidats'],{path:'/gestion/missions/'+missionId});
  add('organisation-'+group,'Organisation · '+name,group,'/organisation','Coordonnées et identité de l’organisation.',['Nom et adresse','Référent','Identifiants professionnels',...(group==='agence'?['Établissements rattachés']:[])]);
- add('besoins-'+group,'Besoins de personnel · '+name,group,'/besoins',group==='agence'?'Lecture des besoins des établissements rattachés.':'Déclaration et consultation des besoins de personnel.',['Dates et horaires','Service et qualification','Effectif et critères cliniques',group==='agence'?'Préparer une mission préremplie':'Création et modification du besoin'],{setup:group==='agence'?'need-detail':'need-filled'});
 }
-add('mission-nouvelle','Créer une mission','agence','/gestion/missions/nouvelle','Formulaire complet de création d’un brouillon de mission.',['Établissement rattaché','Compétences et conditions','Horaires, adresse et rémunération']);
-add('mission-depuis-besoin','Préparer une mission depuis un besoin','agence','/gestion/missions/nouvelle?besoin='+uid(17),'Critères du besoin repris dans un brouillon de mission pour un professionnel.',['Établissement et critères préremplis','Effectif demandé rappelé','Rémunération et coordonnées à compléter']);
+add('besoins-redirection','Ancien lien vers les missions','agence','/besoins','Redirection vers le suivi unique des missions.',['Missions et suivi'],{finalPath:'/missions'});
+add('mission-nouvelle','Créer une mission','agence','/gestion/missions/nouvelle','Formulaire complet de création et publication directe d’une mission.',['Établissement rattaché','Compétences et conditions','Horaires, adresse et rémunération']);
+add('mission-depuis-besoin','Compléter une ancienne annonce','agence','/gestion/missions/nouvelle?besoin='+uid(17),'Reprise des critères d’une ancienne saisie dans le formulaire de publication.',['Établissement et critères préremplis','Effectif demandé rappelé','Rémunération et coordonnées à compléter']);
 add('mission-modifier','Modifier une mission','agence','/gestion/missions/:id/modifier','Modification des conditions d’une mission existante.',['Conditions préremplies','Qualification et compétences','Enregistrement des modifications'],{path:'/gestion/missions/'+missionId+'/modifier'});
 add('mission-brouillon','Mission · brouillon','agence','/gestion/missions/:id','État avant publication de la mission.',['Modifier','Publier','Annuler'],{path:'/gestion/missions/'+missionId,variant:'draft'});
 add('mission-pourvue','Mission · pourvue','agence','/gestion/missions/:id','État d’une mission avec une affectation confirmée.',['Affectation','Confirmation de mission','Suivi de l’état'],{path:'/gestion/missions/'+missionId,variant:'filled'});
@@ -137,8 +137,6 @@ for(const entry of entries.filter(item=>!process.env.CATALOGUE_ONLY || process.e
     await radios.nth(1).check();
     if(entry.setup==='agency-signup')await page.getByLabel('Type d’organisation').selectOption('AGENCY');
    }
-   if(entry.setup==='need-filled'){await page.getByLabel('Intitulé du besoin').fill('Renfort IDE en journée');await page.getByLabel('Description du besoin').fill('Besoin fictif pour renforcer la continuité des soins adultes aux urgences.');await page.getByLabel('Date de début du besoin').fill('2026-09-28');await page.getByRole('button',{name:'Matin 06–14',exact:true}).click();await page.getByLabel('Service du besoin').selectOption('URGENCES');await page.getByLabel('Nombre de professionnels').fill('2');}
-   if(entry.setup==='need-detail')await page.locator('article summary').first().click();
    if(entry.setup==='calendar-slots'){await page.getByLabel('Aller à la date').fill('2026-09-21');if(entry.variant==='month')await page.getByLabel('Vue du calendrier').selectOption('month');}
    if(entry.setup==='cookie-custom')await page.getByRole('button',{name:'Personnaliser mes choix'}).click();
    if(entry.setup==='finess-found'){await page.locator('input[name=finess]').fill('010000024');await page.getByText('Établissement trouvé',{exact:true}).waitFor();}
@@ -150,7 +148,7 @@ for(const entry of entries.filter(item=>!process.env.CATALOGUE_ONLY || process.e
    await page.waitForTimeout(120);
    await page.evaluate(()=>window.scrollTo(0,0));
    await page.waitForTimeout(140);
-   assert.equal(new URL(page.url()).pathname,new URL(entry.path||entry.route,base).pathname,'Redirection inattendue');
+   assert.equal(new URL(page.url()).pathname,new URL(entry.finalPath||entry.path||entry.route,base).pathname,'Redirection inattendue');
    const headings=await page.locator('h1').allTextContents(); assert.ok(headings.some(h=>h.trim()),'Titre de page absent');
    const alerts=await page.getByRole('alert').allTextContents();if(!entry.expectedAlert)assert.deepEqual(alerts,[],'Alerte inattendue');
    const loading=await page.locator('[role=status]').allTextContents();assert.ok(!loading.some(t=>/Chargement|Vérification de votre compte en cours/i.test(t)),'Page encore en chargement');
@@ -165,7 +163,7 @@ for(const entry of entries.filter(item=>!process.env.CATALOGUE_ONLY || process.e
  }
 }
 const router=await readFile('src/router.tsx','utf8');const routes=[...router.matchAll(/path:\s*["']([^"']+)["']/g)].map(m=>m[1]);const capturedRoutes=[...new Set(entries.map(e=>e.route))];const uncovered=routes.filter(r=>!capturedRoutes.includes(r)&&r!=='/catalogue');assert.deepEqual(uncovered,[],'Route frontend non couverte');
-if(process.env.CATALOGUE_ONLY){const prior=JSON.parse(await readFile('docs/proofs/catalogue-captures.json','utf8'));reports.push(...prior.reports.filter(old=>!reports.some(now=>now.id===old.id&&now.device===old.device)));}
+if(process.env.CATALOGUE_ONLY){const prior=JSON.parse(await readFile('docs/proofs/catalogue-captures.json','utf8'));reports.push(...prior.reports.filter(old=>entries.some(entry=>entry.id===old.id)&&!reports.some(now=>now.id===old.id&&now.device===old.device)));}
 assert.equal(reports.length,entries.length*2,'Une capture manque');
 await mkdir('docs/proofs',{recursive:true});await writeFile('docs/proofs/catalogue-captures.json',JSON.stringify({generatedAt:manifest.generatedAt,entryCount:entries.length,captureCount:reports.length,viewports:{desktop:'1440x960',mobile:'375x812'},scope:'Composants réels, API entièrement interceptée, données fictives uniquement, aucun compte ni enregistrement serveur. Polices publiques autorisées. Google OAuth hors capture. Le catalogue lui-même est la page de consultation, sans capture récursive.',routes,capturedRoutes,uncovered,reports},null,2)+'\n');
 console.log(JSON.stringify({entries:entries.length,captures:reports.length,uncovered,overflow:reports.filter(r=>r.width.document>r.width.viewport).map(r=>r.id+' '+r.device)}));
