@@ -152,7 +152,7 @@ export function MixedRecommendations({
       <header className={s.header}>
         <div className={s.heading}>
           <span className={s.emblem} aria-hidden="true"><Icon name="heart-outline" size={26} /></span>
-          <div><p className={s.eyebrow}>LE BON MATCH, CÔTÉ MISSION</p><h2 id="recommendations-heading">Vos crushs</h2></div>
+          <div><p className={s.eyebrow}>LE BON MATCH, CÔTÉ MISSION</p><h2 id="recommendations-heading">Vos matchs</h2></div>
         </div>
         <Link className={s.allOffers} to={`/missions?origine=${origin}`}>Toutes les offres <span aria-hidden="true">→</span></Link>
       </header>
@@ -186,7 +186,7 @@ export function MixedRecommendations({
           {origin !== "partenaires" && data.external.sources.some(source => !["SUCCESS", "SUCCEEDED", "READY"].includes(source.status)) && (
             <p className={s.notice} role="status">La dernière actualisation d’au moins une source est indisponible ou incomplète. Les offres déjà enregistrées peuvent être présentées ; vérifiez leur disponibilité sur le site source.</p>
           )}
-          {selected.length > 0 ? cards() : <div className={s.state}><h3>Votre prochain crush se prépare</h3><p>Aucune offre disponible dans cette sélection pour le moment.</p></div>}
+          {selected.length > 0 ? cards() : <div className={s.state}><h3>Votre prochain match se prépare</h3><p>Aucune offre disponible dans cette sélection pour le moment.</p></div>}
           {origin !== "externes" && data.internal.status === "READY" && !data.internal.items.length && (
             <p className={s.emptyNote}>Aucune mission partenaire disponible dans cette sélection. <Link to="/profil">Vérifiez votre profil</Link>, votre dossier RPPS et vos <Link to="/calendrier">disponibilités</Link>.</p>
           )}
@@ -194,7 +194,7 @@ export function MixedRecommendations({
             <p className={s.emptyNote}>Aucune offre externe disponible pour le moment.</p>
           )}
           <details className={s.explanation}>
-            <summary>Comment sont choisis vos crushs ?</summary>
+            <summary>Comment sont choisis vos matchs ?</summary>
             {origin !== "externes" && <p>Les missions partenaires sont classées selon la correspondance avec votre profil lorsque celui-ci permet de la confirmer.</p>}
             {origin !== "partenaires" && <p>Les offres externes complètent la sélection : leur correspondance est partielle. Horaires, prérequis et disponibilité sont à vérifier auprès de l’annonceur. La candidature se fait sur le site source.</p>}
             <p>Le cœur ajoute uniquement l’offre à vos favoris : il n’envoie pas de candidature.</p>
