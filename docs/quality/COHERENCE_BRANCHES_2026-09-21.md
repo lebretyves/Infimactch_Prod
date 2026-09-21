@@ -11,6 +11,7 @@ L’inventaire initial comprend 1 201 fichiers de production et 1 205 fichiers E
 - Anciennes versions retirées des guides courants README, déploiement et soutenance ; une seule [référence de livraison vérifiée](../rendu/LIVRAISON_VERIFIEE.json).
 - SHA non prérempli dans les scénarios encore à recetter : la version doit désigner le code effectivement testé, avec date et preuve.
 - Trois doubles d’exports n8n propres à Epitech archivés hors Git. Le double de reprise à 30 minutes était obsolète ; l’export conservé est à quatre heures, Europe/Paris. Les deux autres étaient identiques à leur référence conservée.
+- Chemin d’exclusion des notes locales `workspace-docs` rétabli côté Epitech : une ancienne substitution avait produit `workspace-docs_intern`. Le comparateur ne normalise plus les suffixes de noms arbitraires.
 - Note de cadrage propre au dépôt Epitech conservée. Les chemins `docs` / `docs_intern` restent adaptés à chaque dépôt.
 - Contrôle structurel ajouté à la CI : liens Markdown locaux, JSON, absence de doubles documentaires, cadence de reprise et cohérence du tableau de recette. Comparaison de branches disponible en option.
 
