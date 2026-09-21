@@ -118,3 +118,5 @@
 @media(max-width:560px) { .qualifications > .choices, .skillSection .choices, .related { grid-template-columns: minmax(0,1fr); } .sectionNav { gap: 2px 4px; } .sectionNav a { padding-inline: 8px; } .cvDisclosure > summary span { display: block; margin: 4px 0 0 16px; } }
 
 .profilePage button { min-height: 44px; min-width: 44px; }
+
+.experience { background: #edf7fb; border-color: #c8dfed; border-left: 3px solid #219ba9; }

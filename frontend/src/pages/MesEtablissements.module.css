@@ -47,3 +47,12 @@
 .removeActions { grid-column:1/-1; display:grid; gap:12px; }
 .removeActions section { display:grid; justify-items:start; gap:12px; padding:16px; margin-top:12px; background:var(--brand-50); border-radius:8px; }
 @media(max-width:600px) { .heading { align-items:stretch; flex-direction:column; } .actions { align-items:stretch; flex-direction:column; } .addPanel { padding:20px 16px; } }
+
+/* Establishments and their missions share the workspace's framed sections. */
+.heading { padding: 24px; border: 1px solid #c9def3; border-left: 4px solid var(--brand-800); border-radius: 14px; background: #e1effc; }
+.search, .missionSearch { border-color: #c9dfee; border-top: 3px solid #219ba9; background: #f7fbfe; }
+.list { border-color: #c9dfee; box-shadow: 0 5px 18px #07215205; }
+.row, .mission { padding: 24px; }
+.row:nth-child(2n), .mission:nth-child(2n) { background: #f6fafE; }
+.addPanel { border-color: #c9dfee; border-top: 3px solid var(--brand-800); }
+@media (max-width: 760px) { .heading { padding: 20px 16px; } .row, .mission { padding: 20px 16px; } }

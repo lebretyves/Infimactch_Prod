@@ -31,3 +31,10 @@
   .metric { padding: 22px 18px; }
   .metricValue { font-size: 30px; }
 }
+
+/* Reporting remains a distinct, quieter section of the agency workspace. */
+.report { border-color: #c8ddeb; border-top: 4px solid #219ba9; box-shadow: 0 5px 18px #07215205; }
+.filters { padding: 24px 18px; background: #f0f6fc; border: 1px solid #d4e3ef; border-radius: 10px; }
+.metric { border: 1px solid #d0e0ef; border-left: 3px solid var(--brand-800); background: #edf4fc; }
+.metric:nth-child(2n) { background: #edf9fa; border-color: #c9e5e8; border-left-color: #219ba9; }
+@media (max-width: 700px) { .filters { padding: 20px 14px; } }

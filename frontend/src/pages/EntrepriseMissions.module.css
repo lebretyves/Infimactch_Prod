@@ -14,3 +14,5 @@
 .jump input { width: 76px; min-height: 42px; border: 1px solid #c7d9ec; border-radius: 7px; font: inherit; padding: 8px; }
 @media(max-width:1000px) { .search { grid-template-columns: repeat(2,minmax(0,1fr)); } }
 @media(max-width:550px) { .search { grid-template-columns: 1fr; padding: 16px; } .searchActions { flex-direction: column; align-items: stretch; } .pageButtons { gap: 6px; } .pageButtons > button:first-child,.pageButtons > button:last-child { flex-basis: 42%; order: 2; } }
+
+.search { border-color: #c9dfee; border-top: 3px solid #219ba9; background: #f7fbfe; box-shadow: 0 5px 18px #07215205; }
