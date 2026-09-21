@@ -30221,10 +30221,12 @@
             "type": "string"
           },
           "latitude": {
-            "type": "number"
+            "type": "number",
+            "nullable": true
           },
           "longitude": {
-            "type": "number"
+            "type": "number",
+            "nullable": true
           },
           "hourlySalary": {
             "type": "number"
@@ -30245,8 +30247,6 @@
           "end",
           "shift",
           "address",
-          "latitude",
-          "longitude",
           "hourlySalary"
         ]
       },

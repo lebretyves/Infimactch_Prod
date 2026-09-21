@@ -34,8 +34,14 @@ export function SearchPlace({
   selected,
   home,
   onChange,
+  label = "Où ?",
+  required = false,
+  maxLength = 150,
 }: {
   value: string;
+  label?: string;
+  required?: boolean;
+  maxLength?: number;
   selected: boolean;
   home: SearchLocation | null;
   onChange: (value: string, location: SearchLocation | null) => void;
@@ -68,7 +74,7 @@ export function SearchPlace({
       setBusy(true);
       try {
         const result = await api<{ items: SearchLocation[] }>(
-          "/listings/locations?q=" + encodeURIComponent(value.trim()),
+          "/listings/locations?q=" + encodeURIComponent(value.trim().slice(0, 150)),
           { signal: controller.signal },
         );
         if (!controller.signal.aborted) {
@@ -107,10 +113,12 @@ export function SearchPlace({
       }}
     >
       <TextField
-        label="Où ?"
+        label={label}
+        required={required}
+        minLength={required ? 5 : undefined}
         value={value}
         placeholder={home ? home.label : "Ville, code postal ou adresse"}
-        maxLength={150}
+        maxLength={maxLength}
         autoComplete="off"
         role="combobox"
         aria-autocomplete="list"
