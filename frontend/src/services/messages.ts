@@ -1,4 +1,5 @@
-﻿export const reasonLabels: Record<string, string> = {
+export const reasonLabels: Record<string, string> = {
+  RPPS_OPTIONAL_DEMO: "Projet de démonstration : le RPPS est facultatif. Le profil n’est pas vérifié auprès du répertoire professionnel.",
   SERVICE_NOT_PREFERRED: "Le service de cette mission ne fait pas partie de vos choix pour ce métier.",
   SCHEDULE_UNCONFIRMED: "Horaires précis à confirmer.",
   QUALIFICATION_MISSING: "Le diplôme requis n’est pas renseigné.",

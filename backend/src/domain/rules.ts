@@ -22,12 +22,14 @@ const weights = Object.freeze({
   D: Number(parsed.D),
   E: Number(parsed.E),
 });
+const rppsRequired = process.env.DEMO_OPTIONAL_RPPS !== "true";
 export const MATCH_RULES = Object.freeze({
   version:
-    "1.1.0-services-" +
+    "1.2.0-rpps-policy-" +
     createHash("sha256")
-      .update(JSON.stringify(weights))
+      .update(JSON.stringify({ weights, rppsRequired }))
       .digest("hex")
       .slice(0, 10),
   weights,
+  rppsRequired,
 });

@@ -8838,11 +8838,15 @@
                         "D",
                         "E"
                       ]
+                    },
+                    "rppsRequired": {
+                      "type": "boolean"
                     }
                   },
                   "required": [
                     "version",
-                    "weights"
+                    "weights",
+                    "rppsRequired"
                   ]
                 }
               }

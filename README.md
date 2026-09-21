@@ -25,7 +25,7 @@ InfiMatch facilite la recherche et le suivi des missions. Les agences assurent l
 - Import et nettoyage d'offres externes, contrôle des doublons, reprises et quotas.
 - Administration : rôles, MFA, suivi des comptes, incidents, imports et journaux.
 
-Le RIB reste facultatif. Le domicile et la zone de recherche/alertes sont distincts ; une recherche ponctuelle ne modifie pas les alertes enregistrées. Une correspondance RPPS ne certifie pas à elle seule l'identité du titulaire.
+Le RIB reste facultatif. Pour la démonstration scolaire, DEMO_OPTIONAL_RPPS=true permet de candidater et d’affecter sans RPPS vérifié ; le statut du profil reste inchangé. Le contrôle strict est appliqué si ce réglage est absent ou vaut false. Le domicile et la zone de recherche/alertes sont distincts ; une recherche ponctuelle ne modifie pas les alertes enregistrées. Une correspondance RPPS ne certifie pas à elle seule l'identité du titulaire.
 
 ## Architecture
 
