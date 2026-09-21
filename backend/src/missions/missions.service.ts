@@ -87,6 +87,8 @@ async function applicationAssessment(em: SqlClient, p: any, m: any) {
 export class MissionsService {
   constructor(private readonly db: Database) {}
   private validate(b: MissionDto, checkHorizon = true) {
+    if ((b.latitude == null) !== (b.longitude == null))
+      throw new BadRequestException("Latitude and longitude must be supplied together");
     if (b.timezone !== undefined) {
       try {
         if (typeof b.timezone !== "string" || !/^[A-Za-z_]+(?:\/[A-Za-z0-9_+.-]+)*$/.test(b.timezone)) throw new Error();
@@ -146,8 +148,8 @@ export class MissionsService {
           b.end,
           b.shift,
           b.address,
-          b.longitude,
-          b.latitude,
+          b.longitude ?? null,
+          b.latitude ?? null,
           b.hourlySalary,
           b.staffingRequestId ?? null,
           b.timezone ?? "Europe/Paris",
@@ -220,8 +222,8 @@ export class MissionsService {
         new Date(b.end).toISOString(),
         b.shift,
         b.address,
-        b.longitude,
-        b.latitude,
+        b.longitude ?? null,
+        b.latitude ?? null,
         b.hourlySalary,
         b.timezone ?? m.timezone ?? "Europe/Paris",
         b.schedulePrecision ?? m.schedule_precision ?? "EXACT",
@@ -246,8 +248,8 @@ export class MissionsService {
           b.end,
           b.shift,
           b.address,
-          b.longitude,
-          b.latitude,
+          b.longitude ?? null,
+          b.latitude ?? null,
           b.hourlySalary,
           revision,
           b.timezone ?? m.timezone ?? "Europe/Paris",

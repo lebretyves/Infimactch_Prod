@@ -8,11 +8,12 @@ const facility = { id:id(2), kind:'ESTABLISHMENT', name:'Clinique de test', addr
 const date = new Date(Date.now() + 7*86400000).toISOString().slice(0,10);
 const mission = {id:id(3),title:'Renfort IDE',status:'OPEN',qualification:'IDE',service:'URGENCES',start_at:date+'T06:00:00Z',end_at:date+'T14:00:00Z',timezone:'Europe/Paris',assignments:[],events:[],application_count:0,can_manage:true,required_skills:[],desired_skills:[],establishment_id:facility.id,establishment_name:facility.name};
 const legacy = {id:id(4),title:'Ancienne annonce',description:'Renfort infirmier de démonstration',establishment_id:facility.id,establishment_name:facility.name,details:null,missions:[]};
-async function setup(kind) {
+async function setup(kind, scenario="known") {
+ const currentFacility = scenario === "missing" ? {...facility, latitude:null, longitude:null} : facility;
  const context = await browser.newContext();
  await context.addInitScript(()=>localStorage.setItem('infimatch:cookie-preferences',JSON.stringify({version:1,savedAt:new Date().toISOString(),google:false})));
  const state={old:[],failLegacy:false,malformed:false,writes:[],errors:[],unknown:[]};
- const org=kind==='AGENCY'?agency:facility;
+ const org=kind==='AGENCY'?agency:currentFacility;
  await context.route('**/api/**',async route=>{
   const req=route.request(),url=new URL(req.url()),p=url.pathname.replace(/^\/api\/v1/,'');
   const send=json=>route.fulfill({json});
@@ -24,8 +25,9 @@ async function setup(kind) {
   }
   if(p==='/auth/me')return send({id:id(10),email:'fixture@example.invalid',family:'ENTERPRISE',organizations:[org]});
   if(p==='/auth/csrf')return send({csrfToken:'fixture-token'});
-  if(p==='/me/organizations')return send({organizations:[org],links:kind==='AGENCY'?[{...facility,agency_id:agency.id}]:[]});
+  if(p==='/me/organizations')return send({organizations:[org],links:kind==='AGENCY'?[{...currentFacility,agency_id:agency.id}]:[]});
   if(p==='/matching/rules')return send({weights:{C:.45,Z:.25,D:.2,E:.1}});
+  if(p==='/listings/locations')return scenario==='unavailable' ? route.fulfill({status:503,json:{message:'Unavailable'}}) : send({items:scenario==='suggestion'?[{label:'20 rue de Rennes 35000 Rennes',latitude:48.11,longitude:-1.68}]:[]});
   if(p==='/reference-data')return send({ideServices:['URGENCES'],blockSpecialties:[]});
   if(p==='/enterprise/missions')return send({items:[mission],total:1,limit:20,offset:0});
   if(p==='/staffing-requests'){
@@ -50,8 +52,8 @@ async function setup(kind) {
  return {context,page,state};
 }
 try {
- for(const kind of ['AGENCY','ESTABLISHMENT']){
-  const {context,page,state}=await setup(kind);
+ for(const kind of ['AGENCY','ESTABLISHMENT']) for(const scenario of ['known','missing','unavailable','suggestion']){
+  const {context,page,state}=await setup(kind,scenario);
   await page.goto(base+'/accueil');
   await page.getByRole('heading',{name:'Mes dernières offres'}).waitFor();
   assert.equal(await page.getByRole('link',{name:'Besoins',exact:true}).count(),0);
@@ -66,6 +68,13 @@ try {
   await page.getByLabel('Date de début').fill(date);
   await page.getByLabel('Date de fin incluse').fill(date);
   await page.getByLabel('Rémunération brute par heure (€)').fill('25');
+  assert.equal(await page.getByLabel('Latitude du lieu').count(),0);
+  assert.equal(await page.getByLabel('Longitude du lieu').count(),0);
+  if(scenario==='unavailable'||scenario==='suggestion'){
+   await page.getByLabel('Adresse du lieu de mission').fill('20 rue de Rennes');
+   if(scenario==='unavailable') await page.getByRole('status').filter({hasText:'Recherche de lieux indisponible.'}).waitFor();
+   else await page.getByRole('option',{name:'20 rue de Rennes 35000 Rennes',exact:true}).click();
+  }
   await page.getByRole('button',{name:'Créer et publier la mission',exact:true}).click();
   await page.waitForURL('**/gestion/missions/'+mission.id+'?**');
   await page.getByText('Offre publiée : les intérimaires peuvent la consulter et candidater selon leurs critères.',{exact:true}).waitFor();
@@ -74,9 +83,12 @@ try {
   assert.ok(state.writes[0].key);
   assert.equal(state.writes[0].body.establishmentId,facility.id);
   assert.equal(state.writes[0].body.hourlySalary,25);
+  assert.equal(state.writes[0].body.latitude,scenario==='known'?facility.latitude:scenario==='suggestion'?48.11:null);
+  assert.equal(state.writes[0].body.longitude,scenario==='known'?facility.longitude:scenario==='suggestion'?-1.68:null);
+  assert.ok(state.writes[0].body.address.length>=5);
   assert.equal(state.writes[0].body.staffingRequestId,undefined);
   assert.deepEqual(state.errors,[]);assert.deepEqual(state.unknown,[]);
-  console.log('PASS',kind,'single form, direct publication and no staffing-request write');
+  console.log('PASS',kind,scenario,'single form, direct publication and no staffing-request write');
   await context.close();
  }
  const {context,page,state}=await setup('AGENCY');

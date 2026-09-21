@@ -105,16 +105,18 @@ export class MissionDto {
   @IsString()
   @Length(5, 500)
   address!: string;
-  @ApiProperty({ type: () => Number, required: true })
+  @ApiProperty({ type: () => Number, required: false, nullable: true })
+  @IsOptional()
   @IsNumber()
   @Min(-90)
   @Max(90)
-  latitude!: number;
-  @ApiProperty({ type: () => Number, required: true })
+  latitude?: number | null;
+  @ApiProperty({ type: () => Number, required: false, nullable: true })
+  @IsOptional()
   @IsNumber()
   @Min(-180)
   @Max(180)
-  longitude!: number;
+  longitude?: number | null;
   @ApiProperty({ type: () => Number, required: true })
   @IsNumber({ maxDecimalPlaces: 2 })
   @Min(0.01)

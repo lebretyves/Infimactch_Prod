@@ -1,3 +1,4 @@
+import { SearchPlace, validCoordinates } from "@/components/SearchPlace";
 import { missionMaxDate, validateMissionHorizon } from "@/lib/missionDateRange";
 import { missionReturnTo } from "@/lib/missionNavigation";
 import { serviceOptionsFor } from "@/data/clinicalSkills";
@@ -61,8 +62,8 @@ type Stored = {
   end_at: string;
   shift: string;
   address: string;
-  latitude: number;
-  longitude: number;
+  latitude: number | null;
+  longitude: number | null;
   hourly_salary: number;
 };
 type Reference = { ideServices: string[]; blockSpecialties: string[] };
@@ -96,6 +97,8 @@ function Form({
   const requestedLink = context.links.find(o => o.id === requestedEstablishmentId && agencies.some(a => a.id === o.agency_id));
   const first = requestedDirect ? "" : requestedLink?.agency_id || agencies[0]?.id || "";
   const initialEstablishment = need ? [...directEstablishments,...context.links].find(o=>o.id===need.establishment_id) : requestedDirect || requestedLink || (!first ? directEstablishments[0] : undefined);
+  const initialAddress = need?.details?.address || need?.establishment_address || initialEstablishment?.address || "";
+  const initialPosition = initialAddress.trim() === initialEstablishment?.address.trim() ? validCoordinates(initialEstablishment?.latitude, initialEstablishment?.longitude) : null;
   const [v, setV] = useState<Draft>(
     mission
       ? {
@@ -137,9 +140,9 @@ function Form({
           start: need?.details ? localDate(need.details.start, need.details.timezone) : "",
           end: need?.details ? inclusiveEndDate(need.details.end, need.details.timezone) : "",
           shift: need?.details?.shift || "UNKNOWN",
-          address: need?.details?.address || need?.establishment_address || initialEstablishment?.address || "",
-          latitude: initialEstablishment?.latitude ?? null,
-          longitude: initialEstablishment?.longitude ?? null,
+          address: initialAddress,
+          latitude: initialPosition?.latitude ?? null,
+          longitude: initialPosition?.longitude ?? null,
           hourlySalary: null,
         },
   );
@@ -166,8 +169,6 @@ function Form({
       if (!experienceYears.trim() || !Number.isFinite(years) || years < 0 || years > 50)
         throw new Error("Renseignez une expérience entre 0 et 50 ans.");
       const minExperienceMonths = Math.round(years * 12);
-      if (v.latitude === null || v.longitude === null)
-        throw new Error("Renseignez la position du lieu de mission.");
       if (v.hourlySalary === null || v.hourlySalary <= 0)
         throw new Error("Complétez la rémunération brute par heure.");
       if (!linked.some((link) => link.id === v.establishmentId))
@@ -238,8 +239,8 @@ function Form({
             </p>
           )}
           <p>
-            Vérifiez les informations préremplies et complétez le salaire et la
-            position du lieu de travail. La validation publie directement la mission et la rend visible aux intérimaires.
+            Vérifiez les informations préremplies et complétez le salaire et
+            l’adresse du lieu de travail. La validation publie directement la mission et la rend visible aux intérimaires.
           </p>
           <ButtonLink to="/missions" variant="ghost">
             Retour aux missions
@@ -262,12 +263,19 @@ function Form({
             required={!directEstablishments.length}
             disabled={!!mission}
             value={v.agencyId}
-            onChange={(e) =>
+            onChange={(e) => {
+              const agencyId = e.target.value;
+              const establishment = agencyId
+                ? context.links.find(link => link.agency_id === agencyId && link.id === need?.establishment_id)
+                : directEstablishments[0];
               set({
-                agencyId: e.target.value,
-                establishmentId: need?.establishment_id || (!e.target.value ? directEstablishments[0]?.id : "") || "",
-              })
-            }
+                agencyId,
+                establishmentId: establishment?.id || "",
+                address: establishment?.address || "",
+                latitude: establishment?.latitude ?? null,
+                longitude: establishment?.longitude ?? null,
+              });
+            }}
           >
             {!!directEstablishments.length && <option value="">Directement par mon établissement</option>}
             {agencies.map((o) => (
@@ -439,46 +447,21 @@ function Form({
           <option value="NIGHT">Nuit</option>
           {v.shift === "MIXED" && <option value="MIXED">Alternance jour et nuit (déjà enregistrée)</option>}
         </SelectField>
-        <TextField
+        <SearchPlace
           label="Adresse du lieu de mission"
           required
-          minLength={5}
           maxLength={500}
           value={v.address}
-          onChange={(e) => set({ address: e.target.value })}
+          selected={!!validCoordinates(v.latitude, v.longitude)}
+          home={null}
+          onChange={(address, location) => set({
+            address,
+            latitude: location?.latitude ?? null,
+            longitude: location?.longitude ?? null,
+          })}
         />
-        <p>La position doit correspondre au lieu de travail.</p>
-        <div className={s.paire}>
-          <TextField
-            label="Latitude du lieu"
-            type="number"
-            required
-            min={-90}
-            max={90}
-            step="any"
-            value={v.latitude ?? ""}
-            onChange={(e) =>
-              set({
-                latitude: e.target.value === "" ? null : Number(e.target.value),
-              })
-            }
-          />
-          <TextField
-            label="Longitude du lieu"
-            type="number"
-            required
-            min={-180}
-            max={180}
-            step="any"
-            value={v.longitude ?? ""}
-            onChange={(e) =>
-              set({
-                longitude:
-                  e.target.value === "" ? null : Number(e.target.value),
-              })
-            }
-          />
-        </div>
+        <p>Choisissez une adresse proposée pour préciser le lieu. Vous pouvez aussi publier avec l’adresse saisie, même si elle n’est pas reconnue.</p>
+        {!validCoordinates(v.latitude, v.longitude) && <p>La distance ne pourra pas être calculée tant que la position du lieu n’est pas connue.</p>}
         <TextField
           label="Rémunération brute par heure (€)"
           type="number"
