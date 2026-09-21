@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { Link, useLocation } from "react-router";
 import { EcranPublic } from "@/layouts/EcranPublic";
 import { Icon } from "@/ui/Icon";
@@ -7,7 +8,13 @@ import { usePageTitle } from "@/lib/usePageTitle";
 import { useCookieConsent } from "@/context/CookieConsentContext";
 import s from "./Mentions.module.css";
 export default function Mentions() {
-  const { state } = useLocation();
+  const { state, hash, key } = useLocation();
+  useEffect(() => {
+    if (hash !== "#cookies") return;
+    const section = document.getElementById("cookies");
+    section?.focus({ preventScroll: true });
+    section?.scrollIntoView({ block: "start" });
+  }, [hash, key]);
   const { openPreferences } = useCookieConsent();
   const retourInscription =
     state?.retourInscription === "/inscription/consentements"
@@ -190,7 +197,7 @@ export default function Mentions() {
           <p>Vos choix d’affichage, leur version et leur date sont conservés dans le stockage local de cet appareil, jusqu’à leur réinitialisation ou à l’effacement des données du navigateur. Ils ne sont pas associés à votre compte. Le bouton « Réinitialiser » du panneau Accessibilité permet de les effacer. Si le stockage est bloqué, les choix restent utilisables pendant la visite.</p>
           <p>La lecture vocale est facultative et démarre à votre demande. InfiMatch utilise uniquement les voix françaises déclarées locales par le navigateur ; aucun texte n’est envoyé à une API vocale d’InfiMatch. La lecture s’arrête lorsque vous changez de page ou masquez l’onglet.</p>
         </section>
-        <section aria-labelledby="titre-cookies" id="cookies">
+        <section aria-labelledby="titre-cookies" id="cookies" tabIndex={-1}>
           <h2 id="titre-cookies">Cookies et stockage dans votre navigateur</h2>
           <p>
             Les éléments nécessaires au fonctionnement restent actifs. Le

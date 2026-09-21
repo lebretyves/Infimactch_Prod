@@ -1,7 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { Button } from "@/ui/Button";
 import { Icon } from "@/ui/Icon";
-import { Checkbox } from "@/ui/Choice";
 import type { CookiePreferences } from "@/services/cookiePreferences";
 import s from "./CookiePreferencesPanel.module.css";
 import preferencesStyle from "./SitePreferences.module.css";
@@ -25,6 +24,8 @@ export function CookiePreferencesPanel({
 }: Props) {
   const dialog = useRef<HTMLDialogElement>(null);
   const trigger = useRef<HTMLButtonElement>(null);
+  const title = useRef<HTMLHeadingElement>(null);
+  const returnFocus = useRef<HTMLElement | null>(null);
   const [custom, setCustom] = useState(false);
   const [google, setGoogle] = useState(false);
   useEffect(() => {
@@ -33,7 +34,14 @@ export function CookiePreferencesPanel({
     if (open) {
       setGoogle(preferences?.google === true);
       setCustom(false);
-      if (!element.open) element.showModal();
+      if (!element.open) {
+        const active = document.activeElement;
+        returnFocus.current = active instanceof HTMLElement && !element.contains(active)
+          ? active : trigger.current;
+        element.showModal();
+        element.scrollTop = 0;
+        title.current?.focus();
+      }
     } else if (element.open) element.close();
   }, [open, preferences]);
   const policy =
@@ -71,7 +79,15 @@ export function CookiePreferencesPanel({
         }}
         onClose={() => {
           if (open) onClose();
-          trigger.current?.focus();
+          const previous = returnFocus.current;
+          if (previous) {
+            const target = previous !== document.body && previous.isConnected
+              ? previous : document.querySelector<HTMLElement>("main h1") ?? document.querySelector<HTMLElement>("main");
+            if (target) {
+              if (target.matches("h1, main")) target.tabIndex = -1;
+              target.focus();
+            }
+          }
         }}
       >
         <div className={s.heading}>
@@ -80,7 +96,7 @@ export function CookiePreferencesPanel({
           </span>
           <div>
             <p className={s.eyebrow}>Vos préférences</p>
-            <h2 id="cookie-title">Cookies et connexion Google</h2>
+            <h2 id="cookie-title" ref={title} tabIndex={-1}>Cookies et connexion Google</h2>
           </div>
           <button
             className={s.close}
@@ -122,7 +138,6 @@ export function CookiePreferencesPanel({
           <a
             href={policy}
             onClick={(event) => {
-              onClose();
               if (
                 !event.ctrlKey &&
                 !event.metaKey &&
@@ -131,15 +146,20 @@ export function CookiePreferencesPanel({
                 event.button === 0
               ) {
                 event.preventDefault();
+                // Close before navigation so the destination is no longer inert.
+                returnFocus.current = null;
+                dialog.current?.close();
+                onClose();
                 onPolicyNavigate();
+              } else {
+                onClose();
               }
             }}
           >
             Politique des cookies
           </a>
         </div>
-        {custom && (
-          <div id="cookie-categories" className={s.categories}>
+        <div id="cookie-categories" className={s.categories} hidden={!custom}>
             <section>
               <div className={s.row}>
                 <h3>Nécessaires</h3>
@@ -151,13 +171,16 @@ export function CookiePreferencesPanel({
               </p>
             </section>
             <section>
-              <Checkbox
-                checked={google}
-                onChange={(event) => setGoogle(event.target.checked)}
-              >
-                Connexion Google
-              </Checkbox>
-              <p>
+              <label className={s.choice}>
+                <input
+                  type="checkbox"
+                  checked={google}
+                  aria-describedby="cookie-google-description"
+                  onChange={(event) => setGoogle(event.target.checked)}
+                />
+                <span>Connexion Google</span>
+              </label>
+              <p id="cookie-google-description">
                 Autorise le service Google Identity Services, fourni par Google,
                 à afficher son bouton et à vous identifier. Google peut lire ou
                 déposer ses propres cookies.{" "}
@@ -175,7 +198,6 @@ export function CookiePreferencesPanel({
               Enregistrer mes choix
             </Button>
           </div>
-        )}
         <p className={s.footnote}>
           Choix conservé six mois sur ce navigateur, modifiable à tout moment
           avec « Cookies ». Retirer l’accord ne supprime pas les cookies déjà

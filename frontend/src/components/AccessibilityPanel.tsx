@@ -4,14 +4,14 @@ import { LOCAL_VOICE_HELP, prepareSpeechVoices, type SpeechVoiceState, isSpeechS
 import s from "./AccessibilityPanel.module.css";
 import preferencesStyle from "./SitePreferences.module.css";
 export function AccessibilityPanel() {
- const a=useAccessibility(), dialog=useRef<HTMLDialogElement>(null),trigger=useRef<HTMLButtonElement>(null);
+ const a=useAccessibility(), dialog=useRef<HTMLDialogElement>(null),trigger=useRef<HTMLButtonElement>(null),title=useRef<HTMLHeadingElement>(null);
  const [voiceState,setVoiceState]=useState<SpeechVoiceState>("loading");
  const [retryText,setRetryText]=useState("");
  useEffect(()=>{if(a.panelOpen)return prepareSpeechVoices(setVoiceState);},[a.panelOpen]);
  const [message,setMessage]=useState(""),[speaking,setSpeaking]=useState(false),[selectionMode,setSelectionMode]=useState(false);
  useEffect(()=>{
   const el=dialog.current;if(!el)return;
-  if(a.panelOpen&&!el.open)el.showModal();
+  if(a.panelOpen&&!el.open){el.showModal();el.scrollTop=0;title.current?.focus();}
   if(!a.panelOpen&&el.open)el.close();
  },[a.panelOpen]);
  useEffect(()=>{
@@ -46,7 +46,7 @@ export function AccessibilityPanel() {
   <dialog ref={dialog} id="a11y-preferences" className={s.dialog} aria-labelledby="a11y-title" aria-describedby="a11y-summary"
    onCancel={e=>{e.preventDefault();a.closePanel();}}
    onClose={()=>{a.closePanel();trigger.current?.focus();}}>
-   <div className={s.heading}><h2 id="a11y-title">Options d’accessibilité</h2><button type="button" className={s.close} aria-label="Fermer les options d’accessibilité" onClick={a.closePanel}>×</button></div>
+   <div className={s.heading}><h2 id="a11y-title" ref={title} tabIndex={-1}>Options d’accessibilité</h2><button type="button" className={s.close} aria-label="Fermer les options d’accessibilité" onClick={a.closePanel}>×</button></div>
    <p id="a11y-summary">Adaptez l’affichage sur cet appareil. Ces aides complètent votre navigateur et votre lecteur d’écran.</p>
    <fieldset className={s.group}><legend>Agrandissement des textes et commandes</legend><div className={s.radios}>
     {([["normal","Normal"],["large","Grand (115 %)"],["xlarge","Très grand (130 %)"]] as const).map(([v,label])=><label key={v}><input type="radio" name="a11y-text-size" checked={a.preferences.textSize===v} onChange={()=>a.setTextSize(v)} /> {label}</label>)}
