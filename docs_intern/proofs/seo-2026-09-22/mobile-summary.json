@@ -1,0 +1,48 @@
+[
+  {
+    "date": "2026-09-22T07:34:01.654Z",
+    "version": "13.5.0",
+    "url": "https://infimactch-prod-backend-l5bc.vercel.app/",
+    "categories": {
+      "performance": 97,
+      "accessibility": 100,
+      "best-practices": 96,
+      "seo": 100
+    },
+    "LCP_ms": 2336.6605,
+    "CLS": 0.05346294046172539,
+    "TBT_ms": 64,
+    "transferBytes": 355435,
+    "settings": {
+      "rttMs": 150,
+      "throughputKbps": 1638.4,
+      "requestLatencyMs": 562.5,
+      "downloadThroughputKbps": 1474.5600000000002,
+      "uploadThroughputKbps": 675,
+      "cpuSlowdownMultiplier": 4
+    }
+  },
+  {
+    "date": "2026-09-22T07:34:18.942Z",
+    "version": "13.5.0",
+    "url": "https://infimactch-prod-backend-l5bc.vercel.app/",
+    "categories": {
+      "performance": 98,
+      "accessibility": 100,
+      "best-practices": 96,
+      "seo": 100
+    },
+    "LCP_ms": 2122.8635,
+    "CLS": 0.05346294046172539,
+    "TBT_ms": 38,
+    "transferBytes": 360086,
+    "settings": {
+      "rttMs": 150,
+      "throughputKbps": 1638.4,
+      "requestLatencyMs": 562.5,
+      "downloadThroughputKbps": 1474.5600000000002,
+      "uploadThroughputKbps": 675,
+      "cpuSlowdownMultiplier": 4
+    }
+  }
+]

@@ -20,6 +20,8 @@ Le [rapport du 18 septembre](../AUTOMATIONS_VALIDATION_2026-09-18.md) décrit ma
 
 ## Qualité et gains
 
+[Bilan SEO actualisé du 22 septembre 2026](../quality/POSITIONNEMENT_SEO_2026-09-22.md) : SEO Lighthouse mobile 100/100 sur deux passages, performances 97–98/100. Indexabilité technique vérifiée ; positionnement Google et données Search Console non attestés par cette campagne.
+
 Deux pratiques documentées : [requêtes de matching regroupées](../quality/OPTIMISATION_MATCHING_2026-09-20.md) et [imports bornés / parsing réutilisé](../quality/IMPORTS_SOBRIETE_2026-09-19.md). Les gains locaux de requêtes ne se convertissent pas directement en euros ou en CO2. [Accessibilité ciblée](../quality/RGAA_CORRECTIONS_2026-09-20.md) : aucune conformité complète revendiquée.
 
 ## Versions et recette

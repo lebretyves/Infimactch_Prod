@@ -1,94 +1,73 @@
-# Conservation, cloture et restauration ? preparation pour utilisateurs reels
+# Conservation des données — démonstration et éventuelle exploitation réelle
 
-Statut : mecanismes techniques prepares ; politique a faire valider par le responsable du traitement avant exploitation reelle. Cette mention concerne le lot historique : la maintenance technique dispose depuis de son propre parcours cloud ; la suppression des historiques métier reste exclue de ce traitement. Ce document ne certifie pas la conformite du service.
+État au 21 septembre 2026. La politique pédagogique ci-dessous est décidée ; son échéance est septembre 2027 et son exécution reste à organiser. Ce document ne certifie pas une conformité globale et ne déclenche aucune suppression.
 
+## Décisions retenues
 
-## Décisions confirmées le 20 septembre 2026
+- Projet de démonstration Epitech, sans activité réelle, avec données métier fictives selon la confirmation du porteur.
+- Conservation des comptes et données de démonstration jusqu’à la fin de l’année scolaire, puis suppression. Les preuves conservées pour le rendu doivent être anonymisées. **Échéance confirmée : septembre 2027**. L’intervention reste à organiser à cette échéance ; aucune tâche de purge n’est annoncée comme déjà active.
+- Dans le scénario, InfiMatch assure la mise en relation ; les agences emploient et paient. Le RIB reste facultatif avant et après première mission. La suggestion après première affectation ne bloque aucune action et ne transmet pas automatiquement le document aux agences.
+- Domicile et GPS facultatifs ; la zone de travail est distincte du domicile et sert à la recherche et aux alertes. Les fonctions facultatives gardent leur choix propre.
+- Les annonces et référentiels publics importés sont des sources externes réelles, distinctes des scénarios fictifs. Les coordonnées des membres et les journaux techniques ne deviennent pas anonymes du seul fait du caractère pédagogique du projet.
 
-InfiMatch assure uniquement la mise en relation. Les agences sont employeurs et paient les intérimaires. Les obligations propres à la paie ne s’appliquent donc pas automatiquement à tous les documents détenus par InfiMatch.
+## Responsabilité et contact
 
-Le RIB est facultatif avant et après la première mission. L’invitation après première affectation est conservée (`suggested`), sans obligation (`required: false`) ni blocage de candidature ou de mission. Le dépôt reste volontaire dans l’espace personnel. Cette fonction ne transmet pas automatiquement le RIB aux agences ; l’accès applicatif est limité au titulaire. Toute collecte pour le compte d’une agence nécessiterait de définir cette finalité et les rôles correspondants.
+Le porteur a répondu « Epitech » puis confirmé le cadre de démonstration. Aucun contact institutionnel n’a été fourni ; ne pas en inventer ni présenter une prise en charge formelle par l’établissement comme documentée. L’identité juridique et le rôle effectif du responsable restent à clarifier pour clôturer complètement ce point. Le contact de projet déjà publié est conservé : yleb.user@outlook.fr.
 
-Le domicile et le GPS sont facultatifs à l’inscription. La zone de travail, enregistrée séparément, sert aux recherches et alertes. Les CGU restent à accepter ; l’information sur les données remplace le consentement global obligatoire. Les fonctions facultatives restent indépendantes.
+Le responsable effectif découle des décisions sur les finalités et moyens du traitement. Un rattachement pédagogique ou l’usage de données métier fictives ne suffit pas, à lui seul, à établir tous les rôles.
 
-Epitech n’a pas confirmé être responsable du traitement (confirmation du porteur du projet). Epitech reste mentionné comme rattachement pédagogique. L’identité juridique du responsable effectif est donc encore à établir ; aucune responsabilité n’est attribuée arbitrairement à l’établissement.
+## Conservation dans le périmètre pédagogique
 
-### Conservation par finalité
-
-| Catégorie | Cadre CNIL et application | État / limite |
+| Catégorie | Règle retenue ou seuil technique existant | Mise en œuvre et limite |
 |---|---|---|
-| Compte actif | Données nécessaires au service demandé | Clôture disponible ; ne pas appliquer la durée d’une candidature à toutes les données du compte |
-| Vivier de candidats non retenus | Repère CNIL : jusqu’à 2 ans après le dernier contact, avec information et base légale appropriée | Pas de dernier contact de vivier fiable identifié ; ne pas utiliser une mise à jour technique comme contact ni improviser une purge générale |
-| Preuves de recrutement | Référentiel RH 2026 : archivage probatoire distinct, notamment 5 ans à partir du poste pourvu pour actions en discrimination | Définir les seules pièces nécessaires et les habilitations ; ne pas prolonger le matching actif à ce titre |
-| Diplômes / justificatifs | Pièces nécessaires aux qualifications recherchées ; accès restreint, versions inutiles à écarter | Effacement des pièces privées lors de clôture validée ; préciser durée propre aux pièces actives |
-| RIB volontaire | Document personnel facultatif, aucun usage de paie par InfiMatch | Suggestion après première mission ; versions remplacées 30 jours ; effacement à clôture validée |
-| Journaux de sécurité | Recommandation générale CNIL : 6 à 12 mois, exceptions documentées | Seuil technique existant 365 jours ; mesures spécifiques à définir pour les preuves d’incidents |
-| Notifications / explications | Durées opérationnelles distinctes des archives légales | Seuils existants 90 / 30 jours, non présentés comme des obligations CNIL |
-| Support | Temps nécessaire à la demande puis preuves justifiées | Suppression à clôture ; durée hors clôture à définir, pas de chiffre universel CNIL |
-| Sauvegardes | Rotation, accès restreint, respect de l’effacement à restauration | Cible 30 jours mais minimum deux copies : ne pas annoncer une limite absolue si sauvegardes interrompues |
+| Comptes, profils et justificatifs de démonstration | Fin de l’année scolaire en septembre 2027 puis suppression | Échéance fixée au mois de septembre 2027 ; documents entièrement fictifs pour les scénarios ; clôture individuelle disponible |
+| RIB fictif facultatif | Même échéance ; versions remplacées candidates au nettoyage après 30 jours | Document privé du titulaire, aucun usage de paie par InfiMatch |
+| Missions, candidatures, affectations et PDF fictifs | Fin de l’année scolaire en septembre 2027 puis suppression | Purge de fin de projet à préparer ; les historiques ne sont pas supprimés automatiquement aujourd’hui |
+| Support de démonstration | Fin de l’année scolaire en septembre 2027 puis suppression, ou clôture individuelle effective | Conserver uniquement les preuves réellement anonymisées pour le rendu ; examiner séparément un éventuel incident réel |
+| Notifications | Seuil technique existant de 90 jours | Maintenance ; copies emails/Discord à traiter séparément |
+| Explications de matching | Seuil existant de 30 jours | TTL MongoDB et contrôle d’expiration à la lecture |
+| Journaux d’audit | Seuil technique existant de 365 jours | La clôture pédagogique doit aussi examiner ces traces ; ne pas conserver des identifiants au seul motif qu’un plafond technique est plus long |
+| Événements techniques terminés | Seuil existant de 30 jours | Liens et déduplication à préserver pendant les opérations actives |
+| Documents temporaires non finalisés | Nettoyage après 24 heures, selon leur cycle | Reprise des écritures et verrouillage ; confirmations gérées séparément |
+| Sauvegardes récentes | Rotation ciblant 30 jours lors de son exécution | Arrêt du poste : délai possible ; vérifier les copies récupérables lors de la clôture |
+| Anciennes archives locales | Traitement distinct nécessaire | L’audit sécurité a constaté cinq archives hors de cette rotation avec des secrets actifs ; aucune purge ou rotation de clés n’a été exécutée |
+| Registre d’effacement | Durée couvrant les sauvegardes récupérables | Séparé des anciennes sauvegardes ; accès restreint ; les UUID restent des données à protéger |
+| Preuves du rendu | Conservation des éléments effectivement anonymisés | Retirer les identifiants, contacts, coordonnées, tokens et autres éléments réidentifiants ; un simple masquage visuel ou pseudonyme ne garantit pas l’anonymat |
 
-### Bases et responsabilités
+Ces chiffres techniques ne sont pas tous des prescriptions de la CNIL. La décision de fin d’année est un choix du projet, distinct d’une durée légale universelle. La suppression finale devra couvrir les fichiers, métadonnées, copies utiles et traitements externes concernés ; aucune suppression déjà réalisée n’est affirmée.
 
-- Fonctions de compte et mise en relation demandées : exécution du service contractuel ou mesures précontractuelles appropriées, uniquement les données nécessaires.
-- Sécurité : intérêt légitime de protection des comptes ; analyse de nécessité et mise en balance à documenter.
-- Fonctions facultatives : choix propre à chaque fonction ; CGU et consentement ne se confondent pas.
-- Agences : responsabilités propres pour recrutement, emploi et rémunération, selon leurs décisions effectives.
-- Prestataires : contrats, sous-traitants ultérieurs, régions réelles et transferts à documenter. Le nom d’un hébergeur ne garantit pas une résidence française des données.
+## Bases, prestataires et éventuels utilisateurs réels
 
-Restent à établir : responsable juridique, dernier contact de vivier et information correspondante, accès aux archives, pièces probatoires, gels de litige, durée du support et procédure complète de restauration. Aucune purge destructive de données réelles n’a été exécutée. Les adaptations de collecte ne valent pas validation globale de la politique.
+Les fonctions de compte/mise en relation et la sécurité avaient des bases proposées respectivement pour le service demandé et sa protection ; leur applicabilité au périmètre pédagogique et l’information des personnes restent à vérifier avec le responsable effectif. L’acceptation des CGU n’est pas un consentement général à tous les traitements.
 
-Sources consultées le 20 septembre 2026 :
-- https://www.cnil.fr/fr/recrutement-et-donnees-personnelles-dans-les-tpepme-cinq-questions-incontournables-se-poser
-- https://www.cnil.fr/sites/default/files/2026-04/referentiel_durees_de_conservation_gestion_des_ressources_humaines.pdf
-- https://www.cnil.fr/fr/securite-tracer-les-operations
-- https://www.cnil.fr/fr/rgpd-comment-bien-identifier-son-role
+Avant une exploitation réelle, établir séparément les durées par finalité : compte actif/inactif, suivi de candidature/vivier, justificatifs courants, historiques et pièces probatoires, support et incidents. Distinguer base active, archive restreinte et sauvegardes. Ne pas appliquer automatiquement à InfiMatch les durées RH ou de paie propres aux employeurs.
 
-## Principes et decisions
+Le repère de deux ans pour certains viviers ne s’applique pas à toutes les tables. Le dernier contact doit avoir une définition vérifiable ; une mise à jour technique n’est pas nécessairement un contact. Identifier les pièces probatoires utiles, les habilitations, les éventuels gels/contentieux et les obligations applicables avant tout paramétrage.
 
-Distinguer base active, archivage restreint et sauvegardes. Justifier chaque duree par sa finalite et, le cas echeant, les obligations applicables a la plateforme, aux agences ou aux employeurs. La plateforme n est pas automatiquement l employeur. Une confirmation PDF de POC n est pas un bulletin de paie ni un contrat signe.
+Documenter les prestataires, régions effectives, accords et transferts. Le nom de l’hébergeur ne garantit pas un stockage en France. Le caractère fictif du scénario n’efface pas les éventuelles données personnelles des comptes ou journaux.
 
-| Donnees | Traitement propose | Decision encore necessaire |
-|---|---|---|
-| Compte et profil | Conserves pendant le service ; demande de cloture authentifiee, examen operateur, desactivation et effacement des champs directs | Definition de l inactivite, information des personnes, responsable et canal de contact |
-| Candidatures / vivier | Distinguer suivi d une candidature et conservation pour opportunites futures | Applicabilite du referentiel recrutement, base juridique, dernier contact et information/accord ; ne pas appliquer deux ans a toutes les tables |
-| Missions / affectations / confirmations | Historiques conserves jusqu a politique explicite ; acces limite aux personnes habilitees | Obligations des parties, contentieux et gel de suppression, archive restreinte et terme de conservation |
-| RIB et justificatifs | Effacement des pieces privees du compte lors de cloture selon decision operateur ; anciennes pieces bancaires candidates a nettoyage apres 30 jours | Besoin reel de collecte et duree justifiee ; ne pas stocker de donnees inutiles |
-| Notifications | Reglage technique actuel : 90 jours | Valider pour notifications internes ; Discord et les emails ont leurs propres copies |
-| Audit | Reglage technique actuel : 365 jours ; details personnels retires lors de cloture | Besoin de securite/preuve, droits d acces, risque de perte de preuves et exceptions |
-| Matching MongoDB | Reglage technique actuel : 30 jours | Valider besoin d explication et traitement des demandes en cours |
-| Fichiers STAGING | Nettoyage apres 24 h, sauf confirmations gerees par leur cycle | Reprise des ecritures et verrouillage ; valeur technique a documenter |
-| Sauvegardes | Rotation technique proposee : 30 jours, garder au moins deux sauvegardes completes | Valider frequence et duree ; minimum de deux copies peut prolonger la conservation si backups arretes, alerter et ne pas promettre une borne stricte de 30 jours |
-| Registre d effacement | Conservation separee pour rejouer les effacements apres restauration | Duree couvrant les sauvegardes recuperables, UUID toujours donnee personnelle, acces restreint |
+## Clôture et purge : état technique
 
-## Garde-fou historique metier
+`BUSINESS_HISTORY_RETENTION_DAYS` est vide par défaut. La maintenance technique exclut les historiques métier. La décision de fin d’année ne se traduit donc pas en un nombre de jours arbitraire dans cette variable.
 
-BUSINESS_HISTORY_RETENTION_DAYS est vide par defaut : aucune suppression automatique de mission/affectation historique. La valeur 365 du POC n est plus une valeur implicite. Une valeur entiere positive ne doit etre renseignee qu apres validation de la politique et traitement des gels/contentieux. Ne pas activer cette purge pour de vrais historiques avant ces validations.
+API de demande : GET/POST/DELETE `/api/v1/me/closure-request`. La demande est authentifiée ; son traitement passe par l’opérateur habilité. Examiner les missions actives, les organisations partagées et les éventuelles obligations avant validation. Ne pas demander systématiquement une pièce d’identité supplémentaire à une personne déjà authentifiée.
 
-## Cloture
+La clôture supprime les sessions, associations et pièces privées concernées, désactive les affiliations et neutralise le profil/compte. Elle n’efface pas automatiquement tous les historiques de mission et leurs PDF : ne pas la présenter comme une anonymisation intégrale.
 
-API authentifiee GET/POST/DELETE /api/v1/me/closure-request. Demande puis approbation explicite via CLI ; approbation journalisee. La CLI est reservee a l operateur autorise, pas au navigateur.
+SQL et `document_erasure` sont enregistrés dans la même transaction. Les fichiers sont nettoyés après commit ; un échec reste reprenable. Les historiques MongoDB du compte sont retirés avant achèvement. Les demandes APPROVED/PROCESSING sont reprises ; les erreurs de lot ne révèlent pas le contenu privé.
 
-Avant approbation : verifier la demande, les missions en cours, les organisations partagees, les obligations de conservation et les eventuels gels. Ne pas demander systematiquement une piece d identite supplementaire a un utilisateur deja authentifie.
+Commandes existantes : `closure-requests`, `approve-closure --request UUID`, `process-closure-requests` (simulation), `process-closure-requests --apply`, `retry-document-erasures` (comptage), `retry-document-erasures --apply`. Ces commandes ne valent pas une purge générale de fin de projet et aucune n’a été lancée pour appliquer cette décision.
 
-La fermeture supprime les sessions, l association Google, les favoris, notifications et pieces privees concernees, desactive les affiliations et remplace les donnees du profil/compte. Elle ne supprime pas automatiquement les historiques de mission ni leurs PDF et ne doit pas etre presentee comme une anonymisation integrale.
+## Sauvegardes et restauration
 
-L effacement SQL et la file document_erasure sont commits ensemble. Si le disque est indisponible ensuite, la file conserve les identifiants necessaires a la reprise. Une demande ne passe COMPLETED qu apres nettoyage de ses fichiers et de MongoDB. Un echec reste APPROVED pour reprise et ne bloque pas les autres demandes. Les messages d erreur de lot contiennent un code controle, pas des donnees privees.
+Restaurer en environnement isolé, vérifier intégrité et déchiffrement, puis rejouer le registre courant d’effacement avant réouverture. Une copie ancienne du registre ne remplace pas les demandes ultérieures. Une copie chiffrée indépendante et des clés récupérables séparément restent à organiser.
 
-Commandes : closure-requests ; approve-closure --request UUID ; process-closure-requests (simulation) ; process-closure-requests --apply (execution autorisee) ; retry-document-erasures (comptage) ; retry-document-erasures --apply (execution des effacements deja commits).
+Les tests de sécurité du 21 septembre prouvent les mécanismes isolés de stockage, accès et suppression ; ils ne prouvent pas la suppression future à l’échéance scolaire de septembre 2027. La clôture finale exigera sa propre preuve d’exécution sur le périmètre décidé.
 
-## Restauration
+## Références
 
-Sauvegardes SQL/MongoDB/documents/Vault/n8n et registre privacy. Le registre courant doit etre conserve independamment des sauvegardes anciennes. Restaurer hors ligne, appliquer migrations, verifier integrite et dechiffrement puis rejouer le registre courant avant toute reouverture. Le registre archive avec une sauvegarde ancienne ne remplace pas les demandes posterieures.
-
-Le test --verify-erasure-replay choisit un compte dans la base restauree et ajoute son UUID a un registre de recette prive ; il verifie ensuite le compte desactive et l adresse neutralisee. Il ne modifie ni le compte source ni le registre courant. Les journaux de recette sont isoles dans data/security.
-
-## Avant ouverture reelle
-
-Nommer le responsable et l operateur ; valider le tableau et les textes utilisateur ; recetter le moyen visible de demander la cloture dans Mon compte ; definir suivi et reponse des demandes ; gerer les exceptions/contentieux ; etablir les droits sur archives et sauvegardes ; configurer une copie hors machine ; tester le parcours complet avec les dernieres migrations. Les copies envoyées dans des services externes nécessitent un traitement distinct de la suppression des données InfiMatch.
-
-## Sources consultees
-
-- CNIL, durees : https://www.cnil.fr/fr/passer-laction/les-durees-de-conservation-des-donnees
+- CNIL, responsable : https://www.cnil.fr/fr/definition/responsable-de-traitement
+- CNIL, durées : https://www.cnil.fr/fr/passer-laction/les-durees-de-conservation-des-donnees
 - CNIL, recrutement : https://www.cnil.fr/fr/recrutement-et-donnees-personnelles-dans-les-tpepme-cinq-questions-incontournables-se-poser
-- CNIL, referentiel RH : https://cnil.fr/fr/referentiel-durees-conservation-donnees-rh
-- CNIL, sauvegardes : https://cnil.fr/fr/securite-sauvegarder
+- CNIL, sécurité et journaux : https://www.cnil.fr/fr/securite-tracer-les-operations
+- CNIL, sauvegardes : https://www.cnil.fr/fr/securite-sauvegarder

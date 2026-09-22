@@ -4,6 +4,7 @@ Revue du 21 septembre 2026. Ce classement distingue les références actuelles d
 
 | Document | Portée |
 | --- | --- |
+| [Positionnement SEO — 22 septembre 2026](quality/POSITIONNEMENT_SEO_2026-09-22.md) | Contrôle publié et preuves jointes ; classement Google non mesuré |
 | [README.md](../README.md) | Référence courante revue ou corrigée |
 | [docs/ACQUISITION_REELLE.md](ACQUISITION_REELLE.md) | Preuve historique, résultats non réactualisés |
 | [docs/ADAPTATEURS_EXTERNES.md](ADAPTATEURS_EXTERNES.md) | Référence courante revue ou corrigée |

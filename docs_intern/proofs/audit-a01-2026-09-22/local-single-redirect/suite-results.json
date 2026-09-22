@@ -1,0 +1,10 @@
+{
+  "date": "2026-09-22T08:21:32.307Z",
+  "mode": "integration",
+  "results": [
+    {
+      "file": "security-evidence.spec.js",
+      "passed": true
+    }
+  ]
+}

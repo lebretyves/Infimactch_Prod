@@ -1,0 +1,75 @@
+{
+  "date": "2026-09-22T07:35:15.899Z",
+  "pages": [
+    {
+      "path": "/",
+      "title": "L’intérim infirmier, pensé pour le soin — InfiMatch",
+      "description": "Découvrez InfiMatch : un projet de plateforme reliant infirmiers IDE, IADE, IBODE, établissements de santé et agences d’intérim.",
+      "canonical": "https://infimactch-prod-backend-l5bc.vercel.app/",
+      "robots": "index,follow",
+      "h1": [
+        "L’intérim infirmier,\npensé pour le soin."
+      ],
+      "overflow": false,
+      "missingAlt": 0,
+      "brokenImages": [],
+      "errors": []
+    },
+    {
+      "path": "/installer",
+      "title": "Installer l’application — InfiMatch",
+      "description": "Retrouvez InfiMatch depuis votre écran d’accueil, avec le même compte et les mêmes fonctions.",
+      "canonical": "https://infimactch-prod-backend-l5bc.vercel.app/installer",
+      "robots": "index,follow",
+      "h1": [
+        "Installer l’application"
+      ],
+      "overflow": false,
+      "missingAlt": 0,
+      "brokenImages": [],
+      "errors": []
+    },
+    {
+      "path": "/accessibilite",
+      "title": "Accessibilité : état des travaux — InfiMatch",
+      "description": "Périmètre, méthode et limites des contrôles d’accessibilité du projet InfiMatch.",
+      "canonical": "https://infimactch-prod-backend-l5bc.vercel.app/accessibilite",
+      "robots": "index,follow",
+      "h1": [
+        "Accessibilité : état des travaux"
+      ],
+      "overflow": false,
+      "missingAlt": 0,
+      "brokenImages": [],
+      "errors": []
+    },
+    {
+      "path": "/ecoconception",
+      "title": "Écoconception : on prend soin des ressources aussi — InfiMatch",
+      "description": "Les petits choix concrets d’InfiMatch pour limiter les ressources utilisées, et les mesures de chaque version.",
+      "canonical": "https://infimactch-prod-backend-l5bc.vercel.app/ecoconception",
+      "robots": "index,follow",
+      "h1": [
+        "On prend soin\ndes ressources aussi."
+      ],
+      "overflow": false,
+      "missingAlt": 0,
+      "brokenImages": [],
+      "errors": []
+    },
+    {
+      "path": "/mentions-legales",
+      "title": "Mentions légales et données personnelles — InfiMatch",
+      "description": "Fonctionnement du projet InfiMatch, données de compte et préférences cookies.",
+      "canonical": "https://infimactch-prod-backend-l5bc.vercel.app/mentions-legales",
+      "robots": "index,follow",
+      "h1": [
+        "Mentions légales et données personnelles"
+      ],
+      "overflow": false,
+      "missingAlt": 0,
+      "brokenImages": [],
+      "errors": []
+    }
+  ]
+}

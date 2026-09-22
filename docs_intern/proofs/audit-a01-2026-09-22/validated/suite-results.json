@@ -1,0 +1,118 @@
+{
+  "date": "2026-09-22T08:27:46.876Z",
+  "mode": "coverage",
+  "results": [
+    {
+      "file": "unit",
+      "passed": true
+    },
+    {
+      "file": "admin.spec.js",
+      "passed": true
+    },
+    {
+      "file": "application-warnings.spec.js",
+      "passed": true
+    },
+    {
+      "file": "audit-remediation.spec.js",
+      "passed": true
+    },
+    {
+      "file": "cloud-storage.spec.js",
+      "passed": true
+    },
+    {
+      "file": "contract-preparation.spec.js",
+      "passed": true
+    },
+    {
+      "file": "conversions.spec.js",
+      "passed": true
+    },
+    {
+      "file": "demo-notification-suppression.spec.js",
+      "passed": true
+    },
+    {
+      "file": "email-delivery.spec.js",
+      "passed": true
+    },
+    {
+      "file": "enterprise-flow.spec.js",
+      "passed": true
+    },
+    {
+      "file": "establishment-directory.spec.js",
+      "passed": true
+    },
+    {
+      "file": "external-collection.spec.js",
+      "passed": true
+    },
+    {
+      "file": "jobspipe-credits.spec.js",
+      "passed": true
+    },
+    {
+      "file": "journey.spec.js",
+      "passed": true
+    },
+    {
+      "file": "listing-order.spec.js",
+      "passed": true
+    },
+    {
+      "file": "matching-distance.spec.js",
+      "passed": true
+    },
+    {
+      "file": "mission-guardrails.spec.js",
+      "passed": true
+    },
+    {
+      "file": "mission-location.spec.js",
+      "passed": true
+    },
+    {
+      "file": "mission-mail.spec.js",
+      "passed": true
+    },
+    {
+      "file": "notifications.spec.js",
+      "passed": true
+    },
+    {
+      "file": "offer-freshness.spec.js",
+      "passed": true
+    },
+    {
+      "file": "personal-corrections.spec.js",
+      "passed": true
+    },
+    {
+      "file": "profile-after-assignment.spec.js",
+      "passed": true
+    },
+    {
+      "file": "purge-demo-alerts.spec.js",
+      "passed": true
+    },
+    {
+      "file": "recovery.spec.js",
+      "passed": true
+    },
+    {
+      "file": "security-evidence.spec.js",
+      "passed": true
+    },
+    {
+      "file": "shared-rate-limit.spec.js",
+      "passed": true
+    },
+    {
+      "file": "support.spec.js",
+      "passed": true
+    }
+  ]
+}

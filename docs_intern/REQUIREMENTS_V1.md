@@ -1,6 +1,6 @@
 # Exigences InfiMatch
 
-Version documentaire : 21 septembre 2026. Ce document définit le périmètre retenu et les conditions de validation. « Présent dans le code » ne signifie pas « recetté sur la version publiée ».
+Version documentaire : 22 septembre 2026. Ce document définit le périmètre retenu et les conditions de validation. « Présent dans le code » ne signifie pas « recetté sur la version publiée ».
 
 ## 1. Références et priorité
 
@@ -14,7 +14,7 @@ Le [sujet Epitech D-WEB-901](references/D-WEB-901-project.pdf) fixe les exigence
 | Établissement / agence | Création et publication directe des missions, examen des candidatures et affectations autorisées |
 | Administration | Assistance et exploitation selon les permissions du rôle |
 
-InfiMatch assure la mise en relation. Les agences emploient et paient. Hors périmètre validé : paie, signature électronique et contrat complet. Le PDF de confirmation n'est pas présenté comme un contrat signé.
+InfiMatch assure la mise en relation. Les agences emploient et paient. Hors périmètre validé : paie, signature électronique et contrat complet. Le PDF de confirmation n'est pas présenté comme un contrat signé. La [répartition métier validée pour la démonstration](quality/PERIMETRE_METIER_A06_2026-09-22.md) distingue les responsabilités des acteurs, les contrôles logiciels et les étapes humaines.
 
 ## 3. Exigences du kick-off
 
@@ -41,8 +41,8 @@ InfiMatch assure la mise en relation. Les agences emploient et paient. Hors pér
 | P01 | RIB facultatif | Aucun blocage d'inscription, de candidature ou de mission causé uniquement par son absence ; proposition après première mission |
 | P02 | Domicile distinct de la zone d'alertes | Ville et rayon enregistrés modifiables ; une recherche ponctuelle ne change pas les alertes |
 | P03 | Discord facultatif après création | Choix Configurer / Passer ; aucune nouvelle préférence cochée automatiquement ; réglages accessibles ensuite |
-| P04 | Vérification professionnelle | État RPPS réel, attente et échec explicites ; RPPS facultatif en démonstration via DEMO_OPTIONAL_RPPS=true, sans validation fictive |
-| P05 | Décision humaine | Matching et avertissements aident la décision ; les permissions et critères bloquants sont appliqués côté serveur |
+| P04 | Vérification professionnelle | État RPPS conservé, attente et échec explicites, aucune validation fictive ; distinguer éligibilité du matching et candidature volontaire |
+| P05 | Décision humaine malgré un profil incomplet | Candidature et acceptation/refus possibles malgré les alertes sur les informations manquantes ou les écarts avec la mission ; permissions, dates et conflits d’affectation restent contrôlés côté serveur |
 | P06 | Documents privés | Accès autorisé, métadonnées maîtrisées, chiffrement et distinction confirmation/contrat |
 | P07 | Traçabilité honnête | Acceptation d'un email distincte de sa livraison ; configuration d'un service distincte de son fonctionnement prouvé |
 | P08 | Administration protégée | Rôles, MFA et opérations sensibles journalisées ; le succès réel d'enrôlement du propriétaire doit être vérifié |
@@ -69,8 +69,10 @@ Diagnostic détaillé des connexions, chronologie admin centralisée et tableau 
 
 [Architecture technique](SCHEMA_ARCHITECTURE_V1.md), [flux métier](FLUX_V1.md), [automatisations et preuves](AUTOMATISATIONS.md), [guide utilisateur](GUIDE_UTILISATEUR.md) et [inventaire documentaire](INVENTAIRE_DOCUMENTAIRE.md). Les six tutoriels vidéo ont été réenregistrés et contrôlés le 21 septembre 2026 : [périmètre et preuves](quality/TUTORIELS_VIDEO_2026-09-21.md). La répétition humaine du support oral reste à faire.
 
-### RPPS dans la démonstration scolaire
+### Profil incomplet, RPPS et décision humaine
 
-Le réglage serveur `DEMO_OPTIONAL_RPPS=true` permet le matching interne, la candidature et l’affectation sans RPPS vérifié. Le statut existant est conservé ; les écrans de candidature signalent cette dérogation. La qualification déclarée, les conflits d’affectation et les règles de dates restent contrôlés. En l’absence de ce réglage, le contrôle RPPS strict revient. La version des règles de matching change avec cette option pour invalider les anciennes explications. Les offres externes gardent leur comparaison partielle et leurs propres conditions.
+Bloquer systématiquement une candidature ou son examen parce que le profil est incomplet serait trop restrictif. Le candidat peut candidater et l’entreprise ou l’agence peut accepter ou refuser malgré les avertissements correspondant aux informations manquantes et aux écarts avec la mission. Le statut RPPS est conservé sans validation fictive. Les permissions, les dates et les conflits d’affectation restent contrôlés.
 
-Validation : `backend/test/unit/rpps-demo-policy.spec.ts` et `frontend/scripts/test-rpps-demo.mjs` couvrent les modes facultatif et strict sans modifier de statut RPPS ni soumettre une candidature réelle.
+Le réglage `DEMO_OPTIONAL_RPPS=true` concerne le critère RPPS du matching interne. Sans ce réglage, ce critère redevient strict dans le matching ; cela ne rend pas les alertes RPPS automatiquement bloquantes pour une candidature volontaire ou son acceptation. Les horaires doivent être confirmés avant l’affectation. Les offres externes conservent leur comparaison partielle et leurs propres conditions.
+
+La [politique de candidature et d’affectation](quality/POLITIQUE_CANDIDATURE_AFFECTATION_2026-09-22.md) détaille cette distinction, les avertissements et les tests associés.

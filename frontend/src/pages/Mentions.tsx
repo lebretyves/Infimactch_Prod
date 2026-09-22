@@ -52,8 +52,11 @@ export default function Mentions() {
           <h2 id="titre-mentions">À propos du projet</h2>
           <p>
             Les annonces externes proviennent des sources indiquées sur chaque
-            offre. Les pages de démonstration du catalogue utilisent des
-            exemples fictifs, distincts des données de votre compte.
+            offre. Les scénarios métier du projet sont des démonstrations avec
+            des données fictives, sans mission de travail réelle organisée par
+            InfiMatch. Les données publiques importées restent identifiées par
+            leur source. Les coordonnées utilisées pour accéder au projet et les
+            journaux techniques sont traités séparément des exemples fictifs.
           </p>
           <p>
             Contact du projet et demandes concernant vos données :{" "}
@@ -124,7 +127,9 @@ export default function Mentions() {
             document bancaire ou renseignement de patient dans ces messages.
             Les demandes de votre compte sont supprimées lors de sa clôture
             effective ; vos réponses éventuelles dans d’autres dossiers sont
-            anonymisées. La durée maximale hors clôture reste à formaliser.
+            anonymisées. Les échanges liés à la démonstration suivent également
+            la clôture prévue à la fin de l’année scolaire, hors preuve
+            anonymisée conservée pour le rendu.
           </p>
           <p>
             Les candidatures sont accessibles aux organisations concernées selon leurs habilitations. Les coordonnées bancaires et leur pièce jointe sont consultables par leur titulaire dans son espace ; elles ne sont pas transmises automatiquement aux agences par cette fonction. Les journaux
@@ -154,6 +159,13 @@ export default function Mentions() {
         </section>
         <section aria-labelledby="titre-conservation">
           <h2 id="titre-conservation">Conservation et suppression</h2>
+          <p>Les comptes et données de démonstration sont conservés jusqu’à la
+            fin de l’année scolaire du projet, en septembre 2027, puis leur suppression est prévue.
+            Les preuves conservées pour le rendu doivent être anonymisées.
+            L’opération de clôture sera organisée à cette échéance avec le
+            contact du projet. Cette décision ne signifie pas qu’une purge
+            automatique générale est déjà programmée. Les copies de sauvegarde
+            et celles des services externes doivent aussi être prises en compte.</p>
           <p>Les seuils techniques actuellement prévus sont les suivants :
             notifications 90 jours ; journaux d’audit 365 jours ; explications
             de matching et événements techniques terminés 30 jours ; anciens
@@ -164,7 +176,7 @@ export default function Mentions() {
             pseudonymisée de l’adresse réseau ou de la session, avec une fenêtre
             de 1 à 15 minutes selon le parcours. Les compteurs expirés sont
             nettoyés par la maintenance. Les sauvegardes locales de production
-            sont chiffrées ; la rotation vise 30 jours et conserve au moins deux copies complètes. L’arrêt des sauvegardes peut prolonger la présence de copies anciennes : leur suppression et le respect des effacements lors d’une restauration doivent être contrôlés.</p>
+            récentes sont chiffrées ; la rotation vise 30 jours lors de son exécution. L’arrêt des sauvegardes peut prolonger la présence de copies anciennes. Les archives antérieures ne sont pas toutes couvertes par cette rotation : leur traitement et le respect des effacements lors d’une restauration restent à contrôler.</p>
           <p>La suppression automatique générale des missions, affectations et
             documents métier historiques n’est pas activée sans décision sur
             leur conservation. La clôture du compte n’efface donc pas
