@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { Link, NavLink, Outlet, useLocation, useNavigate } from "react-router";
+import { Link, NavLink, Outlet, useLocation } from "react-router";
 import { Button } from "@/ui/Button";
 import { Icon, type IconName } from "@/ui/Icon";
 import { Logo } from "@/ui/Logo";
@@ -37,7 +37,6 @@ const enterpriseNavigation: { to: string; label: string; icon: IconName }[] = [
 ];
 export function AppLayout() {
   const { user, logout } = useAuth();
-  const navigate = useNavigate();
   const location = useLocation();
   const [error, setError] = useState(""),
     [open, setOpen] = useState(false);
@@ -60,7 +59,7 @@ export function AppLayout() {
     try {
       setError("");
       await logout();
-      navigate("/connexion");
+      // ProtectedRoute owns the redirect when logout clears the session.
     } catch (e) {
       setError((e as Error).message);
     }
