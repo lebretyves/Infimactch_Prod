@@ -141,10 +141,10 @@ try {
   await context.unroute(legalChunk);
   console.log('PASS deferred focus cancelled when keyboard navigation continues');
 
-  for (const width of [320, 375, 1440]) {
+  for (const size of ['Très grand (130 %)', 'Double (200 %)']) for (const width of [320, 375, 1440]) {
     await page.setViewportSize({ width, height: 640 });
     await accessTrigger.click();
-    await access.getByRole('radio', { name: 'Très grand (130 %)', exact: true }).check();
+    await access.getByRole('radio', { name: size, exact: true }).check();
     for (const name of ['Contraste renforcé', 'Police de lecture Lexend', 'Espacement du texte augmenté', 'Souligner les liens', 'Réduire les animations']) {
       await access.getByRole('checkbox', { name, exact: true }).check();
     }
@@ -164,7 +164,10 @@ try {
     }
     await page.keyboard.press('Escape');
   }
-  console.log('PASS both panels fit at 130%, all display aids enabled, equal consent buttons and larger controls');
+  await page.reload();
+  await page.waitForFunction(() => document.documentElement.dataset.a11yText === 'xxlarge');
+  assert.equal(await page.evaluate(() => getComputedStyle(document.documentElement).zoom), '2');
+  console.log('PASS both panels fit at 130% and 200%, persisted after reload, all display aids enabled, equal consent buttons and larger controls');
 
   await accessTrigger.click();
   await access.getByRole('button', { name: 'Réinitialiser', exact: true }).click();

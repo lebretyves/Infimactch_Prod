@@ -2,7 +2,7 @@
 export const A11Y_PREFERENCES_KEY = "infimatch:a11y-preferences";
 export const A11Y_PREFERENCES_VERSION = 1;
 
-export type TextSizePreference = "normal" | "large" | "xlarge";
+export type TextSizePreference = "normal" | "large" | "xlarge" | "xxlarge";
 
 export type AccessibilityPreferences = {
   version: number;
@@ -27,7 +27,7 @@ export const defaultAccessibilityPreferences = (): AccessibilityPreferences => (
 });
 
 function isTextSize(value: unknown): value is TextSizePreference {
-  return value === "normal" || value === "large" || value === "xlarge";
+  return value === "normal" || value === "large" || value === "xlarge" || value === "xxlarge";
 }
 
 export function parseAccessibilityPreferences(
