@@ -82,7 +82,6 @@ export function AppLayout() {
         </Link>
         <div className={s.headerRight}>
           <Link to="/aide" className={s.helpLink}>Centre d’aide</Link>
-          <span data-accessibility-slot />
           <Link className={s.identity} to={nurse ? "/profil" : "/organisation"}>
             <span className={s.avatar}>
               {(user?.prenom?.[0] || "I") + (user?.nom?.[0] || "")}
@@ -96,6 +95,7 @@ export function AppLayout() {
               </small>
             </span>
           </Link>
+          <span data-accessibility-slot />
           <button
             ref={menu}
             type="button"

@@ -33,6 +33,7 @@ export function GoogleConnexion({
   const search = location.pathname === "/inscription" ? location.search : "";
   const [linkRequired, setLinkRequired] = useState(false);
   const [error, setError] = useState("");
+  const [loadError, setLoadError] = useState("");
   const [enabled, setEnabled] = useState(false);
   const [busy, setBusy] = useState(false);
   const [version, setVersion] = useState(0);
@@ -46,11 +47,19 @@ export function GoogleConnexion({
   useEffect(() => {
     let active = true;
     let resizeObserver: ResizeObserver | undefined;
+    let buttonObserver: MutationObserver | undefined;
+    let timeout: number | undefined;
     const controller = new AbortController();
     const element = target.current;
     setReady(false);
+    setLoadError("");
     setBusy(false);
     element?.replaceChildren();
+    if (googleAllowed) {
+      timeout = window.setTimeout(() => {
+        if (active) setLoadError("Le bouton Google n’a pas pu s’afficher. Réessayez ; si le problème persiste, vérifiez les protections de votre navigateur ou utilisez votre adresse e-mail.");
+      }, 15000);
+    }
     async function prepare() {
       try {
         const config = await api<{ enabled: boolean; clientId: string | null }>(
@@ -64,8 +73,10 @@ export function GoogleConnexion({
           !config.clientId ||
           !googleAllowed ||
           !isGoogleIdentityAllowed()
-        )
+        ) {
+          window.clearTimeout(timeout);
           return;
+        }
         await loadGoogleIdentity();
         if (!active || !isGoogleIdentityAllowed()) return;
         const { nonce } = await api<{ nonce: string }>(
@@ -146,6 +157,16 @@ export function GoogleConnexion({
           },
         });
         const buttonTarget = target.current;
+        const checkButton = () => {
+          const frame = buttonTarget.querySelector("iframe");
+          if (active && frame && frame.getBoundingClientRect().height > 0 && frame.getBoundingClientRect().width > 0) {
+            window.clearTimeout(timeout);
+            setReady(true);
+            setLoadError("");
+          }
+        };
+        buttonObserver = new MutationObserver(checkButton);
+        buttonObserver.observe(buttonTarget, { childList: true, subtree: true, attributes: true });
         let previousWidth = 0;
         const render = () => {
           if (!active || !isGoogleIdentityAllowed()) return;
@@ -161,23 +182,26 @@ export function GoogleConnexion({
           });
         };
         render();
-        resizeObserver = new ResizeObserver(render);
+        resizeObserver = new ResizeObserver(() => { render(); checkButton(); });
         resizeObserver.observe(buttonTarget);
-        setReady(true);
+        checkButton();
       } catch (e) {
+        window.clearTimeout(timeout);
         if (
           active &&
           !controller.signal.aborted &&
           (!googleAllowed || isGoogleIdentityAllowed())
         )
-          setError((e as Error).message);
+          setLoadError((e as Error).message);
       }
     }
     void prepare();
     return () => {
       active = false;
       controller.abort();
+      window.clearTimeout(timeout);
       resizeObserver?.disconnect();
+      buttonObserver?.disconnect();
       pending.current = false;
       element?.replaceChildren();
     };
@@ -188,7 +212,7 @@ export function GoogleConnexion({
       aria-label={
         mode === "closure" ? "Confirmer la clôture avec Google" : mode === "signup" ? "Inscription avec Google" : "Connexion avec Google"
       }
-      hidden={!enabled && !error}
+      hidden={!enabled && !error && !loadError}
       aria-busy={busy}
     >
       {enabled && !googleAllowed ? (
@@ -224,6 +248,9 @@ export function GoogleConnexion({
           </p>
         )
       )}
+      {enabled && googleAllowed && !ready && !loadError && (
+        <p role="status">Chargement du bouton Google…</p>
+      )}
       <div
         ref={target}
         className={s.googleButton}
@@ -234,6 +261,7 @@ export function GoogleConnexion({
         }
       />
       {busy && <p role="status">Vérification de votre compte Google…</p>}
+      {loadError && <p role="alert">{loadError}</p>}
       {error && <p role="alert">{error}</p>}
       {linkRequired &&
         (mode === "signup" ? (
@@ -248,7 +276,7 @@ export function GoogleConnexion({
             cliquez à nouveau sur Google pour associer les deux comptes.
           </p>
         ))}
-      {error && !ready && (
+      {(error || loadError) && !ready && (
         <Button
           type="button"
           variant="outline"

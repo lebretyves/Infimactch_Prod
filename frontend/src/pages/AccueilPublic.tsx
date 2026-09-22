@@ -81,6 +81,7 @@ export default function AccueilPublic() {
           <Logo size={38} withWordmark />
         </Link>
         <div className={s.mobileControls}>
+        <span data-accessibility-slot />
 
         <button
           ref={boutonMenu}
@@ -122,7 +123,7 @@ export default function AccueilPublic() {
   );
 
   return (
-    <EcranPublic entete={entete}>
+    <EcranPublic entete={entete} accessibilityInHeader>
       <main id="contenu" className={s.corps} tabIndex={-1}>
         <section className={`${s.conteneur} ${s.hero}`} aria-labelledby="titre-accueil">
           <div className={s.discours}>

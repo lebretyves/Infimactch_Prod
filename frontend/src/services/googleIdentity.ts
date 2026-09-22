@@ -55,34 +55,40 @@ export function loadGoogleIdentity(): Promise<void> {
   if (!sdk) {
     const attempt = generation;
     sdk = new Promise<void>((resolve, reject) => {
-      rejectPending = reject;
       const element = document.createElement("script");
       script = element;
-      element.src = "https://accounts.google.com/gsi/client";
-      element.async = true;
-      element.dataset.infimatchGoogle = "true";
-      element.onload = () => {
-        rejectPending = undefined;
-        if (!allowed || attempt !== generation) {
-          element.remove();
-          reject(
-            new Error("Connexion Google désactivée dans vos préférences."),
-          );
-        } else resolve();
-      };
-      element.onerror = () => {
+      const fail = (error: Error) => {
+        window.clearTimeout(timeout);
+        element.onload = null;
+        element.onerror = null;
         element.remove();
         if (script === element) {
           script = undefined;
           sdk = undefined;
           rejectPending = undefined;
         }
-        reject(
-          new Error(
-            "Google est indisponible. Réessayez ou utilisez votre adresse e-mail.",
-          ),
-        );
+        reject(error);
       };
+      const unavailable = () => fail(new Error(
+        "Le bouton Google n’a pas pu se charger. Réessayez ou utilisez votre adresse e-mail.",
+      ));
+      const timeout = window.setTimeout(unavailable, 12000);
+      rejectPending = fail;
+      element.src = "https://accounts.google.com/gsi/client";
+      element.async = true;
+      element.dataset.infimatchGoogle = "true";
+      element.onload = () => {
+        if (!allowed || attempt !== generation) {
+          fail(new Error("Connexion Google désactivée dans vos préférences."));
+        } else if (!window.google?.accounts.id) {
+          unavailable();
+        } else {
+          window.clearTimeout(timeout);
+          rejectPending = undefined;
+          resolve();
+        }
+      };
+      element.onerror = unavailable;
       document.head.appendChild(element);
     });
   }
