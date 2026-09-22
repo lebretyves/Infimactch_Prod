@@ -92,13 +92,38 @@
 .contextNote a { color: var(--brand-700); font-weight: 600; }
 .documentLayout { display: grid; grid-template-columns: minmax(0,.9fr) minmax(0,1.1fr); gap: 20px; align-items: start; }
 .documentStack { display: grid; gap: 20px; min-width: 0; }
-.documentStack > :is(form,section) { scroll-margin-top: 24px; }
 .dossierPage .help, .dossierPage .documents strong { font-size: 14px; }
 .dossierPage .fileLabel { min-height: 44px; }
 @media(max-width:1150px) { .documentLayout { grid-template-columns: minmax(0,1fr); } }
 @media(max-width:560px) { .sectionNav a { padding-inline: 8px; } }
 
 .dossierPage button { min-height: 44px; min-width: 44px; }
+
+.cardTop { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 10px 16px; }
+.cardTop h2 { margin: 0; }
+
+.dropzone { transition: background-color .15s, border-color .15s; }
+.dragging { background: var(--brand-50); border: 2px dashed var(--brand-600); }
+
+.secondary { background: #fff; color: var(--brand-700); border: 1px solid var(--line-strong); }
+.secondary:hover { background: var(--brand-50); }
+.cameraOnly { display: grid; gap: 6px; justify-items: start; }
+@media (hover: hover) and (pointer: fine) { .cameraOnly { display: none; } }
+
+.selectedFile,
+.documentItem { display: flex; align-items: center; gap: 12px; min-width: 0; }
+.selectedFile { padding: 14px 16px; border: 1px solid var(--line-strong); border-radius: 8px; background: var(--sky-50, #f5f9fd); }
+.selectedFile > svg,
+.documentItem > svg { flex-shrink: 0; color: var(--brand-600); }
+.fileMeta { display: grid; gap: 2px; flex: 1; min-width: 0; }
+.fileMeta strong { font-size: 14px; overflow-wrap: anywhere; }
+.selectedFile .fileMeta strong { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.fileMeta span { font-size: 13px; color: var(--ink-600); }
+.documentList { list-style: none; margin: 0; padding: 0; display: grid; }
+.documentItem { padding: 12px 0; border-bottom: 1px solid #e5edf5; }
+.documentItem:last-child { border-bottom: 0; }
+.documents { border-top: 0; padding-top: 0; }
+@media (prefers-reduced-motion: reduce) { .dropzone { transition: none; } }
 
 .verifiedNumber { margin: 0; display: grid; gap: 6px; }
 .verifiedNumber dt { font-size: 14px; font-weight: 600; }

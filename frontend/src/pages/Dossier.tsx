@@ -1,5 +1,5 @@
 import type { BankFields } from "@/lib/bankFields";
-import { useLocation } from "react-router";
+import { Link, useLocation } from "react-router";
 import { BankDocument } from "@/components/BankDocument";
 import { BankReminder } from "@/components/BankReminder";
 import { useEffect, useRef, useState, type FormEvent } from "react";
@@ -28,6 +28,14 @@ const rppsLabels: Record<string, string> = {
   NOT_FOUND: "Numéro non retrouvé : vérifiez la saisie",
   PENDING: "Vérification en attente",
 };
+function formatSize(bytes: number) {
+  return bytes >= 1024 * 1024
+    ? `${(bytes / 1024 / 1024).toLocaleString("fr-FR", { maximumFractionDigits: 1 })} Mo`
+    : `${Math.ceil(bytes / 1024)} Ko`;
+}
+function documentLabel(kind: string) {
+  return kind === "CV" ? "CV" : kind === "CONFIRMATION" ? "Confirmation de mission" : "Justificatif de démonstration";
+}
 export default function Dossier() {
   const { user } = useAuth();
   const { hash } = useLocation();
@@ -37,7 +45,8 @@ export default function Dossier() {
     [file, setFile] = useState<File | null>(null),
     [busy, setBusy] = useState(""),
     [error, setError] = useState(""),
-    [message, setMessage] = useState("");
+    [message, setMessage] = useState(""),
+    [dragging, setDragging] = useState(false);
   const input = useRef<HTMLInputElement>(null);
   const operationKeys = useRef(new Map<string, string>());
   function operationKey(operation: string, content: string) {
@@ -141,9 +150,9 @@ export default function Dossier() {
         </p>
       </header>
       <nav className={s.sectionNav} aria-label="Rubriques de mon dossier">
-        <a href="#verification">Vérification RPPS</a><a href="#justificatifs">Justificatifs</a><a href="#rib">RIB facultatif</a>
+        <a href="#verification">Vérification RPPS</a><a href="#rib">RIB facultatif</a><a href="#justificatifs">Justificatifs</a><a href="#documents">Mes documents</a>
       </nav>
-      <p className={s.contextNote}>Pour vos diplômes déclarés, compétences et expériences, rendez-vous dans <a href="/profil">Mon profil</a>.</p>
+      <p className={s.contextNote}>Pour vos diplômes déclarés, compétences et expériences, rendez-vous dans <Link to="/profil">Mon profil</Link>.</p>
       <BankReminder key={r.data?.bank.document?.id||r.data?.bank.iban||"empty"} />
       {error && (
         <p role="alert" className={u.feedback}>
@@ -186,10 +195,16 @@ export default function Dossier() {
                 );
               }}
             >
-              <h2 className={u.cardHeading}>
-                <Icon name="stethoscope" />
-                Vérification professionnelle
-              </h2>
+              <div className={s.cardTop}>
+                <h2 className={u.cardHeading}>
+                  <Icon name="stethoscope" />
+                  Vérification professionnelle
+                </h2>
+                <span className={rppsFound ? u.badge : s.pending}>
+                  {rppsLabels[r.data?.profile.rpps_status || "NOT_CHECKED"] ||
+                    "Vérification en attente"}
+                </span>
+              </div>
               <fieldset className={s.fields} disabled={!!busy}>
                 {rppsFound ? (
                   <dl className={s.verifiedNumber}>
@@ -199,24 +214,16 @@ export default function Dossier() {
                 ) : (
                   <TextField
                     label="Numéro RPPS"
+                    hint="11 chiffres, indiqués sur votre carte CPS ou e-CPS."
                     required
                     pattern="[0-9]{11}"
                     maxLength={11}
                     inputMode="numeric"
+                    autoComplete="off"
                     value={number ?? r.data?.profile.rpps_number ?? ""}
                     onChange={(e) => setNumber(e.target.value)}
                   />
                 )}
-                <span
-                  className={
-                    r.data?.profile.rpps_status === "FOUND"
-                      ? u.badge
-                      : s.pending
-                  }
-                >
-                  {rppsLabels[r.data?.profile.rpps_status || "NOT_CHECKED"] ||
-                    "Vérification en attente"}
-                </span>
                 {!rppsFound && <Button type="submit" loading={busy === "rpps"}>
                   Vérifier mon numéro
                 </Button>}
@@ -266,32 +273,63 @@ export default function Dossier() {
               <p className={s.help}>
                 Déposez uniquement un document contenant des données fictives.
               </p>
-              <form onSubmit={upload} className={s.fields}>
+              <form onSubmit={upload}>
                 <fieldset disabled={!!busy} className={s.fields}>
-                  <div
-                    className={s.dropzone}
-                    onDragOver={(e) => e.preventDefault()}
-                    onDrop={(e) => {
-                      e.preventDefault();
-                      if (!busy) choose(e.dataTransfer.files[0] || null);
-                    }}
-                  >
-                    <Icon name="folder" size={42} />
-                    <label className={s.fileLabel}>
-                      Choisir un fichier
-                      <input
-                        ref={input}
-                        type="file"
-                        aria-label="Document fictif"
-                        accept="application/pdf,image/png,image/jpeg"
-                        onChange={(e) => choose(e.target.files?.[0] || null)}
-                      />
-                    </label>
-                    <p>{file ? file.name : "Ou déposez votre fichier ici"}</p>
-                    <small>PDF, PNG ou JPEG · {uploadLimitMiB} Mo maximum</small>
-                  </div>
-                  <label className={s.fileLabel}>Prendre une photo du justificatif<input type="file" accept="image/jpeg,image/png" capture="environment" onChange={e=>choose(e.target.files?.[0]||null)}/></label>
-                  <p>Selon votre navigateur, l’appareil photo ou le choix d’une image sera proposé. Aucune lecture automatique du contenu.</p>
+                  {file ? (
+                    <div className={s.selectedFile}>
+                      <Icon name="file-text" size={24} />
+                      <div className={s.fileMeta}>
+                        <strong>{file.name}</strong>
+                        <span>{formatSize(file.size)}</span>
+                      </div>
+                      <Button
+                        type="button"
+                        variant="ghost"
+                        size="sm"
+                        aria-label={`Retirer le fichier ${file.name}`}
+                        onClick={() => { setFile(null); setFictional(false); }}
+                      >
+                        Retirer
+                      </Button>
+                    </div>
+                  ) : (
+                    <>
+                      <div
+                        className={`${s.dropzone} ${dragging ? s.dragging : ""}`}
+                        onDragEnter={(e) => { e.preventDefault(); setDragging(true); }}
+                        onDragOver={(e) => e.preventDefault()}
+                        onDragLeave={(e) => {
+                          if (!e.currentTarget.contains(e.relatedTarget as Node | null)) setDragging(false);
+                        }}
+                        onDrop={(e) => {
+                          e.preventDefault();
+                          setDragging(false);
+                          if (!busy) choose(e.dataTransfer.files[0] || null);
+                        }}
+                      >
+                        <Icon name="folder" size={42} />
+                        <label className={s.fileLabel}>
+                          Choisir un fichier
+                          <input
+                            ref={input}
+                            type="file"
+                            aria-label="Choisir un document fictif"
+                            accept="application/pdf,image/png,image/jpeg"
+                            onChange={(e) => choose(e.target.files?.[0] || null)}
+                          />
+                        </label>
+                        <p>{dragging ? "Relâchez pour ajouter le fichier" : "ou glissez-déposez votre fichier ici"}</p>
+                        <small>PDF, PNG ou JPEG · {uploadLimitMiB} Mo maximum</small>
+                      </div>
+                      <div className={s.cameraOnly}>
+                        <label className={`${s.fileLabel} ${s.secondary}`}>
+                          Prendre une photo du justificatif
+                          <input type="file" accept="image/jpeg,image/png" capture="environment" onChange={e=>choose(e.target.files?.[0]||null)}/>
+                        </label>
+                        <p className={s.help}>Aucune lecture automatique du contenu.</p>
+                      </div>
+                    </>
+                  )}
                   <Checkbox
                     required
                     checked={fictional}
@@ -303,48 +341,63 @@ export default function Dossier() {
                     type="submit"
                     disabled={!file || !fictional}
                     loading={busy === "upload"}
+                    aria-describedby={!file || !fictional ? "upload-hint" : undefined}
                   >
                     Enregistrer le document
                   </Button>
+                  {(!file || !fictional) && (
+                    <p id="upload-hint" className={s.help}>
+                      {!file
+                        ? "Choisissez d’abord un fichier."
+                        : "Cochez la case pour confirmer que le document est fictif."}
+                    </p>
+                  )}
                 </fieldset>
               </form>
+            </section>
+            <section id="documents" tabIndex={-1} className={u.card}>
+              <h2 className={u.cardHeading}>
+                <Icon name="folder" />
+                Mes documents
+              </h2>
               <div className={s.documents}>
-                <h3>Mes documents</h3>
-                <ul className={u.list}>
-                  {r.data?.documents.map((d) => (
-                    <li className={u.listItem} key={d.id}>
-                      <div className={u.row}>
-                        <div>
-                          <strong>
-                            {d.kind === "CV" ? "CV" : d.kind === "CONFIRMATION"
-                              ? "Confirmation de mission"
-                              : "Justificatif de démonstration"}
-                          </strong>
-                          <p className={s.help}>
-                            {new Date(d.created_at).toLocaleDateString("fr-FR")}{" "}
-                            · {Math.ceil(d.size_bytes / 1024)} Ko
-                          </p>
-                        </div>
-                        <Button
-                          variant="outline"
-                          size="sm"
-                          disabled={!!busy}
-                          onClick={() =>
-                            void act(
-                              "download",
-                              () => downloadDocument(d.id),
-                              "Téléchargement lancé.",
-                            )
-                          }
-                        >
-                          Télécharger
-                        </Button>
-                      </div>
-                    </li>
-                  ))}
-                </ul>
-                {!r.data?.documents.length && (
-                  <p className={u.muted}>Aucun document sur cette page.</p>
+                {r.data?.documents.length ? (
+                  <ul className={s.documentList}>
+                    {r.data.documents.map((d) => {
+                      const label = documentLabel(d.kind);
+                      const date = new Date(d.created_at).toLocaleDateString("fr-FR");
+                      return (
+                        <li className={s.documentItem} key={d.id}>
+                          <Icon name="file-text" size={20} />
+                          <div className={s.fileMeta}>
+                            <strong>{label}</strong>
+                            <span>{date} · {formatSize(d.size_bytes)}</span>
+                          </div>
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            disabled={!!busy}
+                            aria-label={`Télécharger : ${label} du ${date}`}
+                            onClick={() =>
+                              void act(
+                                "download",
+                                () => downloadDocument(d.id),
+                                "Téléchargement lancé.",
+                              )
+                            }
+                          >
+                            Télécharger
+                          </Button>
+                        </li>
+                      );
+                    })}
+                  </ul>
+                ) : (
+                  <p className={u.muted}>
+                    {offset
+                      ? "Aucun document sur cette page."
+                      : "Aucun document pour l’instant. Vos justificatifs et confirmations de mission apparaîtront ici."}
+                  </p>
                 )}
                 {(offset > 0 || (r.data?.documents.length || 0) >= 20) && (
                   <nav className={u.row} aria-label="Pages de documents">
@@ -377,9 +430,6 @@ export default function Dossier() {
           </div>
         </div>
       )}
-      <ButtonLink to="/profil" variant="ghost">
-        Retour à mon profil
-      </ButtonLink>
     </div>
   );
 }
