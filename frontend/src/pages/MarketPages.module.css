@@ -180,6 +180,10 @@
   color: var(--ink-600);
   line-height: 1.7;
 }
+.empty > a,
+.empty > button {
+  margin-top: 12px;
+}
 .notice {
   padding: 16px 20px;
   background: var(--brand-50);
