@@ -62,9 +62,8 @@ try {
    await page.setViewportSize({width:375,height:812});await page.evaluate(()=>scrollTo(0,0));
    const access=await page.getByRole('button',{name:'Accessibilité',exact:true}).boundingBox();
    const header=page.locator('header').first();
-   const identity=await header.locator('a[href="/organisation"]').boundingBox();
-   const brand=await header.getByRole('link',{name:'InfiMatch — accueil',exact:true}).boundingBox();
-   assert.ok(access&&identity&&brand&&access.y>=0&&access.y+access.height<=100&&access.x>=brand.x+brand.width-1&&access.x+access.width<=identity.x+1,'Connected accessibility remains visible between the brand and account identity');
+   const menu=await header.getByRole('button',{name:'Ouvrir le menu',exact:true}).boundingBox();
+   assert.ok(access&&menu&&access.y>=0&&access.y+access.height<=100&&menu.x-access.x-access.width>=-1&&menu.x-access.x-access.width<=10&&Math.abs(access.y+access.height/2-menu.y-menu.height/2)<2,'Accessibility is immediately beside the menu on the same row');
    await page.getByRole('button',{name:'Ouvrir le menu',exact:true}).click();
    const navigation=page.getByRole('navigation',{name:'Navigation principale',exact:true});await navigation.waitFor();
    const navBox=await navigation.boundingBox(),headerBox=await page.locator('header').first().boundingBox();
