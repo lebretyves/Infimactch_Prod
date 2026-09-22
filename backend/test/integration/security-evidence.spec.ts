@@ -52,7 +52,12 @@ test('SEC08 and SEC18 real API: stored text stays inert, logout revokes cookie a
   await page.getByRole('button',{name:'Déconnexion',exact:true}).click();await page.waitForURL('**/connexion');
   const denied=await context.request.get(origin+'/api/v1/profile');assert.equal(denied.status(),401);assert.match(denied.headers()['cache-control'],/no-store/);
   await request(app.getHttpServer()).get('/api/v1/profile').set('Cookie',cookie).expect(401);
-  await page.goBack();await page.waitForURL('**/connexion');assert.equal((await page.locator('body').innerText()).includes(payload),false);
+  await page.goBack();
+  try { await page.waitForURL('**/connexion'); }
+  catch (error) {
+   console.error('SEC18 back-navigation diagnostics',JSON.stringify({url:page.url(),payloadVisible:(await page.locator('body').innerText()).includes(payload),body:(await page.locator('body').innerText()).slice(0,1200)}));
+   throw error;
+  }assert.equal((await page.locator('body').innerText()).includes(payload),false);
   await page.goto(origin+'/profil');await page.waitForURL('**/connexion');assert.equal((await page.locator('body').innerText()).includes(payload),false);
   const cached=await page.evaluate(async()=>{const urls:string[]=[];for(const name of await caches.keys())for(const req of await(await caches.open(name)).keys())urls.push(req.url);return urls;});assert.ok(!cached.some((url:string)=>/\/api\/|\/profil(?:$|\?)/.test(url)));
  }finally{await browser?.close();await new Promise<void>(resolve=>server.close(()=>resolve()));}
