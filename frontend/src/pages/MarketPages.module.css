@@ -439,7 +439,7 @@
 :global([data-space="candidate"]) .details { margin: 18px 0; }
 :global([data-space="candidate"]) .empty { padding: 28px 20px; }
 :global([data-space="candidate"]) .focusedPage { max-width: 960px; }
-:global([data-space="candidate"]) .noticeList { list-style: none; padding: 0; margin: 0 0 16px; display: grid; }
+:global([data-space="candidate"]) .noticeList { list-style: none; padding: 0; margin: 0; display: grid; }
 :global([data-space="candidate"]) .noticeItem { padding: 16px 0; border-top: 1px solid var(--line); display: grid; gap: 8px; }
 :global([data-space="candidate"]) .noticeItem:first-child { border-top: 0; padding-top: 0; }
 :global([data-space="candidate"]) .noticeItem p { margin: 0; }
