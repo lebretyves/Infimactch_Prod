@@ -282,7 +282,7 @@
 .toolsContent>section p { font-size: 12px; }
 .toolsContent>section a { min-height: 44px; display: inline-flex; align-items: center; }
 .toolsContent>section a[class*="button"] { font-size: 12px; height: auto; white-space: normal; }
-.dossierLink { display: inline-flex; gap: 7px; font-size: 12px; font-weight: 600; min-height: 44px; align-items: center; }
+.dossierLink { justify-self: start; }
 .stats { gap: 14px; }
 .stat { padding: 14px 16px; gap: 12px; }
 .stat strong { font-size: 24px; }

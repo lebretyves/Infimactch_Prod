@@ -251,7 +251,7 @@ export default function Accueil() {
                       </ButtonLink>
                       <Link to="/calendrier">Ma mobilité</Link>
                     </div>
-                    <Link to="/dossier" className={s.dossierLink}><Icon name="folder" size={17}/>Votre dossier professionnel →</Link>
+                    <ButtonLink to="/dossier" variant="outline" size="sm" className={s.dossierLink}><Icon name="folder" size={17}/>Votre dossier professionnel →</ButtonLink>
                   </section>
                   </div>
                 </details>

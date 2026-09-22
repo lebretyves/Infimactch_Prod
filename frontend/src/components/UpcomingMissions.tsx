@@ -1,5 +1,5 @@
-import { Link } from 'react-router';
 import type { Assignment } from '@/services/nurse';
+import { ButtonLink } from '@/ui/Button';
 import { Icon } from '@/ui/Icon';
 import u from '@/components/NurseUI.module.css';
 import s from './UpcomingMissions.module.css';
@@ -20,9 +20,9 @@ export function UpcomingMissions({ assignments, limit = 3 }: { assignments: Upco
     <p className={s.hours}>{format(m.start_at,{timeStyle:'short'})} – {sameDay?'':format(m.end_at,{day:'numeric',month:'short'})+' à '}{format(m.end_at,{timeStyle:'short'})}</p>
     <p className={s.zone}>Heure locale · {zone}</p>
     <div className={s.place}><Icon name="building" size={16}/><div>{place&&<strong>{place}</strong>}<span>{m.address||'Lieu à consulter dans la mission'}</span></div></div>
-    <Link to={'/missions/m_'+encodeURIComponent(m.mission_id)} aria-label={'Voir la mission : '+m.title}>Voir la mission →</Link>
+    <ButtonLink to={'/missions/m_'+encodeURIComponent(m.mission_id)} aria-label={'Voir la mission : '+m.title} variant="outline" size="sm" block className={s.action}>Voir la mission →</ButtonLink>
    </li>;
   })}</ul>:<p className={u.muted}>Aucune mission confirmée à venir pour le moment.</p>}
-  <Link to="/historique" className={s.all}>Toutes mes missions confirmées →</Link>
+  <ButtonLink to="/historique" variant="outline" size="sm" className={s.all}>Toutes mes missions confirmées →</ButtonLink>
  </section>;
 }
