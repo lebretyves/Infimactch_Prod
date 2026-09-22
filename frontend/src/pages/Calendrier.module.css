@@ -163,6 +163,31 @@
   text-decoration: none;
   overflow-wrap: anywhere;
 }
+.assignmentBlock {
+  display: grid;
+  gap: 6px;
+  background: var(--brand-600);
+  border-radius: 5px;
+  padding: 0 0 8px;
+  color: white;
+}
+.assignmentBlock .assignment {
+  border-radius: 5px 5px 0 0;
+  padding-bottom: 4px;
+}
+.assignmentBlock > :last-child {
+  padding-inline: 6px;
+}
+.exportBar {
+  margin-bottom: 8px;
+  display: grid;
+  gap: 8px;
+}
+.exportHint {
+  margin: 0;
+  font-size: 13px;
+  color: var(--ink-700);
+}
 .assignment strong {
   font-size: 11px;
 }

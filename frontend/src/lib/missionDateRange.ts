@@ -1,21 +1,88 @@
 import { nextDate, zonedDateTimeInput, zonedDateTimeToISO } from "./parisDateTime.ts";
 export type SchedulePrecision = "DATE" | "EXACT";
 export type OriginalMissionPeriod = { start: string; end: string; timezone?: string; schedulePrecision?: SchedulePrecision };
+export type MissionClockTimes = { startTime: string; endTime: string };
 export function localDate(value: string, timezone = "Europe/Paris"): string {
   return value ? zonedDateTimeInput(value, timezone).slice(0, 10) : "";
+}
+export function localTime(value: string, timezone = "Europe/Paris"): string {
+  return value ? zonedDateTimeInput(value, timezone).slice(11, 16) : "";
 }
 // API ranges have an exclusive end. Subtracting one instant gives the last covered date.
 export function inclusiveEndDate(value: string, timezone = "Europe/Paris"): string {
   return value ? localDate(new Date(Date.parse(value) - 1).toISOString(), timezone) : "";
 }
-export function missionDateRange(startDate: string, endDate: string, timezone: string, original?: OriginalMissionPeriod) {
+/** Standard créneau hours used as defaults when the form has not set free times yet. */
+export function missionShiftHours(shift: string): { startHour: number; endHour: number; crossesMidnight: boolean } | null {
+  switch (shift) {
+    case "MORNING":
+      return { startHour: 6, endHour: 14, crossesMidnight: false };
+    case "AFTERNOON":
+      return { startHour: 14, endHour: 22, crossesMidnight: false };
+    case "DAY":
+      return { startHour: 6, endHour: 22, crossesMidnight: false };
+    case "NIGHT":
+      return { startHour: 22, endHour: 6, crossesMidnight: true };
+    default:
+      return null;
+  }
+}
+export function missionShiftDefaultTimes(shift: string): MissionClockTimes | null {
+  const hours = missionShiftHours(shift);
+  if (!hours) return null;
+  return {
+    startTime: `${String(hours.startHour).padStart(2, "0")}:00`,
+    endTime: `${String(hours.endHour).padStart(2, "0")}:00`,
+  };
+}
+function clock(hour: number) {
+  return `${String(hour).padStart(2, "0")}:00`;
+}
+function validClock(value: string) {
+  return /^([01]\d|2[0-3]):[0-5]\d$/.test(value);
+}
+export function missionDateRange(
+  startDate: string,
+  endDate: string,
+  timezone: string,
+  original?: OriginalMissionPeriod,
+  shift?: string,
+  times?: MissionClockTimes,
+) {
   if (!/^\d{4}-\d{2}-\d{2}$/.test(startDate) || !/^\d{4}-\d{2}-\d{2}$/.test(endDate))
     throw new Error("Renseignez les dates de début et de fin.");
   if (endDate < startDate) throw new Error("La date de fin doit être égale ou postérieure au début.");
-  // Preserve exact imported vacations when only unrelated fields are edited.
+  const custom =
+    times && validClock(times.startTime) && validClock(times.endTime)
+      ? times
+      : null;
+  // Preserve exact custom hours when dates, timezone and clocks are unchanged.
   if (original && (original.timezone || "Europe/Paris") === timezone &&
-      localDate(original.start, timezone) === startDate && inclusiveEndDate(original.end, timezone) === endDate) {
-    return { start: original.start, end: original.end, schedulePrecision: original.schedulePrecision || "EXACT" };
+      localDate(original.start, timezone) === startDate && inclusiveEndDate(original.end, timezone) === endDate &&
+      original.schedulePrecision !== "DATE") {
+    if (!custom ||
+      (localTime(original.start, timezone) === custom.startTime &&
+        localTime(original.end, timezone) === custom.endTime)) {
+      return { start: original.start, end: original.end, schedulePrecision: original.schedulePrecision || "EXACT" };
+    }
+  }
+  if (custom) {
+    if (custom.endTime === custom.startTime)
+      throw new Error("L’heure de fin doit être postérieure à l’heure de début.");
+    const start = zonedDateTimeToISO(`${startDate}T${custom.startTime}`, undefined, timezone);
+    let endDay = endDate;
+    if (custom.endTime < custom.startTime) endDay = nextDate(endDate);
+    const end = zonedDateTimeToISO(`${endDay}T${custom.endTime}`, undefined, timezone);
+    if (Date.parse(end) <= Date.parse(start))
+      throw new Error("L’heure de fin doit être postérieure à l’heure de début.");
+    return { start, end, schedulePrecision: "EXACT" as const };
+  }
+  const hours = shift ? missionShiftHours(shift) : null;
+  if (hours) {
+    const start = zonedDateTimeToISO(`${startDate}T${clock(hours.startHour)}`, undefined, timezone);
+    const endDay = hours.crossesMidnight ? nextDate(endDate) : endDate;
+    const end = zonedDateTimeToISO(`${endDay}T${clock(hours.endHour)}`, undefined, timezone);
+    return { start, end, schedulePrecision: "EXACT" as const };
   }
   // Validate the inclusive end independently before calculating the following day.
   zonedDateTimeToISO(endDate + "T00:00", undefined, timezone);

@@ -10,4 +10,5 @@
 .place svg { flex-shrink: 0; margin-top: 2px; }
 .place strong,.place span { display: block; overflow-wrap: anywhere; }
 .action { margin-top: 12px; }
+.actions { display: grid; gap: 8px; margin-top: 12px; }
 .all { justify-self: start; margin-top: 8px; }

@@ -1,0 +1,26 @@
+.row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+}
+.compact {
+  display: grid;
+  gap: 6px;
+}
+.google {
+  font-size: 12px;
+  color: inherit;
+}
+.status {
+  margin: 0;
+  font-size: 12px;
+  width: 100%;
+}
+.compact .google {
+  color: #fff;
+  text-decoration: underline;
+}
+.compact .status {
+  color: #e8f0ff;
+}

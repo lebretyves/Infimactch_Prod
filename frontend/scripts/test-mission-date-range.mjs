@@ -1,5 +1,5 @@
 ﻿import assert from 'node:assert/strict';
-import { missionDateRange, localDate, inclusiveEndDate, missionDateRangeLabel } from '../src/lib/missionDateRange.ts';
+import { missionDateRange, localDate, inclusiveEndDate, missionDateRangeLabel, missionShiftHours } from '../src/lib/missionDateRange.ts';
 for (const host of ['Europe/Paris', 'America/Los_Angeles', 'Asia/Tokyo']) {
   process.env.TZ = host;
   const ordinary = missionDateRange('2026-09-18', '2026-09-18', 'Europe/Paris');
@@ -10,7 +10,7 @@ for (const host of ['Europe/Paris', 'America/Los_Angeles', 'Asia/Tokyo']) {
   assert.equal(overseas.start,'2026-09-18T04:00:00.000Z');
   assert.equal(overseas.end,'2026-09-21T04:00:00.000Z');
   assert.equal(inclusiveEndDate(overseas.end,'America/Martinique'),'2026-09-20');
-  const original={start:'2026-09-18T20:00:15.000Z',end:'2026-09-19T04:00:27.000Z',timezone:'Europe/Paris'};
+  const original={start:'2026-09-18T20:00:15.000Z',end:'2026-09-19T04:00:27.000Z',timezone:'Europe/Paris',schedulePrecision:'EXACT'};
   assert.deepEqual(missionDateRange('2026-09-18','2026-09-19','Europe/Paris',original),{start:original.start,end:original.end,schedulePrecision:'EXACT'});
   assert.equal(missionDateRange('2026-09-18','2026-09-20','Europe/Paris',original).schedulePrecision,'DATE');
   assert.deepEqual(missionDateRange('2026-09-18','2026-09-18','Europe/Paris',{...ordinary,timezone:'Europe/Paris'}),ordinary);
@@ -23,5 +23,26 @@ for (const host of ['Europe/Paris', 'America/Los_Angeles', 'Asia/Tokyo']) {
   assert.throws(()=>missionDateRange('2026-09-18','2026-02-31','Europe/Paris'));
   assert.throws(()=>missionDateRange('2026-09-20','2026-09-18','Europe/Paris'));
   assert.throws(()=>missionDateRange('','2026-09-18','Europe/Paris'));
+  assert.deepEqual(missionShiftHours('MORNING'),{startHour:6,endHour:14,crossesMidnight:false});
+  const morning=missionDateRange('2026-09-18','2026-09-18','Europe/Paris',undefined,'MORNING');
+  assert.equal(morning.schedulePrecision,'EXACT');
+  assert.equal(morning.start,'2026-09-18T04:00:00.000Z');
+  assert.equal(morning.end,'2026-09-18T12:00:00.000Z');
+  const night=missionDateRange('2026-09-18','2026-09-18','Europe/Paris',undefined,'NIGHT');
+  assert.equal(night.start,'2026-09-18T20:00:00.000Z');
+  assert.equal(night.end,'2026-09-19T04:00:00.000Z');
+  const dateOnly={start:ordinary.start,end:ordinary.end,timezone:'Europe/Paris',schedulePrecision:'DATE'};
+  const upgraded=missionDateRange('2026-09-18','2026-09-18','Europe/Paris',dateOnly,'AFTERNOON');
+  assert.equal(upgraded.schedulePrecision,'EXACT');
+  assert.equal(upgraded.start,'2026-09-18T12:00:00.000Z');
+  assert.equal(upgraded.end,'2026-09-18T20:00:00.000Z');
+  const custom=missionDateRange('2026-09-18','2026-09-18','Europe/Paris',undefined,'MORNING',{startTime:'07:30',endTime:'15:15'});
+  assert.equal(custom.schedulePrecision,'EXACT');
+  assert.equal(custom.start,'2026-09-18T05:30:00.000Z');
+  assert.equal(custom.end,'2026-09-18T13:15:00.000Z');
+  const customNight=missionDateRange('2026-09-18','2026-09-18','Europe/Paris',undefined,'NIGHT',{startTime:'21:00',endTime:'05:00'});
+  assert.equal(customNight.start,'2026-09-18T19:00:00.000Z');
+  assert.equal(customNight.end,'2026-09-19T03:00:00.000Z');
+  assert.throws(()=>missionDateRange('2026-09-18','2026-09-18','Europe/Paris',undefined,undefined,{startTime:'10:00',endTime:'10:00'}));
 }
-console.log('Date-only range checks passed across 3 host timezones: inclusive dates, DST, overseas, exact-period preservation and invalid dates.');
+console.log('Date-only range checks passed across 3 host timezones: inclusive dates, DST, overseas, exact-period preservation, shift hours, custom clocks and invalid dates.');

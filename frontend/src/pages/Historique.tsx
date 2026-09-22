@@ -7,6 +7,7 @@ import { date, statusLabels } from "@/services/market";
 import { Button, ButtonLink } from "@/ui/Button";
 import { SelectField } from "@/ui/Field";
 import { ConfirmationButton } from "@/components/ConfirmationButton";
+import { AddToPersonalCalendar } from "@/components/AddToPersonalCalendar";
 import { Icon } from "@/ui/Icon";
 import s from "./MarketPages.module.css";
 import periodStyles from "./Historique.module.css";
@@ -76,6 +77,9 @@ export default function Historique() {
             Consultez vos missions confirmées et leur historique.
           </p>
         </div>
+        {!r.loading && !r.error && !!r.data?.length && (
+          <AddToPersonalCalendar assignments={r.data} />
+        )}
       </header>
       <BankReminder />
       <nav className={s.tabs} aria-label="Mon planning">
@@ -260,6 +264,9 @@ export default function Historique() {
                 >
                   Voir la mission
                 </ButtonLink>
+                {selectedItem.status === "ACTIVE" && (
+                  <AddToPersonalCalendar assignment={selectedItem} />
+                )}
                 <ConfirmationButton assignmentId={selectedItem.id} cancelled={selectedItem.status === "CANCELLED"} />
                 <ButtonLink to={"/affectations/" + selectedItem.id + "/preparation-contrat"} variant="outline">Consulter la préparation</ButtonLink>
               </div>

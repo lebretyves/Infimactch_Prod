@@ -17,6 +17,7 @@ import {
   type AvailabilityChange,
 } from "@/services/profile";
 import { allHistory, type Assignment } from "@/services/nurse";
+import { AddToPersonalCalendar } from "@/components/AddToPersonalCalendar";
 import {
   AVAILABILITY_SLOTS,
   SLOT_STATUS_LABELS,
@@ -296,17 +297,19 @@ function Editor({
                           overlaps({ start: m.start_at, end: m.end_at }, day),
                       )
                       .map((m) => (
-                        <Link
-                          key={m.id}
-                          className={s.assignment}
-                          to={"/missions/m_" + m.mission_id}
-                        >
-                          <strong>Mission confirmée</strong>
-                          <span>{m.title}</span>
-                          <span>{exactParisPeriodLabel({ start: m.start_at, end: m.end_at })}</span>
-                          {m.establishment_name && <span>{m.establishment_name}</span>}
-                          {m.address && <span>{m.address}</span>}
-                        </Link>
+                        <div key={m.id} className={s.assignmentBlock}>
+                          <Link
+                            className={s.assignment}
+                            to={"/missions/m_" + m.mission_id}
+                          >
+                            <strong>Mission confirmée</strong>
+                            <span>{m.title}</span>
+                            <span>{exactParisPeriodLabel({ start: m.start_at, end: m.end_at })}</span>
+                            {m.establishment_name && <span>{m.establishment_name}</span>}
+                            {m.address && <span>{m.address}</span>}
+                          </Link>
+                          <AddToPersonalCalendar assignment={m} compact />
+                        </div>
                       ))}
                   </div>
                 </div>
@@ -332,6 +335,10 @@ function Editor({
         <a href="#zone-mobilite">Ma zone de recherche et d’alertes</a>
         <NavLink to="/historique">Mes missions</NavLink>
       </nav>
+      <div className={s.exportBar}>
+        <p className={s.exportHint}>Exportez toutes vos missions confirmées à venir vers Apple, Google ou Outlook.</p>
+        <AddToPersonalCalendar assignments={history} />
+      </div>
       {error && (
         <p role="alert" className={u.feedback}>
           {error}

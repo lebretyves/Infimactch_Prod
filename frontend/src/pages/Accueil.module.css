@@ -269,6 +269,7 @@
 }
 /* Keep preparation short; let recommendation groups use the full content width. */
 .preparation { display: grid; grid-template-columns: minmax(0, 1fr); gap: 20px; align-items: start; }
+.upcomingExport { display: grid; gap: 12px; }
 .preparationTools { padding: 18px !important; }
 .preparationTools>summary { cursor: pointer; color: var(--ink-900); font-weight: 700; font-size: 15px; min-height: 44px; display: flex; align-items: center; gap: 8px; list-style: none; }
 .preparationTools>summary::before { content: '›'; font-size: 21px; }

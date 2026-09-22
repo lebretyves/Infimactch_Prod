@@ -12,7 +12,7 @@ import {
   type OrganizationContext,
 } from "@/services/organizations";
 import { staffingNeed, type StaffingNeed } from "@/services/needs";
-import { localDate, inclusiveEndDate, missionDateRange, type SchedulePrecision } from "@/lib/missionDateRange";
+import { localDate, inclusiveEndDate, localTime, missionDateRange, missionShiftDefaultTimes, type SchedulePrecision } from "@/lib/missionDateRange";
 import u from "@/components/NurseUI.module.css";
 import { labelCode } from "@/data/professional";
 import { Button, ButtonLink } from "@/ui/Button";
@@ -35,6 +35,8 @@ type Draft = {
   timezone: string;
   start: string;
   end: string;
+  startTime: string;
+  endTime: string;
   shift: string;
   address: string;
   latitude: number | null;
@@ -117,6 +119,12 @@ function Form({
           timezone: mission.timezone || "Europe/Paris",
           start: localDate(mission.start_at, mission.timezone),
           end: inclusiveEndDate(mission.end_at, mission.timezone),
+          startTime: mission.schedule_precision === "DATE"
+            ? (missionShiftDefaultTimes(mission.shift)?.startTime || "")
+            : localTime(mission.start_at, mission.timezone || "Europe/Paris"),
+          endTime: mission.schedule_precision === "DATE"
+            ? (missionShiftDefaultTimes(mission.shift)?.endTime || "")
+            : localTime(mission.end_at, mission.timezone || "Europe/Paris"),
           shift: mission.shift,
           address: mission.address,
           latitude: mission.latitude,
@@ -139,6 +147,16 @@ function Form({
           timezone: need?.details?.timezone || "Europe/Paris",
           start: need?.details ? localDate(need.details.start, need.details.timezone) : "",
           end: need?.details ? inclusiveEndDate(need.details.end, need.details.timezone) : "",
+          startTime: need?.details
+            ? (need.details.schedulePrecision === "DATE"
+              ? (missionShiftDefaultTimes(need.details.shift)?.startTime || localTime(need.details.start, need.details.timezone || "Europe/Paris"))
+              : localTime(need.details.start, need.details.timezone || "Europe/Paris"))
+            : "",
+          endTime: need?.details
+            ? (need.details.schedulePrecision === "DATE"
+              ? (missionShiftDefaultTimes(need.details.shift)?.endTime || localTime(need.details.end, need.details.timezone || "Europe/Paris"))
+              : localTime(need.details.end, need.details.timezone || "Europe/Paris"))
+            : "",
           shift: need?.details?.shift || "",
           address: initialAddress,
           latitude: initialPosition?.latitude ?? null,
@@ -166,6 +184,8 @@ function Form({
     setError("");
     try {
       if (!v.shift) throw new Error("Choisissez un créneau : matin, après-midi ou nuit.");
+      if (!v.startTime || !v.endTime)
+        throw new Error("Renseignez l’heure de début et l’heure de fin du créneau.");
       const years = Number(experienceYears);
       if (!experienceYears.trim() || !Number.isFinite(years) || years < 0 || years > 50)
         throw new Error("Renseignez une expérience entre 0 et 50 ans.");
@@ -178,11 +198,16 @@ function Form({
         );
       validateMissionHorizon(v.start,v.end,v.timezone);
       const { start, end, schedulePrecision } = missionDateRange(v.start, v.end, v.timezone,
-        mission ? { start: mission.start_at, end: mission.end_at, timezone: mission.timezone, schedulePrecision: mission.schedule_precision } : undefined);
+        mission ? { start: mission.start_at, end: mission.end_at, timezone: mission.timezone, schedulePrecision: mission.schedule_precision } : undefined,
+        v.shift,
+        { startTime: v.startTime, endTime: v.endTime });
+      if (schedulePrecision !== "EXACT")
+        throw new Error("Renseignez un créneau et des horaires précis pour publier la mission.");
       if (!mission && v.start < localDate(new Date().toISOString(), v.timezone))
         throw new Error("La mission doit commencer aujourd’hui ou à une date ultérieure.");
+      const { startTime: _startTime, endTime: _endTime, ...missionFields } = v;
       const body = {
-        ...v,
+        ...missionFields,
         minExperienceMonths,
         schedulePrecision,
         agencyId: v.agencyId || undefined,
@@ -416,8 +441,7 @@ function Form({
           {Array.from(new Set(["Europe/Paris", "America/Guadeloupe", "America/Martinique", "America/Cayenne", "Indian/Reunion", "Indian/Mayotte", v.timezone])).map(zone => <option key={zone} value={zone}>{zone}</option>)}
         </SelectField>
         <p>
-          Dates inclusives. Horaires précis à confirmer.
-          {mission && mission.schedule_precision !== "DATE" && " Les horaires déjà enregistrés sont conservés si les dates et le fuseau restent inchangés."}
+          Dates inclusives. Indiquez les heures précises du créneau (ex. 07:30–15:30). Un créneau type peut préremplir ces heures.
         </p>
         <div className={s.paire}>
           <TextField
@@ -438,18 +462,43 @@ function Form({
             onChange={(e) => set({ end: e.target.value })}
           />
         </div>
+        <div className={s.paire}>
+          <TextField
+            label="Heure de début"
+            type="time"
+            required
+            value={v.startTime}
+            onChange={(e) => set({ startTime: e.target.value })}
+          />
+          <TextField
+            label="Heure de fin"
+            type="time"
+            required
+            value={v.endTime}
+            onChange={(e) => set({ endTime: e.target.value })}
+            hint={v.endTime && v.startTime && v.endTime <= v.startTime ? (v.endTime === v.startTime ? "L’heure de fin doit être différente de l’heure de début." : "Si l’heure de fin est avant le début, la fin est le lendemain (ex. nuit).") : undefined}
+          />
+        </div>
         <SelectField
-          label="Créneau de la mission"
+          label="Type de créneau"
           required
           value={v.shift}
-          onChange={(e) => set({ shift: e.target.value })}
+          onChange={(e) => {
+            const shift = e.target.value;
+            const defaults = missionShiftDefaultTimes(shift);
+            set({
+              shift,
+              ...(defaults ? { startTime: defaults.startTime, endTime: defaults.endTime } : {}),
+            });
+          }}
+          hint="Sert au matching. Choisir un type préremplit les heures ; vous pouvez ensuite les ajuster."
         >
           <option value="" disabled>Choisissez un créneau</option>
-          <option value="MORNING">Matin</option>
-          <option value="AFTERNOON">Après-midi</option>
+          <option value="MORNING">Matin (préremplit 06 h–14 h)</option>
+          <option value="AFTERNOON">Après-midi (préremplit 14 h–22 h)</option>
           {v.shift === "UNKNOWN" && <option value="UNKNOWN">Non connu (déjà enregistré)</option>}
-          {v.shift === "DAY" && <option value="DAY">Jour (déjà enregistré)</option>}
-          <option value="NIGHT">Nuit</option>
+          {v.shift === "DAY" && <option value="DAY">Jour (préremplit 06 h–22 h)</option>}
+          <option value="NIGHT">Nuit (préremplit 22 h–06 h)</option>
           {v.shift === "MIXED" && <option value="MIXED">Alternance jour et nuit (déjà enregistrée)</option>}
         </SelectField>
         <SearchPlace

@@ -2,6 +2,7 @@ import {EnterpriseConversion} from '@/components/EnterpriseConversion';
 import { BankReminder } from "@/components/BankReminder";
 import { MixedRecommendations } from "@/components/MixedRecommendations";
 import { UpcomingMissions } from "@/components/UpcomingMissions";
+import { AddToPersonalCalendar } from "@/components/AddToPersonalCalendar";
 import { notificationHref } from "@/lib/notificationHref";
 import { useEffect, useState } from "react";
 import { Link } from "react-router";
@@ -200,7 +201,10 @@ export default function Accueil() {
                     </Link>
                   </div>
               <div className={s.preparation}>
-                <UpcomingMissions assignments={data.history} limit={1}/>
+                <div className={s.upcomingExport}>
+                  <UpcomingMissions assignments={data.history} limit={1}/>
+                  <AddToPersonalCalendar assignments={data.history} />
+                </div>
                 <details className={`${u.card} ${s.preparationTools}`} open={preparationOpen} onToggle={e=>setPreparationOpen(e.currentTarget.open)}>
                   <summary>Disponibilités, profil et dossier</summary>
                   <div className={s.toolsContent}>
