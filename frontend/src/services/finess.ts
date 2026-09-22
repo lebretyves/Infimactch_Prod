@@ -1,3 +1,4 @@
+import { normalizeFiness } from "./finessFormat";
 ﻿import { api } from "./api";
 
 export type FinessEstablishment = {
@@ -18,10 +19,7 @@ export type FinessLookup = {
   grantsOrganizationAccess: false;
 };
 
-export const normalizeFiness = (value: string) =>
-  value.replace(/\s/g, "").toUpperCase();
-export const isCompleteFiness = (value: string) =>
-  /^(?:[0-9]{9}|2[AB][0-9]{7})$/.test(normalizeFiness(value));
+export { normalizeFiness, isCompleteFiness } from "./finessFormat";
 export const lookupFiness = (value: string, signal?: AbortSignal) =>
   api<FinessLookup>(
     "/reference-data/finess/" + encodeURIComponent(normalizeFiness(value)),

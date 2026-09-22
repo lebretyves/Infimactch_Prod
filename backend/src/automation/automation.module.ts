@@ -1,3 +1,4 @@
+import { matchingMission } from "../missions/mission-mapping";
 import { sendReminders } from './reminders';
 import { demoNoticeSuppressed, mutedDemoMissionIds } from "../notifications/demo-suppression";
 import {professionalIdentityName, queueMissionEmails, generateCancellations, dispatchMissionEmails} from './mission-mail';
@@ -26,9 +27,8 @@ import {
 } from "../documents/documents.module";
 import {
   lockMission,
-  matchingMission,
 } from "../missions/missions.service";
-import { professional } from "../profiles/profiles.module";
+import { professional } from "../profiles/profile-mapping";
 import { match } from "../domain/matching";
 import { notificationMessage } from "../domain/notification-messages";
 async function missionNotice(em: import("../database/database").SqlClient, eventId: string, recipient: {user_id:string;role:string}, kind: "MATCH"|"REMINDER"|"CONFIRMATION"|"CANCELLATION", m: any) {

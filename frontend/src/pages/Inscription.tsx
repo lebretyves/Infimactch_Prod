@@ -1,5 +1,11 @@
+import { validateAccount } from "./inscription/accountValidation";
+import type { AccountErrors, FinessState, OrganizationField } from "./inscription/accountTypes";
+import { OrganizationAccountFields } from "./inscription/OrganizationAccountFields";
+import { ReferentFields } from "./inscription/ReferentFields";
+import { OrganizationFields } from "./inscription/OrganizationFields";
+import { CandidateAccountFields } from "./inscription/CandidateAccountFields";
 import { MatchingReminder } from "@/components/MatchingReminder";
-﻿import { api, ApiError } from "@/services/api";
+import { api, ApiError } from "@/services/api";
 import { GoogleConnexion } from "@/components/GoogleConnexion";
 import { AccountCreatedError } from "@/services/auth";
 import { useEffect, useRef, useState, type FormEvent } from "react";
@@ -7,14 +13,10 @@ import {
   isCompleteFiness,
   lookupFiness,
   normalizeFiness,
-  type FinessLookup,
 } from "@/services/finess";
 import { Link, useNavigate, useSearchParams, useLocation } from "react-router";
 import { EcranAuth, authStyles as a } from "@/layouts/EcranAuth";
-import { Button } from "@/ui/Button";
-import { Checkbox } from "@/ui/Choice";
 import { ChoixRole, type Role } from "@/ui/ChoixRole";
-import { PasswordField, TextField, SelectField } from "@/ui/Field";
 import { enregistrer, charger } from "@/pages/inscription/state";
 import { useAuth } from "@/context/AuthContext";
 import { usePageTitle } from "@/lib/usePageTitle";
@@ -54,19 +56,6 @@ const ETAPES_ETABLISSEMENT = [
   },
 ];
 
-type Erreurs = Record<string, string>;
-type OrganizationField = "name" | "address" | "postalCode" | "city";
-type FinessState = {
-  state: "idle" | "loading" | "found" | "missing" | "error";
-  data?: FinessLookup;
-};
-const referenceDate = (value?: string | null) =>
-  value && Number.isFinite(Date.parse(value))
-    ? new Intl.DateTimeFormat("fr-FR", { dateStyle: "long" }).format(
-        new Date(value),
-      )
-    : "";
-
 export default function Inscription() {
   usePageTitle(
     "Créer mon compte",
@@ -95,7 +84,7 @@ export default function Inscription() {
   const [motDePasse, setMotDePasse] = useState(() => charger().motDePasse);
   const [confirmation, setConfirmation] = useState(() => charger().motDePasse);
   const [cgu, setCgu] = useState(false);
-  const [erreurs, setErreurs] = useState<Erreurs>({});
+  const [erreurs, setErreurs] = useState<AccountErrors>({});
   const [enCours, setEnCours] = useState(false);
   const [compteCree, setCompteCree] = useState(false);
 
@@ -285,58 +274,14 @@ export default function Inscription() {
     });
   }
 
-  function verifier(): Erreurs {
-    const trouvees: Erreurs = {};
-
-    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim()))
-      trouvees.email = "Indiquez une adresse e-mail valide.";
-    if (!google && (motDePasse.length < 12 || motDePasse.length > 128))
-      trouvees.motDePasse = "Entre 12 et 128 caractères.";
-    if (!google && confirmation !== motDePasse)
-      trouvees.confirmation = "Les deux mots de passe diffèrent.";
-
-    if (interimaire) {
-      // Pour l'infirmier : seules les informations de compte sont requises ici.
-      // L'identité civile (nom/prénom/naissance) et la qualification seront renseignées
-      // sans redondance dans les étapes suivantes (/inscription/identite, etc.)
-    } else {
-      if (!cgu)
-        trouvees.cgu = "Vous devez accepter les conditions d'utilisation.";
-      if (!nomEtablissement.trim())
-        trouvees.nomEtablissement = "Indiquez le nom de l'établissement.";
-      // Neuf caractères, avec les préfixes corses 2A et 2B acceptés.
-      if (organizationType === "ESTABLISHMENT" && !isCompleteFiness(finess)) {
-        trouvees.finess = "Indiquez un numéro FINESS valide de 9 caractères.";
-      }
-      if (organizationType === "AGENCY" && siret && !/^\d{14}$/.test(siret))
-        trouvees.siret = "Le SIRET doit contenir 14 chiffres.";
-      if (!adresse.trim())
-        trouvees.adresse = "Indiquez l'adresse de l'établissement.";
-      if (!/^\d{5}$/.test(codePostal.replace(/\s/g, ""))) {
-        trouvees.codePostal = "Code postal à 5 chiffres requis.";
-      }
-      if (!villeEtablissement.trim())
-        trouvees.villeEtablissement = "Indiquez la ville.";
-      if (!referentPrenom.trim())
-        trouvees.referentPrenom = "Indiquez le prénom du référent.";
-      if (!referentNom.trim())
-        trouvees.referentNom = "Indiquez le nom du référent.";
-      if (!referentFonction.trim()) {
-        trouvees.referentFonction =
-          "Indiquez la fonction (ex: Cadre, Directeur des soins, RH).";
-      }
-      if (!referentTelephone.trim())
-        trouvees.referentTelephone = "Numéro de téléphone direct requis.";
-    }
-
-    return trouvees;
-  }
-
   async function soumettre(event: FormEvent) {
     event.preventDefault();
     if (enCours || (google && !googleReady)) return;
 
-    const trouvees = verifier();
+    const trouvees = validateAccount({
+      email, motDePasse, confirmation, nomEtablissement, finess, siret, adresse, codePostal, villeEtablissement, referentPrenom, referentNom, referentFonction, referentTelephone,
+      google, interimaire, cgu, organizationType,
+    });
     setErreurs(trouvees);
     if (Object.keys(trouvees).length > 0) return;
 
@@ -531,402 +476,68 @@ export default function Inscription() {
         {interimaire ? (
           /* ======================== IDENTIFIANTS INFIRMIER (SANS REDONDANCE) ======================== */
           <>
-            <TextField
-              label="Adresse e-mail de connexion"
-              required
-              icon="mail"
-              type="email"
-              name="email"
-              autoComplete="email"
-              placeholder="vous@exemple.fr"
-              value={email}
-              readOnly={google}
-              aria-readonly={google}
-              onChange={(e) => setEmail(e.target.value)}
-              error={erreurs.email}
-              hint={
-                google
-                  ? "Adresse vérifiée par Google. Pour en changer, reprenez avec un autre compte Google."
-                  : "Cette adresse servira d’identifiant unique de connexion."
-              }
+            <CandidateAccountFields
+              email={email}
+              motDePasse={motDePasse}
+              confirmation={confirmation}
+              google={google}
+              googleReady={googleReady}
+              erreurs={erreurs}
+              enCours={enCours}
+              setEmail={setEmail}
+              setMotDePasse={setMotDePasse}
+              setConfirmation={setConfirmation}
             />
 
-            {!google && (
-              <div className={s.paire}>
-                <PasswordField
-                  label="Mot de passe"
-                  required
-                  name="password"
-                  minLength={12}
-                  maxLength={128}
-                  autoComplete="new-password"
-                  placeholder="12 caractères minimum"
-                  value={motDePasse}
-                  onChange={(e) => setMotDePasse(e.target.value)}
-                  error={erreurs.motDePasse}
-                />
-                <PasswordField
-                  label="Confirmer le mot de passe"
-                  required
-                  name="password-confirmation"
-                  minLength={12}
-                  maxLength={128}
-                  autoComplete="new-password"
-                  placeholder="Répétez le mot de passe"
-                  value={confirmation}
-                  onChange={(e) => setConfirmation(e.target.value)}
-                  error={erreurs.confirmation}
-                />
-              </div>
-            )}
-
-            <div
-              style={{
-                background: "var(--sky-50)",
-                border: "1px solid var(--sky-200)",
-                borderRadius: "var(--radius-lg)",
-                padding: "var(--space-4)",
-                fontSize: "var(--font-body-sm)",
-                color: "var(--ink-700)",
-              }}
-            >
-              <strong>Parcours en étapes :</strong> Vos coordonnées civiles
-              (nom, prénom), diplômes et disponibilités seront renseignés aux
-              étapes suivantes.
-            </div>
-
-            <Button
-              type="submit"
-              block
-              size="lg"
-              loading={enCours}
-              disabled={google && !googleReady}
-            >
-              Continuer mon inscription
-            </Button>
           </>
         ) : (
           /* ==================== FORMULAIRE ÉTABLISSEMENT DÉDIÉ ==================== */
           <>
-            <SelectField
-              label="Type d’organisation"
-              value={organizationType}
-              onChange={(e) =>
-                setOrganizationType(
-                  e.target.value as "AGENCY" | "ESTABLISHMENT",
-                )
-              }
-            >
-              <option value="ESTABLISHMENT">Établissement de santé</option>
-              <option value="AGENCY">Agence d’intérim</option>
-            </SelectField>
-            <h2 className={s.sectionTitre}>Coordonnées de l’organisation</h2>
-
-            {organizationType === "ESTABLISHMENT" ? (
-              <section
-                className={s.finessLookup}
-                aria-label="Identifier mon établissement"
-              >
-                <TextField
-                  label="Numéro FINESS"
-                  required
-                  icon="building"
-                  name="finess"
-                  autoComplete="off"
-                  spellCheck={false}
-                  placeholder="Ex : 010000024"
-                  hint="Saisissez les 9 caractères pour retrouver automatiquement votre établissement."
-                  value={finess}
-                  onChange={(e) => changeFiness(e.target.value)}
-                  error={erreurs.finess}
-                />
-                <div aria-live="polite" aria-atomic="true">
-                  {finessState.state === "loading" && (
-                    <p className={s.finessNotice} role="status">
-                      Recherche dans le répertoire FINESS…
-                    </p>
-                  )}
-                  {finessState.state === "found" &&
-                    finessState.data?.establishment && (
-                      <div className={s.finessResult}>
-                        <p className={s.finessTitle}>Établissement trouvé</p>
-                        <strong>{finessState.data.establishment.name}</strong>
-                        <p>
-                          {[
-                            finessState.data.establishment.address,
-                            finessState.data.establishment.postal_code,
-                            finessState.data.establishment.city,
-                          ]
-                            .filter(Boolean)
-                            .join(" · ")}
-                        </p>
-                        {Number.isFinite(
-                          finessState.data.establishment.latitude,
-                        ) &&
-                          Number.isFinite(
-                            finessState.data.establishment.longitude,
-                          ) && (
-                            <p className={s.finessSource}>
-                              Localisation : latitude{" "}
-                              {Number(
-                                finessState.data.establishment.latitude,
-                              ).toLocaleString("fr-FR", {
-                                maximumFractionDigits: 6,
-                              })}
-                              , longitude{" "}
-                              {Number(
-                                finessState.data.establishment.longitude,
-                              ).toLocaleString("fr-FR", {
-                                maximumFractionDigits: 6,
-                              })}
-                              .
-                            </p>
-                          )}
-                        <p className={s.finessSource}>
-                          Répertoire FINESS
-                          {referenceDate(finessState.data.generated_at)
-                            ? " · données du " +
-                              referenceDate(finessState.data.generated_at)
-                            : ""}
-                          .
-                        </p>
-                        <p className={s.finessHelp}>
-                          Les champs vides ont été préremplis. Vos saisies
-                          personnelles sont conservées et restent modifiables.
-                        </p>
-                      </div>
-                    )}
-                  {finessState.state === "missing" && (
-                    <p className={s.finessNotice}>
-                      Cet établissement n’a pas été trouvé dans la version du
-                      répertoire disponible. Vérifiez le numéro ou renseignez
-                      les coordonnées ci-dessous.
-                    </p>
-                  )}
-                  {finessState.state === "error" && (
-                    <div className={s.finessNotice}>
-                      <p>
-                        Le répertoire FINESS est momentanément indisponible.
-                        Vous pouvez renseigner les coordonnées manuellement.
-                      </p>
-                      <Button
-                        type="button"
-                        variant="outline"
-                        size="sm"
-                        onClick={() =>
-                          setFinessVersion((version) => version + 1)
-                        }
-                      >
-                        Réessayer la recherche FINESS
-                      </Button>
-                    </div>
-                  )}
-                </div>
-                <p className={s.finessHelp}>
-                  Cette recherche identifie la structure et ne donne pas accès à
-                  un compte existant. Le référent est à renseigner séparément.
-                </p>
-              </section>
-            ) : (
-              <TextField
-                label="SIRET"
-                optional
-                maxLength={14}
-                pattern="[0-9]{14}"
-                value={siret}
-                onChange={(e) => setSiret(e.target.value)}
-                error={erreurs.siret}
-              />
-            )}
-
-            <TextField
-              label="Nom de l’organisation"
-              required
-              icon="building"
-              name="nomEtablissement"
-              placeholder="Ex : Centre Hospitalier Universitaire de Nantes"
-              value={nomEtablissement}
-              onChange={(e) => editOrganizationField("name", e.target.value)}
-              error={erreurs.nomEtablissement}
+            <OrganizationFields
+              organizationType={organizationType}
+              setOrganizationType={setOrganizationType}
+              finess={finess}
+              finessState={finessState}
+              changeFiness={changeFiness}
+              setFinessVersion={setFinessVersion}
+              siret={siret}
+              setSiret={setSiret}
+              nomEtablissement={nomEtablissement}
+              adresse={adresse}
+              codePostal={codePostal}
+              villeEtablissement={villeEtablissement}
+              editOrganizationField={editOrganizationField}
+              erreurs={erreurs}
             />
 
-            <TextField
-              label="Adresse de l'établissement"
-              required
-              name="adresse"
-              autoComplete="street-address"
-              placeholder="Numéro et nom de rue"
-              value={adresse}
-              onChange={(e) => editOrganizationField("address", e.target.value)}
-              error={erreurs.adresse}
+            <ReferentFields
+              referentPrenom={referentPrenom}
+              setReferentPrenom={setReferentPrenom}
+              referentNom={referentNom}
+              setReferentNom={setReferentNom}
+              referentFonction={referentFonction}
+              setReferentFonction={setReferentFonction}
+              referentTelephone={referentTelephone}
+              setReferentTelephone={setReferentTelephone}
+              erreurs={erreurs}
             />
 
-            <div className={s.paire}>
-              <TextField
-                label="Code postal"
-                required
-                name="codePostal"
-                autoComplete="postal-code"
-                placeholder="44000"
-                value={codePostal}
-                onChange={(e) =>
-                  editOrganizationField("postalCode", e.target.value)
-                }
-                error={erreurs.codePostal}
-              />
-              <TextField
-                label="Ville"
-                required
-                icon="map-pin"
-                name="villeEtablissement"
-                autoComplete="address-level2"
-                placeholder="Nantes"
-                value={villeEtablissement}
-                onChange={(e) => editOrganizationField("city", e.target.value)}
-                error={erreurs.villeEtablissement}
-              />
-            </div>
-
-            <h2 className={s.sectionTitre}>Coordonnées du référent</h2>
-
-            <div className={s.paire}>
-              <TextField
-                label="Prénom du référent"
-                required
-                icon="user"
-                name="referentPrenom"
-                placeholder="Prénom"
-                value={referentPrenom}
-                onChange={(e) => setReferentPrenom(e.target.value)}
-                error={erreurs.referentPrenom}
-              />
-              <TextField
-                label="Nom du référent"
-                required
-                icon="user"
-                name="referentNom"
-                placeholder="Nom"
-                value={referentNom}
-                onChange={(e) => setReferentNom(e.target.value)}
-                error={erreurs.referentNom}
-              />
-            </div>
-
-            <div className={s.paire}>
-              <TextField
-                label="Fonction / Poste"
-                required
-                name="referentFonction"
-                placeholder="Ex : Directeur des soins, Cadre RH"
-                value={referentFonction}
-                onChange={(e) => setReferentFonction(e.target.value)}
-                error={erreurs.referentFonction}
-              />
-              <TextField
-                label="Téléphone direct"
-                required
-                type="tel"
-                name="referentTelephone"
-                placeholder="02 40 00 00 00"
-                value={referentTelephone}
-                onChange={(e) => setReferentTelephone(e.target.value)}
-                error={erreurs.referentTelephone}
-              />
-            </div>
-
-            <TextField
-              label="E-mail professionnel de connexion"
-              required
-              icon="mail"
-              type="email"
-              name="email"
-              autoComplete="email"
-              placeholder="contact.rh@hopital.fr"
-              value={email}
-              readOnly={google}
-              aria-readonly={google}
-              onChange={(e) => setEmail(e.target.value)}
-              error={erreurs.email}
+            <OrganizationAccountFields
+              email={email}
+              motDePasse={motDePasse}
+              confirmation={confirmation}
+              google={google}
+              googleReady={googleReady}
+              erreurs={erreurs}
+              enCours={enCours}
+              setEmail={setEmail}
+              setMotDePasse={setMotDePasse}
+              setConfirmation={setConfirmation}
+              cgu={cgu}
+              setCgu={setCgu}
+              organizationType={organizationType}
             />
 
-            {!google && (
-              <div className={s.paire}>
-                <PasswordField
-                  label="Mot de passe"
-                  required
-                  name="password"
-                  minLength={12}
-                  maxLength={128}
-                  autoComplete="new-password"
-                  placeholder="12 caractères minimum"
-                  value={motDePasse}
-                  onChange={(e) => setMotDePasse(e.target.value)}
-                  error={erreurs.motDePasse}
-                />
-                <PasswordField
-                  label="Confirmer le mot de passe"
-                  required
-                  name="password-confirmation"
-                  minLength={12}
-                  maxLength={128}
-                  autoComplete="new-password"
-                  placeholder="Répétez le mot de passe"
-                  value={confirmation}
-                  onChange={(e) => setConfirmation(e.target.value)}
-                  error={erreurs.confirmation}
-                />
-              </div>
-            )}
-
-            <p className={s.aide}>Les informations nécessaires au service demandé servent à créer le compte de votre organisation et à faciliter la mise en relation. Ne transmettez aucune donnée permettant d’identifier un patient ni aucune donnée de santé concernant un patient.</p>
-
-            <div className={s.consentement}>
-              <Checkbox
-                name="cgu"
-                checked={cgu}
-                onChange={(e) => setCgu(e.currentTarget.checked)}
-                required
-              >
-                J'accepte les{" "}
-                <Link
-                  to="/mentions-legales#conditions"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  conditions d'utilisation
-                </Link>{" "}
-                d'InfiMatch.
-              </Checkbox>
-
-              <p className={s.aide}>
-                Consultez la{" "}
-                <Link
-                  to="/mentions-legales#confidentialite"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  politique de confidentialité
-                </Link>{" "}
-                pour connaître l'usage de vos données.
-              </p>
-
-              {erreurs.cgu && (
-                <p className={s.erreur} role="alert">
-                  {erreurs.cgu}
-                </p>
-              )}
-            </div>
-
-            <Button
-              type="submit"
-              block
-              size="lg"
-              loading={enCours}
-              disabled={google && !googleReady}
-            >
-              Créer le compte{" "}
-              {organizationType === "AGENCY" ? "agence" : "établissement"}
-            </Button>
           </>
         )}
       </form>

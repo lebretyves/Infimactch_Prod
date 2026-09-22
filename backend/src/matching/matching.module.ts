@@ -1,3 +1,4 @@
+import { matchingMission } from "../missions/mission-mapping";
 import { displayMatch } from "../domain/matching-display";
 import { MATCH_RULES } from "../domain/rules";
 import { geodesicKm, geodesicKmBatch } from "../database/distance";
@@ -23,10 +24,9 @@ import { SessionGuard, user } from "../common/access";
 import { required } from "../config";
 import {
   missionSelect,
-  matchingMission,
   scope,
 } from "../missions/missions.service";
-import { professional } from "../profiles/profiles.module";
+import { professional } from "../profiles/profile-mapping";
 import { match } from "../domain/matching";
 const runSchema = new mongoose.Schema(
   {

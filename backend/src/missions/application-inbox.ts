@@ -4,8 +4,8 @@ import { IsOptional, IsString, MaxLength } from 'class-validator';
 import { PageDto } from '../common/page.dto';
 import { SqlClient } from '../database/database';
 import { experienceMonths, requiredMissionSkills } from '../domain/matching';
-import { professional } from '../profiles/profiles.module';
-import { matchingMission } from './missions.service';
+import { professional } from '../profiles/profile-mapping';
+import { matchingMission } from './mission-mapping';
 export class ApplicationInboxDto extends PageDto {
  @ApiProperty({required:false,maxLength:150})
  @IsOptional() @IsString() @MaxLength(150) q?:string;
