@@ -5,7 +5,7 @@ import {dirname,resolve} from 'node:path';
 const root=resolve(dirname(fileURLToPath(import.meta.url)),'..');
 const read=path=>readFileSync(resolve(root,path),'utf8');
 const origin='https://infimactch-prod-backend-l5bc.vercel.app';
-const publicPaths=['/','/installer','/accessibilite','/ecoconception','/mentions-legales'];
+const publicPaths=['/', '/plan-du-site','/installer','/accessibilite','/ecoconception','/mentions-legales'];
 const meta=(html,key)=>html.match(new RegExp('<meta\\s+name="'+key+'"\\s+content="([^"]*)"'))?.[1];
 const titles=new Set(),pages=[];
 for(const path of publicPaths){const html=read('dist/'+(path==='/'?'index':path.slice(1))+'.html');const title=html.match(/<title>(.*?)<\/title>/s)?.[1];assert.ok(title);assert.ok(!titles.has(title));titles.add(title);assert.equal(meta(html,'robots'),'index,follow');assert.ok((meta(html,'description')||'').length>40);assert.ok(html.includes('rel="canonical" href="'+origin+path+'"'));assert.ok(html.includes('<noscript>'));assert.ok(!html.includes('"@type":"JobPosting"'));pages.push({path,title,indexable:true,canonical:origin+path,noJsFallback:true});}

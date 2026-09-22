@@ -1,7 +1,8 @@
 /** Route metadata is deliberately generic: no names, document contents or query tokens. */
 export const SITE_ORIGIN = 'https://infimactch-prod-backend-l5bc.vercel.app';
-export const PUBLIC_PATHS = new Set(['/', '/installer', '/accessibilite', '/ecoconception', '/mentions-legales']);
+export const PUBLIC_PATHS = new Set(['/', '/plan-du-site', '/installer', '/accessibilite', '/ecoconception', '/mentions-legales']);
 const pages: Record<string, [string, string]> = {
+ '/plan-du-site': ['Plan du site', 'Retrouvez les pages et les accès aux espaces InfiMatch, ainsi que les informations utiles pour vous accompagner.'],
  '/aide': ['Centre d’aide', 'Consultez les guides et retrouvez vos demandes de support après connexion.'],
  '/': ['L’intérim infirmier, pensé pour le soin', 'Découvrez InfiMatch : un projet de plateforme reliant infirmiers IDE, IADE, IBODE, établissements de santé et agences d’intérim.'],
  '/installer': ['Installer l’application', 'Retrouvez InfiMatch depuis votre écran d’accueil, avec le même compte et les mêmes fonctions.'],

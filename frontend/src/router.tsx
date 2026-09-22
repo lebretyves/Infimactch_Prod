@@ -4,6 +4,7 @@ const Aide = lazy(() => import("./pages/Aide"));
 import { QualityRoot } from "./components/QualityRoot";
 const Compte = lazy(() => import("./pages/Compte"));
 const ReinitialiserMotDePasse = lazy(() => import("./pages/ReinitialiserMotDePasse"));
+const PlanDuSite = lazy(() => import("./pages/PlanDuSite"));
 const Installer = lazy(() => import("./pages/Installer"));
 const Accessibilite = lazy(() => import("./pages/Qualite").then(m => ({ default: m.Accessibilite })));
 const Ecoconception = lazy(() => import("./pages/Qualite").then(m => ({ default: m.Ecoconception })));
@@ -62,6 +63,7 @@ export const router = creerRouteur([{ element: <QualityRoot />, errorElement: <R
   },
   { path: "/", element: <AccueilPublic /> },
   { path: "/aide", element: <Aide /> },
+  { path: "/plan-du-site", element: <PlanDuSite /> },
   { path: "/installer", element: <Installer /> },
   { path: "/accessibilite", element: <Accessibilite /> },
   { path: "/ecoconception", element: <Ecoconception /> },

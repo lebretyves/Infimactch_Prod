@@ -18,7 +18,7 @@ for (const [path, metadata] of pages) {
     .replace(/(<link\s+rel="canonical"\s+href=")[^"]*/, `$1https://infimactch-prod-backend-l5bc.vercel.app/${path}`);
   fs.writeFileSync(`dist/${path}.html`, html);
 }
-console.log('Static metadata generated for four useful public routes.');
+console.log(`Static metadata generated for ${pages.length} public routes.`);
 
 // Private routes must not initially advertise the homepage canonical or indexability.
 const privateShell = shell.replace(/<title>.*?<\/title>/s, '<title>Espace personnel — InfiMatch</title>')

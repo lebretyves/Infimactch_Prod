@@ -25,6 +25,14 @@ export function applyUpdate() {
   registration.waiting.postMessage({ type: 'ACTIVATE_UPDATE' });
 }
 export function startPwa() {
+  const displayMode = matchMedia('(display-mode: standalone)');
+  const syncDisplayMode = () => {
+    document.documentElement.toggleAttribute('data-app-mode', isStandalone());
+    notify();
+  };
+  syncDisplayMode();
+  displayMode.addEventListener('change', syncDisplayMode);
+  window.addEventListener('pageshow', syncDisplayMode);
   window.addEventListener('beforeinstallprompt', (event) => {
     event.preventDefault(); installEvent = event as InstallEvent; notify();
   });
