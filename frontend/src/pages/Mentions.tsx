@@ -255,7 +255,8 @@ export default function Mentions() {
           </ul>
           <p>
             Vous pouvez refuser ou autoriser Google avec la même simplicité,
-            puis modifier votre choix à tout moment avec le bouton « Cookies ».
+            puis modifier votre choix à tout moment avec le bouton « Cookies »
+            en bas de page, ou depuis le menu « Aide » une fois connecté.
             Le retrait désactive le bouton Google et empêche InfiMatch de lancer
             de nouveaux chargements de ce service. Il ne supprime pas les
             cookies déjà déposés par Google ; leur gestion dépend du navigateur

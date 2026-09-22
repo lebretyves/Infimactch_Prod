@@ -5,8 +5,16 @@ import { Icon, type IconName } from "@/ui/Icon";
 import { Logo } from "@/ui/Logo";
 import { useAuth } from "@/context/AuthContext";
 import { NotificationRead } from "@/components/NotificationRead";
+import { HelpMenu } from "@/components/HelpMenu";
+import { useCookieConsent } from "@/context/CookieConsentContext";
 import s from "./AppLayout.module.css";
 type NavigationItem = { to: string; label: string; icon: IconName };
+const footerLinks = [
+  { to: "/plan-du-site", label: "Plan du site" },
+  { to: "/mentions-legales", label: "Mentions légales" },
+  { to: "/accessibilite", label: "Accessibilité" },
+  { to: "/ecoconception", label: "Écoconception" },
+];
 const nurseGroups: { label: string; items: NavigationItem[] }[] = [
   { label: "Découvrir", items: [
     { to: "/missions", label: "Rechercher une mission", icon: "search" },
@@ -42,6 +50,11 @@ export function AppLayout() {
     [open, setOpen] = useState(false);
   const menu = useRef<HTMLButtonElement>(null);
   const nurse = user?.role === "interimaire";
+  const { setTriggerHidden } = useCookieConsent();
+  useEffect(() => {
+    setTriggerHidden(true);
+    return () => setTriggerHidden(false);
+  }, [setTriggerHidden]);
   useEffect(() => {
     setOpen(false);
   }, [location.pathname]);
@@ -81,7 +94,7 @@ export function AppLayout() {
           <Logo size={34} withWordmark />
         </Link>
         <div className={s.headerRight}>
-          <Link to="/aide" className={s.helpLink}>Centre d’aide</Link>
+          <HelpMenu />
           <Link className={s.identity} to={nurse ? "/profil" : "/organisation"}>
             <span className={s.avatar}>
               {(user?.prenom?.[0] || "I") + (user?.nom?.[0] || "")}
@@ -134,8 +147,12 @@ export function AppLayout() {
         {error && <p role="alert">{error}</p>}
         <Outlet />
         <footer className={s.footer}>
-          InfiMatch © {new Date().getFullYear()}
-          <Link to="/plan-du-site">Plan du site</Link><Link to="/mentions-legales">Mentions légales</Link><Link to="/accessibilite">Accessibilité</Link><Link to="/ecoconception">Écoconception</Link>
+          <p className={s.copyright}>© {new Date().getFullYear()} InfiMatch</p>
+          <nav aria-label="Informations légales">
+            <ul className={s.footerLinks}>
+              {footerLinks.map(link => <li key={link.to}><NavLink to={link.to} className={s.footerLink}>{link.label}</NavLink></li>)}
+            </ul>
+          </nav>
         </footer>
       </main>
     </div>

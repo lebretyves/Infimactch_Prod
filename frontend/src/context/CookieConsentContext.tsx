@@ -24,6 +24,7 @@ type ConsentContext = {
   preferences: CookiePreferences | null;
   openPreferences: () => void;
   savePreferences: (google: boolean) => void;
+  setTriggerHidden: (hidden: boolean) => void;
 };
 const Context = createContext<ConsentContext | undefined>(undefined);
 export function CookieConsentProvider({
@@ -37,6 +38,7 @@ export function CookieConsentProvider({
   const [preferences, setPreferences] = useState(readCookiePreferences);
   const [open, setOpen] = useState(() => !readCookiePreferences());
   const [storageNotice, setStorageNotice] = useState("");
+  const [triggerHidden, setTriggerHidden] = useState(false);
   const googleAllowed = preferences?.google === true;
   const savePreferences = useCallback((google: boolean) => {
     const result = storeCookiePreferences(google);
@@ -89,15 +91,20 @@ export function CookieConsentProvider({
   }, [preferences]);
   return (
     <Context
-      value={{ googleAllowed, preferences, openPreferences, savePreferences }}
+      value={{ googleAllowed, preferences, openPreferences, savePreferences, setTriggerHidden }}
     >
       <div className={preferencesStyle.page}>
       <AccessibilityPanel returnToCookies={open} />
       <div className={preferencesStyle.content}>{children}</div>
-      <div className={preferencesStyle.bar} role="group" aria-label="Préférences du site">
-        <div className={preferencesStyle.controls}>
+      <div
+        className={triggerHidden ? undefined : preferencesStyle.bar}
+        role={triggerHidden ? undefined : "group"}
+        aria-label={triggerHidden ? undefined : "Préférences du site"}
+      >
+        <div className={triggerHidden ? undefined : preferencesStyle.controls}>
           <CookiePreferencesPanel
             open={open}
+            showTrigger={!triggerHidden}
             suspended={accessibility.panelOpen}
             onAccessibilityOpen={accessibility.openPanel}
             preferences={preferences}

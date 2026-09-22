@@ -42,6 +42,7 @@ function focusPageWhenReady() {
 
 type Props = {
   open: boolean;
+  showTrigger?: boolean;
   suspended?: boolean;
   onAccessibilityOpen: () => void;
   preferences: CookiePreferences | null;
@@ -53,6 +54,7 @@ type Props = {
 };
 export function CookiePreferencesPanel({
   open,
+  showTrigger = true,
   suspended = false,
   onAccessibilityOpen,
   preferences,
@@ -117,7 +119,7 @@ export function CookiePreferencesPanel({
       : `${import.meta.env.BASE_URL}mentions-legales#cookies`;
   return (
     <>
-      <button
+      {showTrigger && <button
         ref={trigger}
         className={`${preferencesStyle.trigger} ${preferencesStyle.cookieTrigger}`}
         type="button"
@@ -127,7 +129,7 @@ export function CookiePreferencesPanel({
         aria-controls="cookie-preferences"
       >
         Cookies
-      </button>
+      </button>}
       {storageNotice && (
         <p className={s.storageNotice} role="status">
           {storageNotice}
@@ -275,7 +277,8 @@ export function CookiePreferencesPanel({
           </div>
         <p className={s.footnote}>
           Choix conservé six mois sur ce navigateur, modifiable à tout moment
-          avec « Cookies ». Retirer l’accord ne supprime pas les cookies déjà
+          avec « Cookies » en bas de page, ou depuis le menu « Aide » une fois
+          connecté. Retirer l’accord ne supprime pas les cookies déjà
           déposés par Google.
         </p>
       </dialog>
