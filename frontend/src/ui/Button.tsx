@@ -14,7 +14,7 @@ type BaseProps = {
 };
 
 type ButtonProps = BaseProps & ButtonHTMLAttributes<HTMLButtonElement> & { to?: never };
-type LinkProps = BaseProps & { to: string; className?: string; 'aria-label'?: string };
+type LinkProps = BaseProps & { to: string; state?: unknown; className?: string; 'aria-label'?: string };
 
 function classes(variant: Variant, size: Size, block?: boolean, extra?: string) {
   return [s.button, s[variant], variant !== 'icon' && s[size], block && s.block, extra]
