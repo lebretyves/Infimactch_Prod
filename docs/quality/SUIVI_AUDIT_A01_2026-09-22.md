@@ -1,5 +1,7 @@
 # Revue conjointe — A01 : validation continue et navigation après déconnexion
 
+> Note de reprise sur Backend ? 22 septembre 2026 : le rapport ci-dessous d?crit la validation historique de la branche source. Les correctifs A01 ont depuis ?t? repris sur Backend dans les lots 1 ? 3 (`0e54329`, `d51ba5f`, `e64bd36`, `1eb4565`). Les preuves import?es restent attach?es aux commits et environnements source ; elles ne constituent pas une nouvelle recette de production.
+
 **État au 22 septembre 2026 : correctif validé sur la branche `fix/audit-a01-ci`, commit `cf9ef6f55ab88f5be00cca48ac294c1c2f442ec0`. Intégré ensuite dans Main `081fcc3` et Backend `698292d` lors de l’alignement des dépôts.** La validation de branche et la recette publiée restent distinctes.
 
 L’utilisateur a autorisé les corrections A01, puis l’examen et la correction de la navigation découverte pendant les tests. Les points A02 à A10 restent à revoir ensemble ; aucun accord métier n’est déduit automatiquement du rapport reçu.

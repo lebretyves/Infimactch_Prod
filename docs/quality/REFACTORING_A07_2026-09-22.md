@@ -1,5 +1,7 @@
 # A07 — découpage ciblé des formulaires, missions et règles métier
 
+> Note de reprise : les r?f?rences et r?sultats ci-dessous d?crivent la branche source. La reprise actuelle est pr?par?e sur Backend apr?s `d302f29` ; ses v?rifications sont consign?es s?par?ment dans le rapport de validation du lot 10.
+
 Date : 22 septembre 2026. Base : Main `081fcc3`, alignée fonctionnellement avec Backend `698292d`. Le travail conserve les modifications frontend présentes dans cette base.
 
 ## Changements
