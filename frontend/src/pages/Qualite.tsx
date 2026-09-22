@@ -10,7 +10,7 @@ export function QualityPage({ title, description, children }: {title: string; de
   usePageTitle(title, description);
   return <EcranPublic entete={<><Link to="/" aria-label="InfiMatch, accueil"><Logo size={38} withWordmark /></Link><Link to="/">Retour à l’accueil</Link></>}>
     <main id="contenu" tabIndex={-1} className={s.page}><h1>{title}</h1><p className={s.chapeau}>{description}</p>{children}
-    <nav aria-label="Qualité et installation"><Link to="/installer">Installer l’application</Link> · <Link to="/accessibilite">Accessibilité</Link> · <Link to="/ecoconception">Écoconception</Link> · <Link to="/mentions-legales">Mentions légales</Link></nav></main>
+    <nav aria-label="Qualité et installation"><span data-install-prompt><Link to="/installer">Installer l’application</Link> · </span><Link to="/accessibilite">Accessibilité</Link> · <Link to="/ecoconception">Écoconception</Link> · <Link to="/mentions-legales">Mentions légales</Link> <Link to="/plan-du-site">Plan du site</Link></nav></main>
   </EcranPublic>;
 }
 export function Accessibilite() {
@@ -72,10 +72,10 @@ export function Ecoconception() {
         </section>
 
         <nav className={eco.navigation} aria-label="Qualité et installation">
-          <Link to="/installer">Installer l’application</Link>
+          <Link to="/installer" data-install-prompt>Installer l’application</Link>
           <Link to="/accessibilite">Accessibilité</Link>
           <Link to="/ecoconception" aria-current="page">Écoconception</Link>
-          <Link to="/mentions-legales">Mentions légales</Link>
+          <Link to="/mentions-legales">Mentions légales</Link> <Link to="/plan-du-site">Plan du site</Link>
         </nav>
       </div>
     </main>

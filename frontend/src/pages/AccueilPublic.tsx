@@ -134,7 +134,7 @@ export default function AccueilPublic() {
               <a href="#soignants" className={s.actionPrimaire} onClick={(event) => suivreAncre(event, 'soignants')}>Je suis soignant <span aria-hidden="true">↗</span></a>
               <a href="#recruteurs" className={s.actionSecondaire} onClick={(event) => suivreAncre(event, 'recruteurs')}>Je recrute <span aria-hidden="true">↗</span></a>
             </div>
-            <div className={s.installation}><ButtonLink to="/installer" variant="outline">Installer l’application</ButtonLink></div>
+            <div className={s.installation} data-install-prompt><ButtonLink to="/installer" variant="outline">Installer l’application</ButtonLink></div>
           </div>
           <div className={s.visuel}><PhotoMaquette variante="accueil" /></div>
         </section>
@@ -207,7 +207,7 @@ export default function AccueilPublic() {
           <div className={s.footerMarque}><Link to="/" aria-label="InfiMatch, accueil"><Logo size={38} withWordmark tone="light" /></Link><p>L’intérim infirmier,<br />pensé pour le soin.</p></div>
           <nav aria-label="Découvrir InfiMatch"><h2>Découvrir InfiMatch</h2><a href="#notre-mission">Notre mission</a><a href="#qui-sommes-nous">Qui sommes-nous</a><a href="#questions-frequentes">Questions fréquentes</a></nav>
           <nav aria-label="Votre parcours"><h2>Votre parcours</h2><a href="#soignants">Soignants</a><a href="#recruteurs">Établissements et agences</a><a href="#comment-ca-marche">Comment ça marche</a></nav>
-          <nav aria-label="Informations légales"><h2>Informations</h2><Link to="/accessibilite">Accessibilité</Link><Link to="/ecoconception">Écoconception</Link><Link to="/mentions-legales">Mentions légales</Link><Link to="/mentions-legales#confidentialite">Confidentialité</Link><Link to="/mentions-legales#conditions">Conditions d’utilisation</Link></nav>
+          <nav aria-label="Informations légales"><h2>Informations</h2><Link to="/plan-du-site">Plan du site</Link><Link to="/accessibilite">Accessibilité</Link><Link to="/ecoconception">Écoconception</Link><Link to="/mentions-legales">Mentions légales</Link><Link to="/mentions-legales#confidentialite">Confidentialité</Link><Link to="/mentions-legales#conditions">Conditions d’utilisation</Link></nav>
         </div>
         <div className={`${s.conteneur} ${s.footerBas}`}><p>InfiMatch · Projet de plateforme d’intérim infirmier</p></div>
       </footer>

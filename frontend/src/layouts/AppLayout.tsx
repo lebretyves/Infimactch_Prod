@@ -135,7 +135,7 @@ export function AppLayout() {
         <Outlet />
         <footer className={s.footer}>
           InfiMatch © {new Date().getFullYear()}
-          <Link to="/mentions-legales">Mentions légales</Link><Link to="/accessibilite">Accessibilité</Link><Link to="/ecoconception">Écoconception</Link>
+          <Link to="/plan-du-site">Plan du site</Link><Link to="/mentions-legales">Mentions légales</Link><Link to="/accessibilite">Accessibilité</Link><Link to="/ecoconception">Écoconception</Link>
         </footer>
       </main>
     </div>

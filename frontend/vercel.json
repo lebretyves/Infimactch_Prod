@@ -5,6 +5,7 @@
   "buildCommand": "npm run build",
   "outputDirectory": "dist",
   "rewrites": [
+    { "source": "/plan-du-site", "destination": "/plan-du-site.html" },
     {
       "source": "/aide",
       "destination": "/aide.html"
