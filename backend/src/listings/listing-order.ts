@@ -58,7 +58,7 @@ export function compareListingOrder(a: ListingOrder, b: ListingOrder, sort: Sear
 }
 
 /** Scan compact records, rank the whole catalogue, and hydrate only the requested page.
- * Keyset batches and one repeatable snapshot avoid an arbitrary result cap and inconsistent totals.
+ * A server-side cursor and one repeatable snapshot avoid an arbitrary result cap and inconsistent totals.
  */
 export async function rankedListingPage(db: Database, sourceSql: string, sourceParameters: unknown[], search: SearchDto, profileRow: any) {
   return db.transaction(async em => {
@@ -76,10 +76,12 @@ export async function rankedListingPage(db: Database, sourceSql: string, sourceP
       : 'NULL';
     const compact = 'jsonb_build_object(' + fields.map(k => "'"+k+"',data->'"+k+"'").join(',') + ",'matchingDistanceKm'," + matchDistance + ",'provenance',jsonb_build_object('publishedAt',data#>'{provenance,publishedAt}','facts',data#>'{provenance,facts}'))";
     const offset = search.offset ?? 0, limit = search.limit ?? 20, keep = offset + limit;
-    let cursor = '', total = 0;
+    let total = 0;
     const top: ListingOrder[] = [];
-    for (;;) {
-      const batch = await em.query('SELECT listing_id,' + compact + ' AS data FROM (' + sourceSql + ') available WHERE ' + textFilter + ' AND listing_id>$' + (parameters.length + 1) + ' ORDER BY listing_id LIMIT 500', [...parameters, cursor]);
+    // One execution plan streams the whole catalogue, without rescanning each batch.
+    await em.query('DECLARE ranked_listings NO SCROLL CURSOR FOR SELECT listing_id,' + compact + ' AS data FROM (' + sourceSql + ') available WHERE ' + textFilter, parameters);
+    try { for (;;) {
+      const batch = await em.query('FETCH FORWARD 500 FROM ranked_listings');
       if (!batch.length) break;
       for (const row of batch) {
         const metric = listingOrder(row.data, profile, search, now);
@@ -89,9 +91,9 @@ export async function rankedListingPage(db: Database, sourceSql: string, sourceP
       }
       top.sort((a,b) => compareListingOrder(a,b,search.sort));
       if (top.length > keep) top.length = keep;
-      cursor = batch[batch.length - 1].listing_id;
       if (batch.length < 500) break;
     }
+    } finally { await em.query('CLOSE ranked_listings'); }
     const selected = top.slice(offset, offset + limit);
     if (!selected.length) return {total, items: []};
     const rows = await em.query('SELECT data FROM (' + sourceSql + ') available WHERE listing_id=ANY($' + (sourceParameters.length + 1) + '::text[])', [...sourceParameters, selected.map(x => x.id)]);

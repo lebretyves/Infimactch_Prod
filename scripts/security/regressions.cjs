@@ -37,9 +37,14 @@ try{
  const firstBank=await docs.store(actor.id,'BANK','application/json',bankBody,null,undefined,true);
  const [{bytes}]=await db.query("SELECT sum(size_bytes)::int AS bytes FROM document WHERE owner_id=$1 AND kind IN('EVIDENCE','BANK') AND superseded_at IS NULL",[actor.id]);
  await db.query("INSERT INTO document(id,owner_id,kind,mime,status,key_version,size_bytes) VALUES($1,$2,'EVIDENCE','application/pdf','READY',1,$3)",[randomUUID(),actor.id,26214400-bytes]);
+ await assert.rejects(docs.store(actor.id,'BANK','application/json',bankBody,null,undefined,true),e=>e.getStatus()===413);
+ assert.equal((await db.query('SELECT superseded_at FROM document WHERE id=$1',[firstBank.id]))[0].superseded_at,null);
+ // Free exactly one replacement worth of fictional quota; retained bytes remain counted.
+ await db.query("UPDATE document SET size_bytes=size_bytes-$2 WHERE owner_id=$1 AND kind='EVIDENCE' AND size_bytes>1000000",[actor.id,bankBody.length]);
  const replacedBank=await docs.store(actor.id,'BANK','application/json',bankBody,null,undefined,true);
+ await assert.rejects(docs.store(actor.id,'BANK','application/json',bankBody,null,undefined,true),e=>e.getStatus()===413);
  assert.notEqual(firstBank.id,replacedBank.id);assert.ok((await db.query('SELECT superseded_at FROM document WHERE id=$1',[firstBank.id]))[0].superseded_at);
- checks.push('bank replacement at quota limit counts only active version, retained previous version remains superseded');
+ checks.push('bank replacement counts retained versions, preserves active RIB on quota failure, and succeeds only with sufficient space');
  console.log(JSON.stringify({status:'PASS',checks},null,2));
 }finally{await matching.onModuleDestroy();await db.onModuleDestroy();}})().catch(e=>{console.error(e);process.exitCode=1;});
 

@@ -48,7 +48,7 @@ export async function withRole(role, operation) {
   try{return await operation(token);}finally{await revoke(token);}
 }
 export function selectKeys(input,keys) { return Object.fromEntries(keys.filter(k=>typeof input[k]==='string').map(k=>[k,input[k]])); }
-export function keyList(input) { return [...backendKeys,...Object.keys(input).filter(k=>/^DOCUMENT_KEY_V[1-9][0-9]*$/.test(k))]; }
+export function keyList(input) { return [...backendKeys,...Object.keys(input).filter(k=>/^(?:DOCUMENT|ADMIN_MFA)_KEY_V[1-9][0-9]*$/.test(k))]; }
 export function validateSecrets(values,group) {
   if(!values||typeof values!=='object'||Array.isArray(values))throw new Error('VAULT_INVALID_SECRET_OBJECT');
   const allowed=group==='backend'?[...keyList(values),...configKeys]:infraKeys;

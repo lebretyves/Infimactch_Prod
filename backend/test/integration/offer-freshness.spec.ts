@@ -1,3 +1,6 @@
+import {RefreshService} from '../../src/public-data/refresh.service';
+import {FranceTravailClient} from '../../src/public-data/france-travail-client';
+import {newFtCollection} from '../../src/public-data/france-travail-collection';
 import 'reflect-metadata';
 import {test,before,after} from 'node:test';
 import assert from 'node:assert/strict';
@@ -66,3 +69,20 @@ test('cycle cutoff checks only unreturned active offers while retaining explicit
  const untouched=await em.query('SELECT id,provenance FROM external_offer WHERE id=ANY($1::uuid[])',[[boundary,recent]]);assert.equal(untouched.length,2);for(const row of untouched)assert.equal(row.provenance.availabilityCheck,undefined);
  assert.equal((await em.query('SELECT active FROM external_offer WHERE id=$1',[old]))[0].active,true);
 }));
+
+
+test('refresh releases catalogue locks before provider detail requests',async()=>{
+ const initial=newFtCollection();initial.queue=[{keyword:'infirmier',start:0}];
+ await db.query("UPDATE source_control SET enabled=true,last_started_at=NULL,collection_state=$1 WHERE provider='FRANCE_TRAVAIL'",[JSON.stringify(initial)]);
+ const stale=await offer(db,'audit-lock-old',"now()-interval '1 day'");
+ const search=FranceTravailClient.prototype.search,detail=FranceTravailClient.prototype.detail;let detailCalls=0;
+ FranceTravailClient.prototype.search=async()=>({rows:[{id:'audit-lock-new',intitule:'Infirmier IDE en interim',description:'Mission infirmier en interim de demonstration',typeContrat:'MIS',lieuTravail:{libelle:'Paris',latitude:'48.85',longitude:'2.35'}}],total:1,next:null});
+ FranceTravailClient.prototype.detail=async()=>{
+  detailCalls++;
+  // A different connection must be able to lock an offer while provider I/O is in progress.
+  await db.transaction(async em=>{await em.query('SELECT id FROM external_offer WHERE id=$1 FOR UPDATE NOWAIT',[stale]);const [lock]=await em.query('SELECT pg_try_advisory_xact_lock(1789380901) acquired');assert.equal(lock.acquired,true);});
+  return new Response(null,{status:200});
+ };
+ try {const result=await new RefreshService(db).run('FRANCE_TRAVAIL',true);assert.equal(result.status,'SUCCESS');assert.equal(result.accepted,1);assert.equal(detailCalls,1);}
+ finally {FranceTravailClient.prototype.search=search;FranceTravailClient.prototype.detail=detail;await db.query("DELETE FROM external_offer WHERE source_id IN('audit-lock-old','audit-lock-new')");}
+});

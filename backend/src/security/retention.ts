@@ -182,8 +182,9 @@ export async function requireOwnerTransfer(em:SqlClient,accountId:string){
   const [owner]=await em.query("SELECT 1 FROM platform_admin WHERE user_id=$1 AND role='OWNER' AND active",[accountId]);
   if(owner){const [remaining]=await em.query("SELECT count(*)::int n FROM platform_admin p JOIN account a ON a.id=p.user_id WHERE p.user_id<>$1 AND p.role='OWNER' AND p.active AND a.active AND a.password_hash<>'ADMIN_ACTIVATION_PENDING' AND p.invitation_hash IS NULL",[accountId]);if(!remaining?.n)throw Error('Transfer platform ownership before account closure');}
 }
-export async function anonymizeAccount(em: SqlClient, accountId: string) {
-  await requireOwnerTransfer(em,accountId);
+export async function anonymizeAccount(em: SqlClient, accountId: string, options: {approvedErasureReplay?: boolean} = {}) {
+  // Restoring an older ownership state must not resurrect an already erased account.
+  if (!options.approvedErasureReplay) await requireOwnerTransfer(em,accountId);
   const [account] = await em.query(
     "SELECT id FROM account WHERE id=$1::uuid FOR UPDATE",
     [accountId],

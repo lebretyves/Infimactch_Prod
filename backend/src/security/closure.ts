@@ -8,13 +8,20 @@ import {projectRoot} from "../config";
 import {anonymizeAccount,cleanupRemovedDocuments,requireOwnerTransfer} from "./retention";
 /** Keep this ledger outside rotated backups, and replay it before reopening a restore. */
 export async function executeClosure(db:Database,accountId:string,requestId?:string){
+ return closeAccount(db,accountId,requestId,false);
+}
+/** Operator-only replay of an already approved, independently retained erasure ledger. */
+export async function replayApprovedErasure(db:Database,accountId:string){
+ return closeAccount(db,accountId,undefined,true);
+}
+async function closeAccount(db:Database,accountId:string,requestId:string|undefined,replaying:boolean){
  if(!/^[0-9a-f-]{36}$/i.test(accountId))throw Error("Invalid account id");
  const result=await db.transaction(async em=>{
   await lockClosure(em,accountId);
-  await requireOwnerTransfer(em,accountId);
+  if(!replaying)await requireOwnerTransfer(em,accountId);
   const [account]=await em.query("SELECT id FROM account WHERE id=$1 FOR UPDATE",[accountId]);if(!account)throw Error("Account not found");
   if(requestId){const [request]=await em.query("SELECT status FROM closure_request WHERE id=$1 AND account_id=$2 FOR UPDATE",[requestId,accountId]);if(request?.status==='PROCESSING')return {id:accountId,documents:0,documentIds:[] as string[]};if(request?.status!=='APPROVED')return null;}
-  const blockers=await closureBlockers(em,accountId);if(blockers.length)throw new ConflictException({code:'CLOSURE_BLOCKED',message:blockers.map(b=>b.label).join(' ')});
+  const blockers=replaying?[]:await closureBlockers(em,accountId);if(blockers.length)throw new ConflictException({code:'CLOSURE_BLOCKED',message:blockers.map(b=>b.label).join(' ')});
   if(requestId)await em.query("UPDATE closure_request SET status='PROCESSING',last_error=NULL WHERE id=$1",[requestId]);
   if(process.env.DOCUMENT_STORAGE==='postgres'){
    // Independent of SQL backups: replay this ledger before reopening a restore.
@@ -24,7 +31,7 @@ export async function executeClosure(db:Database,accountId:string,requestId?:str
    const path=resolve(process.env.ERASURE_LEDGER_DIRECTORY || resolve(projectRoot,"data/privacy"));await mkdir(path,{recursive:true});
    await appendFile(resolve(path,"erasure-ledger.ndjson"),JSON.stringify({accountId,approvedAt:new Date().toISOString()})+"\n",{mode:0o600});
   }
-  return anonymizeAccount(em,accountId);
+  return anonymizeAccount(em,accountId,{approvedErasureReplay:replaying});
  });
  if(!result)return {skipped:true};
  const pending=await db.query("SELECT id FROM document_erasure WHERE owner_id=$1",[accountId]);

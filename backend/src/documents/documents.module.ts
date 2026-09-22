@@ -146,11 +146,11 @@ export class DocumentsService {
         "document-storage:" + actor,
       ]);
       // System confirmations must remain available even when user uploads fill their quota.
-      // Replaced bank details remain retained but only the active version consumes user quota.
+      // Retained versions still occupy storage and must count toward the hard quota.
       if (!["CONFIRMATION","CANCELLATION"].includes(kind)) {
         const [storage] = await em.query(
-          "SELECT COALESCE(sum(size_bytes),0)::text AS bytes FROM document WHERE owner_id=$1 AND kind IN('EVIDENCE','BANK','CV') AND superseded_at IS NULL AND status IN('STAGING','READY') AND NOT ($2::boolean AND kind=$3)",
-          [actor, replacePrevious, kind],
+          "SELECT COALESCE(sum(size_bytes),0)::text AS bytes FROM document WHERE owner_id=$1 AND kind IN('EVIDENCE','BANK','CV') AND status IN('STAGING','READY')",
+          [actor],
         );
         if (Number(storage.bytes) + data.length > documentQuotaBytes())
           throw new PayloadTooLargeException("Document storage quota exceeded");
