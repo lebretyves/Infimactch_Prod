@@ -249,9 +249,11 @@ export default function Accueil() {
                       <ButtonLink to="/profil" variant="outline" size="sm">
                         Compléter mon profil
                       </ButtonLink>
-                      <Link to="/calendrier">Ma mobilité</Link>
+                      <ButtonLink to="/calendrier" variant="outline" size="sm">
+                        Ma mobilité
+                      </ButtonLink>
+                      <ButtonLink to="/dossier" variant="outline" size="sm"><Icon name="folder" size={17}/>Votre dossier professionnel →</ButtonLink>
                     </div>
-                    <ButtonLink to="/dossier" variant="outline" size="sm" className={s.dossierLink}><Icon name="folder" size={17}/>Votre dossier professionnel →</ButtonLink>
                   </section>
                   </div>
                 </details>
