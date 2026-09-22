@@ -43,23 +43,27 @@ test('SEC08 and SEC18 real API: stored text stays inert, logout revokes cookie a
  });
  await new Promise<void>((resolve,reject)=>{server.once('error',reject);server.listen(4197,'127.0.0.1',resolve);});let browser:any;
  try{
-  browser=await chromium.launch({headless:true,...(process.platform==='win32'?{channel:'msedge'}:{})});const context=await browser.newContext();
+  browser=await chromium.launch({headless:true});for(let iteration=0;iteration<3;iteration++){const context=await browser.newContext();
   await context.addInitScript(()=>localStorage.setItem('infimatch:cookie-preferences',JSON.stringify({version:1,savedAt:new Date().toISOString(),google:false})));
-  const page=await context.newPage();await page.goto(origin+'/connexion');await page.getByLabel('Adresse e-mail',{exact:true}).fill(email);await page.getByLabel('Mot de passe',{exact:true}).fill(password);await page.getByRole('button',{name:'Se connecter',exact:true}).click();await page.waitForURL('**/accueil');
+  const page=await context.newPage();const events:any[]=[];
+  page.on('console',(m:any)=>events.push(['console',m.type(),m.text()]));page.on('pageerror',(e:Error)=>events.push(['error',e.message]));page.on('requestfailed',(r:any)=>events.push(['failed',new URL(r.url()).pathname,r.failure()]));
+  await context.addInitScript(()=>{for(const name of ['pageshow','pagehide','popstate'])addEventListener(name,(e:any)=>console.log('NAVIGATION',name,location.pathname,e.persisted));});
+  await page.goto(origin+'/connexion');await page.getByLabel('Adresse e-mail',{exact:true}).fill(email);await page.getByLabel('Mot de passe',{exact:true}).fill(password);await page.getByRole('button',{name:'Se connecter',exact:true}).click();await page.waitForURL('**/accueil');await page.getByRole('button',{name:'Déconnexion',exact:true}).waitFor();
   const cookies=await context.cookies();const cookie=cookies.map((c:any)=>c.name+'='+c.value).join('; ');
-  await page.goto(origin+'/profil');await page.getByText(payload,{exact:true}).waitFor();assert.equal(await page.locator('img[src=x]').count(),0);assert.equal(await page.evaluate(()=>Boolean((window as any).__auditXss)),false);
+  await page.goto(origin+'/profil');await page.getByText(payload,{exact:true}).waitFor().catch(async(error:unknown)=>{console.error('SEC08 diagnostics',JSON.stringify({url:page.url(),body:await page.locator('body').innerText(),events}));throw error;});assert.equal(await page.locator('img[src=x]').count(),0);assert.equal(await page.evaluate(()=>Boolean((window as any).__auditXss)),false);
   const authenticated=await context.request.get(origin+'/api/v1/profile');assert.equal(authenticated.status(),200);assert.match(authenticated.headers()['cache-control'],/no-store/);
-  await page.getByRole('button',{name:'Déconnexion',exact:true}).click();await page.waitForURL('**/connexion');
+  await page.getByRole('button',{name:'Déconnexion',exact:true}).click();await page.waitForURL('**/connexion');await page.getByRole('button',{name:'Se connecter',exact:true}).waitFor();
   const denied=await context.request.get(origin+'/api/v1/profile');assert.equal(denied.status(),401);assert.match(denied.headers()['cache-control'],/no-store/);
   await request(app.getHttpServer()).get('/api/v1/profile').set('Cookie',cookie).expect(401);
   await page.goBack();
-  try { await page.waitForURL('**/connexion'); }
+  try { await page.waitForURL('**/connexion');await page.getByRole('button',{name:'Se connecter',exact:true}).waitFor(); }
   catch (error) {
-   console.error('SEC18 back-navigation diagnostics',JSON.stringify({url:page.url(),payloadVisible:(await page.locator('body').innerText()).includes(payload),body:(await page.locator('body').innerText()).slice(0,1200)}));
+   console.error('SEC18 back-navigation diagnostics',JSON.stringify({url:page.url(),payloadVisible:(await page.locator('body').innerText()).includes(payload),body:(await page.locator('body').innerText()).slice(0,1200),html:(await page.locator('#root').innerHTML()).slice(-7000),events}));
    throw error;
   }assert.equal((await page.locator('body').innerText()).includes(payload),false);
-  await page.goto(origin+'/profil');await page.waitForURL('**/connexion');assert.equal((await page.locator('body').innerText()).includes(payload),false);
+  await page.goto(origin+'/profil');await page.waitForURL('**/connexion');await page.getByRole('button',{name:'Se connecter',exact:true}).waitFor();assert.equal((await page.locator('body').innerText()).includes(payload),false);
   const cached=await page.evaluate(async()=>{const urls:string[]=[];for(const name of await caches.keys())for(const req of await(await caches.open(name)).keys())urls.push(req.url);return urls;});assert.ok(!cached.some((url:string)=>/\/api\/|\/profil(?:$|\?)/.test(url)));
+  await context.close();console.log('SEC18 iteration',iteration,'PASS');}
  }finally{await browser?.close();await new Promise<void>(resolve=>server.close(()=>resolve()));}
 });
 
