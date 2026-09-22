@@ -22,7 +22,7 @@ export function EmailDeliveryItems({items}:{items:EmailDelivery[]}) {
     <p>Les 50 derniers envois sont affichés. Les anciens emails peuvent ne pas disposer d’un retour de livraison.</p>
   </>;
 }
-export function EmailDeliveryJournal({userId,collapsible=false}:{userId:string;collapsible?:boolean}) {
+export function EmailDeliveryJournal({userId,collapsible=false,className}:{userId:string;collapsible?:boolean;className?:string}) {
   const request=useRemote(async signal=>{
     const data=await api<EmailJournal>('/me/email-deliveries',{signal});
     const record=(v:unknown):v is Record<string,unknown>=>!!v&&typeof v==='object'&&!Array.isArray(v);
@@ -34,7 +34,7 @@ export function EmailDeliveryJournal({userId,collapsible=false}:{userId:string;c
         (e.bounceType===null||typeof e.bounceType==='string'))))throw new Error('Suivi des emails indisponible. Réessayez dans un instant.');
     return data;
   },userId);
-  return <NotificationSection title="Suivi de mes emails" ariaLabel="Suivi de mes emails" collapsible={collapsible} style={{padding:24,border:'1px solid var(--line)',borderRadius:16,background:'white'}}>
+  return <NotificationSection title="Suivi de mes emails" ariaLabel="Suivi de mes emails" collapsible={collapsible} className={className} style={className?undefined:{padding:24,border:'1px solid var(--line)',borderRadius:16,background:'white'}}>
     <Button variant="outline" onClick={request.reload} disabled={request.loading}>Actualiser les emails</Button>
     {request.loading?<p role="status">Chargement du suivi des emails…</p>:request.error?<p role="alert">Suivi des emails indisponible. Vous pouvez réessayer avec « Actualiser les emails ».</p>:request.data&&<EmailDeliveryItems items={request.data.items}/>}
   </NotificationSection>;

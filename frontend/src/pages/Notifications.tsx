@@ -64,8 +64,8 @@ export default function Notifications() {
     {user?.role === "interimaire" && <p>Les alertes de missions compatibles suivent votre zone de recherche et d’alertes, ainsi que vos qualifications et critères d’admissibilité. La dernière ville utilisée dans la recherche ne change pas cette zone. <Link to="/calendrier#zone-mobilite">Vérifier ma zone de recherche et d’alertes</Link>.</p>}
     {!onboarding && <NotificationSection title="Votre activité" headingId="notice-list" className={s.card} collapsible={collapsible}>
       {notices.loading?<p role="status">Chargement…</p>:notices.error?<p role="alert">{notices.error} <Button onClick={notices.reload}>Réessayer</Button></p>:<>
-      {notices.data?.length?<ul className={s.noticeList}>{notices.data.map(n=><li className={s.noticeItem} key={n.id} style={user?.role === "interimaire" ? undefined : {paddingBlock:14}}><strong>{data?.catalog[n.kind]||"Notification"}{!n.read_at?" — Non lue":""}</strong><p>{n.message}</p><time dateTime={n.created_at}>{new Date(n.created_at).toLocaleString("fr-FR")}</time><div className={s.actions}><Link to={notificationHref(n.href,n.id)}>Consulter</Link></div></li>)}</ul>:<p>Aucune notification pour cette page.</p>}
-      <div className={s.actions}><Button variant="outline" disabled={offset===0} onClick={()=>setOffset(v=>Math.max(0,v-20))}>Précédent</Button><Button variant="outline" disabled={(notices.data?.length??0)<20} onClick={()=>setOffset(v=>v+20)}>Suivant</Button></div></>}
+      {notices.data?.length?<ul className={s.noticeList}>{notices.data.map(n=><li className={s.noticeItem} key={n.id} style={user?.role === "interimaire" ? undefined : {paddingBlock:14}}><strong>{data?.catalog[n.kind]||"Notification"}{!n.read_at?" — Non lue":""}</strong><p>{n.message}</p><time dateTime={n.created_at}>{new Date(n.created_at).toLocaleString("fr-FR",{dateStyle:"medium",timeStyle:"short"})}</time><div className={s.actions}><ButtonLink to={notificationHref(n.href,n.id)} variant="outline" size="sm">Consulter</ButtonLink></div></li>)}</ul>:<p>Aucune notification pour cette page.</p>}
+      {(offset>0||(notices.data?.length??0)>=20)&&<div className={s.actions}><Button variant="outline" disabled={offset===0} onClick={()=>setOffset(v=>Math.max(0,v-20))}>Précédent</Button><Button variant="outline" disabled={(notices.data?.length??0)<20} onClick={()=>setOffset(v=>v+20)}>Suivant</Button></div>}</>}
     </NotificationSection>}
     <NotificationSection title="Notifications Discord" headingId="discord-settings" className={s.card} collapsible={collapsible}>
       <p>Besoin d’aide pour trouver votre identifiant ? <a href="/aide/discord/retrouver-identifiant-discord.pdf" target="_blank" rel="noopener noreferrer">Ouvrir le guide illustré (PDF, 2 pages)</a> · <a href="/aide/discord/retrouver-identifiant-discord.pdf" download>Télécharger le PDF</a></p>
@@ -107,7 +107,7 @@ export default function Notifications() {
       </>}
     </NotificationSection>
     {onboarding && <ButtonLink to="/accueil">Continuer vers mon espace</ButtonLink>}
-    {!onboarding && <><EmailDeliveryJournal userId={user?.id||"anonymous"} collapsible={collapsible}/>
+    {!onboarding && <><EmailDeliveryJournal userId={user?.id||"anonymous"} collapsible={collapsible} className={s.card}/>
     <NotificationSection title="Suivi des envois Discord" className={s.card} collapsible={collapsible}><Button variant="outline" onClick={deliveries.reload}>Actualiser</Button>{deliveries.error?<p role="alert">{deliveries.error}</p>:deliveries.data?.length?<ul>{deliveries.data.map(d=><li key={d.id}>{data?.catalog[d.kind]||d.kind} : {deliveryLabels[d.status]||d.status}</li>)}</ul>:<p>Aucun envoi pour le moment.</p>}</NotificationSection>
     </>}
   </div>;
