@@ -7,7 +7,7 @@ permissions:
 jobs:
   backend:
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    timeout-minutes: 30
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -20,6 +20,13 @@ jobs:
       - name: Check encrypted archive authentication
         run: node --test scripts/security/legacy-archive.test.mjs
       - run: npm run typecheck && npm run build
+      - name: Prepare browser integration dependencies
+        run: npm ci --prefix frontend
+      - name: Install browser for backend integration tests
+        working-directory: frontend
+        run: npx playwright install --with-deps chromium
+      - name: Build application and admin for backend integration tests
+        run: npm run build --prefix frontend && npm run build:admin --prefix frontend
       - run: npm run test:isolated
       - uses: actions/upload-artifact@v4
         if: always()
