@@ -7,6 +7,7 @@ import {RecommendationsController} from './recommendations';
 import {MatchingModule} from '../matching/matching.module';
 import { partialOfferMatch } from "../public-data/partial-matching";
 import { professional } from "../profiles/profile-mapping";
+import { visibleExternalProviders } from "../public-data/external-visibility";
 import { PageDto } from "../common/page.dto";
 import { Query } from "@nestjs/common";
 import { ApiOperation, ApiProperty } from "@nestjs/swagger";
@@ -93,6 +94,13 @@ export class ListingsController {
               : externalQualifications,
           ) +
           ")" + (generalBrowse ? " OR e.qualification IS NULL)" : ")");
+    const visibleSources = await visibleExternalProviders(this.db);
+    const visibilityFilter =
+      b.origine === "partenaires"
+        ? ""
+        : visibleSources.length
+          ? " AND e.source=ANY(" + bind(visibleSources) + ")"
+          : " AND false";
     let externalRadius='';
     if(b.radiusKm!==undefined){
       const lat="e.provenance#>'{facts,location,coordinates,latitude}'",lon="e.provenance#>'{facts,location,coordinates,longitude}'";
@@ -104,7 +112,7 @@ export class ListingsController {
       "SELECT 'm_'||m.id AS listing_id,m.created_at AS listed_at,(to_jsonb(m)-'location')||jsonb_build_object('id','m_'||m.id,'kind','INTERNAL_MISSION','publicationDate',COALESCE((SELECT min(a.created_at) FROM audit a WHERE a.resource_id=m.id AND a.event='MISSION_OPEN'),m.created_at),'latitude',ST_Y(m.location::geometry),'longitude',ST_X(m.location::geometry),'salary',jsonb_build_object('amount',m.hourly_salary,'currency','EUR','unit','HOUR','gross',true)) AS data FROM mission m WHERE " +
       (q.where + (b.origine==='externes' ? ' AND false' : '')) +
       " UNION ALL SELECT 'e_'||e.id,e.imported_at,(to_jsonb(e)-'raw_hash')||jsonb_build_object('id','e_'||e.id,'kind','EXTERNAL_OFFER','applicationMode','REDIRECT','eligibility','INCOMPLETE') FROM external_offer e WHERE " +
-      (externalWhere + externalRadius + (b.origine==='partenaires' ? ' AND false' : ''));
+      (externalWhere + visibilityFilter + externalRadius + (b.origine==='partenaires' ? ' AND false' : ''));
     const pageResult = await rankedListingPage(this.db, sourceSql, parameters, b, p);
     const unverifiedSearchFilters = [
       "start",
@@ -147,6 +155,7 @@ export class ListingsController {
         !b.includeUncertainExternal &&
         (strictUnknown || b.radiusKm !== undefined ||
           externalQualifications.length !== b.qualifications.length),
+      externalCatalogueVisible: visibleSources.length > 0,
     };
   }
   @Get("me/listings/:id/correspondence")
@@ -167,7 +176,7 @@ export class ListingsController {
     ]);
     if (!p) throw new NotFoundException();
     const [offer] = await this.db.query(
-      "SELECT title,provenance FROM external_offer WHERE id=$1 AND active AND (expires_at IS NULL OR expires_at>now())",
+      "SELECT e.title,e.provenance FROM external_offer e JOIN source_control s ON s.provider=e.source WHERE e.id=$1 AND e.active AND (e.expires_at IS NULL OR e.expires_at>now()) AND s.visible",
       [id.slice(2)],
     );
     if (!offer) throw new NotFoundException();
@@ -182,9 +191,13 @@ export class ListingsController {
   })
   @Get("listings/external")
   async external(@Query() page: ExternalListingsDto) {
+    const visibleSources = await visibleExternalProviders(this.db);
+    if (!visibleSources.length) {
+      return { total: 0, limit: page.limit, offset: page.offset, items: [] };
+    }
     const query = listingPageQuery(
-      "SELECT e.id::text AS listing_id,e.imported_at AS listed_at,jsonb_build_object('id',e.id,'source',e.source,'source_id',e.source_id,'title',e.title,'description',e.description,'url',e.url,'location_label',e.location_label,'qualification',e.qualification,'imported_at',e.imported_at,'expires_at',e.expires_at,'provenance',e.provenance,'parsed_offer',e.parsed_offer) AS data FROM external_offer e WHERE e.active AND (e.expires_at IS NULL OR e.expires_at>now())",
-      [], page,
+      "SELECT e.id::text AS listing_id,e.imported_at AS listed_at,jsonb_build_object('id',e.id,'source',e.source,'source_id',e.source_id,'title',e.title,'description',e.description,'url',e.url,'location_label',e.location_label,'qualification',e.qualification,'imported_at',e.imported_at,'expires_at',e.expires_at,'provenance',e.provenance,'parsed_offer',e.parsed_offer) AS data FROM external_offer e WHERE e.active AND (e.expires_at IS NULL OR e.expires_at>now()) AND e.source=ANY($1::text[])",
+      [visibleSources], page,
     );
     const [result] = await this.db.query(query.sql, query.parameters);
     return {
@@ -216,7 +229,7 @@ export class ListingsController {
       throw new NotFoundException();
     if (id.startsWith("e_")) {
       const [e] = await this.db.query(
-        "SELECT * FROM external_offer WHERE id=$1",
+        "SELECT e.* FROM external_offer e JOIN source_control s ON s.provider=e.source WHERE e.id=$1 AND s.visible",
         [id.slice(2)],
       );
       if (!e) throw new NotFoundException();
@@ -270,7 +283,8 @@ export class ListingsController {
       await nurse(em, user(r));
       const sql = {
         MISSION: "SELECT id FROM mission WHERE id=$1 AND status!='DRAFT'",
-        EXTERNAL: "SELECT id FROM external_offer WHERE id=$1",
+        EXTERNAL:
+          "SELECT e.id FROM external_offer e JOIN source_control s ON s.provider=e.source WHERE e.id=$1 AND s.visible",
         ESTABLISHMENT:
           "SELECT id FROM organization WHERE id=$1 AND kind='ESTABLISHMENT'",
       }[b.kind];

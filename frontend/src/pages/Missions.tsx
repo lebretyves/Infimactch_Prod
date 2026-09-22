@@ -208,6 +208,7 @@ function NurseMissions() {
     requestKey,
   );
   const data = result.data?.requestKey === requestKey ? result.data : null;
+  const showExternes = data?.externalCatalogueVisible !== false;
   const error = p.error || initialZone.error || result.error;
   const loading = p.loading || result.loading || (!data && !error);
   const total = data?.total ?? 0,
@@ -224,6 +225,14 @@ function NurseMissions() {
     },
     [paramsKey, qualifications.join(",")],
   );
+  useEffect(() => {
+    if (!data || showExternes || origin !== "externes") return;
+    const next = new URLSearchParams(params);
+    next.set("origine", "toutes");
+    next.delete("vue");
+    next.delete("page");
+    setParams(next, { replace: true });
+  }, [data, showExternes, origin, params, setParams]);
   useEffect(() => {
     if (outOfRange) {
       const next = new URLSearchParams(params);
@@ -357,6 +366,7 @@ function NurseMissions() {
       <div className={s.catalogueControls}>
         <OfferOriginChoices
           value={origin}
+          showExternes={showExternes}
           onChange={(origine) => update({ origine, vue: "", page: 1 })}
         />
         <SelectField

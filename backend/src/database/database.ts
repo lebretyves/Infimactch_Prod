@@ -1,4 +1,5 @@
 import {CvDocuments1790023000000} from './cv-documents';
+import {ExternalVisibility1790024000000} from './external-visibility';
 import {MissionTimeSlots1790006600000} from './mission-time-slots';
 import {AdminPassword1790006500000} from './admin-password';
 import {MissionLocationOptional1790006400000} from "./mission-location-optional";
@@ -85,6 +86,7 @@ export class Database implements OnModuleDestroy {
       AdminPassword1790006500000,
       MissionTimeSlots1790006600000,
       CvDocuments1790023000000,
+      ExternalVisibility1790024000000,
     ],
     logging: false,
     extra: { max: 12 },

@@ -8,7 +8,7 @@ export type Recommendation = Listing & {
   provenance?: { salaryRaw?: string | null; contract?: string | null };
 };
 export type Recommendations = {
-  mode: 'MIXED'; generatedAt: string;
+  mode: 'MIXED'; generatedAt: string; externalCatalogueVisible: boolean;
   internal: { status: 'READY' | 'UNAVAILABLE' | 'HIDDEN'; personalization?: 'COMPATIBLE' | 'GENERAL_PROFILE_INCOMPLETE'; rppsStatus: string | null; items: Recommendation[] };
   external: { status: 'READY' | 'UNAVAILABLE' | 'HIDDEN'; personalization: 'PARTIAL' | 'GENERAL_PROFILE_INCOMPLETE'; items: Recommendation[]; sources: { provider: string; status: string; created_at: string | null }[] };
 };

@@ -1,5 +1,6 @@
 import { OfferOriginChoices, readOfferOrigin } from "./OfferOrigin";
 import { Link, useSearchParams } from "react-router";
+import { useEffect } from "react";
 import { useRemote } from "@/lib/useRemote";
 import {
   getRecommendations,
@@ -42,6 +43,13 @@ export function MixedRecommendations({
   );
   const data = result.data;
   const selected = data ? missionCrushs(data, origin) : [];
+  const showExternes = data?.externalCatalogueVisible !== false;
+  useEffect(() => {
+    if (!data || showExternes || origin !== "externes") return;
+    const next = new URLSearchParams(params);
+    next.set("origine", "toutes");
+    setParams(next, { replace: true });
+  }, [data, showExternes, origin, params, setParams]);
   function cards() {
     return (
       <ul className={s.cards}>
@@ -158,12 +166,12 @@ export function MixedRecommendations({
       </header>
       <p className={s.intro}>Jusqu’à 3 missions à découvrir. Un coup de cœur ? Gardez-le dans vos favoris.</p>
       <div className={s.toolbar}>
-        <OfferOriginChoices partnersFirst value={origin} onChange={(origine) => {
+        <OfferOriginChoices partnersFirst showExternes={showExternes} value={origin} onChange={(origine) => {
           const next = new URLSearchParams(params);
           next.set("origine", origine);
           setParams(next);
         }} />
-        <p>{origin === "toutes" ? "Partenaires en priorité, puis offres externes." : origin === "partenaires" ? "Votre sélection partenaire InfiMatch." : "Des offres externes à explorer."}</p>
+        <p>{origin === "toutes" ? (showExternes ? "Partenaires en priorité, puis offres externes." : "Votre sélection partenaire InfiMatch.") : origin === "partenaires" ? "Votre sélection partenaire InfiMatch." : "Des offres externes à explorer."}</p>
       </div>
       {result.loading ? (
         <p role="status" className={s.state}>Recherche de vos prochaines missions…</p>
@@ -174,16 +182,16 @@ export function MixedRecommendations({
           {origin !== "externes" && data.internal.personalization === "GENERAL_PROFILE_INCOMPLETE" && (
             <p className={s.notice}>Ces missions partenaires sont consultables. Votre profil ou votre vérification professionnelle est incomplet : leur compatibilité n’est pas confirmée. <Link to="/profil">Compléter mon profil</Link>.</p>
           )}
-          {origin !== "partenaires" && data.external.personalization === "GENERAL_PROFILE_INCOMPLETE" && (
+          {origin !== "partenaires" && showExternes && data.external.personalization === "GENERAL_PROFILE_INCOMPLETE" && (
             <p className={s.notice}>Votre profil est incomplet : ces offres externes générales ne sont pas des recommandations personnalisées. <Link to="/profil">Compléter mon profil</Link>.</p>
           )}
           {origin !== "externes" && data.internal.status === "UNAVAILABLE" && (
             <div className={s.notice} role="status"><p>La recherche de missions compatibles est temporairement indisponible.</p><Button variant="outline" onClick={result.reload}>Réessayer les missions compatibles</Button></div>
           )}
-          {origin !== "partenaires" && data.external.status === "UNAVAILABLE" && (
+          {origin !== "partenaires" && showExternes && data.external.status === "UNAVAILABLE" && (
             <div className={s.notice} role="status"><p>Les suggestions externes sont temporairement indisponibles.</p><Button variant="outline" onClick={result.reload}>Réessayer les offres externes</Button></div>
           )}
-          {origin !== "partenaires" && data.external.sources.some(source => !["SUCCESS", "SUCCEEDED", "READY"].includes(source.status)) && (
+          {origin !== "partenaires" && showExternes && data.external.sources.some(source => !["SUCCESS", "SUCCEEDED", "READY"].includes(source.status)) && (
             <p className={s.notice} role="status">La dernière actualisation d’au moins une source est indisponible ou incomplète. Les offres déjà enregistrées peuvent être présentées ; vérifiez leur disponibilité sur le site source.</p>
           )}
           {selected.length > 0 ? cards() : <div className={s.state}><h3>Votre prochain match se prépare</h3><p>Aucune offre disponible dans cette sélection pour le moment.</p></div>}

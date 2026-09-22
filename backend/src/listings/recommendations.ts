@@ -7,6 +7,7 @@ import {MatchingService} from '../matching/matching.module';
 import {professional} from '../profiles/profile-mapping';
 import {partialOfferMatch} from '../public-data/partial-matching';
 import {externalPresentation} from '../public-data/offer-quality';
+import {visibleExternalProviders} from '../public-data/external-visibility';
 
 export function publicationDate(value:unknown,now=Date.now()):string|null {
   if(typeof value!=='string'||!/^\d{4}-\d{2}-\d{2}T.*(?:Z|[+-]\d{2}:\d{2})$/.test(value))return null;
@@ -29,8 +30,9 @@ export class RecommendationsController {
     const actor=user(r),now=Date.now(),generatedAt=new Date(now).toISOString();
     const [profile]=await this.db.query('SELECT p.* FROM profile p JOIN account a ON a.id=p.user_id WHERE p.user_id=$1 AND a.active',[actor]);
     if(!profile)throw new NotFoundException();
-    const results=await Promise.allSettled([query.origine==='externes'?Promise.resolve({status:'HIDDEN',items:[]}):this.internal(actor,profile),query.origine==='partenaires'?Promise.resolve({status:'HIDDEN',items:[],sources:[]}):this.external(profile,generatedAt)]);
-    return {mode:'MIXED',generatedAt,
+    const externalCatalogueVisible=(await visibleExternalProviders(this.db)).length>0;
+    const results=await Promise.allSettled([query.origine==='externes'?Promise.resolve({status:'HIDDEN',items:[]}):this.internal(actor,profile),query.origine==='partenaires'||!externalCatalogueVisible?Promise.resolve({status:'HIDDEN',personalization:profile.qualifications.length?'PARTIAL':'GENERAL_PROFILE_INCOMPLETE',items:[],sources:[]}):this.external(profile,generatedAt)]);
+    return {mode:'MIXED',generatedAt,externalCatalogueVisible,
       internal:results[0].status==='fulfilled'?results[0].value:{status:'UNAVAILABLE',rppsStatus:profile.rpps_status,items:[]},
       external:results[1].status==='fulfilled'?results[1].value:{status:'UNAVAILABLE',personalization:profile.qualifications.length?'PARTIAL':'GENERAL_PROFILE_INCOMPLETE',items:[],sources:[]},
     };
@@ -49,10 +51,14 @@ export class RecommendationsController {
     })};
   }
   private async external(profile:any,generatedAt:string) {
+    const visibleSources=await visibleExternalProviders(this.db);
+    if(!visibleSources.length){
+      return {status:'HIDDEN',personalization:profile.qualifications.length?'PARTIAL':'GENERAL_PROFILE_INCOMPLETE',items:[],sources:[]};
+    }
     let cursor='00000000-0000-0000-0000-000000000000';const top:any[]=[];
     const p=professional(profile);
     while(true){
-      const batch=await this.db.query("SELECT id,source,title,description,url,location_label,qualification,imported_at,expires_at,provenance,parsed_offer FROM external_offer WHERE active AND (expires_at IS NULL OR expires_at>now()) AND source IN('FRANCE_TRAVAIL','JOBSPIPE') AND id>$1::uuid ORDER BY id LIMIT 100",[cursor]);
+      const batch=await this.db.query("SELECT id,source,title,description,url,location_label,qualification,imported_at,expires_at,provenance,parsed_offer FROM external_offer WHERE active AND (expires_at IS NULL OR expires_at>now()) AND source=ANY($1::text[]) AND id>$2::uuid ORDER BY id LIMIT 100",[visibleSources,cursor]);
       if(!batch.length)break;
       for(const row of batch){
         const comparison=partialOfferMatch(row,p,generatedAt);
@@ -61,7 +67,7 @@ export class RecommendationsController {
       }
       cursor=batch[batch.length-1].id;
     }
-    const sources=await this.db.query("SELECT DISTINCT ON(provider) provider,status,created_at FROM import_run WHERE provider IN('FRANCE_TRAVAIL','JOBSPIPE') ORDER BY provider,created_at DESC");
+    const sources=await this.db.query("SELECT DISTINCT ON(provider) provider,status,created_at FROM import_run WHERE provider=ANY($1::text[]) ORDER BY provider,created_at DESC",[visibleSources]);
     return {status:'READY',personalization:profile.qualifications.length?'PARTIAL':'GENERAL_PROFILE_INCOMPLETE',items:top.map(({relevance,...item})=>externalPresentation(item)),sources};
   }
 }

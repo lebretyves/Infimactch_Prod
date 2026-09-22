@@ -14,6 +14,7 @@ class Membership extends Reason {@IsEmail() @Length(3,254) email!:string;@IsBool
 class Link extends Reason {@IsUUID() otherOrganizationId!:string;@IsBoolean() active!:boolean;}
 class Review extends Reason {@IsIn(['TO_REVIEW','REVIEWED','NEEDS_INFORMATION']) state!:string;}
 class SourceState extends Reason {@IsBoolean() enabled!:boolean;}
+class SourceVisibility extends Reason {@IsBoolean() visible!:boolean;}
 const SERVICES=['API','POSTGRES','MONGODB','N8N','DISCORD','IMPORTS','DOCUMENTS','VAULT'];
 class Incident extends Reason {@IsIn(SERVICES) service!:string;@IsString() @Length(8,500) impact!:string;@IsString() @Length(2,100) ownerLabel!:string;}
 class IncidentState extends Reason {@IsIn(['OPEN','INVESTIGATING','RESOLVED']) state!:string;}
@@ -127,15 +128,23 @@ export class AdminOperationsController {
 
   @Get('operations') async operations(@Req() r:Request) {
     authorizeAdmin(r,'sources');
-    const controls=await this.db.query('SELECT provider,enabled,updated_at,collection_state FROM source_control ORDER BY provider');
+    const controls=await this.db.query('SELECT provider,enabled,visible,updated_at,collection_state FROM source_control ORDER BY provider');
     const runs=await this.db.query('SELECT DISTINCT ON(provider) provider,status,created_at,summary FROM import_run WHERE provider=ANY($1::text[]) ORDER BY provider,created_at DESC',[[...PROVIDERS]]);
     const counts=await this.db.query("SELECT source,count(*)::int total,count(*) FILTER(WHERE active)::int active,count(*) FILTER(WHERE active AND jsonb_typeof(provenance#>'{facts,location,coordinates}')='object')::int localized FROM external_offer GROUP BY source");
     const [credits]=await this.db.query("SELECT COALESCE(sum(charged),0)::int used FROM jobspipe_request_receipt WHERE budget_month=date_trunc('month',now() AT TIME ZONE 'UTC')::date");
-    return {sources:controls.map(c=>{const run=runs.find(x=>x.provider===c.provider);const state=c.collection_state;const collection=state?{status:state.phase??state.terminal??(state.completedAt?'COMPLETE':'IN_PROGRESS'),observed:state.seen?.length??state.seenIds?.length??0,pages:state.pages??null,remainingQueries:state.queue?.length??null,startedAt:state.startedAt,completedAt:state.completedAt??null,retryAt:state.retryAt??null,reason:state.error??state.reason??null,creditsUsed:c.provider==='JOBSPIPE'?credits.used:null,creditLimit:c.provider==='JOBSPIPE'?1000:null}:null;return {provider:c.provider,enabled:c.enabled,updated_at:c.updated_at,collection,nextScheduleLabel:c.enabled?(c.provider==='FRANCE_TRAVAIL'?'Chaque jour à 7 h et 15 h (Europe/Paris)':'Chaque jour à 7 h (Europe/Paris)'):'Planification suspendue',counts:counts.find(x=>x.source===c.provider)??{total:0,active:0},lastRun:run?{status:run.status,created_at:run.created_at,accepted:run.summary?.accepted??null,rejected:Array.isArray(run.summary?.rejected)?run.summary.rejected.length:null,duplicates:Array.isArray(run.summary?.duplicates)?run.summary.duplicates.length:null,error:run.status==='FAILED'?'Acquisition interrompue ; vérifier les accès et quotas du fournisseur.':null}:null};}),incidents:await this.db.query("SELECT id,service,state,impact,owner_label,started_at,updated_at,resolved_at FROM operational_incident WHERE state<>'RESOLVED' ORDER BY updated_at DESC LIMIT 20"),observedAt:new Date().toISOString()};
+    return {sources:controls.map(c=>{const run=runs.find(x=>x.provider===c.provider);const state=c.collection_state;const collection=state?{status:state.phase??state.terminal??(state.completedAt?'COMPLETE':'IN_PROGRESS'),observed:state.seen?.length??state.seenIds?.length??0,pages:state.pages??null,remainingQueries:state.queue?.length??null,startedAt:state.startedAt,completedAt:state.completedAt??null,retryAt:state.retryAt??null,reason:state.error??state.reason??null,creditsUsed:c.provider==='JOBSPIPE'?credits.used:null,creditLimit:c.provider==='JOBSPIPE'?1000:null}:null;return {provider:c.provider,enabled:c.enabled,visible:c.visible,updated_at:c.updated_at,collection,nextScheduleLabel:c.enabled?(c.provider==='FRANCE_TRAVAIL'?'Chaque jour à 7 h et 15 h (Europe/Paris)':'Chaque jour à 7 h (Europe/Paris)'):'Planification suspendue',counts:counts.find(x=>x.source===c.provider)??{total:0,active:0},lastRun:run?{status:run.status,created_at:run.created_at,accepted:run.summary?.accepted??null,rejected:Array.isArray(run.summary?.rejected)?run.summary.rejected.length:null,duplicates:Array.isArray(run.summary?.duplicates)?run.summary.duplicates.length:null,error:run.status==='FAILED'?'Acquisition interrompue ; vérifier les accès et quotas du fournisseur.':null}:null};}),incidents:await this.db.query("SELECT id,service,state,impact,owner_label,started_at,updated_at,resolved_at FROM operational_incident WHERE state<>'RESOLVED' ORDER BY updated_at DESC LIMIT 20"),observedAt:new Date().toISOString()};
   }
   @Post('operations/sources/:provider/state') async sourceState(@Req() r:Request,@Param('provider') name:string,@Body() b:SourceState) {
     const actor=authorizeAdmin(r,'sources:write',true),provider=providerName(name);
     return this.db.transaction(async em=>{await em.query('UPDATE source_control SET enabled=$2,updated_at=now() WHERE provider=$1',[provider,b.enabled]);await audit(em,actor,'ADMIN_SOURCE_SCHEDULE_CHANGED',null,{provider,enabled:b.enabled,reason:b.reason});return {ok:true};});
+  }
+  @Post('operations/sources/:provider/visibility') async sourceVisibility(@Req() r:Request,@Param('provider') name:string,@Body() b:SourceVisibility) {
+    const actor=authorizeAdmin(r,'sources:write',true),provider=providerName(name);
+    return this.db.transaction(async em=>{
+      await em.query('UPDATE source_control SET visible=$2,updated_at=now() WHERE provider=$1',[provider,b.visible]);
+      await audit(em,actor,'ADMIN_SOURCE_VISIBILITY_CHANGED',null,{provider,visible:b.visible,reason:b.reason});
+      return {ok:true};
+    });
   }
   @Post('operations/sources/:provider/refresh') async refreshSource(@Req() r:Request,@Param('provider') name:string,@Body() b:Reason) {
     const actor=authorizeAdmin(r,'sources:write',true),provider=providerName(name);

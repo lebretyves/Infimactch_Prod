@@ -33,6 +33,7 @@ const external = {
 const mixed = () => ({
   mode: "MIXED",
   generatedAt: "2030-09-18T11:00:00Z",
+  externalCatalogueVisible: true,
   internal: { status: "READY", rppsStatus: "FOUND", items: [internal] },
   external: {
     status: "READY",

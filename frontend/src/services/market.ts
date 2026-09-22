@@ -56,6 +56,7 @@ export type ListingPage = {
   total: number;
   limit: number;
   offset: number;
+  externalCatalogueVisible?: boolean;
 };
 export type Profile = {
   display_name: string;
