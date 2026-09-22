@@ -144,21 +144,21 @@ try {
   await page.goto(base + "/accueil");
   await page.getByRole("button", { name: "Tout refuser", exact: true }).click();
   await page
-    .getByRole("heading", { name: "Offres partenaires InfiMatch", exact: true })
+    .getByRole("heading", { name: "Vos matchs", exact: true })
     .waitFor();
   await page
-    .getByRole("heading", { name: "Offres externes à explorer", exact: true })
+    .getByRole("heading", { name: external.title, exact: true })
     .waitFor();
   assert.ok(
     (
       await page
-        .getByRole("link", { name: "Voir la mission partenaire" })
+        .getByRole("link", { name: "Voir la mission" })
         .getAttribute("href")
     ).endsWith("?correspondance=explanation-fixture"),
   );
   assert.equal(
     await page
-      .getByRole("link", { name: "Voir l’offre externe", exact: true })
+      .getByRole("link", { name: "Voir l’offre", exact: true })
       .getAttribute("href"),
     "/missions/" + external.id,
   );
@@ -196,14 +196,14 @@ try {
     await page.getByText("INTERIM_CONTEXT_CONFIRMED", { exact: true }).count(),
     0,
   );
-  assert.notEqual(
+  assert.equal(
     await page
       .getByRole("button", {
         name: "Retirer " + external.title + " des favoris",
         exact: true,
       })
-      .evaluate((e) => getComputedStyle(e).backgroundColor),
-    "rgba(0, 0, 0, 0)",
+      .getAttribute("aria-pressed"),
+    "true",
   );
   fs.mkdirSync("artifacts/browser-checks", { recursive: true });
   for (const width of [375, 768, 1440]) {
@@ -220,16 +220,26 @@ try {
       fullPage: true,
     });
   }
+  const matches = page.getByRole("region", { name: "Vos matchs", exact: true });
+  const partnerCard = matches.getByRole("listitem").filter({ has: page.getByRole("heading", { name: internal.title, exact: true }) });
+  const externalCard = matches.getByRole("listitem").filter({ has: page.getByRole("heading", { name: external.title, exact: true }) });
+  assert.equal(await matches.getByRole("listitem").count(), 2);
+  assert.match(await partnerCard.innerText(), /Partenaire InfiMatch/);
+  assert.match(await partnerCard.innerText(), /87\s*%/);
+  assert.match(await externalCard.innerText(), /France Travail/);
+  assert.match(await externalCard.innerText(), /Correspondance partielle/);
+  assert.doesNotMatch(await externalCard.innerText(), /\d+\s*%/);
   const choices = page.getByRole("group", { name: "Origine des offres" });
+  assert.deepEqual(await choices.getByRole("button").allTextContents(), ["Partenaires", "Externes", "Toutes"]);
   await Promise.all([
     page.waitForResponse(r => {const u=new URL(r.url());return u.pathname.endsWith('/me/recommendations')&&u.searchParams.get('origine')==='partenaires'&&r.ok();}),
     choices.getByRole("button", { name: "Partenaires", exact: true }).click(),
   ]);
   await page
-    .getByRole("heading", { name: "Offres partenaires InfiMatch", exact: true })
+    .getByRole("heading", { name: "Vos matchs", exact: true })
     .waitFor();
   await page
-    .getByRole("heading", { name: "Offres externes à explorer", exact: true })
+    .getByRole("heading", { name: external.title, exact: true })
     .waitFor({ state: "hidden" });
   assert.equal(origins.at(-1), "partenaires");
   await Promise.all([
@@ -237,10 +247,10 @@ try {
     choices.getByRole("button", { name: "Externes", exact: true }).click(),
   ]);
   await page
-    .getByRole("heading", { name: "Offres externes à explorer", exact: true })
+    .getByRole("heading", { name: external.title, exact: true })
     .waitFor();
   await page
-    .getByRole("heading", { name: "Offres partenaires InfiMatch", exact: true })
+    .getByRole("heading", { name: internal.title, exact: true })
     .waitFor({ state: "hidden" });
   assert.equal(origins.at(-1), "externes");
   incomplete = true;
@@ -250,8 +260,10 @@ try {
     .getByText("Ces missions partenaires sont consultables.", { exact: false })
     .waitFor();
   await page
-    .getByRole("link", { name: "Voir la mission partenaire", exact: true })
+    .getByRole("link", { name: "Voir la mission", exact: true })
     .waitFor();
+  assert.match(await partnerCard.innerText(), /Matching non calculable/);
+  assert.doesNotMatch(await partnerCard.innerText(), /87\s*%/);
   await page.goto(base + "/missions");
   await page
     .getByRole("heading", { name: "37 offres disponibles", exact: true })
@@ -317,7 +329,7 @@ try {
   incomplete = false;
   await page.goto(base + "/accueil?origine=toutes");
   await page
-    .getByRole("heading", { name: "Offres partenaires InfiMatch", exact: true })
+    .getByRole("heading", { name: "Vos matchs", exact: true })
     .waitFor();
   state = mixed();
   state.internal.items = [];
@@ -328,12 +340,12 @@ try {
     })
     .waitFor();
   await page
-    .getByRole("link", { name: "Voir l’offre externe", exact: true })
+    .getByRole("link", { name: "Voir l’offre", exact: true })
     .waitFor();
   state.external.personalization = "GENERAL_PROFILE_INCOMPLETE";
   await page.reload();
   await page
-    .getByText("ces offres générales ne sont pas", { exact: false })
+    .getByText("ces offres externes générales ne sont pas", { exact: false })
     .waitFor();
   state.internal.status = "UNAVAILABLE";
   state.external.sources[0].status = "FAILED";
@@ -346,7 +358,7 @@ try {
   await page.getByText("La dernière actualisation", { exact: false }).waitFor();
   await page.getByRole("heading", { name: "Vos disponibilités" }).waitFor();
   await page
-    .getByRole("link", { name: "Voir l’offre externe", exact: true })
+    .getByRole("link", { name: "Voir l’offre", exact: true })
     .waitFor();
   fail = true;
   await page.reload();
@@ -358,7 +370,7 @@ try {
   state = mixed();
   await page.getByRole("button", { name: "Réessayer les suggestions" }).click();
   await page
-    .getByRole("link", { name: "Voir la mission partenaire" })
+    .getByRole("link", { name: "Voir la mission" })
     .waitFor();
   console.log(
     "PASS mixed groups, empty/internal retained external, incomplete/general, partial/source failure, complete retry isolated from dashboard, missing dates/salary, detail links, external favorites, 375/768/1440 no overflow.",
