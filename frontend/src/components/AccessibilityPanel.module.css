@@ -109,7 +109,7 @@
 
 .speechActions button {
   flex: 1 1 auto;
-  min-width: 120px;
+  min-width: min(120px, 100%);
 }
 
 .speechBar {
@@ -152,7 +152,7 @@
 
 .actions {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 130px), 1fr));
   gap: 10px;
   margin-top: 20px;
 }
@@ -209,3 +209,5 @@
 
 .dialog .close { flex: 0 0 44px; width:44px; height:44px; display:grid; place-items:center; border:0; border-radius:0; background:transparent; box-shadow:none; font:inherit; font-size:26px; line-height:1; padding:0; }
 .close:focus-visible { outline:3px solid var(--brand-700); outline-offset:2px; }
+
+.group, .heading h2 { min-width: 0; }

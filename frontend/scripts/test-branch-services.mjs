@@ -12,6 +12,7 @@ test('source dates retain their semantics; missing or invalid dates are omitted'
 test('preferences validation, reset, malformed data and unavailable storage',()=>{
  const d=defaultAccessibilityPreferences();assert.deepEqual(parseAccessibilityPreferences(JSON.stringify(d)),d);
  for(const raw of ['{}','null','broken',JSON.stringify({...d,textSize:'huge'}),JSON.stringify({...d,savedAt:'bad'}),JSON.stringify({...d,highContrast:'true'})])assert.equal(parseAccessibilityPreferences(raw),null);
+ assert.equal(parseAccessibilityPreferences(JSON.stringify({...d,textSize:'xxlarge'})).textSize,'xxlarge');
  const saved=Object.getOwnPropertyDescriptor(globalThis,'localStorage');
  try{Object.defineProperty(globalThis,'localStorage',{configurable:true,get(){throw Error('blocked');}});assert.equal(storeAccessibilityPreferences(d).persisted,false);assert.equal(readAccessibilityPreferences().textSize,'normal');assert.equal(clearAccessibilityPreferences(),false);}finally{if(saved)Object.defineProperty(globalThis,'localStorage',saved);else delete globalThis.localStorage;}
 });

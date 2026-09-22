@@ -60,7 +60,7 @@ export function AccessibilityPanel({ returnToCookies = false }: { returnToCookie
    <div className={s.heading}><h2 id="a11y-title" ref={title} tabIndex={-1}>Options d’accessibilité</h2><button type="button" className={s.close} aria-label="Fermer les options d’accessibilité" onClick={a.closePanel}>×</button></div>
    <p id="a11y-summary">Adaptez l’affichage sur cet appareil. Ces aides complètent votre navigateur et votre lecteur d’écran.</p>
    <fieldset className={s.group}><legend>Agrandissement des textes et commandes</legend><div className={s.radios}>
-    {([["normal","Normal"],["large","Grand (115 %)"],["xlarge","Très grand (130 %)"]] as const).map(([v,label])=><label key={v}><input type="radio" name="a11y-text-size" checked={a.preferences.textSize===v} onChange={()=>a.setTextSize(v)} /> {label}</label>)}
+    {([["normal","Normal"],["large","Grand (115 %)"],["xlarge","Très grand (130 %)"],["xxlarge","Double (200 %)"]] as const).map(([v,label])=><label key={v}><input type="radio" name="a11y-text-size" checked={a.preferences.textSize===v} onChange={()=>a.setTextSize(v)} /> {label}</label>)}
    </div><p className={s.help}>Vous pouvez aussi utiliser le zoom de votre navigateur.</p></fieldset>
    <fieldset className={s.group}><legend>Affichage</legend><div className={s.checks}>
     <label><input type="checkbox" checked={a.preferences.highContrast} onChange={e=>a.setHighContrast(e.target.checked)} /> Contraste renforcé</label>

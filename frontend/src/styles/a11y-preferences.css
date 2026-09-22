@@ -20,9 +20,11 @@
 /* CSS enlargement also scales controls. No DOM rewriting or mutation observer. */
 html[data-a11y-text="large"] { zoom: 1.15; }
 html[data-a11y-text="xlarge"] { zoom: 1.3; }
+html[data-a11y-text="xxlarge"] { zoom: 2; }
 @supports not (zoom: 1.15) {
  html[data-a11y-text="large"] { font-size: 115%; }
  html[data-a11y-text="xlarge"] { font-size: 130%; }
+ html[data-a11y-text="xxlarge"] { font-size: 200%; }
 }
 @media print { html[data-a11y-text] { zoom: 1; } }
 
