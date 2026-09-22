@@ -191,7 +191,7 @@ export default function Historique() {
               <h2>Aucune mission pour cette sélection</h2>
               <p>Vos affectations confirmées apparaîtront dans ce planning.</p>
               <ButtonLink to="/missions" variant="outline">
-                Voir les missions
+                Rechercher une mission
               </ButtonLink>
             </div>
           )}
