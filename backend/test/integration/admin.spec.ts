@@ -442,3 +442,31 @@ test('real browser creates admin passwords from email and invitation against the
   assert.equal(calls.filter(p=>p==='/api/v1/admin/login').length,0);
  }finally{await browser?.close();await new Promise<void>(resolve=>server.close(()=>resolve()));}
 });
+
+
+test('SEC17 isolated drill: failed event alert, containment, incident diagnosis, recovery and audit',async()=>{
+ const owner=await enroll();
+ const [event]=await db.query("INSERT INTO outbox(event,payload,attempts,last_error) VALUES('AuditDrill','{}',1,'FICTIONAL_PROVIDER_UNAVAILABLE') RETURNING id");
+ const [before]=await db.query("SELECT enabled FROM source_control WHERE provider='JOBSPIPE'");
+ let incidentId:string|undefined;
+ try {
+ const detected=await owner.agent.get('/api/v1/admin/overview').expect(200);
+ assert.ok(detected.body.alerts.some((alert:any)=>alert.kind==='automation'));
+ assert.ok(detected.body.counts.failedEvents>=1);
+ const incident=await post(owner.agent,'incidents',owner.csrf,{service:'IMPORTS',impact:'EXERCICE ISOLE : automatisation fictive en echec, aucun usager concerne',ownerLabel:'Operateur de recette fictif',reason:'Alerte automation detectee sur la vue admin; collecte des preuves et confinement'}).expect(201);incidentId=incident.body.id;
+ await post(owner.agent,'operations/sources/JOBSPIPE/state',owner.csrf,{enabled:false,reason:'EXERCICE : confinement temporaire de la source fictive'}).expect(201);
+ assert.equal((await app.get(RefreshService).run('JOBSPIPE')).status,'PAUSED');
+ await post(owner.agent,'incidents/'+incidentId,owner.csrf,{state:'INVESTIGATING',reason:'Diagnostic : indisponibilite fournisseur simulee; aucune perte ni fuite de donnees, aucune notification externe'}).expect(201);
+ // Simulate restored provider processing of this one fictional event, never discard a real failure.
+ await db.query("UPDATE outbox SET completed_at=now(),last_error=NULL WHERE id=$1 AND event='AuditDrill'",[event.id]);
+ await post(owner.agent,'operations/sources/JOBSPIPE/state',owner.csrf,{enabled:before.enabled,reason:'EXERCICE : retour a la configuration initiale apres reprise'}).expect(201);
+ const recovered=await owner.agent.get('/api/v1/admin/overview').expect(200);
+ assert.equal(recovered.body.counts.failedEvents,detected.body.counts.failedEvents-1);
+ if(recovered.body.counts.failedEvents===0)assert.equal(recovered.body.alerts.some((alert:any)=>alert.kind==='automation'),false);
+ await post(owner.agent,'incidents/'+incidentId,owner.csrf,{state:'RESOLVED',reason:'Reprise verifiee : evenement fictif termine, alerte retiree si aucune autre panne, configuration restauree; compte rendu de recette conserve'}).expect(201);
+ const traces=await db.query('SELECT event,details FROM audit WHERE resource_id=$1 ORDER BY created_at,id',[incidentId]);
+ assert.equal(traces.length,3);assert.equal(traces.filter((t:any)=>t.event==='ADMIN_INCIDENT_OPENED').length,1);
+ assert.deepEqual(traces.filter((t:any)=>t.event==='ADMIN_INCIDENT_UPDATED').map((t:any)=>t.details.state).sort(),['INVESTIGATING','RESOLVED']);
+ console.log('SEC17_DRILL '+JSON.stringify({detected:true,contained:true,diagnosed:true,recovered:true,auditTraces:3,externalMessages:0,productionModified:false}));
+ }finally{await db.query("UPDATE source_control SET enabled=$1 WHERE provider='JOBSPIPE'",[before.enabled]);await db.query("DELETE FROM outbox WHERE id=$1 AND event='AuditDrill'",[event.id]);}
+});

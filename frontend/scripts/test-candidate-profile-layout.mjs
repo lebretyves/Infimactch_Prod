@@ -24,9 +24,9 @@ try{
  for(const route of ['profil','dossier','calendrier']){
  await page.goto(base+'/'+route);const consent=page.getByRole('button',{name:'Tout refuser',exact:true});if(await consent.count())await consent.click();
  await page.locator('h1').waitFor();await page.waitForTimeout(200);
- if(route==='profil'){await page.getByLabel(/^Prénom/).waitFor();}
- if(route==='dossier')await page.getByLabel(/^Numéro RPPS/).waitFor();
- if(route==='dossier'){assert.equal(await page.getByLabel(/^Numéro RPPS/).isEditable(),!populated);assert.equal(await page.getByRole('button',{name:'Vérifier mon numéro',exact:true}).count(),populated?0:1);}
+ if(route==='profil'){await page.locator('#prenom dt').waitFor();}
+ if(route==='dossier')await (populated?page.locator('#verification dt'):page.locator('#verification input')).first().waitFor();
+ if(route==='dossier'){assert.equal(await page.locator('#verification input').count(),populated?0:1);assert.equal(await page.getByRole('button',{name:'Vérifier mon numéro',exact:true}).count(),populated?0:1);}
  if(route==='calendrier')await page.getByRole('combobox',{name:'Ville de référence'}).waitFor();
  if(populated&&route==='dossier'){
  assert.equal(await page.locator('#justificatifs li').count(),2);
@@ -46,11 +46,11 @@ try{
  assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth+1),false,route+' '+width);assert.equal(await page.locator('h1').count(),1);
  }
  if(phase==='after'&&route==='profil'){
- assert.equal(await page.getByLabel(/^Prénom/).isEditable(),false);
+ assert.equal(await page.locator('#prenom input').count(),0);
  const toc=page.getByRole('navigation',{name:'Rubriques de mon profil'});await toc.waitFor();await toc.getByRole('link',{name:'Informations personnelles',exact:true}).click();assert.equal(new URL(page.url()).hash,'#informations-personnelles');
- const cv=page.locator('details').filter({has:page.locator('summary').getByText('Importer un CV',{exact:false})});assert.equal(await cv.getAttribute('open'),null);await cv.locator('summary').click();await page.getByLabel('Importer mon CV (PDF, JPEG ou PNG)').waitFor();
+ const cv=page.locator('details').filter({has:page.locator('summary').getByText('Importer un CV',{exact:false})});assert.notEqual(await cv.getAttribute('open'),null);await page.getByLabel(/Importer mon CV/).waitFor();
  if(populated){
- await page.getByLabel('Importer mon CV (PDF, JPEG ou PNG)').setInputFiles({name:'cv-test.txt',mimeType:'text/plain',buffer:Buffer.from('Document fictif')});
+ await page.getByLabel(/Importer mon CV/).setInputFiles({name:'cv-test.txt',mimeType:'text/plain',buffer:Buffer.from('Document fictif')});
  await cv.getByRole('alert').waitFor();await cv.locator('summary').click();await page.waitForTimeout(100);assert.notEqual(await cv.getAttribute('open'),null);
  for(const width of [375,1440]){await page.setViewportSize({width,height:1000});await cv.scrollIntoViewIfNeeded();await page.screenshot({path:out+'/profil-cv-error-'+width+'.png',fullPage:true});}
  await page.getByRole('button',{name:'Modifier l’expérience 1',exact:true}).click();await page.getByLabel('Établissement 1',{exact:true}).fill('Centre modifié');await page.getByRole('button',{name:'Enregistrer l’expérience',exact:true}).click();assert.equal(writes.length,0);}

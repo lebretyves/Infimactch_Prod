@@ -30,8 +30,9 @@ export class RefreshService {
     return {...result,accepted,batches,geolocation};
   }
   async run(provider:Provider,manual=false) {
-    // The transaction-scoped lock is held across acquisition and import. Another
-    // trigger returns immediately instead of multiplying network calls.
+    // Hold only the provider/control lock across acquisition. Catalogue writes use
+    // separate short transactions, committed before the next provider request.
+    // A failed checkpoint may replay a page; import upserts are idempotent.
     return this.db.transaction(async em=>{
       const [lock]=await em.query('SELECT pg_try_advisory_xact_lock($1) AS acquired',[provider==='FRANCE_TRAVAIL'?1789381901:1789381902]);
       if(!lock.acquired)return {provider,status:'BUSY',accepted:0};
@@ -41,32 +42,31 @@ export class RefreshService {
       if(control.collection_state?.phase!=='IN_PROGRESS'&&!(control.collection_state?.cycleId&&!control.collection_state?.completedAt&&!control.collection_state?.terminal)&&control.last_started_at&&Date.now()-new Date(control.last_started_at).getTime()<60000)return {provider,status:'COOLDOWN',accepted:0};
       await em.query('UPDATE source_control SET last_started_at=now() WHERE provider=$1',[provider]);
       try {
-        const scoped={query:em.query,transaction:async(fn:any)=>fn(em)} as unknown as Database;
         if(provider==='FRANCE_TRAVAIL'){
           const client=new FranceTravailClient();
-          const result=await advanceFranceTravailCollection(scoped,control.collection_state,client,manual);
+          const result=await advanceFranceTravailCollection(this.db,control.collection_state,client,manual);
           await em.query('UPDATE source_control SET collection_state=$2 WHERE provider=$1',[provider,JSON.stringify(result.state)]);
-          const availability=result.state.phase==='COMPLETE'?await verifyClosedFranceTravailOffers(scoped,id=>client.detail(id),{limit:25,recheckClosed:true,notImportedSince:new Date(result.state.startedAt)}):{deferredUntilCollectionComplete:true};
-          const freshness=await retireStaleOffers(scoped,true);await guardCrossSourceDuplicates(em);
+          const availability=result.state.phase==='COMPLETE'?await verifyClosedFranceTravailOffers(this.db,id=>client.detail(id),{limit:25,recheckClosed:true,notImportedSince:new Date(result.state.startedAt)}):{deferredUntilCollectionComplete:true};
+          const freshness=await retireStaleOffers(this.db,true);if ('reopened' in availability && availability.reopened) await this.db.transaction(async catalogue=>{await catalogue.query('SELECT pg_advisory_xact_lock(1789380901)');await guardCrossSourceDuplicates(catalogue);});
           return {provider,status:result.status,accepted:result.accepted,coverage:result.coverage,availability,freshness};
         }
         const result=await advanceJobsPipeCollection(this.db,control.collection_state,{manual});
-        const summary=result.rows.length?await importOffers(scoped,await enrichJobsPipeLocations(result.rows),false,normalizeJobsPipe,'JOBSPIPE'):null;
+        const summary=result.rows.length?await importOffers(this.db,await enrichJobsPipeLocations(result.rows),false,normalizeJobsPipe,'JOBSPIPE'):null;
         await em.query('UPDATE source_control SET collection_state=$2 WHERE provider=$1',[provider,JSON.stringify(result.state)]);
         let availability:any=null;
         if(result.status==='COMPLETE'||(result.status==='COOLDOWN'&&result.state.completedAt)){
-          const candidates=await em.query("SELECT source_id FROM external_offer WHERE source='JOBSPIPE' AND active AND (CASE WHEN jsonb_typeof(provenance->'availabilityCheck'->'nextCheckAtMs')='number' THEN (provenance->'availabilityCheck'->>'nextCheckAtMs')::numeric ELSE 0 END)<$1 ORDER BY imported_at,source_id LIMIT 25",[Date.now()]);
+          const candidates=await this.db.query("SELECT source_id FROM external_offer WHERE source='JOBSPIPE' AND active AND (CASE WHEN jsonb_typeof(provenance->'availabilityCheck'->'nextCheckAtMs')='number' THEN (provenance->'availabilityCheck'->>'nextCheckAtMs')::numeric ELSE 0 END)<$1 ORDER BY imported_at,source_id LIMIT 25",[Date.now()]);
           if(candidates.length){
             const ids=candidates.map(x=>x.source_id),check=await verifyJobsPipeOffers(this.db,ids,{requestId:new Date().toISOString().slice(0,10)+':'+ids.join('|')});
             if(check.rows.length){
-              await importOffers(scoped,await enrichJobsPipeLocations(check.rows),false,normalizeJobsPipe,'JOBSPIPE');
-              await em.query("UPDATE external_offer SET provenance=jsonb_set(provenance,'{availabilityCheck}',jsonb_build_object('status','PROVIDER_RECORD_CHECKED','checkedAtMs',$2::bigint,'nextCheckAtMs',$2::bigint+604800000)) WHERE source='JOBSPIPE' AND source_id=ANY($1::text[])",[check.rows.map(x=>x.id),Date.now()]);
+              await importOffers(this.db,await enrichJobsPipeLocations(check.rows),false,normalizeJobsPipe,'JOBSPIPE');
+              await this.db.query("UPDATE external_offer SET provenance=jsonb_set(provenance,'{availabilityCheck}',jsonb_build_object('status','PROVIDER_RECORD_CHECKED','checkedAtMs',$2::bigint,'nextCheckAtMs',$2::bigint+604800000)) WHERE source='JOBSPIPE' AND source_id=ANY($1::text[])",[check.rows.map(x=>x.id),Date.now()]);
             }
-            if(check.status==='COMPLETE'){const returned=new Set(check.rows.map(x=>x.id));const missing=ids.filter(x=>!returned.has(x));if(missing.length)await em.query("UPDATE external_offer SET provenance=jsonb_set(provenance,'{availabilityCheck}',jsonb_build_object('status','NOT_RETURNED_UNVERIFIED','checkedAtMs',$2::bigint,'nextCheckAtMs',$2::bigint+604800000)) WHERE source='JOBSPIPE' AND source_id=ANY($1::text[])",[missing,Date.now()]);}
+            if(check.status==='COMPLETE'){const returned=new Set(check.rows.map(x=>x.id));const missing=ids.filter(x=>!returned.has(x));if(missing.length)await this.db.query("UPDATE external_offer SET provenance=jsonb_set(provenance,'{availabilityCheck}',jsonb_build_object('status','NOT_RETURNED_UNVERIFIED','checkedAtMs',$2::bigint,'nextCheckAtMs',$2::bigint+604800000)) WHERE source='JOBSPIPE' AND source_id=ANY($1::text[])",[missing,Date.now()]);}
             availability={status:check.status,checked:check.rows.length,missingMeansClosed:false};
           }
         }
-        const freshness=await retireStaleOffers(scoped,true);
+        const freshness=await retireStaleOffers(this.db,true);
         return {provider,status:result.status==='CONTINUE'?'IN_PROGRESS':result.status==='COMPLETE'?'SUCCESS':result.status,accepted:summary?.accepted??0,coverage:result.coverage,availability,freshness};
       } catch (error) {
         await em.query("INSERT INTO import_run(provider,status,summary) VALUES($1,'FAILED',$2)",[provider,JSON.stringify({code:'PROVIDER_REFRESH_FAILED',reason:error instanceof Error&&/^[A-Z0-9_]+$/.test(error.message)?error.message:undefined,incomplete:true})]);

@@ -1,3 +1,4 @@
+import { listingPageQuery } from "./listing-page";
 import {ConversionController,ConversionService} from './conversions';
 import {rankedListingPage} from './listing-order';
 import {LocationsController} from './locations';
@@ -28,7 +29,6 @@ import { Request } from "express";
 import { Database } from "../database/database";
 import { SessionGuard, user, nurse } from "../common/access";
 import { missionSelect } from "../missions/missions.service";
-import { listingPageQuery } from "./listing-page";
 import { ExternalListingsDto, SearchDto, searchSql } from "./search";
 import { externalPresentation } from "../public-data/offer-quality";
 class FavoriteDto {
@@ -105,10 +105,7 @@ export class ListingsController {
       (q.where + (b.origine==='externes' ? ' AND false' : '')) +
       " UNION ALL SELECT 'e_'||e.id,e.imported_at,(to_jsonb(e)-'raw_hash')||jsonb_build_object('id','e_'||e.id,'kind','EXTERNAL_OFFER','applicationMode','REDIRECT','eligibility','INCOMPLETE') FROM external_offer e WHERE " +
       (externalWhere + externalRadius + (b.origine==='partenaires' ? ' AND false' : ''));
-    const pageQuery = listingPageQuery(sourceSql, parameters, b);
-    const pageResult = b.sort || b.availableOnly || b.publishedWithinDays
-      ? await rankedListingPage(this.db, sourceSql, parameters, b, p)
-      : (await this.db.query(pageQuery.sql, pageQuery.parameters))[0];
+    const pageResult = await rankedListingPage(this.db, sourceSql, parameters, b, p);
     const unverifiedSearchFilters = [
       "start",
       "end",

@@ -1,3 +1,4 @@
+import {protectSessionRevocation} from './security/session-revocation';
 import {ContractsModule} from './contracts/contracts.module';
 import {SupportModule} from "./support/support.module";
 import { EmailDeliveryModule } from "./automation/email-delivery.module";
@@ -147,7 +148,7 @@ export async function createApp() {
   app.enableCors({ origin: [required("APP_ORIGIN"), ...(process.env.ADMIN_ORIGIN ? [process.env.ADMIN_ORIGIN] : [])], credentials: true });
   const pool = new Pool({ ...postgresConnection(), max: 4 });
   const Store = connectPgSimple(session);
-  const sessionStore = new Store({ pool, tableName: "session" });
+  const sessionStore = protectSessionRevocation(new Store({ pool, tableName: "session" }),pool,"session");
   const clientSession = session({
       name: "infimatch.sid",
       secret: required("SESSION_SECRET"),
@@ -161,7 +162,7 @@ export async function createApp() {
         maxAge: 8 * 60 * 60 * 1000,
       },
     });
-  const adminStore = new Store({pool,tableName:"admin_session"});
+  const adminStore = protectSessionRevocation(new Store({pool,tableName:"admin_session"}),pool,"admin_session");
   const adminSession = session({name:"infimatch.admin.sid",secret:required("SESSION_SECRET")+":admin",store:adminStore,resave:false,saveUninitialized:false,cookie:{path:"/api/v1/admin",httpOnly:true,secure:process.env.NODE_ENV==="production",sameSite:"strict",maxAge:8*3600000}});
   app.use((req:any,res:any,next:any)=>(req.path.startsWith("/api/v1/admin/")?adminSession:clientSession)(req,res,next));
   const limiterDb = app.get(Database);
@@ -209,8 +210,9 @@ export async function createApp() {
     next();
   });
   app.use(
-    "/api/v1/me/documents",
+    ["/api/v1/me/documents", "/api/v1/me/bank-document", "/api/v1/me/bank-details", "/api/v1/me/cv-document"],
     sharedRateLimit(limiterDb,"documents",{
+      keyGenerator: req => req.session?.userId ?? req.sessionID,
       windowMs: 60000,
       limit: 30,
       standardHeaders: "draft-8",

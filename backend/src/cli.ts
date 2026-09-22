@@ -1,6 +1,6 @@
 import {RefreshService} from "./public-data/refresh.service";
 import {enrichFranceTravailLocations} from "./public-data/offer-geolocation";
-import { executeClosure, processClosures, approveClosure } from "./security/closure";
+import { executeClosure,replayApprovedErasure, processClosures, approveClosure } from "./security/closure";
 import { retireStaleOffers } from "./public-data/freshness";
 import { reparseOffers } from "./public-data/reparse-offers";
 import { retryOutbox } from "./automation/automation.module";
@@ -290,7 +290,7 @@ cli.command("replay-erasures").requiredOption("--ledger <path>").action(async op
  const entries=(await readFile(opts.ledger,"utf8")).split(/\r?\n/).filter(Boolean).map(line=>JSON.parse(line).accountId);
  if(entries.some(id=>typeof id!=="string"||!/^[0-9a-f-]{36}$/i.test(id)))throw Error("Invalid erasure ledger");
  const db=await new Database().connect();let processed=0;
- try{for(const id of new Set(entries)){if(!(await db.query("SELECT id FROM account WHERE id=$1",[id])).length)continue;await executeClosure(db,id);processed++;}console.log(JSON.stringify({processed}));}finally{await db.onModuleDestroy();}
+ try{for(const id of new Set(entries)){if(!(await db.query("SELECT id FROM account WHERE id=$1",[id])).length)continue;await replayApprovedErasure(db,id);processed++;}console.log(JSON.stringify({processed}));}finally{await db.onModuleDestroy();}
 });
 cli.command("retry-document-erasures").option("--apply", "Retry committed document deletions",false).action(async opts=>{const db=await new Database().connect();try{if(opts.apply)await cleanupRemovedDocuments(db);console.log(JSON.stringify({dryRun:!opts.apply,pending:Number((await db.query("SELECT count(*) AS n FROM document_erasure"))[0].n)}));}finally{await db.onModuleDestroy();}});
 void cli.parseAsync().catch((e) => {
