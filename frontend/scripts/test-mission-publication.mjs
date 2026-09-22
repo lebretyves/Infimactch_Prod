@@ -61,7 +61,10 @@ try {
   if(scenario==='known'){
    await page.setViewportSize({width:375,height:812});await page.evaluate(()=>scrollTo(0,0));
    const access=await page.getByRole('button',{name:'Accessibilité',exact:true}).boundingBox();
-   assert.ok(access&&access.y>=0&&access.y<100&&access.x+access.width>315,'Connected accessibility is visible top-right');
+   const header=page.locator('header').first();
+   const identity=await header.locator('a[href="/organisation"]').boundingBox();
+   const brand=await header.getByRole('link',{name:'InfiMatch — accueil',exact:true}).boundingBox();
+   assert.ok(access&&identity&&brand&&access.y>=0&&access.y+access.height<=100&&access.x>=brand.x+brand.width-1&&access.x+access.width<=identity.x+1,'Connected accessibility remains visible between the brand and account identity');
    await page.getByRole('button',{name:'Ouvrir le menu',exact:true}).click();
    const navigation=page.getByRole('navigation',{name:'Navigation principale',exact:true});await navigation.waitFor();
    const navBox=await navigation.boundingBox(),headerBox=await page.locator('header').first().boundingBox();
@@ -77,6 +80,7 @@ try {
   await page.getByLabel('Description').fill('Renfort infirmier pour une vacation de démonstration.');
   if(kind==='AGENCY')await page.getByLabel('Établissement').selectOption(facility.id);
   await page.getByRole('combobox',{name:'Service',exact:true}).selectOption('URGENCES');
+  await page.getByLabel('Créneau de la mission').selectOption('MORNING');
   await page.getByLabel('Date de début').fill(date);
   await page.getByLabel('Date de fin incluse').fill(date);
   await page.getByLabel('Rémunération brute par heure (€)').fill('25');
@@ -92,6 +96,7 @@ try {
   await page.getByText('Offre publiée : les intérimaires peuvent la consulter et candidater selon leurs critères.',{exact:true}).waitFor();
   assert.equal(state.writes.length,1,JSON.stringify(state.writes.map(w=>w.path)));
   assert.equal(state.writes[0].path,'/missions/open');
+  assert.equal(state.writes[0].body.shift,'MORNING');
   assert.ok(state.writes[0].key);
   assert.equal(state.writes[0].body.establishmentId,facility.id);
   assert.equal(state.writes[0].body.hourlySalary,25);
