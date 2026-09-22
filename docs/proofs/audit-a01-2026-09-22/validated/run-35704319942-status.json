@@ -1,0 +1,208 @@
+{
+  "conclusion": "success",
+  "databaseId": 35704319942,
+  "event": "pull_request",
+  "headSha": "cf9ef6f55ab88f5be00cca48ac294c1c2f442ec0",
+  "jobs": [
+    {
+      "completedAt": "2026-09-22T08:22:55Z",
+      "conclusion": "success",
+      "databaseId": 106669473909,
+      "name": "frontend",
+      "startedAt": "2026-09-22T08:21:05Z",
+      "status": "completed",
+      "steps": [
+        {
+          "completedAt": "2026-09-22T08:21:06Z",
+          "conclusion": "success",
+          "name": "Set up job",
+          "number": 1,
+          "startedAt": "2026-09-22T08:21:05Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-09-22T08:21:09Z",
+          "conclusion": "success",
+          "name": "Run actions/checkout@v4",
+          "number": 2,
+          "startedAt": "2026-09-22T08:21:06Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-09-22T08:21:09Z",
+          "conclusion": "success",
+          "name": "Run actions/setup-node@v4",
+          "number": 3,
+          "startedAt": "2026-09-22T08:21:09Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-09-22T08:22:53Z",
+          "conclusion": "success",
+          "name": "Validate frontend when included in repository",
+          "number": 4,
+          "startedAt": "2026-09-22T08:21:09Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-09-22T08:22:53Z",
+          "conclusion": "success",
+          "name": "Post Run actions/setup-node@v4",
+          "number": 7,
+          "startedAt": "2026-09-22T08:22:53Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-09-22T08:22:53Z",
+          "conclusion": "success",
+          "name": "Post Run actions/checkout@v4",
+          "number": 8,
+          "startedAt": "2026-09-22T08:22:53Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-09-22T08:22:53Z",
+          "conclusion": "success",
+          "name": "Complete job",
+          "number": 9,
+          "startedAt": "2026-09-22T08:22:53Z",
+          "status": "completed"
+        }
+      ],
+      "url": "https://github.com/lebretyves/Infimactch_Prod/actions/runs/35704319942/job/106669473909"
+    },
+    {
+      "completedAt": "2026-09-22T08:26:44Z",
+      "conclusion": "success",
+      "databaseId": 106669474127,
+      "name": "backend",
+      "startedAt": "2026-09-22T08:21:05Z",
+      "status": "completed",
+      "steps": [
+        {
+          "completedAt": "2026-09-22T08:21:06Z",
+          "conclusion": "success",
+          "name": "Set up job",
+          "number": 1,
+          "startedAt": "2026-09-22T08:21:05Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-09-22T08:21:09Z",
+          "conclusion": "success",
+          "name": "Run actions/checkout@v4",
+          "number": 2,
+          "startedAt": "2026-09-22T08:21:06Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-09-22T08:21:13Z",
+          "conclusion": "success",
+          "name": "Run actions/setup-node@v4",
+          "number": 3,
+          "startedAt": "2026-09-22T08:21:09Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-09-22T08:21:13Z",
+          "conclusion": "success",
+          "name": "Check documentation and workflow consistency",
+          "number": 4,
+          "startedAt": "2026-09-22T08:21:13Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-09-22T08:21:18Z",
+          "conclusion": "success",
+          "name": "Run npm ci",
+          "number": 5,
+          "startedAt": "2026-09-22T08:21:13Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-09-22T08:21:19Z",
+          "conclusion": "success",
+          "name": "Check encrypted archive authentication",
+          "number": 6,
+          "startedAt": "2026-09-22T08:21:18Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-09-22T08:21:26Z",
+          "conclusion": "success",
+          "name": "Run npm run typecheck && npm run build",
+          "number": 7,
+          "startedAt": "2026-09-22T08:21:19Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-09-22T08:21:28Z",
+          "conclusion": "success",
+          "name": "Prepare browser integration dependencies",
+          "number": 8,
+          "startedAt": "2026-09-22T08:21:26Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-09-22T08:21:46Z",
+          "conclusion": "success",
+          "name": "Install browser for backend integration tests",
+          "number": 9,
+          "startedAt": "2026-09-22T08:21:28Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-09-22T08:22:04Z",
+          "conclusion": "success",
+          "name": "Build application and admin for backend integration tests",
+          "number": 10,
+          "startedAt": "2026-09-22T08:21:46Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-09-22T08:26:39Z",
+          "conclusion": "success",
+          "name": "Run npm run test:isolated",
+          "number": 11,
+          "startedAt": "2026-09-22T08:22:04Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-09-22T08:26:43Z",
+          "conclusion": "success",
+          "name": "Run actions/upload-artifact@v4",
+          "number": 12,
+          "startedAt": "2026-09-22T08:26:39Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-09-22T08:26:43Z",
+          "conclusion": "success",
+          "name": "Post Run actions/setup-node@v4",
+          "number": 23,
+          "startedAt": "2026-09-22T08:26:43Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-09-22T08:26:43Z",
+          "conclusion": "success",
+          "name": "Post Run actions/checkout@v4",
+          "number": 24,
+          "startedAt": "2026-09-22T08:26:43Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-09-22T08:26:43Z",
+          "conclusion": "success",
+          "name": "Complete job",
+          "number": 25,
+          "startedAt": "2026-09-22T08:26:43Z",
+          "status": "completed"
+        }
+      ],
+      "url": "https://github.com/lebretyves/Infimactch_Prod/actions/runs/35704319942/job/106669474127"
+    }
+  ],
+  "status": "completed",
+  "url": "https://github.com/lebretyves/Infimactch_Prod/actions/runs/35704319942"
+}

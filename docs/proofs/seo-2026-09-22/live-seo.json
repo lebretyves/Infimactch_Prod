@@ -1,0 +1,203 @@
+{
+  "date": "2026-09-22T07:33:50.557Z",
+  "origin": "https://infimactch-prod-backend-l5bc.vercel.app",
+  "pages": [
+    {
+      "path": "/",
+      "status": 200,
+      "url": "https://infimactch-prod-backend-l5bc.vercel.app/",
+      "title": "L’intérim infirmier, pensé pour le soin — InfiMatch",
+      "description": "Découvrez InfiMatch : un projet de plateforme reliant infirmiers IDE, IADE, IBODE, établissements de santé et agences d’intérim.",
+      "robots": "index,follow",
+      "xRobotsTag": null,
+      "canonical": "https://infimactch-prod-backend-l5bc.vercel.app/",
+      "language": "fr",
+      "googleVerification": true,
+      "noJsFallback": true,
+      "jobPosting": false,
+      "cacheControl": "public, max-age=0, must-revalidate",
+      "htmlSha256": "97ad59e1f6a0b9bcf97da08ba794b6cb7e83285f0219e8d4c8eb74b317b21580",
+      "scripts": [
+        "/assets/index-05EzMYaG.js"
+      ]
+    },
+    {
+      "path": "/installer",
+      "status": 200,
+      "url": "https://infimactch-prod-backend-l5bc.vercel.app/installer",
+      "title": "Installer l’application — InfiMatch",
+      "description": "Retrouvez InfiMatch depuis votre écran d’accueil, avec le même compte et les mêmes fonctions.",
+      "robots": "index,follow",
+      "xRobotsTag": null,
+      "canonical": "https://infimactch-prod-backend-l5bc.vercel.app/installer",
+      "language": "fr",
+      "googleVerification": true,
+      "noJsFallback": true,
+      "jobPosting": false,
+      "cacheControl": "public, max-age=0, must-revalidate",
+      "htmlSha256": "78b9b6ffd42c4623eedf3fd440f487bd603e16e04fafbef792f2a10aa0dcddff",
+      "scripts": [
+        "/assets/index-05EzMYaG.js"
+      ]
+    },
+    {
+      "path": "/accessibilite",
+      "status": 200,
+      "url": "https://infimactch-prod-backend-l5bc.vercel.app/accessibilite",
+      "title": "Accessibilité : état des travaux — InfiMatch",
+      "description": "Périmètre, méthode et limites des contrôles d’accessibilité du projet InfiMatch.",
+      "robots": "index,follow",
+      "xRobotsTag": null,
+      "canonical": "https://infimactch-prod-backend-l5bc.vercel.app/accessibilite",
+      "language": "fr",
+      "googleVerification": true,
+      "noJsFallback": true,
+      "jobPosting": false,
+      "cacheControl": "public, max-age=0, must-revalidate",
+      "htmlSha256": "383e9c4ff3719f2c0affd78a959ee7888a5599a5f5a7475adc319bd08096821a",
+      "scripts": [
+        "/assets/index-05EzMYaG.js"
+      ]
+    },
+    {
+      "path": "/ecoconception",
+      "status": 200,
+      "url": "https://infimactch-prod-backend-l5bc.vercel.app/ecoconception",
+      "title": "Écoconception : on prend soin des ressources aussi — InfiMatch",
+      "description": "Les petits choix concrets d’InfiMatch pour limiter les ressources utilisées, et les mesures de chaque version.",
+      "robots": "index,follow",
+      "xRobotsTag": null,
+      "canonical": "https://infimactch-prod-backend-l5bc.vercel.app/ecoconception",
+      "language": "fr",
+      "googleVerification": true,
+      "noJsFallback": true,
+      "jobPosting": false,
+      "cacheControl": "public, max-age=0, must-revalidate",
+      "htmlSha256": "c46d0c4b31adf14562935c20cef2478c0cbd2d5096a6021e359013ca7af28fc1",
+      "scripts": [
+        "/assets/index-05EzMYaG.js"
+      ]
+    },
+    {
+      "path": "/mentions-legales",
+      "status": 200,
+      "url": "https://infimactch-prod-backend-l5bc.vercel.app/mentions-legales",
+      "title": "Mentions légales et données personnelles — InfiMatch",
+      "description": "Fonctionnement du projet InfiMatch, données de compte et préférences cookies.",
+      "robots": "index,follow",
+      "xRobotsTag": null,
+      "canonical": "https://infimactch-prod-backend-l5bc.vercel.app/mentions-legales",
+      "language": "fr",
+      "googleVerification": true,
+      "noJsFallback": true,
+      "jobPosting": false,
+      "cacheControl": "public, max-age=0, must-revalidate",
+      "htmlSha256": "a852723b27292c89a9f1cdbb191c94637c0af35e77a1e50455b664375353cb73",
+      "scripts": [
+        "/assets/index-05EzMYaG.js"
+      ]
+    },
+    {
+      "path": "/connexion",
+      "status": 200,
+      "url": "https://infimactch-prod-backend-l5bc.vercel.app/connexion",
+      "title": "Espace personnel — InfiMatch",
+      "description": "Connectez-vous pour accéder à votre espace InfiMatch.",
+      "robots": "noindex,follow",
+      "xRobotsTag": "noindex, follow",
+      "canonical": null,
+      "language": "fr",
+      "googleVerification": true,
+      "noJsFallback": true,
+      "jobPosting": false,
+      "cacheControl": "no-store",
+      "htmlSha256": "9467027747f05ff07fe43f33b67ae072310966ff900bad3f9f9230b4d2c07f13",
+      "scripts": [
+        "/assets/index-05EzMYaG.js"
+      ]
+    },
+    {
+      "path": "/inscription/localisation",
+      "status": 200,
+      "url": "https://infimactch-prod-backend-l5bc.vercel.app/inscription/localisation",
+      "title": "Espace personnel — InfiMatch",
+      "description": "Connectez-vous pour accéder à votre espace InfiMatch.",
+      "robots": "noindex,follow",
+      "xRobotsTag": "noindex, follow",
+      "canonical": null,
+      "language": "fr",
+      "googleVerification": true,
+      "noJsFallback": true,
+      "jobPosting": false,
+      "cacheControl": "no-store",
+      "htmlSha256": "9467027747f05ff07fe43f33b67ae072310966ff900bad3f9f9230b4d2c07f13",
+      "scripts": [
+        "/assets/index-05EzMYaG.js"
+      ]
+    },
+    {
+      "path": "/missions",
+      "status": 200,
+      "url": "https://infimactch-prod-backend-l5bc.vercel.app/missions",
+      "title": "Espace personnel — InfiMatch",
+      "description": "Connectez-vous pour accéder à votre espace InfiMatch.",
+      "robots": "noindex,follow",
+      "xRobotsTag": "noindex, follow",
+      "canonical": null,
+      "language": "fr",
+      "googleVerification": true,
+      "noJsFallback": true,
+      "jobPosting": false,
+      "cacheControl": "no-store",
+      "htmlSha256": "9467027747f05ff07fe43f33b67ae072310966ff900bad3f9f9230b4d2c07f13",
+      "scripts": [
+        "/assets/index-05EzMYaG.js"
+      ]
+    },
+    {
+      "path": "/profil",
+      "status": 200,
+      "url": "https://infimactch-prod-backend-l5bc.vercel.app/profil",
+      "title": "Espace personnel — InfiMatch",
+      "description": "Connectez-vous pour accéder à votre espace InfiMatch.",
+      "robots": "noindex,follow",
+      "xRobotsTag": "noindex, follow",
+      "canonical": null,
+      "language": "fr",
+      "googleVerification": true,
+      "noJsFallback": true,
+      "jobPosting": false,
+      "cacheControl": "no-store",
+      "htmlSha256": "9467027747f05ff07fe43f33b67ae072310966ff900bad3f9f9230b4d2c07f13",
+      "scripts": [
+        "/assets/index-05EzMYaG.js"
+      ]
+    }
+  ],
+  "sitemap": {
+    "status": 200,
+    "locations": [
+      "https://infimactch-prod-backend-l5bc.vercel.app/",
+      "https://infimactch-prod-backend-l5bc.vercel.app/installer",
+      "https://infimactch-prod-backend-l5bc.vercel.app/accessibilite",
+      "https://infimactch-prod-backend-l5bc.vercel.app/ecoconception",
+      "https://infimactch-prod-backend-l5bc.vercel.app/mentions-legales"
+    ]
+  },
+  "robots": {
+    "status": 200,
+    "content": "User-agent: *\nAllow: /\nSitemap: https://infimactch-prod-backend-l5bc.vercel.app/sitemap.xml\n"
+  },
+  "redirects": [
+    {
+      "path": "/catalogue",
+      "status": 308,
+      "location": "/"
+    },
+    {
+      "path": "/apercu-annonces",
+      "status": 308,
+      "location": "/"
+    }
+  ]
+}

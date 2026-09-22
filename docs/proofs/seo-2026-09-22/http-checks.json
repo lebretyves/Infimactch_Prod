@@ -1,0 +1,101 @@
+{
+  "date": "2026-09-22T07:35:42.165Z",
+  "results": [
+    {
+      "path": "/",
+      "status": 200,
+      "title": "L’intérim infirmier, pensé pour le soin — InfiMatch",
+      "robots": "index,follow",
+      "canonical": "https://infimactch-prod-backend-l5bc.vercel.app/",
+      "xRobots": null
+    },
+    {
+      "path": "/installer",
+      "status": 200,
+      "title": "Installer l’application — InfiMatch",
+      "robots": "index,follow",
+      "canonical": "https://infimactch-prod-backend-l5bc.vercel.app/installer",
+      "xRobots": null
+    },
+    {
+      "path": "/accessibilite",
+      "status": 200,
+      "title": "Accessibilité : état des travaux — InfiMatch",
+      "robots": "index,follow",
+      "canonical": "https://infimactch-prod-backend-l5bc.vercel.app/accessibilite",
+      "xRobots": null
+    },
+    {
+      "path": "/ecoconception",
+      "status": 200,
+      "title": "Écoconception : on prend soin des ressources aussi — InfiMatch",
+      "robots": "index,follow",
+      "canonical": "https://infimactch-prod-backend-l5bc.vercel.app/ecoconception",
+      "xRobots": null
+    },
+    {
+      "path": "/mentions-legales",
+      "status": 200,
+      "title": "Mentions légales et données personnelles — InfiMatch",
+      "robots": "index,follow",
+      "canonical": "https://infimactch-prod-backend-l5bc.vercel.app/mentions-legales",
+      "xRobots": null
+    },
+    {
+      "path": "/profil",
+      "status": 200,
+      "title": "Espace personnel — InfiMatch",
+      "robots": "noindex,follow",
+      "xRobots": "noindex, follow"
+    },
+    {
+      "path": "/dossier",
+      "status": 200,
+      "title": "Espace personnel — InfiMatch",
+      "robots": "noindex,follow",
+      "xRobots": "noindex, follow"
+    },
+    {
+      "path": "/calendrier",
+      "status": 200,
+      "title": "Espace personnel — InfiMatch",
+      "robots": "noindex,follow",
+      "xRobots": "noindex, follow"
+    },
+    {
+      "path": "/missions",
+      "status": 200,
+      "title": "Espace personnel — InfiMatch",
+      "robots": "noindex,follow",
+      "xRobots": "noindex, follow"
+    },
+    {
+      "path": "/candidatures",
+      "status": 200,
+      "title": "Espace personnel — InfiMatch",
+      "robots": "noindex,follow",
+      "xRobots": "noindex, follow"
+    },
+    {
+      "path": "/favoris",
+      "status": 200,
+      "title": "Espace personnel — InfiMatch",
+      "robots": "noindex,follow",
+      "xRobots": "noindex, follow"
+    },
+    {
+      "path": "/notifications",
+      "status": 200,
+      "title": "Espace personnel — InfiMatch",
+      "robots": "noindex,follow",
+      "xRobots": "noindex, follow"
+    },
+    {
+      "path": "/compte",
+      "status": 200,
+      "title": "Espace personnel — InfiMatch",
+      "robots": "noindex,follow",
+      "xRobots": "noindex, follow"
+    }
+  ]
+}

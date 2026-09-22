@@ -2,6 +2,8 @@
 
 ## Références courantes
 
+- [Positionnement SEO : bilan et preuves du 22 septembre 2026](quality/POSITIONNEMENT_SEO_2026-09-22.md).
+
 - [Exigences et critères d'acceptation](REQUIREMENTS_V1.md).
 - [Décisions produit](DECISIONS_V1.md).
 - [Rendu et recette](rendu/README.md).

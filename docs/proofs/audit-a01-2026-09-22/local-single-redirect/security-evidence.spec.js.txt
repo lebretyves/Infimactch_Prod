@@ -1,0 +1,14 @@
+✔ SEC09 malformed SQL and Mongo operators are rejected without arbitrary query execution (505.9115ms)
+SEC18 iteration 0 PASS
+SEC18 iteration 1 PASS
+SEC18 iteration 2 PASS
+✔ SEC08 and SEC18 real API: stored text stays inert, logout revokes cookie and back navigation exposes no private profile (5538.9696ms)
+✔ SEC18 delayed session persistence cannot resurrect a logged-out client or admin (28.8469ms)
+ℹ tests 3
+ℹ suites 0
+ℹ pass 3
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 17423.6989
