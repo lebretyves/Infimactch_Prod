@@ -25,6 +25,8 @@ import {
 import { useAuth } from "@/context/AuthContext";
 import { ButtonLink, Button } from "@/ui/Button";
 import { Icon } from "@/ui/Icon";
+import { CommuteLink } from "@/components/CommuteLink";
+import { getProfile } from "@/services/profile";
 import s from "./MarketPages.module.css";
 export default function MissionDetail() {
   const { id = "" } = useParams(),
@@ -34,6 +36,10 @@ export default function MissionDetail() {
     if (user?.role !== "interimaire" || !id.startsWith("m_")) return [];
     return api<{id:string;status:string}[]>("/me/missions/"+encodeURIComponent(id.slice(2))+"/assignments",{signal});
   }, "mission-confirmations:"+user?.id+":"+id);
+  const profile = useRemote(async signal => {
+    if (user?.role !== "interimaire") return null;
+    return getProfile(signal);
+  }, "commute-profile:"+user?.id);
   const parsedOffer = r.data?.parsedOffer;
   const parsedSummary = extractedSidebar(parsedOffer);
   const saved = useRemote(
@@ -253,6 +259,13 @@ export default function MissionDetail() {
                   <p className={s.muted}>
                     {m.address || m.location_label || "Adresse non précisée"}
                   </p>
+                  {nurse && !profile.loading && (
+                    <CommuteLink
+                      origin={profile.data}
+                      destination={m}
+                      destinationLabel={m.establishment_name || "l’établissement"}
+                    />
+                  )}
                 </div>
                 {m.establishment_id && (
                   <div className={s.stack}>

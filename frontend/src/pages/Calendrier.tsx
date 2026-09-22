@@ -5,6 +5,7 @@ import { useEffect, useRef, useState, type FormEvent } from "react";
 import { NavLink, Link } from "react-router";
 import { useRemote } from "@/lib/useRemote";
 import { useAuth } from "@/context/AuthContext";
+import { api } from "@/services/api";
 import {
   getProfile,
   saveProfile,
@@ -666,27 +667,68 @@ function Editor({
             <Button
               type="button"
               variant="ghost"
+              loading={busy === "locate"}
               onClick={() => {
-                setError("");
-                if (!navigator.geolocation) {
-                  setError("Géolocalisation indisponible.");
-                  return;
-                }
-                navigator.geolocation.getCurrentPosition(
-                  (position) => {
-                    setCity("");
-                    setLatitude(String(position.coords.latitude));
-                    setLongitude(String(position.coords.longitude));
-                    setMessage(
-                      "Position obtenue. Enregistrez votre zone pour la conserver.",
+                void run("locate", async () => {
+                  if (!window.isSecureContext) {
+                    throw new Error(
+                      "La géolocalisation nécessite localhost ou HTTPS. Ouvrez l’app via http://127.0.0.1:5173.",
                     );
-                  },
-                  () =>
-                    setError(
-                      "Position indisponible. Vous pouvez saisir les coordonnées manuellement.",
-                    ),
-                  { timeout: 10000 },
-                );
+                  }
+                  if (!navigator.geolocation) {
+                    throw new Error("Géolocalisation indisponible sur cet appareil.");
+                  }
+                  let position: GeolocationPosition;
+                  try {
+                    position = await new Promise<GeolocationPosition>((resolve, reject) =>
+                      navigator.geolocation.getCurrentPosition(resolve, reject, {
+                        timeout: 15000,
+                        maximumAge: 60000,
+                        enableHighAccuracy: false,
+                      }),
+                    );
+                  } catch (e) {
+                    const code = (e as GeolocationPositionError)?.code;
+                    if (code === 1) {
+                      throw new Error(
+                        "Localisation refusée par le navigateur. Autorisez la position pour ce site, ou saisissez une commune.",
+                      );
+                    }
+                    if (code === 3) {
+                      throw new Error(
+                        "Délai dépassé pour obtenir la position. Réessayez ou saisissez une commune.",
+                      );
+                    }
+                    throw new Error(
+                      "Position indisponible. Saisissez une commune ou les coordonnées manuellement.",
+                    );
+                  }
+                  const coords = {
+                    latitude: position.coords.latitude,
+                    longitude: position.coords.longitude,
+                  };
+                  setLatitude(String(coords.latitude));
+                  setLongitude(String(coords.longitude));
+                  try {
+                    const result = await api<{
+                      address: { address: string; postalCode: string; city: string } | null;
+                    }>("/listings/locations/reverse", {
+                      method: "POST",
+                      body: coords,
+                    });
+                    if (result.address?.city) {
+                      setCity(
+                        result.address.postalCode
+                          ? `${result.address.city} · ${result.address.postalCode}`
+                          : result.address.city,
+                      );
+                    } else {
+                      setCity("Ma position");
+                    }
+                  } catch {
+                    setCity("Ma position");
+                  }
+                }, "Position obtenue. Enregistrez votre zone pour la conserver.");
               }}
             >
               Utiliser ma position
