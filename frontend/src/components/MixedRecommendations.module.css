@@ -15,8 +15,6 @@
 .recommendations .heading h2 { font-size: clamp(25px, 2.5vw, 30px); line-height: 1.15; letter-spacing: -1px; color: var(--ink-900); }
 .emblem { display: grid; place-items: center; width: 52px; height: 58px; flex: 0 0 auto; border: 1px solid transparent; border-radius: 14px 14px 22px 14px; background: var(--brand-600); color: var(--white); transform: rotate(-7deg); }
 .eyebrow { font-size: 11px; line-height: 1.5; letter-spacing: 1.4px; font-weight: 700; color: var(--brand-700); margin-bottom: 6px !important; }
-.allOffers { display: inline-flex; align-items: center; gap: 12px; min-height: 44px; color: var(--brand-800); font-size: 14px; font-weight: 700; text-underline-offset: 5px; }
-.allOffers:hover { color: var(--brand-900); }
 .intro { color: var(--ink-700); font-size: 15px; }
 .toolbar { padding-block: 18px; border-block: 1px solid var(--line); }
 .toolbar p { color: var(--ink-700); font-size: 13px; }

@@ -154,7 +154,7 @@ export function MixedRecommendations({
           <span className={s.emblem} aria-hidden="true"><Icon name="heart-outline" size={26} /></span>
           <div><p className={s.eyebrow}>LE BON MATCH, CÔTÉ MISSION</p><h2 id="recommendations-heading">Vos matchs</h2></div>
         </div>
-        <Link className={s.allOffers} to={`/missions?origine=${origin}`}>Toutes les offres <span aria-hidden="true">→</span></Link>
+        <ButtonLink to={`/missions?origine=${origin}`} variant="outline" size="sm">Toutes les offres <span aria-hidden="true">→</span></ButtonLink>
       </header>
       <p className={s.intro}>Jusqu’à 3 missions à découvrir. Un coup de cœur ? Gardez-le dans vos favoris.</p>
       <div className={s.toolbar}>
