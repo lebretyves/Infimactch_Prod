@@ -30,7 +30,7 @@ Ces nombres décrivent le découpage, pas une mesure de qualité ou de couvertur
 - Nouveau test recherche à 390 et 1440 pixels : filtres, pagination, retour navigateur, résultats vides, réinitialisation et correction d’une page hors limites.
 - Tests supplémentaires : reconnaissance du métier, navigation locale et dates dans trois fuseaux horaires.
 
-Les nouveaux parcours navigateur utilisent des réponses API fictives. Ils ne créent pas de comptes réels et ne prouvent pas une recette publiée ni une livraison de notifications. La CI complète sur le commit final doit être verte avant promotion.
+Les nouveaux parcours navigateur utilisent des réponses API fictives. Ils ne créent pas de comptes réels et ne prouvent pas une recette publiée ni une livraison de notifications. La [CI complète 35714914376](https://github.com/lebretyves/Infimactch_Prod/actions/runs/35714914376) a réussi sur le commit de code `80ab7ae5a111e7ffdcef189de61b891580dd0524` avant sa publication dans Main. Le report équivalent `c9a528e` a été publié dans Backend ; les 35 fichiers modifiés ont été comparés entre les deux dépôts, avec adaptation des chemins documentaires. Les jobs Epitech restent bloqués avant démarrage par le budget Actions de l’organisation.
 
 ## Suite prioritaire
 
