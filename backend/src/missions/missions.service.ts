@@ -1,5 +1,8 @@
+import { matchingMission } from "./mission-mapping";
+import { validateMission } from "./mission-validation";
+export { matchingMission } from "./mission-mapping";
 import {cancellationRecord} from '../automation/mission-mail';
-import {validDateBounds,startsInPast,withinMissionHorizon} from "../domain/schedule-period";
+import {startsInPast,withinMissionHorizon} from "../domain/schedule-period";
 import { assessApplication } from "./application-assessment";
 import { assessAssignment } from "./assignment-assessment";
 import { requireActiveAccount } from "../common/access";
@@ -16,29 +19,9 @@ import { createHash } from "node:crypto";
 import { Database, audit, event } from "../database/database";
 import { member, nurse } from "../common/access";
 import { MissionDto } from "./mission.dto";
-import { interval, MatchMission } from "../domain/matching";
-import { professional } from "../profiles/profiles.module";
+import { professional } from "../profiles/profile-mapping";
 export const missionSelect =
   "SELECT m.*,ST_Y(m.location::geometry) AS latitude,ST_X(m.location::geometry) AS longitude FROM mission m";
-export function matchingMission(m: any): MatchMission {
-  return {
-    start: new Date(m.start_at).toISOString(),
-    end: new Date(m.end_at).toISOString(),
-    status: m.status,
-    qualification: m.qualification,
-    service: m.service,
-    population: m.population,
-    block: m.block,
-    specialty: m.specialty,
-    requiredSkills: m.required_skills,
-    desiredSkills: m.desired_skills,
-    minExperienceMonths: Number(m.min_experience_months),
-    latitude: m.latitude,
-    longitude: m.longitude,
-    shift: m.shift,
-    schedulePrecision: m.schedule_precision,
-  };
-}
 export async function lockMission(em: SqlClient, id: string) {
   const [m] = await em.query(missionSelect + " WHERE m.id=$1 FOR UPDATE", [id]);
   if (!m) throw new NotFoundException();
@@ -86,33 +69,8 @@ async function applicationAssessment(em: SqlClient, p: any, m: any) {
 @Injectable()
 export class MissionsService {
   constructor(private readonly db: Database) {}
-  private validate(b: MissionDto, checkHorizon = true) {
-    if ((b.latitude == null) !== (b.longitude == null))
-      throw new BadRequestException("Latitude and longitude must be supplied together");
-    if (b.timezone !== undefined) {
-      try {
-        if (typeof b.timezone !== "string" || !/^[A-Za-z_]+(?:\/[A-Za-z0-9_+.-]+)*$/.test(b.timezone)) throw new Error();
-        new Intl.DateTimeFormat("en", { timeZone: b.timezone }).format();
-      } catch { throw new BadRequestException("Invalid mission timezone"); }
-    }
-    try {
-      interval(b);
-    } catch {
-      throw new BadRequestException("Invalid mission interval");
-    }
-    if (b.schedulePrecision === 'DATE' && !validDateBounds(b.start,b.end,b.timezone))
-      throw new BadRequestException("Date-only bounds must be complete local calendar days");
-    if (checkHorizon && !withinMissionHorizon(b.start,b.end,b.timezone))
-      throw new BadRequestException("Les dates de mission ne peuvent pas dépasser deux ans à partir d’aujourd’hui.");
-    if (b.block === "SPECIALIZED" && !b.specialty)
-      throw new BadRequestException("Specialty required");
-    if (b.block !== "SPECIALIZED" && b.specialty)
-      throw new BadRequestException(
-        "Specialty only applies to specialized block",
-      );
-  }
   async create(actor: string, b: MissionDto, key?: string, publish = false) {
-    this.validate(b);
+    validateMission(b);
     return this.db.transaction(async (em) => {
       if (b.agencyId) {
         await member(em, actor, b.agencyId, "AGENCY");
@@ -167,11 +125,11 @@ export class MissionsService {
     });
   }
   async edit(actor: string, id: string, b: MissionDto, key?: string) {
-    this.validate(b, false);
+    validateMission(b, false);
     return this.db.transaction(async (em) => {
       const m = await lockMission(em, id);
       await scope(em, actor, m, true);
-      this.validate({...b,schedulePrecision:b.schedulePrecision ?? m.schedule_precision,timezone:b.timezone ?? m.timezone});
+      validateMission({...b,schedulePrecision:b.schedulePrecision ?? m.schedule_precision,timezone:b.timezone ?? m.timezone});
       const receipt = await commandReceipt(
         em,
         actor,

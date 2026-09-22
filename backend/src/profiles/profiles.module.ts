@@ -1,3 +1,6 @@
+import { ensureAvailabilityLimit, validateProfile } from "./profile-validation";
+export { validateProfile } from "./profile-validation";
+export { professional } from "./profile-mapping";
 import {CvController} from './cv.controller';
 import { SearchAreaDto } from './search-area';
 import {assertPersonalInformationUnchanged} from './personal-information';
@@ -43,7 +46,7 @@ import { Type } from "class-transformer";
 import { Request } from "express";
 import { Database, audit, queueProfileMatches } from "../database/database";
 import { nurse, user, SessionGuard } from "../common/access";
-import { interval, Professional } from "../domain/matching";
+import { interval } from "../domain/matching";
 import { RppsService } from "./rpps";
 export class PeriodDto {
   @ApiProperty({ type: () => String, required: true })
@@ -66,17 +69,6 @@ export class AvailabilityPatchDto {
   @ValidateNested({ each: true })
   @Type(() => AvailabilityChangeDto)
   changes!: AvailabilityChangeDto[];
-}
-function ensureAvailabilityLimit(value: {
-  available: PeriodDto[];
-  unavailable: PeriodDto[];
-}) {
-  if (value.available.length > 200 || value.unavailable.length > 200)
-    throw new BadRequestException({
-      code: "AVAILABILITY_LIMIT",
-      message:
-        "Votre planning dépasse 200 périodes distinctes par état. Réduisez la période sélectionnée ou regroupez vos créneaux.",
-    });
 }
 class ExperienceDto extends PeriodDto {
   @ApiProperty({ required: false })
@@ -182,70 +174,6 @@ class RppsDto {
   @ApiProperty({ type: () => String, required: true })
   @Matches(/^\d{11}$/)
   number!: string;
-}
-export function professional(p: any, conflicts: any[] = []): Professional {
-  return {
-    qualifications: p.qualifications,
-    practiceServices: p.details?.practiceServices,
-    skills: p.skills,
-    experience: p.experience,
-    available: p.available,
-    unavailable: p.unavailable,
-    conflicts: conflicts.map((a) => ({
-      start: new Date(a.start_at).toISOString(),
-      end: new Date(a.end_at).toISOString(),
-    })),
-    rppsStatus: p.rpps_status,
-    latitude: p.latitude,
-    longitude: p.longitude,
-    radiusKm: p.radius_km,
-    acceptedShifts: p.accepted_shifts,
-    preferredShifts: p.preferred_shifts,
-  };
-}
-export function validateProfile(b: ProfileDto) {
-  try {
-    for (const i of [...b.available, ...b.unavailable, ...b.experience])
-      interval(i);
-  } catch {
-    throw new BadRequestException("Invalid interval or missing timezone");
-  }
-  if (b.experience.some((e) => Date.parse(e.end) > Date.now()))
-    throw new BadRequestException("Experience must describe completed periods");
-  if (
-    b.qualifications.some((q) => q !== "IDE") &&
-    !b.qualifications.includes("IDE")
-  )
-    throw new BadRequestException("Complete the IDE qualification explicitly");
-  if (b.preferredShifts.some((s) => !b.acceptedShifts.includes(s)))
-    throw new BadRequestException("Preferred shift must be accepted");
-  if (b.details?.birthDate) {
-    const date = new Date(b.details.birthDate + "T00:00:00Z");
-    if (
-      !Number.isFinite(date.getTime()) ||
-      date.toISOString().slice(0, 10) !== b.details.birthDate ||
-      date > new Date()
-    )
-      throw new BadRequestException("Invalid birth date");
-  }
-  if (
-    [
-      b.details?.diplomaYear,
-      b.details?.ideDiplomaYear,
-      b.details?.iadeDiplomaYear,
-      b.details?.ibodeDiplomaYear,
-    ].some((year) => year !== undefined && year > new Date().getFullYear())
-  )
-    throw new BadRequestException("Diploma year cannot be in the future");
-  if (b.details?.ideDiplomaYear !== undefined &&
-      [b.details.iadeDiplomaYear, b.details.ibodeDiplomaYear]
-        .some(year => year !== undefined && year < b.details!.ideDiplomaYear!))
-    throw new BadRequestException("Specialist diploma year cannot precede IDE diploma year");
-  // Canonicalize every full-profile write, including registration and legacy clients.
-  const normalized = normalizeAvailability(b);
-  ensureAvailabilityLimit(normalized);
-  b.available = normalized.available;
-  b.unavailable = normalized.unavailable;
 }
 @Injectable()
 export class ProfilesService {

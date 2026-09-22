@@ -1,6 +1,6 @@
 # Revue conjointe — A01 : validation continue et navigation après déconnexion
 
-**État au 22 septembre 2026 : correctif validé sur la branche `fix/audit-a01-ci`, commit `cf9ef6f55ab88f5be00cca48ac294c1c2f442ec0`. Non fusionné dans Main, non promu en production.** L’intégration dans la version remise reste distincte de cette validation de branche.
+**État au 22 septembre 2026 : correctif validé sur la branche `fix/audit-a01-ci`, commit `cf9ef6f55ab88f5be00cca48ac294c1c2f442ec0`. Intégré ensuite dans Main `081fcc3` et Backend `698292d` lors de l’alignement des dépôts.** La validation de branche et la recette publiée restent distinctes.
 
 L’utilisateur a autorisé les corrections A01, puis l’examen et la correction de la navigation découverte pendant les tests. Les points A02 à A10 restent à revoir ensemble ; aucun accord métier n’est déduit automatiquement du rapport reçu.
 
@@ -39,4 +39,4 @@ Deux chemins de redirection concurrents étaient présents après déconnexion. 
 - [Trois cycles et contrôles de sécurité Linux](../proofs/audit-a01-2026-09-22/validated/security-evidence.spec.js.txt).
 - [Statut GitHub push](../proofs/audit-a01-2026-09-22/validated/run-35704316008-status.json) et [pull_request](../proofs/audit-a01-2026-09-22/validated/run-35704319942-status.json).
 
-Les correctifs et cette documentation sont synchronisés dans les copies locales production et Epitech. La branche de proposition est sauvegardée sur le dépôt production. Aucune fusion de Main ou Backend ni publication en production n’est revendiquée.
+Les correctifs et cette documentation ont été publiés dans Main `081fcc3` et Backend `698292d`. Le [run d’alignement 35711272315](https://github.com/lebretyves/Infimactch_Prod/actions/runs/35711272315) est entièrement vert sur le dépôt production. Les jobs Epitech n’ont pas démarré en raison du budget Actions de l’organisation ; les tests unitaires et builds y ont été vérifiés localement. Cette synchronisation Git ne constitue pas une recette complète du site publié.

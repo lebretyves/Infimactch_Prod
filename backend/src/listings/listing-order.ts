@@ -1,8 +1,8 @@
 import { displayMatch } from '../domain/matching-display';
 import { Database } from '../database/database';
 import { covers, distanceKm, overlaps, Professional } from '../domain/matching';
-import { matchingMission } from '../missions/missions.service';
-import { professional } from '../profiles/profiles.module';
+import { matchingMission } from '../missions/mission-mapping';
+import { professional } from '../profiles/profile-mapping';
 import { partialOfferMatch } from '../public-data/partial-matching';
 import { publicationDate } from './recommendations';
 import { SearchDto } from './search';

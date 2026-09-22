@@ -1,6 +1,7 @@
 import { RecoveryController, RecoveryService } from "./recovery";
 import { sessionTiming } from "./idle-session";
-import { ProfileDto, validateProfile } from "../profiles/profiles.module";
+import { ProfileDto } from "../profiles/profiles.module";
+import { validateProfile } from "../profiles/profile-validation";
 import { Type } from "class-transformer";
 import { GoogleAuth, type GoogleIdentity } from "./google";
 import { FINESS_PATTERN } from "../reference-data/finess";

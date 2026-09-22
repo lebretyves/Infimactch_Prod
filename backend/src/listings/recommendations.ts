@@ -4,7 +4,7 @@ import {Request} from 'express';
 import {Database} from '../database/database';
 import {SessionGuard,user} from '../common/access';
 import {MatchingService} from '../matching/matching.module';
-import {professional} from '../profiles/profiles.module';
+import {professional} from '../profiles/profile-mapping';
 import {partialOfferMatch} from '../public-data/partial-matching';
 import {externalPresentation} from '../public-data/offer-quality';
 

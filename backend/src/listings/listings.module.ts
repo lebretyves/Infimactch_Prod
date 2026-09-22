@@ -6,7 +6,7 @@ import {ReverseLocationController} from './reverse-location';
 import {RecommendationsController} from './recommendations';
 import {MatchingModule} from '../matching/matching.module';
 import { partialOfferMatch } from "../public-data/partial-matching";
-import { professional } from "../profiles/profiles.module";
+import { professional } from "../profiles/profile-mapping";
 import { PageDto } from "../common/page.dto";
 import { Query } from "@nestjs/common";
 import { ApiOperation, ApiProperty } from "@nestjs/swagger";
