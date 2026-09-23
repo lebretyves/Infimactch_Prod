@@ -1,3 +1,4 @@
+import { discordNotificationMessage } from "./discord-message";
 import { matchAreaStillValid } from './match-area';
 import { demoNoticeSuppressed } from "./demo-suppression";
 import { BadRequestException, Body, ConflictException, Controller, Delete, Get, Injectable, Module, Param, ParseUUIDPipe, Post, Put, Req, UseGuards } from "@nestjs/common";
@@ -111,7 +112,8 @@ export class NotificationsService {
         const [muted]=await em.query("SELECT 1 FROM notification_preference WHERE account_id=$1 AND kind=$2 AND NOT discord",[row.user_id,row.kind]);
         let obsolete=demoNoticeSuppressed(row.context.missionId, row.kind);
         if(row.context.missionId) {
-          const [m]=await em.query("SELECT status,version,start_at FROM mission WHERE id=$1",[row.context.missionId]);
+          const [m]=await em.query("SELECT status,version,start_at,end_at,title,timezone,schedule_precision,(SELECT name FROM organization WHERE id=mission.establishment_id) AS establishment_name FROM mission WHERE id=$1",[row.context.missionId]);
+          row.mission=m;
           obsolete ||= !m || m.version!==row.context.version;
           if(m && ["MATCH","REMINDER","MISSION_CHANGED","APPLICATION_SUBMITTED","APPLICATION_SELECTED","MISSION_PUBLISHED"].includes(row.kind)) obsolete ||= m.status!=="OPEN" || new Date(m.start_at).getTime()<=Date.now();
           if(m && row.kind==='CONFIRMATION') obsolete ||= !['FILLED','COMPLETED'].includes(m.status);
@@ -134,10 +136,7 @@ export class NotificationsService {
       if(item.skip) continue;
       try {
         const origin=process.env.NOTIFICATION_APP_ORIGIN || process.env.APP_ORIGIN!;
-        const reference=item.context.missionId ? "\nRéférence mission : "+item.context.missionId : "";
-        const link=new URL(item.href,origin);
-        link.searchParams.set("notification",item.notification_id);
-        const content=item.message+reference+"\n"+link.href;
+        const content=discordNotificationMessage(item,origin);
         const result=await sendDiscord(item.target_type,item.target_id,content,item.id.replace(/-/g,"").slice(0,25));
         if(!/^\d{17,20}$/.test(result?.id || "")) throw new Error("INVALID_SEND_RECEIPT");
         await this.db.query("UPDATE notification_delivery SET status='SENT',message_id=$3,sent_at=now(),lease_until=NULL WHERE id=$1 AND lease_token=$2",[item.id,item.token,result.id]);sent++;

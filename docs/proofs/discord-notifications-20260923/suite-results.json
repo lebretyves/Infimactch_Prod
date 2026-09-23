@@ -1,0 +1,14 @@
+{
+  "date": "2026-09-23T17:46:53.867Z",
+  "mode": "integration",
+  "results": [
+    {
+      "file": "demo-notification-suppression.spec.js",
+      "passed": true
+    },
+    {
+      "file": "notifications.spec.js",
+      "passed": true
+    }
+  ]
+}

@@ -1,0 +1,31 @@
+ISOLATED FILE demo-notification-suppression.spec.js
+{"migrations":["InitialSchema1789380000000","Extended1789380100000","Harden1789380200000","Finess1789380300000","GoogleIdentity1789380400000","FrontendFields1789380500000","StaffingRequestDetails1789380600000","DocumentSecurity1789380700000","AccountSecurity1789380800000","OfferParsing1789381000000","PrivacyRequests1789381100000","ErasureRecovery1789381200000","DiscordNotifications1789381300000","NotificationCenter1789381400000","CloudStorage1789381500000","EnterpriseFollowUp1789381600000","PlatformAdmin1789381700000","ProfessionalIdentity1789381800000","AdminOperations1789381900000","ClientRequests1789382000000","ExternalCollection1789382100000","JobsPipeCredits1789382200000","PersonalCorrections1789382300000","MissionSchedulePrecision1789718400000","MissionMail1789722000000","MissionGuardrails1789826400000","RecoveryEmail1789840800000","EmailDelivery1789844400000","SharedRateLimit1789848000000","SupportTickets1789851600000","ContractPreparation1789855200000","AdminMfaRecovery1789905600000","MissionLocationOptional1790006400000","AdminPassword1790006500000","MissionTimeSlots1790006600000","CvDocuments1790023000000","ExternalVisibility1790024000000"]}
+✔ only the recorded import is muted, with confirmation and cancellation preserved (77.1221ms)
+✔ reminders skip the old batch in SQL and still notify the new mission (42.2856ms)
+✔ profile refresh queues matching only for the new mission; direct old webhook emits no alerts (20.0677ms)
+✔ dispatch never invokes n8n for old queued publications, while a new mission is dispatched (26.4388ms)
+✔ publication notices are blocked for old missions but new notices and transactional notices remain enabled (8.3589ms)
+✔ already queued Discord alerts are cancelled for the old batch and sent for the new mission (43.98ms)
+ℹ tests 6
+ℹ suites 0
+ℹ pass 6
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1468.0039
+ISOLATED FILE notifications.spec.js
+{"migrations":["InitialSchema1789380000000","Extended1789380100000","Harden1789380200000","Finess1789380300000","GoogleIdentity1789380400000","FrontendFields1789380500000","StaffingRequestDetails1789380600000","DocumentSecurity1789380700000","AccountSecurity1789380800000","OfferParsing1789381000000","PrivacyRequests1789381100000","ErasureRecovery1789381200000","DiscordNotifications1789381300000","NotificationCenter1789381400000","CloudStorage1789381500000","EnterpriseFollowUp1789381600000","PlatformAdmin1789381700000","ProfessionalIdentity1789381800000","AdminOperations1789381900000","ClientRequests1789382000000","ExternalCollection1789382100000","JobsPipeCredits1789382200000","PersonalCorrections1789382300000","MissionSchedulePrecision1789718400000","MissionMail1789722000000","MissionGuardrails1789826400000","RecoveryEmail1789840800000","EmailDelivery1789844400000","SharedRateLimit1789848000000","SupportTickets1789851600000","ContractPreparation1789855200000","AdminMfaRecovery1789905600000","MissionLocationOptional1790006400000","AdminPassword1790006500000","MissionTimeSlots1790006600000","CvDocuments1790023000000","ExternalVisibility1790024000000"]}
+✔ welcome is transactional and scoped to the new account (47.0925ms)
+✔ Discord opt-in, event filtering, revocation and delivery deduplication (30.4749ms)
+✔ a code is account-bound, limited to five attempts and never reusable (64.5108ms)
+✔ an organization gets one queued message even with multiple members, no personal welcome (23.8087ms)
+✔ delivery sends once and never replays an ambiguous send (117.1642ms)
+ℹ tests 5
+ℹ suites 0
+ℹ pass 5
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 945.7724

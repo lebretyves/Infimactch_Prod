@@ -95,6 +95,8 @@ for (const scenario of [
         async (_type: any, _target: any, content: string) => {
           sent++;
           assert.ok(content.includes("notification=notice"));
+          assert.match(content,/\[Voir la mission\]\(</);
+          assert.ok(!content.includes("Référence mission"));
           if (scenario === "rate-limit") throw new discord.DiscordFailure(429);
           if (scenario === "forbidden") throw new discord.DiscordFailure(403);
           if (scenario === "network") throw new Error("offline");

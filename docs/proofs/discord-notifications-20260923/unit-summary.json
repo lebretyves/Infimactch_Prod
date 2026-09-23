@@ -1,0 +1,38 @@
+{
+  "date": "2026-09-23T17:47:28.125Z",
+  "tests": 660,
+  "passed": 660,
+  "failed": 0,
+  "coverage": {
+    "lines": {
+      "total": 12394,
+      "covered": 11789,
+      "skipped": 0,
+      "pct": 95.11
+    },
+    "statements": {
+      "total": 12394,
+      "covered": 11789,
+      "skipped": 0,
+      "pct": 95.11
+    },
+    "functions": {
+      "total": 944,
+      "covered": 778,
+      "skipped": 0,
+      "pct": 82.41
+    },
+    "branches": {
+      "total": 5170,
+      "covered": 4652,
+      "skipped": 0,
+      "pct": 89.98
+    },
+    "branchesTrue": {
+      "total": 0,
+      "covered": 0,
+      "skipped": 0,
+      "pct": 100
+    }
+  }
+}
