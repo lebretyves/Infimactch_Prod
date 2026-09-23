@@ -1,0 +1,28 @@
+{
+  "checkedAt": "2026-09-23T15:57:41.485Z",
+  "deployedApplicationCommit": "2c4f46f1b0a6c123c11fb68de67b09316e2087d1",
+  "results": [
+    {
+      "name": "API",
+      "status": 200,
+      "body": {
+        "status": "ok",
+        "application": "InfiMatch"
+      }
+    },
+    {
+      "name": "Offers",
+      "status": 200,
+      "total": 0,
+      "items": 0
+    },
+    {
+      "name": "Frontend",
+      "status": 200
+    },
+    {
+      "name": "Admin",
+      "status": 200
+    }
+  ]
+}

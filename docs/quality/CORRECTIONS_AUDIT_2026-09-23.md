@@ -57,3 +57,10 @@ Le changement des interfaces physiques Ethernet/Wi-Fi requiert une Ã©lÃ©vati
 [Résumé et méthode de consolidation](../proofs/remediation-20260923/summary.json) · [Preuves détaillées](../proofs/remediation-20260923/).
 
 Les deux branches principales ont été sauvegardées dans `backup/main-avant-corrections-audit-20260923`, au commit `18dfdeb1319699be20f2896b6c2739261c30db00`, avant publication.
+## Publication et production
+
+La correction applicative `2c4f46f1b0a6c123c11fb68de67b09316e2087d1` a été publiée sur Yves `Main` et Epitech `main`. Les déploiements backend et frontend Vercel sont réussis. À 17 h 57, heure de Paris, l’API de santé, le site et l’administration répondent HTTP 200 ; le catalogue externe renvoie zéro offre, conformément aux sources masquées.
+
+[Déploiements](../proofs/remediation-20260923/production-deployments.json) · [Contrôles HTTP](../proofs/remediation-20260923/production-http.json).
+
+Le contrôle administrateur MongoDB du 23 septembre à 17 h 26 reste la dernière preuve authentifiée de connexion depuis Vercel. La session administrateur avait expiré lors de la nouvelle consultation après déploiement ; aucun contournement d’authentification n’a été effectué. La correction publiée ne modifie pas la connexion MongoDB. La CI distante est également déclenchée ; les résultats de tests indiqués ci-dessus sont les résultats locaux consignés, pas une affirmation que cette nouvelle CI est déjà terminée.
