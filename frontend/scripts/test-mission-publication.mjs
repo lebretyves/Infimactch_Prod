@@ -79,7 +79,7 @@ try {
   await page.getByLabel('Description').fill('Renfort infirmier pour une vacation de démonstration.');
   if(kind==='AGENCY')await page.getByLabel('Établissement').selectOption(facility.id);
   await page.getByRole('combobox',{name:'Service',exact:true}).selectOption('URGENCES');
-  await page.getByLabel('Créneau de la mission').selectOption('MORNING');
+  await page.getByLabel('Type de créneau').selectOption('MORNING');
   await page.getByLabel('Date de début').fill(date);
   await page.getByLabel('Date de fin incluse').fill(date);
   await page.getByLabel('Rémunération brute par heure (€)').fill('25');

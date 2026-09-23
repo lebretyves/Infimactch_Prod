@@ -15,15 +15,26 @@ export type CalendarMission = {
 function icsEscape(value: string) {
   return value
     .replace(/\\/g, "\\\\")
-    .replace(/\n/g, "\\n")
+    .replace(/\r\n|\r|\n/g, "\\n")
     .replace(/,/g, "\\,")
     .replace(/;/g, "\\;");
 }
 
 function foldIcsLine(line: string) {
-  if (line.length <= 75) return line;
-  const parts = [line.slice(0, 75)];
-  for (let i = 75; i < line.length; i += 74) parts.push(" " + line.slice(i, i + 74));
+  const encoder = new TextEncoder();
+  const parts: string[] = [];
+  let part = "", bytes = 0;
+  for (const character of line) {
+    const size = encoder.encode(character).length;
+    if (bytes + size > 75) {
+      parts.push(part);
+      part = " ";
+      bytes = 1;
+    }
+    part += character;
+    bytes += size;
+  }
+  parts.push(part);
   return parts.join("\r\n");
 }
 
@@ -41,7 +52,8 @@ export function upcomingConfirmedMissions(missions: CalendarMission[], now = Dat
         (!m.status || m.status === "ACTIVE") &&
         Number.isFinite(Date.parse(m.start_at)) &&
         Number.isFinite(Date.parse(m.end_at)) &&
-        Date.parse(m.end_at) > now,
+        Date.parse(m.end_at) > now &&
+        Date.parse(m.end_at) > Date.parse(m.start_at),
     )
     .sort((a, b) => Date.parse(a.start_at) - Date.parse(b.start_at));
 }
@@ -65,7 +77,7 @@ export function missionCalendarDescription(m: CalendarMission, origin = "https:/
 export function googleCalendarUrl(m: CalendarMission, origin = typeof location !== "undefined" ? location.origin : "https://infimatch.fr") {
   const start = calendarUtcStamp(m.start_at);
   const end = calendarUtcStamp(m.end_at);
-  if (!start || !end) return null;
+  if (!start || !end || Date.parse(m.end_at) <= Date.parse(m.start_at)) return null;
   const params = new URLSearchParams({
     action: "TEMPLATE",
     text: m.title,
@@ -80,7 +92,7 @@ export function googleCalendarUrl(m: CalendarMission, origin = typeof location !
 export function assignmentIcsEvent(m: CalendarMission, origin = "https://infimatch.fr") {
   const start = calendarUtcStamp(m.start_at);
   const end = calendarUtcStamp(m.end_at);
-  if (!start || !end) return null;
+  if (!start || !end || Date.parse(m.end_at) <= Date.parse(m.start_at)) return null;
   const stamp = calendarUtcStamp(new Date().toISOString()) || start;
   const place = missionLocation(m);
   const lines = [

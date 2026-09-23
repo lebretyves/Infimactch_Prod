@@ -199,6 +199,8 @@ test("incomplete profiles receive general listings while external recommendation
                 raw_hash: "private",
               }))
             : []
+          : sql.includes("FROM source_control")
+            ? [{ provider: "FRANCE_TRAVAIL" }]
           : sql.includes("FROM import_run")
             ? [{ provider: "FRANCE_TRAVAIL", status: "SUCCESS" }]
             : [],
@@ -242,4 +244,31 @@ test("recommendation provider failures remain isolated and missing profiles are 
     origine: "externes",
   });
   assert.equal(r.internal.status, "HIDDEN");
+});
+
+
+test("source visibility outage leaves internal recommendations available", async () => {
+  const f = fixture(sql => {
+    if (sql.includes("FROM profile")) return [{ ...profile, qualifications: [] }];
+    if (sql.includes("FROM source_control")) throw new Error("visibility unavailable");
+    if (sql.includes("FROM mission")) return [{ id: "internal", hourly_salary: 25 }];
+    throw new Error("unexpected external query");
+  });
+  const result = await new RecommendationsController(f.db, {} as any).recommendations({session:{userId:"nurse"}} as any, {});
+  assert.equal(result.internal.status, "READY");
+  assert.equal(result.external.status, "UNAVAILABLE");
+  assert.equal(result.externalCatalogueVisible, false);
+  assert.equal(f.calls.filter(c => c.sql.includes("FROM source_control")).length, 1);
+});
+
+test("hidden catalogues never query external offers or import metadata", async () => {
+  const f = fixture(sql => {
+    if (sql.includes("FROM profile")) return [profile];
+    if (sql.includes("FROM source_control")) return [];
+    throw new Error("hidden sources must not be queried");
+  });
+  const result = await new RecommendationsController(f.db, {} as any).recommendations({session:{userId:"nurse"}} as any, {origine:"externes"});
+  assert.equal(result.internal.status, "HIDDEN");
+  assert.equal(result.external.status, "HIDDEN");
+  assert.equal(result.externalCatalogueVisible, false);
 });

@@ -203,7 +203,7 @@ test("full internal journey and concurrency, with isolated fixture RPPS", async 
   }).expect(201);
   expect(listing.body.items.some((x: any) => x.id === "m_" + id)).toBe(true);
   const [external] = await db.query(
-    "INSERT INTO external_offer(source,source_id,title,description,url,location_label,qualification,raw_hash,provenance) VALUES('TEST_FIXTURE',$1,'Offre IDE FICTIVE','Donnees synthetiques de test','https://example.invalid/fictif','Paris','IDE','fixture','{\"fictional\":true}') RETURNING id",
+    "INSERT INTO external_offer(source,source_id,title,description,url,location_label,qualification,raw_hash,provenance) VALUES('FRANCE_TRAVAIL',$1,'Offre IDE FICTIVE','Donnees synthetiques de test','https://example.invalid/fictif','Paris','IDE','fixture','{\"fictional\":true}') RETURNING id",
     [randomUUID()],
   );
   const normalized = normalizeOffer({
@@ -751,7 +751,7 @@ test("secondary lists paginate, reject invalid limits and protect private cachin
     await client.agent.get("/api/v1/" + path + "?offset=-1").expect(400);
   }
   const fixtures = await db.query(
-    "INSERT INTO external_offer(source,source_id,title,description,url,location_label,qualification,raw_hash) VALUES('PAGINATION_FIXTURE',$1,'Offre fictive A','Test pagination','https://example.invalid/a','Paris','IDE','fixture-a'),('PAGINATION_FIXTURE',$2,'Offre fictive B','Test pagination','https://example.invalid/b','Paris','IDE','fixture-b') RETURNING id",
+    "INSERT INTO external_offer(source,source_id,title,description,url,location_label,qualification,raw_hash) VALUES('FRANCE_TRAVAIL',$1,'Offre fictive A','Test pagination','https://example.invalid/a','Paris','IDE','fixture-a'),('FRANCE_TRAVAIL',$2,'Offre fictive B','Test pagination','https://example.invalid/b','Paris','IDE','fixture-b') RETURNING id",
     [randomUUID(), randomUUID()],
   );
   try {
@@ -1075,7 +1075,7 @@ test("partial external comparison is private and incomplete leads require explic
     lieuTravail: { libelle: "Paris" },
   });
   const [e] = await db.query(
-    "INSERT INTO external_offer(source,source_id,title,description,url,location_label,qualification,raw_hash,provenance) VALUES('TEST_FIXTURE',$1,$2,'Fictional','https://example.invalid/partial','Paris','IDE','fixture',$3) RETURNING id",
+    "INSERT INTO external_offer(source,source_id,title,description,url,location_label,qualification,raw_hash,provenance) VALUES('FRANCE_TRAVAIL',$1,$2,'Fictional','https://example.invalid/partial','Paris','IDE','fixture',$3) RETURNING id",
     [randomUUID(), normalized.title, JSON.stringify(normalized.provenance)],
   );
   const id = "e_" + e.id,

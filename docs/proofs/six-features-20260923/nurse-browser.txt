@@ -1,0 +1,3 @@
+PASS calendar downloads a valid ICS containing only active confirmed assignments
+PASS Help menu keyboard dismissal and cookie preferences dialog
+PASS document selection/removal resets confirmation and prevents premature upload

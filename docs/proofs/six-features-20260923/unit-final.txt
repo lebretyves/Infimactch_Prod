@@ -1,0 +1,857 @@
+
+> infimatch@0.1.0 coverage:unit
+> npm run coverage:unit -w backend
+
+
+> @infimatch/backend@0.1.0 coverage:unit
+> npm run test:compile && c8 --all --src=src --extension=.ts --include="src/**" --include=".test-build/src/**" --check-coverage --lines=95 --reporter=text --reporter=json-summary --reporter=html --reports-dir=../docs/proofs/unit-coverage node --test ".test-build/test/unit/*.spec.js"
+
+
+> @infimatch/backend@0.1.0 test:compile
+> tsc --outDir .test-build
+
+✔ admin invitation normalizes email, stores only the hash and refuses existing or inactive access (5.2496ms)
+✔ renewed admin invitation revokes outstanding MFA challenges and replaces only the token hash (0.8104ms)
+✔ deleting admin access preserves client account identity and anonymises dedicated administrator accounts (1.5629ms)
+✔ manual recovery issues a fragment token while persisting only a version-bound digest (2.5809ms)
+✔ privacy decisions recheck blockers and execute only approved requests, preserving retry status (4.5932ms)
+✔ admin login starts MFA without granting access and invalid passwords increment lockout counters (15.3302ms)
+✔ first admin login enrolls an encrypted factor, returns recovery codes once and establishes MFA session (8.2009ms)
+✔ admin MFA refuses expired challenges, reused codes and concurrent factor replacement (2.7105ms)
+✔ admin recovery consumes the code, revokes sessions and requires enrollment of a new factor (2.4833ms)
+✔ admin invitations require possession and activation preserves a client password (2.7063ms)
+✔ admin reauthentication refreshes write permissions only after password and unused TOTP (3.5655ms)
+✔ admin guard rejects expired sessions and changed privileges; self and logout retain identity (11.402ms)
+✔ admin missing resources reject before writes; privileged accounts require access permission (4.7228ms)
+✔ empty count and missing backup proof expose honest defaults (1.579ms)
+✔ operations missing resources and invalid relationships reject with no mutation (2.102ms)
+✔ verification without identity returns null and preserves reviews (0.6036ms)
+✔ operations distinguishes missing collection state, stopped schedule and failed import without leaking supplier error (1.0721ms)
+✔ infrastructure reports unavailable dependencies and configured delivery metadata without sending (23.6455ms)
+✔ TOTP matches RFC6238 SHA1 vectors (2.2199ms)
+✔ MFA rejects replay, expired code and invalid input (0.6957ms)
+✔ MFA secret encryption authenticates ciphertext (6.5705ms)
+✔ platform roles never grant arbitrary document or assignment access (0.5018ms)
+✔ legacy, versioned document and dedicated MFA secrets survive staged rotation (2.3375ms)
+✔ admin notification audit distinguishes association, muted events and pending or expired challenges (4.1383ms)
+✔ membership removal preserves a remaining manager then revokes affected sessions (2.8215ms)
+✔ agency links are removable only when no draft, open or filled mission depends on them (1.5349ms)
+✔ admin matching history marks changed profiles stale and retains requested pagination (1.3192ms)
+✔ professional review records an assessment without changing RPPS or qualification data (1.2624ms)
+✔ source operations summarize progress and sanitize provider failure details (2.1451ms)
+✔ incident administration and source refresh bind parameters and write audit evidence (1.7919ms)
+✔ source visibility changes are audited without altering import scheduling (1.0614ms)
+✔ source visibility rejects unsupported providers and missing recent admin authentication (10.7187ms)
+✔ adding uses an agency-owned record and replay does not duplicate it (4.7125ms)
+✔ existing own-agency record is reused without granting another organization access (0.5239ms)
+✔ non-agency members cannot add or remove {"member":false} (0.5832ms)
+✔ non-agency members cannot add or remove {"kind":"ESTABLISHMENT"} (0.2476ms)
+✔ active mission blocks removal (0.2807ms)
+✔ removal locks link and only deletes the agency relationship, preserving records and history (0.4531ms)
+✔ already removed link is an idempotent no-op (0.2753ms)
+✔ manual FINESS is optional but invalid identifiers are rejected (4.7881ms)
+✔ HTTP boot registers trusted origins, upload limits, validation and rate-limit identities (33.8896ms)
+✔ request middleware assigns correlation ids and private responses cannot be cached (2.9382ms)
+✔ CSRF middleware checks trusted origin and constant-length token on all mutations (2.2054ms)
+✔ HTTP exception filter redacts internals, maps conflicts and preserves structured validation errors (2.3717ms)
+✔ Vercel handler reuses the app and dispatches background deliveries only after successful mutations (7.7651ms)
+✔ application warns about matching differences while strict matching remains ineligible (26.4241ms)
+✔ preferences and unknown or distant mobility only warn for applications (0.8792ms)
+✔ hard restrictions survive alongside soft differences (0.5961ms)
+✔ implicit specialized skills are included and duplicates are removed (0.6751ms)
+✔ date-only application warns without assuming full-day unavailability or conflict (1.425ms)
+✔ date-only applications keep profile and schedule issues as warnings (0.7662ms)
+✔ exact applications remain closed after the actual start time (0.3974ms)
+✔ empty profile can apply with warnings: NOT_CHECKED (0.9476ms)
+✔ empty profile can apply with warnings: PENDING (3.8285ms)
+✔ empty profile can apply with warnings: NOT_FOUND (17.2478ms)
+✔ recruiter can confirm incomplete declarations without changing matching eligibility (5.6334ms)
+✔ stale unavailability and outside radius are warnings during confirmation (0.9417ms)
+✔ confirmed overlap remains blocking even when the agenda is empty (2.2752ms)
+✔ adjacent confirmed missions do not conflict (0.7891ms)
+✔ mission state and exact schedule remain mandatory (1.2616ms)
+✔ direct acceptance creates assignment and confirmation event from SUBMITTED (6.9159ms)
+✔ direct acceptance creates assignment and confirmation event from SELECTED (0.9102ms)
+✔ incomplete profile can be accepted with visible qualification and RPPS warnings: NOT_CHECKED (4.3948ms)
+✔ incomplete profile can be accepted with visible qualification and RPPS warnings: PENDING (0.6357ms)
+✔ incomplete profile can be accepted with visible qualification and RPPS warnings: NOT_FOUND (0.5012ms)
+✔ rejection does not require a complete profile or renewed consent (1.0557ms)
+✔ unchanged missing declarations and unrelated days do not invalidate a confirmed mission (49.3549ms)
+✔ partial improvements are allowed even when the whole mission remains uncovered (1.3334ms)
+✔ new unavailability and removal of declared availability inside a commitment are rejected (1.2056ms)
+✔ existing stale unavailability can remain but cannot expand inside a confirmed slot (16.1443ms)
+✔ half-open boundaries and equivalent fragmented declarations are preserved (0.713ms)
+✔ Session reads do not consume login attempts, but the 51st auth write is refused (5130.4949ms)
+✔ authenticated activity does not consume shared login attempts (1647.4108ms)
+✔ nurse registration normalizes email, stores only the hash and creates an empty profile (4.4302ms)
+✔ registration stores validated profile qualifications and links Google identity (1.0872ms)
+✔ enterprise registration validates required organisation data before writing and creates membership (2.1351ms)
+✔ registration distinguishes Google conflicts without leaking uniqueness details (1.1423ms)
+✔ login performs password work for unknown users and rejects invalid, disabled and platform-only accounts (0.9533ms)
+✔ password login and registration rotate the session and bind CSRF to the new identity (1.6239ms)
+✔ session endpoints return identity, preserve CSRF and destroy cookies only after logout (1.1287ms)
+✔ match workflow notifies only eligible profiles and consumes an event once (7.1689ms)
+✔ missing and superseded match events never generate alerts (1.2351ms)
+✔ confirmation generation binds stored PDF to assignment and notifies all participant roles (2.0489ms)
+✔ confirmation replay, cancelled assignment and active generation lease avoid duplicate PDF storage (0.3071ms)
+✔ confirmation cancels an obsolete assignment without storing a PDF (0.2377ms)
+✔ confirmation reserves an exclusive generation lease (0.4332ms)
+✔ mission cancellation during PDF storage prevents ready status and participant email (0.4441ms)
+✔ storage failure releases only the held lease and redacts private error details (0.7443ms)
+✔ superseded confirmation lease cannot publish the generated document (0.4343ms)
+✔ cancellation deduplicates affected nurses, scopes links and skips unpublished drafts (0.7229ms)
+✔ dispatch acknowledges only successful deliveries with final receipts and reports exhausted retries (2.1452ms)
+✔ automation endpoint rejects wrong tokens before calling service and forwards valid commands (5.2355ms)
+✔ unavailable sub-period splits availability and preserves both surrounding pieces (27.486ms)
+✔ three clicks return available then unavailable then truly unreported (2.5197ms)
+✔ re-enabling a sub-period overrides unavailability only inside the chosen slot (1.4182ms)
+✔ legacy overlaps normalize with unavailability priority, duplicates and adjacency merge (0.6217ms)
+✔ a night spanning DST keeps exact instants and never uses a fixed eight-hour duration (6.6369ms)
+✔ boundary-touching periods do not erase each other (0.3611ms)
+✔ patch DTO rejects empty, excessive, invalid-state and malformed change bodies (15.4619ms)
+✔ many alternating edits remain disjoint and agree with a pointwise reference model (1363.4266ms)
+✔ bank API accepts omitted or empty BIC and normalizes a provided BIC on both endpoints (16.046ms)
+✔ bank API rejects malformed or non-string provided BIC on both endpoints (14.1138ms)
+✔ optional BIC does not relax IBAN checksum, holder or explicit review requirements (3.0823ms)
+✔ manual and uploaded RIB persist an empty BIC without inventing one (1.7293ms)
+✔ bank details are optional with first assignment=false; suggestion follows the first mission (1.9802ms)
+✔ bank details are optional with first assignment=true; suggestion follows the first mission (0.2418ms)
+✔ a bank document already supplied suppresses the optional reminder (0.3642ms)
+✔ operator migrations close the connection after success and database failure (57.668ms)
+✔ organization linking refuses wrong roles before writes and inserts a parameterized valid pair (12.7096ms)
+✔ account operator commands revoke sessions, preserve active state on revoke and audit their action (11.1459ms)
+✔ retention and account anonymization are read-only unless apply is explicit (8.3202ms)
+✔ provider, reconciliation and seed commands forward operator options and always release database resources (25.5475ms)
+✔ JobsPipe rejects invalid paid-page budgets before opening a database and dry-run never calls provider (8.1537ms)
+✔ closure operations preserve dry-runs, signal partial failure and replay unique existing ledger accounts only (76.588ms)
+✔ public reference data exposes the sourced catalogue without changing existing reference fields (368.988ms)
+✔ closure writes independent erasure evidence before anonymisation: postgres (5.1487ms)
+✔ closure writes independent erasure evidence before anonymisation: filesystem (3.0615ms)
+✔ closure skips unapproved requests and refuses blockers or unavailable independent ledger (1.9452ms)
+✔ processing closure resumes physical cleanup without repeating anonymisation, replay uses retained approval (1.0454ms)
+✔ closure batches bound work, sanitize failure details and skip unapproved requests (2.647ms)
+✔ cloud jobs require internal token and use bounded dispatch and provider batches (4.3835ms)
+✔ maintenance commits retention before file cleanup and keeps business history excluded (1.4038ms)
+✔ busy maintenance does no cleanup; incomplete closures or file erasure produce retryable failure evidence (1.0279ms)
+✔ cloud dispatch authenticates before processing and bounds work (4.6156ms)
+✔ scheduled provider endpoint authenticates and calls only the selected provider (2.0358ms)
+✔ development does not trust forwarded headers by default (2.0559ms)
+✔ production requires an explicit trusted proxy (6.2846ms)
+✔ trusted proxy accepts bounded hops and explicit network ranges (4.1545ms)
+✔ document storage quota is bounded and deterministic (0.474ms)
+✔ configuration rejects insecure production origins, missing secrets and unsupported persistence (3.5174ms)
+✔ proxy trust rejects malformed CIDRs and quota rejects fractions, infinity and unsafe values (5.4823ms)
+✔ demo seed refuses production before accessing a database (0.9455ms)
+✔ structured salary ranges preserve units, components and uncertainty (1.9943ms)
+✔ PSC discovery validates issuer and endpoints, caches metadata and creates PKCE challenges (41.3556ms)
+✔ confirmation PDF preserves assignment, participant, place, timezone and salary on one tagged page (72.246ms)
+✔ date-only demonstration uses unconfirmed hours and tolerates absent optional fields (57.7009ms)
+✔ cancellation PDF retains initiator and reason: NURSE (24.0865ms)
+✔ cancellation PDF retains initiator and reason: ENTERPRISE (18.0736ms)
+✔ long content is compacted without losing the final address or cancellation reason (25.5453ms)
+✔ oversize PDF and invalid timestamps fail explicitly instead of producing a truncated document (75.7372ms)
+✔ CDI du poste et alternatives CDI exclus (1.8466ms)
+✔ presentation recruteur et evolution future ne sont pas un CDI actuel (0.4421ms)
+✔ interim du poste accepte, presentation agence refusee (0.7759ms)
+✔ reimport CDI desactive une annonce existante sans supprimer les favoris (2.2245ms)
+✔ reimport ferme ou expire desactive sans conclure a une disparition hors lot (2.0357ms)
+✔ other health professions are distinct from nursing roles (0.615ms)
+✔ contract preparation accepts an incomplete draft without inventing required values (14.7527ms)
+✔ contract preparation rejects malformed notes, excess fields and invalid version (4.0979ms)
+✔ contract preparation shows missing fields and grants edits only to the employer (3.2521ms)
+✔ contract save trims values, detects concurrent edits and replays identical previous submission (1.6675ms)
+✔ generated controller metadata exposes bounded uploads, registration and mission consent contracts (348.9487ms)
+✔ zero denominator is unavailable and known denominators use two decimal percentages (2.0136ms)
+✔ period validates actual calendar dates and bounds before querying SQL (1.8119ms)
+✔ reminders honour recipient budget and never partially notify a mission (2.4365ms)
+✔ personal correction request records old and proposed value without changing identity immediately (9.5378ms)
+✔ approved email correction applies only after identity verification and current-value check (1.015ms)
+✔ approved firstName correction applies only after identity verification and current-value check (0.932ms)
+✔ approved phone correction applies only after identity verification and current-value check (0.3997ms)
+✔ correction controllers scope users and require recent admin confirmation for decisions (0.6895ms)
+✔ authenticated encryption rejects tampering and swapped documents (6.5657ms)
+✔ encryption uses independent nonces (0.8001ms)
+✔ HTML is not accepted as PDF (0.4211ms)
+✔ IDE OR IADE filters stay in their branch and all values are bound (1.9174ms)
+✔ unselected branch filter rejected (1.452ms)
+✔ incomplete location rejected (0.5065ms)
+✔ CV DTO bounds extracted text and refuses arbitrary profile fields (4.6351ms)
+✔ CV analysis requires a nurse profile and never writes the CV or profile (8.8193ms)
+✔ CV DTO requires explicit storage and bounds content (12.8448ms)
+✔ CV storage validates signatures including bounded DOCX package (1.0966ms)
+✔ CV upload uses authenticated nurse, private storage, original bytes and idempotent command (4.1262ms)
+✔ CV recognises French periods, service and employer without importing education or identity (15.5814ms)
+✔ CV can associate period after employer and retain missing services for review (2.5939ms)
+✔ ongoing, future and impossible periods do not become completed experience (6.0706ms)
+✔ year-only boundaries are explicit approximations; ambiguous service is not guessed (2.4161ms)
+✔ empty and unstructured CVs return a manual completion warning; proposals are bounded (51.7385ms)
+✔ CV recognises periods split by PDF line boundaries and spaced numeric dates (13.3898ms)
+✔ CV distinguishes ongoing typographic periods and never fabricates an end date (3.4761ms)
+✔ CV does not join dates across employers or manufacture a range from isolated years (1.8755ms)
+✔ CV recognises French abbreviations and preserves months instead of matching only years (6.8714ms)
+✔ CV preserves full written dates, hyphen dates and year-month boundaries (5.6342ms)
+✔ expanded CV date formats still reject impossible dates and non-work sections (4.9076ms)
+✔ CV proposes labelled identity and header contact with evidence, never referee identity (2.293ms)
+✔ CV distinguishes clear names, ambiguous all-caps names and contradictory header values (2.2685ms)
+✔ CV keeps separate IDE and IADE diploma years, no inferred IDE or RPPS validation (2.7117ms)
+✔ CV never manufactures diploma years from training ranges, conflicting dates or shared dates (1.4901ms)
+✔ CV catalog skills require explicit mentions, not the service or a qualification (4.3445ms)
+✔ CV no readable text, negative or ambiguous OCR produces no invented profile values (0.6869ms)
+✔ demo seeding is forbidden in production before any database operation (2.4687ms)
+✔ demo seed orchestrates fictional accounts, matching availability and private credential file (3.3465ms)
+✔ demo seed leaves existing accounts and mission intact on subsequent runs (0.6552ms)
+✔ cloud dispatch remains fresh across the four-hour schedule and expires after its grace period (3.8252ms)
+✔ document store encrypts and reads an owner document using postgres (7.1676ms)
+✔ document store encrypts and reads an owner document using filesystem (1.8577ms)
+✔ storage rejects quotas but permits system confirmations and validates encryption keys (1.7873ms)
+✔ document command replay validates receipts and avoids storage writes (1.0105ms)
+✔ a failed filesystem write cleans both temporary and final encrypted files (1.7533ms)
+✔ confirmation and cancellation reads require ready records and assignment access (3.1567ms)
+✔ missing metadata is hidden and corrupted ciphertext produces an unavailable response (0.9765ms)
+✔ reconciliation authenticates staged postgres blobs and leaves missing or invalid records pending (4.5527ms)
+✔ reconciliation promotes authenticated temporary files and removes only unlocked stale orphans (2.2641ms)
+✔ evidence uploads reject mismatched or oversize files and bind validated content to actor and command (8.4055ms)
+✔ document list is owner scoped and downloads hide bank files and disable caching (0.7132ms)
+✔ bank download returns only the latest owner file, decodes versioned envelopes and rejects details-only records (1.3731ms)
+✔ bank summary distinguishes optional, suggested and legacy documents without exposing legacy full IBAN (0.6758ms)
+✔ email webhook fails closed without a long independent bearer secret (1.5813ms)
+✔ email event parsing retains technical data only and handles provider UTC time (2.1145ms)
+✔ delivery status does not regress on replay, late processed, or older callbacks; later outcomes can resolve a bounce (0.4611ms)
+✔ journal controllers fix self identity and require admin accounts permission (1.7287ms)
+✔ enterprise search binds all user filters and limits sorting to trusted expressions (2.5202ms)
+✔ conversion report calculates honest rates, rounded delays and explicit exclusions (2.0932ms)
+✔ demo alert cleanup previews without deletion and preserves sending or uncertain deliveries (0.9526ms)
+✔ execution trace stores correlation only, including failures (4.5428ms)
+✔ external source visibility rejects unknown, missing and hidden sources (2.6935ms)
+✔ visible providers are selected independently from scheduling (0.6216ms)
+✔ visibility migration preserves existing catalogues and refuses destructive rollback (0.7931ms)
+✔ visibleExternalProviders returns only visible catalogue sources (0.2985ms)
+✔ isExternalSourceVisible reads the provider flag (0.2455ms)
+✔ FINESS monthly expiry is based on source generation, not reimport (27.8196ms)
+✔ FINESS countdown and seven day warning (2.1394ms)
+✔ FINESS calendar month clamps month end and respects Paris DST (4.1237ms)
+✔ FINESS missing, invalid and future snapshots never appear current (0.8341ms)
+✔ official FINESS import streams compressed data, computes provenance and preserves unknown coordinates (34.5596ms)
+✔ FINESS import refuses untrusted source URLs without reading any file (1.1596ms)
+✔ FINESS import refuses older snapshots before replacing reference data (3.534ms)
+✔ FINESS import rejects empty snapshot before database writes (5.4329ms)
+✔ FINESS import rejects duplicate snapshot before database writes (5.9276ms)
+✔ FINESS import rejects invalid-date snapshot before database writes (2.7285ms)
+✔ FINESS import rejects invalid-collection snapshot before database writes (3.3533ms)
+✔ FINESS searches and lookups provide provenance without granting organisation membership (3.0332ms)
+✔ FINESS retains leading zero and Corsican identifiers (2.2536ms)
+✔ FINESS selects degree coordinates instead of projected XY (2.5949ms)
+✔ FINESS refuses ambiguous pairs and retains unknown coordinates (0.4823ms)
+✔ FINESS identity lookup includes entries without address and inactive entries (1.2504ms)
+✔ all keyword pages are followed and duplicate provider IDs do not multiply offers (980.0141ms)
+✔ saturated windows split dates with shared boundary and never report a saturated second complete (2.6736ms)
+✔ 206 missing or inconsistent Content-Range cannot masquerade as a completed import (4.0577ms)
+✔ provider throttling retries with the same page; detail 204 is preserved distinctly from search (1.0855ms)
+✔ Google identity uses the verified subject and normalizes email (1.9767ms)
+✔ Google login rejects a missing or mismatched session nonce (0.5396ms)
+✔ Google login rejects unverified or incomplete identity claims (0.1496ms)
+✔ Google verifies the configured audience and logs in by subject, never by changed email (1.0287ms)
+✔ Google never auto-links accounts on matching email alone (0.7173ms)
+✔ Google cannot link with an invalid local password (245.8942ms)
+✔ Google links only after checking the local password and audits the association (214.3197ms)
+✔ A rejected Google signature never queries application accounts (0.8867ms)
+✔ First Google access prepares registration without creating an account (2.1661ms)
+✔ Certificate retrieval failures are service errors and never access accounts (0.7203ms)
+✔ New verified identity stays on server until explicit registration; session rotates on completion (1.0914ms)
+✔ Google challenge cannot be consumed twice; another tab challenge is retained (0.3746ms)
+✔ Missing or expired Google preregistration cannot create an account (1.3623ms)
+✔ Google registration requires an explicit family and terms version and rejects supplied credentials (8.8766ms)
+✔ Google signup creates account, identity and profile in one transaction with a nonempty Argon2 hash (172.4944ms)
+✔ Google refuses disabled accounts (linked) (0.6998ms)
+✔ Google refuses disabled accounts (email association) (0.4951ms)
+✔ linked Google identity can request closure without password; replay fails (4.4673ms)
+✔ rejects expired challenge (0.4659ms)
+✔ rejects nonce challenge (0.248ms)
+✔ rejects account challenge (0.1767ms)
+✔ rejects consent challenge (0.2376ms)
+✔ rejects missing challenge (0.1496ms)
+✔ rejects invalid identity/account {"linked":false} (0.4728ms)
+✔ rejects invalid identity/account {"active":false} (0.1683ms)
+✔ rejects invalid identity/account {"version":4} (0.1573ms)
+✔ rejects invalid identity/account {"invalid":true} (0.3416ms)
+✔ challenge is random and bound to the current account (0.8339ms)
+✔ idle session expires at exactly fifteen minutes (1.4966ms)
+✔ activity cannot extend absolute eight hour maximum (0.3332ms)
+✔ legacy or malformed sessions need fresh authentication (0.1407ms)
+✔ expired cookie session is destroyed before any route executes (0.4984ms)
+✔ candidate inbox escapes literal search characters and returns matching explanations without raw profile data (7.0886ms)
+✔ distance adapter preserves longitude-latitude order, absent coordinates and batch ordering (0.5776ms)
+✔ offer reparsing previews stale records and applies only changed parser results (10.9735ms)
+▶ JobsPipe durable pagination, validation and budget
+  ✔ first-page crash reuses stable receipt and does not fetch or charge twice (37.4901ms)
+  ✔ repeated cursor and missing cursor metadata never claim completion (2.31ms)
+  ✔ monthly quota does not call provider and suspends until UTC reset (0.4957ms)
+  ✔ HTTP errors retain conservative costs and correct statuses (1.6488ms)
+  ✔ closure lookup returns only requested records and never closes missing IDs (0.7025ms)
+  ✔ uncertain network keeps full reservation and identical retry key (0.9732ms)
+  ✔ SQL receipt cache survives restart, expired reservation does not refetch (0.6917ms)
+  ✔ manual reset changes failed cycle; automatic never blindly resets (2.5835ms)
+  ✔ daily discovery watermark advances only after both queries and resets monthly (2.1289ms)
+  ✔ SQL reservation rejects over quota before insert (0.3256ms)
+✔ JobsPipe durable pagination, validation and budget (52.0351ms)
+✔ JobsPipe preserves source, URL and nursing facts (6.5045ms)
+✔ JobsPipe rejects non interim, non nursing, closed and unsafe offers (2.5584ms)
+✔ JobsPipe records contextual interim, not agency wording (0.8765ms)
+✔ JobsPipe dry run deduplicates and never writes (0.7576ms)
+✔ JobsPipe request is bounded, authenticated and rejects quota errors without response body (33.455ms)
+✔ JobsPipe retains line and HTML boundaries for explicit contracts (2.4075ms)
+✔ search accepts only supported sorts and publication windows, and paired distance centre without radius (6.4535ms)
+✔ external date is source publication, never import date; missing facts stay unknown (2.0686ms)
+✔ availability honors contiguous periods, explicit unavailability and confirmed conflicts (7.7373ms)
+✔ sorting is deterministic and uses requested location without changing profile correspondence (12.9943ms)
+✔ partner correspondence uses the database geodesic distance at radius boundaries (1.2729ms)
+✔ matching sort ranks displayed percentages, including incomplete profiles, before pagination (4.0031ms)
+✔ morning and afternoon filters are valid and a day search includes both slots (2.2142ms)
+✔ ranked catalogue uses one cursor, ranks every batch and hydrates only the selected page (8.0068ms)
+✔ catalogue filters unknown availability and old publications without reporting inflated totals (3.1736ms)
+✔ catalogue closes its cursor when a batch fails (1.2786ms)
+✔ recommendations use matching for complete profiles and omit changed mission versions (1.0835ms)
+✔ incomplete profiles receive general listings while external recommendations remain explicitly partial (12.1497ms)
+✔ recommendation provider failures remain isolated and missing profiles are hidden (2.1307ms)
+✔ source visibility outage leaves internal recommendations available (0.953ms)
+✔ hidden catalogues never query external offers or import metadata (0.3067ms)
+✔ catalogue search rejects missing profiles and undeclared qualifications before ranking (2.3636ms)
+✔ catalogue filters bind coordinates and preserve uncertainty instead of inventing eligibility (14.2535ms)
+✔ public listing details validate identifiers and return organisation labels without private comparison (4.5469ms)
+✔ private external comparison requires both an active offer and an authenticated profile (0.9607ms)
+✔ catalogue pagination and facilities retain bounds and absent facilities return 404 (1.1526ms)
+✔ favorite writes require an existing target and remain scoped to the account (0.8568ms)
+✔ notification read never acknowledges a foreign or nonexistent item (0.2995ms)
+✔ dashboard separates nurse data from organization aggregates and fills missing states with zero (0.4828ms)
+✔ location search uses the fixed provider and selects bounded valid coordinates (34.5182ms)
+✔ location provider errors are explicit and never a fabricated empty success (3.0845ms)
+✔ municipality lookup scopes the provider and labels postal codes without accepting streets (1.2676ms)
+✔ document erasure deduplicates ids, preserves existing records and clears retry ledger after deletion (3.7319ms)
+✔ retention registers document erasure before deletion and removes history only with an explicit policy (2.5345ms)
+✔ database adapter normalizes driver results, binds parameters and closes only initialized connections (0.8993ms)
+✔ email delivery callbacks correlate a single attempted recipient, deduplicate events and resolve uncertain sends (6.0305ms)
+✔ maintenance reports missing, stale, failed, running and successful executions (1.3367ms)
+✔ incomplete profile exposes an estimate without granting eligibility or fabricating strict score (5.1678ms)
+✔ unknown distance and unknown schedule add no points and never redistribute their weights (0.557ms)
+✔ eligible pair keeps exactly the existing weighted score (0.5614ms)
+✔ listing and detail share the same estimate; explicit missing distance stays unknown (1.1807ms)
+✔ RPPS and assignment conflicts remain visible and blocking despite an estimate (0.3839ms)
+✔ personal matching uses the same score as enterprise matching and only the authenticated profile (8.6706ms)
+✔ missing profile or unavailable mission does not produce a score (1.3427ms)
+✔ incomplete profile returns reasons and null rather than a fabricated percentage (0.9487ms)
+✔ a started mission is not presented as a current match (1.0765ms)
+✔ matching stores a reproducible versioned result with bounded expiry and closes Mongo (6.3574ms)
+✔ Mongo failure or inactive account preserves matching result but marks history unavailable (1.7415ms)
+✔ nurse ranking scans all batches, excludes ineligible missions and paginates in stable order (3.6844ms)
+✔ nurse ranking rejects a missing active profile (1.1042ms)
+✔ mission candidates require membership, exclude schedule conflicts and keep candidate sorting stable (2.8195ms)
+✔ mission candidate requests hide absent and unauthorised missions (0.7348ms)
+✔ explanation lookup enforces owner and expiry, rejects invalid ids and marks stale histories (1.4622ms)
+✔ matching endpoints forward authenticated identity and pagination to the matching service (0.5458ms)
+✔ night requires full availability including next day (50.6029ms)
+✔ adjacent intervals merge but gaps do not (1.4983ms)
+✔ RPPS NOT_FOUND cannot be offset by score (1.5408ms)
+✔ RPPS PENDING cannot be offset by score (0.6431ms)
+✔ RPPS NOT_CHECKED cannot be offset by score (0.51ms)
+✔ no IADE to IBODE equivalence (0.3475ms)
+✔ mixed population requires both competencies (0.3297ms)
+✔ unknown location is not zero distance (0.4107ms)
+✔ consecutive assignments do not overlap (1.1173ms)
+✔ overlapping experience counted once (1.4174ms)
+✔ timezone required and interval positive (1.5684ms)
+✔ documented score example is 93.75 and exposes components (1.0107ms)
+✔ date-only requests never invent all-day availability or conflicts (0.4572ms)
+✔ unconfirmed schedule still checks qualification and RPPS (0.6549ms)
+✔ unknown shift does not create a shift preference mismatch or score (1.0156ms)
+✔ explicit exact precision preserves legacy matching results (0.863ms)
+✔ practice services are alternatives within the mission qualification (1.0017ms)
+✔ empty and missing service preferences preserve existing matching (2.2058ms)
+✔ MORNING is compatible with existing day preferences but not night-only profiles (0.5779ms)
+✔ AFTERNOON is compatible with existing day preferences but not night-only profiles (1.6815ms)
+✔ migration account-security refuses destructive rollback before any database write (8.5851ms)
+✔ migration admin-mfa-recovery refuses destructive rollback before any database write (6.7498ms)
+✔ migration admin-password refuses destructive rollback before any database write (1.7851ms)
+✔ migration admin-operations refuses destructive rollback before any database write (1.7866ms)
+✔ migration client-requests refuses destructive rollback before any database write (1.6472ms)
+✔ migration contract-preparation refuses destructive rollback before any database write (1.2882ms)
+✔ migration cv-documents refuses destructive rollback before any database write (2.2927ms)
+✔ migration discord-notifications refuses destructive rollback before any database write (1.4231ms)
+✔ migration document-security refuses destructive rollback before any database write (2.0866ms)
+✔ migration email-delivery refuses destructive rollback before any database write (1.4658ms)
+✔ migration erasure-recovery refuses destructive rollback before any database write (0.9914ms)
+✔ migration extended refuses destructive rollback before any database write (0.905ms)
+✔ migration finess refuses destructive rollback before any database write (1.5895ms)
+✔ migration google-identity refuses destructive rollback before any database write (2.3186ms)
+✔ migration harden refuses destructive rollback before any database write (1.3889ms)
+✔ migration mission-guardrails refuses destructive rollback before any database write (1.4563ms)
+✔ migration mission-mail refuses destructive rollback before any database write (2.2919ms)
+✔ migration mission-schedule-precision refuses destructive rollback before any database write (1.245ms)
+✔ migration mission-time-slots refuses destructive rollback before any database write (1.2835ms)
+✔ migration notification-center refuses destructive rollback before any database write (1.1049ms)
+✔ migration personal-corrections refuses destructive rollback before any database write (1.4325ms)
+✔ migration platform-admin refuses destructive rollback before any database write (1.9222ms)
+✔ migration privacy-requests refuses destructive rollback before any database write (1.3176ms)
+✔ migration professional-identity refuses destructive rollback before any database write (1.4048ms)
+✔ migration recovery-email refuses destructive rollback before any database write (1.4183ms)
+✔ migration schema refuses destructive rollback before any database write (1.0374ms)
+✔ migration shared-rate-limit refuses destructive rollback before any database write (1.3973ms)
+✔ migration staffing-request-details refuses destructive rollback before any database write (1.6745ms)
+✔ migration support-tickets refuses destructive rollback before any database write (1.738ms)
+✔ mission confirmation lookup is scoped to the authenticated nurse and requested mission (3.4234ms)
+✔ two year calendar horizon includes the last whole day and rejects 2090 (26.1422ms)
+✔ horizon handles leap day, time zones and invalid ranges (1.9875ms)
+✔ mission email escapes untrusted titles and links for both cancellation initiators (1.6046ms)
+✔ queued mission emails choose personal or enterprise links and preserve cancellation evidence (2.3668ms)
+✔ mission email dispatch handles sent with a leased delivery and safe retry state (2.7083ms)
+✔ mission email dispatch handles 429 with a leased delivery and safe retry state (0.9327ms)
+✔ mission email dispatch handles 400 with a leased delivery and safe retry state (0.6466ms)
+✔ mission email dispatch handles 500 with a leased delivery and safe retry state (0.4672ms)
+✔ mission email dispatch handles invalid-receipt with a leased delivery and safe retry state (0.5234ms)
+✔ mission email dispatch handles network with a leased delivery and safe retry state (0.4653ms)
+✔ mission email dispatch handles document-error with a leased delivery and safe retry state (0.8151ms)
+✔ mission email dispatch handles revoked with a leased delivery and safe retry state (4.2224ms)
+✔ cancellation PDF worker handles ready without publishing under another lease (2.4695ms)
+✔ cancellation PDF worker handles storage-failure without publishing under another lease (0.6163ms)
+✔ cancellation PDF worker handles lost-lease without publishing under another lease (0.5958ms)
+✔ mission documents prefer the complete registered identity to the display name (1.1947ms)
+✔ legacy or partial identities retain the known display name without inventing a surname (0.2472ms)
+✔ cancellation freezes the full identity, assignment dates and mission references at cancellation time (1.4995ms)
+✔ Mission timezone accepts IANA DOM and Paris; rejects invalid/null/offset (10.0195ms)
+✔ create persists zone and unchanged UTC; omitted zone defaults Paris (12.5044ms)
+✔ edit preserves stored zone for legacy clients; explicit change revisions terms (6.2449ms)
+✔ invalid timezone rejected before a database transaction (3.6639ms)
+✔ mission publication, reopening and completion enforce legal states and persist versioned events (14.6407ms)
+✔ mission publication rejects past dates and dates beyond the supported horizon (3.2658ms)
+✔ enterprise cancellation invalidates confirmations and records affected nurses (0.8247ms)
+✔ application checks and submissions bind fresh consent and reject closed missions (4.3108ms)
+✔ nurse assignment cancellation withdraws consent, invalidates PDF and reopens the mission (1.4805ms)
+✔ assignment requires an idempotency key, closes overlapping applications and translates SQL conflicts (2.0422ms)
+✔ mission commands preserve actor, version consent and idempotency keys (2.8487ms)
+✔ personal application and assignment lists are scoped to the session identity (0.4221ms)
+✔ cancellation documents hide missing and foreign assignments, report unavailable pending records (0.9881ms)
+✔ enterprise mission detail requires membership and includes management rights and chronological evidence (0.8088ms)
+✔ application detail is visible to its owner or authorised enterprise but hidden from outsiders (0.7823ms)
+✔ enterprise search and application inbox forward scope and pagination to query services (1.0792ms)
+✔ Discord challenge hashes the account-bound code, sends only via provider boundary and enforces rate limit (32.4987ms)
+✔ failed Discord delivery expires the challenge and never exposes the provider error or code (1.3587ms)
+✔ Discord organization destination requires a linked account, private text channel, administrator and bot permissions (10.2048ms)
+✔ destination changes separate personal and organization events and revoke pending versions (1.4383ms)
+✔ Discord verification binds code to actor and revokes the previous destination before relinking (4.0025ms)
+✔ Discord dispatch handles sent without unsafe replay (2.5725ms)
+✔ Discord dispatch handles rate-limit without unsafe replay (0.8469ms)
+✔ Discord dispatch handles forbidden without unsafe replay (0.6017ms)
+✔ Discord dispatch handles network without unsafe replay (0.5473ms)
+✔ Discord dispatch handles invalid-receipt without unsafe replay (0.4908ms)
+✔ Discord dispatch handles muted without unsafe replay (0.3066ms)
+✔ Discord dispatch handles obsolete without unsafe replay (0.2348ms)
+✔ Discord dispatch handles outside-area without unsafe replay (0.2482ms)
+✔ notification controller returns scoped preferences and disconnect revokes links and outstanding codes (1.1781ms)
+✔ private channel overwrites deny everyone but allow only the bot role (2.7738ms)
+✔ only guild owner or management roles authorize channel configuration (0.232ms)
+✔ personal events cannot be selected for collective organization channels (0.4005ms)
+✔ identical cross-provider content is hidden deterministically (3.5719ms)
+✔ different cities, shifts and qualifications remain separate (0.7527ms)
+✔ same France Travail detail URL identifies syndicated offer despite tracking (0.4072ms)
+✔ same-source offers and short boilerplate are not merged (9.5177ms)
+✔ guard preserves records and records the canonical offer (1.9594ms)
+✔ availability only closes documented detail 204; unexpected statuses remain active (2.8301ms)
+✔ auth, rate limits, network and server outages stop the batch without retiring rows (2.2624ms)
+✔ reimport snapshot conflicts are skipped and never reported closed (0.4903ms)
+✔ invalid bounds are rejected before database or network work (2.4605ms)
+✔ detail response bodies are released without retaining offer payloads (0.4447ms)
+✔ cycle cutoff is passed explicitly and invalid dates fail before acquisition (2.5575ms)
+✔ provider decimal numbers/strings are accepted without coercing blanks, booleans or wrong-country points (5.4943ms)
+✔ official commune fallback is cached, shared per batch, precise about centre and does not change raw hash (31.4434ms)
+✔ known source coordinates avoid network and provider JSON cannot spoof trusted geocoding (0.4535ms)
+✔ mismatched commune, invalid response, 429 and timeout remain unknown with bounded requests (12.518ms)
+✔ reimport updates existing provenance even when provider raw hash is unchanged (10.4065ms)
+✔ JobsPipe exact unique official postal/town match transfers into normalized facts (2.674ms)
+✔ JobsPipe ambiguous postal/town results and broader labels remain unknown (1.8752ms)
+✔ JobsPipe without postal code resolves only an exact unique official town (1.201ms)
+✔ legacy API provenance remains distinct from source evidence and reports inconsistent imports (5.4534ms)
+✔ legacy titles classify anesthetists and ignore recruitment boilerplate contracts (0.5832ms)
+✔ experience units, minimums and unquantified experience are retained without inventing years (3.9248ms)
+✔ conditional equipment, negated skills and desired alternatives remain distinct (1.7915ms)
+✔ legacy contract exclusions and explicit duration preserve uncertainty (0.845ms)
+✔ shift quantities reject impossible percentages and preserve planning evidence (2.3964ms)
+✔ transport activity and patient care context are not benefits or assignment services (1.2954ms)
+✔ advance payments distinguish unknown frequency from explicit schedules (1.0033ms)
+✔ allowances keep ambiguous grouped rates and optional reimbursement periods (1.8ms)
+✔ break durations never imply paid time and notices remain explicit (2.1922ms)
+✔ incomplete supplier dates and damaged descriptions remain visible alerts (1.1568ms)
+✔ current parser distinguishes permit requirement, software and dated evidence (9.8547ms)
+✔ salary amounts retain hourly, monthly, annual and unknown units with gross uncertainty (1.5633ms)
+✔ hash canonicalization retains array order, ignores provider name and invalidates altered evidence (0.5697ms)
+✔ parser retains exact evidence offsets and deterministic input hash (12.4609ms)
+✔ missing unit never becomes hourly salary (0.783ms)
+✔ transport allowance is not a base salary (1.4769ms)
+✔ night premium does not establish a night shift (0.6759ms)
+✔ candidate disability is not patient population (1.3573ms)
+✔ mixed diploma requirement and desired experience remain uncertain (0.703ms)
+✔ alternative diplomas are not cumulative requirements (0.5611ms)
+✔ no housing remains negated (0.4785ms)
+✔ full time and part time conflict is visible (4.8903ms)
+✔ unrecognized important passages remain in review queue (0.675ms)
+✔ stale extraction never appears as current (0.6308ms)
+✔ JSONB key ordering preserves the parser input fingerprint (0.5365ms)
+✔ display is the exact source, never a generated code label (0.8413ms)
+✔ clinical emergency and facility catalog do not create job services (1.0265ms)
+✔ an explicit service assignment remains and nearby diploma requirement is not inherited (1.7225ms)
+✔ hour ranges retain both bounds including compact, overnight and spaced source text (3.4793ms)
+✔ invalid times do not create valid-looking ranges; ambiguous alternatives stay separate (0.8651ms)
+✔ range patch preserves qualification and care evidence, invalidates previous parser cache (0.7497ms)
+✔ time evidence keeps alternatives and negative wording for display (0.7408ms)
+✔ IDE acronym and ambiguous block diploma stay distinct (7.0056ms)
+✔ provider contradictions are flagged without overwriting reported values (6.3362ms)
+✔ external criteria never claim complete eligibility or a score (9.7736ms)
+✔ four provider searches deduplicate and enforce the requested department (460.0941ms)
+✔ empty keyword does not stop subsequent searches and failure is not partial success (1928.0994ms)
+✔ invalid import bounds and department fail before network access (0.6718ms)
+✔ existing cached offers are re-extracted at read without provider import or database mutation (4.9173ms)
+✔ external detail retains source dates and labels import as last observation (12.4273ms)
+✔ Paris import slots respect summer/winter time and do not reset at midnight (26.3024ms)
+✔ afternoon queries only new creations after a complete morning; next morning reconciles all edits (3.4918ms)
+✔ a completed slot never repeats while an unfinished cycle keeps its checkpoint across slots (3.3785ms)
+✔ public offer cleanup retains provenance and no invented dates (12.3269ms)
+✔ permanent contract rejected from interim import (1.7792ms)
+✔ unknown qualification stays unknown (0.6209ms)
+✔ IBODE does not become IADE (0.4582ms)
+✔ missing provider access cannot report an acquisition (1.2466ms)
+✔ provider ISO dates are normalized to UTC without changing their instant (29.7971ms)
+✔ invalid or missing provider dates become null without rejecting the offer (4.8637ms)
+✔ ISO dates without offset use UTC rather than the machine timezone (0.9428ms)
+✔ organisation reads and directory remain scoped to the authenticated actor (4.1826ms)
+✔ organisation update requires membership and FINESS for establishments (2.1613ms)
+✔ staffing creation normalizes content, saves its receipt and avoids duplicate writes on replay (8.8079ms)
+✔ staffing detail hides missing records and list binds pagination and actor (0.4801ms)
+✔ staffing edits reject missing records and reassignment before saving, and replay is idempotent (2.0341ms)
+✔ notification preferences require a nurse profile and persist either boolean (0.7998ms)
+✔ confirmation access hides foreign assignments and returns pending or latest document (0.5179ms)
+✔ partial IDE comparison never proves availability or full eligibility (32.5426ms)
+✔ partial IADE comparison never proves availability or full eligibility (1.9189ms)
+✔ partial IBODE comparison never proves availability or full eligibility (0.968ms)
+✔ known qualification mismatch is distinct from unavailable evidence (4.4079ms)
+✔ RPPS not found blocks and pending stays pending even with matching qualification (3.0503ms)
+✔ missing profile experience is a completion request, not proof of absent competence (1.7829ms)
+✔ approximate location and shifts remain indicative and cannot prove incompatibility (3.1044ms)
+✔ conflicting and ambiguous provider facts are not made into matches (1.5105ms)
+✔ transport emergency words do not imply emergency department experience (0.9455ms)
+✔ external service preferences are compared for the offer role without inventing missing evidence (3.692ms)
+✔ all personal fields, removals and display name are locked after registration (1.8642ms)
+✔ professional changes and omitted personal details remain allowed (0.6913ms)
+✔ correction values validate format and date, normalize email and permit clearing optional fields (10.9753ms)
+✔ legacy PostgreSQL configuration is unchanged without custom CA (1.7339ms)
+✔ custom CA enforces hostname verification without URL overriding the CA (0.4378ms)
+✔ weaker TLS modes and conflicting SSL URL settings are rejected (0.6306ms)
+✔ custom CA promotes require and verify-ca to full verification (0.231ms)
+✔ custom CA preserves escaped credentials and non-TLS connection options (0.2613ms)
+✔ practice preferences accept multiple services per role and explicit empty preferences (7.0453ms)
+✔ the stored profile maps service choices into every matching consumer (0.7625ms)
+✔ service preferences warn on voluntary applications but do not block an explicit eligible assignment (5.74ms)
+✔ all API routes including unauthorized and malformed requests prohibit browser and CDN storage (1.7943ms)
+✔ non-API assets do not receive a blanket no-store directive (1.0588ms)
+✔ profile accepts declared professional reference and years for each diploma (7.7975ms)
+✔ profile reference validates email, lengths and rejects invented verification fields (2.1817ms)
+✔ every diploma year is an integer with sensible bounds and cannot be future (4.0128ms)
+✔ legacy diploma details remain accepted when optional additions are omitted (0.5337ms)
+✔ API validates each specialist diploma chronology without merging diploma years (0.4359ms)
+✔ availability changes merge periods, write actor-scoped data and enqueue matching (11.7298ms)
+✔ availability rejects invalid intervals and cannot remove a committed assignment period (2.3971ms)
+✔ full profile update preserves personal identity, qualifications and committed availability (2.6868ms)
+✔ profile reads normalize overlapping legacy periods without persisting silent edits (0.5181ms)
+✔ profile endpoints use the authenticated actor and RPPS retry requires an existing number (0.6786ms)
+✔ RPPS verification binds provider response to exact profile version and ignores stale results (4.8561ms)
+✔ OpenAPI describes idempotency, CSRF, private downloads and distinct webhook authentication (1.8949ms)
+✔ provider refresh persists completed collection checkpoints and rechecks returned or missing job offers honestly (1.547ms)
+✔ completed France Travail refresh performs availability checks and deduplicates reopened offers (0.6683ms)
+✔ provider batches accumulate accepted counts, stop at completion and repair geolocation once (0.3781ms)
+✔ France Travail validates bounds and identifiers before network access (3.5409ms)
+✔ France Travail fails closed on absent credentials and malformed authentication (31.7112ms)
+✔ France Travail renews a rejected token exactly once and preserves query filters (3.137ms)
+✔ France Travail retry budget and long Retry-After do not trigger unbounded calls (3.6686ms)
+✔ France Travail rejects malformed payloads and impossible range metadata (5.094ms)
+✔ France Travail deadline and saturated partition guards preserve incomplete status (1.3021ms)
+✔ Discord refuses unconfigured and insecure relay before making network requests (1.3184ms)
+✔ Discord relay validates envelope and forwards only the configured relay token (2.8552ms)
+✔ Discord direct delivery creates personal channel and disables mentions (1.4469ms)
+✔ Discord permission resolution honours owner, everyone, role and personal overwrites (1.2914ms)
+✔ PSC link requires a recent nurse session and a still-active account before creating a challenge (6.2638ms)
+✔ PSC login stores an anonymous challenge and propagates session persistence failure (1.3726ms)
+✔ PSC callback refuses missing, excessive and consumed states without calling the provider (1.7268ms)
+✔ PSC cancellation consumes its challenge but does not authenticate (0.6753ms)
+✔ PSC successful unlinked identity requires association, while a linked identity renews the session (2.1868ms)
+✔ PSC identity association checks session version, active ownership and collision (1.9193ms)
+✔ PSC provider and session errors redirect safely without exposing their contents (0.8686ms)
+✔ PSC absent configuration stays disabled, identity is not inferred from sub or email (2.5424ms)
+✔ PSC library rejects invalid signature, issuer, audience, expiry, nonce and state (690.3097ms)
+✔ recommendation publication dates are explicit instants, never import dates or invented future dates (1.4876ms)
+✔ external relevance precedes publication recency without inventing a global score (1.2172ms)
+✔ reset mail uses only a trusted-origin fragment link, plain text and one recipient (39.0828ms)
+✔ explicit provider rejections are distinguished from ambiguous sends, without retries or raw errors (5.9927ms)
+✔ the timeout bounds a stalled provider body and does not resend (3002.7448ms)
+✔ recovery config rejects untrusted URLs and supports manual fallback (2.112ms)
+✔ manual recovery creates an assistance request without token and does not enumerate unknown accounts (3.8152ms)
+✔ automatic recovery stores only a token hash and never returns delivery status to the caller (0.9628ms)
+✔ recent or still-valid recovery requests suppress repeat issuance and delivery (0.5394ms)
+✔ recovery completion rechecks account version, changes password and revokes every old session (4.574ms)
+✔ invalid recovery tokens fail before password hashing (2.9572ms)
+✔ recovery refuses disabled accounts without changing passwords (0.5612ms)
+✔ recovery refuses platform accounts without changing passwords (0.2029ms)
+✔ recovery refuses admin accounts without changing passwords (0.1584ms)
+✔ recovery refuses closing accounts without changing passwords (0.2519ms)
+✔ recovery refuses expired accounts without changing passwords (0.2451ms)
+✔ recovery refuses changed-version accounts without changing passwords (0.1068ms)
+✔ recovery controller forwards supplied email, token and new password (0.2804ms)
+✔ refresh skips locked, paused and cooling sources before network acquisition (2.8892ms)
+✔ scheduled batches follow pages, retain page checkpoints and stop on provider errors (0.6084ms)
+✔ quota and idle refreshes never run geolocation repair (0.4237ms)
+✔ location repair preserves availability and uses an optimistic provenance check (50.2263ms)
+✔ retention policy keeps business records and bounds traces (2.5089ms)
+✔ dry inspection counts expired traces without deletes (7.4456ms)
+✔ apply deletes traces, superseded bank files and never missions (2.2288ms)
+✔ anonymize closes the account and removes private documents (1.8668ms)
+✔ business history has no automatic duration for real users (1.9964ms)
+✔ automatic maintenance excludes business history even when a duration exists (0.8064ms)
+✔ generated reverse-location contract covers coordinates, nullable address and controlled errors (353.5079ms)
+✔ reverse lookup selects a street address without duplicating city/postcode or leaking provider data (36.1731ms)
+✔ no result and distant/invalid addresses stay unavailable; a commune never becomes a street (3.0836ms)
+✔ provider failure is explicit and does not expose internals (4.8718ms)
+✔ registration coordinates reject strings, missing, non-finite and out-of-range numbers (4.862ms)
+✔ RPPS demonstration policy is explicit, versioned, reversible and does not certify profiles (1153.8182ms)
+✔ missing credentials is pending (3.0575ms)
+✔ zero exact results is not found (28.5102ms)
+✔ exact RPPS found (1.8669ms)
+✔ HTTP 401 remains pending (0.765ms)
+✔ HTTP 403 remains pending (0.6037ms)
+✔ HTTP 404 remains pending (0.4158ms)
+✔ HTTP 429 remains pending (0.6693ms)
+✔ HTTP 500 remains pending (0.4405ms)
+✔ HTTP 503 remains pending (0.3506ms)
+✔ malformed results cannot prove absence (1.349ms)
+✔ a different practitioner does not count as found (0.9791ms)
+✔ name discrepancy remains pending for manual review, punctuation is normalized (2.706ms)
+✔ search area HTTP route requires a session, validates the PATCH and documents its response (247.2991ms)
+✔ search area accepts a selected town and rejects incomplete, global or malformed zones (5.9005ms)
+✔ saving Rennes as alert area preserves Nantes domicile and notification preferences; identical save is a no-op (1.1959ms)
+✔ an account without an interim worker profile cannot save an alert zone (0.5955ms)
+✔ queued mission alerts use the current area, and incomplete/disabled profiles fail closed (2.0124ms)
+✔ outbox retry rejects invalid, missing and reserved events and preserves completed events (2.868ms)
+✔ closure blockers report every obligation and lock account, profile and organizations in order (0.4917ms)
+✔ Google challenges prune expired entries, bound concurrent tabs and propagate session persistence failures (0.7596ms)
+✔ enterprise query DTO rejects unsupported filters, malformed dates and unbounded pages (5.7766ms)
+✔ profile validation enforces real birth dates, valid periods and the planning limit for both states (1.5011ms)
+✔ session guard: valid (1.9004ms)
+✔ session guard: revoked (1.3307ms)
+✔ session guard: legacy (0.3122ms)
+✔ session guard: disabled (0.2941ms)
+✔ store keys are stable keyed hashes, isolated by scope and secret, with no raw IP or session (2.4566ms)
+✔ database failures fail closed with explicit 503 and no internal error or operation execution (287.799ms)
+✔ invalid database counters do not bypass the limiter (0.7011ms)
+✔ maintenance enforces a bounded batch and rejects unbounded input before SQL (2.2733ms)
+✔ structured need requires details and accepts complete nursing criteria (4.9871ms)
+✔ need rejects invented qualifications, services, blocks and specialties (1.6315ms)
+✔ need headcount and experience have explicit integer bounds (1.8114ms)
+✔ need rejects duplicate competencies and non-object details (0.8063ms)
+✔ need period is normalized to exact UTC instants (6.2257ms)
+✔ need rejects backwards, missing-timezone and past periods (1.202ms)
+✔ specialty is required only for specialized blocks (1.3107ms)
+✔ support creation trims input, replays identical requests and enforces hourly limits (3.6399ms)
+✔ support list and details bind owner access and use a lookahead row for pagination (0.7379ms)
+✔ client support reply reopens tickets, staff can resolve and duplicate keys cannot change content (1.0002ms)
+✔ support validates bounds and keeps script-like descriptions as inert plain text (1.7268ms)
+✔ support admin controls deny OPS/AUDITOR and require recent confirmation for responses (0.5234ms)
+✔ transient serialization failure is retried, then returns committed result (103.0978ms)
+✔ deadlock retries stop after three attempts (88.9027ms)
+✔ uniqueness/business conflicts are not retried (0.6772ms)
+ℹ tests 652
+ℹ suites 0
+ℹ pass 652
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 15709.1362
+--------------------------------|---------|----------|---------|---------|--------------------------
+File                            | % Stmts | % Branch | % Funcs | % Lines | Uncovered Line #s
+--------------------------------|---------|----------|---------|---------|--------------------------
+All files                       |   95.08 |    89.95 |   82.32 |   95.08 |
+ src                            |   99.49 |    97.64 |     100 |   99.49 |
+  app.ts                        |     100 |    97.22 |     100 |     100 | 148,275
+  cli.ts                        |   98.03 |    97.29 |     100 |   98.03 | 300-305
+  config.ts                     |     100 |    98.55 |     100 |     100 | 7
+  openapi-contracts.ts          |     100 |      100 |     100 |     100 |
+  openapi.ts                    |     100 |    97.05 |     100 |     100 | 321
+ src/admin                      |   99.58 |    75.19 |   70.37 |   99.58 |
+  admin-auth.ts                 |     100 |    77.68 |   80.76 |     100 | ...9-100,103-105,120-121
+  admin.module.ts               |     100 |       60 |      50 |     100 | 23,25,33-46,69,82,94-96
+  client-requests.ts            |     100 |    65.78 |      80 |     100 | ...-36,38,41-42,50,52-53
+  mfa.ts                        |    92.3 |    84.09 |     100 |    92.3 | 25-26
+  operations.ts                 |     100 |    81.65 |      68 |     100 | ...6,48-50,67,88,107,136
+  permissions.ts                |     100 |       50 |     100 |     100 | 8
+ src/auth                       |   97.02 |    91.71 |   90.12 |   97.02 |
+  auth-rate-limit.ts            |     100 |      100 |     100 |     100 |
+  auth.module.ts                |   95.85 |    90.51 |    92.5 |   95.85 | ...58-60,121-123,227-228
+  google.ts                     |   94.25 |     90.9 |      80 |   94.25 | 31-35
+  idle-session.ts               |     100 |    66.66 |     100 |     100 | 8,12,17
+  psc.module.ts                 |     100 |    91.07 |   77.77 |     100 | 14-15,17,25
+  psc.ts                        |     100 |    89.58 |     100 |     100 | 4,10,15
+  recovery-mail.ts              |     100 |    97.22 |     100 |     100 | 8
+  recovery.ts                   |     100 |      100 |   83.33 |     100 |
+ src/automation                 |     100 |    94.79 |     100 |     100 |
+  automation.module.ts          |     100 |    92.85 |     100 |     100 | ...4,126,200,229-231,250
+  cloud-jobs.module.ts          |     100 |    96.15 |     100 |     100 | 55
+  confirmation-pdf.ts           |     100 |    98.31 |     100 |     100 | 164,171
+  dispatch-health.ts            |     100 |      100 |     100 |     100 |
+  email-delivery.module.ts      |     100 |      100 |     100 |     100 |
+  email-delivery.ts             |     100 |    93.42 |     100 |     100 | 22,27,35,42,48
+  execution-trace.ts            |     100 |    93.33 |     100 |     100 | 10
+  mission-mail.ts               |     100 |    95.31 |     100 |     100 | 31,67,90
+  reminders.ts                  |     100 |    72.72 |     100 |     100 | 37
+ src/common                     |   98.95 |    95.91 |     100 |   98.95 |
+  access.ts                     |     100 |    95.45 |     100 |     100 | 85
+  idempotency.ts                |   96.07 |    92.85 |     100 |   96.07 | 24-25
+  page.dto.ts                   |     100 |      100 |     100 |     100 |
+  private-cache.ts              |     100 |      100 |     100 |     100 |
+  retry.ts                      |     100 |      100 |     100 |     100 |
+ src/contracts                  |     100 |    93.75 |   73.33 |     100 |
+  contracts.module.ts           |     100 |      100 |   33.33 |     100 |
+  contracts.service.ts          |     100 |    93.33 |     100 |     100 | 35,39,63
+ src/database                   |   52.26 |    97.29 |   49.43 |   52.26 |
+  account-security.ts           |   56.25 |      100 |      50 |   56.25 | 5-11
+  admin-mfa-recovery.ts         |     100 |      100 |      50 |     100 |
+  admin-operations.ts           |   16.21 |      100 |      50 |   16.21 | 5-35
+  admin-password.ts             |     100 |      100 |      50 |     100 |
+  client-requests.ts            |      24 |      100 |      50 |      24 | 5-23
+  cloud-storage.ts              |    62.5 |      100 |       0 |    62.5 | 4-6
+  connection.ts                 |     100 |     92.3 |     100 |     100 | 10
+  contract-preparation.ts       |   35.71 |      100 |      50 |   35.71 | 4-12
+  cv-documents.ts               |   83.33 |      100 |      50 |   83.33 | 4
+  database.ts                   |     100 |    93.33 |    90.9 |     100 | 152
+  discord-notifications.ts      |    8.62 |      100 |      50 |    8.62 | 4-56
+  distance.ts                   |     100 |      100 |     100 |     100 |
+  document-security.ts          |   56.25 |      100 |      50 |   56.25 | 5-11
+  email-delivery.ts             |   23.07 |      100 |      50 |   23.07 | 5-24
+  enterprise-follow-up.ts       |   55.55 |      100 |       0 |   55.55 | 4-7
+  erasure-recovery.ts           |     100 |      100 |      50 |     100 |
+  extended.ts                   |      50 |      100 |      50 |      50 | 4-12
+  external-collection.ts        |     100 |      100 |       0 |     100 |
+  external-visibility.ts        |     100 |      100 |     100 |     100 |
+  finess.ts                     |   53.84 |      100 |      50 |   53.84 | 4-9
+  frontend-fields.ts            |   29.41 |      100 |       0 |   29.41 | 4-12,14-16
+  google-identity.ts            |   69.23 |      100 |      50 |   69.23 | 4-7
+  harden.ts                     |   41.17 |      100 |      50 |   41.17 | 4-13
+  jobspipe-credits.ts           |   33.33 |      100 |       0 |   33.33 | 6-17,19-20
+  mission-guardrails.ts         |   21.05 |      100 |      50 |   21.05 | 5-34
+  mission-location-optional.ts  |   54.54 |      100 |       0 |   54.54 | 5-6,8-10
+  mission-mail.ts               |   18.51 |      100 |      50 |   18.51 | 4-25
+  mission-schedule-precision.ts |   55.55 |      100 |      50 |   55.55 | 4-7
+  mission-time-slots.ts         |    62.5 |      100 |      50 |    62.5 | 4-6
+  notification-center.ts        |    8.77 |      100 |      50 |    8.77 | 4-55
+  offer-parsing.ts              |     100 |      100 |       0 |     100 |
+  personal-corrections.ts       |   38.46 |      100 |      50 |   38.46 | 4-11
+  platform-admin.ts             |   45.45 |      100 |      50 |   45.45 | 4-9
+  privacy-requests.ts           |    62.5 |      100 |      50 |    62.5 | 4-6
+  professional-identity.ts      |   45.45 |      100 |      50 |   45.45 | 4-9
+  recovery-email.ts             |   46.15 |      100 |      50 |   46.15 | 5-11
+  schema.ts                     |   19.56 |      100 |      50 |   19.56 | 4-40
+  shared-rate-limit.ts          |      40 |      100 |      50 |      40 | 5-13
+  staffing-request-details.ts   |   63.63 |      100 |      50 |   63.63 | 4-7
+  support-tickets.ts            |   45.45 |      100 |      50 |   45.45 | 4-9
+ src/demo                       |     100 |      100 |     100 |     100 |
+  seed.ts                       |     100 |      100 |     100 |     100 |
+ src/documents                  |   97.15 |     89.5 |   96.42 |   97.15 |
+  crypto.ts                     |     100 |    78.57 |     100 |     100 | 3,34,36
+  cv-file.ts                    |     100 |    88.88 |     100 |     100 | 12,15-17
+  documents.module.ts           |   96.78 |    90.56 |   95.83 |   96.78 | ...2-263,283-286,454-456
+ src/domain                     |   98.88 |    94.11 |   95.23 |   98.88 |
+  assignment-profile.ts         |     100 |      100 |     100 |     100 |
+  availability.ts               |     100 |      100 |     100 |     100 |
+  matching-display.ts           |     100 |      100 |     100 |     100 |
+  matching.ts                   |     100 |    96.47 |     100 |     100 | 44,159,191
+  notification-messages.ts      |     100 |       50 |     100 |     100 | 24
+  rules.ts                      |     100 |       50 |     100 |     100 | 4,18
+  schedule-period.ts            |   76.47 |    85.71 |   66.66 |   76.47 | 2-5
+ src/listings                   |   98.72 |    90.64 |   62.66 |   98.72 |
+  conversions.ts                |   98.71 |      100 |      90 |   98.71 | 11
+  listing-order.ts              |     100 |    89.77 |     100 |     100 | 26,36,40-43,55-57,85
+  listing-page.ts               |     100 |    28.57 |     100 |     100 | 12-20
+  listings.module.ts            |   98.96 |    94.38 |   84.21 |   98.96 | 43-44,196-197
+  locations.ts                  |     100 |    96.77 |      25 |     100 | 18
+  recommendations.ts            |     100 |    88.33 |   88.88 |     100 | 22,36,51,55,60,75
+  reverse-location.ts           |   96.61 |      100 |      75 |   96.61 | 57-58
+  search.ts                     |   97.72 |    84.31 |   13.63 |   97.72 | 213-216,232-233
+ src/matching                   |     100 |    88.88 |     100 |     100 |
+  matching.module.ts            |     100 |    88.88 |     100 |     100 | ...1-142,172,185,230-233
+ src/missions                   |   96.62 |    80.93 |   95.89 |   96.62 |
+  application-assessment.ts     |     100 |      100 |     100 |     100 |
+  application-inbox.ts          |     100 |    81.81 |      75 |     100 | 25,31
+  assignment-assessment.ts      |     100 |      100 |     100 |     100 |
+  mission-mapping.ts            |     100 |      100 |     100 |     100 |
+  mission-validation.ts         |   77.08 |       50 |     100 |   77.08 | ...,33,36-37,40-41,46-47
+  mission.dto.ts                |     100 |      100 |     100 |     100 |
+  missions.module.ts            |     100 |    97.56 |   92.85 |     100 | 217
+  missions.service.ts           |    95.4 |     73.8 |     100 |    95.4 | ...4,223-225,365,433-438
+ src/notifications              |    95.2 |    89.38 |   88.88 |    95.2 |
+  catalog.ts                    |     100 |    68.96 |     100 |     100 | 29,33-37,39-40
+  demo-suppression.ts           |     100 |    66.66 |     100 |     100 | 7
+  discord-client.ts             |     100 |    98.24 |     100 |     100 | 28
+  events.ts                     |   78.33 |    71.87 |     100 |   78.33 | 45-46,48-58
+  match-area.ts                 |     100 |     90.9 |     100 |     100 | 12
+  notifications.module.ts       |   96.59 |    95.04 |   81.81 |   96.59 | 18,119-123
+  purge-demo-alerts.ts          |     100 |      100 |     100 |     100 |
+ src/organizations              |   96.82 |    91.89 |    82.5 |   96.82 |
+  agency-establishments.ts      |     100 |    85.71 |   55.55 |     100 | 20,29,31
+  establishment-directory.ts    |     100 |      100 |   83.33 |     100 |
+  need.dto.ts                   |     100 |    77.77 |     100 |     100 | 65,69-74,99,102
+  organizations.module.ts       |   93.21 |      100 |      90 |   93.21 | 39-53
+ src/profiles                   |   99.26 |     93.8 |   90.36 |   99.26 |
+  cv-parser.ts                  |     100 |    95.53 |     100 |     100 | ...8,30,66-70,77,111,122
+  cv.controller.ts              |     100 |      100 |     100 |     100 |
+  personal-corrections.ts       |     100 |    80.43 |   81.25 |     100 | ...,24-28,31-32,35,46-47
+  personal-information.ts       |     100 |    96.15 |     100 |     100 | 13
+  profile-details.ts            |     100 |      100 |     100 |     100 |
+  profile-mapping.ts            |     100 |      100 |     100 |     100 |
+  profile-validation.ts         |     100 |    91.66 |     100 |     100 | 25,30,32
+  profiles.module.ts            |   99.13 |      100 |   87.17 |   99.13 | 79-81
+  rpps.ts                       |   95.45 |       90 |     100 |   95.45 | 52-53,60-61
+  search-area.ts                |     100 |    66.66 |     100 |     100 | 20
+ src/public-data                |   98.23 |    87.15 |   94.18 |   98.23 |
+  contract-policy.ts            |     100 |      100 |     100 |     100 |
+  external-visibility.ts        |     100 |      100 |     100 |     100 |
+  france-travail-client.ts      |   98.36 |    97.72 |     100 |   98.36 | 25
+  france-travail-collection.ts  |     100 |    73.68 |     100 |     100 | 22,24,26-30,32,34-35
+  freshness.ts                  |   91.93 |    95.65 |   66.66 |   91.93 | 11-15
+  jobspipe-collection.ts        |   96.87 |    78.26 |   91.66 |   96.87 | 30-32,35
+  jobspipe-geolocation.ts       |    95.1 |    62.79 |     100 |    95.1 | 67-69,84-86,132
+  jobspipe.ts                   |     100 |    84.78 |     100 |     100 | 11,14,21,25,33,39-41
+  offer-deduplication.ts        |     100 |    96.42 |     100 |     100 | 18
+  offer-geolocation.ts          |   99.11 |    88.37 |     100 |   99.11 | 148-149
+  offer-parser.ts               |     100 |    85.23 |     100 |     100 | ...-61,68-70,72,81-83,92
+  offer-quality.ts              |    98.4 |       90 |     100 |    98.4 | 106-108
+  offers.ts                     |     100 |    85.41 |   66.66 |     100 | 27-32,55,72,112
+  partial-matching.ts           |     100 |    95.45 |     100 |     100 | 48,60,104,157-159
+  refresh.service.ts            |    96.2 |    77.35 |   83.33 |    96.2 | 72-74
+  repair-geolocation.ts         |   81.81 |    66.66 |     100 |   81.81 | 12-13,19-20
+  reparse-offers.ts             |     100 |      100 |     100 |     100 |
+  service-evidence.ts           |     100 |     92.3 |     100 |     100 | 7
+ src/public-data/parser         |     100 |    95.12 |     100 |     100 |
+  legacy-v2.ts                  |     100 |    96.71 |     100 |     100 | 16-18,40,43
+  legacy-v3.ts                  |     100 |    93.68 |     100 |     100 | 6,26,43
+  structured-details.ts         |     100 |     92.5 |     100 |     100 | 8,10
+ src/reference-data             |     100 |    93.16 |    92.3 |     100 |
+  finess-freshness.ts           |     100 |    95.23 |     100 |     100 | 7
+  finess.module.ts              |     100 |      100 |      80 |     100 |
+  finess.ts                     |     100 |    91.56 |     100 |     100 | 33,39,48,53-54,70,72
+  reference-data.module.ts      |     100 |      100 |     100 |     100 |
+ src/security                   |   94.44 |     92.3 |      75 |   94.44 |
+  closure-blockers.ts           |     100 |      100 |     100 |     100 |
+  closure.ts                    |   90.32 |    94.87 |      80 |   90.32 | 45-50
+  maintenance-status.ts         |     100 |      100 |     100 |     100 |
+  privacy.module.ts             |   81.81 |    81.48 |      50 |   81.81 | 31,43-47,49-52
+  retention.ts                  |     100 |    91.89 |     100 |     100 | 62,183,192
+  session-revocation.ts         |   62.06 |      100 |      20 |   62.06 | 12-16,19-21,24-26
+  shared-rate-limit.ts          |     100 |    92.85 |     100 |     100 | 19,38
+ src/support                    |     100 |    92.42 |   57.14 |     100 |
+  support.module.ts             |     100 |      100 |   30.76 |     100 |
+  support.service.ts            |     100 |    91.93 |     100 |     100 | 10,25,27-28,32
+--------------------------------|---------|----------|---------|---------|--------------------------

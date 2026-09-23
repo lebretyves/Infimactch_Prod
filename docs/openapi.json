@@ -8628,6 +8628,156 @@
         ]
       }
     },
+    "/api/v1/admin/operations/sources/{provider}/visibility": {
+      "post": {
+        "operationId": "AdminOperationsController_sourceVisibility",
+        "parameters": [
+          {
+            "name": "provider",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "X-CSRF-Token",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Token from /auth/csrf; cookie credentials and the configured Origin are required"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SourceVisibility"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "ok": {
+                      "type": "boolean",
+                      "enum": [
+                        true
+                      ]
+                    }
+                  },
+                  "required": [
+                    "ok"
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Controlled API error; applicability depends on route",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Controlled API error; applicability depends on route",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Controlled API error; applicability depends on route",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Controlled API error; applicability depends on route",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Controlled API error; applicability depends on route",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "413": {
+            "description": "Controlled API error; applicability depends on route",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Controlled API error; applicability depends on route",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Controlled API error; applicability depends on route",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Controlled API error; applicability depends on route",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "AdminOperations"
+        ]
+      }
+    },
     "/api/v1/admin/operations/sources/{provider}/refresh": {
       "post": {
         "operationId": "AdminOperationsController_refreshSource",
@@ -10294,10 +10444,14 @@
                         "requested_at"
                       ],
                       "nullable": true
+                    },
+                    "googleLinked": {
+                      "type": "boolean"
                     }
                   },
                   "required": [
-                    "request"
+                    "request",
+                    "googleLinked"
                   ]
                 }
               }
@@ -10586,6 +10740,310 @@
         ],
         "responses": {
           "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string",
+                      "format": "uuid"
+                    },
+                    "status": {
+                      "type": "string",
+                      "enum": [
+                        "REQUESTED",
+                        "APPROVED",
+                        "PROCESSING",
+                        "COMPLETED",
+                        "CANCELLED",
+                        "REJECTED"
+                      ]
+                    },
+                    "requested_at": {
+                      "type": "string",
+                      "format": "date-time"
+                    },
+                    "approved_at": {
+                      "type": "string",
+                      "format": "date-time",
+                      "nullable": true
+                    },
+                    "completed_at": {
+                      "type": "string",
+                      "format": "date-time",
+                      "nullable": true
+                    },
+                    "decision_reason": {
+                      "type": "string",
+                      "nullable": true
+                    },
+                    "last_error": {
+                      "type": "string",
+                      "nullable": true
+                    }
+                  },
+                  "required": [
+                    "id",
+                    "status",
+                    "requested_at"
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Controlled API error; applicability depends on route",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Controlled API error; applicability depends on route",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Controlled API error; applicability depends on route",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Controlled API error; applicability depends on route",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Controlled API error; applicability depends on route",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "413": {
+            "description": "Controlled API error; applicability depends on route",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Controlled API error; applicability depends on route",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Controlled API error; applicability depends on route",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Controlled API error; applicability depends on route",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Privacy"
+        ]
+      }
+    },
+    "/api/v1/me/closure-request/google/challenge": {
+      "post": {
+        "operationId": "PrivacyController_challenge",
+        "parameters": [
+          {
+            "name": "X-CSRF-Token",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Token from /auth/csrf; cookie credentials and the configured Origin are required"
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "nonce": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "nonce"
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Controlled API error; applicability depends on route",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Controlled API error; applicability depends on route",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Controlled API error; applicability depends on route",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Controlled API error; applicability depends on route",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Controlled API error; applicability depends on route",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "413": {
+            "description": "Controlled API error; applicability depends on route",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Controlled API error; applicability depends on route",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Controlled API error; applicability depends on route",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Controlled API error; applicability depends on route",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Privacy"
+        ]
+      }
+    },
+    "/api/v1/me/closure-request/google": {
+      "post": {
+        "operationId": "PrivacyController_requestGoogle",
+        "parameters": [
+          {
+            "name": "X-CSRF-Token",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Token from /auth/csrf; cookie credentials and the configured Origin are required"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ClosureGoogle"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
             "description": "Successful operation",
             "content": {
               "application/json": {
@@ -15885,6 +16343,8 @@
             "schema": {
               "type": "string",
               "enum": [
+                "MORNING",
+                "AFTERNOON",
                 "DAY",
                 "NIGHT",
                 "MIXED",
@@ -17920,154 +18380,6 @@
         ]
       }
     },
-    "/api/v1/applications/{id}/selection": {
-      "post": {
-        "operationId": "MissionsController_select",
-        "parameters": [
-          {
-            "name": "idempotency-key",
-            "required": true,
-            "in": "header",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "id",
-            "required": true,
-            "in": "path",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "Idempotency-Key",
-            "in": "header",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "minLength": 1,
-              "maxLength": 100
-            },
-            "description": "Stable key per command; reuse for retry with identical content. Reuse with changed content returns 409. Current permissions are checked on replay."
-          },
-          {
-            "name": "X-CSRF-Token",
-            "in": "header",
-            "required": true,
-            "schema": {
-              "type": "string"
-            },
-            "description": "Token from /auth/csrf; cookie credentials and the configured Origin are required"
-          }
-        ],
-        "responses": {
-          "201": {
-            "description": "Successful operation",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Application"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Controlled API error; applicability depends on route",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Controlled API error; applicability depends on route",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "Controlled API error; applicability depends on route",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Controlled API error; applicability depends on route",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          },
-          "409": {
-            "description": "Controlled API error; applicability depends on route",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          },
-          "413": {
-            "description": "Controlled API error; applicability depends on route",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          },
-          "429": {
-            "description": "Controlled API error; applicability depends on route",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Controlled API error; applicability depends on route",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          },
-          "503": {
-            "description": "Controlled API error; applicability depends on route",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          }
-        },
-        "tags": [
-          "Missions"
-        ]
-      }
-    },
     "/api/v1/applications/{id}/rejection": {
       "post": {
         "operationId": "MissionsController_reject",
@@ -19434,6 +19746,8 @@
             "schema": {
               "type": "string",
               "enum": [
+                "MORNING",
+                "AFTERNOON",
                 "DAY",
                 "NIGHT",
                 "MIXED",
@@ -22116,6 +22430,9 @@
                       "type": "string",
                       "format": "date-time"
                     },
+                    "externalCatalogueVisible": {
+                      "type": "boolean"
+                    },
                     "internal": {
                       "type": "object",
                       "properties": {
@@ -22840,6 +23157,148 @@
                   "items": {
                     "$ref": "#/components/schemas/DocumentMetadata"
                   }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Controlled API error; applicability depends on route",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Controlled API error; applicability depends on route",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Controlled API error; applicability depends on route",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Controlled API error; applicability depends on route",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Controlled API error; applicability depends on route",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "413": {
+            "description": "Controlled API error; applicability depends on route",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Controlled API error; applicability depends on route",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Controlled API error; applicability depends on route",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Controlled API error; applicability depends on route",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Documents"
+        ]
+      }
+    },
+    "/api/v1/me/cv-document": {
+      "post": {
+        "operationId": "DocumentsController_uploadCv",
+        "parameters": [
+          {
+            "name": "Idempotency-Key",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 100
+            },
+            "description": "Stable key per command; reuse for retry with identical content. Reuse with changed content returns 409. Current permissions are checked on replay."
+          },
+          {
+            "name": "X-CSRF-Token",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Token from /auth/csrf; cookie credentials and the configured Origin are required"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CvUploadDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DocumentCommand"
                 }
               }
             }
@@ -27478,6 +27937,22 @@
                             "type": "string",
                             "nullable": true
                           },
+                          "agencies": {
+                            "type": "array",
+                            "items": {
+                              "type": "object",
+                              "properties": {
+                                "id": {
+                                  "type": "string",
+                                  "format": "uuid"
+                                },
+                                "name": {
+                                  "type": "string"
+                                }
+                              },
+                              "required": []
+                            }
+                          },
                           "total": {
                             "type": "integer"
                           },
@@ -28907,6 +29382,311 @@
         ]
       }
     },
+    "/api/v1/agencies/{agencyId}/establishments": {
+      "post": {
+        "operationId": "AgencyEstablishmentsController_add",
+        "parameters": [
+          {
+            "name": "agencyId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "idempotency-key",
+            "required": true,
+            "in": "header",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "X-CSRF-Token",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Token from /auth/csrf; cookie credentials and the configured Origin are required"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AgencyEstablishmentDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string",
+                      "format": "uuid"
+                    },
+                    "alreadyLinked": {
+                      "type": "boolean"
+                    }
+                  },
+                  "required": []
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Controlled API error; applicability depends on route",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Controlled API error; applicability depends on route",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Controlled API error; applicability depends on route",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Controlled API error; applicability depends on route",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Controlled API error; applicability depends on route",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "413": {
+            "description": "Controlled API error; applicability depends on route",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Controlled API error; applicability depends on route",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Controlled API error; applicability depends on route",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Controlled API error; applicability depends on route",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "AgencyEstablishments"
+        ]
+      }
+    },
+    "/api/v1/agencies/{agencyId}/establishments/{id}": {
+      "delete": {
+        "operationId": "AgencyEstablishmentsController_remove",
+        "parameters": [
+          {
+            "name": "agencyId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "X-CSRF-Token",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Token from /auth/csrf; cookie credentials and the configured Origin are required"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "ok": {
+                      "type": "boolean",
+                      "enum": [
+                        true
+                      ]
+                    }
+                  },
+                  "required": [
+                    "ok"
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Controlled API error; applicability depends on route",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Controlled API error; applicability depends on route",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Controlled API error; applicability depends on route",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Controlled API error; applicability depends on route",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Controlled API error; applicability depends on route",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "413": {
+            "description": "Controlled API error; applicability depends on route",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Controlled API error; applicability depends on route",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Controlled API error; applicability depends on route",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Controlled API error; applicability depends on route",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "AgencyEstablishments"
+        ]
+      }
+    },
     "/api/v1/reference-data": {
       "get": {
         "operationId": "ReferenceController_get",
@@ -29875,6 +30655,23 @@
           "enabled"
         ]
       },
+      "SourceVisibility": {
+        "type": "object",
+        "properties": {
+          "reason": {
+            "type": "string",
+            "minLength": 8,
+            "maxLength": 500
+          },
+          "visible": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "reason",
+          "visible"
+        ]
+      },
       "Incident": {
         "type": "object",
         "properties": {
@@ -29934,6 +30731,34 @@
         "required": [
           "reason",
           "state"
+        ]
+      },
+      "ClosureGoogle": {
+        "type": "object",
+        "properties": {
+          "credential": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 10000,
+            "writeOnly": true
+          },
+          "nonce": {
+            "type": "string",
+            "minLength": 64,
+            "maxLength": 64,
+            "writeOnly": true
+          },
+          "confirmed": {
+            "type": "boolean",
+            "enum": [
+              true
+            ]
+          }
+        },
+        "required": [
+          "credential",
+          "nonce",
+          "confirmed"
         ]
       },
       "ClosurePassword": {
@@ -30689,6 +31514,8 @@
           "shift": {
             "type": "string",
             "enum": [
+              "MORNING",
+              "AFTERNOON",
               "DAY",
               "NIGHT",
               "MIXED",
@@ -30890,6 +31717,8 @@
             "items": {
               "type": "string",
               "enum": [
+                "MORNING",
+                "AFTERNOON",
                 "DAY",
                 "NIGHT",
                 "MIXED"
@@ -30957,7 +31786,9 @@
             ]
           },
           "contentBase64": {
-            "type": "string"
+            "type": "string",
+            "minLength": 4,
+            "maxLength": 7000000
           },
           "fictional": {
             "type": "boolean"
@@ -30967,6 +31798,31 @@
           "mime",
           "contentBase64",
           "fictional"
+        ]
+      },
+      "CvUploadDto": {
+        "type": "object",
+        "properties": {
+          "mime": {
+            "type": "string",
+            "enum": [
+              "application/pdf",
+              "image/png",
+              "image/jpeg",
+              "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+            ]
+          },
+          "contentBase64": {
+            "type": "string"
+          },
+          "reviewed": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "mime",
+          "contentBase64",
+          "reviewed"
         ]
       },
       "BankDto": {
@@ -31355,6 +32211,28 @@
         },
         "required": [
           "enabled"
+        ]
+      },
+      "AgencyEstablishmentDto": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "address": {
+            "type": "string"
+          },
+          "referent": {
+            "type": "string"
+          },
+          "finess": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "name",
+          "address",
+          "referent"
         ]
       },
       "Profile": {
@@ -32320,7 +33198,8 @@
             "enum": [
               "EVIDENCE",
               "CONFIRMATION",
-              "CANCELLATION"
+              "CANCELLATION",
+              "CV"
             ]
           },
           "mime": {

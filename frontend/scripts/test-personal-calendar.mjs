@@ -66,3 +66,27 @@ test('Google Calendar URL encodes title and UTC dates without an API key', () =>
   assert.match(href, /text=Garde/);
   assert.doesNotMatch(href, /key=/i);
 });
+
+
+test('ICS folding preserves Unicode and limits every physical line to 75 UTF-8 bytes', () => {
+  const title = '\u00e9\ud83d\udc69\u200d\u2695\ufe0f'.repeat(50);
+  const event = assignmentIcsEvent({ ...mission, title });
+  for (const line of event.split('\r\n')) assert.ok(Buffer.byteLength(line, 'utf8') <= 75);
+  assert.ok(event.replace(/\r\n /g, '').includes('SUMMARY:' + title));
+});
+
+test('ICS escapes every newline representation in text fields', () => {
+  const title = 'A\r\nBEGIN:VEVENT\rB\nC';
+  const event = assignmentIcsEvent({ ...mission, title });
+  assert.equal(event.split('\r\n').filter(line => line === 'BEGIN:VEVENT').length, 1);
+  assert.ok(event.includes('SUMMARY:A\\nBEGIN:VEVENT\\nB\\nC'));
+});
+
+test('zero-length and reversed periods cannot be exported to calendars', () => {
+  for (const end_at of [mission.start_at, '2030-09-19T06:00:00.000Z', 'invalid']) {
+    const invalid = { ...mission, end_at };
+    assert.equal(assignmentIcsEvent(invalid), null);
+    assert.equal(googleCalendarUrl(invalid), null);
+    assert.deepEqual(upcomingConfirmedMissions([invalid], Date.parse('2029-01-01')), []);
+  }
+});

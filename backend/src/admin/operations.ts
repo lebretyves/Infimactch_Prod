@@ -1,3 +1,4 @@
+import {ApiProperty} from '@nestjs/swagger';
 import {notificationCatalog} from '../notifications/catalog';
 import {BadRequestException,Body,ConflictException,Controller,Get,NotFoundException,Param,ParseUUIDPipe,Post,Query,Req,UseGuards} from '@nestjs/common';
 import {IsBoolean,IsEmail,IsIn,IsString,IsUUID,Length} from 'class-validator';
@@ -9,12 +10,12 @@ import {MATCH_RULES} from '../domain/rules';
 import {PROVIDERS,providerName,RefreshService} from '../public-data/refresh.service';
 import {AdminGuard,authorizeAdmin} from './admin-auth';
 
-class Reason {@IsString() @Length(8,500) reason!:string;}
+class Reason {@ApiProperty({type:String,minLength:8,maxLength:500}) @IsString() @Length(8,500) reason!:string;}
 class Membership extends Reason {@IsEmail() @Length(3,254) email!:string;@IsBoolean() active!:boolean;}
 class Link extends Reason {@IsUUID() otherOrganizationId!:string;@IsBoolean() active!:boolean;}
 class Review extends Reason {@IsIn(['TO_REVIEW','REVIEWED','NEEDS_INFORMATION']) state!:string;}
 class SourceState extends Reason {@IsBoolean() enabled!:boolean;}
-class SourceVisibility extends Reason {@IsBoolean() visible!:boolean;}
+class SourceVisibility extends Reason {@ApiProperty({type:Boolean}) @IsBoolean() visible!:boolean;}
 const SERVICES=['API','POSTGRES','MONGODB','N8N','DISCORD','IMPORTS','DOCUMENTS','VAULT'];
 class Incident extends Reason {@IsIn(SERVICES) service!:string;@IsString() @Length(8,500) impact!:string;@IsString() @Length(2,100) ownerLabel!:string;}
 class IncidentState extends Reason {@IsIn(['OPEN','INVESTIGATING','RESOLVED']) state!:string;}

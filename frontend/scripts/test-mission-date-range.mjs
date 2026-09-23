@@ -40,6 +40,9 @@ for (const host of ['Europe/Paris', 'America/Los_Angeles', 'Asia/Tokyo']) {
   assert.equal(custom.schedulePrecision,'EXACT');
   assert.equal(custom.start,'2026-09-18T05:30:00.000Z');
   assert.equal(custom.end,'2026-09-18T13:15:00.000Z');
+  const editedNight=missionDateRange('2026-09-18','2026-09-19','Europe/Paris',original,'NIGHT',{startTime:'21:00',endTime:'05:00'});
+  assert.equal(editedNight.end,'2026-09-19T03:00:00.000Z');
+  assert.throws(()=>missionDateRange('2026-09-18','2026-09-18','Europe/Paris',undefined,'DAY',{startTime:'25:00',endTime:'12:00'}));
   const customNight=missionDateRange('2026-09-18','2026-09-18','Europe/Paris',undefined,'NIGHT',{startTime:'21:00',endTime:'05:00'});
   assert.equal(customNight.start,'2026-09-18T19:00:00.000Z');
   assert.equal(customNight.end,'2026-09-19T03:00:00.000Z');

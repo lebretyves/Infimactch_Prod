@@ -30,8 +30,13 @@ export class RecommendationsController {
     const actor=user(r),now=Date.now(),generatedAt=new Date(now).toISOString();
     const [profile]=await this.db.query('SELECT p.* FROM profile p JOIN account a ON a.id=p.user_id WHERE p.user_id=$1 AND a.active',[actor]);
     if(!profile)throw new NotFoundException();
-    const externalCatalogueVisible=(await visibleExternalProviders(this.db)).length>0;
-    const results=await Promise.allSettled([query.origine==='externes'?Promise.resolve({status:'HIDDEN',items:[]}):this.internal(actor,profile),query.origine==='partenaires'||!externalCatalogueVisible?Promise.resolve({status:'HIDDEN',personalization:profile.qualifications.length?'PARTIAL':'GENERAL_PROFILE_INCOMPLETE',items:[],sources:[]}):this.external(profile,generatedAt)]);
+    const visibility=visibleExternalProviders(this.db);
+    const results=await Promise.allSettled([
+      query.origine==='externes'?Promise.resolve({status:'HIDDEN',items:[]}):this.internal(actor,profile),
+      query.origine==='partenaires'?Promise.resolve({status:'HIDDEN',personalization:profile.qualifications.length?'PARTIAL':'GENERAL_PROFILE_INCOMPLETE',items:[],sources:[]}):visibility.then(sources=>this.external(profile,generatedAt,sources)),
+      visibility,
+    ] as const);
+    const externalCatalogueVisible=results[2].status==='fulfilled'&&results[2].value.length>0;
     return {mode:'MIXED',generatedAt,externalCatalogueVisible,
       internal:results[0].status==='fulfilled'?results[0].value:{status:'UNAVAILABLE',rppsStatus:profile.rpps_status,items:[]},
       external:results[1].status==='fulfilled'?results[1].value:{status:'UNAVAILABLE',personalization:profile.qualifications.length?'PARTIAL':'GENERAL_PROFILE_INCOMPLETE',items:[],sources:[]},
@@ -50,8 +55,7 @@ export class RecommendationsController {
       return [{...m,id:'m_'+m.id,kind:'INTERNAL_MISSION',matching_score:x.score,match_explanation_id:x.explanationId,publicationDate:x.publishedAt??null,importedAt:null,sourceUpdatedAt:null,salary:{amount:Number(m.hourly_salary),currency:'EUR',unit:'HOUR',gross:true}}];
     })};
   }
-  private async external(profile:any,generatedAt:string) {
-    const visibleSources=await visibleExternalProviders(this.db);
+  private async external(profile:any,generatedAt:string,visibleSources:string[]) {
     if(!visibleSources.length){
       return {status:'HIDDEN',personalization:profile.qualifications.length?'PARTIAL':'GENERAL_PROFILE_INCOMPLETE',items:[],sources:[]};
     }

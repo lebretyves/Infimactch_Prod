@@ -52,6 +52,8 @@ export function missionDateRange(
   if (!/^\d{4}-\d{2}-\d{2}$/.test(startDate) || !/^\d{4}-\d{2}-\d{2}$/.test(endDate))
     throw new Error("Renseignez les dates de début et de fin.");
   if (endDate < startDate) throw new Error("La date de fin doit être égale ou postérieure au début.");
+  if (times && (!validClock(times.startTime) || !validClock(times.endTime)))
+    throw new Error("Renseignez des horaires valides.");
   const custom =
     times && validClock(times.startTime) && validClock(times.endTime)
       ? times
@@ -71,7 +73,15 @@ export function missionDateRange(
       throw new Error("L’heure de fin doit être postérieure à l’heure de début.");
     const start = zonedDateTimeToISO(`${startDate}T${custom.startTime}`, undefined, timezone);
     let endDay = endDate;
-    if (custom.endTime < custom.startTime) endDay = nextDate(endDate);
+    // Editing clocks on an existing overnight period must not add another day.
+    const originalOvernightEnd = original && original.schedulePrecision !== "DATE" &&
+      (original.timezone || "Europe/Paris") === timezone &&
+      localDate(original.start, timezone) === startDate &&
+      inclusiveEndDate(original.end, timezone) === endDate &&
+      localDate(original.end, timezone) === endDate &&
+      localTime(original.end, timezone) < localTime(original.start, timezone) &&
+      endDate > startDate;
+    if (custom.endTime < custom.startTime && !originalOvernightEnd) endDay = nextDate(endDate);
     const end = zonedDateTimeToISO(`${endDay}T${custom.endTime}`, undefined, timezone);
     if (Date.parse(end) <= Date.parse(start))
       throw new Error("L’heure de fin doit être postérieure à l’heure de début.");

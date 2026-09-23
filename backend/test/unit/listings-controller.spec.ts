@@ -160,7 +160,8 @@ test("private external comparison requires both an active offer and an authentic
   assert.ok(result.profileCorrespondence);
   assert.deepEqual(f.calls[0]!.args, [actor]);
   assert.deepEqual(f.calls[1]!.args, [id]);
-  assert.match(f.calls[1]!.sql, /AND active/);
+  assert.match(f.calls[1]!.sql, /AND e\.active/);
+  assert.match(f.calls[1]!.sql, /AND s\.visible/);
 });
 test("catalogue pagination and facilities retain bounds and absent facilities return 404", async () => {
   const f = fixture((sql) =>

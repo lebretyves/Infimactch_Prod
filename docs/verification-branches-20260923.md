@@ -1,5 +1,7 @@
 # Vérification des branches — 23 septembre 2026
 
+**Mise à jour :** les six nouveautés ci-dessous ont maintenant été reprises et testées. Voir le [rapport d’intégration](quality/INTEGRATION_SIX_FONCTIONNALITES_2026-09-23.md). Le reste de cette page conserve le constat antérieur à cette intégration.
+
 Les deux branches principales ont été vérifiées sur GitHub au même commit `60989e8691dc1e5e35767a717d3f9a9915293e53` : Yves `Main` et Epitech `main`. Les sauvegardes `backup/main-avant-sync-20260923-unit95` existent dans les deux dépôts.
 
 Cela ne signifie pas que toutes les nouveautés des autres branches sont intégrées. Les références ont été actualisées et leurs commits comparés par ascendance, équivalence de patch et inspection des fichiers.

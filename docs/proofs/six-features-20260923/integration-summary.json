@@ -1,0 +1,142 @@
+[
+  {
+    "file": "admin.spec.js.txt",
+    "tests": 27,
+    "fail": 0
+  },
+  {
+    "file": "application-warnings.spec.js.txt",
+    "tests": 3,
+    "fail": 0
+  },
+  {
+    "file": "audit-remediation.spec.js.txt",
+    "tests": 2,
+    "fail": 0
+  },
+  {
+    "file": "cloud-storage.spec.js.txt",
+    "tests": 4,
+    "fail": 0
+  },
+  {
+    "file": "contract-preparation.spec.js.txt",
+    "tests": 6,
+    "fail": 0
+  },
+  {
+    "file": "conversions.spec.js.txt",
+    "tests": 6,
+    "fail": 0
+  },
+  {
+    "file": "demo-notification-suppression.spec.js.txt",
+    "tests": 6,
+    "fail": 0
+  },
+  {
+    "file": "email-delivery.spec.js.txt",
+    "tests": 5,
+    "fail": 0
+  },
+  {
+    "file": "enterprise-flow.spec.js.txt",
+    "tests": 2,
+    "fail": 0
+  },
+  {
+    "file": "establishment-directory.spec.js.txt",
+    "tests": 3,
+    "fail": 0
+  },
+  {
+    "file": "external-collection.spec.js.txt",
+    "tests": 6,
+    "fail": 0
+  },
+  {
+    "file": "external-visibility.spec.js.txt",
+    "tests": 4,
+    "fail": 0
+  },
+  {
+    "file": "jobspipe-credits.spec.js.txt",
+    "tests": 3,
+    "fail": 0
+  },
+  {
+    "file": "journey.spec.js.txt",
+    "tests": 32,
+    "fail": 0
+  },
+  {
+    "file": "listing-order.spec.js.txt",
+    "tests": 6,
+    "fail": 0
+  },
+  {
+    "file": "matching-distance.spec.js.txt",
+    "tests": 1,
+    "fail": 0
+  },
+  {
+    "file": "mission-guardrails.spec.js.txt",
+    "tests": 8,
+    "fail": 0
+  },
+  {
+    "file": "mission-location.spec.js.txt",
+    "tests": 4,
+    "fail": 0
+  },
+  {
+    "file": "mission-mail.spec.js.txt",
+    "tests": 6,
+    "fail": 0
+  },
+  {
+    "file": "notifications.spec.js.txt",
+    "tests": 5,
+    "fail": 0
+  },
+  {
+    "file": "offer-freshness.spec.js.txt",
+    "tests": 6,
+    "fail": 0
+  },
+  {
+    "file": "personal-corrections.spec.js.txt",
+    "tests": 6,
+    "fail": 0
+  },
+  {
+    "file": "profile-after-assignment.spec.js.txt",
+    "tests": 7,
+    "fail": 0
+  },
+  {
+    "file": "purge-demo-alerts.spec.js.txt",
+    "tests": 6,
+    "fail": 0
+  },
+  {
+    "file": "recovery.spec.js.txt",
+    "tests": 8,
+    "fail": 0
+  },
+  {
+    "file": "security-evidence.spec.js.txt",
+    "tests": 3,
+    "fail": 0
+  },
+  {
+    "file": "shared-rate-limit.spec.js.txt",
+    "tests": 5,
+    "fail": 0
+  },
+  {
+    "file": "support.spec.js.txt",
+    "tests": 5,
+    "fail": 0
+  }
+]

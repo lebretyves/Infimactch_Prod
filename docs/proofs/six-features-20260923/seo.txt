@@ -1,0 +1,16 @@
+
+> interimatch@0.1.0 test:seo
+> node scripts/test-seo-build.mjs && node --test scripts/test-help-routes.mjs && node scripts/test-page-metadata.mjs
+
+{"PASS":true,"publicPages":6,"privateRoutes":21,"privateShellNoindex":true,"sitemapOnlyPublic":true}
+✔ direct help route including ticket query resolves to a private no-store shell (0.8608ms)
+ℹ tests 1
+ℹ suites 0
+ℹ pass 1
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 90.5657
+PASS route titles, descriptions, private IDs absent, static private noindex/canonical removal, public canonicals and sitemap
+PASS initial HTML and runtime metadata share identical titles and descriptions on all public/help routes

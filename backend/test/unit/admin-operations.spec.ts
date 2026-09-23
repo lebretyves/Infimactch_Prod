@@ -297,3 +297,29 @@ test("incident administration and source refresh bind parameters and write audit
   assert.deepEqual(refreshed, [["JOBSPIPE", true]]);
   assert.equal((await f.c.organization(req, "org")).organization.id, "org");
 });
+
+
+test("source visibility changes are audited without altering import scheduling", async () => {
+  const f = fixture(() => []);
+  assert.deepEqual(await f.c.sourceVisibility(req, "FRANCE_TRAVAIL", {visible:false, reason}), {ok:true});
+  assert.deepEqual(f.calls[0].args, ["FRANCE_TRAVAIL", false]);
+  assert.match(f.calls[0].sql, /SET visible=/);
+  assert.doesNotMatch(f.calls[0].sql, /enabled/);
+  const audit = f.calls.find(c => c.args.includes("ADMIN_SOURCE_VISIBILITY_CHANGED"));
+  assert.ok(audit);
+  assert.ok(JSON.stringify(audit.args).includes(reason));
+  await f.c.sourceVisibility(req, "FRANCE_TRAVAIL", {visible:true, reason});
+  assert.ok(f.calls.some(c => c.args[0] === "FRANCE_TRAVAIL" && c.args[1] === true));
+});
+
+test("source visibility rejects unsupported providers and missing recent admin authentication", async () => {
+  for (const [request, provider] of [
+    [req, "INVALID"],
+    [{...req, adminRole:"SUPPORT"}, "FRANCE_TRAVAIL"],
+    [{...req, session:{...req.session, adminVerifiedAt:0}}, "FRANCE_TRAVAIL"],
+  ] as const) {
+    const f = fixture(() => []);
+    await assert.rejects(f.c.sourceVisibility(request, provider, {visible:false, reason}));
+    assert.equal(f.calls.length, 0);
+  }
+});

@@ -301,7 +301,7 @@ export class ListingsController {
   @UseGuards(SessionGuard)
   async favorites(@Req() r: Request, @Query() page: PageDto) {
     return this.db.query(
-      `SELECT f.kind,f.target_id,COALESCE(m.title,e.title,o.name) AS title,m.status,e.expires_at,e.active FROM favorite f LEFT JOIN mission m ON f.kind='MISSION' AND m.id=f.target_id LEFT JOIN external_offer e ON f.kind='EXTERNAL' AND e.id=f.target_id LEFT JOIN organization o ON f.kind='ESTABLISHMENT' AND o.id=f.target_id WHERE f.user_id=$1 ORDER BY f.created_at DESC,f.target_id,f.kind LIMIT $2 OFFSET $3`,
+      `SELECT f.kind,f.target_id,COALESCE(m.title,e.title,o.name) AS title,m.status,e.expires_at,e.active FROM favorite f LEFT JOIN mission m ON f.kind='MISSION' AND m.id=f.target_id LEFT JOIN external_offer e ON f.kind='EXTERNAL' AND e.id=f.target_id LEFT JOIN organization o ON f.kind='ESTABLISHMENT' AND o.id=f.target_id LEFT JOIN source_control s ON s.provider=e.source WHERE f.user_id=$1 AND (f.kind<>'EXTERNAL' OR s.visible) ORDER BY f.created_at DESC,f.target_id,f.kind LIMIT $2 OFFSET $3`,
       [user(r), page.limit, page.offset],
     );
   }
