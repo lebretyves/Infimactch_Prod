@@ -1,0 +1,13 @@
+✔ support enforces ownership for detail and reply and rejects cross-account discovery (50.9617ms)
+✔ support serializes concurrent creation, acknowledges once, and rejects key payload replacement (19.1918ms)
+✔ support limits creation and pages results, preserving text without interpretation (44.2171ms)
+✔ staff response is idempotent, notifies once, and client follow-up reopens resolved ticket (36.9056ms)
+✔ account closure removes owned tickets including staff text and scrubs authored replies elsewhere (72.5852ms)
+ℹ tests 5
+ℹ suites 0
+ℹ pass 5
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 757.9037

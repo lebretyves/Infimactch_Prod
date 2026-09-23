@@ -1,0 +1,24 @@
+﻿{
+  "checkedAt": "2026-09-23T19:16:15.245Z",
+  "mode": "READ_ONLY",
+  "roles": [
+    {
+      "role": "backend",
+      "expiresAt": "2026-09-30T17:19:01.751Z",
+      "remainingHours": 166,
+      "status": "VALID"
+    },
+    {
+      "role": "infra",
+      "expiresAt": "2026-09-30T17:19:01.825Z",
+      "remainingHours": 166,
+      "status": "VALID"
+    },
+    {
+      "role": "operator",
+      "expiresAt": "2026-10-15T12:43:36.305Z",
+      "remainingHours": 521,
+      "status": "VALID"
+    }
+  ]
+}

@@ -1,14 +1,14 @@
-﻿scenario;version;etat;preuve;date;observateur
-Inscription candidat et entreprise;;A_RECETTER_SUR_VERSION_PUBLIEE;;;
-Discord facultatif et passage sans activation;;A_RECETTER_SUR_VERSION_PUBLIEE;;;
-Connexion admin et MFA réel;b16ad70;PARTIEL_MFA_REEL_CONFIRME_RECETTE_INTERACTIVE_A_REJOUER;docs/quality/REVUE_SECURITE_18_SCENARIOS_2026-09-21.md;2026-09-21;Lecture seule audit production
-Création et consultation mission;;A_RECETTER_SUR_VERSION_PUBLIEE;;;
-Matching et candidature;;A_RECETTER_SUR_VERSION_PUBLIEE;;;
-Confirmation et agenda;;A_RECETTER_SUR_VERSION_PUBLIEE;;;
-PDF accessible seulement aux personnes autorisées;;A_RECETTER_SUR_VERSION_PUBLIEE;;;
-Workflow nocode mission compatible;;A_RECETTER_SUR_VERSION_PUBLIEE;;;
-Workflow nocode confirmation;;A_RECETTER_SUR_VERSION_PUBLIEE;;;
-Réception Discord réelle sur compte autorisé;;A_RECETTER_SUR_VERSION_PUBLIEE;;;
-Email : statut réellement attesté;;A_RECETTER_SUR_VERSION_PUBLIEE;;;
-Annulation et cohérence agenda/PDF;;A_RECETTER_SUR_VERSION_PUBLIEE;;;
-Clavier zoom lecteur écran téléphone;;A_RECETTER_SUR_VERSION_PUBLIEE;;;
+scenario;version;etat;preuve;date;observateur;preuve_automatisation;limite_automatisation
+Inscription candidat et entreprise;;A_RECETTER_SUR_VERSION_PUBLIEE;;;;docs/proofs/audit-final-20260923/browser-tests.txt;"Environnement isole ou reponses simulees ; reception, OAuth/MFA reels et validation humaine non attestes"
+Discord facultatif et passage sans activation;;A_RECETTER_SUR_VERSION_PUBLIEE;;;;docs/proofs/audit-final-20260923/browser-tests.txt;"Environnement isole ou reponses simulees ; reception, OAuth/MFA reels et validation humaine non attestes"
+Connexion admin et MFA réel;b16ad70;PARTIEL_MFA_REEL_CONFIRME_RECETTE_INTERACTIVE_A_REJOUER;docs/quality/REVUE_SECURITE_18_SCENARIOS_2026-09-21.md;2026-09-21;Lecture seule audit production;docs/proofs/audit-final-20260923/admin-tests.txt;"Environnement isole ou reponses simulees ; reception, OAuth/MFA reels et validation humaine non attestes"
+Création et consultation mission;;A_RECETTER_SUR_VERSION_PUBLIEE;;;;docs/proofs/audit-final-20260923/browser-tests.txt;"Environnement isole ou reponses simulees ; reception, OAuth/MFA reels et validation humaine non attestes"
+Matching et candidature;;A_RECETTER_SUR_VERSION_PUBLIEE;;;;docs/proofs/audit-final-20260923/integration/suite-results.json;"Environnement isole ou reponses simulees ; reception, OAuth/MFA reels et validation humaine non attestes"
+Confirmation et agenda;;A_RECETTER_SUR_VERSION_PUBLIEE;;;;docs/proofs/audit-final-20260923/integration/suite-results.json;"Environnement isole ou reponses simulees ; reception, OAuth/MFA reels et validation humaine non attestes"
+PDF accessible seulement aux personnes autorisées;;A_RECETTER_SUR_VERSION_PUBLIEE;;;;docs/proofs/audit-final-20260923/integration/suite-results.json;"Environnement isole ou reponses simulees ; reception, OAuth/MFA reels et validation humaine non attestes"
+Workflow nocode mission compatible;;A_RECETTER_SUR_VERSION_PUBLIEE;;;;docs/proofs/audit-final-20260923/integration/suite-results.json;"Environnement isole ou reponses simulees ; reception, OAuth/MFA reels et validation humaine non attestes"
+Workflow nocode confirmation;;A_RECETTER_SUR_VERSION_PUBLIEE;;;;docs/proofs/audit-final-20260923/integration/suite-results.json;"Environnement isole ou reponses simulees ; reception, OAuth/MFA reels et validation humaine non attestes"
+Réception Discord réelle sur compte autorisé;;A_RECETTER_SUR_VERSION_PUBLIEE;;;;docs/proofs/audit-final-20260923/integration/suite-results.json;"Environnement isole ou reponses simulees ; reception, OAuth/MFA reels et validation humaine non attestes"
+Email : statut réellement attesté;;A_RECETTER_SUR_VERSION_PUBLIEE;;;;docs/proofs/audit-final-20260923/integration/suite-results.json;"Environnement isole ou reponses simulees ; reception, OAuth/MFA reels et validation humaine non attestes"
+Annulation et cohérence agenda/PDF;;A_RECETTER_SUR_VERSION_PUBLIEE;;;;docs/proofs/audit-final-20260923/integration/suite-results.json;"Environnement isole ou reponses simulees ; reception, OAuth/MFA reels et validation humaine non attestes"
+Clavier zoom lecteur écran téléphone;;A_RECETTER_SUR_VERSION_PUBLIEE;;;;docs/proofs/audit-final-20260923/browser-tests.txt;"Environnement isole ou reponses simulees ; reception, OAuth/MFA reels et validation humaine non attestes"

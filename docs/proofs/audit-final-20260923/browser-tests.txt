@@ -1,0 +1,51 @@
+> interimatch@0.1.0 test:browser
+> node scripts/run-browser-checks.mjs
+
+PASS search filters, numbered pagination, browser back, empty/reset and out-of-range correction 390
+PASS search filters, numbered pagination, browser back, empty/reset and out-of-range correction 1440
+PASS candidate sections and back navigation { google: false }
+PASS candidate sections and back navigation { google: true }
+PASS agency sections, consent and payload { google: false }
+PASS agency sections, consent and payload { google: true }
+PASS establishment sections retain manual edits during FINESS lookup
+PASS: no manual validation, consultation and direct link auto-read, existing query/hash preserved, invalid marker ignored, failure nonblocking and never falsely read. Mock APIs only; no Discord message.
+PASS mixed groups, empty/internal retained external, incomplete/general, partial/source failure, complete retry isolated from dashboard, missing dates/salary, detail links, external favorites, 375/768/1440 no overflow.
+PASS emails missing and recovery
+PASS emails server and recovery
+PASS emails malformed and recovery
+PASS emails slow and recovery
+PASS rules missing and recovery
+PASS rules server and recovery
+PASS rules malformed and recovery
+PASS rules slow and recovery
+PASS render fallback, safe message and reload recovery
+PASS first visit / 375 automatic cookies, accessibility without consent, visible header control and saved choice
+PASS first visit /inscription 375 automatic cookies, accessibility without consent, visible header control and saved choice
+PASS first visit /inscription/identite 375 automatic cookies, accessibility without consent, visible header control and saved choice
+PASS first visit / 1440 automatic cookies, accessibility without consent, visible header control and saved choice
+PASS first visit /inscription 1440 automatic cookies, accessibility without consent, visible header control and saved choice
+PASS first visit /inscription/identite 1440 automatic cookies, accessibility without consent, visible header control and saved choice
+PASS initial focus, keyboard navigation and Escape during delayed page loading without Google consent
+PASS invoker restored, labelled Google explanation, accept/refuse and unsaved cancellation
+PASS policy destination focused from another page and repeated anchor
+PASS deferred focus cancelled when keyboard navigation continues
+PASS both panels fit at 130% and 200%, persisted after reload, all display aids enabled, equal consent buttons and larger controls
+PASS enlarged viewport with text spacing, native checkbox in forced colors, no accidental consent
+PASS AGENCY known single form, direct publication and no staffing-request write
+PASS AGENCY missing single form, direct publication and no staffing-request write
+PASS AGENCY unavailable single form, direct publication and no staffing-request write
+PASS AGENCY suggestion single form, direct publication and no staffing-request write
+PASS ESTABLISHMENT known single form, direct publication and no staffing-request write
+PASS ESTABLISHMENT missing single form, direct publication and no staffing-request write
+PASS ESTABLISHMENT unavailable single form, direct publication and no staffing-request write
+PASS ESTABLISHMENT suggestion single form, direct publication and no staffing-request write
+PASS old list redirects, unpublished data recoverable and no invented salary or automatic publication
+PASS published old bookmark opens existing mission without duplicate creation
+PASS pagination retains access to incomplete records after converted records
+PASS legacy read failure preserves mission access, retry and no blind creation
+PASS malformed legacy response never hides mission list or redirects to a new publication
+PASS NURSE all personal events selected on activation, explicit save and custom choices retained
+PASS ENTERPRISE all personal events selected on activation, explicit save and custom choices retained
+PASS organization defaults contain all organization events and no personal-only event
+PASS RPPS optional demo: application submitted, no fake verification
+PASS RPPS required: submission blocked

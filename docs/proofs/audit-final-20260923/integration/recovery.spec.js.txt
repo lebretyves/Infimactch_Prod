@@ -1,0 +1,16 @@
+✔ automatic recovery sends a one-use 30-minute link, stores only a hash and revokes sessions (3809.1933ms)
+✔ unknown, inactive, privileged and closing accounts have the same acknowledgement and no mail (3522.9373ms)
+✔ concurrent recovery requests obey the persistent one-hour limit and send only once (3517.748ms)
+✔ expired links can be replaced after the one-hour delay and old tokens never work (7030.8552ms)
+✔ a changed account session version or new admin role invalidates the issued link (3787.5851ms)
+✔ explicit mail rejection preserves manual assistance and suppresses repeated sends (7021.4319ms)
+✔ an ambiguous mail result keeps the link valid but never retries automatically (7164.872ms)
+✔ missing SMTP uses manual recovery without generating or sending a token (310.1973ms)
+ℹ tests 8
+ℹ suites 0
+ℹ pass 8
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 36882.4993

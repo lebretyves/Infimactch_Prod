@@ -1,0 +1,14 @@
+✔ known cohorts expose exact denominators, cancelled selection and retained fill delay (168.2775ms)
+✔ organization authorization blocks crossed, inactive, nurse and platform accounts (45.8248ms)
+✔ empty periods are unavailable rather than fabricated zero percentages (10.6207ms)
+✔ exact demo IDs and undated histories are excluded without title heuristics (21.2789ms)
+✔ cohort boundaries use initial dates, count one application despite resubmission, and ignore unrelated dates (26.1734ms)
+✔ a cancelled then reassigned mission counts once and delay excludes negative timestamps (30.7902ms)
+ℹ tests 6
+ℹ suites 0
+ℹ pass 6
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1343.7613

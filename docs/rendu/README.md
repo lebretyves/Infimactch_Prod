@@ -2,6 +2,8 @@
 
 
 ## Dossier actualisé du 23 septembre 2026
+
+Dernières corrections : [suivi de l’audit](../quality/SUIVI_AUDIT_FINAL_2026-09-23.md) et [preuves vérifiées](../proofs/audit-final-20260923/README.md).
 **[Ouvrir les sept livrables](2026-09-23/README.md)** : CDC, installation, neuf exports n8n publiés, nettoyage FINESS, étude de marché sourcée, classeur estimé/réel et pitch de 15 minutes (PowerPoint, PDF, notes).
 
 Les heures humaines et la preuve du cadrage J+2 restent à compléter. Les informations ci-dessous décrivent la préparation antérieure du 21 septembre ; les preuves et limites du dossier daté du 23 font référence pour la nouvelle livraison.

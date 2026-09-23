@@ -1,0 +1,14 @@
+✔ two independent instances atomically share one quota under concurrent traffic (63.2556ms)
+✔ a second Express application rejects once the first consumed the shared limit (64.0557ms)
+✔ the exact quota permits N requests and expiration resets once atomically (6.3326ms)
+✔ route scopes and session keys remain independent; IPv6 subnet grouping is preserved (13.1186ms)
+✔ cleanup deletes only a bounded number of expired buckets and keeps active counters (14.3823ms)
+✔ all ranking routes consume one PostgreSQL quota for the same account across instances (154.9205ms)
+ℹ tests 6
+ℹ suites 0
+ℹ pass 6
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 942.762

@@ -1,0 +1,11 @@
+✔ SQL commits reservations, caps 1000, and survives new store instances without double debit (261.9689ms)
+✔ SQL full reservations stop at 1000, expired lease can retry same key without extra charge (235.5779ms)
+✔ SQL provider402 blocks other requests for current month only (18.3928ms)
+ℹ tests 3
+ℹ suites 0
+ℹ pass 3
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1041.3518

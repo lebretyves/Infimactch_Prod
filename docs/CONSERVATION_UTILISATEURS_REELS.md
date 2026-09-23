@@ -30,7 +30,7 @@ Le responsable effectif découle des décisions sur les finalités et moyens du 
 | Événements techniques terminés | Seuil existant de 30 jours | Liens et déduplication à préserver pendant les opérations actives |
 | Documents temporaires non finalisés | Nettoyage après 24 heures, selon leur cycle | Reprise des écritures et verrouillage ; confirmations gérées séparément |
 | Sauvegardes récentes | Rotation ciblant 30 jours lors de son exécution | Arrêt du poste : délai possible ; vérifier les copies récupérables lors de la clôture |
-| Anciennes archives locales | Traitement distinct nécessaire | L’audit sécurité a constaté cinq archives hors de cette rotation avec des secrets actifs ; aucune purge ou rotation de clés n’a été exécutée |
+| Anciennes archives locales | Traitement distinct nécessaire | Contrôle du 23 septembre : cinq archives / 133 fichiers authentifiés et chiffrés ; aucun des cinq anciens dossiers en clair ne subsiste ; clé documentaire version 2, ancienne clé conservée pour récupération. Voir docs/proofs/audit-final-20260923/legacy-archives.json. Leur conservation reste distincte de la rotation des sauvegardes récentes. |
 | Registre d’effacement | Durée couvrant les sauvegardes récupérables | Séparé des anciennes sauvegardes ; accès restreint ; les UUID restent des données à protéger |
 | Preuves du rendu | Conservation des éléments effectivement anonymisés | Retirer les identifiants, contacts, coordonnées, tokens et autres éléments réidentifiants ; un simple masquage visuel ou pseudonyme ne garantit pas l’anonymat |
 
@@ -60,7 +60,7 @@ Commandes existantes : `closure-requests`, `approve-closure --request UUID`, `pr
 
 ## Sauvegardes et restauration
 
-Restaurer en environnement isolé, vérifier intégrité et déchiffrement, puis rejouer le registre courant d’effacement avant réouverture. Une copie ancienne du registre ne remplace pas les demandes ultérieures. Une copie chiffrée indépendante et des clés récupérables séparément restent à organiser.
+Restaurer en environnement isolé, vérifier intégrité et déchiffrement, puis rejouer le registre courant d’effacement avant réouverture. Une copie ancienne du registre ne remplace pas les demandes ultérieures. Une copie chiffrée sur un second disque physique est vérifiée le 23 septembre. La restauration SQL, MongoDB et de cinq documents a réussi en isolation. La copie reste sur le même ordinateur et les clés de secours utilisent le profil Windows : une copie hors ordinateur et une récupération indépendante de ce profil restent à organiser.
 
 Les tests de sécurité du 21 septembre prouvent les mécanismes isolés de stockage, accès et suppression ; ils ne prouvent pas la suppression future à l’échéance scolaire de septembre 2027. La clôture finale exigera sa propre preuve d’exécution sur le périmètre décidé.
 

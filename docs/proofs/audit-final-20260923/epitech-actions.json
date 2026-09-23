@@ -1,0 +1,8 @@
+{
+  "runId": 35908326280,
+  "applicationCommit": "0389f4e398d0dbc0c3af9392bb707e83ede97398",
+  "conclusion": "failure",
+  "testsStarted": false,
+  "reason": "The job was not started because an Actions budget is preventing further use.",
+  "requiredAction": "Organisation administrator must restore Actions budget; no tests bypassed."
+}

@@ -1,0 +1,59 @@
+{
+  "status": "PASS",
+  "date": "2026-09-23T19:11:00.493Z",
+  "documentKeyVersion": 2,
+  "previousDocumentKeyPreserved": true,
+  "plaintextFoldersRemaining": 0,
+  "archives": [
+    {
+      "folder": "full-v1-2026-09-16T06-40-58-717Z",
+      "status": "PASS",
+      "files": 26,
+      "bytes": 30795676,
+      "sourceCompared": false,
+      "algorithm": "AES-256-GCM",
+      "keyFamily": "BACKUP_KEY",
+      "keyVersion": "1"
+    },
+    {
+      "folder": "full-v1-2026-09-16T06-55-41-622Z",
+      "status": "PASS",
+      "files": 25,
+      "bytes": 30689792,
+      "sourceCompared": false,
+      "algorithm": "AES-256-GCM",
+      "keyFamily": "BACKUP_KEY",
+      "keyVersion": "1"
+    },
+    {
+      "folder": "full-v1-2026-09-16T06-57-23-866Z",
+      "status": "PASS",
+      "files": 27,
+      "bytes": 20157020,
+      "sourceCompared": false,
+      "algorithm": "AES-256-GCM",
+      "keyFamily": "BACKUP_KEY",
+      "keyVersion": "1"
+    },
+    {
+      "folder": "full-v1-2026-09-16T16-48-20-024Z",
+      "status": "PASS",
+      "files": 27,
+      "bytes": 14088654,
+      "sourceCompared": false,
+      "algorithm": "AES-256-GCM",
+      "keyFamily": "BACKUP_KEY",
+      "keyVersion": "1"
+    },
+    {
+      "folder": "full-v1-2026-09-16T18-49-11-878Z",
+      "status": "PASS",
+      "files": 28,
+      "bytes": 14402388,
+      "sourceCompared": false,
+      "algorithm": "AES-256-GCM",
+      "keyFamily": "BACKUP_KEY",
+      "keyVersion": "1"
+    }
+  ]
+}

@@ -1,0 +1,117 @@
+[33m[Nest] 26460  - [39m23/09/2026 21:08:52 [33m   WARN[39m [33mDuplicate DTO detected: "Reason" is defined multiple times with different schemas.
+Consider using unique class names or applying @ApiExtraModels() decorator with custom schema names.
+Note: This will throw an error in the next major version.[39m
+✔ admin routes require authorized access and separate session, with origin isolation (903.6272ms)
+[33m[Nest] 26460  - [39m23/09/2026 21:08:53 [33m   WARN[39m [33mDuplicate DTO detected: "Reason" is defined multiple times with different schemas.
+Consider using unique class names or applying @ApiExtraModels() decorator with custom schema names.
+Note: This will throw an error in the next major version.[39m
+✔ admin permissions, suspension and session revocation are enforced server side (1057.1392ms)
+[33m[Nest] 26460  - [39m23/09/2026 21:08:54 [33m   WARN[39m [33mDuplicate DTO detected: "Reason" is defined multiple times with different schemas.
+Consider using unique class names or applying @ApiExtraModels() decorator with custom schema names.
+Note: This will throw an error in the next major version.[39m
+✔ admin read endpoints expose bounded selected fields and no credentials (735.3484ms)
+[33m[Nest] 26460  - [39m23/09/2026 21:08:55 [33m   WARN[39m [33mDuplicate DTO detected: "Reason" is defined multiple times with different schemas.
+Consider using unique class names or applying @ApiExtraModels() decorator with custom schema names.
+Note: This will throw an error in the next major version.[39m
+✔ last usable owner cannot be removed and sensitive actions require recent password confirmation (1022.5935ms)
+[33m[Nest] 26460  - [39m23/09/2026 21:08:56 [33m   WARN[39m [33mDuplicate DTO detected: "Reason" is defined multiple times with different schemas.
+Consider using unique class names or applying @ApiExtraModels() decorator with custom schema names.
+Note: This will throw an error in the next major version.[39m
+✔ organization membership changes preserve a manager, account family and role boundaries (1630.7002ms)
+[33m[Nest] 26460  - [39m23/09/2026 21:08:58 [33m   WARN[39m [33mDuplicate DTO detected: "Reason" is defined multiple times with different schemas.
+Consider using unique class names or applying @ApiExtraModels() decorator with custom schema names.
+Note: This will throw an error in the next major version.[39m
+✔ manual professional review does not grant directory identity or eligibility (1156.7075ms)
+[33m[Nest] 26460  - [39m23/09/2026 21:08:59 [33m   WARN[39m [33mDuplicate DTO detected: "Reason" is defined multiple times with different schemas.
+Consider using unique class names or applying @ApiExtraModels() decorator with custom schema names.
+Note: This will throw an error in the next major version.[39m
+✔ source controls and incident lifecycle are permission checked and audited (1089.3966ms)
+[33m[Nest] 26460  - [39m23/09/2026 21:09:00 [33m   WARN[39m [33mDuplicate DTO detected: "Reason" is defined multiple times with different schemas.
+Consider using unique class names or applying @ApiExtraModels() decorator with custom schema names.
+Note: This will throw an error in the next major version.[39m
+✔ stored matching is readable, versioned and cannot bypass active agency links (1300.9157ms)
+[33m[Nest] 26460  - [39m23/09/2026 21:09:01 [33m   WARN[39m [33mDuplicate DTO detected: "Reason" is defined multiple times with different schemas.
+Consider using unique class names or applying @ApiExtraModels() decorator with custom schema names.
+Note: This will throw an error in the next major version.[39m
+✔ dedicated administrator activation requires an invitation and never grants client access (798.7769ms)
+[33m[Nest] 26460  - [39m23/09/2026 21:09:02 [33m   WARN[39m [33mDuplicate DTO detected: "Reason" is defined multiple times with different schemas.
+Consider using unique class names or applying @ApiExtraModels() decorator with custom schema names.
+Note: This will throw an error in the next major version.[39m
+✔ activated dedicated administrator must repeat both factors after idle expiration (697.7308ms)
+[33m[Nest] 26460  - [39m23/09/2026 21:09:03 [33m   WARN[39m [33mDuplicate DTO detected: "Reason" is defined multiple times with different schemas.
+Consider using unique class names or applying @ApiExtraModels() decorator with custom schema names.
+Note: This will throw an error in the next major version.[39m
+✔ Discord infrastructure reports a checked bot identity without claiming message delivery (560.3054ms)
+[33m[Nest] 26460  - [39m23/09/2026 21:09:03 [33m   WARN[39m [33mDuplicate DTO detected: "Reason" is defined multiple times with different schemas.
+Consider using unique class names or applying @ApiExtraModels() decorator with custom schema names.
+Note: This will throw an error in the next major version.[39m
+✔ admin account Discord status is scoped, redacted and distinguishes association from preferences (1979.4259ms)
+[33m[Nest] 26460  - [39m23/09/2026 21:09:05 [33m   WARN[39m [33mDuplicate DTO detected: "Reason" is defined multiple times with different schemas.
+Consider using unique class names or applying @ApiExtraModels() decorator with custom schema names.
+Note: This will throw an error in the next major version.[39m
+✔ manual recovery is private, authorized, single-use, expiring and revokes sessions (2994.5008ms)
+[33m[Nest] 26460  - [39m23/09/2026 21:09:08 [33m   WARN[39m [33mDuplicate DTO detected: "Reason" is defined multiple times with different schemas.
+Consider using unique class names or applying @ApiExtraModels() decorator with custom schema names.
+Note: This will throw an error in the next major version.[39m
+✔ client closure needs password, owner approval and preserves organization management (1939.5293ms)
+[33m[Nest] 26460  - [39m23/09/2026 21:09:10 [33m   WARN[39m [33mDuplicate DTO detected: "Reason" is defined multiple times with different schemas.
+Consider using unique class names or applying @ApiExtraModels() decorator with custom schema names.
+Note: This will throw an error in the next major version.[39m
+✔ MFA has no password-only bypass, rejects replay, recovers once and invalidates old sessions (1024.495ms)
+[33m[Nest] 26460  - [39m23/09/2026 21:09:11 [33m   WARN[39m [33mDuplicate DTO detected: "Reason" is defined multiple times with different schemas.
+Consider using unique class names or applying @ApiExtraModels() decorator with custom schema names.
+Note: This will throw an error in the next major version.[39m
+✔ MFA failures persist across password login and an expired challenge grants no access (1900.8145ms)
+[33m[Nest] 26460  - [39m23/09/2026 21:09:13 [33m   WARN[39m [33mDuplicate DTO detected: "Reason" is defined multiple times with different schemas.
+Consider using unique class names or applying @ApiExtraModels() decorator with custom schema names.
+Note: This will throw an error in the next major version.[39m
+✔ technical maintenance really purges expired notifications and records success without business-history deletion (460.5371ms)
+[33m[Nest] 26460  - [39m23/09/2026 21:09:13 [33m   WARN[39m [33mDuplicate DTO detected: "Reason" is defined multiple times with different schemas.
+Consider using unique class names or applying @ApiExtraModels() decorator with custom schema names.
+Note: This will throw an error in the next major version.[39m
+✔ invitation guidance offers admin password creation for existing and dedicated accounts without mutation (866.8157ms)
+[33m[Nest] 26460  - [39m23/09/2026 21:09:14 [33m   WARN[39m [33mDuplicate DTO detected: "Reason" is defined multiple times with different schemas.
+Consider using unique class names or applying @ApiExtraModels() decorator with custom schema names.
+Note: This will throw an error in the next major version.[39m
+✔ invitation guidance rejects unknown, expired, consumed, suspended and locked invitations uniformly (470.0477ms)
+[33m[Nest] 26460  - [39m23/09/2026 21:09:15 [33m   WARN[39m [33mDuplicate DTO detected: "Reason" is defined multiple times with different schemas.
+Consider using unique class names or applying @ApiExtraModels() decorator with custom schema names.
+Note: This will throw an error in the next major version.[39m
+✔ owner invitation creates a dedicated account, renews, activates with MFA and deletes it (1211.767ms)
+[33m[Nest] 26460  - [39m23/09/2026 21:09:16 [33m   WARN[39m [33mDuplicate DTO detected: "Reason" is defined multiple times with different schemas.
+Consider using unique class names or applying @ApiExtraModels() decorator with custom schema names.
+Note: This will throw an error in the next major version.[39m
+✔ deletion preserves a business account and invalidates old MFA challenges after reinvitation (916.859ms)
+[33m[Nest] 26460  - [39m23/09/2026 21:09:17 [33m   WARN[39m [33mDuplicate DTO detected: "Reason" is defined multiple times with different schemas.
+Consider using unique class names or applying @ApiExtraModels() decorator with custom schema names.
+Note: This will throw an error in the next major version.[39m
+✔ invitation and deletion require owner permissions, recent authentication and protect the last owner (1233.0894ms)
+[33m[Nest] 26460  - [39m23/09/2026 21:09:18 [33m   WARN[39m [33mDuplicate DTO detected: "Reason" is defined multiple times with different schemas.
+Consider using unique class names or applying @ApiExtraModels() decorator with custom schema names.
+Note: This will throw an error in the next major version.[39m
+✔ pending owner invitations can be deleted and inactive accounts cannot be invited (727.8261ms)
+[33m[Nest] 26460  - [39m23/09/2026 21:09:19 [33m   WARN[39m [33mDuplicate DTO detected: "Reason" is defined multiple times with different schemas.
+Consider using unique class names or applying @ApiExtraModels() decorator with custom schema names.
+Note: This will throw an error in the next major version.[39m
+✔ invited business account creates an independent admin password and uses it for login and reauthentication (1402.2383ms)
+[33m[Nest] 26460  - [39m23/09/2026 21:09:20 [33m   WARN[39m [33mDuplicate DTO detected: "Reason" is defined multiple times with different schemas.
+Consider using unique class names or applying @ApiExtraModels() decorator with custom schema names.
+Note: This will throw an error in the next major version.[39m
+✔ unfinished dedicated enrollment can choose its password again and invalidates the previous challenge (1201.0959ms)
+[33m[Nest] 26460  - [39m23/09/2026 21:09:21 [33m   WARN[39m [33mDuplicate DTO detected: "Reason" is defined multiple times with different schemas.
+Consider using unique class names or applying @ApiExtraModels() decorator with custom schema names.
+Note: This will throw an error in the next major version.[39m
+✔ real browser creates admin passwords from email and invitation against the isolated API (4344.3516ms)
+[33m[Nest] 26460  - [39m23/09/2026 21:09:26 [33m   WARN[39m [33mDuplicate DTO detected: "Reason" is defined multiple times with different schemas.
+Consider using unique class names or applying @ApiExtraModels() decorator with custom schema names.
+Note: This will throw an error in the next major version.[39m
+SEC17_DRILL {"detected":true,"contained":true,"diagnosed":true,"recovered":true,"auditTraces":3,"externalMessages":0,"productionModified":false}
+✔ SEC17 isolated drill: failed event alert, containment, incident diagnosis, recovery and audit (641.776ms)
+ℹ tests 27
+ℹ suites 0
+ℹ pass 27
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 45987.6803

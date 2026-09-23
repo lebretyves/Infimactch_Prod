@@ -1,0 +1,50 @@
+{
+  "date": "2026-09-23T19:07:30.040Z",
+  "status": "PASS",
+  "source": "E:\\Interimatch\\InfiMatch\\data\\backups\\production",
+  "destination": "D:\\InfiMatch-Sauvegardes",
+  "disks": {
+    "sourceDisk": 1,
+    "destinationDisk": 0
+  },
+  "copies": [
+    "2026-09-17T06-17-42-638Z",
+    "2026-09-17T06-34-30-282Z",
+    "2026-09-17T12-55-41-750Z",
+    "2026-09-19T19-27-55-851Z",
+    "2026-09-19T19-54-59-614Z",
+    "2026-09-19T20-39-41-090Z",
+    "2026-09-19T21-12-43-020Z",
+    "2026-09-20T00-00-07-240Z",
+    "2026-09-20T05-45-15-587Z",
+    "2026-09-21T00-00-03-488Z",
+    "2026-09-21T14-09-37-701Z",
+    "2026-09-21T21-11-35-014Z",
+    "2026-09-22T00-00-03-178Z",
+    "2026-09-22T11-17-54-399Z",
+    "2026-09-23T09-36-03-737Z",
+    "2026-09-23T19-00-41-010Z"
+  ],
+  "skipped": [
+    {
+      "folder": "2026-09-17T06-12-11-994Z",
+      "reason": "INCOMPLETE_NO_MANIFEST"
+    },
+    {
+      "folder": "2026-09-17T06-13-24-552Z",
+      "reason": "INCOMPLETE_NO_MANIFEST"
+    },
+    {
+      "folder": "2026-09-19T20-38-05-109Z",
+      "reason": "INCOMPLETE_NO_MANIFEST"
+    },
+    {
+      "folder": "2026-09-21T21-07-55-124Z",
+      "reason": "INCOMPLETE_NO_MANIFEST"
+    }
+  ],
+  "encrypted": true,
+  "keysProtected": "Windows DPAPI CurrentUser",
+  "independentOfSourceDisk": true,
+  "independentOfComputer": false
+}

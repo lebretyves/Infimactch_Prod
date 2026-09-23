@@ -1,0 +1,15 @@
+✔ global publication ordering crosses batches, preserves exact total and counts empty pages (191.7613ms)
+✔ publication window excludes old offers imported now and unknown publication dates (26.3326ms)
+✔ distance and profile correspondence apply before pagination across origins (76.1867ms)
+✔ availability filter uses actual profile schedule and excludes unverified external schedules (75.0725ms)
+✔ text and origin filters remain global and use literal bound values (84.3764ms)
+Global sort over 5,006 fictional offers: 200 ms on isolated local PostgreSQL.
+✔ national-size catalogue is ranked without truncation to the first pages (227.5558ms)
+ℹ tests 6
+ℹ suites 0
+ℹ pass 6
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1982.201

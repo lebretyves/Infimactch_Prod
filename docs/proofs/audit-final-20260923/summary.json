@@ -1,0 +1,265 @@
+{
+  "date": "2026-09-23T19:12:39.909Z",
+  "integration": {
+    "files": 29,
+    "tests": 188,
+    "passed": 188,
+    "failed": 0,
+    "skipped": 0,
+    "applicationCommit": "0389f4e398d0dbc0c3af9392bb707e83ede97398"
+  },
+  "unit": {
+    "date": "2026-09-23T19:25:11.339639+00:00",
+    "tests": 661,
+    "passed": 661,
+    "failed": 0,
+    "coverage": {
+      "lines": {
+        "total": 12418,
+        "covered": 11813,
+        "skipped": 0,
+        "pct": 95.12
+      },
+      "statements": {
+        "total": 12418,
+        "covered": 11813,
+        "skipped": 0,
+        "pct": 95.12
+      },
+      "functions": {
+        "total": 948,
+        "covered": 782,
+        "skipped": 0,
+        "pct": 82.48
+      },
+      "branches": {
+        "total": 5177,
+        "covered": 4658,
+        "skipped": 0,
+        "pct": 89.97
+      },
+      "branchesTrue": {
+        "total": 0,
+        "covered": 0,
+        "skipped": 0,
+        "pct": 100
+      }
+    },
+    "countExplanation": "2 tests de quota/budget ajoutés ; 2 tests d’une fonction sans appel supprimés et remplacés par 1 test du catalogue masqué.",
+    "applicationCommit": "423ae1e9d0bb02845c238cbd42da45a58ccc40e3"
+  },
+  "integrationFiles": [
+    {
+      "file": "admin.spec.js",
+      "tests": 27,
+      "passed": 27,
+      "failed": 0,
+      "skipped": 0
+    },
+    {
+      "file": "application-warnings.spec.js",
+      "tests": 3,
+      "passed": 3,
+      "failed": 0,
+      "skipped": 0
+    },
+    {
+      "file": "audit-remediation.spec.js",
+      "tests": 2,
+      "passed": 2,
+      "failed": 0,
+      "skipped": 0
+    },
+    {
+      "file": "cloud-storage.spec.js",
+      "tests": 4,
+      "passed": 4,
+      "failed": 0,
+      "skipped": 0
+    },
+    {
+      "file": "contract-preparation.spec.js",
+      "tests": 6,
+      "passed": 6,
+      "failed": 0,
+      "skipped": 0
+    },
+    {
+      "file": "conversions.spec.js",
+      "tests": 6,
+      "passed": 6,
+      "failed": 0,
+      "skipped": 0
+    },
+    {
+      "file": "demo-notification-suppression.spec.js",
+      "tests": 6,
+      "passed": 6,
+      "failed": 0,
+      "skipped": 0
+    },
+    {
+      "file": "email-delivery.spec.js",
+      "tests": 5,
+      "passed": 5,
+      "failed": 0,
+      "skipped": 0
+    },
+    {
+      "file": "enterprise-flow.spec.js",
+      "tests": 2,
+      "passed": 2,
+      "failed": 0,
+      "skipped": 0
+    },
+    {
+      "file": "establishment-directory.spec.js",
+      "tests": 3,
+      "passed": 3,
+      "failed": 0,
+      "skipped": 0
+    },
+    {
+      "file": "external-collection.spec.js",
+      "tests": 6,
+      "passed": 6,
+      "failed": 0,
+      "skipped": 0
+    },
+    {
+      "file": "external-ranking.spec.js",
+      "tests": 2,
+      "passed": 2,
+      "failed": 0,
+      "skipped": 0
+    },
+    {
+      "file": "external-visibility.spec.js",
+      "tests": 4,
+      "passed": 4,
+      "failed": 0,
+      "skipped": 0
+    },
+    {
+      "file": "jobspipe-credits.spec.js",
+      "tests": 3,
+      "passed": 3,
+      "failed": 0,
+      "skipped": 0
+    },
+    {
+      "file": "journey.spec.js",
+      "tests": 32,
+      "passed": 32,
+      "failed": 0,
+      "skipped": 0
+    },
+    {
+      "file": "listing-order.spec.js",
+      "tests": 6,
+      "passed": 6,
+      "failed": 0,
+      "skipped": 0
+    },
+    {
+      "file": "matching-distance.spec.js",
+      "tests": 1,
+      "passed": 1,
+      "failed": 0,
+      "skipped": 0
+    },
+    {
+      "file": "mission-guardrails.spec.js",
+      "tests": 8,
+      "passed": 8,
+      "failed": 0,
+      "skipped": 0
+    },
+    {
+      "file": "mission-location.spec.js",
+      "tests": 4,
+      "passed": 4,
+      "failed": 0,
+      "skipped": 0
+    },
+    {
+      "file": "mission-mail.spec.js",
+      "tests": 6,
+      "passed": 6,
+      "failed": 0,
+      "skipped": 0
+    },
+    {
+      "file": "notifications.spec.js",
+      "tests": 5,
+      "passed": 5,
+      "failed": 0,
+      "skipped": 0
+    },
+    {
+      "file": "offer-freshness.spec.js",
+      "tests": 6,
+      "passed": 6,
+      "failed": 0,
+      "skipped": 0
+    },
+    {
+      "file": "personal-corrections.spec.js",
+      "tests": 6,
+      "passed": 6,
+      "failed": 0,
+      "skipped": 0
+    },
+    {
+      "file": "profile-after-assignment.spec.js",
+      "tests": 7,
+      "passed": 7,
+      "failed": 0,
+      "skipped": 0
+    },
+    {
+      "file": "purge-demo-alerts.spec.js",
+      "tests": 6,
+      "passed": 6,
+      "failed": 0,
+      "skipped": 0
+    },
+    {
+      "file": "recovery.spec.js",
+      "tests": 8,
+      "passed": 8,
+      "failed": 0,
+      "skipped": 0
+    },
+    {
+      "file": "security-evidence.spec.js",
+      "tests": 3,
+      "passed": 3,
+      "failed": 0,
+      "skipped": 0
+    },
+    {
+      "file": "shared-rate-limit.spec.js",
+      "tests": 6,
+      "passed": 6,
+      "failed": 0,
+      "skipped": 0
+    },
+    {
+      "file": "support.spec.js",
+      "tests": 5,
+      "passed": 5,
+      "failed": 0,
+      "skipped": 0
+    }
+  ],
+  "productionNotificationsSent": false,
+  "finalRankingRegression": {
+    "applicationCommit": "423ae1e9d0bb02845c238cbd42da45a58ccc40e3",
+    "tests": 6,
+    "passed": 6,
+    "failed": 0,
+    "proof": "ranking-final/result.json",
+    "scope": "Same six rate-limit tests rerun after adding the mission candidates route; do not add them to the 188 global integration tests."
+  }
+}

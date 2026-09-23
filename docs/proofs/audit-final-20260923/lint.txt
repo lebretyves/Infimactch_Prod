@@ -1,0 +1,6 @@
+> infimatch@0.1.0 lint
+> npm run lint -w backend
+
+
+> @infimatch/backend@0.1.0 lint
+> tsc --noEmit --noUnusedLocals --noUnusedParameters

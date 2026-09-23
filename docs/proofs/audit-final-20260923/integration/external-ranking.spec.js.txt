@@ -1,0 +1,10 @@
+✔ compact SQL projection preserves every matching criterion and listing metric across legacy and rich offers (222.7199ms)
+✔ recommendations rank beyond 500 offers and preserve full presentation for the same best three (127.4572ms)
+ℹ tests 2
+ℹ suites 0
+ℹ pass 2
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1614.1617

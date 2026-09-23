@@ -1,0 +1,16 @@
+ISOLATED FILE shared-rate-limit.spec.js
+{"migrations":["InitialSchema1789380000000","Extended1789380100000","Harden1789380200000","Finess1789380300000","GoogleIdentity1789380400000","FrontendFields1789380500000","StaffingRequestDetails1789380600000","DocumentSecurity1789380700000","AccountSecurity1789380800000","OfferParsing1789381000000","PrivacyRequests1789381100000","ErasureRecovery1789381200000","DiscordNotifications1789381300000","NotificationCenter1789381400000","CloudStorage1789381500000","EnterpriseFollowUp1789381600000","PlatformAdmin1789381700000","ProfessionalIdentity1789381800000","AdminOperations1789381900000","ClientRequests1789382000000","ExternalCollection1789382100000","JobsPipeCredits1789382200000","PersonalCorrections1789382300000","MissionSchedulePrecision1789718400000","MissionMail1789722000000","MissionGuardrails1789826400000","RecoveryEmail1789840800000","EmailDelivery1789844400000","SharedRateLimit1789848000000","SupportTickets1789851600000","ContractPreparation1789855200000","AdminMfaRecovery1789905600000","MissionLocationOptional1790006400000","AdminPassword1790006500000","MissionTimeSlots1790006600000","CvDocuments1790023000000","ExternalVisibility1790024000000"]}
+✔ two independent instances atomically share one quota under concurrent traffic (65.2714ms)
+✔ a second Express application rejects once the first consumed the shared limit (69.4851ms)
+✔ the exact quota permits N requests and expiration resets once atomically (6.8477ms)
+✔ route scopes and session keys remain independent; IPv6 subnet grouping is preserved (14.7142ms)
+✔ cleanup deletes only a bounded number of expired buckets and keeps active counters (14.5779ms)
+✔ all ranking routes consume one PostgreSQL quota for the same account across instances (148.293ms)
+ℹ tests 6
+ℹ suites 0
+ℹ pass 6
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 977.9598

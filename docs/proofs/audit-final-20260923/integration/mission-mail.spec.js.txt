@@ -1,0 +1,14 @@
+✔ confirmation queues PDF email for both parties exactly once; SMTP2GO receives individual attachments (214.5346ms)
+✔ nurse cancellation releases agenda, reopens mission and generates one downloadable PDF for both parties (209.9296ms)
+✔ company cancellation preserves snapshot after reopening and suppresses queued confirmation (186.6104ms)
+✔ rate limiting retries the same payload; changed recipient and ambiguous interrupted sends never send (230.3394ms)
+✔ HTTP 200 with provider rejection is not sent, and a timed-out request is never retried blindly (219.9171ms)
+✔ email markup escapes mission content and missing configuration does not send (0.9222ms)
+ℹ tests 6
+ℹ suites 0
+ℹ pass 6
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 2145.0362

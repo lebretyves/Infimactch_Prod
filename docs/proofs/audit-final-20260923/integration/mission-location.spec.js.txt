@@ -1,0 +1,12 @@
+✔ upgrade keeps existing coordinates and allows unknown locations (49.135ms)
+✔ DTO accepts absent/null positions but rejects invalid values (2.7009ms)
+✔ publication without GPS persists SQL NULL and the address; partial pair is rejected (43.0937ms)
+✔ edit clears stale GPS after address change and later accepts a selected position (45.0224ms)
+ℹ tests 4
+ℹ suites 0
+ℹ pass 4
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1191.447

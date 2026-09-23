@@ -1,6 +1,6 @@
 {
   "date": "2026-09-23",
-  "applicationCommit": "e81282d49aeeb07fe86fc34483122b54ec45ec35",
+  "applicationCommit": "423ae1e9d0bb02845c238cbd42da45a58ccc40e3",
   "pitchMinutes": 15,
   "scope": "Seven deliverable categories; actual human hours and J+2 approval evidence remain pending",
   "containsPrivateSecretExports": false,
@@ -47,8 +47,8 @@
     },
     {
       "file": "08_PREUVES_ET_RESERVES.md",
-      "bytes": 1950,
-      "sha256": "415f8253185f7d536d370258d5a8edf1b45eee306e5417ca27158e6f4fbcd5bc"
+      "bytes": 2386,
+      "sha256": "1c73632159cc48edd6a31fc437db7ff9c49278aa5579e241421a87fdabcded0f"
     },
     {
       "file": "CHIFFRAGE_ESTIME_REEL.csv",
@@ -82,8 +82,8 @@
     },
     {
       "file": "README.md",
-      "bytes": 2181,
-      "sha256": "4801eb8492c5d3f6b777fa52a3a5c1d3c69d7dbb22e8e3aaa4acb1c8b4bfc02d"
+      "bytes": 2460,
+      "sha256": "cd0ff22f70ff395d80c17a92f44a3935edf27ac6a0cef6fbeed7c6083a937aea"
     },
     {
       "file": "VALIDATION.json",

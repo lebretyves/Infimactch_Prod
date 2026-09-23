@@ -1,0 +1,13 @@
+✔ authenticated provider receipt resolves timeout, is replay safe, and never regresses on late processed (136.2202ms)
+✔ bounce after acceptance and delivery is recorded; out-of-order delivery cannot hide it; spam is terminal (96.7595ms)
+✔ recipient, correlation and provider identity must agree; fallback maps legacy provider id without custom header (60.8893ms)
+✔ a callback racing a network timeout wins and the dispatcher does not resend it (76.1663ms)
+✔ delivery journals exclude other accounts and former organization members, and contain no address or mail body (56.6295ms)
+ℹ tests 5
+ℹ suites 0
+ℹ pass 5
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1084.7496

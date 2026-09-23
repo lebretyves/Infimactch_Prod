@@ -1,0 +1,10 @@
+{
+  "status": "PASS",
+  "checks": [
+    "disabled account excluded from candidates, notifications and assignment; CLI removes multiple sessions",
+    "reactivation, session revocation and confirmed assignment preservation",
+    "saturated upload quota still produces readable mission confirmation PDF",
+    "two real SQL connections: cleanup skips uncommitted file and removes actual orphan",
+    "bank replacement counts retained versions, preserves active RIB on quota failure, and succeeds only with sufficient space"
+  ]
+}

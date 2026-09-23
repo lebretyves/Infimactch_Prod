@@ -1,0 +1,8 @@
+{
+  "mode": "current_Vault_secret_values_compared_in_memory_to_repository_files",
+  "filesChecked": 1647,
+  "leakingFiles": 0,
+  "secretValuesPrinted": false,
+  "status": "PASS",
+  "scope": "Current configured values only; not a certification of all historical Git objects."
+}

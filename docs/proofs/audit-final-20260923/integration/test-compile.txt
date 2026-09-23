@@ -1,0 +1,2 @@
+> @infimatch/backend@0.1.0 test:compile
+> tsc --outDir .test-build

@@ -1,0 +1,15 @@
+{
+  "checkedAt": "2026-09-23T19:20:38.442Z",
+  "applicationCommit": "0389f4e398d0dbc0c3af9392bb707e83ede97398",
+  "results": [
+    {
+      "url": "https://infimactch-prod-backend.vercel.app/api/v1/health",
+      "status": 200
+    },
+    {
+      "url": "https://infimactch-prod-backend-l5bc.vercel.app/",
+      "status": 200
+    }
+  ],
+  "scope": "Public HTTP availability only; no authenticated user journey attested."
+}

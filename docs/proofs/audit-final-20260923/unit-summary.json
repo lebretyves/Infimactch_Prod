@@ -1,0 +1,40 @@
+{
+  "date": "2026-09-23T19:25:11.339639+00:00",
+  "tests": 661,
+  "passed": 661,
+  "failed": 0,
+  "coverage": {
+    "lines": {
+      "total": 12418,
+      "covered": 11813,
+      "skipped": 0,
+      "pct": 95.12
+    },
+    "statements": {
+      "total": 12418,
+      "covered": 11813,
+      "skipped": 0,
+      "pct": 95.12
+    },
+    "functions": {
+      "total": 948,
+      "covered": 782,
+      "skipped": 0,
+      "pct": 82.48
+    },
+    "branches": {
+      "total": 5177,
+      "covered": 4658,
+      "skipped": 0,
+      "pct": 89.97
+    },
+    "branchesTrue": {
+      "total": 0,
+      "covered": 0,
+      "skipped": 0,
+      "pct": 100
+    }
+  },
+  "countExplanation": "2 tests de quota/budget ajoutés ; 2 tests d’une fonction sans appel supprimés et remplacés par 1 test du catalogue masqué.",
+  "applicationCommit": "423ae1e9d0bb02845c238cbd42da45a58ccc40e3"
+}

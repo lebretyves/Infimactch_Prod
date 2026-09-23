@@ -1,0 +1,3 @@
+[33m[Nest] 23112  - [39m23/09/2026 21:23:10 [33m   WARN[39m [33mDuplicate DTO detected: "Reason" is defined multiple times with different schemas.
+Consider using unique class names or applying @ApiExtraModels() decorator with custom schema names.
+Note: This will throw an error in the next major version.[39m

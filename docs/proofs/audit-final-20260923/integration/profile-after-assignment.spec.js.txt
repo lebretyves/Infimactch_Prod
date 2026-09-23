@@ -1,0 +1,15 @@
+✔ incomplete confirmed nurse can edit a different day, save unchanged profile and improve partially (123.7204ms)
+✔ new unavailability on a confirmed slot fails for PATCH and full profile without changing stored data (51.6285ms)
+✔ partial availability improvement is permitted but later withdrawal inside the commitment is rejected (58.8815ms)
+✔ stale unavailability can remain unchanged or be repaired after manual confirmation (63.6957ms)
+✔ required qualification remains protected and cancelled assignments no longer lock their dates (77.9366ms)
+✔ profile changes do not unlock overlapping confirmed assignments (58.0255ms)
+✔ API profile update rejects reversed diploma chronology without persisting it (39.1877ms)
+ℹ tests 7
+ℹ suites 0
+ℹ pass 7
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1700.9195

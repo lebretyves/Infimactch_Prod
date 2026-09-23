@@ -1,0 +1,14 @@
+{
+  "checkedAt": "2026-09-23T19:02:38.818Z",
+  "mode": "READ_ONLY",
+  "writePrivilegesStillGranted": true,
+  "roles": [
+    "anon",
+    "authenticated"
+  ],
+  "table": "public.spatial_ref_sys",
+  "geographyChecks": "PASS",
+  "referenceRows": 8500,
+  "supportRequest": "SENT_PREVIOUSLY_AWAITING_PROVIDER",
+  "fixed": false
+}

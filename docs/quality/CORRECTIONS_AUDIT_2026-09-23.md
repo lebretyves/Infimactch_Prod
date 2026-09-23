@@ -1,4 +1,6 @@
-# Corrections de lâ€™audit â€” 23 septembre 2026
+# Corrections de l’audit — 23 septembre 2026
+
+État le plus récent : [suivi final des corrections](SUIVI_AUDIT_FINAL_2026-09-23.md). Les sections ci-dessous conservent la chronologie historique.
 
 ## Mise a jour apres autorisation du 23 septembre 2026
 
@@ -17,48 +19,48 @@ Cette mise a jour remplace les statuts Vault et support en attente consignes plu
 
 ## Transferts Supabase
 
-Le classement des offres externes lit dÃ©sormais uniquement lâ€™identifiant, le titre et les critÃ¨res utilisÃ©s par `partialOfferMatch`. Les descriptions, les donnÃ©es fournisseur et les offres parsÃ©es sont chargÃ©es pour les trois recommandations retenues. Le classement et le chargement final utilisent la mÃªme transaction Ã  instantanÃ© cohÃ©rent. La recherche gÃ©nÃ©rale rÃ©utilise la projection rÃ©duite des critÃ¨res externes. Aucun cache partagÃ© ni limite arbitraire de catalogue nâ€™est ajoutÃ©.
+Le classement des offres externes lit désormais uniquement l’identifiant, le titre et les critères utilisés par `partialOfferMatch`. Les descriptions, les données fournisseur et les offres parsées sont chargées pour les trois recommandations retenues. Le classement et le chargement final utilisent la même transaction Ã  instantané cohérent. La recherche générale réutilise la projection réduite des critères externes. Aucun cache partagé ni limite arbitraire de catalogue n’est ajouté.
 
-Mesure SQL en lecture seule sur 5 128 offres actives, sans rÃ©activer les sources :
+Mesure SQL en lecture seule sur 5 128 offres actives, sans réactiver les sources :
 
-| Recommandations externes | Octets JSON estimÃ©s |
+| Recommandations externes | Octets JSON estimés |
 | --- | ---: |
-| Ancienne sÃ©lection de tout le catalogue | 61 421 614 |
-| Nouvelle lecture des critÃ¨res | 1 724 157 |
-| Trois plus grosses offres complÃ¨tes, borne supÃ©rieure | 139 369 |
-| Total aprÃ¨s correction, borne supÃ©rieure | 1 863 526 |
+| Ancienne sélection de tout le catalogue | 61 421 614 |
+| Nouvelle lecture des critères | 1 724 157 |
+| Trois plus grosses offres complètes, borne supérieure | 139 369 |
+| Total après correction, borne supérieure | 1 863 526 |
 
-La rÃ©duction estimÃ©e est de **96,97 %**. Il sâ€™agit de tailles de reprÃ©sentations JSON calculÃ©es cÃ´tÃ© SQL, pas dâ€™une mesure du trafic facturÃ© par Supabase. Le volume exact varie avec le catalogue. La recherche gÃ©nÃ©rale transfÃ¨re aussi moins de provenance externe : 3 580 032 â†’ 1 190 411 octets pour cette partie uniquement.
+La réduction estimée est de **96,97 %**. Il s’agit de tailles de représentations JSON calculées côté SQL, pas d’une mesure du trafic facturé par Supabase. Le volume exact varie avec le catalogue. La recherche générale transfère aussi moins de provenance externe : 3 580 032 → 1 190 411 octets pour cette partie uniquement.
 
-Les deux sources restent masquÃ©es ; leurs imports restent autorisÃ©s. Cette correction ne rÃ©initialise pas le quota dÃ©jÃ  consommÃ© et ne modifie pas ces rÃ©glages.
+Les deux sources restent masquées ; leurs imports restent autorisés. Cette correction ne réinitialise pas le quota dÃ©jÃ  consommé et ne modifie pas ces réglages.
 
-## Vault : correction prÃ©parÃ©e, application administrative en attente
+## Vault : correction préparée, application administrative en attente
 
-Les accÃ¨s `backend` et `infra`, crÃ©Ã©s le 15 septembre avec une validitÃ© de sept jours, sont expirÃ©s. Lâ€™accÃ¨s opÃ©rateur reste utilisable pour lire les secrets, mais ses chemins de renouvellement utilisent `infimatch-v1-*/role-id` et des motifs analogues. Vault rÃ©serve le glob `*` Ã  la fin du chemin : ces rÃ¨gles ne donnent pas les permissions attendues. [Documentation officielle des politiques Vault](https://developer.hashicorp.com/vault/docs/concepts/policies).
+Les accès `backend` et `infra`, créés le 15 septembre avec une validité de sept jours, sont expirés. L’accès opérateur reste utilisable pour lire les secrets, mais ses chemins de renouvellement utilisent `infimatch-v1-*/role-id` et des motifs analogues. Vault réserve le glob `*` Ã  la fin du chemin : ces règles ne donnent pas les permissions attendues. [Documentation officielle des politiques Vault](https://developer.hashicorp.com/vault/docs/concepts/policies).
 
-Le code de crÃ©ation de politique est corrigÃ© : neuf chemins exacts pour les trois rÃ´les existants, sans extension aux autres rÃ´les. Le test de politique vÃ©rifie la portÃ©e et lâ€™idempotence de cette transformation. `npm run vault:renew` renouvelle uniquement les accÃ¨s applicatifs expirÃ©s, vÃ©rifie leur isolation puis remplace atomiquement leurs fichiers ; aucun secret applicatif nâ€™est modifiÃ©.
+Le code de création de politique est corrigé : neuf chemins exacts pour les trois rôles existants, sans extension aux autres rôles. Le test de politique vérifie la portée et l’idempotence de cette transformation. `npm run vault:renew` renouvelle uniquement les accès applicatifs expirés, vérifie leur isolation puis remplace atomiquement leurs fichiers ; aucun secret applicatif n’est modifié.
 
-La politique du coffre actif nâ€™a pas Ã©tÃ© modifiÃ©e. Lâ€™approbation automatique a refusÃ© la rÃ©cupÃ©ration temporaire de privilÃ¨ges root, le redÃ©marrage de Vault et la modification de politique sans accord explicite. La procÃ©dure concrÃ¨te est dans `scripts/vault/repair-operator-policy.mjs` :
+La politique du coffre actif n’a pas été modifiée. L’approbation automatique a refusé la récupération temporaire de privilèges root, le redémarrage de Vault et la modification de politique sans accord explicite. La procédure concrète est dans `scripts/vault/repair-operator-policy.mjs` :
 
-1. Sauvegarde Raft dans le rÃ©pertoire privÃ©.
-2. RÃ©cupÃ©ration temporaire par le quorum des parts dÃ©jÃ  dÃ©tenues localement.
-3. Correction des seuls chemins de rotation de la politique opÃ©rateur.
-4. RÃ©vocation du jeton root temporaire, restauration de la configuration et vÃ©rification des accÃ¨s.
-5. Renouvellement des accÃ¨s expirÃ©s, puis nouvelle campagne de tests Vault.
+1. Sauvegarde Raft dans le répertoire privé.
+2. Récupération temporaire par le quorum des parts dÃ©jÃ  détenues localement.
+3. Correction des seuls chemins de rotation de la politique opérateur.
+4. Révocation du jeton root temporaire, restauration de la configuration et vérification des accès.
+5. Renouvellement des accès expirés, puis nouvelle campagne de tests Vault.
 
-Sans `--apply`, le script dÃ©crit seulement les opÃ©rations. Lâ€™exÃ©cution avec `--apply` reste soumise Ã  lâ€™accord explicite demandÃ©. Ne pas annoncer ce point rÃ©solu avant la rÃ©ussite des tests rÃ©els.
+Sans `--apply`, le script décrit seulement les opérations. L’exécution avec `--apply` reste soumise Ã  l’accord explicite demandé. Ne pas annoncer ce point résolu avant la réussite des tests réels.
 
-## PostGIS : droits fournisseur encore nÃ©cessaires
+## PostGIS : droits fournisseur encore nécessaires
 
-La tentative avec le compte `postgres` nâ€™a pas retirÃ© les droits effectifs ; le script a dÃ©tectÃ© `WRITE_PRIVILEGES_REMAIN` et annulÃ© la transaction. Aucune dÃ©finition de coordonnÃ©es nâ€™a changÃ©. La table appartient Ã  `supabase_admin`.
+La tentative avec le compte `postgres` n’a pas retiré les droits effectifs ; le script a détecté `WRITE_PRIVILEGES_REMAIN` et annulé la transaction. Aucune définition de coordonnées n’a changé. La table appartient Ã  `supabase_admin`.
 
-La demande prÃªte Ã  transmettre est dans [DEMANDE_SUPABASE_POSTGIS_2026-09-23.md](DEMANDE_SUPABASE_POSTGIS_2026-09-23.md). Aucun message nâ€™a Ã©tÃ© envoyÃ© au support. Il ne faut pas supprimer/recrÃ©er lâ€™extension pour traiter ce point. Supabase documente ce cas de table technique et prÃ©cise quâ€™elle ne contient pas les donnÃ©es mÃ©tier. [Documentation PostGIS Supabase](https://supabase.com/docs/guides/database/extensions/postgis#troubleshooting).
+La demande prête Ã  transmettre est dans [DEMANDE_SUPABASE_POSTGIS_2026-09-23.md](DEMANDE_SUPABASE_POSTGIS_2026-09-23.md). Aucun message n’a été envoyé au support. Il ne faut pas supprimer/recréer l’extension pour traiter ce point. Supabase documente ce cas de table technique et précise qu’elle ne contient pas les données métier. [Documentation PostGIS Supabase](https://supabase.com/docs/guides/database/extensions/postgis#troubleshooting).
 
 ## DNS local
 
-Les recherches SRV MongoDB Ã©chouent via le DNS de la box, mais rÃ©ussissent via 1.1.1.1 et 8.8.8.8. Le ping Atlas rÃ©ussit avec ces DNS et les certificats systÃ¨me, sans dÃ©sactiver TLS. La production Vercel a Ã©tÃ© vÃ©rifiÃ©e sÃ©parÃ©ment et reste disponible.
+Les recherches SRV MongoDB échouent via le DNS de la box, mais réussissent via 1.1.1.1 et 8.8.8.8. Le ping Atlas réussit avec ces DNS et les certificats système, sans désactiver TLS. La production Vercel a été vérifiée séparément et reste disponible.
 
-Le changement des interfaces physiques Ethernet/Wi-Fi requiert une Ã©lÃ©vation Windows. Les anciens serveurs sont sauvegardÃ©s dans le dossier dâ€™audit local. Le script `E:/Interimatch/audits/repair-dns-20260923.ps1` configure les deux DNS, conserve les interfaces VPN et restaure les anciens rÃ©glages en cas dâ€™Ã©chec ; `-Restore` permet le retour arriÃ¨re. Le rÃ©sultat effectif est Ã  confirmer aprÃ¨s lâ€™Ã©lÃ©vation Windows.
+Le changement des interfaces physiques Ethernet/Wi-Fi requiert une élévation Windows. Les anciens serveurs sont sauvegardés dans le dossier d’audit local. Le script `E:/Interimatch/audits/repair-dns-20260923.ps1` configure les deux DNS, conserve les interfaces VPN et restaure les anciens réglages en cas d’échec ; `-Restore` permet le retour arrière. Le résultat effectif est Ã  confirmer après l’élévation Windows.
 ## Vérifications finales
 
 - Backend : **652/652 tests unitaires**, couverture des lignes **95,09 %**.

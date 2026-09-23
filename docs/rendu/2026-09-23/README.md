@@ -1,5 +1,5 @@
 # InfiMatch — les sept livrables
-État au 23 septembre 2026. Référence applicative : 0389f4e398d0dbc0c3af9392bb707e83ede97398. Actualisation après le POC, sans antidater les pièces au J+2.
+État au 23 septembre 2026. Référence applicative : 423ae1e9d0bb02845c238cbd42da45a58ccc40e3. Actualisation après le POC, sans antidater les pièces au J+2.
 
 | Livrable attendu | Document | État |
 | --- | --- | --- |

@@ -1,0 +1,11 @@
+✔ establishment directory scopes counts and pages; creation publishes atomically and idempotently (663.137ms)
+✔ reminders process bounded batches and resume without duplicate windows (615.9372ms)
+✔ enterprise mission search counts filtered pages, preserves scope and supports local dates (706.0078ms)
+ℹ tests 3
+ℹ suites 0
+ℹ pass 3
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 3090.8198

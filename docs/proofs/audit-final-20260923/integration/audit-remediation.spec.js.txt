@@ -1,0 +1,12 @@
+REGRESSION_BANK_QUOTA {"versions":3,"total_bytes":4500093,"active_bytes":1500031,"quota":5242880}
+✔ Retained BANK versions count against the hard account quota (107.4947ms)
+REGRESSION_ERASURE_REPLAY {"exitCode":0,"approvedErasureApplied":true,"accountStillActive":false,"idempotent":true}
+✔ Current approved erasure replay overrides applications restored from an older snapshot (3291.3ms)
+ℹ tests 2
+ℹ suites 0
+ℹ pass 2
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 4547.4915

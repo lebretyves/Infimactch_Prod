@@ -1,0 +1,26 @@
+✔ legacy archive authenticates content, key and relative filename (3.2607ms)
+✔ archive rejects traversal, absolute and alternate stream names (0.327ms)
+✔ manifest authentication detects removed files and altered metadata (1.1617ms)
+✔ operator rotation ACL names only the three intended AppRoles and preserves secret ACLs (0.9347ms)
+✔ production restricted role supports direct and pooler connections (0.7678ms)
+✔ maintenance connections reject unrelated providers, lookalike hosts and missing credentials (0.2739ms)
+✔ maintenance TLS pins CA and preserves pooler username and unrelated options (0.6318ms)
+✔ missing certificate, TLS downgrades and URL overrides are refused (0.8406ms)
+✔ Vault secret payload rejects unexpected environment injection (0.9347ms)
+✔ Parent environment cannot supply stale backend or infrastructure secrets (0.6037ms)
+✔ Vault mode does not silently load secrets from the legacy .env (54.3524ms)
+✔ Real Vault is initialized and unsealed on persistent Raft (62.5115ms)
+✔ HTTPS rejects the local certificate without the configured CA (20.3627ms)
+✔ Backend can read its exact existing secrets, and no infrastructure secret (118.0617ms)
+✔ Infrastructure role cannot read backend secrets (47.8603ms)
+✔ Invalid AppRole credentials are refused (9.1517ms)
+✔ Short-lived launcher token is revoked after use (39.317ms)
+✔ Initial root token is absent from the recovery file after bootstrap (0.8992ms)
+ℹ tests 18
+ℹ suites 0
+ℹ pass 18
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 478.1625

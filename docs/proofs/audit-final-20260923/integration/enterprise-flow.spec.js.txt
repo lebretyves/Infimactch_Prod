@@ -1,0 +1,13 @@
+[33m[Nest] 18328  - [39m23/09/2026 21:10:05 [33m   WARN[39m [33mDuplicate DTO detected: "Reason" is defined multiple times with different schemas.
+Consider using unique class names or applying @ApiExtraModels() decorator with custom schema names.
+Note: This will throw an error in the next major version.[39m
+✔ enterprise need becomes a tracked direct mission visible to nurses only after publication (1267.0679ms)
+✔ mixed recommendations keep eligible internal missions distinct from active external offers (612.7282ms)
+ℹ tests 2
+ℹ suites 0
+ℹ pass 2
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 13462.1583
