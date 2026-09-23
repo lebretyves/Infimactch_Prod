@@ -51,7 +51,7 @@ test('profile refresh queues matching only for the new mission; direct old webho
 test('dispatch never invokes n8n for old queued publications, while a new mission is dispatched',async()=>{
   process.env.N8N_WEBHOOK_BASE='https://example.invalid/n8n';process.env.SERVICE_TOKEN='test-only';
   const called:string[]=[];
-  const result=await automation.dispatch(20,async(_url,options)=>{const id=JSON.parse(options!.body as string).eventId;called.push(id);await db.query("INSERT INTO workflow_receipt(event_id,action) VALUES($1,'matches') ON CONFLICT DO NOTHING",[id]);return Response.json({ok:true});});
+  await automation.dispatch(20,async(_url,options)=>{const id=JSON.parse(options!.body as string).eventId;called.push(id);await db.query("INSERT INTO workflow_receipt(event_id,action) VALUES($1,'matches') ON CONFLICT DO NOTHING",[id]);return Response.json({ok:true});});
   assert.equal(called.length,1);
   const [e]=await db.query('SELECT payload FROM outbox WHERE id=$1',[called[0]]);assert.equal(e.payload.missionId,fresh);
 });

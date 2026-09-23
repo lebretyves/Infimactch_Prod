@@ -1,3 +1,4 @@
+import { rankingRateLimit, rankingRoutes } from './security/ranking-budget';
 import {protectSessionRevocation} from './security/session-revocation';
 import {ContractsModule} from './contracts/contracts.module';
 import {SupportModule} from "./support/support.module";
@@ -220,13 +221,8 @@ export async function createApp() {
     }),
   );
   app.use(
-    "/api/v1/me/matches",
-    sharedRateLimit(limiterDb,"matches",{
-      windowMs: 60000,
-      limit: 15,
-      standardHeaders: "draft-8",
-      legacyHeaders: false,
-    }),
+    rankingRoutes,
+    rankingRateLimit(limiterDb),
   );
   app.use("/api/v1/profile/cv/parse",sharedRateLimit(limiterDb,"cv",{windowMs:60000,limit:10,standardHeaders:"draft-8",legacyHeaders:false}));
   app.useGlobalPipes(

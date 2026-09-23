@@ -168,7 +168,7 @@ function confirmation(
   t.mock.method(mail, "queueMissionEmails", async () => {
     queued++;
   });
-  const f = fixture((sql, args) => {
+  const f = fixture((sql) => {
     if (sql.includes("FROM outbox"))
       return [{ payload: { missionId: m.id, assignmentId: a.id, version: 1 } }];
     if (sql.includes("FROM mission m"))

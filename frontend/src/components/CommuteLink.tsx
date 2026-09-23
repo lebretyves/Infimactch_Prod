@@ -38,6 +38,7 @@ export function CommuteLink({ origin, destination, destinationLabel }: Props) {
       <p className={s.meta}>
         Itinéraire routier depuis votre position de référence (profil) vers {place}.
       </p>
+      <p className={s.meta}>En ouvrant ce lien, vous transmettez à Google les coordonnées de départ et la destination. Une nouvelle fenêtre s’ouvre.</p>
       <a href={href} target="_blank" rel="noopener noreferrer">
         Voir l’itinéraire sur Google Maps →
       </a>

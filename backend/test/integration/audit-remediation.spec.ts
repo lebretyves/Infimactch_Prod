@@ -1,7 +1,7 @@
 // Regression coverage for audit findings F01 and F02; isolated fictional data only.
 import 'reflect-metadata';
 import {test} from 'node:test';import assert from 'node:assert/strict';import {randomUUID} from 'node:crypto';
-import {writeFile,mkdir,rm} from 'node:fs/promises';import {resolve} from 'node:path';import {tmpdir} from 'node:os';import {spawnSync} from 'node:child_process';
+import {writeFile,rm} from 'node:fs/promises';import {resolve} from 'node:path';import {tmpdir} from 'node:os';import {spawnSync} from 'node:child_process';
 import {Database} from '../../src/database/database';import {DocumentsService} from '../../src/documents/documents.module';import {AuthService} from '../../src/auth/auth.module';import {MissionsService} from '../../src/missions/missions.service';
 function guard(){const u=new URL(process.env.DATABASE_URL!);if(process.env.NODE_ENV!=='test'||u.hostname!=='127.0.0.1'||u.port!=='55433'||u.pathname!=='/infimatch_test')throw Error('Isolated database only');}
 test('Retained BANK versions count against the hard account quota',async()=>{

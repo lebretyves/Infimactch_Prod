@@ -1,3 +1,4 @@
+import { rankingRateLimit, rankingRoutes, rankingBudget } from '../../src/security/ranking-budget';
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import express from 'express';
@@ -40,4 +41,31 @@ test('maintenance enforces a bounded batch and rejects unbounded input before SQ
   assert.deepEqual(await cleanupSharedRateLimits(db),{removed:1});
   for(const n of [0,-1,5001,Infinity,1.5])await assert.rejects(cleanupSharedRateLimits(db,n));
   assert.equal(calls,1);
+});
+
+test('ranking quota is shared across all entry points and sessions but isolated by account', async () => {
+  const counters = new Map<string, number>();
+  const db = {query: async (_sql: string, params: unknown[] = []) => {
+    const key = String(params[1]), hits = (counters.get(key) ?? 0) + 1;
+    counters.set(key, hits); return [{hits, reset_at:new Date(Date.now()+60_000)}];
+  }};
+  function application() {
+    const app = express();
+    app.use((req, _res, next) => { req.session = {userId:req.get('test-account')} as any; next(); });
+    app.use(rankingRoutes, rankingRateLimit(db));
+    app.use((_req, res) => res.json({ok:true})); return app;
+  }
+  const a = application(), b = application();
+  for(let i=0; i<15; i++) await request(i%2?a:b).get(rankingRoutes[i%4]!).set('test-account','account-A').expect(200);
+  for(const route of rankingRoutes) {
+    const denied = await request(b).get(route).set('test-account','account-A').expect(429);
+    assert.equal(denied.body.code,'RANKING_RATE_LIMIT'); assert.ok(denied.headers['retry-after']);
+  }
+  await request(a).get(rankingRoutes[0]!).set('test-account','account-B').expect(200);
+  await request(a).get(rankingRoutes[0]!).expect(200);
+});
+
+test('ranking stops explicitly at the work or time budget instead of returning a partial result', () => {
+  let now=0; const work=rankingBudget(()=>now); work(10_000); assert.throws(()=>work(1), /Recherche trop volumineuse/);
+  const time=rankingBudget(()=>now); now=8_001; assert.throws(()=>time(), /Recherche trop volumineuse/);
 });

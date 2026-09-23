@@ -6,7 +6,7 @@ import {ExecutionTrace,executionReference} from '../../src/automation/execution-
 test('execution trace stores correlation only, including failures',async()=>{
  const old=process.env.SERVICE_TOKEN;process.env.SERVICE_TOKEN='test-service-secret';
  try {
-  const records:any[]=[];const trace=new ExecutionTrace({query:async(sql:string,params:any[])=>{records.push(params);}} as any);
+  const records:any[]=[];const trace=new ExecutionTrace({query:async(_sql:string,params:any[])=>{records.push(params);}} as any);
   const request={headers:{'x-infimatch-token':'test-service-secret','x-n8n-execution-id':'123','x-n8n-workflow-id':'workflow_1'},path:'/api/v1/internal/automation/jobs/dispatch',body:{secret:'private-payload'}};
   const ctx={switchToHttp:()=>({getRequest:()=>request})} as any;
   const result={secret:'private-response'};

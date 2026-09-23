@@ -1,3 +1,4 @@
+import { rankingBudget } from '../security/ranking-budget';
 import {IsOptional,IsIn} from 'class-validator';
 import {Controller,Get,Query,Req,UseGuards,NotFoundException} from '@nestjs/common';
 import {Request} from 'express';
@@ -63,10 +64,13 @@ export class RecommendationsController {
     return this.db.transaction(async em=>{
     // Rank and hydrate one consistent snapshot without transferring full provider payloads.
     await em.query('SET TRANSACTION ISOLATION LEVEL REPEATABLE READ');
+    await em.query("SET LOCAL statement_timeout = '5000ms'");
+    const budget = rankingBudget();
     let cursor='00000000-0000-0000-0000-000000000000';const top:any[]=[];
     const p=professional(profile);
     while(true){
       const batch=await em.query("SELECT id,title,"+externalRankingProvenanceSql('provenance')+" AS provenance FROM external_offer WHERE active AND (expires_at IS NULL OR expires_at>now()) AND source=ANY($1::text[]) AND id>$2::uuid ORDER BY id LIMIT 500",[visibleSources,cursor]);
+      budget(batch.length);
       if(!batch.length)break;
       for(const row of batch){
         const comparison=partialOfferMatch(row,p,generatedAt);

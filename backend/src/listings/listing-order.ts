@@ -1,3 +1,4 @@
+import { rankingBudget } from '../security/ranking-budget';
 import { displayMatch } from '../domain/matching-display';
 import { Database } from '../database/database';
 import { covers, distanceKm, overlaps, Professional } from '../domain/matching';
@@ -64,6 +65,8 @@ export function compareListingOrder(a: ListingOrder, b: ListingOrder, sort: Sear
 export async function rankedListingPage(db: Database, sourceSql: string, sourceParameters: unknown[], search: SearchDto, profileRow: any) {
   return db.transaction(async em => {
     await em.query('SET TRANSACTION ISOLATION LEVEL REPEATABLE READ');
+    await em.query("SET LOCAL statement_timeout = '5000ms'");
+    const budget = rankingBudget();
     const conflicts = await em.query("SELECT start_at,end_at FROM assignment WHERE nurse_id=$1 AND status='ACTIVE'", [profileRow.user_id]);
     const profile = professional(profileRow, conflicts), now = Date.now();
     const parameters = [...sourceParameters];
@@ -83,6 +86,7 @@ export async function rankedListingPage(db: Database, sourceSql: string, sourceP
     await em.query('DECLARE ranked_listings NO SCROLL CURSOR FOR SELECT listing_id,' + compact + ' AS data FROM (' + sourceSql + ') available WHERE ' + textFilter, parameters);
     try { for (;;) {
       const batch = await em.query('FETCH FORWARD 500 FROM ranked_listings');
+      budget(batch.length);
       if (!batch.length) break;
       for (const row of batch) {
         const metric = listingOrder(row.data, profile, search, now);

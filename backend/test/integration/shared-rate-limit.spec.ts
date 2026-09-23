@@ -1,3 +1,4 @@
+import { rankingRateLimit, rankingRoutes } from '../../src/security/ranking-budget';
 import 'reflect-metadata';
 import {before,after,test} from 'node:test';
 import assert from 'node:assert/strict';
@@ -64,4 +65,12 @@ test('cleanup deletes only a bounded number of expired buckets and keeps active 
  assert.equal((await a.get('active'))?.totalHits,1);
  const concurrent=await Promise.all([cleanupSharedRateLimits(db,2),cleanupSharedRateLimits(db,2)]);
  assert.equal(concurrent.reduce((n,r)=>n+r.removed,0),4);assert.equal((await a.get('active'))?.totalHits,1);
+});
+
+test('all ranking routes consume one PostgreSQL quota for the same account across instances',async()=>{
+ const actor=randomUUID();
+ function application(){ const app=express(); app.use((req,_res,next)=>{req.session={userId:actor} as any;next();}); app.use(rankingRoutes,rankingRateLimit(db));app.use((_req,res)=>res.json({ok:true}));return app; }
+ const a=application(),b=application();
+ for(let i=0;i<15;i++)await request(i%2?a:b).get(rankingRoutes[i%4]!).expect(200);
+ for(const route of rankingRoutes)await request(b).get(route).expect(429);
 });

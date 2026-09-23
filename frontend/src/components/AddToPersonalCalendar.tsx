@@ -51,9 +51,12 @@ export function AddToPersonalCalendar({
           : "Tout exporter en un clic (.ics)"}
       </Button>
       {google && (
+        <>
+        <p className={s.status}>Ce lien transmet à Google le titre, les dates, le lieu et le lien de la mission. Le fichier .ics permet un import dans le calendrier de votre choix.</p>
         <a className={s.google} href={google} target="_blank" rel="noopener noreferrer" onClick={(e) => e.stopPropagation()}>
           Ouvrir dans Google Calendar
         </a>
+        </>
       )}
       {message && (
         <p role="status" className={s.status}>

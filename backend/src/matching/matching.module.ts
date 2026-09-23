@@ -1,3 +1,4 @@
+import { rankingBudget } from '../security/ranking-budget';
 import { matchingMission } from "../missions/mission-mapping";
 import { displayMatch } from "../domain/matching-display";
 import { MATCH_RULES } from "../domain/rules";
@@ -142,12 +143,15 @@ export class MatchingService implements OnModuleDestroy {
       (ranking === "recent" ? (new Date(b.m.published_at??0).getTime()-new Date(a.m.published_at??0).getTime()) : 0) ||
       new Date(a.m.start_at).getTime() - new Date(b.m.start_at).getTime() ||
       a.m.id.localeCompare(b.m.id);
+    const budget = rankingBudget();
     while (true) {
+      budget();
       const batch = await this.db.query(
         (ranking === "recent" ? missionSelect.replace(" FROM mission m", ",(SELECT max(created_at) FROM audit WHERE resource_id=m.id AND event='MISSION_OPEN') AS published_at FROM mission m") : missionSelect) +
           " WHERE m.status='OPEN' AND m.start_at>now() AND m.qualification=ANY($1) AND m.id>$2::uuid ORDER BY m.id LIMIT 100",
         [p.qualifications, cursor],
       );
+      budget(batch.length);
       if (!batch.length) break;
       const distances = await geodesicKmBatch(this.db, batch.map((m: any) => [p, m] as const));
       for (const [index, m] of batch.entries()) {
@@ -190,11 +194,14 @@ export class MatchingService implements OnModuleDestroy {
       scanned = 0,
       excluded = 0;
     const top: any[] = [];
+    const budget = rankingBudget();
     while (true) {
+      budget();
       const batch = await this.db.query(
         "SELECT p.* FROM profile p JOIN account a ON a.id=p.user_id AND a.active WHERE p.visible AND $1=ANY(p.qualifications) AND p.user_id>$2::uuid ORDER BY p.user_id LIMIT 100",
         [m.qualification, cursor],
       );
+      budget(batch.length);
       if (!batch.length) break;
       const assignments = await this.db.query(
         "SELECT nurse_id,start_at,end_at FROM assignment WHERE nurse_id=ANY($1::uuid[]) AND status='ACTIVE'",

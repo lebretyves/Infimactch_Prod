@@ -1,4 +1,4 @@
-import { test, before as beforeAll, after as afterAll } from "node:test";
+import { test } from "node:test";
 import { expect } from "expect";
 import { lookupRpps } from "../../src/profiles/rpps";
 const num = "10000000001";

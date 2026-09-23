@@ -6,7 +6,6 @@ import {
   executeClosure,
   replayApprovedErasure,
   processClosures,
-  approveClosure,
 } from "../../src/security/closure";
 import * as retention from "../../src/security/retention";
 import * as blockers from "../../src/security/closure-blockers";
@@ -61,7 +60,7 @@ function fixture(t: any, storage = "postgres") {
       steps.push("mongo-close");
     },
     collection: (name: string) => ({
-      updateOne: async (filter: any, value: any, options: any) => {
+      updateOne: async (filter: any, _value: any, options: any) => {
         assert.equal(name, "erasureledger");
         assert.equal(filter._id, account);
         assert.equal(options.writeConcern.w, "majority");

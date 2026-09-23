@@ -42,7 +42,8 @@
     "coverage:unit": "npm run coverage:unit -w backend",
     "test:finess-import": "node scripts/test-import-finess-local.mjs",
     "finess:import": "node scripts/import-finess-local.mjs",
-    "finess:import:force": "node scripts/import-finess-local.mjs --force"
+    "finess:import:force": "node scripts/import-finess-local.mjs --force",
+    "lint": "npm run lint -w backend"
   },
   "imports": {
     "#standard-fonts/*": "pdfkit/standard-fonts/*"

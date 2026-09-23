@@ -121,7 +121,7 @@ test("FINESS searches and lookups provide provenance without granting organisati
   let rows: any[] = [];
   const calls: any[] = [];
   const c = new FinessController({
-    query: async (sql: string, args: any[]) => {
+    query: async (_sql: string, args: any[]) => {
       calls.push(args);
       return rows;
     },
