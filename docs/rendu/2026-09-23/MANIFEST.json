@@ -7,43 +7,43 @@
   "files": [
     {
       "file": "01_CAHIER_DES_CHARGES.md",
-      "bytes": 4161,
-      "sha256": "30c1f8f60c57b37148204cb8a773dee57eb2fd94d9ca2f7e6b151a7409e90be8"
+      "bytes": 4118,
+      "sha256": "5dbfbfa4a9d746be33100764f7ad6f7fa3bf6489ed127b623a3c53ed444f916e"
     },
     {
       "file": "02_DEPOT_ET_INSTALLATION.md",
-      "bytes": 1896,
-      "sha256": "fce2d557edcb307953a303df8474b81aa4f54ac603a87b4f577d87d968882778"
+      "bytes": 1857,
+      "sha256": "d3988ee47540c31083d2f3dbfa576a3f89911583ea225310be21cb69b4a15fca"
     },
     {
       "file": "03_WORKFLOWS_N8N.md",
-      "bytes": 1742,
-      "sha256": "d05aff46ed73d6102884bb9494ba5334d5a28cfe59bce8667233b6098b7caa96"
+      "bytes": 1718,
+      "sha256": "2d368e351ee372fbfd1bfe2e094322ce68a04429f3ae0736470e330adb3f6581"
     },
     {
       "file": "04_DONNEES_PUBLIQUES.md",
-      "bytes": 2452,
-      "sha256": "831f81032da5a4e78adc896967579c8967b51a7f2dd2398750303a17c0ffca13"
+      "bytes": 2416,
+      "sha256": "dd52eb0ebac441107e9e69a7bfd558f69471b2f7df2cefb6a189d2f4fbe51fdc"
     },
     {
       "file": "05_ETUDE_DE_MARCHE.md",
-      "bytes": 3964,
-      "sha256": "aa670c0e7825ad079bcc304aeecec976a589d18fe73b77af1752032d284f7e3d"
+      "bytes": 3923,
+      "sha256": "2a01e2fcc5e5e8e23ccf090f45af3c5e56e877a4276a3445b7fffdcc0b8bb2c6"
     },
     {
       "file": "06_CHIFFRAGE_REEL.md",
-      "bytes": 1483,
-      "sha256": "8de65de597d911a1ac5337d1c8b1527253201452ef0180c18ebd6ac0c340bccf"
+      "bytes": 1469,
+      "sha256": "ba444ccd6169631518ed1cc3a53ecea0d4508efa83e13a5a13c47fb4e716396c"
     },
     {
       "file": "07_PITCH_ORAL.md",
-      "bytes": 8736,
-      "sha256": "6975e0b04b75584eb3679a6bd81ebd40a88630c651433be6bcd2b98f06a3793a"
+      "bytes": 8630,
+      "sha256": "0ea8fa52ced045c79a08b20755aec641c036ec8d5c43047f5ee7e0e454955acb"
     },
     {
       "file": "08_PREUVES_ET_RESERVES.md",
-      "bytes": 1969,
-      "sha256": "b7c94a87d065f9815862c34dad2dc26d0ee707e933c30187e64497fc76ca6943"
+      "bytes": 1950,
+      "sha256": "415f8253185f7d536d370258d5a8edf1b45eee306e5417ca27158e6f4fbcd5bc"
     },
     {
       "file": "apercu-soutenance.png",
@@ -52,8 +52,8 @@
     },
     {
       "file": "CHIFFRAGE_ESTIME_REEL.csv",
-      "bytes": 1668,
-      "sha256": "3bd732102a1d1971492f5efadb4641c1ffb986718773459d76fe1bf6302319a1"
+      "bytes": 1649,
+      "sha256": "d3089c6d0fa39f522fcbda3fac571bf665356f2b8388465c750d0a27c3132dce"
     },
     {
       "file": "CHIFFRAGE_ESTIME_REEL.xlsx",
@@ -67,8 +67,8 @@
     },
     {
       "file": "demonstration-finess.cjs",
-      "bytes": 1905,
-      "sha256": "5594f61ca53494db617d720ec5919975dde61aaaaca2585f45b05befa857e9b1"
+      "bytes": 1904,
+      "sha256": "75a22576204b071704cfa078fded39786505fe97fb5b91d6e304fbfb906c860f"
     },
     {
       "file": "DOSSIER_RENDU.docx",
@@ -77,8 +77,8 @@
     },
     {
       "file": "generate-pitch.py",
-      "bytes": 4358,
-      "sha256": "6cf581f4e0c9a58e917697095599a306b87f359833f88eba7cc6e959c989d45c"
+      "bytes": 4294,
+      "sha256": "c456184b5110004932680c8302fe9f49d49cb5f8c01b80fb02365233bb348c17"
     },
     {
       "file": "InfiMatch_Soutenance_2026-09-23.pdf",
@@ -137,28 +137,29 @@
     },
     {
       "file": "n8n/manifest-source.json",
-      "bytes": 4683,
-      "sha256": "af0a578f5587a0b1e49ef5739e63f33df521fef1c1563d01d99e663113d2832f"
+      "bytes": 4576,
+      "sha256": "385611d8102d1e94afe5ab594804fdefa4ad4eff87f6be034f37105e69fcc81b"
     },
     {
       "file": "README.md",
-      "bytes": 2130,
-      "sha256": "643e718e4b0334ebd91daf141395f880c7d883d25bb19c81a3da5d413ef00126"
+      "bytes": 2107,
+      "sha256": "8880653ef4037df6278bd86f471390272129d21f1cc99df17fab358d992d9ec0"
     },
     {
       "file": "slides.json",
-      "bytes": 10036,
-      "sha256": "0b4393ce397fd86ec5aeaf96ac2fd92bd9bdbde258411f6364bb1184f092fca0"
+      "bytes": 9891,
+      "sha256": "547bb9d7899eaf07284304b15e9449abe1f75c80845e58d7020e052fe60cda7b"
     },
     {
       "file": "validation-layout.json",
-      "bytes": 2265,
-      "sha256": "22636a10b8afc82e1f8dd7a1e037c30c7e580e2fce34a914197c8c02088595b0"
+      "bytes": 2120,
+      "sha256": "176446a659686777baeb1906a69e7d9c65642fbc1ed0805ff3416c1fbfc716fb"
     },
     {
       "file": "VALIDATION.json",
-      "bytes": 324,
-      "sha256": "d5aab1c9191719b9c6b776eedacd10bee6258a7b1a1e1c5d7d4accc7ade0a48a"
+      "bytes": 311,
+      "sha256": "1692668f9bfe668613bdde1fd9ec4e64ea6aac62d97a5d1e8953c4d61ae31ca7"
     }
-  ]
+  ],
+  "hashBasis": "Git blob bytes, as stored in the repository and git archive; text line endings normalized by Git"
 }
