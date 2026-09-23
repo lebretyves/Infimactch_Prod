@@ -6,6 +6,11 @@
   "containsPrivateSecretExports": false,
   "files": [
     {
+      "file": ".gitattributes",
+      "bytes": 62,
+      "sha256": "56b051e599e3046be42240f5ed8bde53f7db539631eaae09bc369fa86392853d"
+    },
+    {
       "file": "01_CAHIER_DES_CHARGES.md",
       "bytes": 4118,
       "sha256": "5dbfbfa4a9d746be33100764f7ad6f7fa3bf6489ed127b623a3c53ed444f916e"
@@ -46,11 +51,6 @@
       "sha256": "415f8253185f7d536d370258d5a8edf1b45eee306e5417ca27158e6f4fbcd5bc"
     },
     {
-      "file": "apercu-soutenance.png",
-      "bytes": 210964,
-      "sha256": "e4e105c11c109a0a6ad73ee76490ec746e6955e6c54e1de9e6c456dbf94dc657"
-    },
-    {
       "file": "CHIFFRAGE_ESTIME_REEL.csv",
       "bytes": 1649,
       "sha256": "d3089c6d0fa39f522fcbda3fac571bf665356f2b8388465c750d0a27c3132dce"
@@ -61,24 +61,9 @@
       "sha256": "a7ddce6d6fe1f9a762989ee886784c5dc748cc7da8b265569fb81e8a059a5b61"
     },
     {
-      "file": "demonstration-finess-resultat.json",
-      "bytes": 2322,
-      "sha256": "b818967203627a664451ad54c2dc9eefb1e004043bc6af4c623b69144c573569"
-    },
-    {
-      "file": "demonstration-finess.cjs",
-      "bytes": 1904,
-      "sha256": "75a22576204b071704cfa078fded39786505fe97fb5b91d6e304fbfb906c860f"
-    },
-    {
       "file": "DOSSIER_RENDU.docx",
       "bytes": 46763,
       "sha256": "6ab90a18714aef7eb3702502a91a6afacec0a91f6d749360ce92275f7c74a57e"
-    },
-    {
-      "file": "generate-pitch.py",
-      "bytes": 4294,
-      "sha256": "c456184b5110004932680c8302fe9f49d49cb5f8c01b80fb02365233bb348c17"
     },
     {
       "file": "InfiMatch_Soutenance_2026-09-23.pdf",
@@ -91,9 +76,74 @@
       "sha256": "1e31f94dd9e9274b6520853d278373151fcacdf30b13fe9c481de2e133fab15a"
     },
     {
-      "file": "n8n/discord-relay.json",
-      "bytes": 3120,
-      "sha256": "2ef9ac9ea883d23940b97083ea91314b6208f68ae8b4ad8fadd8dc24895ecbd5"
+      "file": "InfiMatch_Soutenance_Pro_2026-09-23.pdf",
+      "bytes": 1340476,
+      "sha256": "fbdd2fe9663051e3f154c0781106f58b59f47544d400a977cc2f5d4b407b55c5"
+    },
+    {
+      "file": "README.md",
+      "bytes": 2181,
+      "sha256": "4801eb8492c5d3f6b777fa52a3a5c1d3c69d7dbb22e8e3aaa4acb1c8b4bfc02d"
+    },
+    {
+      "file": "VALIDATION.json",
+      "bytes": 311,
+      "sha256": "1692668f9bfe668613bdde1fd9ec4e64ea6aac62d97a5d1e8953c4d61ae31ca7"
+    },
+    {
+      "file": "apercu-design-pro.png",
+      "bytes": 352447,
+      "sha256": "cf7b0b780288647e0dfbb79ae1f64c8059334a1f4e32b6c5b0cbd2efd56120e7"
+    },
+    {
+      "file": "apercu-soutenance.png",
+      "bytes": 210964,
+      "sha256": "e4e105c11c109a0a6ad73ee76490ec746e6955e6c54e1de9e6c456dbf94dc657"
+    },
+    {
+      "file": "assets/README.md",
+      "bytes": 392,
+      "sha256": "c16021b44bdabd40a352eb6c79b66feec6910a50311b977be0e27c24e0a132ba"
+    },
+    {
+      "file": "assets/epitech-blanc.png",
+      "bytes": 19525,
+      "sha256": "156bb22905566ecc8a1ce8a5122b3c3aacd7ecd5cbb1b38f2b0b4b609a340ef9"
+    },
+    {
+      "file": "assets/epitech-noir.png",
+      "bytes": 19529,
+      "sha256": "88bc76d344519ea6e7466d17e0f20280c29d35602131d2db8ebb97291f184df6"
+    },
+    {
+      "file": "assets/infimatch.svg",
+      "bytes": 679,
+      "sha256": "71282d2db8c4419e8c733fe8d54ae9f9b5f0dd5018ef7635d6ac449a1249b8b7"
+    },
+    {
+      "file": "couverture-design-pro.png",
+      "bytes": 306544,
+      "sha256": "b6b30fc9973a706e804244d33aa87a2cccfc8101300f120530287b4763352702"
+    },
+    {
+      "file": "demonstration-finess-resultat.json",
+      "bytes": 2322,
+      "sha256": "b818967203627a664451ad54c2dc9eefb1e004043bc6af4c623b69144c573569"
+    },
+    {
+      "file": "demonstration-finess.cjs",
+      "bytes": 1904,
+      "sha256": "75a22576204b071704cfa078fded39786505fe97fb5b91d6e304fbfb906c860f"
+    },
+    {
+      "file": "generate-design-pro.py",
+      "bytes": 14520,
+      "sha256": "44e408b8f0586597cb748ac7cca1b57ac6c7b7549cdaa4ec37e35b4da4a62347"
+    },
+    {
+      "file": "generate-pitch.py",
+      "bytes": 4294,
+      "sha256": "c456184b5110004932680c8302fe9f49d49cb5f8c01b80fb02365233bb348c17"
     },
     {
       "file": "n8n/InfiMatch-production-cancellation.json",
@@ -136,14 +186,14 @@
       "sha256": "ca995a44e75f35104b65e0328a9313849099033314f8ec72f4ede6bca2bfcc02"
     },
     {
+      "file": "n8n/discord-relay.json",
+      "bytes": 3120,
+      "sha256": "2ef9ac9ea883d23940b97083ea91314b6208f68ae8b4ad8fadd8dc24895ecbd5"
+    },
+    {
       "file": "n8n/manifest-source.json",
       "bytes": 4576,
       "sha256": "385611d8102d1e94afe5ab594804fdefa4ad4eff87f6be034f37105e69fcc81b"
-    },
-    {
-      "file": "README.md",
-      "bytes": 2107,
-      "sha256": "8880653ef4037df6278bd86f471390272129d21f1cc99df17fab358d992d9ec0"
     },
     {
       "file": "slides.json",
@@ -151,15 +201,16 @@
       "sha256": "547bb9d7899eaf07284304b15e9449abe1f75c80845e58d7020e052fe60cda7b"
     },
     {
+      "file": "validation-design-pro.json",
+      "bytes": 23467,
+      "sha256": "85d71535bb897664a542d860cfb164a51eaf20e4d7a5362eab259911083fffcc"
+    },
+    {
       "file": "validation-layout.json",
       "bytes": 2120,
       "sha256": "176446a659686777baeb1906a69e7d9c65642fbc1ed0805ff3416c1fbfc716fb"
-    },
-    {
-      "file": "VALIDATION.json",
-      "bytes": 311,
-      "sha256": "1692668f9bfe668613bdde1fd9ec4e64ea6aac62d97a5d1e8953c4d61ae31ca7"
     }
   ],
-  "hashBasis": "Git blob bytes, as stored in the repository and git archive; text line endings normalized by Git"
+  "hashBasis": "Git blob bytes, as stored in the repository and git archive; text line endings normalized by Git",
+  "pdfDesign": "Professional PDF with official Epitech and current InfiMatch logos; 12 pages, 15 minutes"
 }

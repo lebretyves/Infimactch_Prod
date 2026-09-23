@@ -9,9 +9,9 @@
 | Données publiques | [Nettoyage](04_DONNEES_PUBLIQUES.md), [script](demonstration-finess.cjs) | Fonction de normalisation réellement utilisée par l'application |
 | Étude de marché | [Étude sourcée](05_ETUDE_DE_MARCHE.md) | Sources primaires et hypothèses commerciales distinguées |
 | Chiffrage réel | [Méthode](06_CHIFFRAGE_REEL.md), [Excel](CHIFFRAGE_ESTIME_REEL.xlsx), [CSV](CHIFFRAGE_ESTIME_REEL.csv) | Estimations remplies ; heures humaines à renseigner |
-| Pitch | [PowerPoint](InfiMatch_Soutenance_2026-09-23.pptx), [PDF](InfiMatch_Soutenance_2026-09-23.pdf), [texte oral](07_PITCH_ORAL.md) | Douze diapositives, quinze minutes, quatre rôles à attribuer |
+| Pitch | [PowerPoint](InfiMatch_Soutenance_2026-09-23.pptx), [PDF — nouveau design](InfiMatch_Soutenance_Pro_2026-09-23.pdf), [texte oral](07_PITCH_ORAL.md) | Douze diapositives, quinze minutes, quatre rôles à attribuer |
 
-[Dossier modifiable](DOSSIER_RENDU.docx) · [Preuves et réserves](08_PREUVES_ET_RESERVES.md) · [Manifeste](MANIFEST.json).
+[Aperçu du nouveau PDF](apercu-design-pro.png) · [Dossier modifiable](DOSSIER_RENDU.docx) · [Preuves et réserves](08_PREUVES_ET_RESERVES.md) · [Manifeste](MANIFEST.json).
 
 ## Dépôts
 - [Epitech — main](https://github.com/EpitechMscProPromo2027/D-WEB-901-PAR-9-1-InteriMatch-1/tree/main)
