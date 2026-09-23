@@ -63,7 +63,7 @@ function Establishments() {
         </article>)}
         {!r.data?.items.length && <p className={s.empty}>{q ? "Aucun établissement ne correspond à cette recherche." : "Aucun établissement n’est encore rattaché à votre compte."}</p>}
       </div>
-      {!!r.data?.total && <nav className={s.pagination} aria-label="Pages des établissements"><Button variant="outline" disabled={!offset} onClick={() => move(Math.max(0, offset - 20))}>Précédent</Button><span>{offset + 1}–{Math.min(offset + 20, r.data.total)} sur {r.data.total}</span><Button variant="outline" disabled={offset + 20 >= r.data.total} onClick={() => move(offset + 20)}>Suivant</Button></nav>}
+      {r.data && (r.data.total > 20 || offset > 0) && <nav className={s.pagination} aria-label="Pages des établissements"><Button variant="outline" disabled={!offset} onClick={() => move(Math.max(0, offset - 20))}>Précédent</Button><span>{offset + 1}–{Math.min(offset + 20, r.data.total)} sur {r.data.total}</span><Button variant="outline" disabled={offset + 20 >= r.data.total} onClick={() => move(offset + 20)}>Suivant</Button></nav>}
     </>}
   </div>;
 }

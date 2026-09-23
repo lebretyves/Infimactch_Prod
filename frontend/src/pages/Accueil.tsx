@@ -15,6 +15,7 @@ import {
   date,
   favorite,
   favorites,
+  statusLabels,
   type Application,
   type Listing,
 } from "@/services/market";
@@ -277,7 +278,7 @@ export default function Accueil() {
               <section className={s.enterpriseSection} aria-labelledby="activity-title">
                 <div className={s.sectionHeading}>
                   <div><h2 id="activity-title">Mon activité</h2><p>Une vue d’ensemble de vos missions et candidatures.</p></div>
-                  <Button variant="ghost" onClick={r.reload}>Actualiser</Button>
+                  <Button variant="outline" onClick={r.reload}>Actualiser</Button>
                 </div>
                 <Link to="/candidatures" className={s.applicationsPriority}>
                   <span className={s.priorityIcon}><Icon name="file-text" /></span>
@@ -291,8 +292,8 @@ export default function Accueil() {
                 </dl>
                 <nav className={s.managementActions} aria-label="Gérer mon activité">
                   <ButtonLink to="/missions" variant="outline"><Icon name="briefcase" size={18} />Toutes les missions</ButtonLink>
-                  <ButtonLink to="/missions?mode=edit" variant="ghost">Modifier une offre</ButtonLink>
-                  <ButtonLink to="/mes-etablissements" variant="ghost"><Icon name="building" size={18} />Mes établissements</ButtonLink>
+                  <ButtonLink to="/missions?mode=edit" variant="outline"><Icon name="file-text" size={18} />Modifier une offre</ButtonLink>
+                  <ButtonLink to="/mes-etablissements" variant="outline"><Icon name="building" size={18} />Mes établissements</ButtonLink>
                 </nav>
               </section>
               <div className={s.enterpriseDaily}>
@@ -302,7 +303,7 @@ export default function Accueil() {
                     <div className={s.recentOffers}>
                       {r.data.dashboard.recentMissions.map((m) => (
                         <article key={m.id} className={s.recentOffer}>
-                          <div className={s.offerHeading}><h3>{m.title}</h3><span className={s.offerStatus}>{labels[m.status] || m.status}</span></div>
+                          <div className={s.offerHeading}><h3>{m.title}</h3><span className={s.offerStatus}>{statusLabels[m.status] || m.status}</span></div>
                           <p className={s.offerDate}><Icon name="calendar" size={17} />{date(m.start_at, m.timezone)}</p>
                           <div className={s.offerFooter}><p><strong>{m.application_count}</strong> candidature(s) à traiter</p><ButtonLink to={"/gestion/missions/" + m.id} variant="outline">Gérer l’offre et les candidatures</ButtonLink></div>
                         </article>
@@ -315,6 +316,7 @@ export default function Accueil() {
                 <section className={`${s.enterpriseSection} ${s.notificationsSection}`} aria-labelledby="recent-notifications-title">
                   <div className={s.sectionHeading}><div><h2 id="recent-notifications-title">Notifications récentes</h2><p>Les dernières nouvelles de votre activité.</p></div><Icon name="bell" size={22} /></div>
                   {notificationList()}
+                  <ButtonLink to="/notifications" variant="ghost">Toutes les notifications</ButtonLink>
                 </section>
               </div>
               <EnterpriseConversion userId={user!.id}/>
@@ -332,16 +334,13 @@ export default function Accueil() {
             <p>
               <strong>{n.title || n.message || "Nouvelle notification"}</strong>
             </p>
-            <div className={u.actions}>
-              <Link
-                className={s.textLink}
-                to={notificationHref(n.href || (n.kind === "CONFIRMATION" ? "/historique" : "/missions"), n.id)}
-              >
-                {n.kind === "CONFIRMATION"
-                  ? "Voir mes confirmations"
-                  : "Consulter les missions"}
-              </Link>
-            </div>
+            <ButtonLink
+              variant="outline"
+              size="sm"
+              to={notificationHref(n.href || (n.kind === "CONFIRMATION" ? "/historique" : "/missions"), n.id)}
+            >
+              Consulter
+            </ButtonLink>
           </li>
         ))}
       </ul>

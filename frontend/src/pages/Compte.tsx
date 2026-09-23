@@ -4,7 +4,7 @@ import { useAuth } from '@/context/AuthContext';
 import { useRemote } from '@/lib/useRemote';
 import { usePageTitle } from '@/lib/usePageTitle';
 import { api } from '@/services/api';
-import { Button } from '@/ui/Button';
+import { Button, ButtonLink } from '@/ui/Button';
 import { PasswordField } from '@/ui/Field';
 import { date } from '@/services/market';
 import s from './MarketPages.module.css';
@@ -31,12 +31,24 @@ export default function Compte() {
     finally{pending.current=false;setBusy(false);}
   }
   async function cancel(){if(pending.current)return;pending.current=true;setBusy(true);setError('');setMessage('');try{await api('/me/closure-request',{method:'DELETE'});setMessage('Votre demande de clôture a été annulée.');remote.reload();}catch(cause){setError(cause instanceof Error?cause.message:'L’annulation n’a pas été confirmée.');}finally{pending.current=false;setBusy(false);}}
-  return <div className={`${s.page} ${s.focusedPage}`}><header className={s.header}><div><h1>Mon compte</h1><p>Consultez et gérez votre demande de clôture.</p></div></header>
+  return <div className={`${s.page} ${s.focusedPage}`}><header className={s.header}><div><h1>Mon compte</h1><p>Vos informations de connexion et la gestion de votre compte.</p></div></header>
     {error&&<p role="alert">{error}</p>}{message&&<p role="status">{message}</p>}
+    <section className={s.card} aria-labelledby="account-info-title"><h2 id="account-info-title">Informations du compte</h2>
+      <dl className={s.accountFacts}>
+        <div><dt>{user?.role === 'interimaire' ? 'Nom' : 'Organisation'}</dt><dd>{user?.role === 'interimaire' ? [user?.prenom, user?.nom].filter(Boolean).join(' ') || 'Non renseigné' : user?.nomEtablissement || 'Non renseignée'}</dd></div>
+        <div><dt>Adresse e-mail</dt><dd>{user?.email}</dd></div>
+        <div><dt>Type de compte</dt><dd>{user?.role === 'interimaire' ? 'Professionnel de santé' : user?.role === 'etablissement' ? 'Établissement de santé' : 'Agence d’intérim'}</dd></div>
+        <div><dt>Connexion Google</dt><dd>{remote.loading ? '…' : googleLinked ? 'Associée' : 'Non associée'}</dd></div>
+      </dl>
+      <div className={s.actions}>
+        <ButtonLink to={user?.role === 'interimaire' ? '/profil' : '/organisation'} variant="outline">{user?.role === 'interimaire' ? 'Mon profil' : 'Mon organisation'}</ButtonLink>
+        <ButtonLink to="/notifications" variant="outline">Gérer mes notifications</ButtonLink>
+      </div>
+    </section>
     <section className={s.card}><h2>Clôturer mon compte</h2><p>La demande est examinée par un administrateur. Des candidatures en cours, des missions ouvertes ou affectées, ou votre rôle de dernier responsable d’une organisation peuvent bloquer la clôture.</p><p>Après exécution, l’accès au compte est retiré et les données de profil sont anonymisées. L’historique métier nécessaire peut être conservé : il ne s’agit pas d’un effacement immédiat de toutes les données.</p>
       {remote.loading?<p role="status">Chargement de votre demande…</p>:remote.error?<div role="alert"><p>{remote.error}</p><Button onClick={remote.reload}>Réessayer</Button></div>:<>
         {request&&<section style={{marginBlock:20}} aria-label="Suivi de ma demande"><h3>{labels[request.status]||'État à vérifier'}</h3><p>Demandée le {date(request.requested_at)}</p>{request.approved_at&&<p>Approuvée le {date(request.approved_at)}</p>}{request.completed_at&&<p>Traitée le {date(request.completed_at)}</p>}{request.decision_reason&&<p>Décision de l’administrateur : {request.decision_reason}</p>}{request.last_error&&<p role="status">Le traitement n’est pas terminé. Un administrateur doit vérifier la demande et reprendre les opérations restantes.</p>}{['REQUESTED','APPROVED'].includes(request.status)&&<Button variant="outline" disabled={busy} onClick={cancel}>Annuler ma demande de clôture</Button>}{request.status==='PROCESSING'&&<p>La demande est en cours de traitement et ne peut plus être annulée ici.</p>}</section>}
-        {!active&&<form onSubmit={submit} noValidate style={{display:'grid',gap:16,marginTop:20}}>{!googleLinked&&<PasswordField ref={passwordInput} error={submitted&&!password?"Saisissez votre mot de passe actuel.":undefined} label="Mot de passe actuel" value={password} onChange={e=>setPassword(e.target.value)} autoComplete="current-password" required disabled={busy}/>}<label style={{display:'flex',alignItems:'flex-start',gap:10}}><input ref={confirmationInput} aria-invalid={submitted&&!confirmed||undefined} aria-describedby={submitted&&!confirmed?confirmationErrorId:undefined} type="checkbox" style={{width:20,height:20,flexShrink:0,marginTop:3}} checked={confirmed} onChange={e=>setConfirmed(e.target.checked)} disabled={busy}/>Je demande la clôture de mon compte après examen et j’ai compris que mon accès sera retiré, que mon profil sera anonymisé et qu’un historique métier pourra être conservé.</label>{submitted&&!confirmed&&<p id={confirmationErrorId} role="alert">Confirmez avoir compris les conséquences de la clôture avant de poursuivre.</p>}{googleLinked ? confirmed ? <GoogleConnexion mode="closure" onClosureComplete={()=>{setConfirmed(false);setMessage('Votre demande a été enregistrée pour examen. Votre compte n’est pas encore clôturé.');remote.reload();}}/> : <p>Cochez la confirmation ci-dessus, puis confirmez votre identité avec Google pour envoyer la demande.</p> : <Button type="submit" variant="danger" loading={busy}>Confirmer ma demande de clôture</Button>}</form>}
+        {!active&&<form onSubmit={submit} noValidate style={{display:'grid',gap:16,marginTop:20}}>{!googleLinked&&<PasswordField ref={passwordInput} error={submitted&&!password?"Saisissez votre mot de passe actuel.":undefined} label="Mot de passe actuel" value={password} onChange={e=>setPassword(e.target.value)} autoComplete="current-password" required disabled={busy}/>}<label style={{display:'flex',alignItems:'flex-start',gap:10}}><input ref={confirmationInput} aria-invalid={submitted&&!confirmed||undefined} aria-describedby={submitted&&!confirmed?confirmationErrorId:undefined} type="checkbox" style={{width:20,height:20,flexShrink:0,marginTop:3}} checked={confirmed} onChange={e=>setConfirmed(e.target.checked)} disabled={busy}/>Je demande la clôture de mon compte après examen et j’ai compris que mon accès sera retiré, que mon profil sera anonymisé et qu’un historique métier pourra être conservé.</label>{submitted&&!confirmed&&<p id={confirmationErrorId} role="alert">Confirmez avoir compris les conséquences de la clôture avant de poursuivre.</p>}{googleLinked ? confirmed ? <GoogleConnexion mode="closure" onClosureComplete={()=>{setConfirmed(false);setMessage('Votre demande a été enregistrée pour examen. Votre compte n’est pas encore clôturé.');remote.reload();}}/> : <p>Cochez la confirmation ci-dessus, puis confirmez votre identité avec Google pour envoyer la demande.</p> : <Button type="submit" variant="danger" loading={busy} style={{justifySelf:'start'}}>Confirmer ma demande de clôture</Button>}</form>}
       </>}
     </section>
   </div>;

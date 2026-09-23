@@ -438,7 +438,7 @@
 :global([data-space="candidate"]) .tabs button { min-height: 44px; padding: 10px 16px; }
 :global([data-space="candidate"]) .details { margin: 18px 0; }
 :global([data-space="candidate"]) .empty { padding: 28px 20px; }
-:global([data-space="candidate"]) .focusedPage { max-width: 960px; }
+:global([data-space="candidate"]) .focusedPage > * { max-width: 960px; }
 :global([data-space="candidate"]) .noticeList { list-style: none; padding: 0; margin: 0; display: grid; }
 :global([data-space="candidate"]) .noticeItem { padding: 16px 0; border-top: 1px solid var(--line); display: grid; gap: 8px; }
 :global([data-space="candidate"]) .noticeItem:first-child { border-top: 0; padding-top: 0; }
@@ -458,3 +458,6 @@
   :global([data-space="candidate"]) .tabs button { padding: 10px 12px; }
   :global([data-space="candidate"]) .details { grid-template-columns: 1fr; }
 }
+.accountFacts { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px 24px; margin: 16px 0 20px; }
+.accountFacts dt { font-size: 13px; color: var(--ink-600); }
+.accountFacts dd { margin: 4px 0 0; font-weight: 600; overflow-wrap: anywhere; }

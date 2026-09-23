@@ -46,7 +46,7 @@ try {
  const panels=page.locator('details').filter({has:page.locator('summary h2')});
  assert.equal(await panels.count(),4);
  assert.deepEqual(await panels.locator('summary h2').allTextContents(),titles);
- assert.deepEqual(await panels.evaluateAll(es=>es.map(e=>e.open)),[false,false,false,false]);
+ assert.deepEqual(await panels.evaluateAll(es=>es.map(e=>e.open)),[true,false,false,false]);
  const discord=panels.nth(1),summary=discord.locator('summary');
  await summary.focus();await page.keyboard.press('Enter');assert.equal(await discord.evaluate(e=>e.open),true);
  await panels.first().locator('summary').click();assert.equal(await discord.evaluate(e=>e.open),true,'independent panels');
@@ -79,7 +79,7 @@ try {
  assert.deepEqual(f.errors,[]);await f.context.close();
  const agency=await fixture('entreprise');
  assert.equal(await agency.page.locator('details > summary > h2').count(),4);
- assert.equal(await agency.page.locator('details[open]').count(),0);
+ assert.equal(await agency.page.locator('details[open]').count(),1);
  await agency.page.locator('summary').filter({hasText:titles[1]}).click();
  assert(await agency.page.getByRole('heading',{name:titles[1],exact:true}).isVisible());
  await agency.context.close();
@@ -90,5 +90,5 @@ try {
   if(onboarding)assert(await f.page.getByRole('link',{name:'Passer cette étape'}).isVisible());
   assert.deepEqual(f.errors,[]);await f.context.close();
  }
- console.log('PASS establishment and agency four closed independent panels, keyboard, mounted form drafts, save retry, email retry, responsive; other roles/onboarding unchanged');
+ console.log('PASS establishment and agency four independent panels (activity open by default), keyboard, mounted form drafts, save retry, email retry, responsive; other roles/onboarding unchanged');
 }finally{await browser.close();}

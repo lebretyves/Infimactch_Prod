@@ -5,7 +5,6 @@ import {PersonalCorrectionRequest} from '@/components/PersonalCorrectionRequest'
 import { ProSanteConnect } from "@/components/ProSanteConnect";
 import { useRef, useState, type FormEvent } from "react";
 import { useAuth } from "@/context/AuthContext";
-import { Navigate } from "react-router";
 import { useRemote } from "@/lib/useRemote";
 import { api } from "@/services/api";
 import {
@@ -609,8 +608,7 @@ function Editor({ initial }: { initial: ProfessionalProfile }) {
 }
 export default function Profil({ calendar = false }: { calendar?: boolean }) {
   const { user } = useAuth();
-  if (calendar)
-    return user?.role === "interimaire" ? <Calendrier /> : <Navigate to="/accueil" replace />;
+  if (calendar) return <Calendrier />;
   return user?.role === "interimaire" ? (
     <ProfileLoader />
   ) : (

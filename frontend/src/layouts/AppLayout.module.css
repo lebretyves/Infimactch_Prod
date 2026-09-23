@@ -128,15 +128,25 @@
 }
 .bottom {
   margin-top: auto;
-  padding-top: 30px;
+  padding-top: 16px;
+  border-top: 1px solid #e8eff5;
   display: grid;
-  gap: 14px;
-  justify-items: start;
+  gap: 2px;
 }
-.catalogue {
-  font-size: 11px;
-  padding-left: 12px;
-  color: var(--ink-600);
+.logout {
+  width: 100%;
+  border: 0;
+  background: none;
+  font-family: inherit;
+  text-align: left;
+  cursor: pointer;
+  color: var(--danger-700);
+}
+.logout svg {
+  color: var(--danger-700);
+}
+.logout:hover {
+  background: var(--danger-50);
 }
 .main {
   min-width: 0;
@@ -278,7 +288,6 @@
 .groupLabel { margin: 0 12px 4px; font-size: 11px; font-weight: 800; letter-spacing: .07em; text-transform: uppercase; color: var(--brand-700); }
 .shell[data-space="candidate"] .link { min-height: 44px; padding: 10px 12px; font-size: 12px; gap: 10px; }
 .shell[data-space="candidate"] .bottom { padding-top: 16px; gap: 4px; align-items: stretch; justify-items: stretch; }
-.shell[data-space="candidate"] .catalogue { min-height: 44px; display: flex; align-items: center; font-size: 12px; padding: 10px 12px; }
 .shell[data-space="candidate"] .main { padding: 26px clamp(20px, 2.5vw, 36px) 20px; }
 .shell[data-space="candidate"] .menu { min-width: 44px; min-height: 44px; }
 .shell[data-space="candidate"] .identity { min-height: 44px; }

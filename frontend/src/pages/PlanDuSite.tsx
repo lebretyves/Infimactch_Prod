@@ -3,7 +3,7 @@ import { QualityPage } from './Qualite';
 
 export default function PlanDuSite() {
   return <QualityPage title="Plan du site" description="Retrouvez les pages et les accès aux espaces InfiMatch, ainsi que les informations utiles pour vous accompagner.">
-    <nav aria-label="Pages du site">
+    <nav aria-label="Pages du site" style={{ display: "grid", gap: 32 }}>
       <section>
         <h2>Découvrir InfiMatch</h2>
         <ul>

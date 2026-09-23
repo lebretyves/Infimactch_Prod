@@ -180,10 +180,10 @@ export function MixedRecommendations({
       ) : data && (
         <>
           {origin !== "externes" && data.internal.personalization === "GENERAL_PROFILE_INCOMPLETE" && (
-            <p className={s.notice}>Ces missions partenaires sont consultables. Votre profil ou votre vérification professionnelle est incomplet : leur compatibilité n’est pas confirmée. <Link to="/profil">Compléter mon profil</Link>.</p>
+            <p className={s.notice}>Ces missions partenaires sont consultables. Votre profil ou votre vérification professionnelle est incomplet : leur compatibilité n’est pas confirmée. <Link to="/profil">Compléter mon profil</Link></p>
           )}
           {origin !== "partenaires" && showExternes && data.external.personalization === "GENERAL_PROFILE_INCOMPLETE" && (
-            <p className={s.notice}>Votre profil est incomplet : ces offres externes générales ne sont pas des recommandations personnalisées. <Link to="/profil">Compléter mon profil</Link>.</p>
+            <p className={s.notice}>Votre profil est incomplet : ces offres externes générales ne sont pas des recommandations personnalisées. <Link to="/profil">Compléter mon profil</Link></p>
           )}
           {origin !== "externes" && data.internal.status === "UNAVAILABLE" && (
             <div className={s.notice} role="status"><p>La recherche de missions compatibles est temporairement indisponible.</p><Button variant="outline" onClick={result.reload}>Réessayer les missions compatibles</Button></div>

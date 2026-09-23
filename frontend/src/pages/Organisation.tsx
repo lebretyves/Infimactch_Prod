@@ -2,7 +2,7 @@
 import { useRemote } from "@/lib/useRemote";
 import { api } from "@/services/api";
 import { organizations, type Organization } from "@/services/organizations";
-import { Button, ButtonLink } from "@/ui/Button";
+import { Button } from "@/ui/Button";
 import { TextField, TextArea, SelectField } from "@/ui/Field";
 import page from "./Candidater.module.css";
 import s from "./inscription/Etape.module.css";
@@ -91,7 +91,7 @@ function Edit({ initial }: { initial: Organization }) {
           value={o.siret || ""}
           onChange={(e) => setO({ ...o, siret: e.target.value })}
         />
-        <Button type="submit" loading={busy}>
+        <Button type="submit" loading={busy} style={{ justifySelf: "start" }}>
           Enregistrer l’organisation
         </Button>
       </fieldset>
@@ -154,9 +154,6 @@ export default function Organisation() {
       ) : (
         <p>Aucune organisation n’est associée à ce compte.</p>
       )}
-      <ButtonLink to="/missions" variant="ghost">
-        Mes missions
-      </ButtonLink>
     </div>
   );
 }

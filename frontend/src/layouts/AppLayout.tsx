@@ -1,6 +1,5 @@
 import { useEffect, useRef, useState } from "react";
 import { Link, NavLink, Outlet, useLocation } from "react-router";
-import { Button } from "@/ui/Button";
 import { Icon, type IconName } from "@/ui/Icon";
 import { Logo } from "@/ui/Logo";
 import { useAuth } from "@/context/AuthContext";
@@ -39,9 +38,9 @@ const enterpriseNavigation: { to: string; label: string; icon: IconName }[] = [
   { to: "/accueil", label: "Mon espace", icon: "nav-home" },
   { to: "/notifications", label: "Notifications", icon: "bell" },
   { to: "/mes-etablissements", label: "Mes établissements", icon: "building" },
-  { to: "/missions", label: "Missions et suivi", icon: "search" },
+  { to: "/missions", label: "Missions et suivi", icon: "briefcase" },
   { to: "/candidatures", label: "Candidatures à traiter", icon: "file-text" },
-  { to: "/organisation", label: "Organisation", icon: "building" },
+  { to: "/organisation", label: "Organisation", icon: "settings" },
 ];
 export function AppLayout() {
   const { user, logout } = useAuth();
@@ -104,7 +103,9 @@ export function AppLayout() {
               <small>
                 {nurse
                   ? user?.qualification || "Professionnel de santé"
-                  : user?.nomEtablissement || "Entreprise"}
+                  : user?.role === "etablissement"
+                    ? "Établissement de santé"
+                    : "Agence d’intérim"}
               </small>
             </span>
           </Link>
@@ -136,11 +137,11 @@ export function AppLayout() {
         </> : enterpriseNavigation.map(item => <NavigationLink key={item.to} item={item} />)}
         <div className={s.bottom}>
           {nurse && <NavigationLink item={{ to: "/notifications", label: "Notifications", icon: "bell" }} />}
-          <Link to="/compte" className={s.catalogue}>Mon compte</Link>
-          <Button variant="ghost" onClick={exit}>
-            <Icon name="arrow-left" size={18} />
-            Déconnexion
-          </Button>
+          <NavigationLink item={{ to: "/compte", label: "Mon compte", icon: "user" }} />
+          <button type="button" className={`${s.link} ${s.logout}`} onClick={exit}>
+            <Icon name="arrow-left" size={20} />
+            <span>Déconnexion</span>
+          </button>
         </div>
       </nav>
       <main className={s.main} id="contenu" tabIndex={-1}>

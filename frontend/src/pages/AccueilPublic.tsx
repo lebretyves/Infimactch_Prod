@@ -115,8 +115,8 @@ export default function AccueilPublic() {
           <Link to="/aide" className={s.lien} onClick={() => setMenuOuvert(false)}>Centre d’aide</Link>
         </nav>
         <div className={s.actions} onClick={() => setMenuOuvert(false)}>
-          <Link to="/connexion" className={s.connexion}>Connexion</Link>
-          <Link to="/inscription" className={s.connexion}>Créer mon compte</Link>
+          <ButtonLink to="/connexion" variant="ghost" size="sm" className={s.connexion}>Connexion</ButtonLink>
+          <ButtonLink to="/inscription" size="sm" className={s.inscription}>Créer mon compte</ButtonLink>
         </div>
       </div>
     </>
@@ -131,8 +131,8 @@ export default function AccueilPublic() {
             <h1 id="titre-accueil" className={s.titre}>L’intérim infirmier,<br /><span>pensé pour le soin.</span></h1>
             <p className={s.chapeau}>InfiMatch rapproche les infirmiers <strong>IDE, IADE et IBODE</strong>, les établissements et les agences d’intérim.</p>
             <div className={s.orientations}>
-              <a href="#soignants" className={s.actionPrimaire} onClick={(event) => suivreAncre(event, 'soignants')}>Je suis soignant <span aria-hidden="true">↗</span></a>
-              <a href="#recruteurs" className={s.actionSecondaire} onClick={(event) => suivreAncre(event, 'recruteurs')}>Je recrute <span aria-hidden="true">↗</span></a>
+              <a href="#soignants" className={s.actionPrimaire} onClick={(event) => suivreAncre(event, 'soignants')}>Je suis soignant <span aria-hidden="true">↓</span></a>
+              <a href="#recruteurs" className={s.actionSecondaire} onClick={(event) => suivreAncre(event, 'recruteurs')}>Je recrute <span aria-hidden="true">↓</span></a>
             </div>
             <div className={s.installation} data-install-prompt><ButtonLink to="/installer" variant="outline">Installer l’application</ButtonLink></div>
           </div>
@@ -152,18 +152,18 @@ export default function AccueilPublic() {
               <article id="soignants" className={s.role} tabIndex={-1}>
                 <h3>Soignants</h3>
                 <p>Présentez vos compétences et disponibilités. Choisissez les missions auxquelles postuler.</p>
-                <Link to="/inscription?espace=candidat" className={s.lienParcours}>Créer mon profil soignant <span aria-hidden="true">↗</span></Link>
+                <Link to="/inscription?espace=candidat" className={s.lienParcours}>Créer mon profil soignant <span aria-hidden="true">→</span></Link>
               </article>
               <div id="recruteurs" tabIndex={-1}>
                 <article className={s.role}>
                   <h3>Établissements</h3>
                   <p>Exprimez vos besoins de renfort et examinez les candidatures.</p>
-                  <Link to="/inscription?espace=etablissement" className={s.lienParcours}>Ouvrir mon espace établissement <span aria-hidden="true">↗</span></Link>
+                  <Link to="/inscription?espace=etablissement" className={s.lienParcours}>Ouvrir mon espace établissement <span aria-hidden="true">→</span></Link>
                 </article>
                 <article className={s.role}>
                   <h3>Agences d’intérim</h3>
                   <p>Créez vos missions, suivez les candidatures et confirmez les affectations.</p>
-                  <Link to="/inscription?espace=agence" className={s.lienParcours}>Ouvrir mon espace agence <span aria-hidden="true">↗</span></Link>
+                  <Link to="/inscription?espace=agence" className={s.lienParcours}>Ouvrir mon espace agence <span aria-hidden="true">→</span></Link>
                 </article>
               </div>
             </div>

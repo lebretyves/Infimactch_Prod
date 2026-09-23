@@ -70,7 +70,7 @@ function Draft({ initial, reload }: { initial: Preparation; reload: () => void }
       <div className={s.draft}>
         <section className={s.missing} aria-labelledby="contract-missing">
           <h2 id="contract-missing">{model.missingInformation.length ? 'Informations à compléter' : 'Les informations disponibles sont réunies'}</h2>
-          {model.missingInformation.length ? <><p>Vous pouvez enregistrer un brouillon et compléter ces points ensuite.</p><ul>{model.missingInformation.map((item, index) => <li key={index}>{item}</li>)}</ul></> : <p>Relisez ces éléments avec l’employeur avant d’établir le contrat.</p>}
+          {model.missingInformation.length ? <><p>{editable ? 'Vous pouvez enregistrer un brouillon et compléter ces points ensuite.' : 'Ces points restent à compléter par l’employeur.'}</p><ul>{model.missingInformation.map((item, index) => <li key={index}>{item}</li>)}</ul></> : <p>Relisez ces éléments avec l’employeur avant d’établir le contrat.</p>}
         </section>
         <form ref={form} className={s.form} onSubmit={save} noValidate>
           <header className={s.formHeader}><div><p className={s.eyebrow}>Préparation</p><h2>Le brouillon du contrat</h2></div><span className={s.version}>{model.preparation.version ? 'Version ' + model.preparation.version : 'Non enregistré'}</span></header>

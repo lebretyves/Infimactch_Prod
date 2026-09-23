@@ -1,9 +1,10 @@
+import { BackLink } from "@/ui/BackLink";
 ﻿import { useEffect, useState } from "react";
 import { useParams } from "react-router";
 import { useAuth } from "@/context/AuthContext";
 import { useRemote } from "@/lib/useRemote";
 import { api } from "@/services/api";
-import { Button, ButtonLink } from "@/ui/Button";
+import { Button } from "@/ui/Button";
 import { MissionCard } from "@/ui/MissionCard";
 import { favorites, facilityFavorite, type Listing } from "@/services/market";
 import s from "./MarketPages.module.css";
@@ -56,11 +57,7 @@ export default function Etablissement() {
   }
   return (
     <div className={s.page}>
-      <div>
-        <ButtonLink to="/missions" variant="ghost">
-          ← Retour aux missions
-        </ButtonLink>
-      </div>
+      <BackLink to="/missions">Retour aux missions</BackLink>
       {r.loading ? (
         <div className={s.empty} role="status">
           Chargement de l’établissement…

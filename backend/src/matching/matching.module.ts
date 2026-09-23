@@ -198,8 +198,8 @@ export class MatchingService implements OnModuleDestroy {
     while (true) {
       budget();
       const batch = await this.db.query(
-        "SELECT p.* FROM profile p JOIN account a ON a.id=p.user_id AND a.active WHERE p.visible AND $1=ANY(p.qualifications) AND p.user_id>$2::uuid ORDER BY p.user_id LIMIT 100",
-        [m.qualification, cursor],
+        "SELECT p.* FROM profile p JOIN account a ON a.id=p.user_id AND a.active WHERE p.visible AND $1=ANY(p.qualifications) AND p.user_id>$2::uuid AND NOT EXISTS(SELECT 1 FROM application ap WHERE ap.mission_id=$3 AND ap.nurse_id=p.user_id) ORDER BY p.user_id LIMIT 100",
+        [m.qualification, cursor, m.id],
       );
       budget(batch.length);
       if (!batch.length) break;
