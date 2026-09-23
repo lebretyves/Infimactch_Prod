@@ -14,7 +14,8 @@
     "coverage": "npm run test:compile && c8 --all --src=src --extension=.ts --include=\"src/**\" --include=\".test-build/src/**\" --reporter=text --reporter=json-summary --reporter=html --reports-dir=../docs/proofs/coverage node ../scripts/security/test-suite.cjs coverage",
     "test:compile": "tsc --outDir .test-build",
     "worker": "node --use-system-ca dist/worker.js",
-    "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\""
+    "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
+    "coverage:unit": "npm run test:compile && c8 --all --src=src --extension=.ts --include=\"src/**\" --include=\".test-build/src/**\" --check-coverage --lines=95 --reporter=text --reporter=json-summary --reporter=html --reports-dir=../docs/proofs/unit-coverage node --test \".test-build/test/unit/*.spec.js\""
   },
   "engines": {
     "node": ">=24 <25"

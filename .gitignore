@@ -6,6 +6,7 @@ dist/
 data/
 *.log
 docs/proofs/coverage/
+docs/proofs/unit-coverage/
 backups/
 
 .test-build/

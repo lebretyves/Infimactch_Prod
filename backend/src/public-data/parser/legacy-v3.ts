@@ -50,7 +50,7 @@ export function parseOfferV3(row: any){
   if(/(?:\d+\s*ans|experience).{0,100}(?:\bsi\b|avant juillet|valletoux)/.test(s)||/valletoux/.test(s))add('condition_experience',evidence,evidence,'CONDITION_A_VERIFIER_NON_APPLIQUEE',origin);
   const duration=s.match(/(?:en|postes? de)\s*(\d{1,2})\s*h\b/);
   if(duration&&/horaires?|planning|poste|mission/.test(s)&&Number(duration[1])<=24)add('duree_poste_heures',Number(duration[1]),evidence,'EXPLICITE_A_VERIFIER',origin);
-  const notice=s.match(/(\d+)\s*a\s*(\d+)\s*disponibilites.{0,25}(\d+(?:[.,]\d+)?)\s*mois/);
+  const notice=s.match(/(\d+)\s*a\s*(\d+)\s*disponibilites.{0,25}?(\d+(?:[.,]\d+)?)\s*mois/);
   if(notice)add('disponibilites_a_declarer',{min:Number(notice[1]),max:Number(notice[2]),noticeMonths:Number(notice[3]!.replace(',','.'))},evidence,'EXPLICITE',origin);
  }
  const times=new Set(r.fields.filter((f: any)=>f.field==='temps_travail').map((f: any)=>f.value));

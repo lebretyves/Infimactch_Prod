@@ -59,7 +59,7 @@ class UploadDto {
   })
   @IsIn(["application/pdf", "image/png", "image/jpeg"])
   mime!: string;
-  @ApiProperty({ type: () => String, required: true })
+  @ApiProperty({ type: () => String, required: true, minLength: 4, maxLength: 7000000 })
   @IsString()
   @Length(4, 7000000)
   contentBase64!: string;

@@ -20,6 +20,8 @@ jobs:
       - name: Check encrypted archive authentication
         run: node --test scripts/security/legacy-archive.test.mjs
       - run: npm run typecheck && npm run build
+      - name: Enforce 95 percent backend unit line coverage
+        run: npm run coverage:unit
       - name: Prepare browser integration dependencies
         run: npm ci --prefix frontend
       - name: Install browser for backend integration tests
@@ -36,6 +38,7 @@ jobs:
             docs/openapi.json
             docs/proofs/v1-hardening
             docs/proofs/coverage
+            docs/proofs/unit-coverage
   frontend:
     runs-on: ubuntu-latest
     steps:

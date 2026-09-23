@@ -37,7 +37,8 @@
     "backup:full": "node scripts/security/backup.mjs",
     "restore:verify": "node scripts/security/restore-test.mjs",
     "db:migrate:vault": "node scripts/security/migrate.mjs",
-    "start:https": "node scripts/security/start-https.mjs"
+    "start:https": "node scripts/security/start-https.mjs",
+    "coverage:unit": "npm run coverage:unit -w backend"
   },
   "imports": {
     "#standard-fonts/*": "pdfkit/standard-fonts/*"
