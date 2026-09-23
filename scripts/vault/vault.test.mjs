@@ -2,7 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {spawnSync} from 'node:child_process';
 import {readFile} from 'node:fs/promises';
-import {resolve} from 'node:path';
+import {resolve,isAbsolute} from 'node:path';
 import {parse} from 'dotenv';
 import https from 'node:https';
 import {root,address,request,withRole,readJson,validateSecrets,cleanEnvironment,selectKeys,keyList} from './common.mjs';
@@ -31,7 +31,9 @@ test('Backend can read its exact existing secrets, and no infrastructure secret'
   await withRole('backend',async token=>{
     const result=await request('kv/data/infimatch/v1/backend',{token});
     validateSecrets(result.data.data,'backend');
-    const expected=selectKeys(parse(await readFile(resolve(root,'.env'))),keyList(result.data.data));
+    const reference=process.env.INFIMATCH_VAULT_REFERENCE_ENV||resolve(root,'.env');
+    assert.ok(isAbsolute(reference),'Vault reference environment must use an absolute path');
+    const expected=selectKeys(parse(await readFile(reference)),keyList(result.data.data));
     assert.equal(JSON.stringify(Object.entries(result.data.data).sort())===JSON.stringify(Object.entries(expected).sort()),true,'Vault values must match the existing credentials without changing them');
     await assert.rejects(request('kv/data/infimatch/v1/infra',{token}),e=>e.status===403);
     await assert.rejects(request('kv/data/infimatch/v2/backend',{token}),e=>e.status===403);

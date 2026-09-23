@@ -1,0 +1,14 @@
+✔ server blocks protected profile writes while accepting professional changes (68.6617ms)
+✔ request does not modify profile; owner-only history; approval applies once; rejected requests preserve value (73.082ms)
+✔ admin permissions and recent reauthentication are mandatory (0.4791ms)
+✔ stale values and concurrent duplicate requests are rejected (29.1601ms)
+✔ email correction checks uniqueness and invalidates sessions; identity correction resets RPPS (110.7281ms)
+✔ mobility city and real coordinates persist without changing locked personal city (20.1749ms)
+ℹ tests 6
+ℹ suites 0
+ℹ pass 6
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1596.2538

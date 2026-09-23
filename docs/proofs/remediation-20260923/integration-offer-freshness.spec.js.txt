@@ -1,0 +1,14 @@
+✔ detail closure is conditional on the exact import version, including timestamp microseconds (40.1304ms)
+✔ failed check retries after its delay; positive detail verification keeps an old import fresh (20.2317ms)
+✔ malformed legacy check metadata does not crash selection or stale retirement (12.3584ms)
+✔ explicit rechecks can reopen a provider-closed offer only on a current positive detail response (33.5855ms)
+✔ cycle cutoff checks only unreturned active offers while retaining explicit closed-offer rechecks (15.0638ms)
+✔ refresh releases catalogue locks before provider detail requests (63.7464ms)
+ℹ tests 6
+ℹ suites 0
+ℹ pass 6
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 784.2734

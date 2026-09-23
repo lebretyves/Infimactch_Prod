@@ -1,0 +1,58 @@
+✔ legacy archive authenticates content, key and relative filename (3.2028ms)
+✔ archive rejects traversal, absolute and alternate stream names (0.5773ms)
+✔ manifest authentication detects removed files and altered metadata (0.7202ms)
+✔ operator rotation ACL names only the three intended AppRoles and preserves secret ACLs (0.9393ms)
+✔ production restricted role supports direct and pooler connections (0.8962ms)
+✔ maintenance connections reject unrelated providers, lookalike hosts and missing credentials (0.3334ms)
+✔ maintenance TLS pins CA and preserves pooler username and unrelated options (0.9518ms)
+✔ missing certificate, TLS downgrades and URL overrides are refused (1.3053ms)
+✔ Vault secret payload rejects unexpected environment injection (1.168ms)
+✔ Parent environment cannot supply stale backend or infrastructure secrets (0.6755ms)
+✔ Vault mode does not silently load secrets from the legacy .env (51.8244ms)
+✔ Real Vault is initialized and unsealed on persistent Raft (74.1807ms)
+✔ HTTPS rejects the local certificate without the configured CA (20.1897ms)
+✖ Backend can read its exact existing secrets, and no infrastructure secret (11.6229ms)
+✖ Infrastructure role cannot read backend secrets (10.5629ms)
+✔ Invalid AppRole credentials are refused (10.783ms)
+✖ Short-lived launcher token is revoked after use (9.7699ms)
+✔ Initial root token is absent from the recovery file after bootstrap (1.0808ms)
+ℹ tests 18
+ℹ suites 0
+ℹ pass 15
+ℹ fail 3
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 342.7557
+
+✖ failing tests:
+
+test at scripts\vault\vault.test.mjs:30:1
+✖ Backend can read its exact existing secrets, and no infrastructure secret (11.6229ms)
+  Error: VAULT_HTTP_400 at auth/approle/login
+      at IncomingMessage.<anonymous> (file:///E:/Interimatch/worktrees/unit-coverage-95-20260923/scripts/vault/common.mjs:30:45)
+      at IncomingMessage.emit (node:events:520:35)
+      at endReadableNT (node:internal/streams/readable:1729:12)
+      at process.processTicksAndRejections (node:internal/process/task_queues:90:21) {
+    status: 400
+  }
+
+test at scripts\vault\vault.test.mjs:44:1
+✖ Infrastructure role cannot read backend secrets (10.5629ms)
+  Error: VAULT_HTTP_400 at auth/approle/login
+      at IncomingMessage.<anonymous> (file:///E:/Interimatch/worktrees/unit-coverage-95-20260923/scripts/vault/common.mjs:30:45)
+      at IncomingMessage.emit (node:events:520:35)
+      at endReadableNT (node:internal/streams/readable:1729:12)
+      at process.processTicksAndRejections (node:internal/process/task_queues:90:21) {
+    status: 400
+  }
+
+test at scripts\vault\vault.test.mjs:54:1
+✖ Short-lived launcher token is revoked after use (9.7699ms)
+  Error: VAULT_HTTP_400 at auth/approle/login
+      at IncomingMessage.<anonymous> (file:///E:/Interimatch/worktrees/unit-coverage-95-20260923/scripts/vault/common.mjs:30:45)
+      at IncomingMessage.emit (node:events:520:35)
+      at endReadableNT (node:internal/streams/readable:1729:12)
+      at process.processTicksAndRejections (node:internal/process/task_queues:90:21) {
+    status: 400
+  }

@@ -1,0 +1,13 @@
+✔ two independent instances atomically share one quota under concurrent traffic (67.6078ms)
+✔ a second Express application rejects once the first consumed the shared limit (66.753ms)
+✔ the exact quota permits N requests and expiration resets once atomically (6.9503ms)
+✔ route scopes and session keys remain independent; IPv6 subnet grouping is preserved (17.4478ms)
+✔ cleanup deletes only a bounded number of expired buckets and keeps active counters (16.7815ms)
+ℹ tests 5
+ℹ suites 0
+ℹ pass 5
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 964.4657

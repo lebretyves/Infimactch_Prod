@@ -1,0 +1,14 @@
+✔ preview counts exact import alerts and leaves everything unchanged (165.6657ms)
+✔ failed purge rolls back deletes and completed events atomically (47.9978ms)
+✔ purge preserves new missions, transactional alerts, active and ambiguous deliveries, all business rows and documents (71.7569ms)
+✔ repeating purge does not delete more data or add audit noise (33.7464ms)
+✔ a delivery that starts between selection and locking is preserved (51.0118ms)
+✔ purge is bounded to 500 alerts and reports remaining work (1584.7156ms)
+ℹ tests 6
+ℹ suites 0
+ℹ pass 6
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 2507.6842

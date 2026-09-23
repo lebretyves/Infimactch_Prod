@@ -1,0 +1,122 @@
+
+> interimatch@0.1.0 test
+> node --test scripts/test-api.mjs scripts/test-admin-api.mjs && node --experimental-strip-types --test scripts/test-idle-session.mjs scripts/test-registration-diplomas.mjs scripts/test-registration-validation.mjs scripts/test-mission-search-model.mjs scripts/test-bank-fields.mjs scripts/test-cv-review.mjs scripts/test-help-guides.mjs scripts/test-contract-preparation.mjs scripts/test-search-area.mjs scripts/test-commute.mjs scripts/test-mission-date-range.mjs scripts/test-personal-calendar.mjs && npm run test:branches
+
+✔ Malformed admin CSRF prevents mutation (23.6973ms)
+✔ Unconfirmed admin mutation is not retried and server details remain private (9.1385ms)
+✔ Admin session expiry stays observable with a malformed error body (1.077ms)
+✔ Writes use cookie credentials, CSRF and the provided idempotency key (16.0719ms)
+✔ Only an explicit CSRF rejection retries a command and keeps the same key (2.6609ms)
+✔ A network failure never becomes mock success or silently repeats a mutation (1.7909ms)
+✔ A server eligibility rejection remains a failure with reasons (1.4835ms)
+✔ An expired session notifies the application and never restores browser-stored identity (1.3515ms)
+✔ An aborted stale unauthorized response cannot expire a newer session (1.6178ms)
+✔ Failure to prepare CSRF reports a network error without submitting registration (1.4874ms)
+✔ Google failures explain the association error without expiring another session (4.0857ms)
+✔ Google missing account directs the user to registration (1.692ms)
+✔ Google registration expiration preserves the current authentication state (2.9032ms)
+✔ An offline mutation is refused before CSRF or any network request (1.329ms)
+✔ 429 uses Retry-After without replaying a mutation (2.0218ms)
+✔ Rate-limit durations handle seconds, HTTP dates and invalid headers (1.2247ms)
+✔ Malformed successful responses never confirm a mutation or trigger a retry (4.5144ms)
+✔ Malformed CSRF response prevents the write and malformed errors remain readable (1.4197ms)
+ℹ tests 18
+ℹ suites 0
+ℹ pass 18
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 373.8955
+✔ OCR completeness accepts a verified IBAN and holder without inventing a missing BIC (4.3031ms)
+✔ an optional BIC still has to be valid when present (0.3716ms)
+✔ geo points reject incomplete or out-of-range coordinates (0.901ms)
+✔ maps endpoint prefers coordinates and falls back to address (1.3584ms)
+✔ Google Maps directions URL encodes origin and destination without an API key (0.6008ms)
+✔ Google Maps directions URL accepts an address destination (0.2584ms)
+✔ an empty first draft is valid and its request cannot overwrite assignment facts (1.4879ms)
+✔ contract note limits preserve a complete editable draft and identify the offending field (0.2528ms)
+✔ clearing a saved note is an unsaved modification; a restored note is not (0.2692ms)
+✔ DOCX bounded extraction reads deflate document, not relationships or HTML (19.9462ms)
+✔ DOCX rejects declared zip bomb and false low size (9.9768ms)
+✔ DOCX rejects DTD and damaged checksum (7.5366ms)
+✔ DOCX honours cancellation and file limits (0.911ms)
+✔ review preserves personal identity, RPPS, existing skills and independent IDE year (3.6229ms)
+✔ review rejects invalid, future or reversed diploma years and leaves original untouched (0.4678ms)
+✔ missing OCR years preserve existing years and allow incomplete new diplomas without inventing IDE year (0.3028ms)
+✔ help search ignores accents and combines terms (3.6768ms)
+✔ help guides respect roles while retaining public connection assistance (0.2802ms)
+✔ six tutorials have complete local media or an HTTPS external link and written alternatives (2.8636ms)
+✔ PDF, email and incomplete matching troubleshooting is available to both sides (0.2988ms)
+✔ warning at minute 14, logout at minute 15 (0.9913ms)
+✔ sleeping tab cannot extend an expired deadline (0.1978ms)
+Date-only range checks passed across 3 host timezones: inclusive dates, DST, overseas, exact-period preservation, shift hours, custom clocks and invalid dates.
+✔ scripts\test-mission-date-range.mjs (258.1706ms)
+✔ URL filters preserve encoded values, ignore unrelated parameters and cap input length (1.1108ms)
+✔ page URL coercion keeps the existing 1 to 501 boundary and 20 result offset (0.3809ms)
+✔ last page covers exact and partial pages and never exceeds the accessible range (0.291ms)
+✔ pagination keeps edge pages and ellipses around the current page (1.1433ms)
+✔ UTC stamps drop millis and keep Z (2.2084ms)
+✔ upcoming filter keeps only active future-or-current missions (0.8246ms)
+✔ ICS event contains escaped fields and confirmed status (0.9856ms)
+✔ ICS calendar wraps one or more events (1.6589ms)
+✔ Google Calendar URL encodes title and UTC dates without an API key (0.4835ms)
+✔ ICS folding preserves Unicode and limits every physical line to 75 UTF-8 bytes (0.7334ms)
+✔ ICS escapes every newline representation in text fields (0.5367ms)
+✔ zero-length and reversed periods cannot be exported to calendars (0.2415ms)
+✔ IADE and IBODE select IDE without losing other diplomas (1.4312ms)
+✔ each selected diploma retains its own year; removed diplomas are omitted (2.0418ms)
+✔ missing, future or non-integer years cannot be copied from another diploma (0.8234ms)
+✔ specialist year cannot precede IDE but same calendar year is accepted (0.3341ms)
+✔ candidate first step requires credentials, not organisation or later identity fields (1.7047ms)
+✔ password boundaries and confirmation remain enforced for classical accounts (0.5377ms)
+✔ Google skips password checks but retains email and enterprise consent validation (0.3601ms)
+✔ FINESS is required for establishments and preserves Corsican prefix normalization (0.2179ms)
+✔ agency SIRET remains optional and FINESS does not become an agency prerequisite (0.2388ms)
+✔ enterprise errors keep their order and whitespace rules without mutating input (0.1701ms)
+✔ account area uses working city rather than residence (1.9405ms)
+✔ incomplete or invalid account areas are not defaults (0.2133ms)
+✔ legacy coordinates without a city retain a neutral label (0.1173ms)
+✔ temporary search is isolated per user and does not mutate the account area (0.3895ms)
+✔ logout cleanup removes all account areas and preserves unrelated preferences (0.2509ms)
+✔ blocked browser storage never prevents logout cleanup (0.2237ms)
+ℹ tests 51
+ℹ suites 0
+ℹ pass 51
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 330.2677
+
+> interimatch@0.1.0 test:branches
+> node --test scripts/test-build-measure.mjs && node --experimental-strip-types --test scripts/test-branch-services.mjs scripts/test-page-speech.mjs
+
+✔ missing build fails instead of publishing a success (5.6266ms)
+✔ deterministic inventory except date; report exists in served dist, excludes deferred resources from initial weight (21.9778ms)
+✔ missing manifest or entry dependency is an error (5.0429ms)
+ℹ tests 3
+ℹ suites 0
+ℹ pass 3
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 115.2005
+✔ source dates retain their semantics; missing or invalid dates are omitted (15.0872ms)
+✔ preferences validation, reset, malformed data and unavailable storage (0.4013ms)
+✔ speech never chooses a remote or unspecified voice (0.1915ms)
+✔ late voices are prepared without starting audio, first speak remains synchronous with the next tap (2.1254ms)
+✔ bounded voice polling also handles engines without voiceschanged and cleans up (0.4641ms)
+✔ remote/default voices stay excluded and underscore language tags are supported (0.3559ms)
+✔ silent startup reports an error and cancels the queued request, never endless reading (1.0014ms)
+✔ onstart clears startup timeout; explicit stop invalidates a saved continuation (0.4537ms)
+✔ browser denial and synchronous exceptions are reported, paused engine resumes (0.3707ms)
+ℹ tests 9
+ℹ suites 0
+ℹ pass 9
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 116.4809

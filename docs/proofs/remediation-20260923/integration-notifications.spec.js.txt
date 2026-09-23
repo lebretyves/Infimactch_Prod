@@ -1,0 +1,13 @@
+✔ welcome is transactional and scoped to the new account (45.255ms)
+✔ Discord opt-in, event filtering, revocation and delivery deduplication (27.2723ms)
+✔ a code is account-bound, limited to five attempts and never reusable (51.7521ms)
+✔ an organization gets one queued message even with multiple members, no personal welcome (21.5989ms)
+✔ delivery sends once and never replays an ambiguous send (79.1526ms)
+ℹ tests 5
+ℹ suites 0
+ℹ pass 5
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 944.8909

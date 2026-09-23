@@ -1,0 +1,6 @@
+node : {"status":"FAIL","code":"WRITE_PRIVILEGES_REMAIN"}
+Au caractère Ligne:2 : 73
++ ... ata/vault'; node scripts/vault/harden-postgis-access.mjs --owner --ap ...
++                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: ({"status":"FAIL...ILEGES_REMAIN"}:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError

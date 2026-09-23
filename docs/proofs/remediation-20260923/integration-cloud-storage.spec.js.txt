@@ -1,0 +1,12 @@
+✔ durable documents stay encrypted, enforce ownership and erase with metadata (59.0278ms)
+✔ failed SQL transaction leaves neither metadata nor encrypted blobs (13.3199ms)
+✔ cloud closure records a durable ledger before erasing encrypted documents (143.4313ms)
+✔ an explicitly selected retention deletes expired fictional history and PDF bytes; automatic maintenance preserves it (117.6584ms)
+ℹ tests 4
+ℹ suites 0
+ℹ pass 4
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1802.1453

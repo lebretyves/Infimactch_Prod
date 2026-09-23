@@ -24,6 +24,7 @@
     "vault:status": "node scripts/vault/manage.mjs status",
     "vault:unseal": "node scripts/vault/manage.mjs unseal",
     "vault:rotate": "node scripts/vault/manage.mjs rotate",
+    "vault:renew": "node scripts/vault/renew-expired.mjs",
     "vault:sync": "node scripts/vault/manage.mjs sync",
     "vault:snapshot": "node scripts/vault/manage.mjs snapshot",
     "vault:check": "node scripts/vault/run.mjs check",

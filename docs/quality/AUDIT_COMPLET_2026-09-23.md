@@ -1,5 +1,7 @@
 # Audit du projet — 23 septembre 2026
 
+La correction des transferts et les interventions restantes sont suivies dans [Corrections de l’audit](CORRECTIONS_AUDIT_2026-09-23.md).
+
 ## Mise à jour — MongoDB vérifié depuis Vercel à 17 h 26
 
 **La connexion MongoDB de production est maintenant confirmée : état disponible, ping en 84 ms.** Le contrôle a été exécuté par la route existante `GET /api/v1/admin/infrastructure`, consultée dans Firefox avec la session administrateur normale. Cette route attend la connexion Mongoose puis exécute `admin().ping()` depuis Vercel. PostgreSQL/PostGIS est également disponible (287 ms). Version serveur observée : `1bc970b38efb5f19b202f5e30edbcef767f9d335`.

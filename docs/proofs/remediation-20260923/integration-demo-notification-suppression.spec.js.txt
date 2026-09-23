@@ -1,0 +1,14 @@
+✔ only the recorded import is muted, with confirmation and cancellation preserved (77.9649ms)
+✔ reminders skip the old batch in SQL and still notify the new mission (44.6547ms)
+✔ profile refresh queues matching only for the new mission; direct old webhook emits no alerts (21.825ms)
+✔ dispatch never invokes n8n for old queued publications, while a new mission is dispatched (33.8204ms)
+✔ publication notices are blocked for old missions but new notices and transactional notices remain enabled (9.2959ms)
+✔ already queued Discord alerts are cancelled for the old batch and sent for the new mission (48.3695ms)
+ℹ tests 6
+ℹ suites 0
+ℹ pass 6
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1473.1276

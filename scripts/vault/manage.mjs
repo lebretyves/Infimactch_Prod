@@ -1,3 +1,4 @@
+import {repairOperatorRotationPolicy} from './operator-policy.mjs';
 import {readFile,writeFile,mkdir} from 'node:fs/promises';
 import {resolve} from 'node:path';
 import {parse} from 'dotenv';
@@ -65,9 +66,10 @@ async function bootstrap() {
   await writeSecrets(token,{initial:true});
   const self='path "auth/token/revoke-self" { capabilities = ["update"] }\n';
   for(const group of ['backend','infra','operator']){
-    const policy=group==='operator'
+    let policy=group==='operator'
       ? 'path "kv/data/infimatch/v1/*" { capabilities = ["read", "create", "update"] }\npath "kv/metadata/infimatch/v1/*" { capabilities = ["read"] }\npath "auth/approle/role/infimatch-v1-*/role-id" { capabilities = ["read"] }\npath "auth/approle/role/infimatch-v1-*/secret-id" { capabilities = ["update"] }\npath "auth/approle/role/infimatch-v1-*/secret-id-accessor/destroy" { capabilities = ["update"] }\npath "sys/storage/raft/snapshot" { capabilities = ["read"] }\n'
       : 'path "'+secretPath(group)+'" { capabilities = ["read"] }\n';
+    if(group==='operator')policy=repairOperatorRotationPolicy(policy);
     await request('sys/policies/acl/'+roleName(group),{method:'PUT',token,data:{policy:policy+self}});
     await request('auth/approle/role/'+roleName(group),{method:'POST',token,data:{token_policies:[roleName(group)],token_no_default_policy:true,token_ttl:'5m',token_max_ttl:'10m',secret_id_ttl:group==='operator'?'720h':'168h',bind_secret_id:true}});
     await issueCredentials(group,token);

@@ -184,11 +184,13 @@ test("recommendations use matching for complete profiles and omit changed missio
 });
 test("incomplete profiles receive general listings while external recommendations remain explicitly partial", async () => {
   let batch = 0;
-  const f = fixture((sql) =>
+  const f = fixture((sql, args) =>
     sql.includes("FROM profile")
       ? [{ ...profile, qualifications: [], rpps_status: "NOT_CHECKED" }]
       : sql.includes("FROM mission")
         ? [{ id: "a", hourly_salary: "25", created_at: published }]
+        : sql.includes("FROM external_offer") && sql.includes("id=ANY")
+          ? args[0].slice().reverse().map((id: string) => ({id, source:"FRANCE_TRAVAIL",title:"IDE",description:"Full details",provenance:{publishedAt:published},raw_hash:"private"}))
         : sql.includes("FROM external_offer")
           ? batch++ === 0
             ? [1, 2, 3, 4].map((i) => ({
@@ -216,6 +218,11 @@ test("incomplete profiles receive general listings while external recommendation
   assert.equal(r.external.personalization, "GENERAL_PROFILE_INCOMPLETE");
   assert.equal(r.external.items[0].correspondence.eligibilityVerified, false);
   assert.equal(r.external.items[0].raw_hash, undefined);
+  assert.deepEqual(r.external.items.map((x: any) => x.id), ["e_1", "e_2", "e_3"]);
+  assert.equal(r.external.items[0].description, "Full details");
+  const ranking = f.calls.find(c => c.sql.includes("FROM external_offer") && c.sql.includes("id>"));
+  assert.ok(!ranking.sql.includes("description") && !ranking.sql.includes("parsed_offer"));
+  assert.deepEqual(f.calls.find(c => c.sql.includes("id=ANY") && c.sql.includes("external_offer")).args, [["1","2","3"],["FRANCE_TRAVAIL"]]);
 });
 test("recommendation provider failures remain isolated and missing profiles are hidden", async () => {
   await assert.rejects(

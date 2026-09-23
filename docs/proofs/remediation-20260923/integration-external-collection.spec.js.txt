@@ -1,0 +1,14 @@
+✔ FT collection commits one page at a time, deduplicates pages and retains numeric-string coordinates (91.3017ms)
+✔ failure after advancing a page rolls back offers, import receipt and caller checkpoint together (36.1279ms)
+✔ a stale search reimport preserves provider closure and availability metadata even after a failed recheck (38.527ms)
+✔ national import batches 151 offers and repeated import retains unique IDs (99.9898ms)
+✔ unchanged imports reuse parser output; changed input and parser upgrades rebuild it (53.2984ms)
+✔ malformed provider dates persist as null and valid ISO dates survive import and replay (43.8038ms)
+ℹ tests 6
+ℹ suites 0
+ℹ pass 6
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 507.2188

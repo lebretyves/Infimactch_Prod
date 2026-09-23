@@ -4,6 +4,7 @@ import { covers, distanceKm, overlaps, Professional } from '../domain/matching';
 import { matchingMission } from '../missions/mission-mapping';
 import { professional } from '../profiles/profile-mapping';
 import { partialOfferMatch } from '../public-data/partial-matching';
+import { externalRankingProvenanceSql } from '../public-data/external-ranking';
 import { publicationDate } from './recommendations';
 import { SearchDto } from './search';
 
@@ -74,7 +75,7 @@ export async function rankedListingPage(db: Database, sourceSql: string, sourceP
     const matchDistance = profilePoint
       ? "CASE WHEN data->>'kind'='INTERNAL_MISSION' THEN ST_Distance(ST_SetSRID(ST_MakePoint((data->>'longitude')::double precision,(data->>'latitude')::double precision),4326)::geography,ST_SetSRID(ST_MakePoint(" + bind(profilePoint.longitude) + "," + bind(profilePoint.latitude) + "),4326)::geography)/1000 ELSE NULL END"
       : 'NULL';
-    const compact = 'jsonb_build_object(' + fields.map(k => "'"+k+"',data->'"+k+"'").join(',') + ",'matchingDistanceKm'," + matchDistance + ",'provenance',jsonb_build_object('publishedAt',data#>'{provenance,publishedAt}','facts',data#>'{provenance,facts}'))";
+    const compact = 'jsonb_build_object(' + fields.map(k => "'"+k+"',data->'"+k+"'").join(',') + ",'matchingDistanceKm'," + matchDistance + ",'provenance'," + externalRankingProvenanceSql("data->'provenance'") + ')';
     const offset = search.offset ?? 0, limit = search.limit ?? 20, keep = offset + limit;
     let total = 0;
     const top: ListingOrder[] = [];

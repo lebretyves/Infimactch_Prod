@@ -8,6 +8,7 @@ import {professional} from '../profiles/profile-mapping';
 import {partialOfferMatch} from '../public-data/partial-matching';
 import {externalPresentation} from '../public-data/offer-quality';
 import {visibleExternalProviders} from '../public-data/external-visibility';
+import {externalRankingProvenanceSql} from '../public-data/external-ranking';
 
 export function publicationDate(value:unknown,now=Date.now()):string|null {
   if(typeof value!=='string'||!/^\d{4}-\d{2}-\d{2}T.*(?:Z|[+-]\d{2}:\d{2})$/.test(value))return null;
@@ -59,19 +60,28 @@ export class RecommendationsController {
     if(!visibleSources.length){
       return {status:'HIDDEN',personalization:profile.qualifications.length?'PARTIAL':'GENERAL_PROFILE_INCOMPLETE',items:[],sources:[]};
     }
+    return this.db.transaction(async em=>{
+    // Rank and hydrate one consistent snapshot without transferring full provider payloads.
+    await em.query('SET TRANSACTION ISOLATION LEVEL REPEATABLE READ');
     let cursor='00000000-0000-0000-0000-000000000000';const top:any[]=[];
     const p=professional(profile);
     while(true){
-      const batch=await this.db.query("SELECT id,source,title,description,url,location_label,qualification,imported_at,expires_at,provenance,parsed_offer FROM external_offer WHERE active AND (expires_at IS NULL OR expires_at>now()) AND source=ANY($1::text[]) AND id>$2::uuid ORDER BY id LIMIT 100",[visibleSources,cursor]);
+      const batch=await em.query("SELECT id,title,"+externalRankingProvenanceSql('provenance')+" AS provenance FROM external_offer WHERE active AND (expires_at IS NULL OR expires_at>now()) AND source=ANY($1::text[]) AND id>$2::uuid ORDER BY id LIMIT 500",[visibleSources,cursor]);
       if(!batch.length)break;
       for(const row of batch){
         const comparison=partialOfferMatch(row,p,generatedAt);
-        const item={...row,id:'e_'+row.id,kind:'EXTERNAL_OFFER',applicationMode:'REDIRECT',eligibility:'INCOMPLETE',profileCorrespondence:comparison,publicationDate:publicationDate(row.provenance?.publishedAt,Date.parse(generatedAt)),importedAt:row.imported_at,sourceUpdatedAt:publicationDate(row.provenance?.sourceUpdatedAt,Date.parse(generatedAt)),relevance:externalRelevance(comparison)};
+        const item={id:'e_'+row.id,profileCorrespondence:comparison,publicationDate:publicationDate(row.provenance?.publishedAt,Date.parse(generatedAt)),relevance:externalRelevance(comparison)};
         top.push(item);top.sort(compareRecentExternal);if(top.length>3)top.pop();
       }
       cursor=batch[batch.length-1].id;
     }
-    const sources=await this.db.query("SELECT DISTINCT ON(provider) provider,status,created_at FROM import_run WHERE provider=ANY($1::text[]) ORDER BY provider,created_at DESC",[visibleSources]);
-    return {status:'READY',personalization:profile.qualifications.length?'PARTIAL':'GENERAL_PROFILE_INCOMPLETE',items:top.map(({relevance,...item})=>externalPresentation(item)),sources};
+    const rows=top.length?await em.query("SELECT id,source,title,description,url,location_label,qualification,imported_at,expires_at,provenance,parsed_offer FROM external_offer WHERE id=ANY($1::uuid[]) AND active AND (expires_at IS NULL OR expires_at>now()) AND source=ANY($2::text[])",[top.map(item=>item.id.slice(2)),visibleSources]):[];
+    const byId=new Map(rows.map(row=>['e_'+row.id,row]));
+    const sources=await em.query("SELECT DISTINCT ON(provider) provider,status,created_at FROM import_run WHERE provider=ANY($1::text[]) ORDER BY provider,created_at DESC",[visibleSources]);
+    return {status:'READY',personalization:profile.qualifications.length?'PARTIAL':'GENERAL_PROFILE_INCOMPLETE',items:top.flatMap(({relevance,...item})=>{
+      const row=byId.get(item.id);if(!row)return [];
+      return [externalPresentation({...row,...item,kind:'EXTERNAL_OFFER',applicationMode:'REDIRECT',eligibility:'INCOMPLETE',importedAt:row.imported_at,sourceUpdatedAt:publicationDate(row.provenance?.sourceUpdatedAt,Date.parse(generatedAt))})];
+    }),sources};
+    });
   }
 }

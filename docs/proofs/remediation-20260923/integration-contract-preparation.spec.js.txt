@@ -1,0 +1,14 @@
+✔ preparation pre-fills the full name and actual assignment without exposing private profile fields (164.9996ms)
+✔ unrelated accounts, inactive memberships and inactive actors cannot read or write another preparation (88.3717ms)
+✔ agency-managed preparation is editable by agency and read-only for concerned establishment (115.7761ms)
+✔ concurrent changes preserve the winner and a retry of the same write creates no duplicate audit (137.1164ms)
+✔ cancelled assignments retain draft history read-only and cannot be changed (119.0767ms)
+✔ account erasure deletes free-text drafts and prevents recreating them for a closed professional (119.1088ms)
+ℹ tests 6
+ℹ suites 0
+ℹ pass 6
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1422.8359

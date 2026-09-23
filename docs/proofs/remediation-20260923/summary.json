@@ -1,0 +1,296 @@
+{
+  "status": "APPLICATION_TESTS_PASS_OPERATIONAL_ITEMS_PENDING",
+  "unitBackend": {
+    "tests": 652,
+    "pass": 652,
+    "fail": 0
+  },
+  "unitFrontend": {
+    "tests": 81,
+    "pass": 81,
+    "fail": 0
+  },
+  "unitCoverage": {
+    "lines": {
+      "total": 12340,
+      "covered": 11735,
+      "skipped": 0,
+      "pct": 95.09
+    },
+    "statements": {
+      "total": 12340,
+      "covered": 11735,
+      "skipped": 0,
+      "pct": 95.09
+    },
+    "functions": {
+      "total": 941,
+      "covered": 775,
+      "skipped": 0,
+      "pct": 82.35
+    },
+    "branches": {
+      "total": 5133,
+      "covered": 4616,
+      "skipped": 0,
+      "pct": 89.92
+    },
+    "branchesTrue": {
+      "total": 0,
+      "covered": 0,
+      "skipped": 0,
+      "pct": 100
+    }
+  },
+  "integration": {
+    "tests": 187,
+    "pass": 187,
+    "fail": 0
+  },
+  "integrationFiles": [
+    {
+      "file": "admin.spec.js",
+      "source": "full-campaign",
+      "passed": true,
+      "tests": 27,
+      "pass": 27,
+      "fail": 0
+    },
+    {
+      "file": "application-warnings.spec.js",
+      "source": "full-campaign",
+      "passed": true,
+      "tests": 3,
+      "pass": 3,
+      "fail": 0
+    },
+    {
+      "file": "audit-remediation.spec.js",
+      "source": "full-campaign",
+      "passed": true,
+      "tests": 2,
+      "pass": 2,
+      "fail": 0
+    },
+    {
+      "file": "cloud-storage.spec.js",
+      "source": "full-campaign",
+      "passed": true,
+      "tests": 4,
+      "pass": 4,
+      "fail": 0
+    },
+    {
+      "file": "contract-preparation.spec.js",
+      "source": "full-campaign",
+      "passed": true,
+      "tests": 6,
+      "pass": 6,
+      "fail": 0
+    },
+    {
+      "file": "conversions.spec.js",
+      "source": "full-campaign",
+      "passed": true,
+      "tests": 6,
+      "pass": 6,
+      "fail": 0
+    },
+    {
+      "file": "demo-notification-suppression.spec.js",
+      "source": "full-campaign",
+      "passed": true,
+      "tests": 6,
+      "pass": 6,
+      "fail": 0
+    },
+    {
+      "file": "email-delivery.spec.js",
+      "source": "full-campaign",
+      "passed": true,
+      "tests": 5,
+      "pass": 5,
+      "fail": 0
+    },
+    {
+      "file": "enterprise-flow.spec.js",
+      "source": "targeted",
+      "passed": true,
+      "tests": 2,
+      "pass": 2,
+      "fail": 0
+    },
+    {
+      "file": "establishment-directory.spec.js",
+      "source": "full-campaign",
+      "passed": true,
+      "tests": 3,
+      "pass": 3,
+      "fail": 0
+    },
+    {
+      "file": "external-collection.spec.js",
+      "source": "full-campaign",
+      "passed": true,
+      "tests": 6,
+      "pass": 6,
+      "fail": 0
+    },
+    {
+      "file": "external-ranking.spec.js",
+      "source": "targeted",
+      "passed": true,
+      "tests": 2,
+      "pass": 2,
+      "fail": 0
+    },
+    {
+      "file": "external-visibility.spec.js",
+      "source": "targeted",
+      "passed": true,
+      "tests": 4,
+      "pass": 4,
+      "fail": 0
+    },
+    {
+      "file": "jobspipe-credits.spec.js",
+      "source": "full-campaign",
+      "passed": true,
+      "tests": 3,
+      "pass": 3,
+      "fail": 0
+    },
+    {
+      "file": "journey.spec.js",
+      "source": "full-campaign",
+      "passed": true,
+      "tests": 32,
+      "pass": 32,
+      "fail": 0
+    },
+    {
+      "file": "listing-order.spec.js",
+      "source": "full-campaign",
+      "passed": true,
+      "tests": 6,
+      "pass": 6,
+      "fail": 0
+    },
+    {
+      "file": "matching-distance.spec.js",
+      "source": "full-campaign",
+      "passed": true,
+      "tests": 1,
+      "pass": 1,
+      "fail": 0
+    },
+    {
+      "file": "mission-guardrails.spec.js",
+      "source": "full-campaign",
+      "passed": true,
+      "tests": 8,
+      "pass": 8,
+      "fail": 0
+    },
+    {
+      "file": "mission-location.spec.js",
+      "source": "full-campaign",
+      "passed": true,
+      "tests": 4,
+      "pass": 4,
+      "fail": 0
+    },
+    {
+      "file": "mission-mail.spec.js",
+      "source": "full-campaign",
+      "passed": true,
+      "tests": 6,
+      "pass": 6,
+      "fail": 0
+    },
+    {
+      "file": "notifications.spec.js",
+      "source": "full-campaign",
+      "passed": true,
+      "tests": 5,
+      "pass": 5,
+      "fail": 0
+    },
+    {
+      "file": "offer-freshness.spec.js",
+      "source": "full-campaign",
+      "passed": true,
+      "tests": 6,
+      "pass": 6,
+      "fail": 0
+    },
+    {
+      "file": "personal-corrections.spec.js",
+      "source": "full-campaign",
+      "passed": true,
+      "tests": 6,
+      "pass": 6,
+      "fail": 0
+    },
+    {
+      "file": "profile-after-assignment.spec.js",
+      "source": "full-campaign",
+      "passed": true,
+      "tests": 7,
+      "pass": 7,
+      "fail": 0
+    },
+    {
+      "file": "purge-demo-alerts.spec.js",
+      "source": "full-campaign",
+      "passed": true,
+      "tests": 6,
+      "pass": 6,
+      "fail": 0
+    },
+    {
+      "file": "recovery.spec.js",
+      "source": "full-campaign",
+      "passed": true,
+      "tests": 8,
+      "pass": 8,
+      "fail": 0
+    },
+    {
+      "file": "security-evidence.spec.js",
+      "source": "full-campaign",
+      "passed": true,
+      "tests": 3,
+      "pass": 3,
+      "fail": 0
+    },
+    {
+      "file": "shared-rate-limit.spec.js",
+      "source": "full-campaign",
+      "passed": true,
+      "tests": 5,
+      "pass": 5,
+      "fail": 0
+    },
+    {
+      "file": "support.spec.js",
+      "source": "full-campaign",
+      "passed": true,
+      "tests": 5,
+      "pass": 5,
+      "fail": 0
+    }
+  ],
+  "unchangedApplicationSourcesBetweenFullAndTargetedRuns": true,
+  "verificationApproach": "Full campaign passed all 28 pre-existing integration files. New comparison fixture first needed timezone-qualified dates, then a frozen parser clock. Final targeted rerun passed all three affected integration files and SQL security regressions. Results are consolidated per file, not represented as a single full green run.",
+  "vaultAndSecurity": {
+    "tests": 18,
+    "pass": 15,
+    "fail": 3
+  },
+  "pending": [
+    "Vault live operator ACL repair requires explicit root recovery authorization; application AppRoles still expired",
+    "Windows DNS elevation cancelled; configuration unchanged",
+    "PostGIS write privileges require Supabase owner intervention; attempted transaction rolled back"
+  ]
+}

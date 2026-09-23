@@ -1,0 +1,18 @@
+{
+  "date": "2026-09-23T15:52:39.035Z",
+  "mode": "integration",
+  "results": [
+    {
+      "file": "enterprise-flow.spec.js",
+      "passed": true
+    },
+    {
+      "file": "external-ranking.spec.js",
+      "passed": true
+    },
+    {
+      "file": "external-visibility.spec.js",
+      "passed": true
+    }
+  ]
+}

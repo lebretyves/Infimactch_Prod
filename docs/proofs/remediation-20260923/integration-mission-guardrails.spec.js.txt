@@ -1,0 +1,16 @@
+✔ upgrade excludes all existing missions including edits, versions and republishing (435.3351ms)
+✔ new missions wait from publication, enforce 24 actual hours and three lifetime reminders (84.6799ms)
+✔ cancelled, started missions and concurrent reminder workers never duplicate notifications (48.6059ms)
+✔ global budget survives repeated n8n calls and counts all organization recipients (822.5993ms)
+✔ assignment closes overlapping applications only, records reason and keeps adjacent slots (168.7606ms)
+✔ two concurrent assignments for one nurse yield one success and one closed application (62.2061ms)
+✔ API create, edit, old draft publication and staffing needs reject out of horizon dates (16.7895ms)
+✔ a new published mission still alerts only eligible nurses with notifications enabled (56.0646ms)
+ℹ tests 8
+ℹ suites 0
+ℹ pass 8
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 2879.9337

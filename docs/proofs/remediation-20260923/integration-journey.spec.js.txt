@@ -1,0 +1,43 @@
+[Nest] 52332  - 23/09/2026 17:48:37    WARN Duplicate DTO detected: "Reason" is defined multiple times with different schemas.
+Consider using unique class names or applying @ApiExtraModels() decorator with custom schema names.
+Note: This will throw an error in the next major version.
+✔ full internal journey and concurrency, with isolated fixture RPPS (3400.2685ms)
+✔ CSRF required before registration (9.2787ms)
+✔ account revocation invalidates sessions and disabled login stays generic (433.8503ms)
+✔ a late RPPS answer cannot overwrite a newer number (171.0978ms)
+✔ PostgreSQL exclusion is a backstop against overlapping active assignments (13.0766ms)
+✔ MongoDB failure returns an explicit degraded result and an audit trace (24.372ms)
+✔ an ended assignment completes atomically and cannot be reopened (53.3077ms)
+✔ document key rotation reads previous versions and writes the active version (36.4473ms)
+✔ secondary lists paginate, reject invalid limits and protect private caching (197.8051ms)
+✔ sensitive mission commands replay atomically, reject changed content and recheck rights (165.2496ms)
+✔ completed mission confirmation remains READY on delayed generation and replay (132.8996ms)
+✔ expired outbox lease is retried and HTTP success without business receipt is insufficient (105.2889ms)
+✔ expired PDF lease cannot overwrite the document published by its successor (109.0603ms)
+✔ V1 recommendations rank only eligible entries and expose pending RPPS separately (59.1663ms)
+✔ exhausted automation reports its state and explicit retry refuses active leases (38.5967ms)
+✔ OpenAPI documents idempotency headers and paginated response contracts (24.5948ms)
+✔ partial external comparison is private and incomplete leads require explicit opt-in (409.0724ms)
+✔ stored parser is exposed with proof and stable reimports; preferences persist (248.2214ms)
+✔ idle expiry is enforced server-side; background reads never refresh activity (194.7972ms)
+✔ retention commits SQL before file cleanup and preserves reminder deduplication (220.6459ms)
+✔ account closure clears profile and private traces on real PostgreSQL (189.7542ms)
+✔ closure CLI removes Mongo history and can be retried (3488.4748ms)
+✔ closure requests are private, replayable, cancellable and require operator approval (810.0083ms)
+✔ freshness never treats a bounded import as a complete snapshot (36.1321ms)
+✔ every OpenAPI operation has a success contract and controlled errors (30.5596ms)
+✔ reminders exclude disabled accounts and do not duplicate delivery on replay (449.1279ms)
+✔ confirmation excludes a disabled nurse but keeps the authorized agency notification (50.2045ms)
+✔ committed document erasures survive failure and can be resumed without the old SQL document (198.1427ms)
+✔ a failed closure does not block the next request and approval is audited (689.5416ms)
+✔ partner origin filtering is applied before pagination even with an incomplete profile (329.1542ms)
+✔ bank file uploads are private, validated, replaceable and remain optional after the first mission (762.1301ms)
+✔ chosen search place overrides home only for search and filters located external offers (272.1484ms)
+ℹ tests 32
+ℹ suites 0
+ℹ pass 32
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 25137.0934

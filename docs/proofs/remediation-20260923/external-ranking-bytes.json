@@ -1,0 +1,26 @@
+{
+  "checkedAt": "2026-09-23T15:39:57.430Z",
+  "scope": "Read-only SQL aggregates; JSON representation estimates, not metered network traffic",
+  "measurement": {
+    "active_offers": 5128,
+    "previous_recommendation_bytes": "61421614",
+    "compact_scan_bytes": "1724157",
+    "max_three_details_bytes": "139369",
+    "previous_external_listing_provenance_bytes": "3580032",
+    "compact_external_listing_provenance_bytes": "1190411"
+  },
+  "recommendationUpperBoundBytes": 1863526,
+  "reductionPercent": 96.9660093920684,
+  "visibility": [
+    {
+      "provider": "FRANCE_TRAVAIL",
+      "enabled": true,
+      "visible": false
+    },
+    {
+      "provider": "JOBSPIPE",
+      "enabled": true,
+      "visible": false
+    }
+  ]
+}
