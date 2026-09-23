@@ -1,5 +1,12 @@
 # Rendu Epitech — InfiMatch
 
+
+## Dossier actualisé du 23 septembre 2026
+**[Ouvrir les sept livrables](2026-09-23/README.md)** : CDC, installation, neuf exports n8n publiés, nettoyage FINESS, étude de marché sourcée, classeur estimé/réel et pitch de 15 minutes (PowerPoint, PDF, notes).
+
+Les heures humaines et la preuve du cadrage J+2 restent à compléter. Les informations ci-dessous décrivent la préparation antérieure du 21 septembre ; les preuves et limites du dossier daté du 23 font référence pour la nouvelle livraison.
+
+
 Dossier préparé avec réserves, état au 21 septembre 2026. Le [sujet](../references/D-WEB-901-project.pdf) demeure la référence. L'archive ZIP locale assemblée précédemment est un instantané ; les documents versionnés ci-dessous sont les entrées courantes.
 
 ## Sept livrables

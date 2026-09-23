@@ -1,0 +1,19 @@
+﻿Lot;Domaine;Fonctionnalité;Estimé min h;Estimé max h;Centre indicatif h;Réel h à saisir;Écart h vs centre;Écart % vs centre;Position fourchette;Preuve temps réel;Explication écart
+C01;Collectif;Cadrage, marché, CDC, règles scénario et go/no-go;18;26;22.0;;;;;;
+B01;Backend;Bootstrap, Compose, extensions, migrations, contrat API initial;16;24;20.0;;;;;;
+B02;Backend;Auth, sessions, affiliations, CGU et permissions;22;32;27.0;;;;;;
+B03;Backend;Profils, FINESS, qualifications et référentiels;16;24;20.0;;;;;;
+B04;Backend;Disponibilités, historique et favoris;16;24;20.0;;;;;;
+B05;Backend;Missions, candidatures, consentement et affectation atomique;28;42;35.0;;;;;;
+B06;Backend;Recherche PostGIS et matching avec traces MongoDB;22;32;27.0;;;;;;
+B07;Backend;RPPS API, états, reprise et contrôles serveur;12;20;16.0;;;;;;
+B08;Backend;Import offres API, CLI, nettoyage et manifeste;18;28;23.0;;;;;;
+B09;Backend;RIB et justificatif privés, chiffrement et rotation;16;24;20.0;;;;;;
+B10;Backend;Trois workflows, outbox et confirmation PDF;22;34;28.0;;;;;;
+F01;Frontend;Écrans comptes, profils, recherche, calendriers et dashboards;44;64;54.0;;;;;;
+F02;Frontend;Responsive, accessibilité, SEO et pratiques RGESN;14;22;18.0;;;;;;
+Q01;Qualité;Tests dédiés unitaires/intégration, concurrence et coverage;26;40;33.0;;;;;;
+Q02;Qualité;Recette sécurité, TLS, sauvegardes, restauration et incident;18;28;23.0;;;;;;
+Q03;Qualité;Recette collective et corrections transverses;18;30;24.0;;;;;;
+D01;Collectif;README, matrice, exports, temps réels et pitch;14;22;18.0;;;;;;
+D02;Collectif;Répétition et livraison propre;8;12;10.0;;;;;;

@@ -1,0 +1,164 @@
+{
+  "date": "2026-09-23",
+  "applicationCommit": "e81282d49aeeb07fe86fc34483122b54ec45ec35",
+  "pitchMinutes": 15,
+  "scope": "Seven deliverable categories; actual human hours and J+2 approval evidence remain pending",
+  "containsPrivateSecretExports": false,
+  "files": [
+    {
+      "file": "01_CAHIER_DES_CHARGES.md",
+      "bytes": 4161,
+      "sha256": "30c1f8f60c57b37148204cb8a773dee57eb2fd94d9ca2f7e6b151a7409e90be8"
+    },
+    {
+      "file": "02_DEPOT_ET_INSTALLATION.md",
+      "bytes": 1896,
+      "sha256": "fce2d557edcb307953a303df8474b81aa4f54ac603a87b4f577d87d968882778"
+    },
+    {
+      "file": "03_WORKFLOWS_N8N.md",
+      "bytes": 1742,
+      "sha256": "d05aff46ed73d6102884bb9494ba5334d5a28cfe59bce8667233b6098b7caa96"
+    },
+    {
+      "file": "04_DONNEES_PUBLIQUES.md",
+      "bytes": 2452,
+      "sha256": "831f81032da5a4e78adc896967579c8967b51a7f2dd2398750303a17c0ffca13"
+    },
+    {
+      "file": "05_ETUDE_DE_MARCHE.md",
+      "bytes": 3964,
+      "sha256": "aa670c0e7825ad079bcc304aeecec976a589d18fe73b77af1752032d284f7e3d"
+    },
+    {
+      "file": "06_CHIFFRAGE_REEL.md",
+      "bytes": 1483,
+      "sha256": "8de65de597d911a1ac5337d1c8b1527253201452ef0180c18ebd6ac0c340bccf"
+    },
+    {
+      "file": "07_PITCH_ORAL.md",
+      "bytes": 8736,
+      "sha256": "6975e0b04b75584eb3679a6bd81ebd40a88630c651433be6bcd2b98f06a3793a"
+    },
+    {
+      "file": "08_PREUVES_ET_RESERVES.md",
+      "bytes": 1969,
+      "sha256": "b7c94a87d065f9815862c34dad2dc26d0ee707e933c30187e64497fc76ca6943"
+    },
+    {
+      "file": "apercu-soutenance.png",
+      "bytes": 210964,
+      "sha256": "e4e105c11c109a0a6ad73ee76490ec746e6955e6c54e1de9e6c456dbf94dc657"
+    },
+    {
+      "file": "CHIFFRAGE_ESTIME_REEL.csv",
+      "bytes": 1668,
+      "sha256": "3bd732102a1d1971492f5efadb4641c1ffb986718773459d76fe1bf6302319a1"
+    },
+    {
+      "file": "CHIFFRAGE_ESTIME_REEL.xlsx",
+      "bytes": 9436,
+      "sha256": "a7ddce6d6fe1f9a762989ee886784c5dc748cc7da8b265569fb81e8a059a5b61"
+    },
+    {
+      "file": "demonstration-finess-resultat.json",
+      "bytes": 2322,
+      "sha256": "b818967203627a664451ad54c2dc9eefb1e004043bc6af4c623b69144c573569"
+    },
+    {
+      "file": "demonstration-finess.cjs",
+      "bytes": 1905,
+      "sha256": "5594f61ca53494db617d720ec5919975dde61aaaaca2585f45b05befa857e9b1"
+    },
+    {
+      "file": "DOSSIER_RENDU.docx",
+      "bytes": 46763,
+      "sha256": "6ab90a18714aef7eb3702502a91a6afacec0a91f6d749360ce92275f7c74a57e"
+    },
+    {
+      "file": "generate-pitch.py",
+      "bytes": 4358,
+      "sha256": "6cf581f4e0c9a58e917697095599a306b87f359833f88eba7cc6e959c989d45c"
+    },
+    {
+      "file": "InfiMatch_Soutenance_2026-09-23.pdf",
+      "bytes": 90838,
+      "sha256": "565c565f363a85b78e98e25e70cacc466607a813d44ffc10601656c45d8812e2"
+    },
+    {
+      "file": "InfiMatch_Soutenance_2026-09-23.pptx",
+      "bytes": 69420,
+      "sha256": "1e31f94dd9e9274b6520853d278373151fcacdf30b13fe9c481de2e133fab15a"
+    },
+    {
+      "file": "n8n/discord-relay.json",
+      "bytes": 3120,
+      "sha256": "2ef9ac9ea883d23940b97083ea91314b6208f68ae8b4ad8fadd8dc24895ecbd5"
+    },
+    {
+      "file": "n8n/InfiMatch-production-cancellation.json",
+      "bytes": 2480,
+      "sha256": "af3cc86c18199cf68ca25f6e75896a3a48b458b89cda398d466bd32cf90de5e3"
+    },
+    {
+      "file": "n8n/InfiMatch-production-confirmation.json",
+      "bytes": 2480,
+      "sha256": "783c3101e45e9c52fa8b8ba6dd6ab62b7637b4f1ac9cbbb5c690e7e2feec4f99"
+    },
+    {
+      "file": "n8n/InfiMatch-production-import-France-Travail.json",
+      "bytes": 5043,
+      "sha256": "3c4c56182a31efbbafcc57e2d7eb5ff00641a67d5e494ba73f18a4bc498fda2f"
+    },
+    {
+      "file": "n8n/InfiMatch-production-import-JobsPipe.json",
+      "bytes": 5028,
+      "sha256": "bb3e61776efb0ef43deabc98927525c1147614e97191bce7be85497bcf6e8d81"
+    },
+    {
+      "file": "n8n/InfiMatch-production-maintenance-quotidienne.json",
+      "bytes": 1830,
+      "sha256": "9adb79918cf6470bf7a125c894a368c74edb1b7eed0b00983f7afa3028423f9c"
+    },
+    {
+      "file": "n8n/InfiMatch-production-matches.json",
+      "bytes": 2465,
+      "sha256": "eaf7daca77ee637beee232790899349734d44094c3681d6996b445f534a69b76"
+    },
+    {
+      "file": "n8n/InfiMatch-production-reminders.json",
+      "bytes": 1793,
+      "sha256": "68d8f021178797df696692dcd615697868d098c986596470ac780983d80c2a21"
+    },
+    {
+      "file": "n8n/InfiMatch-production-reprise-et-rappels.json",
+      "bytes": 5548,
+      "sha256": "ca995a44e75f35104b65e0328a9313849099033314f8ec72f4ede6bca2bfcc02"
+    },
+    {
+      "file": "n8n/manifest-source.json",
+      "bytes": 4683,
+      "sha256": "af0a578f5587a0b1e49ef5739e63f33df521fef1c1563d01d99e663113d2832f"
+    },
+    {
+      "file": "README.md",
+      "bytes": 2130,
+      "sha256": "643e718e4b0334ebd91daf141395f880c7d883d25bb19c81a3da5d413ef00126"
+    },
+    {
+      "file": "slides.json",
+      "bytes": 10036,
+      "sha256": "0b4393ce397fd86ec5aeaf96ac2fd92bd9bdbde258411f6364bb1184f092fca0"
+    },
+    {
+      "file": "validation-layout.json",
+      "bytes": 2265,
+      "sha256": "22636a10b8afc82e1f8dd7a1e037c30c7e580e2fce34a914197c8c02088595b0"
+    },
+    {
+      "file": "VALIDATION.json",
+      "bytes": 324,
+      "sha256": "d5aab1c9191719b9c6b776eedacd10bee6258a7b1a1e1c5d7d4accc7ade0a48a"
+    }
+  ]
+}

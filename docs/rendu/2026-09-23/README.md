@@ -1,0 +1,23 @@
+# InfiMatch — les sept livrables
+État au 23 septembre 2026. Référence applicative : e81282d49aeeb07fe86fc34483122b54ec45ec35. Actualisation après le POC, sans antidater les pièces au J+2.
+
+| Livrable attendu | Document | État |
+| --- | --- | --- |
+| Cahier des charges J+2 | [CDC et roadmap](01_CAHIER_DES_CHARGES.md) | Synthèse des exigences et estimations conservées ; preuve de validation J+2 à fournir |
+| Code frontend et backend | [Installation](02_DEPOT_ET_INSTALLATION.md) | Code complet et README dans le dépôt |
+| Workflows nocode | [Notice](03_WORKFLOWS_N8N.md), [JSON](n8n/) | Neuf exports des versions publiées observées le 23 septembre |
+| Données publiques | [Nettoyage](04_DONNEES_PUBLIQUES.md), [script](demonstration-finess.cjs) | Fonction de normalisation réellement utilisée par l'application |
+| Étude de marché | [Étude sourcée](05_ETUDE_DE_MARCHE.md) | Sources primaires et hypothèses commerciales distinguées |
+| Chiffrage réel | [Méthode](06_CHIFFRAGE_REEL.md), [Excel](CHIFFRAGE_ESTIME_REEL.xlsx), [CSV](CHIFFRAGE_ESTIME_REEL.csv) | Estimations remplies ; heures humaines à renseigner |
+| Pitch | [PowerPoint](InfiMatch_Soutenance_2026-09-23.pptx), [PDF](InfiMatch_Soutenance_2026-09-23.pdf), [texte oral](07_PITCH_ORAL.md) | Douze diapositives, quinze minutes, quatre rôles à attribuer |
+
+[Dossier modifiable](DOSSIER_RENDU.docx) · [Preuves et réserves](08_PREUVES_ET_RESERVES.md) · [Manifeste](MANIFEST.json).
+
+## Dépôts
+- [Epitech — main](https://github.com/EpitechMscProPromo2027/D-WEB-901-PAR-9-1-InteriMatch-1/tree/main)
+- [Yves — Main](https://github.com/lebretyves/Infimactch_Prod/tree/Main)
+
+Les dépôts sont privés : accorder l'accès au correcteur. Une réponse 404 peut provenir d'un accès manquant.
+
+## Finalisation humaine
+Renseigner les temps réels et leurs justificatifs ; joindre la validation du cadrage J+2 ; attribuer les prises de parole ; répéter la démonstration. Aucun entretien client ou résultat commercial n'est inventé. Les exports privés contenant les mots de passe restent hors de ce dossier et de Git.

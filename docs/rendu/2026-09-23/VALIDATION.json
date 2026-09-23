@@ -1,0 +1,13 @@
+{
+  "slides": 12,
+  "pdfPages": 12,
+  "durationSeconds": 900,
+  "speakerNotes": true,
+  "wordDocumentReadable": true,
+  "estimatedMinHours": 348,
+  "estimatedMaxHours": 528,
+  "actualHoursMissing": 18,
+  "localLinksBroken": 0,
+  "finessDemo": "seven checks passed, synthetic data",
+  "n8nPublishedExports": 9
+}

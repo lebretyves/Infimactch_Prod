@@ -1,0 +1,86 @@
+{
+  "scope": "Synthetic illustration, not a downloaded public extract",
+  "normalizer": "backend/src/reference-data/finess.ts#normalizeFiness",
+  "before": {
+    "generatedAt": "2026-09-01T00:00:00Z",
+    "pmej": [
+      {
+        "informationsGeneralesPMEJ": {
+          "numFinessPm": "010000001"
+        },
+        "ege": [
+          {
+            "informationsGeneralesEGE": {
+              "numFinessEge": "010000002",
+              "nomEgeLong": "  Etablissement FICTIF de demonstration  "
+            },
+            "etatObjet": "A",
+            "adresse": [
+              {
+                "ligneQuatre": "  10 rue EXEMPLE  ",
+                "codePostal": "01000",
+                "ligneAcheminement": "  VILLE FICTIVE  ",
+                "coordonneesGeographique": {
+                  "directionLongitude": "5.24",
+                  "directionLatitude": "46.20"
+                }
+              }
+            ]
+          },
+          {
+            "informationsGeneralesEGE": {
+              "numFinessEge": "2A0000001",
+              "nomEgeCourt": "FICTIF sans coordonnees"
+            },
+            "etatObjet": "F",
+            "adresse": [
+              {
+                "coordonneesGeographique": {
+                  "coordonneeX": "872835",
+                  "coordonneeY": "6569568"
+                }
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "after": [
+    {
+      "finess": "010000002",
+      "legal_finess": "010000001",
+      "name": "Etablissement FICTIF de demonstration",
+      "status": "A",
+      "address": "10 rue EXEMPLE",
+      "postal_code": "01000",
+      "city": "VILLE FICTIVE",
+      "category": null,
+      "longitude": 5.24,
+      "latitude": 46.2,
+      "coordinate_source": "SOURCE_DIRECTION_DEGREES"
+    },
+    {
+      "finess": "2A0000001",
+      "legal_finess": "010000001",
+      "name": "FICTIF sans coordonnees",
+      "status": "F",
+      "address": null,
+      "postal_code": null,
+      "city": null,
+      "category": null,
+      "longitude": null,
+      "latitude": null,
+      "coordinate_source": null
+    }
+  ],
+  "checks": {
+    "leadingZero": true,
+    "corsicanId": true,
+    "trim": true,
+    "degreeCoordinates": true,
+    "projectedCoordinatesRejected": true,
+    "closedStatusRetained": true,
+    "duplicateRejected": true
+  }
+}

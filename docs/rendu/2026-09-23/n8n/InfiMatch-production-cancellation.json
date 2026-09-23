@@ -1,0 +1,99 @@
+{
+  "name": "InfiMatch production - cancellation",
+  "nodes": [
+    {
+      "id": "ceeedeaa-fd0e-4860-8e07-fb5227415db8",
+      "name": "Reception",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        0,
+        0
+      ],
+      "webhookId": "6ef22020-863a-4e69-bd60-02fb5a240f26",
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "infimatch-prod/cancellation",
+        "authentication": "headerAuth",
+        "responseMode": "lastNode",
+        "options": {}
+      }
+    },
+    {
+      "id": "9c982842-0c34-47bf-9170-2b8d4c87b62a",
+      "name": "Valider evenement",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        220,
+        0
+      ],
+      "parameters": {
+        "jsCode": "const id=$json.body?.eventId;if(typeof id!=='string'||!/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(id))throw new Error('Invalid event');return [{json:{eventId:id}}];"
+      }
+    },
+    {
+      "id": "a2a69603-341a-4a56-8e38-fe9986f2a144",
+      "name": "Backend",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        440,
+        0
+      ],
+      "parameters": {
+        "method": "POST",
+        "url": "={{ \"https://infimactch-prod-backend.vercel.app/api/v1/internal/automation/cancellation/\" + $json.eventId }}",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "X-N8N-Execution-Id",
+              "value": "={{ $execution.id }}"
+            },
+            {
+              "name": "X-N8N-Workflow-Id",
+              "value": "={{ $workflow.id }}"
+            }
+          ]
+        },
+        "options": {
+          "timeout": 240000
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Reception": {
+      "main": [
+        [
+          {
+            "node": "Valider evenement",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Valider evenement": {
+      "main": [
+        [
+          {
+            "node": "Backend",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "saveDataErrorExecution": "none",
+    "saveDataSuccessExecution": "none",
+    "saveManualExecutions": false,
+    "saveExecutionProgress": false
+  }
+}
