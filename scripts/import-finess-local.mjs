@@ -12,9 +12,11 @@ import { rename, unlink } from "node:fs/promises";
 import { basename, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { spawn } from "node:child_process";
+import { createRequire } from "node:module";
 import { pipeline } from "node:stream/promises";
 import { createHash } from "node:crypto";
 
+const require = createRequire(import.meta.url);
 const ROOT = resolve(import.meta.dirname, "..");
 const OUT_DIR = resolve(ROOT, "data/public");
 const DATASET_API = "https://www.data.gouv.fr/api/1/datasets/finess-structures-1/";
@@ -80,17 +82,18 @@ async function download(url, dest) {
   return { sha256, size };
 }
 
-function runImport(file, sourceUrl) {
+export function runImport(file, sourceUrl, spawnImpl = spawn) {
   return new Promise((resolvePromise, reject) => {
     console.log("Importing into Postgres (may take a few minutes)…");
-    const child = spawn(
-      "npx",
-      ["tsx", "src/cli.ts", "import-finess", "--file", file, "--source-url", sourceUrl],
+    const child = spawnImpl(
+      process.execPath,
+      [require.resolve("tsx/cli"), "src/cli.ts", "import-finess", "--file", file, "--source-url", sourceUrl],
       {
         cwd: resolve(ROOT, "backend"),
         stdio: "inherit",
         env: process.env,
-        shell: process.platform === "win32",
+        shell: false,
+        windowsHide: true,
       },
     );
     child.on("error", reject);

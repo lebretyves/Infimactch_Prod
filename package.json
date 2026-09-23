@@ -39,6 +39,7 @@
     "db:migrate:vault": "node scripts/security/migrate.mjs",
     "start:https": "node scripts/security/start-https.mjs",
     "coverage:unit": "npm run coverage:unit -w backend",
+    "test:finess-import": "node scripts/test-import-finess-local.mjs",
     "finess:import": "node scripts/import-finess-local.mjs",
     "finess:import:force": "node scripts/import-finess-local.mjs --force"
   },

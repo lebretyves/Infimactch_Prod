@@ -17,6 +17,8 @@ jobs:
       - name: Check documentation and workflow consistency
         run: python3 scripts/check-repository-consistency.py
       - run: npm ci
+      - name: Validate FINESS import helper without network or database writes
+        run: npm run test:finess-import
       - name: Check encrypted archive authentication
         run: node --test scripts/security/legacy-archive.test.mjs
       - run: npm run typecheck && npm run build

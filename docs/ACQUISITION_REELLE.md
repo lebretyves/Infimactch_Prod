@@ -68,3 +68,11 @@ Le fichier brut n'entre pas dans le bundle Git ; il doit être conservé sépar�
 La cle configuree a permis un appel reel a Practitioner : HTTP 200, Bundle FHIR de recherche et resultat NOT_FOUND sur le numero synthetique 00000000000. Aucun profil n'a ete modifie. Ce test valide l'acces et le cas absence, pas le cas FOUND sur un professionnel reel. Preuve : docs/proofs/ans-fhir-live.json (proofs/ans-fhir-live.json depuis docs).
 
 Les anciens constats de cle manquante sont historiques. Restent notamment le controle positif sur un RPPS reel autorise et la recette complete du parcours. La cle et les fichiers .env restent exclus de Git.
+
+### Script automatique intégré le 23 septembre 2026
+
+Le commit `25227b1` de mbabedse7ra a été repris dans les deux branches principales avec sa provenance. Les commandes `npm run finess:import` et `npm run finess:import:force` téléchargent le référentiel officiel puis lancent son import dans la base configurée. La commande `coverage:unit` reste disponible.
+
+Le lancement du sous-processus a été adapté pour Windows : appel direct de Node/tsx, sans interpréteur de commandes, avec conservation des arguments contenant des espaces. `npm run test:finess-import` vérifie la sélection de la ressource officielle, les erreurs HTTP, l'absence de ressource, le refus d'une ressource hors du jeu FINESS et la remontée des erreurs du sous-processus. Ce contrôle est également exécuté dans la CI, sans accès réseau ni écriture en base.
+
+Validation locale : tests du script réussis, contrôle de syntaxe réussi et lancement réel de `import-finess --help` réussi. Aucun téléchargement du référentiel ni import en production n'a été exécuté pour cette intégration. Il s'agit d'une commande à lancer explicitement, pas d'une nouvelle tâche planifiée.
