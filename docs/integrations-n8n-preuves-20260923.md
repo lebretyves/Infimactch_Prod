@@ -1,4 +1,4 @@
-﻿# Connexions API, workflows n8n et preuves de tests
+# Connexions API, workflows n8n et preuves de tests
 
 État documentaire vérifié le 23 septembre 2026 sur la version consolidée basée sur Main `7cc590a`, complétée par les tests unitaires. La présence d'une intégration dans le code ne garantit pas son activation actuelle en production.
 
@@ -26,7 +26,7 @@ PostgreSQL/PostGIS, MongoDB et Vault sont des connexions d'infrastructure. Verce
 
 - `workflows/confirmation.json`, `matches.json`, `reminders.json` : workflows de recette isolée, utilisés par `scripts/security/isolated.mjs`. Confirmation et annulation partagent un workflow ; les rappels ont un déclenchement horaire.
 - `docs/n8n/InfiMatch-production-*.json` : sept définitions destinées à n8n Cloud. Le configurateur retire les références de credentials lors de l'export ; il faut les associer à nouveau lors d'un import.
-- `docs/n8n/maintenance-quotidienne.json` : maintenance séparée, dont l'activation n'est pas attestée dans l'audit des sept workflows.
+- `docs/n8n/maintenance-quotidienne.json` : maintenance séparée, dont l'activation est confirmée dans la nouvelle lecture du 23 septembre.
 - `docs/n8n/*-test.json` : essais manuels Discord / Teams. `discord-messages.json` est un catalogue, pas un workflow importable. Le relais Discord a son modèle dans `workflows/discord-relay.template.json`.
 
 | Fichier dans docs/n8n | Fonction / fréquence du JSON |
@@ -41,7 +41,7 @@ PostgreSQL/PostGIS, MongoDB et Vault sont des connexions d'infrastructure. Verce
 
 **Écart historique confirmé :** l'observation n8n du 19 septembre 2026 à 21:05 UTC relevait un déclenchement toutes les **30 minutes** pour « reprise et rappels » (`CDQaIucF4whGsJjg`), contre **4 heures** dans le dépôt et son générateur. Les noms des nœuds des six autres workflows et les horaires d'import concordent avec les métadonnées observées. Cela ne prouve pas l'égalité complète des paramètres et des connexions.
 
-La comparaison directe du 23 septembre n'a pas abouti : Firefox est ouvert, mais sa session n'est pas accessible aux outils. Les captures évoquées ne sont pas disponibles dans le fil. Un export des versions actuellement publiées dans n8n Cloud reste nécessaire. Aucun workflow n'a été déclenché ou modifié pendant l'inspection. Les JSON du dépôt ne sont pas certifiés identiques à la production actuelle.
+La lecture authentifiée dans Firefox a finalement abouti le 23 septembre : neuf workflows actifs ont été exportés depuis leur version publiée. Voir [les JSON et la comparaison](n8n/published-20260923/README.md). Le nœud nommé « Toutes les 30 minutes » est actuellement réglé sur quatre heures : son libellé est ancien. Aucun workflow n’a été modifié ni exécuté.
 
 ## Tests et preuves
 

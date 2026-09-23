@@ -1,4 +1,4 @@
-﻿# Synchronisation des branches principales — 23 septembre 2026
+# Synchronisation des branches principales — 23 septembre 2026
 
 Demande : même contenu final dans `lebretyves/Infimactch_Prod:Main` et `EpitechMscProPromo2027/D-WEB-901-PAR-9-1-InteriMatch-1:main`.
 
@@ -11,3 +11,5 @@ Les sauvegardes distantes conservent les deux états antérieurs. La publication
 Preuve unitaire : 643 tests réussis, 95,07 % des lignes backend, sans contribution des tests d'intégration. Voir `docs/proofs/unit-coverage-20260923/`. Une publication Git ne prouve pas que tous les projets Vercel sont déployés.
 
 Les workflows n8n ne sont ni modifiés ni déclenchés par cette synchronisation. L'état de la comparaison Cloud est indiqué dans la note API/n8n.
+
+La lecture Cloud a ensuite abouti : les neuf exports publiés et leur comparaison figurent dans `docs/n8n/published-20260923/`.
