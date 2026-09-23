@@ -1,0 +1,25 @@
+﻿{
+    "checkedAtLocal":  "2026-09-23T17:26:00+02:00",
+    "timePrecision":  "minute as displayed by administration",
+    "method":  "Existing production admin infrastructure page in Firefox; no cookie extraction, no test account, no test document",
+    "url":  "https://infimatch-admin.vercel.app/#/infrastructure",
+    "backendVersion":  "1bc970b38efb5f19b202f5e30edbcef767f9d335",
+    "checks":  [
+                   {
+                       "latencyMs":  84,
+                       "name":  "MongoDB",
+                       "operation":  "Mongoose connection awaited, then MongoDB admin ping executed by Vercel",
+                       "state":  "ready"
+                   },
+                   {
+                       "latencyMs":  287,
+                       "name":  "PostgreSQL/PostGIS",
+                       "operation":  "SELECT PostGIS_Version() executed by Vercel",
+                       "state":  "ready"
+                   }
+               ],
+    "limits":  [
+                   "Connectivity check only, not a complete matching workflow or backup restore",
+                   "Local DNS issue remains; alternative resolvers and system CA used successfully in separate local test"
+               ]
+}

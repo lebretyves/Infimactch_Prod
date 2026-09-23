@@ -1,6 +1,16 @@
 # Audit du projet — 23 septembre 2026
 
-## Résultat
+## Mise à jour — MongoDB vérifié depuis Vercel à 17 h 26
+
+**La connexion MongoDB de production est maintenant confirmée : état disponible, ping en 84 ms.** Le contrôle a été exécuté par la route existante `GET /api/v1/admin/infrastructure`, consultée dans Firefox avec la session administrateur normale. Cette route attend la connexion Mongoose puis exécute `admin().ping()` depuis Vercel. PostgreSQL/PostGIS est également disponible (287 ms). Version serveur observée : `1bc970b38efb5f19b202f5e30edbcef767f9d335`.
+
+[Preuve du contrôle de production](../proofs/full-project-20260923/vercel-mongo-connectivity.json).
+
+Le constat MongoDB ci-dessous décrit le blocage du poste lors de la campagne initiale : il ne constitue plus une incertitude sur la connexion de production. Le DNS local reste à corriger durablement ; un essai local avec DNS alternatifs et certificats système a réussi sans désactiver TLS. Ce contrôle ne valide pas une sauvegarde/restauration ni tout le parcours de matching. Les autres problèmes de l'audit restent ouverts.
+
+Aucun compte ni document fictif n'a été créé. Le contrôle a utilisé l'interface existante, sans extraction de cookie ni modification du code ou des réglages de production.
+
+## Résultat de la campagne initiale
 
 **Les tests applicatifs réussissent, mais quatre points opérationnels ou techniques restent ouverts.** Audit du commit `eb9bd26696da2d8402f29e8562567a8f1285f633`, présent sur Yves `Main` et Epitech `main`. Les lectures de production ont été réalisées vers 16 h 39–16 h 45, heure de Paris. Aucun réglage de visibilité, compte, mission, workflow ou secret de production n'a été modifié par cet audit.
 
