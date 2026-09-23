@@ -73,7 +73,7 @@ export function SourceVisibilityPanel({ user, action, version }: Props) {
               path: `/operations/sources/${provider}/visibility`,
               body: { visible: !visible },
               consequence: visible
-                ? `Les offres ${name} seront retirées de l’interface intérimaire dès sa prochaine actualisation. Les offres de l’autre source et les missions internes restent disponibles.`
+                ? `Les offres ${name} seront retirées de l’interface intérimaire dès sa prochaine actualisation. Les missions internes restent disponibles.`
                 : `Les offres ${name} seront à nouveau affichées dans l’interface intérimaire dès sa prochaine actualisation.`,
             })}>{known ? `${visible ? 'Désactiver' : 'Réactiver'} ${name}` : `${name} indisponible`}</Button>
           </section>;
