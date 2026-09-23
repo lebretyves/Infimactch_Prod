@@ -52,3 +52,35 @@ export function IncidentList({ user, action, version }: Props) {
   return <><p className="admin-caption">Suivi déclaratif des incidents. Un incident résolu ne constitue pas un contrôle automatique de disponibilité.</p><ReadOnly allowed={can} /><Button disabled={!can} onClick={() => action({ title: 'Signaler un incident', path: '/incidents', inputs: [{ name: 'service', label: 'Service concerné', options: incidentServices }, { name: 'impact', label: 'Impact observé', type: 'text', maxLength: 500 }, { name: 'ownerLabel', label: 'Responsable du suivi', type: 'text', maxLength: 100 }], consequence: 'Cet incident et son impact seront visibles des opérateurs habilités. Ne saisissez aucun secret ni donnée personnelle dans ce suivi.' })}>Signaler un incident</Button><DataState request={req}>{d => <><Table rows={d.items || []} cols={[['service', 'Service'], ['state', 'Statut'], ['impact', 'Impact'], ['owner_label', 'Responsable'], ['started_at', 'Début'], ['resolved_at', 'Résolution']]} extra={row => <IncidentActions row={row} user={user} action={action} version={version} />} /><Pager total={d.total || 0} count={d.items?.length || 0} /></>}</DataState></>;
 }
 export function PrivacyRequests({ version }: { version: number }) { const [params] = useSearchParams(); const offset = Math.max(0, Number(params.get('offset')) || 0); const req = useData(`/privacy-requests?limit=20&offset=${offset}`, version); return <><p className="admin-caption">Suivi en lecture seule des demandes de confidentialité. Aucune approbation ni suppression n’est déclenchée depuis cet écran.</p><DataState request={req}>{d => <><Table rows={d.items || []} cols={[['id', 'Demande'], ['account_id', 'Compte'], ['status', 'État'], ['requested_at', 'Demande reçue'], ['approved_at', 'Approbation'], ['completed_at', 'Fin']]} /><Pager total={d.total || 0} count={d.items?.length || 0} /></>}</DataState></>; }
+
+export function SourceVisibilityPanel({ user, action, version }: Props) {
+  const request = useData('/operations', version);
+  const canWrite = permission(user, 'sources:write');
+  return <section className="admin-panel" aria-labelledby="external-offers-title">
+    <h2 id="external-offers-title">Offres externes sur le site</h2>
+    <p>Désactivez une source pour retirer ses offres de l’accueil, de la recherche, des fiches et des favoris des intérimaires. Si les deux sources sont désactivées, aucune offre externe n’est affichée.</p>
+    <DataState request={request}>{data => <>
+      <div className="admin-service-list">
+        {['FRANCE_TRAVAIL', 'JOBSPIPE'].map(provider => {
+          const source = Array.isArray(data.sources) ? data.sources.find((row: Row) => row.provider === provider) : undefined;
+          const known = typeof source?.visible === 'boolean';
+          const visible = source?.visible === true;
+          const name = readable[provider];
+          return <section className="admin-service" key={provider} aria-label={name}>
+            <div><h3>{name}</h3><Badge value={known ? visible ? 'Offres affichées' : 'Offres masquées' : 'État indisponible'} /></div>
+            <Button variant="outline" disabled={!canWrite || !known} onClick={() => action({
+              title: `${visible ? 'Désactiver' : 'Réactiver'} ${name}`,
+              path: `/operations/sources/${provider}/visibility`,
+              body: { visible: !visible },
+              consequence: visible
+                ? `Les offres ${name} seront retirées de l’interface intérimaire dès sa prochaine actualisation. Les offres de l’autre source et les missions internes restent disponibles.`
+                : `Les offres ${name} seront à nouveau affichées dans l’interface intérimaire dès sa prochaine actualisation.`,
+            })}>{known ? `${visible ? 'Désactiver' : 'Réactiver'} ${name}` : `${name} indisponible`}</Button>
+          </section>;
+        })}
+      </div>
+      {!canWrite && <p className="admin-caption">Votre rôle permet la consultation uniquement.</p>}
+      <p className="admin-caption">Les offres sont conservées et les imports continuent. La pause des imports se règle dans « Pilotage des imports ».</p>
+    </>}</DataState>
+  </section>;
+}

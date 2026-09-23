@@ -1,0 +1,1 @@
+PASS dashboard: disable/re-enable each provider, cancel, server failure without false success, CSRF/reason, read-only and missing-state protection, no unauthorized panel, mobile/desktop. Mock API only; production visibility unchanged.
