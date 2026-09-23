@@ -179,6 +179,7 @@ function Form({
   async function submit(e: FormEvent) {
     e.preventDefault();
     if (locked.current) return;
+    const draft = !mission && (e.nativeEvent as SubmitEvent).submitter?.getAttribute("value") === "draft";
     locked.current = true;
     setBusy(true);
     setError("");
@@ -216,11 +217,11 @@ function Form({
         end,
         specialty: v.block === "SPECIALIZED" ? v.specialty : undefined,
       };
-      const content = JSON.stringify(body);
+      const content = JSON.stringify({ body, draft });
       if (key.current.body !== content)
         key.current = { body: content, id: crypto.randomUUID() };
       const result = await api<{ id: string }>(
-        mission ? "/missions/" + mission.id : "/missions/open",
+        mission ? "/missions/" + mission.id : draft ? "/missions" : "/missions/open",
         { method: mission ? "PUT" : "POST", body, key: key.current.id },
       );
       navigate("/gestion/missions/" + (mission?.id || result.id) + "?" + new URLSearchParams({ returnTo }));
@@ -531,11 +532,16 @@ function Form({
             })
           }
         />
-        <Button type="submit" disabled={!linked.length} loading={busy}>
+        <Button type="submit" value="open" disabled={!linked.length} loading={busy}>
           {mission
             ? "Enregistrer les modifications"
             : "Créer et publier la mission"}
         </Button>
+        {!mission && (
+          <Button type="submit" value="draft" variant="outline" disabled={!linked.length || busy}>
+            Enregistrer en brouillon
+          </Button>
+        )}
       </fieldset>
       <ButtonLink
         to={
@@ -545,7 +551,7 @@ function Form({
         }
         variant="ghost"
       >
-        Annuler les modifications
+        {mission ? "Annuler les modifications" : "Annuler"}
       </ButtonLink>
     </form>
   );
@@ -576,7 +582,7 @@ export default function MissionForm() {
             ? "Compléter et publier une mission"
             : "Créer une mission"}
       </h1>
-      {!id && <p>Renseignez les conditions de la mission, puis validez « Créer et publier la mission » pour rendre l’annonce visible aux intérimaires.</p>}
+      {!id && <p>Renseignez les conditions de la mission, puis validez « Créer et publier la mission » pour rendre l’annonce visible aux intérimaires, ou enregistrez-la en brouillon pour la publier plus tard.</p>}
       {r.loading ? (
         <p role="status">Chargement…</p>
       ) : r.error ? (

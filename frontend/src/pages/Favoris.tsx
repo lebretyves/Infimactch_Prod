@@ -1,11 +1,16 @@
 ﻿import { useState } from "react";
-import { Link } from "react-router";
+import { Link, Navigate } from "react-router";
+import { useAuth } from "@/context/AuthContext";
 import { useRemote } from "@/lib/useRemote";
 import { favorites, removeFavorite, type Favorite } from "@/services/market";
 import { Button, ButtonLink } from "@/ui/Button";
 import { Icon } from "@/ui/Icon";
 import s from "./MarketPages.module.css";
 export default function Favoris() {
+  const { user } = useAuth();
+  return user?.role === "interimaire" ? <Favorites /> : <Navigate to="/accueil" replace />;
+}
+function Favorites() {
   const [busy, setBusy] = useState(""),
     [error, setError] = useState("");
   const r = useRemote(favorites, "favorites");

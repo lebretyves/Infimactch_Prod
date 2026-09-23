@@ -99,6 +99,11 @@ svg {
   outline: none;
 }
 
+/* Headings only receive focus programmatically to announce a new view; they are not interactive. */
+:is(h1, h2)[tabindex="-1"]:focus {
+  outline: none;
+}
+
 .accent {
   color: var(--brand-800);
 }

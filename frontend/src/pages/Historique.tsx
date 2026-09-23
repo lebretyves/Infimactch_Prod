@@ -1,6 +1,7 @@
 import { BankReminder } from "@/components/BankReminder";
 import { useState } from "react";
-import { Link } from "react-router";
+import { Link, Navigate } from "react-router";
+import { useAuth } from "@/context/AuthContext";
 import { useRemote } from "@/lib/useRemote";
 import { api } from "@/services/api";
 import { date, statusLabels } from "@/services/market";
@@ -47,6 +48,10 @@ const labels: Record<string, string> = {
   cancelled: "Annulée",
 };
 export default function Historique() {
+  const { user } = useAuth();
+  return user?.role === "interimaire" ? <History /> : <Navigate to="/accueil" replace />;
+}
+function History() {
   const [month, setMonth] = useState(""),
     [year, setYear] = useState(""),
     [status, setStatus] = useState(""),
