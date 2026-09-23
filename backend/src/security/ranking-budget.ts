@@ -4,7 +4,7 @@ import { performance } from 'node:perf_hooks';
 import type { SqlClient } from '../database/database';
 import { sharedRateLimit } from './shared-rate-limit';
 
-export const rankingRoutes = ['/api/v1/me/matches', '/api/v1/me/recommendations', '/api/v1/me/listings', '/api/v1/listings/search'];
+export const rankingRoutes = ['/api/v1/me/matches', '/api/v1/me/recommendations', '/api/v1/me/listings', '/api/v1/listings/search', '/api/v1/missions/:id/candidates'];
 /** One quota per authenticated account, shared across routes, sessions and instances. */
 export function rankingRateLimit(db: SqlClient) {
   return sharedRateLimit(db, 'ranking', {

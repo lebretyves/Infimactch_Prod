@@ -1,5 +1,5 @@
 # InfiMatch — les sept livrables
-État au 23 septembre 2026. Référence applicative : e81282d49aeeb07fe86fc34483122b54ec45ec35. Actualisation après le POC, sans antidater les pièces au J+2.
+État au 23 septembre 2026. Référence applicative : 0389f4e398d0dbc0c3af9392bb707e83ede97398. Actualisation après le POC, sans antidater les pièces au J+2.
 
 | Livrable attendu | Document | État |
 | --- | --- | --- |
@@ -21,3 +21,5 @@ Les dépôts sont privés : accorder l'accès au correcteur. Une réponse 404 pe
 
 ## Finalisation humaine
 Renseigner les temps réels et leurs justificatifs ; joindre la validation du cadrage J+2 ; attribuer les prises de parole ; répéter la démonstration. Aucun entretien client ou résultat commercial n'est inventé. Les exports privés contenant les mots de passe restent hors de ce dossier et de Git.
+
+Dernière campagne : [suivi de l’audit](../../quality/SUIVI_AUDIT_FINAL_2026-09-23.md), [preuves](../../proofs/audit-final-20260923/README.md). Les supports PDF/PPTX conservent les chiffres de leur campagne initiale ; le bilan lié ici donne les résultats les plus récents.

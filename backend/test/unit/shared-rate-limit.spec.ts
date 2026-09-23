@@ -56,9 +56,9 @@ test('ranking quota is shared across all entry points and sessions but isolated 
     app.use((_req, res) => res.json({ok:true})); return app;
   }
   const a = application(), b = application();
-  for(let i=0; i<15; i++) await request(i%2?a:b).get(rankingRoutes[i%4]!).set('test-account','account-A').expect(200);
+  for(let i=0; i<15; i++) await request(i%2?a:b).get(rankingRoutes[i%rankingRoutes.length]!.replace(':id','11111111-1111-4111-8111-111111111111')).set('test-account','account-A').expect(200);
   for(const route of rankingRoutes) {
-    const denied = await request(b).get(route).set('test-account','account-A').expect(429);
+    const denied = await request(b).get(route.replace(':id','11111111-1111-4111-8111-111111111111')).set('test-account','account-A').expect(429);
     assert.equal(denied.body.code,'RANKING_RATE_LIMIT'); assert.ok(denied.headers['retry-after']);
   }
   await request(a).get(rankingRoutes[0]!).set('test-account','account-B').expect(200);

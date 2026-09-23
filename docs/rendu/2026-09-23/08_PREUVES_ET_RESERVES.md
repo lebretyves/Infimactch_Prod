@@ -1,4 +1,10 @@
 # Preuves et réserves
+
+## Actualisation après audit
+
+Référence applicative `0389f4e398d0dbc0c3af9392bb707e83ede97398` : **661/661 unités backend**, **95,12 % de couverture des lignes**, **188/188 intégrations**, **81/81 unités frontend** et **18/18 contrôles Vault**. [Preuves complètes](../../proofs/audit-final-20260923/README.md) et [réserves restantes](../../quality/SUIVI_AUDIT_FINAL_2026-09-23.md).
+
+## Campagne historique du support de pitch
 État au 23 septembre 2026, référence applicative e81282d. Les campagnes ci-dessous sont distinctes.
 
 | Contrôle | Résultat | Preuve |

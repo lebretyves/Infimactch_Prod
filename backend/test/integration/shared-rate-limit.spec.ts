@@ -71,6 +71,6 @@ test('all ranking routes consume one PostgreSQL quota for the same account acros
  const actor=randomUUID();
  function application(){ const app=express(); app.use((req,_res,next)=>{req.session={userId:actor} as any;next();}); app.use(rankingRoutes,rankingRateLimit(db));app.use((_req,res)=>res.json({ok:true}));return app; }
  const a=application(),b=application();
- for(let i=0;i<15;i++)await request(i%2?a:b).get(rankingRoutes[i%4]!).expect(200);
- for(const route of rankingRoutes)await request(b).get(route).expect(429);
+ for(let i=0;i<15;i++)await request(i%2?a:b).get(rankingRoutes[i%rankingRoutes.length]!.replace(':id','11111111-1111-4111-8111-111111111111')).expect(200);
+ for(const route of rankingRoutes)await request(b).get(route.replace(':id','11111111-1111-4111-8111-111111111111')).expect(429);
 });
