@@ -1,0 +1,16 @@
+
+> interimatch@0.1.0 test:pwa
+> node --test scripts/test-pwa.mjs
+
+✔ Service worker never intercepts writes, external URLs, API, admin or documents (12.1038ms)
+✔ Service worker only activates an update on explicit activation message (0.8201ms)
+✔ Logout cache purge removes application caches without deleting other applications (33.9661ms)
+✔ retired catalogue navigations use the network redirect and never a cached gallery (1.62ms)
+ℹ tests 4
+ℹ suites 0
+ℹ pass 4
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 277.0847

@@ -1,0 +1,33 @@
+[
+  {
+    "url": "https://infimactch-prod-backend-l5bc.vercel.app/",
+    "status": 200,
+    "contentType": "text/html; charset=utf-8",
+    "assets": [
+      "/assets/index-DdMTTclL.js",
+      "/assets/index-CjGG_hRg.css"
+    ]
+  },
+  {
+    "url": "https://infimatch-admin.vercel.app/",
+    "status": 200,
+    "contentType": "text/html; charset=utf-8",
+    "assets": [
+      "/assets/admin-Bi3K0431.js",
+      "/assets/admin-CXAESWjB.css"
+    ]
+  },
+  {
+    "url": "https://infimactch-prod-backend.vercel.app/api/v1/health",
+    "status": 200,
+    "contentType": "application/json; charset=utf-8",
+    "healthStatus": "ok"
+  },
+  {
+    "url": "https://infimactch-prod-backend.vercel.app/api/v1/listings/external?limit=1&offset=0",
+    "status": 200,
+    "contentType": "application/json; charset=utf-8",
+    "total": 0,
+    "items": 0
+  }
+]

@@ -1,0 +1,48 @@
+{
+  "checkedAt": "2026-09-23T14:44:40.842Z",
+  "pending": [
+    {
+      "pending": 1,
+      "intentionally_suppressed_demo": 1
+    }
+  ],
+  "spatialPermissions": [
+    {
+      "role": "anon",
+      "can_insert": true,
+      "can_update": true,
+      "can_delete": true
+    },
+    {
+      "role": "authenticated",
+      "can_insert": true,
+      "can_update": true,
+      "can_delete": true
+    }
+  ],
+  "collection": [
+    {
+      "provider": "FRANCE_TRAVAIL",
+      "phase": "IN_PROGRESS",
+      "status": null,
+      "retry_at": null,
+      "completed_at": null
+    },
+    {
+      "provider": "JOBSPIPE",
+      "phase": null,
+      "status": null,
+      "retry_at": "2026-10-01T00:00:00.000Z",
+      "completed_at": null
+    }
+  ],
+  "applicationRole": [
+    {
+      "rolsuper": false,
+      "rolcreatedb": false,
+      "rolcreaterole": false,
+      "schema_create": false,
+      "migration_read": false
+    }
+  ]
+}

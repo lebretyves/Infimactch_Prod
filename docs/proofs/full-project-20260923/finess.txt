@@ -1,0 +1,9 @@
+
+> infimatch@0.1.0 test:finess-import
+> node scripts/test-import-finess-local.mjs
+
+import-finess-local resolve checks passed
+Importing into Postgres (may take a few minutes)…
+Importing into Postgres (may take a few minutes)…
+Importing into Postgres (may take a few minutes)…
+PASS FINESS: latest official snapshot, HTTP/missing/invalid-source errors, shell-free Windows arguments, successful process and error propagation. No download or database import executed.

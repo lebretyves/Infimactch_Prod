@@ -1,0 +1,15 @@
+{
+  "commit": "eb9bd26696da2d8402f29e8562567a8f1285f633",
+  "deployments": [
+    {
+      "context": "Vercel \u2013 infimactch-prod-backend-l5bc",
+      "state": "success",
+      "url": "https://vercel.com/neotravel/infimactch-prod-backend-l5bc/EqK9AUGM6c7rwwPR3GmoVM64rHCD"
+    },
+    {
+      "context": "Vercel \u2013 infimactch-prod-backend",
+      "state": "success",
+      "url": "https://vercel.com/neotravel/infimactch-prod-backend/8YQ5o2AHinfjFMMYqGPngD4eKyuw"
+    }
+  ]
+}

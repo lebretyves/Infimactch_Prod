@@ -1,0 +1,46 @@
+✔ legacy archive authenticates content, key and relative filename (3.0354ms)
+✔ archive rejects traversal, absolute and alternate stream names (0.2331ms)
+✔ manifest authentication detects removed files and altered metadata (0.5784ms)
+✔ production restricted role supports direct and pooler connections (1.0356ms)
+✔ maintenance connections reject unrelated providers, lookalike hosts and missing credentials (0.3966ms)
+✔ maintenance TLS pins CA and preserves pooler username and unrelated options (0.6268ms)
+✔ missing certificate, TLS downgrades and URL overrides are refused (0.8443ms)
+✔ Vault secret payload rejects unexpected environment injection (1.0982ms)
+✔ Parent environment cannot supply stale backend or infrastructure secrets (0.7728ms)
+✔ Vault mode does not silently load secrets from the legacy .env (52.619ms)
+✔ Real Vault is initialized and unsealed on persistent Raft (72.832ms)
+✔ HTTPS rejects the local certificate without the configured CA (17.772ms)
+✖ Infrastructure role cannot read backend secrets (12.5831ms)
+✔ Invalid AppRole credentials are refused (11.8997ms)
+✖ Short-lived launcher token is revoked after use (10.0492ms)
+✔ Initial root token is absent from the recovery file after bootstrap (1.0897ms)
+ℹ tests 16
+ℹ suites 0
+ℹ pass 14
+ℹ fail 2
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 293.4205
+
+✖ failing tests:
+
+test at scripts\vault\vault.test.mjs:42:1
+✖ Infrastructure role cannot read backend secrets (12.5831ms)
+  Error: VAULT_HTTP_400 at auth/approle/login
+      at IncomingMessage.<anonymous> (file:///E:/Interimatch/worktrees/unit-coverage-95-20260923/scripts/vault/common.mjs:30:45)
+      at IncomingMessage.emit (node:events:520:35)
+      at endReadableNT (node:internal/streams/readable:1729:12)
+      at process.processTicksAndRejections (node:internal/process/task_queues:90:21) {
+    status: 400
+  }
+
+test at scripts\vault\vault.test.mjs:52:1
+✖ Short-lived launcher token is revoked after use (10.0492ms)
+  Error: VAULT_HTTP_400 at auth/approle/login
+      at IncomingMessage.<anonymous> (file:///E:/Interimatch/worktrees/unit-coverage-95-20260923/scripts/vault/common.mjs:30:45)
+      at IncomingMessage.emit (node:events:520:35)
+      at endReadableNT (node:internal/streams/readable:1729:12)
+      at process.processTicksAndRejections (node:internal/process/task_queues:90:21) {
+    status: 400
+  }

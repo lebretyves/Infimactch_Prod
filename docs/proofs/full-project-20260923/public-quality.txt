@@ -1,0 +1,1 @@
+18 responsive/semantic checks passed; install event requires click, dismiss works, sensitive API never cached, offline fallback passes.

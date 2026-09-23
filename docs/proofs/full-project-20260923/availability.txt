@@ -1,0 +1,5 @@
+
+> interimatch@0.1.0 test:availability
+> node --experimental-strip-types scripts/test-availability-slots.mjs
+
+Agenda helpers: 21 assertions passed, Paris DST verified from 3 system timezones.

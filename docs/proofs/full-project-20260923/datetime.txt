@@ -1,0 +1,5 @@
+
+> interimatch@0.1.0 test:datetime
+> node --experimental-strip-types scripts/test-paris-datetime.mjs
+
+20 assertions Paris HH:mm passed across 3 system timezones.

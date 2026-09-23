@@ -1,0 +1,229 @@
+{
+  "checkedAt": "2026-09-23T14:41:06.572Z",
+  "scope": "Read-only production aggregate diagnostics",
+  "sql": {
+    "database": [
+      {
+        "bytes": "115207315",
+        "server_started": "2026-09-18T23:22:31.217Z"
+      }
+    ],
+    "table_sizes": [
+      {
+        "relname": "finess_establishment",
+        "n_live_tup": "174741",
+        "bytes": "46292992"
+      },
+      {
+        "relname": "external_offer",
+        "n_live_tup": "5457",
+        "bytes": "39649280"
+      },
+      {
+        "relname": "spatial_ref_sys",
+        "n_live_tup": "8500",
+        "bytes": "7315456"
+      },
+      {
+        "relname": "mission",
+        "n_live_tup": "3097",
+        "bytes": "3743744"
+      },
+      {
+        "relname": "jobspipe_request_receipt",
+        "n_live_tup": "11",
+        "bytes": "950272"
+      },
+      {
+        "relname": "source_control",
+        "n_live_tup": "2",
+        "bytes": "335872"
+      },
+      {
+        "relname": "organization",
+        "n_live_tup": "650",
+        "bytes": "204800"
+      },
+      {
+        "relname": "operational_check",
+        "n_live_tup": "342",
+        "bytes": "180224"
+      },
+      {
+        "relname": "mission_email",
+        "n_live_tup": "10",
+        "bytes": "147456"
+      },
+      {
+        "relname": "audit",
+        "n_live_tup": "295",
+        "bytes": "131072"
+      }
+    ],
+    "sources": [
+      {
+        "provider": "FRANCE_TRAVAIL",
+        "enabled": true,
+        "visible": false,
+        "updated_at": "2026-09-23T14:17:57.752Z"
+      },
+      {
+        "provider": "JOBSPIPE",
+        "enabled": true,
+        "visible": false,
+        "updated_at": "2026-09-23T14:17:50.443Z"
+      }
+    ],
+    "imports": [
+      {
+        "provider": "FRANCE_TRAVAIL",
+        "status": "SUCCESS",
+        "runs": 171,
+        "latest": "2026-09-23T13:03:40.840Z"
+      },
+      {
+        "provider": "JOBSPIPE",
+        "status": "SUCCESS",
+        "runs": 10,
+        "latest": "2026-09-19T14:31:45.442Z"
+      }
+    ],
+    "pending_detail": [
+      {
+        "event": "MissionOPEN",
+        "attempts": 0,
+        "available_at": "2026-09-21T20:50:27.165Z",
+        "lease_until": null,
+        "mission_status": "OPEN",
+        "future": true,
+        "same_version": true
+      }
+    ],
+    "outbox": [
+      {
+        "event": "MatchRequested",
+        "pending": 0,
+        "exhausted": 0,
+        "oldest_pending": null
+      },
+      {
+        "event": "NotificationCreated",
+        "pending": 0,
+        "exhausted": 0,
+        "oldest_pending": null
+      },
+      {
+        "event": "MissionOPEN",
+        "pending": 1,
+        "exhausted": 0,
+        "oldest_pending": "2026-09-21T19:26:21.371Z"
+      },
+      {
+        "event": "ReminderCreated",
+        "pending": 0,
+        "exhausted": 0,
+        "oldest_pending": null
+      },
+      {
+        "event": "MissionCANCELLED",
+        "pending": 0,
+        "exhausted": 0,
+        "oldest_pending": null
+      },
+      {
+        "event": "AssignmentCreated",
+        "pending": 0,
+        "exhausted": 0,
+        "oldest_pending": null
+      }
+    ],
+    "workflows": [
+      {
+        "action": "cancellation",
+        "receipts": 2,
+        "latest": "2026-09-21T09:14:18.179Z"
+      },
+      {
+        "action": "confirmation",
+        "receipts": 5,
+        "latest": "2026-09-22T13:33:42.323Z"
+      },
+      {
+        "action": "reminder",
+        "receipts": 3,
+        "latest": "2026-09-23T14:00:57.718Z"
+      },
+      {
+        "action": "matches",
+        "receipts": 32,
+        "latest": "2026-09-22T13:31:35.761Z"
+      }
+    ],
+    "discord": [],
+    "permissions": [
+      {
+        "tablename": "account",
+        "anon_read": false,
+        "authenticated_read": false
+      },
+      {
+        "tablename": "document_blob",
+        "anon_read": false,
+        "authenticated_read": false
+      },
+      {
+        "tablename": "external_offer",
+        "anon_read": false,
+        "authenticated_read": false
+      },
+      {
+        "tablename": "mission",
+        "anon_read": false,
+        "authenticated_read": false
+      },
+      {
+        "tablename": "profile",
+        "anon_read": false,
+        "authenticated_read": false
+      },
+      {
+        "tablename": "session",
+        "anon_read": false,
+        "authenticated_read": false
+      }
+    ],
+    "external_payload": [
+      {
+        "source": "JOBSPIPE",
+        "offers": 74,
+        "all_rows_json_bytes": "893398",
+        "recommendation_scan_json_bytes": "885940"
+      },
+      {
+        "source": "FRANCE_TRAVAIL",
+        "offers": 5054,
+        "all_rows_json_bytes": "61005696",
+        "recommendation_scan_json_bytes": "60535674"
+      }
+    ],
+    "statistics_view": [
+      {
+        "nspname": "extensions"
+      }
+    ],
+    "query_stats": {
+      "errorCode": "42501"
+    },
+    "statistics_window": {
+      "errorCode": "42501"
+    }
+  },
+  "mongo": {
+    "status": "FAIL",
+    "errorType": "Error",
+    "code": "ECONNREFUSED",
+    "syscall": "querySrv",
+    "serverErrors": [],
+    "scope": "Connection from local audit machine; does not establish Vercel connectivity"
+  }
+}

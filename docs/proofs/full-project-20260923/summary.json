@@ -1,0 +1,60 @@
+{
+  "commit": "eb9bd26696da2d8402f29e8562567a8f1285f633",
+  "unit": {
+    "passed": 652,
+    "failed": 0
+  },
+  "unitCoverage": {
+    "lines": {
+      "total": 12315,
+      "covered": 11710,
+      "skipped": 0,
+      "pct": 95.08
+    },
+    "statements": {
+      "total": 12315,
+      "covered": 11710,
+      "skipped": 0,
+      "pct": 95.08
+    },
+    "functions": {
+      "total": 939,
+      "covered": 773,
+      "skipped": 0,
+      "pct": 82.32
+    },
+    "branches": {
+      "total": 5126,
+      "covered": 4611,
+      "skipped": 0,
+      "pct": 89.95
+    },
+    "branchesTrue": {
+      "total": 0,
+      "covered": 0,
+      "skipped": 0,
+      "pct": 100
+    }
+  },
+  "frontend": {
+    "passed": 81,
+    "failed": 0
+  },
+  "integration": {
+    "files": 28,
+    "tests": 185,
+    "failed": 0
+  },
+  "vaultAndSecurity": {
+    "passed": 14,
+    "failed": 2,
+    "notExecuted": 1
+  },
+  "isolatedResult": {
+    "date": "2026-09-23T14:43:55.590Z",
+    "sourceSha256": "54d4df47cc837f5961ae47ef92627da09d655847a978f596b740bdbd8f4ab998",
+    "status": "PASS",
+    "scope": "Isolated PostgreSQL, MongoDB, real n8n workflows, unit and integration coverage, security regressions"
+  },
+  "knownNpmVulnerabilities": 0
+}

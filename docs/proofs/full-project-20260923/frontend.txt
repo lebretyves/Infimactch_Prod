@@ -1,0 +1,282 @@
+
+> interimatch@0.1.0 test
+> node --test scripts/test-api.mjs scripts/test-admin-api.mjs && node --experimental-strip-types --test scripts/test-idle-session.mjs scripts/test-registration-diplomas.mjs scripts/test-registration-validation.mjs scripts/test-mission-search-model.mjs scripts/test-bank-fields.mjs scripts/test-cv-review.mjs scripts/test-help-guides.mjs scripts/test-contract-preparation.mjs scripts/test-search-area.mjs scripts/test-commute.mjs scripts/test-mission-date-range.mjs scripts/test-personal-calendar.mjs && npm run test:branches
+
+✔ Malformed admin CSRF prevents mutation (26.167ms)
+✔ Unconfirmed admin mutation is not retried and server details remain private (7.7122ms)
+✔ Admin session expiry stays observable with a malformed error body (1.7379ms)
+✔ Writes use cookie credentials, CSRF and the provided idempotency key (20.9014ms)
+✔ Only an explicit CSRF rejection retries a command and keeps the same key (2.5582ms)
+✔ A network failure never becomes mock success or silently repeats a mutation (1.8442ms)
+✔ A server eligibility rejection remains a failure with reasons (2.4996ms)
+✔ An expired session notifies the application and never restores browser-stored identity (1.7754ms)
+✔ An aborted stale unauthorized response cannot expire a newer session (2.0432ms)
+✔ Failure to prepare CSRF reports a network error without submitting registration (1.5497ms)
+✔ Google failures explain the association error without expiring another session (4.6964ms)
+✔ Google missing account directs the user to registration (1.4381ms)
+✔ Google registration expiration preserves the current authentication state (2.463ms)
+✔ An offline mutation is refused before CSRF or any network request (1.5847ms)
+✔ 429 uses Retry-After without replaying a mutation (6.1425ms)
+✔ Rate-limit durations handle seconds, HTTP dates and invalid headers (1.7837ms)
+✔ Malformed successful responses never confirm a mutation or trigger a retry (4.4484ms)
+✔ Malformed CSRF response prevents the write and malformed errors remain readable (1.2751ms)
+ℹ tests 18
+ℹ suites 0
+ℹ pass 18
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 418.169
+✔ OCR completeness accepts a verified IBAN and holder without inventing a missing BIC (1.9546ms)
+✔ an optional BIC still has to be valid when present (0.4048ms)
+✔ geo points reject incomplete or out-of-range coordinates (1.1014ms)
+✔ maps endpoint prefers coordinates and falls back to address (0.798ms)
+✔ Google Maps directions URL encodes origin and destination without an API key (0.4481ms)
+✔ Google Maps directions URL accepts an address destination (0.2503ms)
+✔ an empty first draft is valid and its request cannot overwrite assignment facts (1.3757ms)
+✔ contract note limits preserve a complete editable draft and identify the offending field (0.2509ms)
+✔ clearing a saved note is an unsaved modification; a restored note is not (0.2517ms)
+✔ DOCX bounded extraction reads deflate document, not relationships or HTML (16.7286ms)
+✔ DOCX rejects declared zip bomb and false low size (4.3847ms)
+✔ DOCX rejects DTD and damaged checksum (5.6399ms)
+✔ DOCX honours cancellation and file limits (0.917ms)
+✔ review preserves personal identity, RPPS, existing skills and independent IDE year (2.3309ms)
+✔ review rejects invalid, future or reversed diploma years and leaves original untouched (0.3048ms)
+✔ missing OCR years preserve existing years and allow incomplete new diplomas without inventing IDE year (0.1857ms)
+✔ help search ignores accents and combines terms (3.7725ms)
+✔ help guides respect roles while retaining public connection assistance (0.4686ms)
+✔ six tutorials have complete local media or an HTTPS external link and written alternatives (4.5758ms)
+✔ PDF, email and incomplete matching troubleshooting is available to both sides (0.2785ms)
+✔ warning at minute 14, logout at minute 15 (3.2487ms)
+✔ sleeping tab cannot extend an expired deadline (0.2126ms)
+Date-only range checks passed across 3 host timezones: inclusive dates, DST, overseas, exact-period preservation, shift hours, custom clocks and invalid dates.
+✔ scripts\test-mission-date-range.mjs (201.0039ms)
+✔ URL filters preserve encoded values, ignore unrelated parameters and cap input length (1.7194ms)
+✔ page URL coercion keeps the existing 1 to 501 boundary and 20 result offset (0.346ms)
+✔ last page covers exact and partial pages and never exceeds the accessible range (0.2117ms)
+✔ pagination keeps edge pages and ellipses around the current page (0.6419ms)
+✔ UTC stamps drop millis and keep Z (2.0558ms)
+✔ upcoming filter keeps only active future-or-current missions (0.7238ms)
+✔ ICS event contains escaped fields and confirmed status (1.0333ms)
+✔ ICS calendar wraps one or more events (1.5461ms)
+✔ Google Calendar URL encodes title and UTC dates without an API key (0.4902ms)
+✔ ICS folding preserves Unicode and limits every physical line to 75 UTF-8 bytes (0.5905ms)
+✔ ICS escapes every newline representation in text fields (0.5372ms)
+✔ zero-length and reversed periods cannot be exported to calendars (0.2816ms)
+✔ IADE and IBODE select IDE without losing other diplomas (1.3163ms)
+✔ each selected diploma retains its own year; removed diplomas are omitted (1.0206ms)
+✔ missing, future or non-integer years cannot be copied from another diploma (0.5328ms)
+✔ specialist year cannot precede IDE but same calendar year is accepted (0.2076ms)
+✔ candidate first step requires credentials, not organisation or later identity fields (1.7442ms)
+✔ password boundaries and confirmation remain enforced for classical accounts (0.8063ms)
+✔ Google skips password checks but retains email and enterprise consent validation (0.4379ms)
+✔ FINESS is required for establishments and preserves Corsican prefix normalization (0.2887ms)
+✔ agency SIRET remains optional and FINESS does not become an agency prerequisite (0.2973ms)
+✔ enterprise errors keep their order and whitespace rules without mutating input (0.2499ms)
+✔ account area uses working city rather than residence (1.2391ms)
+✔ incomplete or invalid account areas are not defaults (0.1686ms)
+✔ legacy coordinates without a city retain a neutral label (0.0936ms)
+✔ temporary search is isolated per user and does not mutate the account area (0.5318ms)
+✔ logout cleanup removes all account areas and preserves unrelated preferences (0.247ms)
+✔ blocked browser storage never prevents logout cleanup (0.2849ms)
+ℹ tests 51
+ℹ suites 0
+ℹ pass 51
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 298.3895
+
+> interimatch@0.1.0 test:branches
+> node --test scripts/test-build-measure.mjs && node --experimental-strip-types --test scripts/test-branch-services.mjs scripts/test-page-speech.mjs
+
+✔ missing build fails instead of publishing a success (7.1108ms)
+✔ deterministic inventory except date; report exists in served dist, excludes deferred resources from initial weight (26.3181ms)
+✔ missing manifest or entry dependency is an error (7.9531ms)
+ℹ tests 3
+ℹ suites 0
+ℹ pass 3
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 130.9581
+✔ source dates retain their semantics; missing or invalid dates are omitted (16.204ms)
+✔ preferences validation, reset, malformed data and unavailable storage (0.5945ms)
+✔ speech never chooses a remote or unspecified voice (0.281ms)
+✔ late voices are prepared without starting audio, first speak remains synchronous with the next tap (2.8533ms)
+✔ bounded voice polling also handles engines without voiceschanged and cleans up (0.5211ms)
+✔ remote/default voices stay excluded and underscore language tags are supported (0.3464ms)
+✔ silent startup reports an error and cancels the queued request, never endless reading (0.4322ms)
+✔ onstart clears startup timeout; explicit stop invalidates a saved continuation (1.1311ms)
+✔ browser denial and synchronous exceptions are reported, paused engine resumes (0.4428ms)
+ℹ tests 9
+ℹ suites 0
+ℹ pass 9
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 140.9257
+
+> interimatch@0.1.0 build
+> node scripts/prepare-ocr-assets.mjs && tsc -b && vite build && node scripts/public-pages.mjs && node scripts/measure-build.mjs
+
+OCR/PDF worker, core and language assets prepared locally.
+vite v7.3.6 building client environment for production...
+transforming...
+✓ 289 modules transformed.
+rendering chunks...
+computing gzip size...
+dist/index.html                                       1.86 kB │ gzip:   0.81 kB
+dist/.vite/manifest.json                             30.52 kB │ gzip:   3.89 kB
+dist/assets/Historique-dej9tM7r.css                   0.12 kB │ gzip:   0.13 kB
+dist/assets/AddToPersonalCalendar-Dkq_BR8k.css        0.33 kB │ gzip:   0.21 kB
+dist/assets/InlineConfirmation-OSP_UIQf.css           0.44 kB │ gzip:   0.27 kB
+dist/assets/Consentements-CAuFTTbR.css                0.46 kB │ gzip:   0.25 kB
+dist/assets/PhotoMaquette-CXfWEI7n.css                0.49 kB │ gzip:   0.30 kB
+dist/assets/ConfirmationEtablissement-zz2H7Mcp.css    0.52 kB │ gzip:   0.30 kB
+dist/assets/GoogleConnexion-D-n13CzM.css              0.66 kB │ gzip:   0.34 kB
+dist/assets/EcranPublic-BNO1gN8q.css                  0.71 kB │ gzip:   0.35 kB
+dist/assets/GestionMission-jRJliRta.css               0.82 kB │ gzip:   0.30 kB
+dist/assets/Mentions-kIPOVMHf.css                     0.96 kB │ gzip:   0.38 kB
+dist/assets/Mobilite-CN2mMc64.css                     0.98 kB │ gzip:   0.43 kB
+dist/assets/SearchPlace-tvAkHlTT.css                  1.01 kB │ gzip:   0.49 kB
+dist/assets/Candidatures-C50vVNd7.css                 1.04 kB │ gzip:   0.43 kB
+dist/assets/MotDePasseOublie-DOJOrTz4.css             1.20 kB │ gzip:   0.41 kB
+dist/assets/Notifications-lxTVpwgP.css                1.43 kB │ gzip:   0.57 kB
+dist/assets/ClinicalSkillsPicker-CswfdpzM.css         1.45 kB │ gzip:   0.55 kB
+dist/assets/CandidateMatch-rD1-s2CE.css               1.50 kB │ gzip:   0.60 kB
+dist/assets/Connexion-bhX4rE7f.css                    1.71 kB │ gzip:   0.58 kB
+dist/assets/Etape-Bwri-Iuv.css                        1.73 kB │ gzip:   0.58 kB
+dist/assets/EcranAuth-CcKEc1mS.css                    1.82 kB │ gzip:   0.66 kB
+dist/assets/Choice-XVmDRBUB.css                       1.86 kB │ gzip:   0.62 kB
+dist/assets/Aide-GeT5ofo2.css                         1.87 kB │ gzip:   0.71 kB
+dist/assets/MissionCard-DeQzehQ5.css                  2.34 kB │ gzip:   0.84 kB
+dist/assets/ConfirmationLayout-Deul5FyT.css           2.35 kB │ gzip:   0.85 kB
+dist/assets/MissionDetail-pd3qdB9z.css                2.57 kB │ gzip:   0.91 kB
+dist/assets/Candidater-B43ajU2I.css                   2.80 kB │ gzip:   0.89 kB
+dist/assets/Field-LW8QhSHw.css                        3.01 kB │ gzip:   1.12 kB
+dist/assets/NurseUI-1BPjk-0v.css                      3.66 kB │ gzip:   1.24 kB
+dist/assets/Dossier-CgB0_Fs9.css                      4.28 kB │ gzip:   1.33 kB
+dist/assets/ContractPreparation-CkYgQmBo.css          4.29 kB │ gzip:   1.29 kB
+dist/assets/MesEtablissements-DwEzmSsu.css            4.35 kB │ gzip:   1.20 kB
+dist/assets/Qualite-n8Z4JcIr.css                      4.81 kB │ gzip:   1.37 kB
+dist/assets/Inscription-CNCpW9_h.css                  5.63 kB │ gzip:   1.60 kB
+dist/assets/Missions-DQAFyqV6.css                     8.72 kB │ gzip:   2.05 kB
+dist/assets/MarketPages-CJZxomDx.css                  9.14 kB │ gzip:   2.17 kB
+dist/assets/AccueilPublic-CjKz2I0d.css               11.45 kB │ gzip:   2.67 kB
+dist/assets/Profil-0LW02BuZ.css                      14.98 kB │ gzip:   3.49 kB
+dist/assets/Accueil-BTJJ-ar5.css                     24.98 kB │ gzip:   4.65 kB
+dist/assets/index-CjGG_hRg.css                       28.90 kB │ gzip:   6.75 kB
+dist/assets/organizations-JiEWVWY6.js                 0.10 kB │ gzip:   0.12 kB
+dist/assets/MotDePasseOublie.module-D2T7xk1P.js       0.11 kB │ gzip:   0.11 kB
+dist/assets/Mentions.module--IvGMn6j.js               0.17 kB │ gzip:   0.14 kB
+dist/assets/notificationHref-B2gs5hzt.js              0.21 kB │ gzip:   0.17 kB
+dist/assets/Candidater.module-DXU1NcgU.js             0.28 kB │ gzip:   0.19 kB
+dist/assets/Etape.module-aVndppzU.js                  0.33 kB │ gzip:   0.21 kB
+dist/assets/datePeriods-BYwfEgpp.js                   0.34 kB │ gzip:   0.25 kB
+dist/assets/nurse-BQKXIbgo.js                         0.42 kB │ gzip:   0.31 kB
+dist/assets/useRemote-DNsBNxxF.js                     0.46 kB │ gzip:   0.30 kB
+dist/assets/NurseUI.module-BVLmpCDU.js                0.48 kB │ gzip:   0.28 kB
+dist/assets/matchingScore-DZDZ-B31.js                 0.51 kB │ gzip:   0.33 kB
+dist/assets/usePageTitle-DtNVvP7j.js                  0.58 kB │ gzip:   0.32 kB
+dist/assets/EcranPublic-BjW3eWzA.js                   0.59 kB │ gzip:   0.34 kB
+dist/assets/MesEtablissements.module-1-6-rjr1.js      0.65 kB │ gzip:   0.35 kB
+dist/assets/OfferOrigin-BHc7BhO1.js                   0.68 kB │ gzip:   0.42 kB
+dist/assets/needs-DyBnY76k.js                         0.76 kB │ gzip:   0.41 kB
+dist/assets/missionNavigation-CPPPP_DV.js             0.76 kB │ gzip:   0.47 kB
+dist/assets/InlineConfirmation-G4kfqXd_.js            0.78 kB │ gzip:   0.46 kB
+dist/assets/BankReminder-CsbuoyvJ.js                  0.78 kB │ gzip:   0.51 kB
+dist/assets/LegacyNeedRedirect-Dv6CGjq1.js            0.94 kB │ gzip:   0.57 kB
+dist/assets/ConfirmationButton-c1CfGTUI.js            0.95 kB │ gzip:   0.57 kB
+dist/assets/MarketPages.module-DearIq4m.js            0.98 kB │ gzip:   0.49 kB
+dist/assets/Identite-NlZ_LSSC.js                      1.12 kB │ gzip:   0.57 kB
+dist/assets/Choice-BYc-yjjG.js                        1.17 kB │ gzip:   0.51 kB
+dist/assets/EcranAuth-C4wXqAOc.js                     1.18 kB │ gzip:   0.62 kB
+dist/assets/Etape-zfk2r2NG.js                         1.35 kB │ gzip:   0.79 kB
+dist/assets/Disponibilites-C7qdkn-s.js                1.45 kB │ gzip:   0.75 kB
+dist/assets/Confirmation-Dldw7Ruz.js                  1.52 kB │ gzip:   0.67 kB
+dist/assets/Mobilite-BlprdrGN.js                      1.56 kB │ gzip:   0.78 kB
+dist/assets/PhotoMaquette-DyFen2t_.js                 1.59 kB │ gzip:   0.79 kB
+dist/assets/MotDePasseOublie-Bpj7T_I6.js              1.88 kB │ gzip:   1.01 kB
+dist/assets/ConfirmationEtablissement-C-PFmAw1.js     2.07 kB │ gzip:   0.87 kB
+dist/assets/ConfirmationLayout-BlqxFsPo.js            2.11 kB │ gzip:   1.01 kB
+dist/assets/PracticeChoices-BLvj2bBO.js               2.16 kB │ gzip:   1.08 kB
+dist/assets/bankFields-DYzOX0zY.js                    2.32 kB │ gzip:   1.25 kB
+dist/assets/PlanDuSite-Dr8khUJW.js                    2.33 kB │ gzip:   0.77 kB
+dist/assets/ProSanteConnect-CC3rkybL.js               2.63 kB │ gzip:   1.29 kB
+dist/assets/SearchPlace-CYRk3QdY.js                   2.79 kB │ gzip:   1.46 kB
+dist/assets/ReinitialiserMotDePasse-BLKqC1wW.js       3.03 kB │ gzip:   1.42 kB
+dist/assets/Etablissement-DRKqhXtw.js                 3.03 kB │ gzip:   1.37 kB
+dist/assets/Organisation-C71SOSVl.js                  3.11 kB │ gzip:   1.40 kB
+dist/assets/Installer-ypiqDuLu.js                     3.17 kB │ gzip:   1.38 kB
+dist/assets/Favoris-B7S2MCnh.js                       3.27 kB │ gzip:   1.38 kB
+dist/assets/market-ZyBoV6HE.js                        3.27 kB │ gzip:   1.52 kB
+dist/assets/MissionCard-UM2AVcH1.js                   3.39 kB │ gzip:   1.68 kB
+dist/assets/Localisation-CFliMeBB.js                  3.39 kB │ gzip:   1.51 kB
+dist/assets/AddToPersonalCalendar-Bz91bhho.js         3.51 kB │ gzip:   1.70 kB
+dist/assets/CandidatureDetail-D3_gmVAA.js             3.65 kB │ gzip:   1.48 kB
+dist/assets/cvText-CBCwu10F.js                        3.85 kB │ gzip:   2.04 kB
+dist/assets/bankOcr-Ckig4C3v.js                       3.97 kB │ gzip:   1.68 kB
+dist/assets/Connexion-fTIqpSuI.js                     4.01 kB │ gzip:   1.91 kB
+dist/assets/MatchingRules-C1PT4Mp6.js                 4.10 kB │ gzip:   1.83 kB
+dist/assets/Field-BRj0GXed.js                         4.28 kB │ gzip:   1.51 kB
+dist/assets/ClinicalSkillsPicker-C5x5oqyQ.js          4.38 kB │ gzip:   1.93 kB
+dist/assets/CandidateMatch--BIIFrzz.js                4.53 kB │ gzip:   1.92 kB
+dist/assets/Compte-BP7fxdf9.js                        5.06 kB │ gzip:   2.20 kB
+dist/assets/GoogleConnexion-p0hVFymI.js               5.06 kB │ gzip:   2.33 kB
+dist/assets/Qualification-BF6B_JhG.js                 5.09 kB │ gzip:   2.07 kB
+dist/assets/Consentements-Bo8lNObs.js                 5.24 kB │ gzip:   2.42 kB
+dist/assets/Historique-CILaoh07.js                    6.74 kB │ gzip:   2.69 kB
+dist/assets/Candidater-Bhm6ddI-.js                    7.14 kB │ gzip:   2.89 kB
+dist/assets/Candidatures-DbkeUBWL.js                  8.71 kB │ gzip:   3.23 kB
+dist/assets/GestionMission-DF5Bf6ag.js                8.76 kB │ gzip:   3.33 kB
+dist/assets/MesEtablissements-C8BXeTs7.js             9.04 kB │ gzip:   3.34 kB
+dist/assets/ContractPreparation-BDKIBKVv.js           9.53 kB │ gzip:   3.62 kB
+dist/assets/Qualite-BkZEDOTO.js                      11.91 kB │ gzip:   4.48 kB
+dist/assets/AccueilPublic-DFYdz2PR.js                13.26 kB │ gzip:   4.17 kB
+dist/assets/Mentions-fyM7ihnI.js                     15.80 kB │ gzip:   5.63 kB
+dist/assets/index-C6xHUsg2.js                        15.83 kB │ gzip:   6.83 kB
+dist/assets/Notifications-a2zUMzpT.js                16.60 kB │ gzip:   6.03 kB
+dist/assets/MissionForm-BRo_xfjA.js                  18.56 kB │ gzip:   6.42 kB
+dist/assets/Inscription-66uibon7.js                  20.58 kB │ gzip:   7.08 kB
+dist/assets/professional-D2qqZF0F.js                 24.04 kB │ gzip:   5.33 kB
+dist/assets/MissionDetail-B1gfiMmn.js                24.65 kB │ gzip:   9.07 kB
+dist/assets/Dossier-y01J5Tru.js                      25.47 kB │ gzip:   9.02 kB
+dist/assets/Aide-TKAcU33j.js                         27.35 kB │ gzip:   9.44 kB
+dist/assets/Accueil-UXNBzID8.js                      28.55 kB │ gzip:   9.27 kB
+dist/assets/Missions-DQM4aviz.js                     34.10 kB │ gzip:  11.10 kB
+dist/assets/Profil-CYEmwwtD.js                       62.30 kB │ gzip:  20.39 kB
+dist/assets/pdf-CoTZ2JFh.js                         436.68 kB │ gzip: 130.66 kB
+dist/assets/index-DdMTTclL.js                       442.45 kB │ gzip: 147.16 kB
+✓ built in 7.20s
+Static metadata generated for 5 public routes.
+{"report":"E:\\Interimatch\\worktrees\\unit-coverage-95-20260923\\frontend\\dist\\quality\\build-weight.json","measuredAt":"2026-09-23T14:35:42.845Z","sha256":"9263a3dac74998bcdeb574decd8d21740a6596f062c807839f3d4bad81fd9c5f","installedBytes":83017295,"initialEstimateBytes":567309,"transfers":null}
+
+> interimatch@0.1.0 build:admin
+> tsc -b && vite build --config vite.admin.config.ts
+
+vite v7.3.6 building client environment for production...
+transforming...
+node.exe :
+Au caractère Ligne:1 : 1
++ & "C:\Program Files\nodejs/node.exe" "C:\Program Files\nodejs/node_mo ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+
+/fonts/PlusJakartaSans-Variable.woff2 referenced in /fonts/PlusJakartaSans-Variable.woff2 didn't resolve at build
+time, it will remain unchanged to be resolved at runtime
+✓ 69 modules transformed.
+rendering chunks...
+computing gzip size...
+dist-admin/robots.txt                                           0.03 kB │ gzip:   0.05 kB
+dist-admin/index.html                                           0.48 kB │ gzip:   0.32 kB
+dist-admin/vercel.json                                          1.35 kB │ gzip:   0.51 kB
+dist-admin/assets/soignante-poste-informatique-R6o7CiKX.webp   45.12 kB
+dist-admin/assets/admin-CXAESWjB.css                           30.29 kB │ gzip:   7.31 kB
+dist-admin/assets/admin-Bi3K0431.js                           436.75 kB │ gzip: 140.18 kB
+✓ built in 922ms

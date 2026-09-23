@@ -1,0 +1,12 @@
+✔ existing source rows remain visible after the additive migration (48.902ms)
+✔ hiding one source removes public, private and favorite access without erasing offers (54.2179ms)
+✔ all-hidden catalogue is empty and revealing a source restores saved favorites (24.5033ms)
+✔ unauthorized visibility changes leave SQL state untouched (1.5769ms)
+ℹ tests 4
+ℹ suites 0
+ℹ pass 4
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1550.899
