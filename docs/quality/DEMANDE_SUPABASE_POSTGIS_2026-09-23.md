@@ -1,6 +1,6 @@
 # Demande Supabase prête à transmettre — droits PostGIS
 
-Statut : préparée, non envoyée.
+Statut : demande envoyee le 23 septembre 2026 via le formulaire authentifie Supabase. Creation du ticket confirmee pour InfiMatch ; aucun numero affiche. Reponse attendue a yves.le-bret@epitech.eu. Correction des droits encore en attente du support.
 
 Projet : InfiMatch — référence `skdrmhqwapxwwbupllhu`, région eu-west-1.
 

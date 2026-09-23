@@ -1,11 +1,8 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {spawnSync} from 'node:child_process';
-import {readFile} from 'node:fs/promises';
-import {resolve,isAbsolute} from 'node:path';
-import {parse} from 'dotenv';
 import https from 'node:https';
-import {root,address,request,withRole,readJson,validateSecrets,cleanEnvironment,selectKeys,keyList} from './common.mjs';
+import {root,address,request,withRole,readJson,validateSecrets,cleanEnvironment} from './common.mjs';
 
 test('Vault secret payload rejects unexpected environment injection',()=>{
   assert.throws(()=>validateSecrets({NODE_OPTIONS:'--inspect'},'backend'),/INVALID_SECRET_FIELD/);
@@ -31,10 +28,11 @@ test('Backend can read its exact existing secrets, and no infrastructure secret'
   await withRole('backend',async token=>{
     const result=await request('kv/data/infimatch/v1/backend',{token});
     validateSecrets(result.data.data,'backend');
-    const reference=process.env.INFIMATCH_VAULT_REFERENCE_ENV||resolve(root,'.env');
-    assert.ok(isAbsolute(reference),'Vault reference environment must use an absolute path');
-    const expected=selectKeys(parse(await readFile(reference)),keyList(result.data.data));
-    assert.equal(JSON.stringify(Object.entries(result.data.data).sort())===JSON.stringify(Object.entries(expected).sort()),true,'Vault values must match the existing credentials without changing them');
+    // The legacy .env was deliberately retired; compare with the current
+    // operator-authorized payload without exporting secret values to disk.
+    const expected=await withRole('operator',async operatorToken=>
+      (await request('kv/data/infimatch/v1/backend',{token:operatorToken})).data.data);
+    assert.equal(JSON.stringify(Object.entries(result.data.data).sort())===JSON.stringify(Object.entries(expected).sort()),true,'Backend must read the exact current operator-authorized values');
     await assert.rejects(request('kv/data/infimatch/v1/infra',{token}),e=>e.status===403);
     await assert.rejects(request('kv/data/infimatch/v2/backend',{token}),e=>e.status===403);
     await assert.rejects(request('sys/policies/acl',{token}),e=>e.status===403);

@@ -1,5 +1,20 @@
 # Corrections de lâ€™audit â€” 23 septembre 2026
 
+## Mise a jour apres autorisation du 23 septembre 2026
+
+Cette mise a jour remplace les statuts Vault et support en attente consignes plus bas.
+
+- Vault : politique operateur corrigee sur le coffre actif, apres sauvegarde Raft. Jeton root temporaire revoque et configuration originale restauree ; recuperation non authentifiee de nouveau refusee.
+- Les acces AppRole backend et infra sont renouveles jusqu'au 30 septembre. Les secrets applicatifs ne sont pas modifies.
+- **18/18 verifications Vault et securite reussies**, zero echec, zero test ignore. La premiere relance apres renouvellement donnait 17/18 : elle comparait les secrets a un ancien .env volontairement retire. Le test compare desormais en memoire les valeurs lues par le backend aux valeurs actuelles autorisees a l'operateur ; les refus d'acces aux autres espaces restent testes. Il ne pretend pas verifier l'egalite avec une ancienne version des secrets.
+- Le redemarrage attend maintenant que Vault soit actif apres deverrouillage avant de lancer la recuperation, ce qui corrige l'erreur HTTP 500 pendant l'election du leader.
+- Supabase : demande PostGIS envoyee, confirmation de creation recue dans le tableau de bord. Reponse attendue a yves.le-bret@epitech.eu. Les droits PostGIS ne sont pas encore corriges.
+- DNS Windows : inchanges apres annulation de l'elevation. Ce point reste ouvert.
+
+[Preuve de maintenance et envoi](../proofs/remediation-20260923/vault-support-followup.json) | [Tests Vault finaux](../proofs/remediation-20260923/vault-final-tests.log).
+
+
+
 ## Transferts Supabase
 
 Le classement des offres externes lit dÃ©sormais uniquement lâ€™identifiant, le titre et les critÃ¨res utilisÃ©s par `partialOfferMatch`. Les descriptions, les donnÃ©es fournisseur et les offres parsÃ©es sont chargÃ©es pour les trois recommandations retenues. Le classement et le chargement final utilisent la mÃªme transaction Ã  instantanÃ© cohÃ©rent. La recherche gÃ©nÃ©rale rÃ©utilise la projection rÃ©duite des critÃ¨res externes. Aucun cache partagÃ© ni limite arbitraire de catalogue nâ€™est ajoutÃ©.

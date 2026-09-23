@@ -1,0 +1,47 @@
+✔ legacy archive authenticates content, key and relative filename (4.5733ms)
+✔ archive rejects traversal, absolute and alternate stream names (0.3366ms)
+✔ manifest authentication detects removed files and altered metadata (0.7202ms)
+✔ operator rotation ACL names only the three intended AppRoles and preserves secret ACLs (0.9143ms)
+✔ production restricted role supports direct and pooler connections (0.9731ms)
+✔ maintenance connections reject unrelated providers, lookalike hosts and missing credentials (0.3043ms)
+✔ maintenance TLS pins CA and preserves pooler username and unrelated options (0.633ms)
+✔ missing certificate, TLS downgrades and URL overrides are refused (0.822ms)
+✔ Vault secret payload rejects unexpected environment injection (0.8696ms)
+✔ Parent environment cannot supply stale backend or infrastructure secrets (0.5286ms)
+✔ Vault mode does not silently load secrets from the legacy .env (54.8391ms)
+✔ Real Vault is initialized and unsealed on persistent Raft (69.1167ms)
+✔ HTTPS rejects the local certificate without the configured CA (18.1625ms)
+✖ Backend can read its exact existing secrets, and no infrastructure secret (47.3964ms)
+✔ Infrastructure role cannot read backend secrets (54.5577ms)
+✔ Invalid AppRole credentials are refused (10.1748ms)
+✔ Short-lived launcher token is revoked after use (43.2473ms)
+✔ Initial root token is absent from the recovery file after bootstrap (0.7706ms)
+ℹ tests 18
+ℹ suites 0
+ℹ pass 17
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 467.1914
+
+✖ failing tests:
+
+test at scripts\vault\vault.test.mjs:30:1
+✖ Backend can read its exact existing secrets, and no infrastructure secret (47.3964ms)
+  AssertionError [ERR_ASSERTION]: Vault values must match the existing credentials without changing them
+  
+  false !== true
+  
+      at file:///E:/Interimatch/worktrees/unit-coverage-95-20260923/scripts/vault/vault.test.mjs:37:12
+      at async withRole (file:///E:/Interimatch/worktrees/unit-coverage-95-20260923/scripts/vault/common.mjs:48:14)
+      at async TestContext.<anonymous> (file:///E:/Interimatch/worktrees/unit-coverage-95-20260923/scripts/vault/vault.test.mjs:31:3)
+      at async Test.run (node:internal/test_runner/test:1125:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:787:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }

@@ -7,6 +7,7 @@ import {request,readJson,privateDir,withRole,revoke} from './common.mjs';
 import {repairOperatorRotationPolicy} from './operator-policy.mjs';
 // This maintenance operation requires explicit authorization for temporary root recovery.
 // No recovery or writes occur without --apply. Secrets and recovery keys never go to stdout.
+let phase='preflight';
 async function repair(){
  const installation=resolve(privateDir,'../..'),configPath=resolve(installation,'infra/vault/server.hcl');
  const original=await readFile(configPath,'utf8');
@@ -21,22 +22,28 @@ async function repair(){
   let status=await request('sys/seal-status');
   if(status.sealed){const r=await readJson('recovery.json');for(const key of r.keys_base64.slice(0,r.threshold??2)){status=await request('sys/unseal',{method:'POST',data:{key}});if(!status.sealed)break;}}
   if(status.sealed)throw Error('VAULT_STILL_SEALED');
+  let active=false;
+  for(let i=0;i<60;i++){try{await request('sys/health');active=true;break;}catch{await new Promise(r=>setTimeout(r,500));}}
+  if(!active)throw Error('VAULT_ACTIVE_TIMEOUT');
  }
  try{
+  phase='snapshot';
   const snapshot=await withRole('operator',token=>request('sys/storage/raft/snapshot',{token,raw:true}));
   await writeFile(resolve(privateDir,'raft-before-policy-repair-'+Date.now()+'.snap'),snapshot,{flag:'wx',mode:0o600});proof.snapshotSaved=true;
+  phase='enable_recovery';
   changed=true;await writeFile(configPath,original+'\n# Temporary quorum-based recovery; restored in finally.\nenable_unauthenticated_access = ["generate-root"]\n');
-  await restart();const status=await request('sys/generate-root/attempt');if(status.started)throw Error('OTHER_RECOVERY_ACTIVE');
-  attempt=await request('sys/generate-root/attempt',{method:'POST',data:{}});
-  const recovery=await readJson('recovery.json');let result;
+  phase='restart_for_recovery';
+  await restart();phase='recovery_status';const status=await request('sys/generate-root/attempt');if(status.started)throw Error('OTHER_RECOVERY_ACTIVE');
+  phase='begin_recovery';attempt=await request('sys/generate-root/attempt',{method:'POST',data:{}});
+  phase='quorum';const recovery=await readJson('recovery.json');let result;
   for(const key of recovery.keys_base64.slice(0,recovery.threshold??2)){result=await request('sys/generate-root/update',{method:'POST',data:{nonce:attempt.nonce,key}});if(result.complete)break;}
   if(!result?.complete)throw Error('RECOVERY_INCOMPLETE');
-  const encoded=Buffer.from(result.encoded_token??result.encoded_root_token,'base64'),otp=Buffer.from(attempt.otp);assert.equal(encoded.length,otp.length);
+  phase='decode_root';const encoded=Buffer.from(result.encoded_token??result.encoded_root_token,'base64'),otp=Buffer.from(attempt.otp);assert.equal(encoded.length,otp.length);
   admin=Buffer.from(encoded.map((b,i)=>b^otp[i])).toString();
-  const path='sys/policies/acl/infimatch-v1-operator',before=(await request(path,{token:admin})).data.policy,after=repairOperatorRotationPolicy(before);
-  assert.notEqual(after,before,'Expected unsupported rotation paths');assert.ok(!after.includes('infimatch-v1-*/'));
-  await request(path,{method:'PUT',token:admin,data:{policy:after}});
-  assert.equal((await request(path,{token:admin})).data.policy,after);
+  phase='read_policy';const path='sys/policies/acl/infimatch-v1-operator',before=(await request(path,{token:admin})).data.policy,after=repairOperatorRotationPolicy(before);
+  phase='validate_policy_patch';assert.notEqual(after,before,'Expected unsupported rotation paths');assert.ok(!after.includes('infimatch-v1-*/'));
+  phase='write_policy';await request(path,{method:'PUT',token:admin,data:{policy:after}});
+  phase='verify_policy';assert.equal((await request(path,{token:admin})).data.policy,after);
   proof.policyUpdated=true;proof.beforeHash=createHash('sha256').update(before).digest('hex');proof.afterHash=createHash('sha256').update(after).digest('hex');
  }finally{
   try{
@@ -49,4 +56,4 @@ async function repair(){
  console.log(JSON.stringify(proof));
 }
 if(!process.argv.includes('--apply'))console.log(JSON.stringify({mode:'PLAN_ONLY',requires:'Explicit authorization for temporary Vault root recovery, restart, and operator ACL update',steps:['Save private Raft snapshot','Quorum recovery with existing local shares','Expand invalid wildcard to nine exact AppRole paths only','Revoke temporary root and restore original configuration','Verify operator access; then run vault:renew'],applicationSecretsChanged:false}));
-else await repair().catch(error=>{console.error(JSON.stringify({status:'FAIL',code:/^[A-Z_]+$/.test(error.message)?error.message:'VAULT_POLICY_REPAIR_FAILED'}));process.exitCode=1;});
+else await repair().catch(error=>{console.error(JSON.stringify({status:'FAIL',phase,errorType:error.name,processStatus:error.status,code:/^[A-Z_]+$/.test(error.message)?error.message:'VAULT_POLICY_REPAIR_FAILED'}));process.exitCode=1;});

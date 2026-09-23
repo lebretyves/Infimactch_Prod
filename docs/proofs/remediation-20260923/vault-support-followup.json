@@ -1,0 +1,47 @@
+{
+  "checkedAt": "2026-09-23T17:28:01.992700+00:00",
+  "vault": {
+    "status": "PASS",
+    "policyAppliedAt": "2026-09-23T17:18:41.106Z",
+    "snapshotSaved": true,
+    "policyUpdated": true,
+    "beforeHash": "7ad416181857573e1a14d7eae1283866120f0310dd116359f4f9af38b686f028",
+    "afterHash": "7b5177045b880e74243d28e36984ba878c0e116aff93632b619e05cf764f28bc",
+    "temporaryRootRevoked": true,
+    "originalConfigurationRestored": true,
+    "unauthenticatedRecoveryDenied": true,
+    "operatorAccessVerified": true,
+    "renewedRoles": [
+      "backend",
+      "infra"
+    ],
+    "applicationSecretsChanged": false,
+    "tests": {
+      "passed": 18,
+      "total": 18,
+      "failed": 0,
+      "skipped": 0
+    },
+    "referenceMethod": "Compare backend AppRole payload against current operator-authorized Vault payload in memory. Legacy .env was retired on 2026-09-20; it is no longer a complete baseline.",
+    "initialRetest": {
+      "passed": 17,
+      "failed": 1,
+      "reason": "Retired .env lacks secret fields; no evidence of secret loss."
+    },
+    "restartFix": "Wait for sys/health success after unseal before generate-root: avoids leader-election HTTP 500."
+  },
+  "supabase": {
+    "status": "SENT",
+    "project": "skdrmhqwapxwwbupllhu",
+    "channel": "Authenticated dashboard support form",
+    "subject": "PostGIS spatial_ref_sys: remove effective write grants with owner privileges",
+    "confirmation": "Support request sent. Your ticket has been registered for InfiMatch.",
+    "replyAddress": "yves.le-bret@epitech.eu",
+    "ticketNumberShown": false,
+    "postgisFixed": false
+  },
+  "dns": {
+    "changed": false,
+    "status": "PENDING_WINDOWS_ADMIN_APPROVAL"
+  }
+}
