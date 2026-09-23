@@ -32,6 +32,16 @@ L'archive initiale contenait seulement 78 390 établissements filtrés. Son extr
 
 Le fichier téléchargé reste dans `data/public/`, hors Git. Son URL et son SHA-256 sont enregistrés dans le snapshot SQL et les preuves.
 
+En local, le téléchargement et l’import peuvent être enchaînés automatiquement (Postgres doit déjà tourner et les migrations appliquées) :
+
+```bash
+npm run finess:import
+```
+
+`npm run finess:import:force` retélécharge même si le fichier est déjà présent dans `data/public/`.
+
+Import manuel équivalent :
+
 ```powershell
 node backend/dist/cli.js import-finess --file data/public/finess-structures-mensuel-202608.json.gz --source-url https://static.data.gouv.fr/resources/finess-structures-1/20260901-021627/finess-structures-mensuel-202608.json.gz
 node scripts/verify-finess.cjs

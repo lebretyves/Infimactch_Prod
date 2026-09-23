@@ -38,7 +38,9 @@
     "restore:verify": "node scripts/security/restore-test.mjs",
     "db:migrate:vault": "node scripts/security/migrate.mjs",
     "start:https": "node scripts/security/start-https.mjs",
-    "coverage:unit": "npm run coverage:unit -w backend"
+    "coverage:unit": "npm run coverage:unit -w backend",
+    "finess:import": "node scripts/import-finess-local.mjs",
+    "finess:import:force": "node scripts/import-finess-local.mjs --force"
   },
   "imports": {
     "#standard-fonts/*": "pdfkit/standard-fonts/*"

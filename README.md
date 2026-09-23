@@ -73,6 +73,7 @@ npm ci --prefix frontend
 npm run setup
 docker compose --env-file .env -f infra/compose.yaml --profile automation up -d
 npm run db:migrate
+npm run finess:import
 npm run seed -w backend
 npm run build
 npm run start -w backend
