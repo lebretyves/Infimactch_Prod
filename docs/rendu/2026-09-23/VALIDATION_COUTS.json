@@ -1,0 +1,17 @@
+{
+  "date": "2026-09-24",
+  "scope": "Documentation and budget only; no application test rerun",
+  "pages": 13,
+  "durationSeconds": 900,
+  "checks": [
+    "independent arithmetic reconciliation",
+    "PPTX slide count",
+    "PDF page count and budget text",
+    "PDF text bounds checked by generators",
+    "professional budget slide visually inspected",
+    "UTF-8 texts checked",
+    "Excel key formula references checked; Excel calculation on opening"
+  ],
+  "monthlyBudgetEUR": 5265.302222222223,
+  "equipmentAllocationEUR": 133.33333333333334
+}

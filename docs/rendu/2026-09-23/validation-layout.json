@@ -121,18 +121,30 @@
   },
   {
     "slide": 11,
-    "title": "Confronter le prévu au réalisé",
+    "title": "396 heures déclarées, un coût explicite",
     "bodyFontSizes": [
       17,
       17
     ],
     "bodyHeights": [
       63.8,
-      42.5
+      85.0
     ]
   },
   {
     "slide": 12,
+    "title": "Le coût baisse avec les missions validées",
+    "bodyFontSizes": [
+      17,
+      17
+    ],
+    "bodyHeights": [
+      63.8,
+      85.0
+    ]
+  },
+  {
+    "slide": 13,
     "title": "Un POC démontrable, un pilote à valider",
     "bodyFontSizes": [
       17,
