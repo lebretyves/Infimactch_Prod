@@ -1,7 +1,7 @@
 import type { Recommendation, Recommendations } from '../services/recommendations.ts';
-export type MissionCrush = { item: Recommendation; external: boolean };
+export type MissionTopMatch = { item: Recommendation; external: boolean };
 /** The API ranks each source independently. A partial external comparison is not a partner matching score. */
-export function missionCrushs(data: Recommendations, origin: 'toutes' | 'partenaires' | 'externes'): MissionCrush[] {
+export function missionTopMatches(data: Recommendations, origin: 'toutes' | 'partenaires' | 'externes'): MissionTopMatch[] {
   const partners = origin !== 'externes' && data.internal.status === 'READY'
     ? data.internal.items.map(item => ({ item, external: false })) : [];
   const external = origin !== 'partenaires' && data.external.status !== 'HIDDEN'

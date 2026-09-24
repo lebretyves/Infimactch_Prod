@@ -6,16 +6,16 @@ Le classement indique la provenance et l’usage ; il ne certifie pas automatiqu
 
 | Classe | Fichiers |
 | --- | ---: |
-| Campagne ou procedure specialisee | 107 |
+| Campagne ou procedure specialisee | 108 |
 | Chiffrage prospectif | 27 |
 | Configuration n8n maintenue | 13 |
 | Guide technique | 44 |
 | Livrable et sources de generation | 55 |
 | Photographie n8n datee | 11 |
-| Preuve datee | 367 |
+| Preuve datee | 372 |
 | Rapport historique | 8 |
 | Reference du sujet | 3 |
 | Support historique remplace | 12 |
 | Workflow prepare | 2 |
 
-Total inventorie : **649 fichiers** (hors index lui-meme). Les onze suppressions de doubles exacts sont tracees dans le [registre de nettoyage](quality/NETTOYAGE_DOUBLONS_2026-09-24.json).
+Total inventorie : **655 fichiers** (hors index lui-meme). Les onze suppressions de doubles exacts sont tracees dans le [registre de nettoyage](quality/NETTOYAGE_DOUBLONS_2026-09-24.json).

@@ -9,7 +9,7 @@ import { date, salary, sourceLabel, type Listing } from "@/services/market";
 import { labelCode } from "@/data/professional";
 import { Button, ButtonLink } from "@/ui/Button";
 import { Icon } from "@/ui/Icon";
-import { missionCrushs } from "@/lib/missionCrushs";
+import { missionTopMatches } from "@/lib/missionTopMatches";
 import s from "./MixedRecommendations.module.css";
 function contractLabel(value: string) {
   const labels: Record<string, string> = {
@@ -42,7 +42,7 @@ export function MixedRecommendations({
     userId + ":" + origin,
   );
   const data = result.data;
-  const selected = data ? missionCrushs(data, origin) : [];
+  const selected = data ? missionTopMatches(data, origin) : [];
   const showExternes = data?.externalCatalogueVisible !== false;
   useEffect(() => {
     if (!data || showExternes || origin !== "externes") return;

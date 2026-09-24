@@ -42,3 +42,7 @@ Les résultats des tests de cette revue sont publiés dans le rapport de revue. 
 ## Validation de cette revue
 
 [Preuves du 24 septembre](proofs/review-20260924/README.md) : **688/688 tests unitaires**, **95,00 % des lignes**, **192/192 intégrations**, **81/81 frontend**. Builds public/admin, typage, parcours navigateur et relance des contrôles SQL réussis. Le statut initial échoué du test de sécurité obsolète est conservé et expliqué dans les preuves.
+
+## Complément des branches
+
+[Reprise du 24 septembre](quality/REPRISE_BRANCHES_2026-09-24.md) : présentation Mon compte, renommage des recommandations et neuf fichiers de tests activés. Le frontend compte désormais **105/105 tests réussis** ; le résultat 81/81 ci-dessus reste la campagne précédente. Aucun code backend modifié dans ce complément.

@@ -17,7 +17,7 @@ docs/EMAILS_LIVRAISON.md,Guide technique,Lire conjointement avec ETAT_COURANT.md
 docs/EMAILS_MISSIONS.md,Guide technique,Lire conjointement avec ETAT_COURANT.md,4691,38,465461a47b2cd84896939f0dc1131ef64bdda459c30b90770dd6827340c39b0f
 docs/ENTERPRISE_FOLLOW_UP.md,Guide technique,Lire conjointement avec ETAT_COURANT.md,2124,40,ef3dd376c793c4f80e55b360e39a144bae0c98c8e289ffb234d5a5073223c0ab
 docs/ENTERPRISE_MISSION_SEARCH_2026-09-18.md,Rapport historique,Resultats limites a sa date,2031,15,0322c5bbfa6f3c17e92bc25ac831abec6b431813359ef8b1ac25e4f91e717449
-docs/ETAT_COURANT.md,Guide technique,Lire conjointement avec ETAT_COURANT.md,4357,44,0b2acedf5ee76cdf3a28f2e248c71112f3f9c940d0a202dbca53a7ae45967857
+docs/ETAT_COURANT.md,Guide technique,Lire conjointement avec ETAT_COURANT.md,4720,48,f2af8ac9f1eb1746b6436579b22a791efa6310f0a6f0d21943745e2ba7186665
 docs/EXPLICATION_MATCHING_DONNEES_MANQUANTES.docx,Guide technique,Lire conjointement avec ETAT_COURANT.md,38242,,e1cd332dadc85066b0254b340b48530b722a49e9f414f6a33c0b650821eee318
 docs/EXPLICATION_MATCHING_DONNEES_MANQUANTES.md,Guide technique,Lire conjointement avec ETAT_COURANT.md,3508,35,06308144a9121a566977f34fad4f25d95e1d2aa755bacb18247d636d7fe5a8e2
 docs/FLUX_V1.md,Guide technique,Lire conjointement avec ETAT_COURANT.md,10007,173,09aaba45eb553e47d76f1ac9b1aee97617b8a466b17686de5d99017b43f24bea
@@ -256,6 +256,11 @@ docs/proofs/audit-kickoff-2026-09-16/frontend-api-tests.txt,Preuve datee,Conserv
 docs/proofs/audit-kickoff-2026-09-16/frontend-build.txt,Preuve datee,Conserver sa campagne et son perimetre,2120,,67cb8fb4d369c5d490a3edd62a75c6ad78cc309409487d2f74bfd7b35206c7af
 docs/proofs/audit-kickoff-2026-09-16/http-and-routes.json,Preuve datee,Conserver sa campagne et son perimetre,21946,1111,abb41c4daeba6400f99746f5bb2cf4aff990f8916a068fb5f3562f3eb562ca07
 docs/proofs/audit-kickoff-2026-09-16/scope-and-hashes.json,Preuve datee,Conserver sa campagne et son perimetre,23079,198,8b40f1ca30be43bbd4e23a15b3c1b0cca2cc6f24b84d18a843d29280b42081c5
+docs/proofs/branch-completion-20260924/README.md,Preuve datee,Conserver sa campagne et son perimetre,1134,10,6d7abc025d90132fef419bf992769e47b3f62c179e8ae6f01b6055d73f7515cf
+docs/proofs/branch-completion-20260924/branches-before.json,Preuve datee,Conserver sa campagne et son perimetre,6380,232,3c176d721ad4253864bd6c7918a079221d62c73e7d9fa2fe1bc6272905ed0f0c
+docs/proofs/branch-completion-20260924/browser.txt,Preuve datee,Conserver sa campagne et son perimetre,4131,52,baa74b660cd4177507f8eb884b823b454d871bd1b68677fff57f0edfe3c2e2d3
+docs/proofs/branch-completion-20260924/build.txt,Preuve datee,Conserver sa campagne et son perimetre,10895,137,011ccf5bd3fc5c21c275b5207de3efb04f9e8557bdd545841df273d77f0e5562
+docs/proofs/branch-completion-20260924/tests.txt,Preuve datee,Conserver sa campagne et son perimetre,10814,150,204243e6f254bbe1071d5f1e6348a9d7b3955444fd29e3fb1ee3de121ecef451
 docs/proofs/build.txt,Preuve datee,Conserver sa campagne et son perimetre,116,7,0bfbff7a85e8d759af0bc19cfc091dc79878480183440c9f2b53478e96f77052
 docs/proofs/catalogue-direct-edit.json,Preuve datee,Conserver sa campagne et son perimetre,600,15,ea608e79cb2e634c17a76071dbb7cf9bd421ba061109ac0529768a249fb1325c
 docs/proofs/code-recovery.json,Preuve datee,Conserver sa campagne et son perimetre,1027,35,f2c2f907c793e28338bfc9058129a160e180500fb6abd56ac0925ce971ab50d4
@@ -554,6 +559,7 @@ docs/quality/RECUPERATION_AUTONOME_2026-09-19.md,Campagne ou procedure specialis
 docs/quality/REFACTORING_A07_2026-09-22.md,Campagne ou procedure specialisee,"Verifier date, limites et etat courant",4279,42,2e5da98b25181d4caf3562b05de1d7c09281aac985c9dc0d67042a929c38bc59
 docs/quality/REFONTE_MAQUETTES_2026-09-21.md,Campagne ou procedure specialisee,"Verifier date, limites et etat courant",2570,16,2c255b95fe51a9f94888233e7f02f9d6a3307e5408f3f283ab63b0dce3e0aef2
 docs/quality/REGISTRE_TRAITEMENTS_POC.md,Campagne ou procedure specialisee,"Verifier date, limites et etat courant",3185,25,fdb3719ceb564aac9352128b74efcd7c7bc9ee5a0bc8608a6c6a6d0335dbf56e
+docs/quality/REPRISE_BRANCHES_2026-09-24.md,Campagne ou procedure specialisee,"Verifier date, limites et etat courant",3093,27,a5a33801689e6a2cf9824006e379368a69de19e18e62a7b69411b9806f8f3e6b
 docs/quality/REVUE_CODE_2026-09-21.md,Campagne ou procedure specialisee,"Verifier date, limites et etat courant",4798,38,4b3dd669ab38e0588525b52ac36e7bd4e5e60fc497094ef2e34154a89a88a863
 docs/quality/REVUE_DEPOTS_2026-09-24.md,Campagne ou procedure specialisee,"Verifier date, limites et etat courant",6156,54,b294da0cd383ccaf067ffda8e3e04a5145343ac730ae8462d2d514019955cb2c
 docs/quality/REVUE_SECURITE_18_SCENARIOS_2026-09-21.md,Campagne ou procedure specialisee,"Verifier date, limites et etat courant",8766,45,9709dd56946003999d5e11d552d329c29d6d89f4945bd2ea7ecb4bdaee0266ac
