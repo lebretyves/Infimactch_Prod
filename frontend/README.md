@@ -19,6 +19,8 @@ npm run dev
 
 Vite écoute sur `127.0.0.1:5173`. Le proxy `/api` cible par défaut `http://127.0.0.1:3100`; vérifier `vite.config.ts` et l’environnement pour une autre configuration. Les cookies de session et les jetons CSRF sont gérés par le client API. Aucun secret serveur ne doit être introduit dans une variable frontend ou dans le bundle.
 
+Pour l’administration locale, lancer `npm run dev:admin` dans un autre terminal depuis ce dossier. Dans le `.env` à la racine, définir `APP_ORIGIN=http://127.0.0.1:5173` et `ADMIN_ORIGIN=http://127.0.0.1:5175`. La création du premier OWNER et son enrôlement MFA sont décrits dans le [guide d’installation](../README.md#premier-administrateur-local-owner).
+
 ## Commandes
 
 ```powershell

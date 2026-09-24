@@ -19,6 +19,7 @@
     "test:datetime": "node --experimental-strip-types scripts/test-paris-datetime.mjs",
     "test:pwa": "node --test scripts/test-pwa.mjs",
     "test:quality": "node scripts/test-quality.mjs",
+    "dev:admin": "vite --config vite.admin.config.ts",
     "build:admin": "tsc -b && vite build --config vite.admin.config.ts",
     "test:seo": "node scripts/test-seo-build.mjs && node --test scripts/test-help-routes.mjs && node scripts/test-page-metadata.mjs",
     "measure:build": "node scripts/measure-build.mjs",
