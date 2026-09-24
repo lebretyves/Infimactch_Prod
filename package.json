@@ -16,6 +16,7 @@
     "snapshot": "node scripts/snapshot.mjs",
     "infra:up": "docker compose --env-file .env -f infra/compose.yaml up -d",
     "infra:down": "docker compose --env-file .env -f infra/compose.yaml down",
+    "admin:bootstrap:local": "node scripts/bootstrap-local-admin.mjs",
     "setup": "node scripts/setup-env.mjs",
     "verify": "node scripts/verify.mjs",
     "check:secrets": "node scripts/check-secrets.mjs",
