@@ -1,0 +1,62 @@
+[
+  {
+    "id": "inscription-diplomes",
+    "status": "PASS",
+    "seconds": 125.466,
+    "voice": "Microsoft Hortense Desktop / fr-FR",
+    "audio": "Opus 64 kbit/s",
+    "captions": 16,
+    "bytes": 11037612,
+    "decodedAllFramesAndAudio": true
+  },
+  {
+    "id": "profil-cv",
+    "status": "PASS",
+    "seconds": 71.603,
+    "voice": "Microsoft Hortense Desktop / fr-FR",
+    "audio": "Opus 64 kbit/s",
+    "captions": 9,
+    "bytes": 5860516,
+    "decodedAllFramesAndAudio": true
+  },
+  {
+    "id": "recherche-matching",
+    "status": "PASS",
+    "seconds": 67.122,
+    "voice": "Microsoft Hortense Desktop / fr-FR",
+    "audio": "Opus 64 kbit/s",
+    "captions": 8,
+    "bytes": 5815231,
+    "decodedAllFramesAndAudio": true
+  },
+  {
+    "id": "confirmation-pdf",
+    "status": "PASS",
+    "seconds": 45.207,
+    "voice": "Microsoft Hortense Desktop / fr-FR",
+    "audio": "Opus 64 kbit/s",
+    "captions": 6,
+    "bytes": 3649549,
+    "decodedAllFramesAndAudio": true
+  },
+  {
+    "id": "annulation-emails",
+    "status": "PASS",
+    "seconds": 40.998,
+    "voice": "Microsoft Hortense Desktop / fr-FR",
+    "audio": "Opus 64 kbit/s",
+    "captions": 6,
+    "bytes": 3201434,
+    "decodedAllFramesAndAudio": true
+  },
+  {
+    "id": "candidature-agenda",
+    "status": "PASS",
+    "seconds": 58.301,
+    "voice": "Microsoft Hortense Desktop / fr-FR",
+    "audio": "Opus 64 kbit/s",
+    "captions": 8,
+    "bytes": 4521062,
+    "decodedAllFramesAndAudio": true
+  }
+]

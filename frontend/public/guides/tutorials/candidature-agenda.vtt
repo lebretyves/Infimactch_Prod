@@ -1,21 +1,33 @@
 WEBVTT
 
 1
-00:00:00.984 --> 00:00:09.234
+00:00:01.254 --> 00:00:09.566
 4 · Candidature : relisez les horaires et les conditions. Mission fictive.
 
 2
-00:00:09.234 --> 00:00:15.473
+00:00:09.566 --> 00:00:15.835
 La candidature demande votre accord sur les conditions affichées.
 
 3
-00:00:15.473 --> 00:00:22.298
+00:00:15.835 --> 00:00:22.807
 Votre candidature est enregistrée ; elle ne réserve pas encore le créneau.
 
 4
-00:00:22.298 --> 00:00:28.753
+00:00:22.807 --> 00:00:29.515
 Le suivi indique les étapes et la décision du recruteur.
 
 5
-00:00:28.753 --> 00:00:35.136
+00:00:29.515 --> 00:00:35.963
 Exemple après confirmation par le recruteur : la mission apparaît dans l’agenda.
+
+6
+00:00:35.963 --> 00:00:41.950
+En vue Mois, choisissez un jour pour modifier ses créneaux.
+
+7
+00:00:41.950 --> 00:00:49.062
+Ouvrez le jour souhaité, puis cliquez sur le matin, l’après-midi ou la nuit.
+
+8
+00:00:49.062 --> 00:00:58.301
+Le créneau devient disponible et se sauvegarde automatiquement. La mission confirmée reste protégée.

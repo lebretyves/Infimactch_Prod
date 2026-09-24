@@ -17,7 +17,7 @@ docs/EMAILS_LIVRAISON.md,Guide technique,Lire conjointement avec ETAT_COURANT.md
 docs/EMAILS_MISSIONS.md,Guide technique,Lire conjointement avec ETAT_COURANT.md,4691,38,465461a47b2cd84896939f0dc1131ef64bdda459c30b90770dd6827340c39b0f
 docs/ENTERPRISE_FOLLOW_UP.md,Guide technique,Lire conjointement avec ETAT_COURANT.md,2124,40,ef3dd376c793c4f80e55b360e39a144bae0c98c8e289ffb234d5a5073223c0ab
 docs/ENTERPRISE_MISSION_SEARCH_2026-09-18.md,Rapport historique,Resultats limites a sa date,2031,15,0322c5bbfa6f3c17e92bc25ac831abec6b431813359ef8b1ac25e4f91e717449
-docs/ETAT_COURANT.md,Guide technique,Lire conjointement avec ETAT_COURANT.md,4720,48,f2af8ac9f1eb1746b6436579b22a791efa6310f0a6f0d21943745e2ba7186665
+docs/ETAT_COURANT.md,Guide technique,Lire conjointement avec ETAT_COURANT.md,5365,52,1ff6d677ba0d3f9204336a31d81650ccb95cc52a132b8832949eb0aebbba903b
 docs/EXPLICATION_MATCHING_DONNEES_MANQUANTES.docx,Guide technique,Lire conjointement avec ETAT_COURANT.md,38242,,e1cd332dadc85066b0254b340b48530b722a49e9f414f6a33c0b650821eee318
 docs/EXPLICATION_MATCHING_DONNEES_MANQUANTES.md,Guide technique,Lire conjointement avec ETAT_COURANT.md,3508,35,06308144a9121a566977f34fad4f25d95e1d2aa755bacb18247d636d7fe5a8e2
 docs/FLUX_V1.md,Guide technique,Lire conjointement avec ETAT_COURANT.md,10007,173,09aaba45eb553e47d76f1ac9b1aee97617b8a466b17686de5d99017b43f24bea
@@ -319,8 +319,16 @@ docs/proofs/full-project-20260923/unit.txt,Preuve datee,Conserver sa campagne et
 docs/proofs/full-project-20260923/vercel-mongo-connectivity.json,Preuve datee,Conserver sa campagne et son perimetre,1221,25,d7e05b1979b1b0abd34ae0d5149a485411bca3a9bd1e03b3453c1abc333cd514
 docs/proofs/google-registration/database.json,Preuve datee,Conserver sa campagne et son perimetre,647,12,d7323ba982af121985fbf4c002c08f1ec666c5bfea15571ebbc0a083816cebfe
 docs/proofs/google-registration/http.json,Preuve datee,Conserver sa campagne et son perimetre,469,11,031162965d8b0e85086e560a89d7d94ff71ae5b65882f0f1538689702be06f31
+docs/proofs/help-ui-20260924/browser.txt,Preuve datee,Conserver sa campagne et son perimetre,4097,52,411a378342111ca6d390c03da67c6417e14c90f252418424438517d79815b436
+docs/proofs/help-ui-20260924/build.txt,Preuve datee,Conserver sa campagne et son perimetre,10895,137,6cec50c326905846ac7074ef7f7e4e6fc0534c8c2994d04633a4f4012179e110
+docs/proofs/help-ui-20260924/unit.txt,Preuve datee,Conserver sa campagne et son perimetre,10822,150,fbb8c710b542deb2a9507fd50edde49e7bc5df38379f9410d605c0ab315592fe
 docs/proofs/help-videos-2026-09-21/audio-validation.json,Preuve datee,Conserver sa campagne et son perimetre,1470,62,6b922c6356e832c31281b9a7d224335e953c684712ba118c1ad8312b7f1147d0
 docs/proofs/help-videos-2026-09-21/browser-audio-results.json,Preuve datee,Conserver sa campagne et son perimetre,6102,223,52075fe43923d691b3bf357d61d2befdff7ad796e2701e78984cc5ae1e40fe8b
+docs/proofs/help-videos-2026-09-24/README.md,Preuve datee,Conserver sa campagne et son perimetre,2126,27,d2fa083c0cdc52ee6bcee4557354b5d9a331c82ab7d98753f1d7e7a80a5a2aed
+docs/proofs/help-videos-2026-09-24/audio-validation.json,Preuve datee,Conserver sa campagne et son perimetre,1532,62,d6b01884569db8c1c775277a142643b6ba040138ceeab2b2fd6a66d9092e2503
+docs/proofs/help-videos-2026-09-24/browser-playback.json,Preuve datee,Conserver sa campagne et son perimetre,919,50,8bfb87a54c4a0a3476dffada3bacc17d350ab6dca5961a04ed71079ed67c9052
+docs/proofs/help-videos-2026-09-24/media-manifest.json,Preuve datee,Conserver sa campagne et son perimetre,3593,96,0f17338736d52c38cdfaafc4755430ac88a46505ff1ee146918b401481f77352
+docs/proofs/help-videos-2026-09-24/recording-results.json,Preuve datee,Conserver sa campagne et son perimetre,17024,528,fbfcdf38d8128ad48d2d218fb0aa0bca5f53118d33545b8e424eb5b15fbf8c81
 docs/proofs/images.json,Preuve datee,Conserver sa campagne et son perimetre,341,8,74f352b80a64ba679bf23a6caf683a6b1a8d656b91cf3f656f8734fe353757e2
 docs/proofs/integration-final.txt,Preuve datee,Conserver sa campagne et son perimetre,698,47,2d944cf2b85244741f7147b3f4e0f8fb9a279ae7b9caacc3450ea19745c1d537
 docs/proofs/interimaire-maquettes/backend.json,Preuve datee,Conserver sa campagne et son perimetre,1553,24,f6015ebef4fc73383b2d5e368c45e924781a200d6d865bf40882686993d3d7f2
@@ -490,6 +498,7 @@ docs/quality/ACCEPTATION_DIRECTE_2026-09-21.md,Campagne ou procedure specialisee
 docs/quality/ADMIN_NOTIFICATIONS_DISCORD.md,Campagne ou procedure specialisee,"Verifier date, limites et etat courant",1481,13,47c4ee2ef872497575d3c473ac0e35eb4e866ca36906bb955a9d27e67a7b684b
 docs/quality/ADMIN_PROTECTION_BRANCHES.md,Campagne ou procedure specialisee,"Verifier date, limites et etat courant",1326,14,dbeb5ac0e50ad7d8e47ef8a0ccb7a9ba6cbd292b1093066324764d406fc06942
 docs/quality/ADMIN_PSC_EXPLOITATION.md,Campagne ou procedure specialisee,"Verifier date, limites et etat courant",11773,68,1347fbb9ef7cb1f79d22ae22ed4c0c071cf683ae66c472213af35e183f85179a
+docs/quality/AIDE_MATCHS_CALENDRIER_2026-09-24.md,Campagne ou procedure specialisee,"Verifier date, limites et etat courant",2504,19,7ad7f66042d50eb55f6bd29ac3e57c617c00a4d649a5da0e49901a7e9f5ae55d
 docs/quality/AIDE_SUPPORT_GUIDES_2026-09-19.md,Campagne ou procedure specialisee,"Verifier date, limites et etat courant",4662,36,dc1ca4d83e1d04bf14692a9f983ebccaac2311dea4107ec486bf4558b79432ff
 docs/quality/ALIGNEMENTS_NOTIFICATIONS_2026-09-21.md,Campagne ou procedure specialisee,"Verifier date, limites et etat courant",8132,69,4dcc2ab2b6d4d0524887b341ae092abde69bcaae89448a1a346f21f22ca4b63e
 docs/quality/AUDIT_COMPLET_2026-09-23.md,Campagne ou procedure specialisee,"Verifier date, limites et etat courant",11929,104,0676579e2ea7f0092dced0124270fe071bf379b9a808bfef35353cab212b0f20

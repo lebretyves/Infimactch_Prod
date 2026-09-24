@@ -1,0 +1,96 @@
+{
+  "date": "2026-09-24",
+  "revision": "2026-09-24-front-r3",
+  "files": [
+    {
+      "path": "frontend/public/guides/tutorials/annulation-emails.jpg",
+      "bytes": 80464,
+      "sha256": "36b9f3826d5081b74b93c66e133ca657f7b7e982dc3e6d1ef0d536ba4c4e0ba8"
+    },
+    {
+      "path": "frontend/public/guides/tutorials/annulation-emails.vtt",
+      "bytes": 617,
+      "sha256": "1e6012a42a3ad08ef03637d445a689751075e8f07c3e36e298bd28d2f2f823dc"
+    },
+    {
+      "path": "frontend/public/guides/tutorials/annulation-emails.webm",
+      "bytes": 3201434,
+      "sha256": "09c857a437b892fd96f78959d4f4eacd0d5439a67af4138cf7b62ace263700c6"
+    },
+    {
+      "path": "frontend/public/guides/tutorials/candidature-agenda.jpg",
+      "bytes": 69917,
+      "sha256": "14732f47a8d3f244cf059b61b76b47e1b8858661af7ffa195e8a3933395f3aaf"
+    },
+    {
+      "path": "frontend/public/guides/tutorials/candidature-agenda.vtt",
+      "bytes": 883,
+      "sha256": "4a86cee6d67edaa365348e9137ca8f08e7f0bbcb776255891456973402f2813c"
+    },
+    {
+      "path": "frontend/public/guides/tutorials/candidature-agenda.webm",
+      "bytes": 4521062,
+      "sha256": "60104228726c2bfaa096aa0cfdde0857bff17b090b1de2c61cb8aac08fe8e062"
+    },
+    {
+      "path": "frontend/public/guides/tutorials/confirmation-pdf.jpg",
+      "bytes": 85369,
+      "sha256": "e4acb6e76019df5cd4731a1d6f74bc4593c3f658cf6cd120731f670c107023a4"
+    },
+    {
+      "path": "frontend/public/guides/tutorials/confirmation-pdf.vtt",
+      "bytes": 647,
+      "sha256": "0e562df4ca3b8e833167cd456334bf9beec329f4f00157fda80ee1d20561d5ac"
+    },
+    {
+      "path": "frontend/public/guides/tutorials/confirmation-pdf.webm",
+      "bytes": 3649549,
+      "sha256": "53fc1d48eab1551cdc753cefc829c4a836292eaab70685cc641b940ad48330da"
+    },
+    {
+      "path": "frontend/public/guides/tutorials/inscription-diplomes.jpg",
+      "bytes": 91834,
+      "sha256": "71ccbe7fba85f38e6c4d3fcd6b2673394467d0c8035f7c24b5bcfb2c4d06cf33"
+    },
+    {
+      "path": "frontend/public/guides/tutorials/inscription-diplomes.vtt",
+      "bytes": 1809,
+      "sha256": "6c5950fee43a230f14d539aadfc3a9b6e7f21d453c94af73193831f119d5ba00"
+    },
+    {
+      "path": "frontend/public/guides/tutorials/inscription-diplomes.webm",
+      "bytes": 11037612,
+      "sha256": "5b806eae24d7b048a93022fdc850d48be94ea3b63e16d59c88ddd2484a58d4d1"
+    },
+    {
+      "path": "frontend/public/guides/tutorials/profil-cv.jpg",
+      "bytes": 96069,
+      "sha256": "c40d0af63d2c20c78064ab6afe6589000db02304de96b8398bfc85eeeaf2bc8e"
+    },
+    {
+      "path": "frontend/public/guides/tutorials/profil-cv.vtt",
+      "bytes": 1015,
+      "sha256": "8173a28016a6b5df793b89159d26a7040dc062fdec35d9711fa2e7e05155803a"
+    },
+    {
+      "path": "frontend/public/guides/tutorials/profil-cv.webm",
+      "bytes": 5860516,
+      "sha256": "f86996b0ca92fdc8b530856b91ce9ac9475cb5c6c58d2df5520732945413e09f"
+    },
+    {
+      "path": "frontend/public/guides/tutorials/recherche-matching.jpg",
+      "bytes": 174048,
+      "sha256": "bfdf44459ad61d040e489001306e3fd084dda1f82d41549192a1acdeb0ad4311"
+    },
+    {
+      "path": "frontend/public/guides/tutorials/recherche-matching.vtt",
+      "bytes": 952,
+      "sha256": "8fb106c37520291b2ad510ec4db788fe14cc59f1996855151cfa6cf6b4e4340d"
+    },
+    {
+      "path": "frontend/public/guides/tutorials/recherche-matching.webm",
+      "bytes": 5815231,
+      "sha256": "990d67bb8dcb48f2a32764187a95a7a9601167131270a4bc17889509fdef217f"
+    }
+  ]
+}

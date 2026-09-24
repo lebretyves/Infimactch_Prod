@@ -1,4 +1,4 @@
-import { OfferOriginChoices, readOfferOrigin } from "./OfferOrigin";
+import { OfferOriginChoices } from "./OfferOrigin";
 import { Link, useSearchParams } from "react-router";
 import { useEffect } from "react";
 import { useRemote } from "@/lib/useRemote";
@@ -36,7 +36,7 @@ export function MixedRecommendations({
   busy: boolean;
 }) {
   const [params, setParams] = useSearchParams();
-  const origin = readOfferOrigin(params.get("origine"));
+  const origin = params.get("origine") === "externes" ? "externes" : "partenaires";
   const result = useRemote(
     (signal) => getRecommendations(signal, origin),
     userId + ":" + origin,
@@ -47,7 +47,7 @@ export function MixedRecommendations({
   useEffect(() => {
     if (!data || showExternes || origin !== "externes") return;
     const next = new URLSearchParams(params);
-    next.set("origine", "toutes");
+    next.set("origine", "partenaires");
     setParams(next, { replace: true });
   }, [data, showExternes, origin, params, setParams]);
   function cards() {
@@ -166,12 +166,12 @@ export function MixedRecommendations({
       </header>
       <p className={s.intro}>Jusqu’à 3 missions à découvrir. Un coup de cœur ? Gardez-le dans vos favoris.</p>
       <div className={s.toolbar}>
-        <OfferOriginChoices partnersFirst showExternes={showExternes} value={origin} onChange={(origine) => {
+        <OfferOriginChoices showAll={false} partnersFirst showExternes={showExternes} value={origin} onChange={(origine) => {
           const next = new URLSearchParams(params);
           next.set("origine", origine);
           setParams(next);
         }} />
-        <p>{origin === "toutes" ? (showExternes ? "Partenaires en priorité, puis offres externes." : "Votre sélection partenaire InfiMatch.") : origin === "partenaires" ? "Votre sélection partenaire InfiMatch." : "Des offres externes à explorer."}</p>
+        <p>{origin === "partenaires" ? "Votre s?lection partenaire InfiMatch." : "Des offres externes ? explorer."}</p>
       </div>
       {result.loading ? (
         <p role="status" className={s.state}>Recherche de vos prochaines missions…</p>
@@ -194,13 +194,14 @@ export function MixedRecommendations({
           {origin !== "partenaires" && showExternes && data.external.sources.some(source => !["SUCCESS", "SUCCEEDED", "READY"].includes(source.status)) && (
             <p className={s.notice} role="status">La dernière actualisation d’au moins une source est indisponible ou incomplète. Les offres déjà enregistrées peuvent être présentées ; vérifiez leur disponibilité sur le site source.</p>
           )}
-          {selected.length > 0 ? cards() : <div className={s.state}><h3>Votre prochain match se prépare</h3><p>Aucune offre disponible dans cette sélection pour le moment.</p></div>}
+          {selected.length > 0 ? cards() : (origin === "partenaires" ? data.internal.status : data.external.status) === "READY" ? <div className={s.state}><h3>Aucun match dans cette sélection</h3><p>Aucune offre ne correspond à cette sélection pour le moment.</p><ButtonLink to="/missions" variant="outline">Consulter les missions</ButtonLink></div> : null}
           {origin !== "externes" && data.internal.status === "READY" && !data.internal.items.length && (
-            <p className={s.emptyNote}>Aucune mission partenaire disponible dans cette sélection. <Link to="/profil">Vérifiez votre profil</Link>, votre dossier RPPS et vos <Link to="/calendrier">disponibilités</Link>.</p>
+            <p className={s.emptyNote}>Aucune mission partenaire disponible dans cette sélection. Vérifiez les compétences et l’expérience renseignées dans <Link to="/profil">votre profil</Link>, votre rayon de recherche et vos <Link to="/calendrier">disponibilités</Link>. Le catalogue peut contenir d’autres missions, sans compatibilité confirmée.</p>
           )}
           {origin !== "partenaires" && data.external.status === "READY" && !data.external.items.length && (
             <p className={s.emptyNote}>Aucune offre externe disponible pour le moment.</p>
           )}
+          {!showExternes && <p className={s.emptyNote}>Les offres externes ne sont pas affichées actuellement.</p>}
           <details className={s.explanation}>
             <summary>Comment sont choisis vos matchs ?</summary>
             {origin !== "externes" && <p>Les missions partenaires sont classées selon la correspondance avec votre profil lorsque celui-ci permet de la confirmer.</p>}

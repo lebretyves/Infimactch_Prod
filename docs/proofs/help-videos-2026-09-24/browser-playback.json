@@ -1,0 +1,50 @@
+[
+  {
+    "id": "inscription-diplomes",
+    "duration": 125.48,
+    "width": 1280,
+    "height": 800,
+    "playedSeconds": 0.251468,
+    "status": "PASS"
+  },
+  {
+    "id": "profil-cv",
+    "duration": 71.96,
+    "width": 1280,
+    "height": 800,
+    "playedSeconds": 0.421846,
+    "status": "PASS"
+  },
+  {
+    "id": "recherche-matching",
+    "duration": 67.28,
+    "width": 1280,
+    "height": 800,
+    "playedSeconds": 0.448374,
+    "status": "PASS"
+  },
+  {
+    "id": "candidature-agenda",
+    "duration": 58.708,
+    "width": 1280,
+    "height": 800,
+    "playedSeconds": 0.427509,
+    "status": "PASS"
+  },
+  {
+    "id": "confirmation-pdf",
+    "duration": 45.44,
+    "width": 1280,
+    "height": 800,
+    "playedSeconds": 0.433417,
+    "status": "PASS"
+  },
+  {
+    "id": "annulation-emails",
+    "duration": 41.308,
+    "width": 1280,
+    "height": 800,
+    "playedSeconds": 0.435457,
+    "status": "PASS"
+  }
+]
