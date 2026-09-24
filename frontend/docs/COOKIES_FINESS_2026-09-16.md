@@ -25,7 +25,7 @@
 - 25 contrôles navigateur : cookies, chargement Google avec SDK simulé et challenge serveur réel, refus/retrait/rechargement, conservation de la session, panne de stockage, lien de politique, FINESS réel, valeurs manuelles, réponses retardées, erreur/réessai, code corse, inscription depuis le navigateur enregistrée en base, préinscription Google simulée. Aucun compte réel Google utilisé dans les tests.
 - Contrôles visuels 1440, 375 et 320 px sans débordement horizontal sur ces écrans.
 - Comptes de test et écritures SQL entièrement dans une transaction annulée; sessions de test en mémoire. Aucun compte utilisateur modifié.
-- Preuves : `docs/proofs/cookies-finess/browser.json`, captures dans le même dossier; preuve backend dans `InfiMatch/docs/proofs/cookies-finess/backend.json`.
+- Preuves : `annexe/proofs/cookies-finess/browser.json`, captures dans le même dossier; preuve backend dans `InfiMatch/annexe/proofs/cookies-finess/backend.json`.
 - Catalogue enrichi avec les choix cookies et le formulaire FINESS prérempli. Captures de catalogue avec données isolées.
 
 - Compilation TypeScript/Vite finale réussie. Évaluation visuelle indépendante : PASS. Avertissement existant de taille du bundle JavaScript (586 ko avant compression), sans erreur de compilation.

@@ -36,5 +36,5 @@ try{
   assert.equal((await service.login({email,password})).id,created.id);
  });
  await client.query('ROLLBACK');assert.deepEqual(await count(),before);checks.push('Outer rollback verified: original account/identity/profile/organization counts unchanged');
- await mkdir('docs/proofs/google-registration',{recursive:true});await writeFile('docs/proofs/google-registration/database.json',JSON.stringify({at:new Date().toISOString(),checks,scope:'Real PostgreSQL writes enclosed in an outer rollback; no persisted test accounts or organizations.'},null,2));
+ await mkdir('annexe/proofs/google-registration',{recursive:true});await writeFile('annexe/proofs/google-registration/database.json',JSON.stringify({at:new Date().toISOString(),checks,scope:'Real PostgreSQL writes enclosed in an outer rollback; no persisted test accounts or organizations.'},null,2));
 }catch(e){await client.query('ROLLBACK').catch(()=>{});console.error(e.message);process.exitCode=1}finally{await client.end()}

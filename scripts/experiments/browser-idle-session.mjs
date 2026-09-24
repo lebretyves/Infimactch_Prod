@@ -11,8 +11,8 @@ route('/dashboards',{family:'NURSE',counts:{}});route('/me/matches*',{items:[],t
 route('/auth/activity',{idleExpiresAt:Date.now()+900000});
 route('/auth/me',{id:'idle-ui',email:'ui@example.invalid',family:'NURSE',organizations:[],session:{idleExpiresAt:Date.now()+60000}});
 run('open','https://localhost:8443/accueil');run('wait','--text','Rester connecté');
-run('screenshot','docs/proofs/parser-v4/idle-warning.png');
+run('screenshot','annexe/proofs/parser-v4/idle-warning.png');
 let s=run('snapshot');const stay=s.match(/button "Rester connecté" \[[^\]]*ref=([^\]]+)/);assert.ok(stay);run('click','@'+stay[1]);run('wait','1000');assert.ok(!run('snapshot').includes('Rester connecté'));
 run('eval','window.originalNow=Date.now;Date.now=()=>window.originalNow()+14*60*1000');run('wait','1500');assert.ok(run('snapshot').includes('Rester connecté'));
-run('eval','Date.now=()=>window.originalNow()+16*60*1000');run('wait','--url','**/connexion');assert.ok(run('snapshot').includes('Votre session a expiré'));run('screenshot','docs/proofs/parser-v4/idle-expired.png');
-fs.writeFileSync('docs/proofs/parser-v4/idle-browser.json',JSON.stringify({at:new Date().toISOString(),status:'PASS',scope:'Mock browser identity and timing; accelerated frontend clock; server expiry separately covered by isolated integration test',checks:['warning one minute before','explicit activity renews','warning at minute 14','logout and login message at minute 15']},null,2));run('close');console.log('Idle browser PASS');
+run('eval','Date.now=()=>window.originalNow()+16*60*1000');run('wait','--url','**/connexion');assert.ok(run('snapshot').includes('Votre session a expiré'));run('screenshot','annexe/proofs/parser-v4/idle-expired.png');
+fs.writeFileSync('annexe/proofs/parser-v4/idle-browser.json',JSON.stringify({at:new Date().toISOString(),status:'PASS',scope:'Mock browser identity and timing; accelerated frontend clock; server expiry separately covered by isolated integration test',checks:['warning one minute before','explicit activity renews','warning at minute 14','logout and login message at minute 15']},null,2));run('close');console.log('Idle browser PASS');

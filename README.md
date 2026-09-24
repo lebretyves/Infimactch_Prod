@@ -20,11 +20,11 @@ Les espaces personnels nécessitent une connexion. Les liens de production ont �
 
 | Besoin | Document |
 | --- | --- |
-| Périmètre et critères d'acceptation | [Exigences du projet](docs/REQUIREMENTS_V1.md) |
-| Préparer le rendu Epitech | [Livrables et recette finale](docs/rendu/README.md) |
-| Trouver un guide technique | [Index documentaire](docs/README.md) |
-| Comprendre les services déployés | [Déploiement](docs/DEPLOIEMENT_PRODUCTION.md) |
-| Retrouver un ancien document | [Politique d'archivage](docs/ARCHIVES.md) |
+| Périmètre et critères d'acceptation | [Exigences du projet](annexe/REQUIREMENTS_V1.md) |
+| Préparer le rendu Epitech | [Livrables et recette finale](annexe/rendu/README.md) |
+| Trouver un guide technique | [Index documentaire](annexe/README.md) |
+| Comprendre les services déployés | [Déploiement](annexe/DEPLOIEMENT_PRODUCTION.md) |
+| Retrouver un ancien document | [Politique d'archivage](annexe/ARCHIVES.md) |
 
 ## Fonctionnalités
 
@@ -52,7 +52,7 @@ flowchart LR
     API --> Services["Discord, SMTP2GO et sources publiques"]
 ```
 
-[Architecture détaillée et schéma imprimable](docs/SCHEMA_ARCHITECTURE_V1.md) · [Flux métier et sécurité](docs/FLUX_V1.md) · [Automatisations, horaires et preuves](docs/AUTOMATISATIONS.md).
+[Architecture détaillée et schéma imprimable](annexe/SCHEMA_ARCHITECTURE_V1.md) · [Flux métier et sécurité](annexe/FLUX_V1.md) · [Automatisations, horaires et preuves](annexe/AUTOMATISATIONS.md).
 
 Le backend porte les règles métier ; n8n orchestre les appels. La reprise périodique est réglée sur quatre heures, en complément des tentatives immédiates après certaines écritures. Les trois applications Vercel sont déployées séparément.
 
@@ -72,7 +72,7 @@ frontend/      Application, administration et tests navigateur
 infra/         Environnement local et configuration d'infrastructure
 scripts/       Validation, imports, exploitation et sauvegardes
 workflows/     Modèles de workflows n8n
-docs/         Guides, exigences, preuves et préparation du rendu
+annexe/       Guides, exigences, preuves et préparation du rendu
 ```
 
 ## Installation locale
@@ -144,7 +144,7 @@ Cette commande utilise uniquement le `.env` de ce clone. Elle exige le mode dév
 
 Ouvrir le fichier privé `data/admin/first-local-owner-invitation.json`, puis l’administration locale. Choisir « J’ai reçu une invitation », saisir l’adresse et le code, puis suivre la création du mot de passe administrateur et l’enrôlement MFA. Conserver les codes de secours. L’invitation expire après 24 heures ; aucun email d’invitation n’est envoyé automatiquement. Le fichier privé n’est pas à publier. Une fois connecté, inviter les autres administrateurs depuis l’interface.
 
-Le bootstrap de production suit une [procédure distincte](docs/quality/ADMIN_PSC_EXPLOITATION.md).
+Le bootstrap de production suit une [procédure distincte](annexe/quality/ADMIN_PSC_EXPLOITATION.md).
 
 ### Démarrage quotidien
 
@@ -165,9 +165,9 @@ docker compose --env-file .env -f infra/compose.yaml --profile automation stop
 
 ### Automatisations et services externes
 
-Le démarrage de n8n local ne configure pas ses workflows ni leurs connexions. Les imports externes, Discord et SMTP2GO nécessitent leurs propres identifiants et destinations. Voir les [automatisations](docs/AUTOMATISATIONS.md) et la [configuration des services](docs/quality/CONFIGURATION.md). L’application locale de base peut démarrer sans ces services ; leurs fonctions ne sont alors pas opérationnelles. Le worker `npm run worker`, après compilation, traite les événements de la base configurée : ne le lancer que lorsque les destinations locales sont vérifiées.
+Le démarrage de n8n local ne configure pas ses workflows ni leurs connexions. Les imports externes, Discord et SMTP2GO nécessitent leurs propres identifiants et destinations. Voir les [automatisations](annexe/AUTOMATISATIONS.md) et la [configuration des services](annexe/quality/CONFIGURATION.md). L’application locale de base peut démarrer sans ces services ; leurs fonctions ne sont alors pas opérationnelles. Le worker `npm run worker`, après compilation, traite les événements de la base configurée : ne le lancer que lorsque les destinations locales sont vérifiées.
 
-Le [guide frontend](frontend/README.md) complète les commandes de développement. Les documents référencés ici se trouvent dans `docs/` sur les deux branches principales ; `docs_intern/` appartient aux anciens états du dépôt Epitech.
+Le [guide frontend](frontend/README.md) complète les commandes de développement. Les documents référencés ici se trouvent dans `annexe/` sur les deux branches principales ; `docs_intern/` appartient aux anciens états du dépôt Epitech.
 
 
 ## Validation
@@ -192,7 +192,7 @@ Contrôle documentaire et comparaison des branches : `python scripts/check-repos
 
 ## État de livraison et limites
 
-État documentaire : **24 septembre 2026**. Consulter en priorité [l’état courant du code, des documents et du déploiement](docs/ETAT_COURANT.md). Les versions applicatives vérifiées, les déploiements et les résultats CI sont regroupés dans [le registre de livraison](docs/rendu/LIVRAISON_VERIFIEE.json). Le manifeste du rendu identifie le commit effectivement remis. Une mise à jour documentaire ne constitue pas une nouvelle recette métier ; les preuves datées conservent leur périmètre.
+État documentaire : **24 septembre 2026**. Consulter en priorité [l’état courant du code, des documents et du déploiement](annexe/ETAT_COURANT.md). Les versions applicatives vérifiées, les déploiements et les résultats CI sont regroupés dans [le registre de livraison](annexe/rendu/LIVRAISON_VERIFIEE.json). Le manifeste du rendu identifie le commit effectivement remis. Une mise à jour documentaire ne constitue pas une nouvelle recette métier ; les preuves datées conservent leur périmètre.
 
 - Optimisation du matching testée sur bases isolées ; résultats et comparaisons conservés.
 - Étape Discord facultative testée sur les trois familles de comptes avec API fictive ; aucune réception Discord réelle n'en est déduite.
@@ -200,22 +200,22 @@ Contrôle documentaire et comparaison des branches : `python scripts/check-repos
 - Identité du responsable des données, certaines durées et heures humaines de l'équipe restent à formaliser.
 - La CI Epitech était bloquée par le budget de l'organisation au dernier constat ; ne pas l'assimiler à une CI réussie.
 
-Le [dossier de rendu](docs/rendu/README.md) distingue livrables disponibles et validations ouvertes. Aucune conformité RGAA complète ni économie financière/carbone n'est revendiquée.
+Le [dossier de rendu](annexe/rendu/README.md) distingue livrables disponibles et validations ouvertes. Aucune conformité RGAA complète ni économie financière/carbone n'est revendiquée.
 
 ## API et exploitation
 
-Les routes métier utilisent `/api/v1`. Les écritures authentifiées nécessitent les protections de session, d'origine et CSRF prévues par le client. Les droits sont contrôlés côté serveur. L'[export OpenAPI](docs/openapi.json) complète la documentation servie par l'application.
+Les routes métier utilisent `/api/v1`. Les écritures authentifiées nécessitent les protections de session, d'origine et CSRF prévues par le client. Les droits sont contrôlés côté serveur. L'[export OpenAPI](annexe/openapi.json) complète la documentation servie par l'application.
 
-Les variables `VITE_*` sont publiques : ne jamais y mettre de secret. L'administration, le site et l'API ont des livraisons distinctes. Voir [le déploiement](docs/DEPLOIEMENT_PRODUCTION.md), [les sauvegardes](docs/quality/SAUVEGARDES_OPERATIONNELLES_2026-09-19.md) et [les automatisations](docs/rendu/README.md#automatisations).
+Les variables `VITE_*` sont publiques : ne jamais y mettre de secret. L'administration, le site et l'API ont des livraisons distinctes. Voir [le déploiement](annexe/DEPLOIEMENT_PRODUCTION.md), [les sauvegardes](annexe/quality/SAUVEGARDES_OPERATIONNELLES_2026-09-19.md) et [les automatisations](annexe/rendu/README.md#automatisations).
 
 ## Contribution et documentation
 
-Conserver les tests et preuves adaptés au changement. Mettre à jour les exigences lorsqu'un comportement produit évolue. Ne pas placer conversations, prompts, comptes rendus successifs ou secrets dans les branches actives. Les guides décrivent l'usage courant ; les preuves datées décrivent uniquement leur campagne. Voir [les archives](docs/ARCHIVES.md).
+Conserver les tests et preuves adaptés au changement. Mettre à jour les exigences lorsqu'un comportement produit évolue. Ne pas placer conversations, prompts, comptes rendus successifs ou secrets dans les branches actives. Les guides décrivent l'usage courant ; les preuves datées décrivent uniquement leur campagne. Voir [les archives](annexe/ARCHIVES.md).
 
 Licence : [LICENSE](LICENSE).
 
-[Guide utilisateur](docs/GUIDE_UTILISATEUR.md) · [Inventaire documentaire](docs/INVENTAIRE_DOCUMENTAIRE.md).
+[Guide utilisateur](annexe/GUIDE_UTILISATEUR.md) · [Inventaire documentaire](annexe/INVENTAIRE_DOCUMENTAIRE.md).
 
-[Seconde vérification documentaire et réserves restantes](docs/VERIFICATION_DOCUMENTAIRE_2026-09-21.md).
+[Seconde vérification documentaire et réserves restantes](annexe/VERIFICATION_DOCUMENTAIRE_2026-09-21.md).
 
-La [revue du code du 21 septembre](docs/quality/REVUE_CODE_2026-09-21.md) décrit le nettoyage, les corrections et les limites des vérifications.
+La [revue du code du 21 septembre](annexe/quality/REVUE_CODE_2026-09-21.md) décrit le nettoyage, les corrections et les limites des vérifications.

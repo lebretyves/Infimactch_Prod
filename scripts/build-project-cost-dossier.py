@@ -6,13 +6,13 @@ from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
 from reportlab.lib.colors import HexColor, white
 from reportlab.lib.pagesizes import A4
 ROOT=Path(__file__).resolve().parents[1]
-m=json.loads((ROOT/'docs/rendu/2026-09-23/couts-production.json').read_text(encoding='utf-8'))
+m=json.loads((ROOT/'annexe/rendu/2026-09-23/couts-production.json').read_text(encoding='utf-8'))
 hours=m['people_actual']*m['days']*(m['hours_day']+m['hours_evening'])
 gross=hours*m['salary_gross_year']/m['paid_hours_year']
 charges=gross*m['employer_loading_assumption']
 equipment=m['people_actual']*m['equipment_per_station_ht']/m['equipment_years']/m['working_days_year_assumption']*m['days']
 fmt=lambda x:f'{x:,.2f}'.replace(',',' ').replace('.',',')+' EUR'
-out=ROOT/'docs/cout-projet/COUT_REALISATION_INFIMATCH.pdf'
+out=ROOT/'documentation/cout-projet/COUT_REALISATION_INFIMATCH.pdf'
 styles=getSampleStyleSheet()
 styles.add(ParagraphStyle(name='TitleBlue',fontName='Helvetica-Bold',fontSize=27,leading=32,textColor=HexColor('#123454'),spaceAfter=16))
 styles['BodyText'].leading=16
@@ -27,7 +27,7 @@ def footer(c,d):
  c.setFillColor(HexColor('#123454'));c.setFont('Helvetica',9)
  c.drawString(50,30,'InfiMatch | Estimation de réalisation | 24 septembre 2026')
  c.drawRightString(545,30,str(d.page))
- logo=ROOT/'docs/rendu/2026-09-23/assets/epitech-noir.png'
+ logo=ROOT/'annexe/rendu/2026-09-23/assets/epitech-noir.png'
  if logo.exists():c.drawImage(str(logo),445,775,width=100,height=28,preserveAspectRatio=True,mask='auto')
 p('INFIMATCH / DOSSIER PROJET')
 p('Coût de réalisation<br/>de l’application','TitleBlue')
@@ -49,6 +49,6 @@ p('L’achat intégral et l’amortissement ne sont pas additionnés. Si tous le
 p('Ce qui reste à établir','Heading2')
 p('Ce montant ne constitue pas un coût complet constaté : majorations éventuelles des heures supplémentaires, abonnements et licences réellement payés pendant le projet, locaux, énergie et frais généraux restent non établis. Le fonctionnement mensuel futur et la maintenance sont chiffrés séparément.')
 p('Sources de calcul dans le Git','Heading2')
-p('docs/rendu/2026-09-23/ : couts-production.json, calcul-couts.py, resultats-couts.json, COUTS_PRODUCTION.xlsx et 09_COUTS_PRODUCTION.md. Le dossier docs/cout-projet/README.md regroupe leurs liens. Ce PDF réutilise le modèle existant ; aucun nouveau prix fournisseur n’a été supposé.')
+p('annexe/rendu/2026-09-23/ : couts-production.json, calcul-couts.py, resultats-couts.json, COUTS_PRODUCTION.xlsx et 09_COUTS_PRODUCTION.md. Le dossier documentation/cout-projet/README.md regroupe leurs liens. Ce PDF réutilise le modèle existant ; aucun nouveau prix fournisseur n’a été supposé.')
 SimpleDocTemplate(str(out),pagesize=A4,rightMargin=50,leftMargin=50,topMargin=80,bottomMargin=55,title='InfiMatch - Coût de réalisation du projet',author='InfiMatch').build(story,onFirstPage=footer,onLaterPages=footer)
 print(out)

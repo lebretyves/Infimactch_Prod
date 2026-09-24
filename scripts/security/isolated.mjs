@@ -2,7 +2,7 @@ import {spawn,spawnSync} from 'node:child_process';
 import {mkdirSync,writeFileSync,readFileSync,readdirSync} from 'node:fs';
 import {resolve,dirname} from 'node:path';
 import {randomBytes,createHash} from 'node:crypto';
-const root=resolve(import.meta.dirname,'../..'), proof=resolve(process.env.INFIMATCH_TEST_PROOF_DIR||resolve(root,'docs/proofs/v1-hardening'));mkdirSync(proof,{recursive:true});
+const root=resolve(import.meta.dirname,'../..'), proof=resolve(process.env.INFIMATCH_TEST_PROOF_DIR||resolve(root,'annexe/proofs/v1-hardening'));mkdirSync(proof,{recursive:true});
 function sourceSnapshot(){
  const files=[];function visit(dir){for(const entry of readdirSync(resolve(root,dir),{withFileTypes:true})){const path=dir+'/'+entry.name;if(entry.isDirectory())visit(path);else if(/\.(ts|json)$/.test(entry.name))files.push(path);}}
  visit('backend/src');visit('backend/test');files.push('backend/package.json');files.sort();
@@ -33,7 +33,7 @@ try{
  let apiReady=false;for(let i=0;i<60;i++){try{if((await fetch('http://127.0.0.1:3210/api/v1/health')).ok&&(await fetch('http://127.0.0.1:55679/healthz/readiness')).ok){apiReady=true;break;}}catch{}await new Promise(r=>setTimeout(r,1000));}if(!apiReady)throw Error('Isolated API or n8n did not become ready');
  const suiteMode=process.env.INFIMATCH_TEST_FILES?'test:integration':'coverage';
  console.log('Running isolated '+suiteMode);
- if(suiteMode==='coverage')run(process.execPath,[resolve(root,'node_modules/c8/bin/c8.js'),'--all','--src=src','--extension=.ts','--include=src/**','--include=.test-build/src/**','--reporter=text','--reporter=json-summary','--reporter=html','--reports-dir=../docs/proofs/coverage',process.execPath,resolve(root,'scripts/security/test-suite.cjs'),'coverage'],'coverage',resolve(root,'backend'));
+ if(suiteMode==='coverage')run(process.execPath,[resolve(root,'node_modules/c8/bin/c8.js'),'--all','--src=src','--extension=.ts','--include=src/**','--include=.test-build/src/**','--reporter=text','--reporter=json-summary','--reporter=html','--reports-dir=../annexe/proofs/coverage',process.execPath,resolve(root,'scripts/security/test-suite.cjs'),'coverage'],'coverage',resolve(root,'backend'));
  else run(process.execPath,[resolve(root,'scripts/security/test-suite.cjs'),'integration'],'targeted-integration');
  console.log('Running real PostgreSQL security regressions');
  run(process.execPath,['scripts/security/regressions.cjs'],'regressions');

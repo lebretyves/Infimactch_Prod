@@ -20,7 +20,7 @@ try {
   await client.query("INSERT INTO import_run(provider,status,summary) VALUES('CROSS_SOURCE_DEDUPLICATION','SUCCESS',$1)",[JSON.stringify(report)]);
  }
  await client.query('COMMIT');
- await mkdir('docs/proofs/offer-deduplication',{recursive:true});
- await writeFile('docs/proofs/offer-deduplication/audit.json',JSON.stringify(report,null,2));
+ await mkdir('annexe/proofs/offer-deduplication',{recursive:true});
+ await writeFile('annexe/proofs/offer-deduplication/audit.json',JSON.stringify(report,null,2));
  console.log(JSON.stringify(report,null,2));
 }catch(e){await client.query('ROLLBACK');throw e;}finally{await client.end();}

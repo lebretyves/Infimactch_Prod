@@ -28,7 +28,7 @@ try {
       finally{for(const bytes of Object.values(opened))bytes.fill(0);}
     });
   }
-  const proof=resolve(root,'docs/quality');await mkdir(proof,{recursive:true});
+  const proof=resolve(root,'annexe/quality');await mkdir(proof,{recursive:true});
   await writeFile(resolve(proof,result.synthetic?'restore-synthetic.json':'restore-production.json'),JSON.stringify({date:new Date().toISOString(),...result},null,2)+'\n');
   console.log(JSON.stringify(result));
 } catch(error){console.error(JSON.stringify({status:'FAIL',code:/^[A-Z0-9_]+$/.test(error.message)?error.message:'RESTORE_PROBE_FAILED'}));process.exitCode=1;}

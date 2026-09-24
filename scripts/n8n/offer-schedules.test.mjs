@@ -10,7 +10,7 @@ test('provider schedules use Paris timezone and distinct cron hours and API rout
  }
 });
 test('periodic workflow retains dispatch/reminders and has no dangling import edge',()=>{
- const w=JSON.parse(readFileSync(new URL('../../docs/n8n/InfiMatch-production-reprise-et-rappels.json',import.meta.url)));
+ const w=JSON.parse(readFileSync(new URL('../../annexe/n8n/InfiMatch-production-reprise-et-rappels.json',import.meta.url)));
  removeOfferRefresh(w);assert.ok(w.nodes.some(n=>n.name==='Rappels'));assert.ok(w.nodes.some(n=>n.name==='Traiter la file'));
  assert.ok(!JSON.stringify(w).includes('refresh-offers'));
  for(const connection of Object.values(w.connections))for(const output of connection.main)for(const link of output)assert.ok(w.nodes.some(n=>n.name===link.node));
@@ -28,7 +28,7 @@ test('continuation follows pages but stops on quota, completion, 20 batches or 3
 });
 
 test('quota-saving retry schedule is four hours with all trigger edges connected',()=>{
- const w=JSON.parse(readFileSync(new URL('../../docs/n8n/InfiMatch-production-reprise-et-rappels.json',import.meta.url)));
+ const w=JSON.parse(readFileSync(new URL('../../annexe/n8n/InfiMatch-production-reprise-et-rappels.json',import.meta.url)));
  const triggers=w.nodes.filter(n=>n.type==='n8n-nodes-base.scheduleTrigger');
  assert.equal(triggers.length,1);assert.deepEqual(triggers[0].parameters.rule.interval,[{field:'hours',hoursInterval:4}]);
  assert.equal(w.settings.timezone,'Europe/Paris');

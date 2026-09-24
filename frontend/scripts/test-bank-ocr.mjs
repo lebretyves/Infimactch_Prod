@@ -70,7 +70,7 @@ try{
  await page.waitForTimeout(1200);
  assert.ok(await page.evaluate(()=>{clearInterval(window.fixtureTimer);return window.fixtureTracks.every(t=>t.readyState==='ended');}));
  assert.equal(await page.getByLabel('Titulaire du compte').inputValue(),'CAMILLE CAMERA');
- for(const width of [375,1440]){await page.setViewportSize({width,height:900});assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth+1),false);await page.screenshot({path:`../InfiMatch/docs/quality/rib-review-${width}.png`,fullPage:true});}
+ for(const width of [375,1440]){await page.setViewportSize({width,height:900});assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth+1),false);await page.screenshot({path:`../InfiMatch/annexe/quality/rib-review-${width}.png`,fullPage:true});}
  assert.deepEqual(external,[]);assert.ok(resources.some(x=>x.includes('/ocr/worker.min.js')));assert.equal(await page.evaluate(()=>JSON.stringify({...localStorage,...sessionStorage}).includes('FR7630006')),false);
  console.log('PASS automatic file analysis + real live camera OCR/autocapture/field mapping/track cleanup, real local Tesseract synthetic image + PDF.js text PDF, reminder SPA anchor and file limits, IBAN checksum, explicit review/save contract, invalid PDF x2/manual fallback, new file clears old fields, 375/1440, no external requests/storage.');
 }finally{await browser.close();}

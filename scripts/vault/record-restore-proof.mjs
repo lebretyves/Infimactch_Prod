@@ -2,7 +2,7 @@ import {managedPostgresConnection} from './postgres-target.mjs';
 import {withRole,request} from './common.mjs';
 import {Client} from 'pg';
 import {readFile} from 'node:fs/promises';
-const proof=JSON.parse(await readFile(new URL('../../docs/quality/restore-production.json',import.meta.url),'utf8'));
+const proof=JSON.parse(await readFile(new URL('../../annexe/quality/restore-production.json',import.meta.url),'utf8'));
 if(proof.status!=='PASS'||proof.synthetic!==false||proof.network!=='none'||proof.productionModified!==false)throw Error('Verified isolated production restore required');
 await withRole('operator',async token=>{
  const values=(await request('kv/data/infimatch/v1/production',{token})).data.data;

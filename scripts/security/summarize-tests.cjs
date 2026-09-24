@@ -1,10 +1,10 @@
 const {readFileSync,readdirSync,writeFileSync}=require('node:fs');
 const {resolve}=require('node:path');
-const directory=resolve(process.argv[2]||'docs/proofs/v1-hardening');
+const directory=resolve(process.argv[2]||'annexe/proofs/v1-hardening');
 const root=resolve(__dirname,'../..');
 const files=readdirSync(directory).filter(file=>file==='unit.txt'||(file.endsWith('.spec.js.txt')&&!file.startsWith('migrate-')));
 const campaigns=files.map(file=>{const text=readFileSync(resolve(directory,file),'utf8');const counts=Object.fromEntries(['tests','pass','fail','skipped','cancelled'].map(key=>[key,Number(text.match(new RegExp('\\b'+key+' (\\d+)'))?.[1]||0)]));return {file,...counts};});
 const result=JSON.parse(readFileSync(resolve(directory,'result.json'),'utf8'));
-const coverage=JSON.parse(readFileSync(resolve(root,'docs/proofs/coverage/coverage-summary.json'),'utf8'));
+const coverage=JSON.parse(readFileSync(resolve(root,'annexe/proofs/coverage/coverage-summary.json'),'utf8'));
 const summary={date:new Date().toISOString(),campaignStatus:result.status,sourceSha256:result.sourceSha256||null,campaigns,totals:Object.fromEntries(['tests','pass','fail','skipped','cancelled'].map(key=>[key,campaigns.reduce((sum,c)=>sum+c[key],0)])),coverage:coverage.total,coverageScope:'Backend TypeScript unit and integration test processes; no frontend or isolated external API process coverage inferred'};
 writeFileSync(resolve(directory,'summary.json'),JSON.stringify(summary,null,2));console.log(JSON.stringify(summary,null,2));

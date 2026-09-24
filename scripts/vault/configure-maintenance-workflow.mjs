@@ -28,5 +28,5 @@ try{
   console.log(JSON.stringify({id:saved.id,name,active:true,schedule:'04:15 Europe/Paris daily',businessHistoryEnabled:false,scope:'technical maintenance only'}));
  }else console.log(JSON.stringify({mode:'preview',name,exists:!!existing,schedule:'04:15 Europe/Paris daily',businessHistoryEnabled:false}));
  const clean=structuredClone(workflow);for(const node of clean.nodes)delete node.credentials;
- await mkdir(resolve(root,'docs/n8n'),{recursive:true});await writeFile(resolve(root,'docs/n8n/maintenance-quotidienne.json'),JSON.stringify(clean,null,2)+'\n');
+ await mkdir(resolve(root,'annexe/n8n'),{recursive:true});await writeFile(resolve(root,'annexe/n8n/maintenance-quotidienne.json'),JSON.stringify(clean,null,2)+'\n');
 }catch(e){console.error('Maintenance configuration failed: '+e.message);process.exitCode=1;}finally{ws.close();}

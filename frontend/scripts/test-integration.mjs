@@ -42,7 +42,7 @@ try{
  await login(agency);await page.goto(base+'/missions');await page.getByRole('heading',{name:'Missions de mon organisation'}).waitFor();
  await page.waitForFunction(()=>!document.querySelector('[role=status]'));assert.equal(await page.getByRole('alert').count(),0);checks.push('enterprise_session_and_missions');
  await page.getByRole('button',{name:'Déconnexion',exact:true}).click();await page.waitForURL('**/connexion');
- await mkdir('docs/proofs',{recursive:true});
+ await mkdir('annexe/proofs',{recursive:true});
  const proof={date:new Date().toISOString(),checks,scope:'Real local API with existing fictional seed. Positive application not exercised: nurse fixture RPPS_NOT_CHECKED.'};
- await writeFile('docs/proofs/integration-api.json',JSON.stringify(proof,null,2)+'\n');console.log(JSON.stringify(proof,null,2));
+ await writeFile('annexe/proofs/integration-api.json',JSON.stringify(proof,null,2)+'\n');console.log(JSON.stringify(proof,null,2));
 }finally{await browser.close();}

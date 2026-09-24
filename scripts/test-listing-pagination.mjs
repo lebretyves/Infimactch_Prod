@@ -63,8 +63,8 @@ try {
   assert.equal(first.total,last.total);assert.equal(last.items.length,0);
  });
  await client.query('ROLLBACK');
- await mkdir('docs/proofs/missions-pagination',{recursive:true});
- await writeFile('docs/proofs/missions-pagination/backend-readonly.json',JSON.stringify({at:new Date().toISOString(),checks,scope:'Real PostgreSQL READ ONLY transaction, synthetic SELECT values and existing catalogue; qualified profile fixture only in memory, no persisted fixtures, no account/session changes.'},null,2));
+ await mkdir('annexe/proofs/missions-pagination',{recursive:true});
+ await writeFile('annexe/proofs/missions-pagination/backend-readonly.json',JSON.stringify({at:new Date().toISOString(),checks,scope:'Real PostgreSQL READ ONLY transaction, synthetic SELECT values and existing catalogue; qualified profile fixture only in memory, no persisted fixtures, no account/session changes.'},null,2));
 } catch(error) {
  console.error(error.message);process.exitCode=1;
 } finally {await client.end();}

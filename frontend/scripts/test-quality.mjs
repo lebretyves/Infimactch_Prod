@@ -36,9 +36,9 @@ try {
   assert.deepEqual(cached.sort(), ['/favicon.svg', '/icons/icon-192.png', '/icons/icon-512.png', '/offline.html'].sort());
   await context.setOffline(true); await page.goto(base + '/missions'); await page.getByRole('heading', { name: 'Vous êtes hors connexion' }).waitFor();
   await context.setOffline(false); await page.goto(base + '/installer'); await page.locator('h1').waitFor();
-  fs.mkdirSync('../InfiMatch/docs/quality', { recursive: true });
-  for (const width of [390, 1440]) { await page.setViewportSize({ width, height: 900 }); await page.screenshot({ path: `../InfiMatch/docs/quality/installation-${width}.png`, fullPage: true }); }
-  fs.writeFileSync('../InfiMatch/docs/quality/frontend-checks.json', JSON.stringify({ date: new Date().toISOString(), browser: await browser.version(), fixtures: 'unauthenticated API only', results, pwa: { userTriggeredPrompt: true, dismissal: true, cacheAllowlist: cached, offlineFallback: true }, limitations: ['No real-device installation', 'No screen reader audit', 'No exhaustive RGAA audit'] }, null, 2));
+  fs.mkdirSync('../InfiMatch/annexe/quality', { recursive: true });
+  for (const width of [390, 1440]) { await page.setViewportSize({ width, height: 900 }); await page.screenshot({ path: `../InfiMatch/annexe/quality/installation-${width}.png`, fullPage: true }); }
+  fs.writeFileSync('../InfiMatch/annexe/quality/frontend-checks.json', JSON.stringify({ date: new Date().toISOString(), browser: await browser.version(), fixtures: 'unauthenticated API only', results, pwa: { userTriggeredPrompt: true, dismissal: true, cacheAllowlist: cached, offlineFallback: true }, limitations: ['No real-device installation', 'No screen reader audit', 'No exhaustive RGAA audit'] }, null, 2));
   console.log(`${results.length} responsive/semantic checks passed; install event requires click, dismiss works, sensitive API never cached, offline fallback passes.`);
   await context.close();
 } finally { await browser.close(); }

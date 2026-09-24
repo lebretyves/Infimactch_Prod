@@ -45,8 +45,8 @@ try{
  periodic.connections['Toutes les 4 heures']={main:[[{node:'Verifier disponibilite API',type:'main',index:0}]]};
  periodic.connections['Verifier disponibilite API']={main:[[{node:'Traiter la file',type:'main',index:0}]]};
  resilientReminders(periodic);
- await mkdir(resolve(root,'docs/n8n'),{recursive:true});
- for(const workflow of workflows){const old=existing.find(x=>x.name===workflow.name)||(workflow.name===OFFER_WORKFLOW_NAMES.FRANCE_TRAVAIL?existing.find(x=>x.name===LEGACY_DAILY_NAME):undefined);const saved=old?await api('/rest/workflows/'+old.id,'PATCH',workflow):await api('/rest/workflows','POST',{...workflow,projectId});await api('/rest/workflows/'+saved.id+'/activate','POST',{versionId:saved.versionId});const clean=structuredClone(workflow);for(const node of clean.nodes)delete node.credentials;await writeFile(resolve(root,'docs/n8n/'+workflow.name.replace(/[^a-z0-9]+/gi,'-')+'.json'),JSON.stringify(clean,null,2)+'\n');console.log(JSON.stringify({workflow:workflow.name,id:saved.id,published:true}));}
+ await mkdir(resolve(root,'annexe/n8n'),{recursive:true});
+ for(const workflow of workflows){const old=existing.find(x=>x.name===workflow.name)||(workflow.name===OFFER_WORKFLOW_NAMES.FRANCE_TRAVAIL?existing.find(x=>x.name===LEGACY_DAILY_NAME):undefined);const saved=old?await api('/rest/workflows/'+old.id,'PATCH',workflow):await api('/rest/workflows','POST',{...workflow,projectId});await api('/rest/workflows/'+saved.id+'/activate','POST',{versionId:saved.versionId});const clean=structuredClone(workflow);for(const node of clean.nodes)delete node.credentials;await writeFile(resolve(root,'annexe/n8n/'+workflow.name.replace(/[^a-z0-9]+/gi,'-')+'.json'),JSON.stringify(clean,null,2)+'\n');console.log(JSON.stringify({workflow:workflow.name,id:saved.id,published:true}));}
 }catch(e){console.error('Production workflows configuration failed: '+e.message);process.exitCode=1;}finally{ws.close();}
 
 

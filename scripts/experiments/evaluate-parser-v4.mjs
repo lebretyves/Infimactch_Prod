@@ -24,6 +24,6 @@ const results=rows.map((row,i)=>{
  return {id:row.id,title:row.title,source:row.source,targets,proofErrors,falsePositives,fieldCount:parsed.fields.length,reviewCount:parsed.reviewQueue.length,fields:parsed.fields};
 });
 const report={at:new Date().toISOString(),parserVersion:'4.0.0',scope:'8-offer development evaluation after two omissions fixed; no longer blind; targeted expectations, not exhaustive recall/precision',targets:results.flatMap(r=>r.targets).length,found:results.flatMap(r=>r.targets).filter(t=>t.found).length,proofErrors:results.reduce((n,r)=>n+r.proofErrors,0),targetedFalsePositives:results.flatMap(r=>r.falsePositives),offers:results};
-fs.mkdirSync('docs/proofs/parser-v4',{recursive:true});
-fs.writeFileSync('docs/proofs/parser-v4/evaluation.json',JSON.stringify(report,null,2));
+fs.mkdirSync('annexe/proofs/parser-v4',{recursive:true});
+fs.writeFileSync('annexe/proofs/parser-v4/evaluation.json',JSON.stringify(report,null,2));
 console.log(JSON.stringify({...report,offers:results.map(({fields,...r})=>r)},null,2));

@@ -21,4 +21,4 @@ try{
   const [stored]=await f.db.query('SELECT o.name,o.address,o.finess,o.referent FROM organization o JOIN membership m ON m.organization_id=o.id WHERE m.user_id=$1',[result.body.user.id]);assert.equal(stored.name,name);assert.equal(stored.address,address);assert.equal(stored.referent,'Camille Exemple RH 0100000000');f.ok('Registration '+round+': official or edited coordinates persist in organization and are returned by auth/me');
  }
 }finally{await f.close();}
-await mkdir('docs/proofs/cookies-finess',{recursive:true});await writeFile('docs/proofs/cookies-finess/backend.json',JSON.stringify({at:new Date().toISOString(),checks:f.checks,isolated:true,rollback:true},null,2));
+await mkdir('annexe/proofs/cookies-finess',{recursive:true});await writeFile('annexe/proofs/cookies-finess/backend.json',JSON.stringify({at:new Date().toISOString(),checks:f.checks,isolated:true,rollback:true},null,2));

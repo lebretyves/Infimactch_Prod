@@ -37,10 +37,10 @@ jobs:
         with:
           name: v1-test-evidence
           path: |
-            docs/openapi.json
-            docs/proofs/v1-hardening
-            docs/proofs/coverage
-            docs/proofs/unit-coverage
+            annexe/openapi.json
+            annexe/proofs/v1-hardening
+            annexe/proofs/coverage
+            annexe/proofs/unit-coverage
   frontend:
     runs-on: ubuntu-latest
     steps:

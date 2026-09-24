@@ -1,6 +1,6 @@
 import {spawnSync} from 'node:child_process';import {readFile,writeFile,mkdir,cp} from 'node:fs/promises';import {resolve,join} from 'node:path';import {randomBytes,createHash} from 'node:crypto';import {parse} from 'dotenv';
 const root=resolve(import.meta.dirname,'../..'),folder=resolve(process.argv[2]||'');if(!folder.startsWith(resolve(root,'backups')+ (process.platform==='win32'?'\\':'/')))throw Error('Select a backup inside project backups');
-const proof=resolve(root,'docs/proofs/v1-hardening');await mkdir(proof,{recursive:true});await mkdir(join(root,'data/security'),{recursive:true});const manifest=JSON.parse(await readFile(join(folder,'manifest.json'),'utf8'));const checks=[];
+const proof=resolve(root,'annexe/proofs/v1-hardening');await mkdir(proof,{recursive:true});await mkdir(join(root,'data/security'),{recursive:true});const manifest=JSON.parse(await readFile(join(folder,'manifest.json'),'utf8'));const checks=[];
 for(const f of manifest.files){const bytes=await readFile(join(folder,f.path));if(createHash('sha256').update(bytes).digest('hex')!==f.sha256)throw Error('Backup checksum mismatch');}checks.push('all backup file checksums');
 const id='infimatch-restore-'+Date.now(),pass=randomBytes(24).toString('hex'),containers=[];
 function docker(args,input){const r=spawnSync('docker',args,{input,maxBuffer:512*1024*1024});if(r.status!==0)throw Error('Restore command failed: '+r.stderr.toString().slice(-1000));return r.stdout;}

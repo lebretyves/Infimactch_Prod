@@ -22,7 +22,7 @@ def tracked(root):
 
 
 def canonical(name):
-    return "docs/" + name[len("docs_intern/"):] if name.startswith("docs_intern/") else name
+    return "annexe/" + name[len("docs_intern/"):] if name.startswith("docs_intern/") else name
 
 
 def text_content(raw):
@@ -48,10 +48,10 @@ def normalized(root, name, text):
             return "[" + match[1] + "](@/" + canonical(rel) + (sep + anchor if sep else "") + ")"
         text = re.sub(r"\[([^\]]+)\]\(([^)]+)\)", link, text)
     # These are the documented checkout-specific paths, not runtime behavior changes.
-    text = re.sub(r"(?<![A-Za-z0-9_-])docs_intern/", "docs/", text)
+    text = re.sub(r"(?<![A-Za-z0-9_-])docs_intern/", "annexe/", text)
     if name in {"scripts/verify-finess.cjs", "scripts/verify-france-travail.cjs",
                 "scripts/verify-france-travail-rectification.cjs", "scripts/verify-partial-matching-live.cjs"}:
-        text = text.replace("'../docs_intern'", "'../docs'")
+        text = text.replace("'../docs_intern'", "'../annexe'")
     return text.replace("\r\n", "\n")
 
 
@@ -82,13 +82,13 @@ def inspect(root):
                 if ":" not in target and not target.startswith("#"):
                     if not path.parent.joinpath(target.split("#")[0]).exists():
                         errors.append(f"Broken local link: {name}: {target}")
-        if key == "docs/rendu/RECETTE_FINALE.csv":
+        if key == "annexe/rendu/RECETTE_FINALE.csv":
             for row in csv.DictReader(io.StringIO(text), delimiter=";"):
                 if row["etat"] == "A_RECETTER_SUR_VERSION_PUBLIEE" and row["version"]:
                     errors.append(f"Untested scenario has prefilled version: {name}")
                 if row["etat"] == "REUSSI" and not all(row.get(k) for k in ["version", "preuve", "date", "observateur"]):
                     errors.append(f"Successful scenario lacks evidence: {name}")
-        if key == "docs/n8n/InfiMatch-production-reprise-et-rappels.json":
+        if key == "annexe/n8n/InfiMatch-production-reprise-et-rappels.json":
             workflow = json.loads(text)
             schedules = [n for n in workflow["nodes"] if n["type"] == "n8n-nodes-base.scheduleTrigger"]
             expected = [{"field": "hours", "hoursInterval": 4}]
@@ -96,7 +96,7 @@ def inspect(root):
                 errors.append(f"Retry schedule is not four hours: {name}")
             if workflow.get("settings", {}).get("timezone") != "Europe/Paris":
                 errors.append(f"Retry timezone differs: {name}")
-        if key in {"README.md", "docs/DEPLOIEMENT_PRODUCTION.md", "docs/presentation/DOSSIER_SOUTENANCE.md"}:
+        if key in {"README.md", "annexe/DEPLOIEMENT_PRODUCTION.md", "annexe/presentation/DOSSIER_SOUTENANCE.md"}:
             if re.search(r"d2de5b8|ff0dddb|fd68a377", text):
                 errors.append(f"Superseded delivery reference in current guide: {name}")
     return files, {"files": records, "errors": errors}

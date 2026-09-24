@@ -52,4 +52,4 @@ Inventaire au 21 septembre 2026, établi depuis `src/router.tsx`. Les autorisati
 
 Les libellés courants sont « Documents et vérifications », « Disponibilités et mobilité » et « Rechercher une mission ». Le domicile, la recherche ponctuelle et la zone enregistrée pour les alertes ont des usages distincts. Discord est proposé après inscription sans être obligatoire.
 
-Voir [le guide utilisateur](../docs/GUIDE_UTILISATEUR.md), [les exigences](../docs/REQUIREMENTS_V1.md), [le raccordement API](docs/INTEGRATION_BACKEND.md) et [le design](DESIGN.md). L'ancienne spécification détaillée a été archivée : elle ne décrit plus exhaustivement l'application livrée.
+Voir [le guide utilisateur](../annexe/GUIDE_UTILISATEUR.md), [les exigences](../annexe/REQUIREMENTS_V1.md), [le raccordement API](docs/INTEGRATION_BACKEND.md) et [le design](DESIGN.md). L'ancienne spécification détaillée a été archivée : elle ne décrit plus exhaustivement l'application livrée.

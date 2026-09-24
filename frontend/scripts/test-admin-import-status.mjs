@@ -20,7 +20,7 @@ try {
  for(const next of ['QUOTA_EXHAUSTED','AUTH_REQUIRED','INCOMPLETE','RETRY_REQUIRED']){await refresh(next);await page.getByRole('alert').waitFor();assert.equal(await page.getByRole('status').filter({hasText:'Opération enregistrée'}).count(),0);await page.getByRole('button',{name:'Annuler',exact:true}).click();}
  httpFailure=true;await refresh('RETRY_REQUIRED');await page.getByRole('alert').filter({hasText:'Source temporairement indisponible'}).waitFor();await page.getByRole('button',{name:'Annuler',exact:true}).click();httpFailure=false;
  status='QUOTA_EXHAUSTED';await page.getByRole('button',{name:'Actualiser',exact:true}).click();await page.getByRole('heading',{name:'Quota épuisé',exact:true}).waitFor();
- for(const width of [375,1440]){await page.setViewportSize({width,height:950});assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth+1),false);await page.screenshot({path:`../InfiMatch/docs/quality/admin-import-status-${width}.png`,fullPage:true});}
+ for(const width of [375,1440]){await page.setViewportSize({width,height:950});assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth+1),false);await page.screenshot({path:`../InfiMatch/annexe/quality/admin-import-status-${width}.png`,fullPage:true});}
  legacy=true;await page.getByRole('button',{name:'Actualiser',exact:true}).click();await page.getByText('Avancement global non disponible',{exact:false}).waitFor();assert.equal(posts,6);
  console.log('PASS admin import progress/quota/auth/incomplete/retry and HTTP failure: never false success, reload each outcome, legacy API, localized counts, 375/1440. All API requests mocked.');
 }finally{await browser.close();}

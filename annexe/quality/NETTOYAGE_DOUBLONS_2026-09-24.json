@@ -1,0 +1,57 @@
+[
+  {
+    "removed": "annexe/rendu/2026-09-23/n8n/discord-relay.json",
+    "canonical": "annexe/n8n/published-20260923/discord-relay.json",
+    "sha256": "2ef9ac9ea883d23940b97083ea91314b6208f68ae8b4ad8fadd8dc24895ecbd5"
+  },
+  {
+    "removed": "annexe/rendu/2026-09-23/n8n/InfiMatch-production-cancellation.json",
+    "canonical": "annexe/n8n/published-20260923/InfiMatch-production-cancellation.json",
+    "sha256": "af3cc86c18199cf68ca25f6e75896a3a48b458b89cda398d466bd32cf90de5e3"
+  },
+  {
+    "removed": "annexe/rendu/2026-09-23/n8n/InfiMatch-production-confirmation.json",
+    "canonical": "annexe/n8n/published-20260923/InfiMatch-production-confirmation.json",
+    "sha256": "783c3101e45e9c52fa8b8ba6dd6ab62b7637b4f1ac9cbbb5c690e7e2feec4f99"
+  },
+  {
+    "removed": "annexe/rendu/2026-09-23/n8n/InfiMatch-production-import-France-Travail.json",
+    "canonical": "annexe/n8n/published-20260923/InfiMatch-production-import-France-Travail.json",
+    "sha256": "3c4c56182a31efbbafcc57e2d7eb5ff00641a67d5e494ba73f18a4bc498fda2f"
+  },
+  {
+    "removed": "annexe/rendu/2026-09-23/n8n/InfiMatch-production-import-JobsPipe.json",
+    "canonical": "annexe/n8n/published-20260923/InfiMatch-production-import-JobsPipe.json",
+    "sha256": "bb3e61776efb0ef43deabc98927525c1147614e97191bce7be85497bcf6e8d81"
+  },
+  {
+    "removed": "annexe/rendu/2026-09-23/n8n/InfiMatch-production-maintenance-quotidienne.json",
+    "canonical": "annexe/n8n/published-20260923/InfiMatch-production-maintenance-quotidienne.json",
+    "sha256": "9adb79918cf6470bf7a125c894a368c74edb1b7eed0b00983f7afa3028423f9c"
+  },
+  {
+    "removed": "annexe/rendu/2026-09-23/n8n/InfiMatch-production-matches.json",
+    "canonical": "annexe/n8n/published-20260923/InfiMatch-production-matches.json",
+    "sha256": "eaf7daca77ee637beee232790899349734d44094c3681d6996b445f534a69b76"
+  },
+  {
+    "removed": "annexe/rendu/2026-09-23/n8n/InfiMatch-production-reminders.json",
+    "canonical": "annexe/n8n/published-20260923/InfiMatch-production-reminders.json",
+    "sha256": "68d8f021178797df696692dcd615697868d098c986596470ac780983d80c2a21"
+  },
+  {
+    "removed": "annexe/rendu/2026-09-23/n8n/InfiMatch-production-reprise-et-rappels.json",
+    "canonical": "annexe/n8n/published-20260923/InfiMatch-production-reprise-et-rappels.json",
+    "sha256": "ca995a44e75f35104b65e0328a9313849099033314f8ec72f4ede6bca2bfcc02"
+  },
+  {
+    "removed": "annexe/rendu/2026-09-23/n8n/manifest-source.json",
+    "canonical": "annexe/n8n/published-20260923/manifest.json",
+    "sha256": "385611d8102d1e94afe5ab594804fdefa4ad4eff87f6be034f37105e69fcc81b"
+  },
+  {
+    "removed": "annexe/quality/restore-production.json",
+    "canonical": "annexe/proofs/audit-final-20260923/restore-production.json",
+    "sha256": "3b0ead1ea01ab8aa2128960fe6cf43d5b9d957d05e66b42d229be15448ab0049"
+  }
+]

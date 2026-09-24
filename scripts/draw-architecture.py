@@ -6,7 +6,7 @@ from reportlab.pdfbase import pdfmetrics
 from reportlab.pdfbase.ttfonts import TTFont
 import pypdfium2 as pdfium
 
-out=Path('docs/diagrams');out.mkdir(exist_ok=True)
+out=Path('annexe/diagrams');out.mkdir(exist_ok=True)
 W,H=1600,1360
 pdfmetrics.registerFont(TTFont('Arial',r'C:\Windows\Fonts\arial.ttf'))
 pdfmetrics.registerFont(TTFont('Arial-Bold',r'C:\Windows\Fonts\arialbd.ttf'))

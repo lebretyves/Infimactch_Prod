@@ -1,0 +1,18 @@
+# Chiffrage V1 — contrainte de livraison fixe
+
+**Contrainte confirmée : 4 personnes, 11 jours, rendu à date fixe.** Le planning de référence est [PLANNING_4_PERSONNES_11_JOURS.md](PLANNING_4_PERSONNES_11_JOURS.md). Le périmètre V1 validé est conservé.
+
+L’estimation initiale de conception reste **348 à 528 heures-personnes** pour un projet neuf ; détail dans CHIFFRAGE_V1.csv. Cette fourchette n’a pas été mesurée sur l’équipe ni sur un dépôt applicatif et doit être recalibrée avec les bibliothèques maîtrisées, le code réutilisable et les premiers lots. Elle ne modifie pas la date de rendu.
+
+Capacité déclarée le 24 septembre : 4 personnes × 11 jours × (7 h + environ 2 h le soir), soit environ **396 heures-personnes**. L’équipe initialement prévue de 5 personnes représentait 385 h à 7 h/jour. Ce total est déclaré ; la ventilation réelle par fonctionnalité et les justificatifs restent à compléter. L’ancienne hypothèse de 6 h/jour ne sert plus au chiffrage courant.
+
+L’organisation retient quatre périmètres simultanés : backend métier ; backend données/intégrations ; frontend ; intégration/documents/automatisations. Les tests sont répartis entre les auteurs, la recette est collective. L’intégration quotidienne et les contrats communs limitent le travail refait ; le parallélisme ne réduit pas mécaniquement les heures-personnes.
+
+Ne pas compter deux fois le même travail : Q01 correspond aux tests dédiés au-delà des vérifications courantes des modules ; Q03 à la recette intégrée et ses corrections. Consigner les heures réellement passées dans [le relevé des temps humains](rendu/TEMPS_HUMAINS.csv), sans remplir le réalisé avec l’estimation.
+
+Au cadrage J+2, confronter charge, avancement et dépendances à cette contrainte fixe. Aucun report de date ni retrait de fonctionnalité validée n’est présumé autorisé. Les difficultés sont traitées tôt et leur état est déclaré honnêtement ; une fonction bloquée ne devient pas livrée parce que l’échéance est atteinte.
+
+
+## Actualisation du 24 septembre 2026
+
+Déclaration équipe : 5 personnes prévues (385 h), 4 effectives, 11 jours de 7 h et environ 2 h le soir, soit environ **396 h**, dont 88 h le soir. Cette déclaration actualise les mentions historiques de temps inconnus ; la ventilation par lot reste à établir. Valorisation employeur hypothétique et matériel amorti : **12 800,98 EUR**. Exploitation avec un salarié et matériel : **5 265,30 EUR/mois**. Détail et hypothèses : `annexe/rendu/2026-09-23/09_COUTS_PRODUCTION.md`.

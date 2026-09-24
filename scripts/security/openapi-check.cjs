@@ -1,6 +1,6 @@
 const {readFileSync}=require('node:fs');
 const {resolve}=require('node:path');
-const doc=JSON.parse(readFileSync(resolve(__dirname,'../../docs/openapi.json'),'utf8'));
+const doc=JSON.parse(readFileSync(resolve(__dirname,'../../annexe/openapi.json'),'utf8'));
 const missingSuccess=[],emptyBodies=[];
 function resolveSchema(s){return s?.$ref?doc.components?.schemas?.[s.$ref.split('/').pop()]:s;}
 for(const [path,item] of Object.entries(doc.paths))for(const method of ['get','post','put','patch','delete']){
