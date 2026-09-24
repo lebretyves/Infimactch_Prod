@@ -45,7 +45,7 @@ test('compact SQL projection preserves every matching criterion and listing metr
 test('recommendations rank beyond 500 offers and preserve full presentation for the same best three',async(t)=>{
  t.mock.timers.enable({apis:['Date'],now:Date.now()});
  const req={session:{userId:actor,family:'NURSE'}} as any;
- const actual:any=await new RecommendationsController(db,{} as any).recommendations(req,{origine:'externes'});
+ const actual:any=await new RecommendationsController(db).recommendations(req,{origine:'externes'});
  assert.equal(actual.external.status,'READY');
  const [profile]=await db.query('SELECT * FROM profile WHERE user_id=$1',[actor]);
  const full=await db.query('SELECT id,source,title,description,url,location_label,qualification,imported_at,expires_at,provenance,parsed_offer FROM external_offer WHERE active AND (expires_at IS NULL OR expires_at>now())');

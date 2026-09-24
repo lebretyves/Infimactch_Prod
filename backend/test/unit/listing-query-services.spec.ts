@@ -138,50 +138,6 @@ test("catalogue closes its cursor when a batch fails", async () => {
   );
   assert.equal(f.calls.at(-1).sql, "CLOSE ranked_listings");
 });
-test("recommendations use matching for complete profiles and omit changed mission versions", async () => {
-  const f = fixture((sql) =>
-    sql.includes("FROM profile")
-      ? [profile]
-      : sql.includes("FROM mission")
-        ? [
-            { id: "a", version: 1, hourly_salary: "25" },
-            { id: "changed", version: 2 },
-          ]
-        : [],
-  );
-  let matched = 0;
-  const c = new RecommendationsController(f.db, {
-    forNurse: async (actor: string, page: any, ranking: string) => {
-      matched++;
-      assert.equal(actor, "nurse");
-      assert.deepEqual(page, { limit: 3, offset: 0 });
-      assert.equal(ranking, "recent");
-      return {
-        rppsStatus: "FOUND",
-        items: [
-          {
-            missionId: "a",
-            missionVersion: 1,
-            score: 80,
-            explanationId: "history",
-            publishedAt: published,
-          },
-          { missionId: "changed", missionVersion: 1 },
-          { missionId: "missing", missionVersion: 1 },
-        ],
-      };
-    },
-  } as any);
-  const r: any = await c.recommendations(
-    { session: { userId: "nurse" } } as any,
-    { origine: "partenaires" },
-  );
-  assert.equal(matched, 1);
-  assert.equal(r.external.status, "HIDDEN");
-  assert.equal(r.internal.items.length, 1);
-  assert.equal(r.internal.items[0].matching_score, 80);
-  assert.equal(r.internal.items[0].salary.amount, 25);
-});
 test("incomplete profiles receive general listings while external recommendations remain explicitly partial", async () => {
   let batch = 0;
   const f = fixture((sql, args) =>
@@ -207,7 +163,7 @@ test("incomplete profiles receive general listings while external recommendation
             ? [{ provider: "FRANCE_TRAVAIL", status: "SUCCESS" }]
             : [],
   );
-  const c = new RecommendationsController(f.db, {} as any);
+  const c = new RecommendationsController(f.db);
   const r: any = await c.recommendations(
     { session: { userId: "nurse" } } as any,
     {},
@@ -228,7 +184,6 @@ test("recommendation provider failures remain isolated and missing profiles are 
   await assert.rejects(
     new RecommendationsController(
       fixture(() => []).db,
-      {} as any,
     ).recommendations({ session: { userId: "nurse" } } as any, {}),
     (e) => (e as any).getStatus() === 404,
   );
@@ -236,11 +191,7 @@ test("recommendation provider failures remain isolated and missing profiles are 
     if (sql.includes("FROM profile")) return [profile];
     throw new Error("provider unavailable");
   });
-  const c = new RecommendationsController(f.db, {
-    forNurse: async () => {
-      throw new Error("history unavailable");
-    },
-  } as any);
+  const c = new RecommendationsController(f.db);
   let r: any = await c.recommendations(
     { session: { userId: "nurse" } } as any,
     {},
@@ -261,7 +212,7 @@ test("source visibility outage leaves internal recommendations available", async
     if (sql.includes("FROM mission")) return [{ id: "internal", hourly_salary: 25 }];
     throw new Error("unexpected external query");
   });
-  const result = await new RecommendationsController(f.db, {} as any).recommendations({session:{userId:"nurse"}} as any, {});
+  const result = await new RecommendationsController(f.db).recommendations({session:{userId:"nurse"}} as any, {});
   assert.equal(result.internal.status, "READY");
   assert.equal(result.external.status, "UNAVAILABLE");
   assert.equal(result.externalCatalogueVisible, false);
@@ -274,7 +225,7 @@ test("hidden catalogues never query external offers or import metadata", async (
     if (sql.includes("FROM source_control")) return [];
     throw new Error("hidden sources must not be queried");
   });
-  const result = await new RecommendationsController(f.db, {} as any).recommendations({session:{userId:"nurse"}} as any, {origine:"externes"});
+  const result = await new RecommendationsController(f.db).recommendations({session:{userId:"nurse"}} as any, {origine:"externes"});
   assert.equal(result.internal.status, "HIDDEN");
   assert.equal(result.external.status, "HIDDEN");
   assert.equal(result.externalCatalogueVisible, false);

@@ -82,7 +82,7 @@ try {
       const json = structuredClone(state);
       json.internal.personalization = incomplete
         ? "GENERAL_PROFILE_INCOMPLETE"
-        : "COMPATIBLE";
+        : (state.internal.personalization || "COMPATIBLE");
       if (origin === "externes")
         json.internal = { ...json.internal, status: "HIDDEN", items: [] };
       if (origin === "partenaires")
@@ -247,7 +247,15 @@ try {
   await page.getByRole('heading',{name:'Vos disponibilités'}).waitFor();
   fail=true;await page.reload();await matches.getByRole('button',{name:'Réessayer les suggestions'}).waitFor();
   fail=false;state=mixed();await matches.getByRole('button',{name:'Réessayer les suggestions'}).click();await partnerCard.waitFor();
-  state.externalCatalogueVisible=false;state.external.status='HIDDEN';state.external.items=[];
+  state=mixed();state.internal.personalization='INDICATIVE';
+  state.internal.items=[87,68,42].map((score,index)=>({...internal,id:internal.id+index,title:'Suggestion partielle '+index,matching_score:score,matching_eligible:false,matching_reasons:['NOT_FULLY_AVAILABLE','EXPERIENCE_INSUFFICIENT']}));
+  await page.goto(base+'/accueil');await matches.getByRole('heading',{name:'Suggestion partielle 2',exact:true}).waitFor();
+  assert.deepEqual(await matches.locator('h3').allTextContents(),['Suggestion partielle 0','Suggestion partielle 1','Suggestion partielle 2']);
+  assert.equal(await matches.getByText('Matching indicatif',{exact:true}).count(),3);
+  const first=matches.getByRole('listitem').first();assert.match(await first.innerText(),/87\s*%/);
+  await first.locator('summary').filter({hasText:'Points à vérifier'}).click();await first.getByText('Les disponibilités ne couvrent pas toute la mission.').waitFor();
+  await first.getByText('L’expérience renseignée est insuffisante pour cette mission.').waitFor();
+  state=mixed();state.externalCatalogueVisible=false;state.external.status='HIDDEN';state.external.items=[];
   await page.goto(base+'/accueil?origine=externes');await partnerCard.waitFor();
   assert.equal(origins.at(-1),'partenaires');assert.deepEqual(await choices.getByRole('button').allTextContents(),['Partenaires']);
   console.log('PASS partner default, no All filter in matches, external selection/favorites, hidden source fallback, incomplete profiles, outage distinct from empty, search All preserved, responsive.');

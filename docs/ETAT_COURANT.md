@@ -49,4 +49,8 @@ Les résultats des tests de cette revue sont publiés dans le rapport de revue. 
 
 ## Lot interface et aide suivant
 
-[Photo, filtres des matchs, calendrier mensuel et tutoriels](quality/AIDE_MATCHS_CALENDRIER_2026-09-24.md) : correctifs vérifiés localement, publication à confirmer par la PR associée.
+[Photo, filtres des matchs, calendrier mensuel et tutoriels](quality/AIDE_MATCHS_CALENDRIER_2026-09-24.md) : fusionnés via les PR Yves #4 et Epitech #32. Site public et API déployés avec succès au commit Yves `418168f` le 24 septembre ; contenu identique dans Epitech `8ce1d03`.
+
+## Trois meilleures offres partenaires
+
+[Comportement et preuves](proofs/top-partner-recommendations-20260924/README.md) : 692/692 tests unitaires backend, 95,01 % de couverture des lignes ; trois suites d’intégration ciblées réussies. Classement indicatif même en présence de critères non satisfaits. Publication de ce complément à confirmer après sa propre fusion.

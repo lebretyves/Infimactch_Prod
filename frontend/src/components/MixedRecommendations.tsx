@@ -1,3 +1,4 @@
+import { reasonLabels } from "@/services/messages";
 import { OfferOriginChoices } from "./OfferOrigin";
 import { Link, useSearchParams } from "react-router";
 import { useEffect } from "react";
@@ -114,10 +115,13 @@ export function MixedRecommendations({
                 </p>
               )}
             <div className={s.match}>
-              {!external && data?.internal.personalization === "COMPATIBLE" && typeof item.matching_score === "number" && Number.isFinite(item.matching_score) && item.matching_score >= 0 && item.matching_score <= 100 ? (
-                <><span>Matching</span><strong>{Math.round(item.matching_score)}<small> %</small></strong></>
+              {!external && (data?.internal.personalization === "COMPATIBLE" || data?.internal.personalization === "INDICATIVE") && typeof item.matching_score === "number" && Number.isFinite(item.matching_score) && item.matching_score >= 0 && item.matching_score <= 100 ? (
+                <><span>{data?.internal.personalization === "INDICATIVE" && item.matching_eligible !== true ? "Matching indicatif" : "Matching"}</span><strong>{Math.round(item.matching_score)}<small> %</small></strong></>
               ) : <span>Matching non calculable<small className={s.matchNote}>{external ? "Correspondance partielle" : "Correspondance non confirmée"}</small></span>}
             </div>
+            {!external && data?.internal.personalization === "INDICATIVE" && item.matching_eligible !== true && (
+              <details className={s.sourceDetails}><summary>Points à vérifier avant de candidater</summary><p>Ce taux compare votre profil à la mission ; il ne confirme pas votre éligibilité.</p><ul>{(item.matching_reasons?.length ? item.matching_reasons : ["UNKNOWN"]).map(reason => <li key={reason}>{reasonLabels[reason] || "Une condition de la mission reste à vérifier."}</li>)}</ul></details>
+            )}
             <div className={s.actions}>
               <ButtonLink
                 to={
@@ -171,7 +175,7 @@ export function MixedRecommendations({
           next.set("origine", origine);
           setParams(next);
         }} />
-        <p>{origin === "partenaires" ? "Votre s?lection partenaire InfiMatch." : "Des offres externes ? explorer."}</p>
+        <p>{origin === "partenaires" ? "Votre sélection partenaire InfiMatch." : "Des offres externes à explorer."}</p>
       </div>
       {result.loading ? (
         <p role="status" className={s.state}>Recherche de vos prochaines missions…</p>
@@ -204,7 +208,7 @@ export function MixedRecommendations({
           {!showExternes && <p className={s.emptyNote}>Les offres externes ne sont pas affichées actuellement.</p>}
           <details className={s.explanation}>
             <summary>Comment sont choisis vos matchs ?</summary>
-            {origin !== "externes" && <p>Les missions partenaires sont classées selon la correspondance avec votre profil lorsque celui-ci permet de la confirmer.</p>}
+            {origin !== "externes" && <p>Les missions partenaires ouvertes correspondant à vos diplômes sont classées par taux de matching décroissant. Les trois premières sont proposées même si certains critères ne sont pas remplis : consultez les points à vérifier et la fiche avant de candidater.</p>}
             {origin !== "partenaires" && <p>Les offres externes complètent la sélection : leur correspondance est partielle. Horaires, prérequis et disponibilité sont à vérifier auprès de l’annonceur. La candidature se fait sur le site source.</p>}
             <p>Le cœur ajoute uniquement l’offre à vos favoris : il n’envoie pas de candidature.</p>
           </details>

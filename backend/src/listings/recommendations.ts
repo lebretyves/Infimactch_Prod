@@ -4,7 +4,9 @@ import {Controller,Get,Query,Req,UseGuards,NotFoundException} from '@nestjs/comm
 import {Request} from 'express';
 import {Database} from '../database/database';
 import {SessionGuard,user} from '../common/access';
-import {MatchingService} from '../matching/matching.module';
+import {displayMatch} from '../domain/matching-display';
+import {matchingMission} from '../missions/mission-mapping';
+import {geodesicKmBatch} from '../database/distance';
 import {professional} from '../profiles/profile-mapping';
 import {partialOfferMatch} from '../public-data/partial-matching';
 import {externalPresentation} from '../public-data/offer-quality';
@@ -27,7 +29,7 @@ export function compareRecentExternal(a:any,b:any) {
 class OriginQuery {@IsOptional() @IsIn(['toutes','partenaires','externes']) origine?:'toutes'|'partenaires'|'externes';}
 @Controller('me/recommendations') @UseGuards(SessionGuard)
 export class RecommendationsController {
-  constructor(private readonly db:Database,private readonly matching:MatchingService){}
+  constructor(private readonly db:Database){}
   @Get() async recommendations(@Req() r:Request,@Query() query:OriginQuery) {
     const actor=user(r),now=Date.now(),generatedAt=new Date(now).toISOString();
     const [profile]=await this.db.query('SELECT p.* FROM profile p JOIN account a ON a.id=p.user_id WHERE p.user_id=$1 AND a.active',[actor]);
@@ -45,17 +47,45 @@ export class RecommendationsController {
     };
   }
   private async internal(actor:string,profile:any) {
-    if(!profile.qualifications.length || profile.rpps_status!=='FOUND'){
-      const rows=await this.db.query("SELECT id,title,qualification,service,shift,address,start_at,end_at,timezone,hourly_salary,status,version,created_at FROM mission WHERE status='OPEN' AND start_at>now() AND (cardinality($1::text[])=0 OR qualification=ANY($1::text[])) ORDER BY created_at DESC,id LIMIT 3",[profile.qualifications]);
+    if(!profile.qualifications.length){
+      const rows=await this.db.query("SELECT id,title,qualification,service,shift,address,start_at,end_at,timezone,hourly_salary,status,version,created_at FROM mission WHERE status='OPEN' AND start_at>now() ORDER BY created_at DESC,id LIMIT 3");
       return {status:'READY',personalization:'GENERAL_PROFILE_INCOMPLETE',rppsStatus:profile.rpps_status,items:rows.map(m=>({...m,id:'m_'+m.id,kind:'INTERNAL_MISSION',publicationDate:m.created_at,importedAt:null,sourceUpdatedAt:null,salary:{amount:Number(m.hourly_salary),currency:'EUR',unit:'HOUR',gross:true}}))};
     }
-    const selected=await this.matching.forNurse(actor,{limit:3,offset:0},'recent');
-    if(!selected.items.length)return {status:'READY',personalization:'COMPATIBLE',rppsStatus:selected.rppsStatus,items:[]};
-    const rows=await this.db.query("SELECT id,title,qualification,service,shift,address,start_at,end_at,timezone,hourly_salary,status,version FROM mission WHERE id=ANY($1::uuid[]) AND status='OPEN' AND start_at>now()",[selected.items.map(x=>x.missionId)]);
-    return {status:'READY',personalization:'COMPATIBLE',rppsStatus:selected.rppsStatus,items:selected.items.flatMap((x:any)=>{
-      const m=rows.find(r=>r.id===x.missionId);if(!m||m.version!==x.missionVersion)return [];
-      return [{...m,id:'m_'+m.id,kind:'INTERNAL_MISSION',matching_score:x.score,match_explanation_id:x.explanationId,publicationDate:x.publishedAt??null,importedAt:null,sourceUpdatedAt:null,salary:{amount:Number(m.hourly_salary),currency:'EUR',unit:'HOUR',gross:true}}];
-    })};
+    return this.db.transaction(async em=>{
+      await em.query('SET TRANSACTION ISOLATION LEVEL REPEATABLE READ, READ ONLY');
+      await em.query("SET LOCAL statement_timeout = '5000ms'");
+      const [current]=await em.query('SELECT p.* FROM profile p JOIN account a ON a.id=p.user_id WHERE p.user_id=$1 AND a.active',[actor]);
+      if(!current)throw new NotFoundException();
+      const conflicts=await em.query("SELECT start_at,end_at FROM assignment WHERE nurse_id=$1 AND status='ACTIVE'",[actor]);
+      const p=professional(current,conflicts),budget=rankingBudget();
+      let cursor='00000000-0000-0000-0000-000000000000';
+      const top:any[]=[];
+      const compare=(a:any,b:any)=>b.result.indicativeScore-a.result.indicativeScore
+        ||new Date(b.m.published_at??0).getTime()-new Date(a.m.published_at??0).getTime()
+        ||new Date(a.m.start_at).getTime()-new Date(b.m.start_at).getTime()
+        ||a.m.id.localeCompare(b.m.id);
+      while(true){
+        budget();
+        const batch=await em.query(`SELECT m.id,m.title,m.qualification,m.service,m.shift,m.address,m.start_at,m.end_at,m.timezone,m.hourly_salary,m.status,m.version,m.required_skills,m.desired_skills,m.min_experience_months,m.population,m.block,m.specialty,m.schedule_precision,
+          ST_Y(m.location::geometry) AS latitude,ST_X(m.location::geometry) AS longitude,
+          (SELECT max(created_at) FROM audit WHERE resource_id=m.id AND event='MISSION_OPEN') AS published_at
+          FROM mission m WHERE m.status='OPEN' AND m.start_at>now() AND m.qualification=ANY($1::text[]) AND m.id>$2::uuid ORDER BY m.id LIMIT 100`,[current.qualifications,cursor]);
+        budget(batch.length);
+        if(!batch.length)break;
+        const distances=await geodesicKmBatch(em,batch.map((m:any)=>[current,m] as const));
+        for(let i=0;i<batch.length;i++){
+          budget();
+          const m=batch[i],result=displayMatch(p,matchingMission(m),distances[i] ?? null);
+          top.push({m,result});top.sort(compare);if(top.length>3)top.pop();
+        }
+        cursor=batch[batch.length-1].id;
+      }
+      return {status:'READY',personalization:'INDICATIVE',rppsStatus:current.rpps_status,items:top.map(({m,result})=>({
+        id:'m_'+m.id,kind:'INTERNAL_MISSION',title:m.title,qualification:m.qualification,service:m.service,shift:m.shift,address:m.address,start_at:m.start_at,end_at:m.end_at,timezone:m.timezone,hourly_salary:m.hourly_salary,status:m.status,version:m.version,
+        matching_score:result.indicativeScore,matching_eligible:result.eligible,matching_reasons:result.reasons,
+        publicationDate:m.published_at??null,importedAt:null,sourceUpdatedAt:null,salary:{amount:Number(m.hourly_salary),currency:'EUR',unit:'HOUR',gross:true}
+      }))};
+    });
   }
   private async external(profile:any,generatedAt:string,visibleSources:string[]) {
     if(!visibleSources.length){
