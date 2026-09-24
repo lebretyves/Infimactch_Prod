@@ -1,4 +1,4 @@
-﻿import 'reflect-metadata';
+import 'reflect-metadata';
 import {test,before,after} from 'node:test';
 import assert from 'node:assert/strict';
 import {randomUUID} from 'node:crypto';
@@ -31,4 +31,3 @@ test('inactive account cannot read recommendations',async()=>{
  await db.query('UPDATE account SET active=false WHERE id=$1',[actor]);
  await assert.rejects(new RecommendationsController(db).recommendations({session:{userId:actor}} as any,{}),(e:any)=>e.getStatus()===404);
 });
-
