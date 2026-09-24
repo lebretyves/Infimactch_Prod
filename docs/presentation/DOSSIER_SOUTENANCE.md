@@ -82,3 +82,8 @@ Présenter les contrôles clavier, responsive, focus et erreurs réellement rejo
 ## Validation du support
 
 Les douze diapositives PPTX sont éditables ; les douze pages PDF sont générées depuis la même source. Le générateur vérifie les bornes de texte PDF. Les liens relatifs de ce dossier sont contrôlés à la livraison. Le rendu PowerPoint peut varier selon les polices et la version : vérifier le diaporama sur la machine de soutenance. Le PDF constitue une version de secours stable.
+
+
+## Actualisation du 24 septembre 2026
+
+Déclaration équipe : 5 personnes prévues (385 h), 4 effectives, 11 jours de 7 h et environ 2 h le soir, soit environ **396 h**, dont 88 h le soir. Cette déclaration actualise les mentions historiques de temps inconnus ; la ventilation par lot reste à établir. Valorisation employeur hypothétique et matériel amorti : **12 800,98 EUR**. Exploitation avec un salarié et matériel : **5 265,30 EUR/mois**. Détail et hypothèses : `docs/rendu/2026-09-23/09_COUTS_PRODUCTION.md`.

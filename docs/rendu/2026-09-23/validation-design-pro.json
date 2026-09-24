@@ -1,7 +1,7 @@
 {
-  "pages": 12,
+  "pages": 13,
   "durationMinutes": 15,
-  "textBlocks": 202,
+  "textBlocks": 216,
   "overflow": 0,
   "logoSource": "https://newsroom.epitech.eu/",
   "checks": [
@@ -18,7 +18,7 @@
       "available": 40
     },
     {
-      "text": "POC • SOUTENANCE • 23 SEPTEMBRE 2026",
+      "text": "POC • SOUTENANCE • 24 SEPTEMBRE 2026",
       "font": 10,
       "height": 12.2,
       "available": 18
@@ -30,7 +30,7 @@
       "available": 18
     },
     {
-      "text": "01 / 12",
+      "text": "01 / 13",
       "font": 13,
       "height": 15.9,
       "available": 25
@@ -78,7 +78,7 @@
       "available": 40
     },
     {
-      "text": "POC • SOUTENANCE • 23 SEPTEMBRE 2026",
+      "text": "POC • SOUTENANCE • 24 SEPTEMBRE 2026",
       "font": 10,
       "height": 12.2,
       "available": 18
@@ -90,7 +90,7 @@
       "available": 18
     },
     {
-      "text": "02 / 12",
+      "text": "02 / 13",
       "font": 13,
       "height": 15.9,
       "available": 25
@@ -198,7 +198,7 @@
       "available": 40
     },
     {
-      "text": "POC • SOUTENANCE • 23 SEPTEMBRE 2026",
+      "text": "POC • SOUTENANCE • 24 SEPTEMBRE 2026",
       "font": 10,
       "height": 12.2,
       "available": 18
@@ -210,7 +210,7 @@
       "available": 18
     },
     {
-      "text": "03 / 12",
+      "text": "03 / 13",
       "font": 13,
       "height": 15.9,
       "available": 25
@@ -306,7 +306,7 @@
       "available": 40
     },
     {
-      "text": "POC • SOUTENANCE • 23 SEPTEMBRE 2026",
+      "text": "POC • SOUTENANCE • 24 SEPTEMBRE 2026",
       "font": 10,
       "height": 12.2,
       "available": 18
@@ -318,7 +318,7 @@
       "available": 18
     },
     {
-      "text": "04 / 12",
+      "text": "04 / 13",
       "font": 13,
       "height": 15.9,
       "available": 25
@@ -414,7 +414,7 @@
       "available": 40
     },
     {
-      "text": "POC • SOUTENANCE • 23 SEPTEMBRE 2026",
+      "text": "POC • SOUTENANCE • 24 SEPTEMBRE 2026",
       "font": 10,
       "height": 12.2,
       "available": 18
@@ -426,7 +426,7 @@
       "available": 18
     },
     {
-      "text": "05 / 12",
+      "text": "05 / 13",
       "font": 13,
       "height": 15.9,
       "available": 25
@@ -546,7 +546,7 @@
       "available": 40
     },
     {
-      "text": "POC • SOUTENANCE • 23 SEPTEMBRE 2026",
+      "text": "POC • SOUTENANCE • 24 SEPTEMBRE 2026",
       "font": 10,
       "height": 12.2,
       "available": 18
@@ -558,7 +558,7 @@
       "available": 18
     },
     {
-      "text": "06 / 12",
+      "text": "06 / 13",
       "font": 13,
       "height": 15.9,
       "available": 25
@@ -648,7 +648,7 @@
       "available": 40
     },
     {
-      "text": "POC • SOUTENANCE • 23 SEPTEMBRE 2026",
+      "text": "POC • SOUTENANCE • 24 SEPTEMBRE 2026",
       "font": 10,
       "height": 12.2,
       "available": 18
@@ -660,7 +660,7 @@
       "available": 18
     },
     {
-      "text": "07 / 12",
+      "text": "07 / 13",
       "font": 13,
       "height": 15.9,
       "available": 25
@@ -726,7 +726,7 @@
       "available": 40
     },
     {
-      "text": "POC • SOUTENANCE • 23 SEPTEMBRE 2026",
+      "text": "POC • SOUTENANCE • 24 SEPTEMBRE 2026",
       "font": 10,
       "height": 12.2,
       "available": 18
@@ -738,7 +738,7 @@
       "available": 18
     },
     {
-      "text": "08 / 12",
+      "text": "08 / 13",
       "font": 13,
       "height": 15.9,
       "available": 25
@@ -828,7 +828,7 @@
       "available": 40
     },
     {
-      "text": "POC • SOUTENANCE • 23 SEPTEMBRE 2026",
+      "text": "POC • SOUTENANCE • 24 SEPTEMBRE 2026",
       "font": 10,
       "height": 12.2,
       "available": 18
@@ -840,7 +840,7 @@
       "available": 18
     },
     {
-      "text": "09 / 12",
+      "text": "09 / 13",
       "font": 13,
       "height": 15.9,
       "available": 25
@@ -936,7 +936,7 @@
       "available": 40
     },
     {
-      "text": "POC • SOUTENANCE • 23 SEPTEMBRE 2026",
+      "text": "POC • SOUTENANCE • 24 SEPTEMBRE 2026",
       "font": 10,
       "height": 12.2,
       "available": 18
@@ -948,7 +948,7 @@
       "available": 18
     },
     {
-      "text": "10 / 12",
+      "text": "10 / 13",
       "font": 13,
       "height": 15.9,
       "available": 25
@@ -1038,88 +1038,70 @@
       "available": 40
     },
     {
-      "text": "POC • SOUTENANCE • 23 SEPTEMBRE 2026",
+      "text": "POC • SOUTENANCE • 24 SEPTEMBRE 2026",
       "font": 10,
       "height": 12.2,
       "available": 18
     },
     {
-      "text": "LA CHARGE",
+      "text": "LA CHARGE ET LE MATÉRIEL",
       "font": 10,
       "height": 12.2,
       "available": 18
     },
     {
-      "text": "11 / 12",
+      "text": "11 / 13",
       "font": 13,
       "height": 15.9,
       "available": 25
     },
     {
-      "text": "Source : CHIFFRAGE_V1.csv • 18 lots. Les heures hu",
+      "text": "Déclaration équipe du 24/09/2026 • APEC 41 kEUR br",
       "font": 10,
       "height": 12.2,
       "available": 21
     },
     {
-      "text": "LA CHARGE",
+      "text": "LA RÉALISATION",
       "font": 12,
       "height": 14.6,
       "available": 25
     },
     {
-      "text": "Le prévu est chiffré. Le réalisé doit l’être.",
+      "text": "396 heures déclarées. Un coût explicite.",
       "font": 46,
       "height": 49.7,
       "available": 110
     },
     {
-      "text": "348–528 h",
-      "font": 78,
-      "height": 95.2,
-      "available": 106
+      "text": "396 h",
+      "font": 86,
+      "height": 104.9,
+      "available": 107
     },
     {
-      "text": "heures-personnes estimées • 18 lots",
-      "font": 23,
-      "height": 28.1,
-      "available": 38
+      "text": "308 h de journée + environ 88 h le soir",
+      "font": 25,
+      "height": 30.5,
+      "available": 42
     },
     {
-      "text": "348 h",
-      "font": 17,
-      "height": 20.7,
-      "available": 30
+      "text": "4 personnes × 11 jours × (7 h + 2 h)<br/>Capacité ",
+      "font": 22,
+      "height": 99.0,
+      "available": 116
     },
     {
-      "text": "438 h",
-      "font": 17,
-      "height": 20.7,
-      "available": 30
-    },
-    {
-      "text": "528 h",
-      "font": 17,
-      "height": 20.7,
-      "available": 30
-    },
-    {
-      "text": "Centre indicatif : 438 h, pas une mesure du réalis",
-      "font": 18,
-      "height": 22.0,
-      "available": 39
-    },
-    {
-      "text": "4 personnes<br/>11 jours",
+      "text": "12 800,98 EUR",
       "font": 37,
-      "height": 90.3,
-      "available": 104
+      "height": 45.1,
+      "available": 64
     },
     {
-      "text": "Temps réels et justificatifs<br/>à compléter dans ",
+      "text": "Travail valorisé avec charges<br/>+ matériel amort",
       "font": 20,
-      "height": 122.0,
-      "available": 132
+      "height": 168.0,
+      "available": 190
     },
     {
       "text": "Infi",
@@ -1134,7 +1116,109 @@
       "available": 40
     },
     {
-      "text": "POC • SOUTENANCE • 23 SEPTEMBRE 2026",
+      "text": "POC • SOUTENANCE • 24 SEPTEMBRE 2026",
+      "font": 10,
+      "height": 12.2,
+      "available": 18
+    },
+    {
+      "text": "LE COÛT D’EXPLOITATION",
+      "font": 10,
+      "height": 12.2,
+      "available": 18
+    },
+    {
+      "text": "12 / 13",
+      "font": 13,
+      "height": 15.9,
+      "available": 25
+    },
+    {
+      "text": "Budget prospectif : 09_COUTS_PRODUCTION.md • USD/E",
+      "font": 10,
+      "height": 12.2,
+      "available": 21
+    },
+    {
+      "text": "L’EXPLOITATION",
+      "font": 12,
+      "height": 14.6,
+      "available": 25
+    },
+    {
+      "text": "Un salarié à temps plein. Trois volumes.",
+      "font": 46,
+      "height": 49.7,
+      "available": 110
+    },
+    {
+      "text": "5 265,30 EUR/mois",
+      "font": 38,
+      "height": 46.4,
+      "available": 60
+    },
+    {
+      "text": "Maintenance : 4 851,67 EUR<br/>Services : 265,07 E",
+      "font": 23,
+      "height": 172.5,
+      "available": 193
+    },
+    {
+      "text": "100 validations/mois",
+      "font": 20,
+      "height": 24.4,
+      "available": 30
+    },
+    {
+      "text": "52,65 EUR",
+      "font": 29,
+      "height": 35.4,
+      "available": 45
+    },
+    {
+      "text": "500 validations/mois",
+      "font": 20,
+      "height": 24.4,
+      "available": 30
+    },
+    {
+      "text": "10,53 EUR",
+      "font": 29,
+      "height": 35.4,
+      "available": 45
+    },
+    {
+      "text": "1 000 validations/mois",
+      "font": 20,
+      "height": 24.4,
+      "available": 30
+    },
+    {
+      "text": "5,27 EUR",
+      "font": 29,
+      "height": 35.4,
+      "available": 45
+    },
+    {
+      "text": "Coût moyen alloué par mission validée.<br/>Hypothè",
+      "font": 16,
+      "height": 39.0,
+      "available": 44
+    },
+    {
+      "text": "Infi",
+      "font": 25,
+      "height": 30.5,
+      "available": 40
+    },
+    {
+      "text": "Match",
+      "font": 25,
+      "height": 30.5,
+      "available": 40
+    },
+    {
+      "text": "POC • SOUTENANCE • 24 SEPTEMBRE 2026",
       "font": 10,
       "height": 12.2,
       "available": 18
@@ -1146,7 +1230,7 @@
       "available": 18
     },
     {
-      "text": "12 / 12",
+      "text": "13 / 13",
       "font": 13,
       "height": 15.9,
       "available": 25
@@ -1176,7 +1260,7 @@
       "available": 49
     },
     {
-      "text": "Temps réels et validation J+2.",
+      "text": "Ventiler les 396 h. Preuve J+2.",
       "font": 19,
       "height": 23.2,
       "available": 58

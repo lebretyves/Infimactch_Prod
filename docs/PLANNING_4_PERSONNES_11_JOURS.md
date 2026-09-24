@@ -38,3 +38,8 @@ Les travaux de marché, proposition de valeur, conformité du scénario et CDC s
 - Stabiliser dès J8, conserver J9/J10 pour les corrections et les preuves. Si une fonction reste bloquée, signaler son état réel au lieu de la déclarer réussie.
 
 Ce planning est une répartition proposée sous contrainte fixe, pas un compte rendu de réalisation. Il remplace toute hypothèse antérieure d’équipe de cinq.
+
+
+## Actualisation du 24 septembre 2026
+
+Déclaration équipe : 5 personnes prévues (385 h), 4 effectives, 11 jours de 7 h et environ 2 h le soir, soit environ **396 h**, dont 88 h le soir. Cette déclaration actualise les mentions historiques de temps inconnus ; la ventilation par lot reste à établir. Valorisation employeur hypothétique et matériel amorti : **12 800,98 EUR**. Exploitation avec un salarié et matériel : **5 265,30 EUR/mois**. Détail et hypothèses : `docs/rendu/2026-09-23/09_COUTS_PRODUCTION.md`.

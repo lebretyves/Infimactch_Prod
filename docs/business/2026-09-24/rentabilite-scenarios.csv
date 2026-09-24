@@ -1,0 +1,37 @@
+formule;validations;etablissements;ca_ht;cout;solde;solde_par_validation;statut
+mission;0;20;0;5265.3;-5265.3;;Applicable sous hypothèses
+forfait;0;20;5980;5265.3;714.7;;Applicable sous hypothèses
+mixte;0;20;2980;5265.3;-2285.3;;Applicable sous hypothèses
+mission;50;20;950;5265.3;-4315.3;-86.306;Applicable sous hypothèses
+forfait;50;20;5980;5265.3;714.7;14.294;Applicable sous hypothèses
+mixte;50;20;3430;5265.3;-1835.3;-36.706;Applicable sous hypothèses
+mission;100;20;1900;5265.3;-3365.3;-33.653;Applicable sous hypothèses
+forfait;100;20;5980;5265.3;714.7;7.147;Applicable sous hypothèses
+mixte;100;20;3880;5265.3;-1385.3;-13.853;Applicable sous hypothèses
+mission;200;20;3800;5265.3;-1465.3;-7.3265;Applicable sous hypothèses
+forfait;200;20;5980;5265.3;714.7;3.5735;Applicable sous hypothèses
+mixte;200;20;4780;5265.3;-485.3;-2.4265;Applicable sous hypothèses
+mission;250;20;4750;5265.3;-515.3;-2.0612;Applicable sous hypothèses
+forfait;250;20;5980;5265.3;714.7;2.8588;Applicable sous hypothèses
+mixte;250;20;5230;5265.3;-35.3;-0.1412;Applicable sous hypothèses
+mission;254;20;4826;5265.3;-439.3;-1.7295;Applicable sous hypothèses
+forfait;254;20;5980;5265.3;714.7;2.8138;Applicable sous hypothèses
+mixte;254;20;5266;5265.3;0.7;0.0027;Applicable sous hypothèses
+mission;278;20;5282;5265.3;16.7;0.0601;Applicable sous hypothèses
+forfait;278;20;5980;5265.3;714.7;2.5709;Applicable sous hypothèses
+mixte;278;20;5482;5265.3;216.7;0.7795;Applicable sous hypothèses
+mission;300;20;5700;5265.3;434.7;1.449;Applicable sous hypothèses
+forfait;300;20;5980;5265.3;714.7;2.3823;Applicable sous hypothèses
+mixte;300;20;5680;5265.3;414.7;1.3823;Applicable sous hypothèses
+mission;500;20;9500;5265.3;4234.7;8.4694;Applicable sous hypothèses
+forfait;500;20;5980;5265.3;714.7;1.4294;Applicable sous hypothèses
+mixte;500;20;7480;5265.3;2214.7;4.4294;Applicable sous hypothèses
+mission;600;20;11400;5265.3;6134.7;10.2245;Applicable sous hypothèses
+forfait;600;20;5980;5265.3;714.7;1.1912;Applicable sous hypothèses
+mixte;600;20;8380;5265.3;3114.7;5.1912;Applicable sous hypothèses
+mission;750;20;14250;5265.3;8984.7;11.9796;Applicable sous hypothèses
+forfait;750;20;;5265.3;;;Hors forfait 20 établissements
+mixte;750;20;9730;5265.3;4464.7;5.9529;Applicable sous hypothèses
+mission;1000;20;19000;5265.3;13734.7;13.7347;Applicable sous hypothèses
+forfait;1000;20;;5265.3;;;Hors forfait 20 établissements
+mixte;1000;20;11980;5265.3;6714.7;6.7147;Applicable sous hypothèses

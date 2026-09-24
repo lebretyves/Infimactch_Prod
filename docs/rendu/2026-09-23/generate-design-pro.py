@@ -16,7 +16,7 @@ NAVY='#101E32';INK='#15283F';BLUE='#234BFF';TEAL='#00B5A5';PALE='#F4F6F8';MUTED=
 for n,f in [('Body','segoeui.ttf'),('Bold','segoeuib.ttf'),('Light','segoeuil.ttf')]:
  pdfmetrics.registerFont(TTFont(n,str(Path('C:/Windows/Fonts')/f)))
 c=canvas.Canvas(str(R/'InfiMatch_Soutenance_Pro_2026-09-23.pdf'),pagesize=(W,H))
-c.setTitle('InfiMatch — Soutenance Epitech');c.setAuthor('Équipe InfiMatch');c.setSubject('POC • 15 minutes • 23 septembre 2026')
+c.setTitle('InfiMatch — Soutenance Epitech');c.setAuthor('Équipe InfiMatch');c.setSubject('POC • 15 minutes • 24 septembre 2026')
 checks=[]
 def box(x,y,w,h,color,r=0,stroke=None):
  c.setFillColor(color);c.setStrokeColor(stroke or color)
@@ -59,9 +59,9 @@ def logos(dark=False):
 def base(n,section,dark=False,source=None):
  box(0,0,W,H,NAVY if dark else PALE);logos(dark)
  line(60,665,1220,665,'#304158' if dark else LINE)
- txt('POC • SOUTENANCE • 23 SEPTEMBRE 2026',60,679,450,18,10,'#A7B7C8' if dark else MUTED)
+ txt('POC • SOUTENANCE • 24 SEPTEMBRE 2026',60,679,450,18,10,'#A7B7C8' if dark else MUTED)
  txt(section,580,679,470,18,10,'#A7B7C8' if dark else MUTED,align=2)
- txt(f'{n:02d} / 12',1128,675,92,25,13,TEAL,True,align=2)
+ txt(f'{n:02d} / 13',1128,675,92,25,13,TEAL,True,align=2)
  if source:txt(source,60,636,1158,21,10,'#B2C2D3' if dark else MUTED)
 def heading(kicker,title,subtitle=None,dark=False):
  txt(kicker.upper(),60,110,1100,25,12,TEAL if dark else BLUE,True)
@@ -187,31 +187,35 @@ heading('Les pratiques','Protéger les données. Réduire le superflu.')
 cards=[('Sécurité','Droits par rôle.<br/>Chiffrement et MFA.<br/>Secrets dans Vault.','01'),('Accessibilité','Navigation clavier.<br/>Structure sémantique.<br/>Corrections ciblées.','02'),('Sobriété','Requêtes regroupées.<br/>Scan compact des offres.<br/>Détails chargés à la demande.','03')]
 for i,(t,b,n) in enumerate(cards):card(60+394*i,304,372,294,t,b,n,TEAL if i==2 else BLUE)
 finish()
-# 11 — effort
-base(11,'LA CHARGE',source='Source : CHIFFRAGE_V1.csv • 18 lots. Les heures humaines réelles restent à renseigner, sans extrapolation des commits.')
-heading('La charge','Le prévu est chiffré. Le réalisé doit l’être.')
-txt('348–528 h',59,278,730,106,78,INK,True)
-txt('heures-personnes estimées • 18 lots',64,391,679,38,23,MUTED)
-x0=85;scale=1.07
-line(x0,498,x0+580*scale,498,LINE,3)
-box(x0+348*scale,486,(528-348)*scale,24,BLUE,12)
-circle(x0+438*scale,498,9,TEAL)
-for val,y,label in [(348,531,'348 h'),(438,453,'438 h'),(528,531,'528 h')]:
- txt(label,x0+val*scale-42,y,85,30,17,BLUE,True,align=1)
-txt('Centre indicatif : 438 h, pas une mesure du réalisé.',65,587,678,39,18,MUTED)
-box(847,291,373,306,NAVY,15)
-txt('4 personnes<br/>11 jours',875,315,315,104,37,WHITE,True)
-txt('Temps réels et justificatifs<br/>à compléter dans le classeur.<br/><br/>Ne pas déduire les heures<br/>des sessions agent.',875,447,311,132,20,'#C0D0E0')
+# 11 — effort and equipment
+base(11,'LA CHARGE ET LE MATÉRIEL',source='Déclaration équipe du 24/09/2026 • APEC 41 kEUR brut/an • Hypothèses : charges +42 %, matériel 2 000 EUR/poste, 3 ans.')
+heading('La réalisation','396 heures déclarées. Un coût explicite.')
+txt('396 h',60,286,720,107,86,INK,True)
+txt('308 h de journée + environ 88 h le soir',65,411,710,42,25,MUTED)
+txt('4 personnes × 11 jours × (7 h + 2 h)<br/>Capacité initiale à cinq : 385 h, soit +11 h.<br/>Ventilation par fonctionnalité à compléter.',65,480,704,116,22,INK,leading=1.5)
+box(830,286,390,328,NAVY,15)
+txt('12 800,98 EUR',852,308,349,64,37,WHITE,True)
+txt('Travail valorisé avec charges<br/>+ matériel amorti affecté.<br/><br/>Matériel : 133,33 EUR imputés.<br/>Achat de 4 postes : 8 000 EUR,<br/>sans double comptage.',854,396,343,190,20,'#C0D0E0',leading=1.4)
+finish()
+# 12 — monthly production budget
+base(12,'LE COÛT D’EXPLOITATION',source='Budget prospectif : 09_COUTS_PRODUCTION.md • USD/EUR à parité conventionnelle • Hors dépassements et temps du recruteur.')
+heading('L’exploitation','Un salarié à temps plein. Trois volumes.')
+box(60,288,525,326,NAVY,15)
+txt('5 265,30 EUR/mois',83,310,480,60,38,WHITE,True)
+txt('Maintenance : 4 851,67 EUR<br/>Services : 265,07 EUR<br/>Réserve : 53,01 EUR<br/>Matériel amorti : 55,56 EUR<br/>Connexion et énergie : 40 EUR',84,397,477,193,23,'#C0D0E0',leading=1.5)
+for i,(volume,price) in enumerate([('100 validations/mois','52,65 EUR'),('500 validations/mois','10,53 EUR'),('1 000 validations/mois','5,27 EUR')]):
+ y=290+i*105;box(623,y,597,90,WHITE,12);txt(volume,642,y+17,340,30,20,MUTED);txt(price,979,y+21,222,45,29,BLUE,True,align=2)
+txt('Coût moyen alloué par mission validée.<br/>Hypothèses de consommation à mesurer en pilote.',642,608,570,44,16,MUTED)
 finish()
 # 12 — closing
-base(12,'LA SUITE',True)
+base(13,'LA SUITE',True)
 txt('LA SUITE',62,119,1050,25,12,TEAL,True)
 txt('Un POC démontrable.<br/>Un pilote à valider.',58,174,1130,177,66,WHITE,True,leading=1.05)
-items=[('01','Documenter','Temps réels et validation J+2.'),('02','Éprouver','Besoin terrain et modèle B2B.'),('03','Finaliser','Suivi PostGIS et DNS local.')]
+items=[('01','Documenter','Ventiler les 396 h. Preuve J+2.'),('02','Éprouver','Besoin terrain et modèle B2B.'),('03','Finaliser','Suivi PostGIS et DNS local.')]
 for i,(n,t,b) in enumerate(items):
  x=63+393*i;line(x,413,x+351,413,'#354B65',2);txt(n,x,440,67,42,30,TEAL,True)
  txt(t,x,494,348,49,29,WHITE,True);txt(b,x,551,348,58,19,'#B8CADE')
 finish()
 c.save()
-(R/'validation-design-pro.json').write_text(json.dumps({'pages':12,'durationMinutes':15,'textBlocks':len(checks),'overflow':0,'logoSource':'https://newsroom.epitech.eu/','checks':checks},ensure_ascii=False,indent=2),encoding='utf-8')
-print('PASS: 12 redesigned PDF pages; all text bounds checked.')
+(R/'validation-design-pro.json').write_text(json.dumps({'pages':13,'durationMinutes':15,'textBlocks':len(checks),'overflow':0,'logoSource':'https://newsroom.epitech.eu/','checks':checks},ensure_ascii=False,indent=2),encoding='utf-8')
+print('PASS: 13 redesigned PDF pages; all text bounds checked.')

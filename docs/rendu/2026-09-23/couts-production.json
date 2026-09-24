@@ -1,0 +1,105 @@
+{
+  "date": "2026-09-24",
+  "people_planned": 5,
+  "people_actual": 4,
+  "days": 11,
+  "hours_day": 7,
+  "hours_evening": 2,
+  "salary_gross_year": 41000,
+  "paid_hours_year": 1820,
+  "employer_loading_assumption": 0.42,
+  "usd_to_eur_budget_assumption": 1,
+  "equipment_per_station_ht": 2000,
+  "equipment_years": 3,
+  "working_days_year_assumption": 220,
+  "maintenance_stations": 1,
+  "monthly_connectivity_energy_provision": 40,
+  "technical_contingency": 0.2,
+  "volumes": [
+    100,
+    500,
+    1000
+  ],
+  "services": [
+    [
+      "Vercel Pro",
+      20,
+      "USD",
+      "1 siège déployant, crédit de consommation inclus",
+      "https://vercel.com/docs/plans/pro-plan"
+    ],
+    [
+      "Supabase Pro",
+      25,
+      "USD",
+      "1 projet Micro, crédit compute déduit",
+      "https://supabase.com/pricing"
+    ],
+    [
+      "MongoDB Atlas M10",
+      58.4,
+      "USD",
+      "Prix de départ 0,08 USD/h × 730 h, région à confirmer",
+      "https://www.mongodb.com/pricing"
+    ],
+    [
+      "n8n Cloud Pro",
+      50,
+      "EUR",
+      "10 000 exécutions/mois, facturation annuelle 600 EUR",
+      "https://n8n.io/pricing/"
+    ],
+    [
+      "SMTP2GO Starter",
+      10,
+      "USD",
+      "10 000 emails/mois, tarif du corps de la page à confirmer à la commande",
+      "https://www.smtp2go.com/pricing/"
+    ],
+    [
+      "JobsPipe Builder",
+      49,
+      "USD",
+      "25 000 annonces distinctes/mois ; pas 25 000 missions validées",
+      "https://jobspipe.dev/pricing"
+    ],
+    [
+      "GitHub Team",
+      16,
+      "USD",
+      "4 utilisateurs × 4 USD ; une organisation payante modélisée",
+      "https://github.com/pricing"
+    ],
+    [
+      "Hébergement Vault Community",
+      10,
+      "EUR",
+      "Provision serveur ; architecture cible, aucune migration effectuée",
+      ""
+    ],
+    [
+      "Sauvegardes externes chiffrées",
+      10,
+      "EUR",
+      "Provision stockage, transferts à mesurer",
+      ""
+    ],
+    [
+      "Supervision",
+      15,
+      "EUR",
+      "Provision outil de surveillance",
+      ""
+    ],
+    [
+      "Domaine",
+      1.6666666666666667,
+      "EUR",
+      "Provision renouvellement 20 EUR/an",
+      ""
+    ]
+  ],
+  "n8n_background_per_30days": 300,
+  "n8n_runs_per_validated_assumption": 8,
+  "n8n_retry_factor": 1.1
+}
