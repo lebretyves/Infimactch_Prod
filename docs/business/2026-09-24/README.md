@@ -85,3 +85,6 @@ Je proposerais de tester la formule mixte, qui stabilise une part des revenus sa
 ## Graphiques de rentabilité par proposition
 
 [Analyse et trois formules](RENTABILITE.md) · [Quatre graphiques en PDF](rentabilite-trois-propositions.pdf) · [Classeur modifiable](rentabilite-scenarios.xlsx).
+
+
+[Comparaison complète CA, coûts, résultat et choix de formule](COMPARAISON_COMPLETE.md) · [Dossier PDF complet](DOSSIER_RENTABILITE_COMPLET.pdf).
