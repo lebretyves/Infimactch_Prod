@@ -18,7 +18,7 @@ def tracked(root):
     names = subprocess.check_output(
         ["git", "ls-files", "-z", "--cached", "--others", "--exclude-standard"], cwd=root
     ).decode("utf-8").split("\0")
-    return {name: root / name for name in set(names) if name and (root / name).is_file()}
+    return {name: root / name for name in set(names) if name and not Path(name).name.startswith("~$") and "__pycache__" not in Path(name).parts and (root / name).is_file()}
 
 
 def canonical(name):
@@ -64,7 +64,11 @@ def inspect(root):
         if key in by_canonical:
             errors.append(f"Duplicate canonical path: {by_canonical[key]} / {name}")
         by_canonical[key] = name
-        raw = path.read_bytes()
+        try:
+            raw = path.read_bytes()
+        except OSError as exc:
+            errors.append(f"Unreadable file: {name}: {type(exc).__name__}")
+            continue
         text = text_content(raw)
         records.append({"path": name, "sha256": hashlib.sha256(raw).hexdigest(),
                         "lines": len(text.splitlines()) if text is not None else None})

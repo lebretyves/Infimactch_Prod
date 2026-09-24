@@ -1,3 +1,4 @@
+import {demoNoticeSuppressed} from '../notifications/demo-suppression';
 import {EMAIL_CORRELATION_HEADER} from './email-delivery';
 import {randomUUID} from 'node:crypto';
 import {Database, SqlClient} from '../database/database';
@@ -70,10 +71,16 @@ export async function dispatchMissionEmails(db:Database,documents:DocumentsServi
   await db.query("UPDATE mission_email SET status='UNCERTAIN',last_error='SEND_RESULT_UNKNOWN',lease_until=NULL WHERE status='SENDING' AND lease_until<now()");
   for(let i=0;i<limit;i++) {
     const item=await db.transaction(async em=>{
-      const [r]=await em.query("SELECT e.*,a.status AS assignment_status FROM mission_email e JOIN assignment a ON a.id=e.assignment_id WHERE e.status='PENDING' AND e.available_at<=now() AND (e.lease_until IS NULL OR e.lease_until<now()) ORDER BY e.created_at,e.id LIMIT 1 FOR UPDATE OF e SKIP LOCKED");
+      const [r]=await em.query("SELECT e.*,a.status AS assignment_status FROM mission_email e LEFT JOIN assignment a ON a.id=e.assignment_id WHERE e.status='PENDING' AND e.available_at<=now() AND (e.lease_until IS NULL OR e.lease_until<now()) ORDER BY e.created_at,e.id LIMIT 1 FOR UPDATE OF e SKIP LOCKED");
       if(!r)return null;
       const [allowed]=await em.query('SELECT 1 FROM account WHERE id=$1 AND active AND email=$2 AND ($3::uuid IS NULL OR EXISTS(SELECT 1 FROM membership WHERE user_id=$1 AND organization_id=$3 AND active))',[r.user_id,r.recipient,r.organization_id]);
-      if(!allowed || (r.kind==='CONFIRMATION' && !['ACTIVE','COMPLETED'].includes(r.assignment_status))) {
+      let reminderAllowed=true;
+      if(['REMINDER','START_REMINDER_24H','START_REMINDER_2H'].includes(r.kind)) {
+        const [m]=await em.query('SELECT status,version,start_at,reminders_enabled FROM mission WHERE id=$1',[r.mission_id]);
+        reminderAllowed=!!m && m.version===r.mission_version && new Date(r.expires_at).getTime()>Date.now() && !demoNoticeSuppressed(r.mission_id,r.kind);
+        reminderAllowed &&= r.kind==='REMINDER' ? m.status==='OPEN' && m.reminders_enabled : m.status==='FILLED' && r.assignment_status==='ACTIVE';
+      }
+      if(!allowed || !reminderAllowed || (r.kind==='CONFIRMATION' && !['ACTIVE','COMPLETED'].includes(r.assignment_status))) {
         await em.query("UPDATE mission_email SET status='CANCELLED',last_error='RECIPIENT_OR_ASSIGNMENT_CHANGED',lease_until=NULL WHERE id=$1",[r.id]);
         return {skip:true};
       }
@@ -86,8 +93,8 @@ export async function dispatchMissionEmails(db:Database,documents:DocumentsServi
     if(item.skip)continue;
     let failure='SEND_RESULT_UNKNOWN',permanent=false,retry=false,requested=false;
     try {
-      const doc=await documents.read(item.user_id,item.document_id);
-      const body={sender:item.payload.from,to:[item.recipient],subject:item.payload.subject,html_body:item.payload.html,text_body:item.payload.text,custom_headers:[{header:EMAIL_CORRELATION_HEADER,value:item.id}],attachments:[{filename:(item.kind==='CONFIRMATION'?'confirmation':'annulation')+'-mission-'+item.assignment_id+'.pdf',fileblob:doc.data.toString('base64'),mimetype:'application/pdf'}]};
+      const doc=item.document_id?await documents.read(item.user_id,item.document_id):null;
+      const body={sender:item.payload.from,to:[item.recipient],subject:item.payload.subject,html_body:item.payload.html,text_body:item.payload.text,custom_headers:[{header:EMAIL_CORRELATION_HEADER,value:item.id}],attachments:doc?[{filename:(item.kind==='CONFIRMATION'?'confirmation':'annulation')+'-mission-'+item.assignment_id+'.pdf',fileblob:doc.data.toString('base64'),mimetype:'application/pdf'}]:[]};
       requested=true;
       const response=await transport('https://api.smtp2go.com/v3/email/send',{method:'POST',headers:{'X-Smtp2go-Api-Key':process.env.SMTP2GO_API_KEY,'Content-Type':'application/json'},body:JSON.stringify(body),signal:AbortSignal.timeout(15000)});
       if(!response.ok) {

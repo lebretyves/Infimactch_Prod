@@ -1,4 +1,5 @@
 import { matchingMission } from "../missions/mission-mapping";
+import {queueReminderEmail,scheduledReminders} from './scheduled-reminders';
 import { sendReminders } from './reminders';
 import { demoNoticeSuppressed, mutedDemoMissionIds } from "../notifications/demo-suppression";
 import {professionalIdentityName, queueMissionEmails, generateCancellations, dispatchMissionEmails} from './mission-mail';
@@ -34,7 +35,7 @@ import { notificationMessage } from "../domain/notification-messages";
 async function missionNotice(em: import("../database/database").SqlClient, eventId: string, recipient: {user_id:string;role:string}, kind: "MATCH"|"REMINDER"|"CONFIRMATION"|"CANCELLATION", m: any) {
   const org = recipient.role === "NURSE" ? null : recipient.role === "AGENCY" ? m.agency_id : m.establishment_id;
   const href = (recipient.role === "NURSE" ? "/missions/m_" : "/gestion/missions/") + m.id;
-  const message = kind === "CANCELLATION" && recipient.role === "NURSE" ? "La mission qui vous concernait a ?t? annul?e. Consultez le suivi dans InfiMatch." : notificationMessage(recipient.role as any, kind);
+  const message = kind === "CANCELLATION" && recipient.role === "NURSE" ? "La mission qui vous concernait a été annulée. Consultez le suivi dans InfiMatch." : notificationMessage(recipient.role as any, kind);
   return em.query("INSERT INTO notification(user_id,event_id,kind,message,organization_id,href,context) VALUES($1,$2,$3,$4,$5,$6,$7) ON CONFLICT DO NOTHING RETURNING id", [recipient.user_id,eventId,kind,message,org,href,JSON.stringify({missionId:m.id,version:m.version})]);
 }
 @Injectable()
@@ -97,8 +98,9 @@ export class AutomationService {
     });
   }
   async reminders() {
-    return sendReminders(this.db,missionNotice);
+    return sendReminders(this.db,async (em,event,actor,kind,m)=>{const notices=await missionNotice(em,event,actor,kind,m);if(notices.length)await queueReminderEmail(em,event,actor,kind,m);return notices;});
   }
+  async scheduledReminders() {return scheduledReminders(this.db);}
   async confirmation(id: string) {
     const reservation = await this.db.transaction(async (em) => {
       const [e] = await em.query(
@@ -347,6 +349,7 @@ class AutomationController {
     this.authorize(token);
     return this.service.reminders();
   }
+  @Post("scheduled-reminders") scheduledReminders(@Headers("x-infimatch-token") token:string) {this.authorize(token);return this.service.scheduledReminders();}
   @Post("cancellation/:id") cancellation(
     @Headers("x-infimatch-token") token: string,
     @Param("id", ParseUUIDPipe) id: string,

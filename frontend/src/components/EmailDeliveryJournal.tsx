@@ -13,7 +13,7 @@ const date=(value:string|null)=>value?new Date(value).toLocaleString('fr-FR'):'N
 export function EmailDeliveryItems({items}:{items:EmailDelivery[]}) {
   return <><p>La livraison au serveur destinataire ne prouve ni l’arrivée dans la boîte principale ni la lecture. Vérifiez aussi les indésirables. Aucun suivi d’ouverture ou de clic n’est utilisé ici.</p>
     {items.length ? <ul style={{paddingLeft:20}}>{items.map(item=><li key={item.id} style={{marginBlock:20,overflowWrap:'anywhere'}}>
-      <strong>{item.kind==='CONFIRMATION'?'Confirmation de mission':'Annulation de mission'}</strong><p>{deliveryLabels[item.deliveryStatus]||sendLabels[item.sendStatus]||'État non confirmé'}</p>
+      <strong>{({CONFIRMATION:'Confirmation de mission',CANCELLATION:'Annulation de mission',REMINDER:'Relance de mission non pourvue',START_REMINDER_24H:'Rappel avant mission — J-1',START_REMINDER_2H:'Rappel avant mission — H-2'} as Record<string,string>)[item.kind]||'Email de mission'}</strong><p>{deliveryLabels[item.deliveryStatus]||sendLabels[item.sendStatus]||'État non confirmé'}</p>
       <p>Création : {date(item.createdAt)} · Acceptation par le service : {date(item.acceptedAt)}</p>
       {item.deliveryEventAt&&<p>Dernier état de livraison : {date(item.deliveryEventAt)}</p>}
       {item.sendStatus==='UNCERTAIN'&&item.deliveryStatus==='NOT_REPORTED'&&<p>L’envoi n’est pas relancé automatiquement pour éviter un doublon. Le suivi sera actualisé si le service confirme son résultat.</p>}

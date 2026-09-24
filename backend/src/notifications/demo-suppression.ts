@@ -5,5 +5,5 @@ export const mutedDemoMissionIds: readonly string[] = Object.freeze(snapshot.mis
 const muted = new Set(mutedDemoMissionIds);
 export function demoNoticeSuppressed(missionId: unknown, kind: string): boolean {
   return typeof missionId === "string" && muted.has(missionId) &&
-    ["MATCH", "REMINDER", "MISSION_PUBLISHED"].includes(kind);
+    ["MATCH", "REMINDER", "MISSION_PUBLISHED", "START_REMINDER_24H", "START_REMINDER_2H"].includes(kind);
 }

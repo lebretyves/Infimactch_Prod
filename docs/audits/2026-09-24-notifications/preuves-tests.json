@@ -1,0 +1,72 @@
+{
+  "date": "2026-09-24",
+  "unit": {
+    "tests": 76,
+    "passed": 76
+  },
+  "integration": [
+    {
+      "suite": "demo-notification-suppression.spec.js.txt",
+      "tests": 6,
+      "pass": 6
+    },
+    {
+      "suite": "email-delivery.spec.js.txt",
+      "tests": 5,
+      "pass": 5
+    },
+    {
+      "suite": "journey.spec.js.txt",
+      "tests": 32,
+      "pass": 32
+    },
+    {
+      "suite": "mission-guardrails.spec.js.txt",
+      "tests": 8,
+      "pass": 8
+    },
+    {
+      "suite": "mission-mail.spec.js.txt",
+      "tests": 6,
+      "pass": 6
+    },
+    {
+      "suite": "notifications.spec.js.txt",
+      "tests": 5,
+      "pass": 5
+    },
+    {
+      "suite": "purge-demo-alerts.spec.js.txt",
+      "tests": 6,
+      "pass": 6
+    },
+    {
+      "suite": "recovery.spec.js.txt",
+      "tests": 8,
+      "pass": 8
+    },
+    {
+      "suite": "support.spec.js.txt",
+      "tests": 5,
+      "pass": 5
+    }
+  ],
+  "isolatedResult": {
+    "date": "2026-09-24T05:54:56.716Z",
+    "sourceSha256": "d7497901ee7de049541e7f8d74f9972adbc66928120fe3a4d1f48cd21f523238",
+    "status": "PASS",
+    "scope": "Targeted isolated integrations and security regressions"
+  },
+  "frontend": [
+    {
+      "script": "test-notification-read.mjs",
+      "status": "PASS",
+      "api": "mock"
+    },
+    {
+      "script": "test-establishment-notification-panels.mjs",
+      "status": "PASS",
+      "api": "mock"
+    }
+  ]
+}
