@@ -38,5 +38,7 @@ fig.text(.09,.055,'Hypothèse de budget constant dans les quotas. Au-delà de 1 
 fig.subplots_adjust(left=.09,right=.98,bottom=.23,top=.86)
 for extension in ['png','svg','pdf']:
     fig.savefig(ROOT/f'cout-par-mission.{extension}',dpi=170,facecolor=fig.get_facecolor())
+svg = ROOT / 'cout-par-mission.svg'
+svg.write_text('\n'.join(line.rstrip() for line in svg.read_text(encoding='utf8').splitlines())+'\n', encoding='utf8')
 plt.close(fig)
 print('Generated PNG, SVG, PDF and CSV')
