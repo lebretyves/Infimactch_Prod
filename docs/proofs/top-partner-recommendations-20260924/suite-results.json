@@ -1,0 +1,18 @@
+{
+  "date": "2026-09-24T09:17:53.544Z",
+  "mode": "integration",
+  "results": [
+    {
+      "file": "external-ranking.spec.js",
+      "passed": true
+    },
+    {
+      "file": "external-visibility.spec.js",
+      "passed": true
+    },
+    {
+      "file": "partner-recommendations.spec.js",
+      "passed": true
+    }
+  ]
+}

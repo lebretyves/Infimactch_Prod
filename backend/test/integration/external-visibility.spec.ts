@@ -44,7 +44,7 @@ test('hiding one source removes public, private and favorite access without eras
  assert.equal((await listings.favorites(req(),page)).length,0);
  const search=await listings.search(req(),{qualifications:[],origine:'externes',...page});
  assert.equal(search.total,1);assert.equal(search.items[0].source,'JOBSPIPE');
- const recommendations=await new RecommendationsController(db,{} as any).recommendations(req(),{origine:'externes'});
+ const recommendations=await new RecommendationsController(db).recommendations(req(),{origine:'externes'});
  assert.equal(recommendations.external.status,'READY');assert.equal(recommendations.external.items.length,1);
  assert.equal((await db.query('SELECT id FROM external_offer')).length,2);
  assert.equal((await db.query('SELECT * FROM favorite WHERE user_id=$1',[actor])).length,1);
@@ -56,7 +56,7 @@ test('hiding one source removes public, private and favorite access without eras
 test('all-hidden catalogue is empty and revealing a source restores saved favorites',async()=>{
  await admin.sourceVisibility(adminReq(),'JOBSPIPE',{visible:false,reason});
  assert.equal((await listings.external(page)).total,0);
- const recommendations=await new RecommendationsController(db,{} as any).recommendations(req(),{});
+ const recommendations=await new RecommendationsController(db).recommendations(req(),{});
  assert.equal(recommendations.external.status,'HIDDEN');assert.equal(recommendations.internal.status,'READY');
  assert.equal(recommendations.externalCatalogueVisible,false);
  await admin.sourceVisibility(adminReq(),'FRANCE_TRAVAIL',{visible:true,reason});

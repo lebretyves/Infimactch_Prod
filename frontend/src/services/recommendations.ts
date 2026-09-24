@@ -1,6 +1,8 @@
 import { api } from './api';
 import type { Listing } from './market';
 export type Recommendation = Listing & {
+  matching_eligible?: boolean;
+  matching_reasons?: string[];
   publicationDate: string | null;
   importedAt: string | null;
   sourceUpdatedAt: string | null;
@@ -9,7 +11,7 @@ export type Recommendation = Listing & {
 };
 export type Recommendations = {
   mode: 'MIXED'; generatedAt: string; externalCatalogueVisible: boolean;
-  internal: { status: 'READY' | 'UNAVAILABLE' | 'HIDDEN'; personalization?: 'COMPATIBLE' | 'GENERAL_PROFILE_INCOMPLETE'; rppsStatus: string | null; items: Recommendation[] };
+  internal: { status: 'READY' | 'UNAVAILABLE' | 'HIDDEN'; personalization?: 'COMPATIBLE' | 'INDICATIVE' | 'GENERAL_PROFILE_INCOMPLETE'; rppsStatus: string | null; items: Recommendation[] };
   external: { status: 'READY' | 'UNAVAILABLE' | 'HIDDEN'; personalization: 'PARTIAL' | 'GENERAL_PROFILE_INCOMPLETE'; items: Recommendation[]; sources: { provider: string; status: string; created_at: string | null }[] };
 };
 export const getRecommendations = (signal: AbortSignal, origine: 'toutes' | 'partenaires' | 'externes' = 'toutes') => api<Recommendations>('/me/recommendations?origine=' + origine, { signal });
