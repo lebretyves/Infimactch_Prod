@@ -95,3 +95,7 @@ assert revenues(314,20)[1]>revenues(314,20)[0]
 assert revenues(315,20)[0]>revenues(315,20)[1]
 assert len(PdfReader(R/'DOSSIER_RENTABILITE_COMPLET.pdf').pages)==6
 print('PASS: graphs, 6-page dossier, comparative CSV and dominance checks for 100 client counts × 1,001 volumes')
+
+# Include the salary and monthly/annual explanation pages in every full rebuild.
+import subprocess, sys
+subprocess.run([sys.executable, str(R / "generate-monthly-annual.py")], check=True)

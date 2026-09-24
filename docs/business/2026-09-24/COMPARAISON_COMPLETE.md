@@ -8,7 +8,7 @@ Cette conclusion compare le revenu d’InfiMatch, pas l’intérêt financier du
 
 ![CA, coûts et résultat](comparaison-ca-couts-benefice.png)
 
-[PDF complet de six pages](DOSSIER_RENTABILITE_COMPLET.pdf) · [Comparaison de deux pages](comparaison-commerciale.pdf) · [Données détaillées](comparaison-ca-resultat.csv) · [Classeur paramétrable](rentabilite-scenarios.xlsx)
+[PDF complet de neuf pages](DOSSIER_RENTABILITE_COMPLET.pdf) · [Comparaison de deux pages](comparaison-commerciale.pdf) · [Données détaillées](comparaison-ca-resultat.csv) · [Classeur paramétrable](rentabilite-scenarios.xlsx)
 
 ## Tableau à vingt établissements
 
@@ -60,4 +60,11 @@ Le budget inclut maintenance à temps plein, abonnements, matériel amorti et r�
 
 ## Vérification et reproduction
 
-Génération : `python docs/business/2026-09-24/generate-commercial-comparison.py`, après le script `generate-profitability.py` pour les pages individuelles. Vérification des croisements 314/315, du classement des offres pour cent nombres de clients et 1 001 volumes chacun, du PDF de six pages et inspection du rendu. Le CSV inclut les taux de résultat et l’offre maximisant les recettes pour chaque scénario. Les montants sont calculés avant arrondi.
+Génération : `python docs/business/2026-09-24/generate-commercial-comparison.py`, après le script `generate-profitability.py` pour les pages individuelles. Vérification des croisements 314/315, du classement des offres pour cent nombres de clients et 1 001 volumes chacun, du PDF de neuf pages et inspection du rendu. Le CSV inclut les taux de résultat et l’offre maximisant les recettes pour chaque scénario. Les montants sont calculés avant arrondi.
+
+
+## Pages explicatives ajoutées
+
+Le dossier PDF comprend désormais neuf pages. Les pages 7 à 9 détaillent le salaire et les charges employeur, montrent le passage du CA au résultat et comparent les montants mensuels et annuels avec des graphiques. Hypothèse : 500 validations par mois pendant douze mois, soit 6 000 par an, et vingt établissements payants. Les coûts et résultats annuels sont calculés à partir des valeurs non arrondies.
+
+[Pages explicatives seules](EXPLICATIONS_MOIS_ANNEE_SALAIRE.pdf) · [Graphique salaire](explication-salaire.png) · [CA vers résultat](explication-ca-resultat.png) · [Mois et année](explication-mois-annee.png).
