@@ -4,6 +4,18 @@ Plateforme étudiante de mise en relation entre professionnels de santé, établ
 
 InfiMatch facilite la recherche et le suivi des missions. Les agences assurent l'emploi et la rémunération. Les PDF produits sont des confirmations ou annulations applicatives, pas des contrats de travail complets signés.
 
+## Accès en production
+
+**[Ouvrir l’application InfiMatch](https://infimactch-prod-backend-l5bc.vercel.app)**
+
+| Service | Adresse |
+| --- | --- |
+| Application publique | https://infimactch-prod-backend-l5bc.vercel.app |
+| Administration (compte administrateur et MFA requis) | https://infimatch-admin.vercel.app |
+| État de santé de l’API | https://infimactch-prod-backend.vercel.app/api/v1/health |
+
+Les espaces personnels nécessitent une connexion. Les liens de production ont été vérifiés le 24 septembre 2026 (HTTP 200).
+
 ## Accès rapide
 
 | Besoin | Document |
