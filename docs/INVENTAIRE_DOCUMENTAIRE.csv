@@ -29,7 +29,7 @@ docs/NOTIFICATIONS_DISCORD.md,Guide technique,Lire conjointement avec ETAT_COURA
 docs/OFFRES_EXTERNES_V1.md,Guide technique,Lire conjointement avec ETAT_COURANT.md,6199,57,799094baa209160c5a857ce9c5e90556eb23d09753acd627fdb5a78f8ef73fbf
 docs/PLANNING_4_PERSONNES_11_JOURS.md,Guide technique,Lire conjointement avec ETAT_COURANT.md,5303,45,898074223a2c407020874419caf1127e8e5df300113e3bdb81af0846997fa58a
 docs/PRACTICE_SERVICES_2026-09-18.md,Rapport historique,Resultats limites a sa date,2369,17,f2a11b86c87cc3378802d76119304f597520dd8907cbb14aded4ddbdd79390f4
-docs/README.md,Guide technique,Lire conjointement avec ETAT_COURANT.md,2324,42,fcedd3a1c4478a99f867356bcbec4f39468133828fa96c3a0ab7d3a6054522cf
+docs/README.md,Guide technique,Lire conjointement avec ETAT_COURANT.md,2421,44,3cd0bc97943b410d1416d67c3afea98ded7b9ee5bb11ca9474903196fc38adfd
 docs/RECETTE_BACKEND_V1.md,Guide technique,Lire conjointement avec ETAT_COURANT.md,9259,88,1f25a68e2326062f746179eb14e9ab2487746861e8bd45988c209f8cde4e3f3a
 docs/RECTIFICATIF_CATALOGUE_V1.docx,Guide technique,Lire conjointement avec ETAT_COURANT.md,40210,,30b8a344c26090e6b7a033d072b418674f95b3af9538ed923732c5ce7bd258f5
 docs/RECTIFICATIF_CATALOGUE_V1.md,Guide technique,Lire conjointement avec ETAT_COURANT.md,8446,97,d79b9a6118b940e0905e0a9a573a7fb5bc4824e766343ef973ab005eb8421809
@@ -69,6 +69,8 @@ docs/business/2026-09-24/rentabilite-mixte.png,Chiffrage prospectif,Hypotheses d
 docs/business/2026-09-24/rentabilite-scenarios.csv,Chiffrage prospectif,Hypotheses declarees; pas des factures,2491,37,a50eaa612b8fc50e4837414b3e0dd97855eb80aafb9334509ac848413ee4c671
 docs/business/2026-09-24/rentabilite-scenarios.xlsx,Chiffrage prospectif,Hypotheses declarees; pas des factures,7049,,a04ceccf5b15ca69470d673290db9c67ddecb48640f547c356c5c1e34f9c2d69
 docs/business/2026-09-24/rentabilite-trois-propositions.pdf,Chiffrage prospectif,Hypotheses declarees; pas des factures,54630,,2d3d2e90cc2ea6e2cacb201f8ac53102f189e4a2ba9a738aaf3e6dccb61661b4
+docs/cout-projet/COUT_REALISATION_INFIMATCH.pdf,Guide technique,Lire conjointement avec ETAT_COURANT.md,44341,,af2478761c574df9bf01ecc5cf22ec793cdb422c4c9b180cd957b52506674c02
+docs/cout-projet/README.md,Guide technique,Lire conjointement avec ETAT_COURANT.md,2926,35,d9c886ee180297d01351a56c4b475de43bd85cff89753d18ea12ab0e04e7b0f0
 docs/diagrams/architecture-infimatch-v1.pdf,Guide technique,Lire conjointement avec ETAT_COURANT.md,78878,,838385b7f338943eeb298fc18242c5a2b0385e06b4caf09051dbb70a3e61632b
 docs/diagrams/architecture-infimatch-v1.png,Guide technique,Lire conjointement avec ETAT_COURANT.md,245151,,4af0f7e79bfd400b2af8259ab2c8a04c513605d6b9c4928edfc80d4519239559
 docs/diagrams/architecture-infimatch-v1.svg,Guide technique,Lire conjointement avec ETAT_COURANT.md,9922,74,6fe7de1511c4d0dd6ce5b60bcaefdf4ffc0b9ca7e1fa542dc70a55d6ee6b72fe
