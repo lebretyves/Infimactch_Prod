@@ -175,7 +175,7 @@ export function MixedRecommendations({
           next.set("origine", origine);
           setParams(next);
         }} />
-        <p>{origin === "partenaires" ? "Votre s?lection partenaire InfiMatch." : "Des offres externes ? explorer."}</p>
+        <p>{origin === "partenaires" ? "Votre sélection partenaire InfiMatch." : "Des offres externes à explorer."}</p>
       </div>
       {result.loading ? (
         <p role="status" className={s.state}>Recherche de vos prochaines missions…</p>
