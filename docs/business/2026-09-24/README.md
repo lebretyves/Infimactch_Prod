@@ -80,3 +80,8 @@ Exemple comparable : **20 établissements et 500 validations/mois**, réparties 
 | 149 EUR/établissement +9 EUR/validation | 7 480,00 EUR | 2 214,70 EUR |
 
 Je proposerais de tester la formule mixte, qui stabilise une part des revenus sans facturer toutes les structures comme de gros utilisateurs. La formule à 19 EUR seule reste déficitaire à 100 validations/mois. La volonté de payer doit être vérifiée en pilote : les tarifs concurrents ne prouvent pas que les clients accepteront ces prix pour le POC. Définir contractuellement l’événement facturable, le traitement des annulations et des remboursements avant commercialisation ; aucune facturation n’est implémentée par cette étude.
+
+
+## Graphiques de rentabilité par proposition
+
+[Analyse et trois formules](RENTABILITE.md) · [Quatre graphiques en PDF](rentabilite-trois-propositions.pdf) · [Classeur modifiable](rentabilite-scenarios.xlsx).
