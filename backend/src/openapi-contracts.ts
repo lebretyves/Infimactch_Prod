@@ -171,6 +171,7 @@ export const additionalResponses:Record<string,any>={
  "POST /api/v1/internal/automation/jobs/dispatch":obj({processed:int},["processed"]),
  "POST /api/v1/internal/automation/jobs/refresh-offers":obj({providers:array(obj({provider:str,status:str,accepted:int},["provider","status","accepted"]))},["providers"]),
  "POST /api/v1/internal/automation/jobs/maintenance":ok,
+ "POST /api/v1/internal/automation/scheduled-reminders":obj({status:str,processed:int,notifications:int,hasMore:bool},["status","processed","notifications","hasMore"]),
  "POST /api/v1/internal/automation/reminders":obj({status:str,notifications:int},["status","notifications"]),
  "POST /api/v1/internal/automation/confirmation/{id}":obj({status:str,documentId:uuid,done:bool},["status"]),
  "GET /api/v1/me/closure-request":obj({request:nullable(closure),googleLinked:bool},["request","googleLinked"]),

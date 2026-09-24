@@ -2,6 +2,8 @@ export const notificationCatalog = {
   MATCH: "Nouvelle mission compatible",
   CONFIRMATION: "Affectation confirmée et document disponible",
   CANCELLATION: "Mission annulée",
+  START_REMINDER_24H: "Mission confirmée — rappel J-1",
+  START_REMINDER_2H: "Mission confirmée — rappel H-2",
   REMINDER: "Mission non pourvue",
   NEED_CREATED: "Nouveau besoin de personnel",
   NEED_UPDATED: "Besoin modifié",

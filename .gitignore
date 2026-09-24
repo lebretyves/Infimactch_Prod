@@ -28,3 +28,8 @@ frontend/dist-admin/
 /frontend/artifacts/
 /workspace-docs/
 /archive/
+
+# Local editor locks and Python bytecode are not deliverables.
+~$*
+__pycache__/
+*.pyc
