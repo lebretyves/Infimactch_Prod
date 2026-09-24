@@ -1,0 +1,232 @@
+[
+  {
+    "branch": "epitech/Backend",
+    "base": "epitech/main",
+    "behind": 220,
+    "ahead": 24,
+    "notPatchEquivalentToReview": [
+      "698292de0cf6ed3eb26f0c43581416aab13fbd95",
+      "c9a528e082b443be7fe11024709852724b6adef7",
+      "6e7b82ca5ce0f7ec02338de105924adf8bd14f47",
+      "faee153d32cc5286e39647d57b0b190152ea2182",
+      "d597d21b2c80e8f569b04386ed11cc7df1ff8d70",
+      "8fcd6aeb447e090289bb0ce69dc23aa98002851f",
+      "6cf072f136b8d0c0bb76a7eb24bcc66f4a9d6f86"
+    ]
+  },
+  {
+    "branch": "epitech/backup/main-avant-audit-final-20260923",
+    "base": "epitech/main",
+    "behind": 4,
+    "ahead": 0,
+    "notPatchEquivalentToReview": []
+  },
+  {
+    "branch": "epitech/backup/main-avant-corrections-audit-20260923",
+    "base": "epitech/main",
+    "behind": 11,
+    "ahead": 0,
+    "notPatchEquivalentToReview": []
+  },
+  {
+    "branch": "epitech/backup/main-avant-six-fonctionnalites-20260923",
+    "base": "epitech/main",
+    "behind": 24,
+    "ahead": 0,
+    "notPatchEquivalentToReview": []
+  },
+  {
+    "branch": "epitech/backup/main-avant-sync-20260923-unit95",
+    "base": "epitech/main",
+    "behind": 339,
+    "ahead": 0,
+    "notPatchEquivalentToReview": []
+  },
+  {
+    "branch": "epitech/chore/cleanup-tests-dead-code",
+    "base": "epitech/main",
+    "behind": 220,
+    "ahead": 6,
+    "notPatchEquivalentToReview": [
+      "6cb3f12258e65f7f3dbdd4e90027f4d12fd57596",
+      "9f4d0ffca317954418ee008a2d35f47468fadfcf",
+      "94c2c2147605788c1298a0ef18cfb6e87a9fbe6b"
+    ]
+  },
+  {
+    "branch": "epitech/chore/review-doc-code-20260924",
+    "base": "epitech/main",
+    "behind": 0,
+    "ahead": 11,
+    "notPatchEquivalentToReview": []
+  },
+  {
+    "branch": "epitech/docs/couts-projet-exploitation-20260924",
+    "base": "epitech/main",
+    "behind": 1,
+    "ahead": 6,
+    "notPatchEquivalentToReview": []
+  },
+  {
+    "branch": "epitech/feature/admin-external-offers-visibility",
+    "base": "epitech/main",
+    "behind": 220,
+    "ahead": 8,
+    "notPatchEquivalentToReview": [
+      "6cb3f12258e65f7f3dbdd4e90027f4d12fd57596",
+      "9f4d0ffca317954418ee008a2d35f47468fadfcf",
+      "94c2c2147605788c1298a0ef18cfb6e87a9fbe6b",
+      "694551030274029a879d2de299a35afdf7bf11be",
+      "500180c9b6bf428175e4a1b86d7f2c548a5b7a8a"
+    ]
+  },
+  {
+    "branch": "epitech/feature/google-maps-itinerary",
+    "base": "epitech/main",
+    "behind": 220,
+    "ahead": 7,
+    "notPatchEquivalentToReview": [
+      "6cb3f12258e65f7f3dbdd4e90027f4d12fd57596",
+      "9f4d0ffca317954418ee008a2d35f47468fadfcf",
+      "94c2c2147605788c1298a0ef18cfb6e87a9fbe6b",
+      "694551030274029a879d2de299a35afdf7bf11be"
+    ]
+  },
+  {
+    "branch": "epitech/feature/nurse-personal-calendar-confirmed-missions",
+    "base": "epitech/main",
+    "behind": 220,
+    "ahead": 32,
+    "notPatchEquivalentToReview": [
+      "6cb3f12258e65f7f3dbdd4e90027f4d12fd57596",
+      "9f4d0ffca317954418ee008a2d35f47468fadfcf",
+      "94c2c2147605788c1298a0ef18cfb6e87a9fbe6b",
+      "698292de0cf6ed3eb26f0c43581416aab13fbd95",
+      "c9a528e082b443be7fe11024709852724b6adef7",
+      "694551030274029a879d2de299a35afdf7bf11be",
+      "6e7b82ca5ce0f7ec02338de105924adf8bd14f47",
+      "faee153d32cc5286e39647d57b0b190152ea2182",
+      "d597d21b2c80e8f569b04386ed11cc7df1ff8d70",
+      "8fcd6aeb447e090289bb0ce69dc23aa98002851f",
+      "6cf072f136b8d0c0bb76a7eb24bcc66f4a9d6f86",
+      "500180c9b6bf428175e4a1b86d7f2c548a5b7a8a",
+      "b3a99410035aabf00ebdbbe5e0d6b7f339bb240e",
+      "25227b1c3fa0dd54027476df2942ac4710bfd245"
+    ]
+  },
+  {
+    "branch": "epitech/fix/admin-mission-consulter",
+    "base": "epitech/main",
+    "behind": 302,
+    "ahead": 1,
+    "notPatchEquivalentToReview": []
+  },
+  {
+    "branch": "epitech/fix/audit-p0-limites",
+    "base": "epitech/main",
+    "behind": 339,
+    "ahead": 0,
+    "notPatchEquivalentToReview": []
+  },
+  {
+    "branch": "epitech/fix/audit-seo",
+    "base": "epitech/main",
+    "behind": 344,
+    "ahead": 1,
+    "notPatchEquivalentToReview": [
+      "aab9df2329870d5e9b4cd3edce82e55858a63f49"
+    ]
+  },
+  {
+    "branch": "epitech/fix/inscription-message-diplome",
+    "base": "epitech/main",
+    "behind": 344,
+    "ahead": 1,
+    "notPatchEquivalentToReview": []
+  },
+  {
+    "branch": "epitech/fix/rgaa-connexion-erreurs",
+    "base": "epitech/main",
+    "behind": 340,
+    "ahead": 0,
+    "notPatchEquivalentToReview": []
+  },
+  {
+    "branch": "epitech/front_opti",
+    "base": "epitech/main",
+    "behind": 220,
+    "ahead": 16,
+    "notPatchEquivalentToReview": [
+      "698292de0cf6ed3eb26f0c43581416aab13fbd95",
+      "c9a528e082b443be7fe11024709852724b6adef7"
+    ]
+  },
+  {
+    "branch": "epitech/main",
+    "base": "epitech/main",
+    "behind": 0,
+    "ahead": 0,
+    "notPatchEquivalentToReview": []
+  },
+  {
+    "branch": "epitech/sync/epitech-20260922",
+    "base": "epitech/main",
+    "behind": 220,
+    "ahead": 10,
+    "notPatchEquivalentToReview": [
+      "698292de0cf6ed3eb26f0c43581416aab13fbd95"
+    ]
+  },
+  {
+    "branch": "origin/Backend",
+    "base": "origin/Main",
+    "behind": 203,
+    "ahead": 0,
+    "notPatchEquivalentToReview": []
+  },
+  {
+    "branch": "origin/Main",
+    "base": "origin/Main",
+    "behind": 0,
+    "ahead": 0,
+    "notPatchEquivalentToReview": []
+  },
+  {
+    "branch": "origin/backup/avant-notifications-20260917",
+    "base": "origin/Main",
+    "behind": 336,
+    "ahead": 0,
+    "notPatchEquivalentToReview": []
+  },
+  {
+    "branch": "origin/fix/audit-a01-ci",
+    "base": "origin/Main",
+    "behind": 187,
+    "ahead": 0,
+    "notPatchEquivalentToReview": []
+  },
+  {
+    "branch": "origin/fix/openapi-reverse-location",
+    "base": "origin/Main",
+    "behind": 243,
+    "ahead": 2,
+    "notPatchEquivalentToReview": [
+      "b269d5f66c9f3200ad3af39df9191275ef7fcc17",
+      "0f19c0d8001e7f34340c8422866eb76646c79e51"
+    ]
+  },
+  {
+    "branch": "origin/refactor/a07-20260922",
+    "base": "origin/Main",
+    "behind": 180,
+    "ahead": 0,
+    "notPatchEquivalentToReview": []
+  },
+  {
+    "branch": "origin/sync/repos-20260922",
+    "base": "origin/Main",
+    "behind": 181,
+    "ahead": 0,
+    "notPatchEquivalentToReview": []
+  }
+]

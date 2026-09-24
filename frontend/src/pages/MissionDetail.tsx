@@ -1,3 +1,4 @@
+import { BackLink } from "@/ui/BackLink";
 import { InlineConfirmation } from "@/components/InlineConfirmation";
 import { externalProvenanceDates, FRANCE_TRAVAIL_DOCUMENTATION_URL } from "@/services/offer-provenance";
 import { ConfirmationButton } from "@/components/ConfirmationButton";
@@ -17,6 +18,8 @@ import {
   safeUrl,
   statusLabels,
   favorites,
+  applications,
+  type Application,
   favorite,
   facilityFavorite,
   sourceLabel,
@@ -36,6 +39,14 @@ export default function MissionDetail() {
     if (user?.role !== "interimaire" || !id.startsWith("m_")) return [];
     return api<{id:string;status:string}[]>("/me/missions/"+encodeURIComponent(id.slice(2))+"/assignments",{signal});
   }, "mission-confirmations:"+user?.id+":"+id);
+  const myApplication = useRemote(async signal => {
+    if (user?.role !== "interimaire" || !id.startsWith("m_")) return null;
+    for (let offset = 0; ; offset += 20) {
+      const page: Application[] = await applications(offset, signal);
+      const found = page.find(a => a.mission_id === id.slice(2));
+      if (found || page.length < 20) return found ?? null;
+    }
+  }, "mission-application:"+user?.id+":"+id);
   const profile = useRemote(async signal => {
     if (user?.role !== "interimaire") return null;
     return getProfile(signal);
@@ -111,12 +122,7 @@ export default function MissionDetail() {
   const favoriteDisabled = !!busy || saved.loading || !!saved.error;
   return (
     <div className={s.page}>
-      <div>
-        <ButtonLink to="/missions" variant="ghost">
-          <Icon name="arrow-left" size={17} />
-          Retour aux missions
-        </ButtonLink>
-      </div>
+      <BackLink to="/missions">Retour aux missions</BackLink>
       <header className={s.header}>
         <div>
           <h1>{m.title}</h1>
@@ -154,16 +160,18 @@ export default function MissionDetail() {
         {assignments.data?.map(assignment => <section className={s.card} key={assignment.id}>
           <h2>{assignment.status === "CANCELLED" ? "Annulation de mission" : "Confirmation de mission"}</h2>
           <p>{statusLabels[assignment.status] || assignment.status}</p>
+          <div className={s.actions}>
           <ConfirmationButton assignmentId={assignment.id} cancelled={assignment.status === "CANCELLED"} />
           {assignment.status === "ACTIVE" && <InlineConfirmation disabled={!!busy} explanation="L’entreprise sera avertie, le créneau sera libéré et un PDF d’annulation sera généré." confirmLabel="Confirmer l’annulation" onConfirm={async()=>{
             setBusy("cancel");setError("");
             try {await api("/assignments/"+assignment.id+"/cancel",{method:"POST",key:crypto.randomUUID()});assignments.reload();r.reload();return true;}
             catch(e){setError((e as Error).message);return false;}finally{setBusy("");}
           }}>{busy === "cancel" ? "Annulation…" : "Annuler mon affectation"}</InlineConfirmation>}
+          </div>
         </section>)}
       </>}
 
-      {!external && nurse && user && <div className={s.card}><PersonalMatching key={user.id + id} id={id} userId={user.id} /></div>}
+      {!external && nurse && user && !assignments.data?.some(assignment => assignment.status === "ACTIVE") && <div className={s.card}><PersonalMatching key={user.id + id} id={id} userId={user.id} /></div>}
       {error && (
         <p className={s.error} role="alert">
           {error}
@@ -235,7 +243,7 @@ export default function MissionDetail() {
                 ))
               ) : (
                 <p className={s.muted}>
-                  Aucune compétence structurée disponible ; consulter le texte original.
+                  {external ? "Aucune compétence structurée disponible ; consulter le texte original." : "Aucune compétence spécifique demandée."}
                 </p>
               )}
             </div>
@@ -243,9 +251,9 @@ export default function MissionDetail() {
               <>
                 <h2 style={{ marginTop: 24 }}>Expérience attendue</h2>
                 <p className={s.muted}>
-                  {m.min_experience_months
-                    ? `${m.min_experience_months} mois d’expérience dans le service demandé.`
-                    : "Aucune durée minimale indiquée."}
+                  {Number(m.min_experience_months)
+                    ? `${Number(m.min_experience_months)} mois d’expérience dans le service demandé.`
+                    : "Aucune expérience minimale demandée."}
                 </p>
               </>
             )}
@@ -296,7 +304,7 @@ export default function MissionDetail() {
         </div>
         <aside className={s.card}>
 
-          <h2>Votre prochaine mission</h2>
+          <h2>Dates et rémunération</h2>
           <p>
             <Icon name="calendar" size={18} /> {m.start_at || m.end_at ? `Du ${missionDate(m)} au ${missionDate(m, true)} (${m.timezone || "Europe/Paris"})` : "Dates de mission non précisées"}
           </p>
@@ -329,9 +337,21 @@ export default function MissionDetail() {
                   Le lien de l’annonceur est indisponible.
                 </p>
               )
+            ) : nurse && myApplication.data && myApplication.data.status !== "WITHDRAWN" ? (
+              <div className={s.notice}>
+                <p>
+                  <strong>Votre candidature : {statusLabels[myApplication.data.status] || "état à vérifier"}</strong>
+                </p>
+                <p>
+                  {{ SUBMITTED: "Elle attend la décision de l’établissement ou de l’agence.", SELECTED: "Elle attend la décision de l’établissement ou de l’agence.", ACCEPTED: "Vous êtes affecté(e) à cette mission.", REJECTED: "Elle n’a pas été retenue pour cette mission.", UNAVAILABLE: "Elle a été fermée car une autre mission est confirmée sur ce créneau." }[myApplication.data.status] || ""}
+                </p>
+                <ButtonLink to={"/candidatures/" + myApplication.data.id} variant="outline" block>
+                  Voir le suivi de ma candidature
+                </ButtonLink>
+              </div>
             ) : nurse && m.status === "OPEN" ? (
               <ButtonLink to={"/missions/" + id + "/candidater"} block>
-                Envoyer ma candidature
+                {myApplication.data ? "Postuler à nouveau" : "Envoyer ma candidature"}
               </ButtonLink>
             ) : (
               <p className={s.notice}>
@@ -355,7 +375,7 @@ export default function MissionDetail() {
           <p className={s.muted} style={{ fontSize: 12, marginTop: 18 }}>
             {external
               ? "Les conditions et la candidature sont gérées par le site de l’annonceur."
-              : "Votre admissibilité est vérifiée lors de l’envoi. L’agence confirme ensuite votre affectation."}
+              : `Votre admissibilité est vérifiée lors de l’envoi. ${m.agency_name ? "L’agence" : "L’établissement"} confirme ensuite votre affectation.`}
           </p>
           {!external && (
             <div
@@ -365,8 +385,8 @@ export default function MissionDetail() {
                 marginTop: 20,
               }}
             >
-              <p className={s.muted}>Agence référente</p>
-              <strong>{m.agency_name || "Agence non précisée"}</strong>
+              <p className={s.muted}>{m.agency_name ? "Agence référente" : "Publication"}</p>
+              <strong>{m.agency_name || "Directement par l’établissement"}</strong>
             </div>
           )}
         </aside>

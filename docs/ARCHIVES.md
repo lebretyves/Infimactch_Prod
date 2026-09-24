@@ -17,3 +17,9 @@ Les anciens plans V2 et les notes de maquettes remplacées ont été retirés de
 ## Comparaison des branches du 21 septembre
 
 Les trois doubles d’exports n8n présents seulement dans `docs_intern/n8n` côté Epitech ont été sauvegardés hors Git dans `E:/Interimatch/archive/branch-parity-2026-09-21/`, puis retirés. Les exports courants de reprise et d’import restent dans `docs/n8n` sur les deux branches. Le double de reprise était encore à 30 minutes ; la référence conservée est à quatre heures. Le document de cadrage propre au dépôt Epitech est conservé.
+
+## Revue du 24 septembre
+
+Onze doubles binaires identiques ont été supprimés : dix copies d’exports/manifeste n8n du paquet de rendu, et une copie de preuve de restauration. Les sources de référence restent dans `docs/n8n/published-20260923/` et `docs/proofs/audit-final-20260923/`. Le [registre des empreintes](quality/NETTOYAGE_DOUBLONS_2026-09-24.json) donne chaque suppression et son remplacement. Les versions précédentes restent dans Git.
+
+Les exports opérationnels dans `docs/n8n/` et la photographie datée `published-20260923/` restent séparés : le premier est une configuration maintenue, le second une preuve de provenance. Les anciennes présentations restent historiques ; l’[état courant](ETAT_COURANT.md) dirige vers le rendu actualisé.

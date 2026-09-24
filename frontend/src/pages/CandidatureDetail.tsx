@@ -1,3 +1,4 @@
+import { BackLink } from "@/ui/BackLink";
 ﻿import { useParams } from "react-router";
 import { useRemote } from "@/lib/useRemote";
 import { api } from "@/services/api";
@@ -28,26 +29,22 @@ const events: Record<string, string> = {
 export default function CandidatureDetail() {
   const { id = "" } = useParams(),
     { user } = useAuth();
+  const nurse = user?.role === "interimaire";
   const r = useRemote(
     (signal) => api<Application>("/applications/" + id, { signal }),
     id,
   );
   return (
     <div className={s.page}>
-      <div>
-        <ButtonLink
-          to={user?.role === "interimaire" ? "/candidatures" : "/missions"}
-          variant="ghost"
-        >
-          ← Retour aux candidatures
-        </ButtonLink>
-      </div>
+      <BackLink to="/candidatures">Retour aux candidatures</BackLink>
       <header className={s.header}>
         <div>
-          <p className={s.eyebrow}>Mes candidatures</p>
+          <p className={s.eyebrow}>{nurse ? "Mes candidatures" : "Candidatures reçues"}</p>
           <h1>Suivi de candidature</h1>
           <p className={s.subtitle}>
-            Les étapes et les confirmations de votre candidature.
+            {nurse
+              ? "Les étapes et les confirmations de votre candidature."
+              : "Les étapes de cette candidature. Acceptez ou refusez-la depuis la page de gestion de la mission."}
           </p>
         </div>
       </header>
@@ -74,13 +71,13 @@ export default function CandidatureDetail() {
               {r.data.status === "SELECTED" &&
                 !r.data.assignments.some((a) => a.status === "ACTIVE") && (
                   <p className={s.notice}>
-                    Votre candidature attend une acceptation ou un refus.
+                    {nurse ? "Votre candidature attend une acceptation ou un refus." : "Cette candidature attend votre acceptation ou votre refus."}
                   </p>
                 )}
               {r.data.requires_reconsent && ["SUBMITTED","SELECTED"].includes(r.data.status) && (
                 <div className={s.notice}>
                   <p>Les conditions de la mission ont changé.</p>
-                  {user?.role === "interimaire" && (
+                  {nurse && (
                     <ButtonLink
                       to={"/missions/m_" + r.data.mission_id + "/candidater"}
                     >
@@ -126,18 +123,19 @@ export default function CandidatureDetail() {
               <div className={s.card}>
                 <h2>La mission</h2>
                 <p className={s.muted}>
-                  Retrouvez le descriptif et les informations de
-                  l’établissement.
+                  {nurse
+                    ? "Retrouvez le descriptif et les informations de l’établissement."
+                    : "Consultez le profil du candidat et prenez votre décision depuis la gestion de la mission."}
                 </p>
                 <ButtonLink
                   to={
-                    user?.role === "interimaire"
+                    nurse
                       ? "/missions/m_" + r.data.mission_id
-                      : "/gestion/missions/" + r.data.mission_id
+                      : "/gestion/missions/" + r.data.mission_id + "#candidatures"
                   }
-                  variant="outline"
+                  variant={nurse ? "outline" : "primary"}
                 >
-                  Voir la mission
+                  {nurse ? "Voir la mission" : "Traiter la candidature"}
                 </ButtonLink>
               </div>
             </aside>

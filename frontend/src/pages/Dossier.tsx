@@ -132,14 +132,6 @@ export default function Dossier() {
       "Document enregistré.",
     );
   }
-  if (user?.role !== "interimaire")
-    return (
-      <div className={u.page}>
-        <h1>Mon dossier</h1>
-        <p>Ce dossier personnel est réservé aux professionnels de santé.</p>
-        <ButtonLink to="/accueil">Mon espace</ButtonLink>
-      </div>
-    );
   return (
     <div className={`${u.page} ${s.dossierPage}`}>
       <header>

@@ -1,0 +1,303 @@
+[
+
+  {
+
+    "file": "admin.spec.js.txt",
+
+    "tests": 27,
+
+    "passed": 27
+
+  },
+
+  {
+
+    "file": "application-warnings.spec.js.txt",
+
+    "tests": 3,
+
+    "passed": 3
+
+  },
+
+  {
+
+    "file": "audit-remediation.spec.js.txt",
+
+    "tests": 2,
+
+    "passed": 2
+
+  },
+
+  {
+
+    "file": "cloud-storage.spec.js.txt",
+
+    "tests": 4,
+
+    "passed": 4
+
+  },
+
+  {
+
+    "file": "contract-preparation.spec.js.txt",
+
+    "tests": 6,
+
+    "passed": 6
+
+  },
+
+  {
+
+    "file": "conversions.spec.js.txt",
+
+    "tests": 6,
+
+    "passed": 6
+
+  },
+
+  {
+
+    "file": "demo-notification-suppression.spec.js.txt",
+
+    "tests": 6,
+
+    "passed": 6
+
+  },
+
+  {
+
+    "file": "email-delivery.spec.js.txt",
+
+    "tests": 5,
+
+    "passed": 5
+
+  },
+
+  {
+
+    "file": "enterprise-flow.spec.js.txt",
+
+    "tests": 2,
+
+    "passed": 2
+
+  },
+
+  {
+
+    "file": "establishment-directory.spec.js.txt",
+
+    "tests": 3,
+
+    "passed": 3
+
+  },
+
+  {
+
+    "file": "external-collection.spec.js.txt",
+
+    "tests": 6,
+
+    "passed": 6
+
+  },
+
+  {
+
+    "file": "external-ranking.spec.js.txt",
+
+    "tests": 2,
+
+    "passed": 2
+
+  },
+
+  {
+
+    "file": "external-visibility.spec.js.txt",
+
+    "tests": 4,
+
+    "passed": 4
+
+  },
+
+  {
+
+    "file": "jobspipe-credits.spec.js.txt",
+
+    "tests": 3,
+
+    "passed": 3
+
+  },
+
+  {
+
+    "file": "journey.spec.js.txt",
+
+    "tests": 32,
+
+    "passed": 32
+
+  },
+
+  {
+
+    "file": "listing-order.spec.js.txt",
+
+    "tests": 6,
+
+    "passed": 6
+
+  },
+
+  {
+
+    "file": "matching-distance.spec.js.txt",
+
+    "tests": 1,
+
+    "passed": 1
+
+  },
+
+  {
+
+    "file": "mission-guardrails.spec.js.txt",
+
+    "tests": 8,
+
+    "passed": 8
+
+  },
+
+  {
+
+    "file": "mission-location.spec.js.txt",
+
+    "tests": 4,
+
+    "passed": 4
+
+  },
+
+  {
+
+    "file": "mission-mail.spec.js.txt",
+
+    "tests": 6,
+
+    "passed": 6
+
+  },
+
+  {
+
+    "file": "notifications.spec.js.txt",
+
+    "tests": 5,
+
+    "passed": 5
+
+  },
+
+  {
+
+    "file": "offer-freshness.spec.js.txt",
+
+    "tests": 6,
+
+    "passed": 6
+
+  },
+
+  {
+
+    "file": "personal-corrections.spec.js.txt",
+
+    "tests": 6,
+
+    "passed": 6
+
+  },
+
+  {
+
+    "file": "profile-after-assignment.spec.js.txt",
+
+    "tests": 7,
+
+    "passed": 7
+
+  },
+
+  {
+
+    "file": "purge-demo-alerts.spec.js.txt",
+
+    "tests": 6,
+
+    "passed": 6
+
+  },
+
+  {
+
+    "file": "recovery.spec.js.txt",
+
+    "tests": 8,
+
+    "passed": 8
+
+  },
+
+  {
+
+    "file": "scheduled-reminders.spec.js.txt",
+
+    "tests": 4,
+
+    "passed": 4
+
+  },
+
+  {
+
+    "file": "security-evidence.spec.js.txt",
+
+    "tests": 3,
+
+    "passed": 3
+
+  },
+
+  {
+
+    "file": "shared-rate-limit.spec.js.txt",
+
+    "tests": 6,
+
+    "passed": 6
+
+  },
+
+  {
+
+    "file": "support.spec.js.txt",
+
+    "tests": 5,
+
+    "passed": 5
+
+  }
+
+]

@@ -43,7 +43,7 @@ export default function EntrepriseCandidatures() {
         <CandidateMatch matching={candidate.matching} qualification={candidate.mission.qualification} service={candidate.mission.service} />
         <div className={s.actions}><ButtonLink to={"/gestion/missions/" + candidate.mission.id + "#candidatures"}>Traiter la candidature</ButtonLink></div>
       </article>)}</div> : <section className={s.empty}><h2>{q ? "Aucune candidature trouvée" : "Aucune candidature à traiter"}</h2><p>{q ? "Essayez un autre nom, une mission ou un lieu." : "Les réponses reçues pour les missions de vos établissements apparaîtront ici."}</p></section>}
-      {!!r.data?.total && <nav className={inbox.pagination} aria-label="Pages des candidatures"><Button variant="outline" disabled={!offset} onClick={() => move(Math.max(0, offset - 20))}>Précédent</Button><span>{Math.min(offset + 1, r.data.total)}–{Math.min(offset + 20, r.data.total)} sur {r.data.total}</span><Button variant="outline" disabled={offset + 20 >= r.data.total || offset >= 10000} onClick={() => move(offset + 20)}>Suivant</Button></nav>}
+      {r.data && (r.data.total > 20 || offset > 0) && <nav className={inbox.pagination} aria-label="Pages des candidatures"><Button variant="outline" disabled={!offset} onClick={() => move(Math.max(0, offset - 20))}>Précédent</Button><span>{Math.min(offset + 1, r.data.total)}–{Math.min(offset + 20, r.data.total)} sur {r.data.total}</span><Button variant="outline" disabled={offset + 20 >= r.data.total || offset >= 10000} onClick={() => move(offset + 20)}>Suivant</Button></nav>}
     </>}
   </div>;
 }

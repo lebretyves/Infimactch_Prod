@@ -1,6 +1,6 @@
 # Notifications internes et Discord
 
-État documentaire au 21 septembre 2026, vérifié contre le code. Une configuration présente ne prouve pas une réception réelle.
+État documentaire au 24 septembre 2026. [Différence entre code préparé et production](ETAT_COURANT.md). Une configuration présente ne prouve pas une réception réelle.
 
 ## Parcours utilisateur
 
@@ -28,6 +28,10 @@ Le client choisit le bot direct si `DISCORD_BOT_TOKEN` est fourni ; sinon il uti
 Le traitement recontrôle les préférences et la validité de l'événement au moment de l'envoi. Une destination modifiée ou un événement périmé peut annuler une livraison. Les états `PENDING`, `SENDING`, `SENT`, `FAILED`, `UNCERTAIN` et `CANCELLED` distinguent attente, envoi, reçu et échec. Un résultat incertain ne doit pas être renvoyé aveuglément. La reprise après limitation de débit est bornée.
 
 En production, les tentatives immédiates et la reprise cloud à quatre heures traitent une file bornée ; elles ne garantissent pas une livraison instantanée. En local, le worker peut traiter les files. Les règles métier restent côté API. Les services cloud courants ne nécessitent pas que le PC hébergeant Vault soit allumé.
+
+## Extension des rappels préparée le 24 septembre
+
+Le nouveau code autorise le repli d’un rappel d’organisation vers le message privé du membre actif si aucun salon d’organisation activé ne traite cet événement. Le DM doit lui-même être activé pour cet événement et respecter les préférences. Les choix existants ne sont pas modifiés automatiquement. Trois destinations personnelles étaient présentes lors de l’audit, aucune destination d’organisation ; leur présence ne signifie pas que les nouveaux événements y sont activés.
 
 ## Secrets et preuves
 

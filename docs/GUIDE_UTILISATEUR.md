@@ -1,5 +1,6 @@
 # Guide utilisateur — parcours actuels
 
+> Actualisation du 24 septembre : voir [l’état courant](ETAT_COURANT.md) pour les nouveaux rappels préparés, les tests et la différence avec la production. Les preuves datées ci-dessous conservent leur portée.
 Mise à jour documentaire : 22 septembre 2026. L'aide intégrée est définie dans [helpGuides.ts](../frontend/src/data/helpGuides.ts).
 
 ## Candidat

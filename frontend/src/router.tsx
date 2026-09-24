@@ -24,6 +24,7 @@ import { Navigate, createBrowserRouter, createHashRouter } from "react-router";
 import { AppLayout } from "./layouts/AppLayout";
 import { InscriptionLayout } from "./pages/inscription/InscriptionLayout";
 import { ProtectedRoute } from "./components/ProtectedRoute";
+import { RoleRoute } from "./components/RoleRoute";
 const AccueilPublic = lazy(() => import("./pages/AccueilPublic"));
 const Connexion = lazy(() => import("./pages/Connexion"));
 const MotDePasseOublie = lazy(() => import("./pages/MotDePasseOublie"));
@@ -102,21 +103,31 @@ export const router = creerRouteur([{ element: <QualityRoot />, errorElement: <R
           { path: "/compte", element: <Compte /> },
           { path: "/missions", element: <Missions /> },
           { path: "/missions/:id", element: <MissionDetail /> },
-          { path: "/missions/:id/candidater", element: <Candidater /> },
           { path: "/candidatures", element: <Candidatures /> },
-          { path: "/calendrier", element: <Profil calendar /> },
           { path: "/profil", element: <Profil /> },
-          { path: "/dossier", element: <Dossier /> },
-          { path: "/favoris", element: <Favoris /> },
           { path: "/etablissements/:id", element: <Etablissement /> },
-          { path: "/historique", element: <Historique /> },
+          {
+            element: <RoleRoute nurse />,
+            children: [
+              { path: "/missions/:id/candidater", element: <Candidater /> },
+              { path: "/calendrier", element: <Profil calendar /> },
+              { path: "/dossier", element: <Dossier /> },
+              { path: "/favoris", element: <Favoris /> },
+              { path: "/historique", element: <Historique /> },
+            ],
+          },
           { path: "/affectations/:id/preparation-contrat", element: <ContractPreparation /> },
-          { path: "/organisation", element: <Organisation /> },
-          { path: "/mes-etablissements", element: <MesEtablissements /> },
-          { path: "/besoins", element: <LegacyNeedRedirect /> },
-          { path: "/gestion/missions/nouvelle", element: <MissionForm /> },
-          { path: "/gestion/missions/:id", element: <GestionMission /> },
-          { path: "/gestion/missions/:id/modifier", element: <MissionForm /> },
+          {
+            element: <RoleRoute nurse={false} />,
+            children: [
+              { path: "/organisation", element: <Organisation /> },
+              { path: "/mes-etablissements", element: <MesEtablissements /> },
+              { path: "/besoins", element: <LegacyNeedRedirect /> },
+              { path: "/gestion/missions/nouvelle", element: <MissionForm /> },
+              { path: "/gestion/missions/:id", element: <GestionMission /> },
+              { path: "/gestion/missions/:id/modifier", element: <MissionForm /> },
+            ],
+          },
           { path: "/candidatures/:id", element: <CandidatureDetail /> },
         ],
       },

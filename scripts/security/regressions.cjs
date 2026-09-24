@@ -12,12 +12,16 @@ try{
  const n=await auth.register({...base,email:randomUUID()+'@example.invalid',family:'NURSE',profile:{displayName:'FICTIF',qualifications:['IDE'],skills:['TRIAGE'],experience:[],available:[slot],unavailable:[],latitude:48,longitude:2,radiusKm:30,acceptedShifts:['NIGHT'],preferredShifts:['NIGHT'],visible:true}});
  await db.query("UPDATE profile SET rpps_status='FOUND' WHERE user_id=$1",[n.id]);
  const dto={...slot,agencyId:agency.id,establishmentId:facility.id,title:'Mission FICTIVE',description:'Description fictive de test',qualification:'IDE',service:'URGENCES',population:'ADULT',block:'NONE',requiredSkills:['TRIAGE'],desiredSkills:[],minExperienceMonths:0,shift:'NIGHT',address:'Lieu fictif',latitude:48,longitude:2,hourlySalary:25};
- const m=await missions.create(actor.id,dto,randomUUID());await missions.transition(actor.id,m.id,'publish',randomUUID());const a=await missions.apply(n.id,m.id,1,randomUUID());
+ const m=await missions.create(actor.id,dto,randomUUID());await missions.transition(actor.id,m.id,'publish',randomUUID());
  assert.ok((await matching.forMission(actor.id,m.id)).items.some(x=>x.candidateId===n.id));
+ const a=await missions.apply(n.id,m.id,1,randomUUID());
+ assert.equal((await matching.forMission(actor.id,m.id)).items.some(x=>x.candidateId===n.id),false,'Existing applicants are not proposed again');
+ const probe=await missions.create(actor.id,{...dto,title:'Visibility probe FICTIVE'},randomUUID());await missions.transition(actor.id,probe.id,'publish',randomUUID());
+ assert.ok((await matching.forMission(actor.id,probe.id)).items.some(x=>x.candidateId===n.id));
  const cli=(action)=>{const r=spawnSync(process.execPath,['backend/dist/cli.js',action,'--account',n.id],{env:process.env,encoding:'utf8'});assert.equal(r.status,0,r.stderr);};
  await db.query("INSERT INTO session(sid,sess,expire) VALUES($1,$2,now()+interval '1 hour'),($3,$2,now()+interval '1 hour')",[randomUUID(),JSON.stringify({userId:n.id,sessionVersion:1}),randomUUID()]);
  cli('disable-account');assert.equal((await db.query("SELECT * FROM session WHERE sess->>'userId'=$1",[n.id])).length,0);
- assert.equal((await matching.forMission(actor.id,m.id)).items.some(x=>x.candidateId===n.id),false);
+ assert.equal((await matching.forMission(actor.id,probe.id)).items.some(x=>x.candidateId===n.id),false);
  await assert.rejects(missions.assign(actor.id,m.id,a.id,randomUUID()),e=>e.getStatus()===404);
  // Preselection no longer exists: assignment above is the acceptance path.
  assert.equal((await db.query('SELECT status FROM application WHERE id=$1',[a.id]))[0].status,'SUBMITTED');

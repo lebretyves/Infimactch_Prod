@@ -18,6 +18,7 @@ const protectedMigrations = [
   "harden",
   "mission-guardrails",
   "mission-mail",
+  "scheduled-reminders",
   "mission-schedule-precision",
   "mission-time-slots",
   "notification-center",

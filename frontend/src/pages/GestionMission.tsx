@@ -1,3 +1,4 @@
+import { BackLink } from "@/ui/BackLink";
 import { InlineConfirmation } from "@/components/InlineConfirmation";
 import { MatchingRules } from "@/components/MatchingRules";
 import { missionReturnTo } from "@/lib/missionNavigation";
@@ -124,10 +125,7 @@ export default function GestionMission() {
     agency = m.can_manage;
   return (
     <div className={`${page.page} ${layout.page}`}>
-      <MatchingRules />
-      <ButtonLink to={returnTo} variant="ghost">
-        Retour aux missions
-      </ButtonLink>
+      <BackLink to={returnTo}>Retour aux missions</BackLink>
       <h1>{m.title}</h1>
       <p>
         {statusLabels[m.status || ""] || "État à vérifier"} · {missionDate(m)}{" "}
@@ -139,8 +137,10 @@ export default function GestionMission() {
         <section key={a.id} className={s.bloc}>
           <h2>Confirmation de mission</h2>
           <p>{a.display_name} — {statusLabels[a.status] || a.status}</p>
-          <ConfirmationButton assignmentId={a.id} cancelled={a.status === "CANCELLED"} />
-          <ButtonLink to={"/affectations/" + a.id + "/preparation-contrat"} variant="outline">{agency && a.status === "ACTIVE" ? "Préparer le contrat" : "Consulter la préparation"}</ButtonLink>
+          <div className={layout.actions}>
+            <ConfirmationButton assignmentId={a.id} cancelled={a.status === "CANCELLED"} />
+            <ButtonLink to={"/affectations/" + a.id + "/preparation-contrat"} variant="outline">{agency && a.status === "ACTIVE" ? "Préparer le contrat" : "Consulter la préparation"}</ButtonLink>
+          </div>
         </section>
       ))}
       {error && <p ref={feedback} tabIndex={-1} role="alert">{error}</p>}
@@ -191,11 +191,15 @@ export default function GestionMission() {
             </Button>
           )}
           </div>
+          {m.status === "FILLED" && Date.parse(m.end_at) > Date.now() && (
+            <p>La mission pourra être marquée comme terminée après sa fin, le {missionDate(m, true)}.</p>
+          )}
         </section>
       )}
       <section className={s.bloc} id="candidatures">
         <h2>Candidatures reçues ({m.application_count})</h2>
-        {!r.data.candidates.length && <p>Aucune candidature sur cette page.</p>}
+        {m.status === "OPEN" && <MatchingRules />}
+        {!r.data.candidates.length && <p>{m.status === "DRAFT" ? "Les candidatures apparaîtront ici après la publication de l’offre." : "Aucune candidature reçue pour le moment."}</p>}
         {r.data.candidates.map((c) => (
           <article key={c.id} className={s.bloc}>
             <h3>{c.display_name || "Professionnel de santé"}</h3>
@@ -211,7 +215,7 @@ export default function GestionMission() {
               Compétences :{" "}
               {c.skills.map(labelCode).join(", ") || "À compléter"}
             </p>
-            <CandidateMatch matching={c.matching} qualification={m.qualification} service={m.service} />
+            {["SUBMITTED", "SELECTED"].includes(c.status) && <CandidateMatch matching={c.matching} qualification={m.qualification} service={m.service} />}
             <details>
               <summary>Parcours et disponibilités</summary>
               {c.experience.map((e, i) => (
@@ -225,58 +229,58 @@ export default function GestionMission() {
                 </p>
               ))}
             </details>
-            <ButtonLink to={"/candidatures/" + c.id} variant="ghost">
-              Voir le suivi
+            <ButtonLink to={"/candidatures/" + c.id} variant="outline" className={layout.start}>
+              Voir le suivi de la candidature
             </ButtonLink>
             {m.status === "OPEN" &&
               ["SUBMITTED", "SELECTED"].includes(c.status) && (
                 <>
-                  <Button
-                    variant="outline"
-                    disabled={!!busy}
-                    onClick={() =>
-                      void action("/applications/" + c.id + "/rejection")
-                    }
-                  >
-                    Refuser cette candidature
-                  </Button>
-                </>
-              )}
-            {agency &&
-              m.status === "OPEN" &&
-              ["SUBMITTED", "SELECTED"].includes(c.status) && (
-                <>
-                  <p>
+                  {agency && <p>
                     Un profil incomplet, un diplôme non renseigné ou un RPPS non vérifié restent des avertissements : vous pouvez accepter ou refuser la candidature. Vérifiez les informations utiles avec le candidat. Les horaires précis et l’absence de mission concurrente restent nécessaires.
                     En confirmant, vous validez avec le candidat ses compétences et sa
                     disponibilité. La mission sera ajoutée en bleu à son agenda et
                     bloquera le créneau. Une autre mission déjà confirmée sur ce
                     créneau empêche l’affectation.
-                  </p>
-                  <InlineConfirmation disabled={!!busy}
-                    explanation="Je confirme avoir vérifié avec le candidat ses compétences et sa disponibilité. La mission sera ajoutée à son agenda et bloquera ce créneau."
-                    confirmLabel="Confirmer l’acceptation"
-                    onConfirm={() => action("/missions/" + id + "/assignments", { applicationId: c.id })}>
-                    Accepter la candidature
-                  </InlineConfirmation>
+                  </p>}
+                  <div className={layout.actions}>
+                    {agency && <InlineConfirmation disabled={!!busy}
+                      explanation="Je confirme avoir vérifié avec le candidat ses compétences et sa disponibilité. La mission sera ajoutée à son agenda et bloquera ce créneau."
+                      confirmLabel="Confirmer l’acceptation"
+                      onConfirm={() => action("/missions/" + id + "/assignments", { applicationId: c.id })}>
+                      Accepter la candidature
+                    </InlineConfirmation>}
+                    <Button
+                      variant="outline"
+                      disabled={!!busy}
+                      onClick={() =>
+                        void action("/applications/" + c.id + "/rejection")
+                      }
+                    >
+                      Refuser cette candidature
+                    </Button>
+                  </div>
                 </>
               )}
           </article>
         ))}
-        <Button
-          variant="ghost"
-          disabled={!offset}
-          onClick={() => setOffset((v) => Math.max(0, v - 20))}
-        >
-          Précédent
-        </Button>
-        <Button
-          variant="ghost"
-          disabled={r.data.candidates.length < 20}
-          onClick={() => setOffset((v) => v + 20)}
-        >
-          Suivant
-        </Button>
+        {(offset > 0 || r.data.candidates.length === 20) && (
+          <nav className={layout.pagination} aria-label="Pages des candidatures">
+            <Button
+              variant="ghost"
+              disabled={!offset}
+              onClick={() => setOffset((v) => Math.max(0, v - 20))}
+            >
+              Précédent
+            </Button>
+            <Button
+              variant="ghost"
+              disabled={r.data.candidates.length < 20}
+              onClick={() => setOffset((v) => v + 20)}
+            >
+              Suivant
+            </Button>
+          </nav>
+        )}
       </section>
       {agency && m.status === "OPEN" && (
         <section className={s.bloc}>
@@ -304,11 +308,11 @@ export default function GestionMission() {
               {!proposed.data?.items.length && (
                 <p>Aucun profil admissible proposé pour le moment.</p>
               )}
-              <nav className={layout.pagination} aria-label="Pages des profils proposés">
+              {(proposed.data?.total || 0) > 20 && <nav className={layout.pagination} aria-label="Pages des profils proposés">
                 <Button variant="ghost" disabled={proposed.loading || proposedOffset===0} onClick={()=>setProposedPage({id,offset:Math.max(0,proposedOffset-20)})}>Profils précédents</Button>
                 <span role="status">Page {Math.floor(proposedOffset/20)+1} sur {Math.max(1,Math.ceil((proposed.data?.total || 0)/20))} · {proposed.data?.total || 0} profils</span>
                 <Button variant="ghost" disabled={proposed.loading || proposedOffset+20 >= (proposed.data?.total || 0)} onClick={()=>setProposedPage({id,offset:proposedOffset+20})}>Profils suivants</Button>
-              </nav>
+              </nav>}
               <p>
                 Une candidature et le consentement du professionnel sont
                 nécessaires avant l’affectation.

@@ -117,7 +117,7 @@ export function MissionResults({
               </div>
             </section>
           )}
-          {total > 0 && (
+          {lastPage > 1 && (
             <MissionPagination
               currentPage={currentPage}
               lastPage={lastPage}

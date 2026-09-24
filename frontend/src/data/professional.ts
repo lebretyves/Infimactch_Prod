@@ -1,4 +1,4 @@
-import { clinicalSkills } from './clinicalSkills';
+import { clinicalServiceLabels, clinicalSkills } from './clinicalSkills';
 
 export const QUALIFICATIONS: Record<string, string> = {
   IDE: 'IDE — Infirmier diplômé d’État',
@@ -11,7 +11,7 @@ export const SKILLS: Record<string, string> = {
   POPULATION_PEDIATRIC: "Pratique pédiatrique",
 };
 export const labelCode = (value: string) =>
-  (value === "UNKNOWN" ? "Non connu" : SKILLS[value]) ||
+  (value === "UNKNOWN" ? "Non connu" : SKILLS[value] || clinicalServiceLabels[value]) ||
   value
     .replace(/^BLOCK_/, "Bloc : ")
     .replaceAll("_", " ")

@@ -34,7 +34,7 @@ Inventaire documentaire revu le 21 septembre 2026, issu du code et des scripts d
 | `DISCORD_RELAY_URL`, `DISCORD_RELAY_TOKEN` | API vers relais n8n | URL sensible / secret | Vault / serveur | Relais authentifié, pas de publication dans JS |
 | `DISCORD_BOT_TOKEN`, `DISCORD_CLIENT_SECRET` | Discord | Secrets | Vault / identifiants n8n selon usage | Identité du bot et droits ; aucun token navigateur |
 | `DISCORD_CLIENT_ID`, `DISCORD_TEST_GUILD_ID`, `DISCORD_TEST_CHANNEL_ID`, `DISCORD_TEST_USER_ID` | Configuration et recette Discord | Identifiants internes | Vault / environnement de recette | Destination fictive explicitement choisie |
-| `REMINDER_DELAY_MINUTES` | Worker | Configuration métier | Vault / serveur | Tests de relance et obsolescence |
+| `REMINDER_DELAY_MINUTES` | Ancienne configuration | Variable héritée | Ne pilote pas les rappels actuels | Le délai de mission non pourvue est fixé à 24 h dans `automation/reminders.ts` |
 | `MATCHING_WEIGHTS_JSON` | Matching | Configuration métier | Vault / serveur | Éligibilité bloquante indépendante du score |
 | `MATCHING_RETENTION_DAYS`, `BUSINESS_HISTORY_RETENTION_DAYS` | Conservation | Politique interne | Vault / serveur | Nettoyage technique distinct de la conservation des historiques métier, dont la politique reste à valider |
 | `ERASURE_LEDGER_DIRECTORY` | Effacement local | Chemin interne | Configuration locale | Registre cloud dans MongoDB ; procédures de restauration |

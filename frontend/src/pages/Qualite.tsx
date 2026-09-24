@@ -3,14 +3,15 @@ import type { ReactNode } from 'react';
 import { Link } from 'react-router';
 import { EcranPublic } from '@/layouts/EcranPublic';
 import { Logo } from '@/ui/Logo';
+import { Icon } from '@/ui/Icon';
 import { usePageTitle } from '@/lib/usePageTitle';
 import s from './Mentions.module.css';
 import eco from './Ecoconception.module.css';
 export function QualityPage({ title, description, children }: {title: string; description: string; children: ReactNode}) {
   usePageTitle(title, description);
-  return <EcranPublic entete={<><Link to="/" aria-label="InfiMatch, accueil"><Logo size={38} withWordmark /></Link><Link to="/">Retour à l’accueil</Link></>}>
+  return <EcranPublic entete={<><Link to="/" aria-label="InfiMatch, accueil"><Logo size={38} withWordmark /></Link><Link to="/" className={s.retour}><Icon name="arrow-left" size={20} />Retour à l’accueil</Link></>}>
     <main id="contenu" tabIndex={-1} className={s.page}><h1>{title}</h1><p className={s.chapeau}>{description}</p>{children}
-    <nav aria-label="Qualité et installation"><span data-install-prompt><Link to="/installer">Installer l’application</Link> · </span><Link to="/accessibilite">Accessibilité</Link> · <Link to="/ecoconception">Écoconception</Link> · <Link to="/mentions-legales">Mentions légales</Link> <Link to="/plan-du-site">Plan du site</Link></nav></main>
+    <nav aria-label="Qualité et installation"><span data-install-prompt><Link to="/installer">Installer l’application</Link> · </span><Link to="/accessibilite">Accessibilité</Link> · <Link to="/ecoconception">Écoconception</Link> · <Link to="/mentions-legales">Mentions légales</Link> · <Link to="/plan-du-site">Plan du site</Link></nav></main>
   </EcranPublic>;
 }
 export function Accessibilite() {
@@ -24,7 +25,7 @@ export function Accessibilite() {
 }
 export function Ecoconception() {
   usePageTitle('Écoconception', 'Les petits choix concrets d’InfiMatch pour limiter les ressources utilisées.');
-  return <EcranPublic entete={<><Link to="/" aria-label="InfiMatch, accueil"><Logo size={38} withWordmark /></Link><Link to="/">Retour à l’accueil</Link></>}>
+  return <EcranPublic entete={<><Link to="/" aria-label="InfiMatch, accueil"><Logo size={38} withWordmark /></Link><Link to="/" className={s.retour}><Icon name="arrow-left" size={20} />Retour à l’accueil</Link></>}>
     <main id="contenu" tabIndex={-1} className={eco.page}>
       <div className={eco.content}>
         <header className={eco.intro}>

@@ -6,7 +6,7 @@ Les deux branches principales ont été vérifiées sur GitHub au même commit `
 
 Cela ne signifie pas que toutes les nouveautés des autres branches sont intégrées. Les références ont été actualisées et leurs commits comparés par ascendance, équivalence de patch et inspection des fichiers.
 
-## Nouveautés confirmées non intégrées
+## Constat historique avant intégration (remplacé)
 
 | Commit | Date locale +02:00 | Auteur | Branche où le trouver | Changement |
 | --- | --- | --- | --- | --- |
@@ -28,6 +28,6 @@ Les branches de fonctionnalités sont imbriquées : ne pas additionner leurs com
 - Les anciens commits UI de `front_opti` et Backend ont été retravaillés dans la consolidation ; un SHA différent ne prouve pas une fonctionnalité manquante.
 - Les différences de documents `docs_intern` / `docs` expliquent également des patches non identiques.
 
-Aucune de ces six nouveautés n'a été fusionnée pendant cette vérification. Le périmètre déjà publié reste la consolidation et les 643 tests unitaires à 95,07 % de couverture des lignes backend.
+Lors de la vérification initiale, aucune de ces six nouveautés n’avait encore été fusionnée. Elles ont ensuite été intégrées, comme indiqué en tête de page. Le périmètre déjà publié reste la consolidation et les 643 tests unitaires à 95,07 % de couverture des lignes backend.
 
 CI : chez Yves, frontend et seuil unitaire validés ; campagne d'intégration et CI complète réussies (run 35861433985). Sur Epitech (run 35861649358), les jobs n'ont pas démarré : « The job was not started because an Actions budget is preventing further use. » Ce blocage ne prouve pas une erreur applicative.

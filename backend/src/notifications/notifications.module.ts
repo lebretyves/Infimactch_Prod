@@ -80,7 +80,7 @@ export class NotificationsService {
   async destination(actor:string,org:string|null,b:DestinationDto) {
     if(org) await member(this.db,actor,org);
     if(org && b.events.some(k=>!organizationKinds.includes(k))) throw new BadRequestException("Les notifications personnelles ne peuvent pas être envoyées à une organisation.");
-    if(!org && b.events.some(k=>["NEED_CREATED","NEED_UPDATED","MISSION_PUBLISHED","REMINDER"].includes(k))) throw new BadRequestException("Choisissez les événements personnels.");
+    if(!org && b.events.some(k=>["NEED_CREATED","NEED_UPDATED","MISSION_PUBLISHED"].includes(k))) throw new BadRequestException("Choisissez les événements personnels.");
     const channel=org && b.enabled ? await this.validateChannel(actor,b.channelId || "") : null;
     return this.db.transaction(async em=>{
       if(org) await member(em,actor,org);
@@ -123,9 +123,13 @@ export class NotificationsService {
               obsolete=!a || a.status!=='CANCELLED';
             } else obsolete ||= m.status!=='CANCELLED';
           }
+          if(['START_REMINDER_24H','START_REMINDER_2H'].includes(row.kind)) {
+            const [a]=await em.query('SELECT status FROM assignment WHERE id=$1 AND mission_id=$2',[row.context.assignmentId,row.context.missionId]);
+            obsolete ||= !a || a.status!=='ACTIVE' || m?.status!=='FILLED' || !row.context.expiresAt || new Date(row.context.expiresAt).getTime()<=Date.now();
+          }
           if(row.kind==='MATCH') obsolete ||= !(await matchAreaStillValid(em,row.user_id,row.context.missionId));
         }
-        if(!active || !owner || !row.enabled || row.version!==row.destination_version || !row.events.includes(row.kind) || (!row.organization_id && muted) || obsolete) {
+        if(!active || !owner || !row.enabled || row.version!==row.destination_version || !row.events.includes(row.kind) || (row.target_type==='user' && muted) || obsolete) {
           await em.query("UPDATE notification_delivery SET status='CANCELLED',last_error='DESTINATION_OR_EVENT_CHANGED' WHERE id=$1",[row.id]);return {skip:true};
         }
         const token=randomUUID();

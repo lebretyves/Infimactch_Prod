@@ -80,7 +80,7 @@ function Editor({
   const title =
     view === "month"
       ? calendarDateLabel(anchor, { month: "long", year: "numeric" })
-      : `${calendarDateLabel(days[0], { day: "numeric", month: "short" })} — ${calendarDateLabel(days[6], { day: "numeric", month: "long", year: "numeric" })}`;
+      : `${calendarDateLabel(days[0], days[0].slice(0, 7) === days[6].slice(0, 7) ? { day: "numeric" } : { day: "numeric", month: "long" })} — ${calendarDateLabel(days[6], { day: "numeric", month: "long", year: "numeric" })}`;
   function move(direction: number) {
     setDetailDate(null);
     if (view === "month") {

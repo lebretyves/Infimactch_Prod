@@ -2,7 +2,7 @@
   "date": "2026-09-23",
   "applicationCommit": "423ae1e9d0bb02845c238cbd42da45a58ccc40e3",
   "pitchMinutes": 15,
-  "scope": "Seven deliverable categories; actual human hours and J+2 approval evidence remain pending",
+  "scope": "Seven deliverables plus prospective costs; approximately 396 human hours declared, per-feature allocation and J+2 evidence pending",
   "containsPrivateSecretExports": false,
   "files": [
     {
@@ -12,98 +12,68 @@
     },
     {
       "file": "01_CAHIER_DES_CHARGES.md",
-      "bytes": 4118,
-      "sha256": "5dbfbfa4a9d746be33100764f7ad6f7fa3bf6489ed127b623a3c53ed444f916e"
+      "bytes": 4161,
+      "sha256": "30c1f8f60c57b37148204cb8a773dee57eb2fd94d9ca2f7e6b151a7409e90be8"
     },
     {
       "file": "02_DEPOT_ET_INSTALLATION.md",
-      "bytes": 1857,
-      "sha256": "d3988ee47540c31083d2f3dbfa576a3f89911583ea225310be21cb69b4a15fca"
+      "bytes": 1896,
+      "sha256": "fce2d557edcb307953a303df8474b81aa4f54ac603a87b4f577d87d968882778"
     },
     {
       "file": "03_WORKFLOWS_N8N.md",
-      "bytes": 1718,
-      "sha256": "2d368e351ee372fbfd1bfe2e094322ce68a04429f3ae0736470e330adb3f6581"
+      "bytes": 1775,
+      "sha256": "c42ea3fa7de7c6e71e29efae7c805626e87168a7df5fa2ec6d5e4dafbc384a58"
     },
     {
       "file": "04_DONNEES_PUBLIQUES.md",
-      "bytes": 2416,
-      "sha256": "dd52eb0ebac441107e9e69a7bfd558f69471b2f7df2cefb6a189d2f4fbe51fdc"
+      "bytes": 2452,
+      "sha256": "831f81032da5a4e78adc896967579c8967b51a7f2dd2398750303a17c0ffca13"
     },
     {
       "file": "05_ETUDE_DE_MARCHE.md",
-      "bytes": 3923,
-      "sha256": "2a01e2fcc5e5e8e23ccf090f45af3c5e56e877a4276a3445b7fffdcc0b8bb2c6"
+      "bytes": 3964,
+      "sha256": "aa670c0e7825ad079bcc304aeecec976a589d18fe73b77af1752032d284f7e3d"
     },
     {
       "file": "06_CHIFFRAGE_REEL.md",
-      "bytes": 1469,
-      "sha256": "ba444ccd6169631518ed1cc3a53ecea0d4508efa83e13a5a13c47fb4e716396c"
+      "bytes": 1625,
+      "sha256": "ad54358390be0261a4e235b216d13e90d0366f45bdd8db98cc99666b95141044"
     },
     {
       "file": "07_PITCH_ORAL.md",
-      "bytes": 8630,
-      "sha256": "0ea8fa52ced045c79a08b20755aec641c036ec8d5c43047f5ee7e0e454955acb"
+      "bytes": 5260,
+      "sha256": "3c703937c6d4c0de1b9326b64146d50c1f4e2cf92dbb8c83a23c77f6059e5504"
     },
     {
       "file": "08_PREUVES_ET_RESERVES.md",
-      "bytes": 2386,
-      "sha256": "1c73632159cc48edd6a31fc437db7ff9c49278aa5579e241421a87fdabcded0f"
+      "bytes": 2620,
+      "sha256": "43a2bd7f6fde9ffa0a6ef44d5b30f074b5155d53c5e771e7eeea913697a2ef73"
     },
     {
-      "file": "CHIFFRAGE_ESTIME_REEL.csv",
-      "bytes": 1649,
-      "sha256": "d3089c6d0fa39f522fcbda3fac571bf665356f2b8388465c750d0a27c3132dce"
+      "file": "09_COUTS_PRODUCTION.md",
+      "bytes": 10700,
+      "sha256": "d53a496e9145516c9ea7c581a30d9f9c286c5c7cd32c80f1576ca66b4d1e35ba"
     },
     {
-      "file": "CHIFFRAGE_ESTIME_REEL.xlsx",
-      "bytes": 9436,
-      "sha256": "a7ddce6d6fe1f9a762989ee886784c5dc748cc7da8b265569fb81e8a059a5b61"
+      "file": "apercu-couts-11.png",
+      "bytes": 57138,
+      "sha256": "bad1afc5efe2bdb20ae08b691a7b899712919a30da4daef1d5c24e192e966306"
     },
     {
-      "file": "DOSSIER_RENDU.docx",
-      "bytes": 46763,
-      "sha256": "6ab90a18714aef7eb3702502a91a6afacec0a91f6d749360ce92275f7c74a57e"
-    },
-    {
-      "file": "InfiMatch_Soutenance_2026-09-23.pdf",
-      "bytes": 90838,
-      "sha256": "565c565f363a85b78e98e25e70cacc466607a813d44ffc10601656c45d8812e2"
-    },
-    {
-      "file": "InfiMatch_Soutenance_2026-09-23.pptx",
-      "bytes": 69420,
-      "sha256": "1e31f94dd9e9274b6520853d278373151fcacdf30b13fe9c481de2e133fab15a"
-    },
-    {
-      "file": "InfiMatch_Soutenance_Pro_2026-09-23.pdf",
-      "bytes": 1340476,
-      "sha256": "fbdd2fe9663051e3f154c0781106f58b59f47544d400a977cc2f5d4b407b55c5"
-    },
-    {
-      "file": "README.md",
-      "bytes": 2460,
-      "sha256": "cd0ff22f70ff395d80c17a92f44a3935edf27ac6a0cef6fbeed7c6083a937aea"
-    },
-    {
-      "file": "VALIDATION.json",
-      "bytes": 311,
-      "sha256": "1692668f9bfe668613bdde1fd9ec4e64ea6aac62d97a5d1e8953c4d61ae31ca7"
+      "file": "apercu-couts-12.png",
+      "bytes": 57439,
+      "sha256": "744d5f2e90fe223de25ab059cb00644b98bb3f97ec60b4903f1f59a6e017fcf6"
     },
     {
       "file": "apercu-design-pro.png",
-      "bytes": 352447,
-      "sha256": "cf7b0b780288647e0dfbb79ae1f64c8059334a1f4e32b6c5b0cbd2efd56120e7"
+      "bytes": 400832,
+      "sha256": "e19b0d0c73382642d6221e430ad3d47d7140eb9a44828e893b58f3f4f580708b"
     },
     {
       "file": "apercu-soutenance.png",
-      "bytes": 210964,
-      "sha256": "e4e105c11c109a0a6ad73ee76490ec746e6955e6c54e1de9e6c456dbf94dc657"
-    },
-    {
-      "file": "assets/README.md",
-      "bytes": 392,
-      "sha256": "c16021b44bdabd40a352eb6c79b66feec6910a50311b977be0e27c24e0a132ba"
+      "bytes": 342064,
+      "sha256": "2f2f8b147539723af35fd6540af6900dca29266928d6b8806953ba57a5be3b1c"
     },
     {
       "file": "assets/epitech-blanc.png",
@@ -121,9 +91,39 @@
       "sha256": "71282d2db8c4419e8c733fe8d54ae9f9b5f0dd5018ef7635d6ac449a1249b8b7"
     },
     {
+      "file": "assets/README.md",
+      "bytes": 399,
+      "sha256": "298cbf12635afd5a4d2db4c4008a41ed4278e4b4ae889405a17140e41fd2a579"
+    },
+    {
+      "file": "calcul-couts.py",
+      "bytes": 1917,
+      "sha256": "77c81ebe982e15b603dda0b69387300ddf9a0b45bc7d7c3e145d90434f7e127d"
+    },
+    {
+      "file": "CHIFFRAGE_ESTIME_REEL.csv",
+      "bytes": 1649,
+      "sha256": "d3089c6d0fa39f522fcbda3fac571bf665356f2b8388465c750d0a27c3132dce"
+    },
+    {
+      "file": "CHIFFRAGE_ESTIME_REEL.xlsx",
+      "bytes": 10305,
+      "sha256": "22be6a0f78124cade450a4a11de46d217aa11566353efde53b4c793126b9b32e"
+    },
+    {
+      "file": "couts-production.json",
+      "bytes": 2319,
+      "sha256": "d0c84a37f744761cad32b045db0be0830403830e8b6e333289026c8a667b5478"
+    },
+    {
+      "file": "COUTS_PRODUCTION.xlsx",
+      "bytes": 9679,
+      "sha256": "48bfc39e59fe70b0e254619c6a3a5eefd7767a46eac01fd69bb78621297c9da1"
+    },
+    {
       "file": "couverture-design-pro.png",
-      "bytes": 306544,
-      "sha256": "b6b30fc9973a706e804244d33aa87a2cccfc8101300f120530287b4763352702"
+      "bytes": 142731,
+      "sha256": "78c17e8ff322343e702ec70fdcc286b19142649bbe5d9cf939e7428500a520bf"
     },
     {
       "file": "demonstration-finess-resultat.json",
@@ -136,81 +136,80 @@
       "sha256": "75a22576204b071704cfa078fded39786505fe97fb5b91d6e304fbfb906c860f"
     },
     {
+      "file": "DOSSIER_RENDU.docx",
+      "bytes": 51729,
+      "sha256": "36fa3190000ac3938533ec2f47e0463f5e4ec9f374304066bd7c421b1225d9fb"
+    },
+    {
       "file": "generate-design-pro.py",
-      "bytes": 14520,
-      "sha256": "44e408b8f0586597cb748ac7cca1b57ac6c7b7549cdaa4ec37e35b4da4a62347"
+      "bytes": 15569,
+      "sha256": "c2bb0cc56839654bf0a30a6a21d9cc4c81f5d5af6c78bd50c88fd7ae1d42cdce"
     },
     {
       "file": "generate-pitch.py",
-      "bytes": 4294,
-      "sha256": "c456184b5110004932680c8302fe9f49d49cb5f8c01b80fb02365233bb348c17"
+      "bytes": 4319,
+      "sha256": "bbc2007ce678dcfbc7d2f1882c779856966d154aa1c9142502b8ffd03213c6d7"
     },
     {
-      "file": "n8n/InfiMatch-production-cancellation.json",
-      "bytes": 2480,
-      "sha256": "af3cc86c18199cf68ca25f6e75896a3a48b458b89cda398d466bd32cf90de5e3"
+      "file": "InfiMatch_Soutenance_2026-09-23.pdf",
+      "bytes": 92410,
+      "sha256": "c536ec3f074f60d39e0c3918daaecffa9508da3ad16b7e3854cb6c0cfd17d108"
     },
     {
-      "file": "n8n/InfiMatch-production-confirmation.json",
-      "bytes": 2480,
-      "sha256": "783c3101e45e9c52fa8b8ba6dd6ab62b7637b4f1ac9cbbb5c690e7e2feec4f99"
+      "file": "InfiMatch_Soutenance_2026-09-23.pptx",
+      "bytes": 73164,
+      "sha256": "70fec50ca950ad31ffe72b48e5f39942d37bf2b87d3b616d68dab47cc8caaeb3"
     },
     {
-      "file": "n8n/InfiMatch-production-import-France-Travail.json",
-      "bytes": 5043,
-      "sha256": "3c4c56182a31efbbafcc57e2d7eb5ff00641a67d5e494ba73f18a4bc498fda2f"
+      "file": "InfiMatch_Soutenance_Pro_2026-09-23.pdf",
+      "bytes": 1342797,
+      "sha256": "481e0532ab29fa637c256bffc736e546488e6c38bfa2a1cb2592411a43e9f097"
     },
     {
-      "file": "n8n/InfiMatch-production-import-JobsPipe.json",
-      "bytes": 5028,
-      "sha256": "bb3e61776efb0ef43deabc98927525c1147614e97191bce7be85497bcf6e8d81"
+      "file": "n8n/README.md",
+      "bytes": 591,
+      "sha256": "6663470f090510cb49fe842491428e64fd6728670c688c7b8162d61b0f722bda"
     },
     {
-      "file": "n8n/InfiMatch-production-maintenance-quotidienne.json",
-      "bytes": 1830,
-      "sha256": "9adb79918cf6470bf7a125c894a368c74edb1b7eed0b00983f7afa3028423f9c"
+      "file": "README.md",
+      "bytes": 3350,
+      "sha256": "f77633a58238cfd7d497d179a346bb2ca65d7cad2ea3b104152c55b8f9641ba7"
     },
     {
-      "file": "n8n/InfiMatch-production-matches.json",
-      "bytes": 2465,
-      "sha256": "eaf7daca77ee637beee232790899349734d44094c3681d6996b445f534a69b76"
-    },
-    {
-      "file": "n8n/InfiMatch-production-reminders.json",
-      "bytes": 1793,
-      "sha256": "68d8f021178797df696692dcd615697868d098c986596470ac780983d80c2a21"
-    },
-    {
-      "file": "n8n/InfiMatch-production-reprise-et-rappels.json",
-      "bytes": 5548,
-      "sha256": "ca995a44e75f35104b65e0328a9313849099033314f8ec72f4ede6bca2bfcc02"
-    },
-    {
-      "file": "n8n/discord-relay.json",
-      "bytes": 3120,
-      "sha256": "2ef9ac9ea883d23940b97083ea91314b6208f68ae8b4ad8fadd8dc24895ecbd5"
-    },
-    {
-      "file": "n8n/manifest-source.json",
-      "bytes": 4576,
-      "sha256": "385611d8102d1e94afe5ab594804fdefa4ad4eff87f6be034f37105e69fcc81b"
+      "file": "resultats-couts.json",
+      "bytes": 892,
+      "sha256": "46a0e9c7a6b4cc2b88d8ce28ebbfb7186a8fa4fae031cb0e9accefad8cd2bdc5"
     },
     {
       "file": "slides.json",
-      "bytes": 9891,
-      "sha256": "547bb9d7899eaf07284304b15e9449abe1f75c80845e58d7020e052fe60cda7b"
+      "bytes": 11687,
+      "sha256": "3fde691b790aab98f41bdc9080639a817e488ba81291c9950b4fc7ee9f294780"
     },
     {
       "file": "validation-design-pro.json",
-      "bytes": 23467,
-      "sha256": "85d71535bb897664a542d860cfb164a51eaf20e4d7a5362eab259911083fffcc"
+      "bytes": 26462,
+      "sha256": "9746714543b2f49b3b855bf2305c0103113e56cab5871a3844e61787e59ccb55"
     },
     {
       "file": "validation-layout.json",
-      "bytes": 2120,
-      "sha256": "176446a659686777baeb1906a69e7d9c65642fbc1ed0805ff3416c1fbfc716fb"
+      "bytes": 2471,
+      "sha256": "1c56a431907f51a1bf931cc08236728b11f4eb1e9fbb3c999c396d4b5b150c4c"
+    },
+    {
+      "file": "VALIDATION.json",
+      "bytes": 294,
+      "sha256": "6d7190dcdcb8272daa13ed1b0363bf335b4a594963e13ba64cb68f95154ce992"
+    },
+    {
+      "file": "VALIDATION_COUTS.json",
+      "bytes": 551,
+      "sha256": "1de53f661a0084d2a792707b19e129af6421ca790d7b348445d6c3331923797e"
     }
   ],
   "hashBasis": "Git blob bytes, as stored in the repository and git archive; text line endings normalized by Git",
-  "pdfDesign": "Professional PDF with official Epitech and current InfiMatch logos; 12 pages, 15 minutes"
+  "pdfDesign": "Professional PDF with official Epitech and current InfiMatch logos; 12 pages, 15 minutes",
+  "documentationUpdatedAt": "2026-09-24",
+  "documentationReviewedAt": "2026-09-24",
+  "workflowReference": "../../n8n/published-20260923/manifest.json",
+  "validationReference": "../../proofs/review-20260924/summary.json"
 }

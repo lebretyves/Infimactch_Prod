@@ -13,6 +13,7 @@ export const clinicalSkillGroups: Record<string, string> = catalog.groups;
 export const clinicalSkillSources = catalog.sources;
 export const clinicalSkills: ClinicalSkill[] = catalog.skills;
 export const clinicalSkillsVersion = catalog.version;
+export const clinicalServiceLabels: Record<string, string> = catalog.services;
 
 /** Suggestions only: never infer a person's skills from their diploma or service. */
 export function skillsForContext(qualifications: string[], service = ''): ClinicalSkill[] {

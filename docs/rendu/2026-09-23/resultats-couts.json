@@ -1,0 +1,31 @@
+{
+  "hours": 396,
+  "gross_hourly": 22.52747252747253,
+  "development_gross": 8920.87912087912,
+  "development_equipment": 133.33333333333334,
+  "development_gross_plus_equipment": 9054.212454212455,
+  "development_employer_plus_equipment": 12800.981684981685,
+  "services_monthly": 265.06666666666666,
+  "technical_reserve": 53.013333333333335,
+  "maintenance_employer_monthly": 4851.666666666667,
+  "equipment_monthly": 55.55555555555555,
+  "monthly_total": 5265.302222222223,
+  "yearly_total": 63183.62666666667,
+  "scenarios": [
+    {
+      "validated": 100,
+      "euros_per_validated": 52.653022222222226,
+      "n8n_runs_budget": 1210.0
+    },
+    {
+      "validated": 500,
+      "euros_per_validated": 10.530604444444446,
+      "n8n_runs_budget": 4730.0
+    },
+    {
+      "validated": 1000,
+      "euros_per_validated": 5.265302222222223,
+      "n8n_runs_budget": 9130.0
+    }
+  ]
+}

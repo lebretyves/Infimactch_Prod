@@ -12,3 +12,4 @@
 .pagination { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; }
 .pagination > span { white-space: nowrap; }
 @media (max-width: 600px) { .pagination { flex-direction: column; align-items: stretch; } .pagination > span { text-align: center; } }
+.start { justify-self: start; }

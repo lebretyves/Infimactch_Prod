@@ -1,5 +1,6 @@
 # Exigences InfiMatch
 
+> Actualisation du 24 septembre : voir [l’état courant](ETAT_COURANT.md) pour les nouveaux rappels préparés, les tests et la différence avec la production. Les preuves datées ci-dessous conservent leur portée.
 Version documentaire : 22 septembre 2026. Ce document définit le périmètre retenu et les conditions de validation. « Présent dans le code » ne signifie pas « recetté sur la version publiée ».
 
 ## 1. Références et priorité

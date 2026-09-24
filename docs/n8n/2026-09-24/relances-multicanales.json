@@ -1,0 +1,329 @@
+{
+  "name": "InfiMatch - relances multicanales et avant mission",
+  "active": false,
+  "nodes": [
+    {
+      "id": "d1de4bdb-bfd1-40e7-b7e4-be6ca8298840",
+      "name": "Toutes les 4 heures",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        0,
+        0
+      ],
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "hours",
+              "hoursInterval": 4
+            }
+          ]
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://infimactch-prod-backend.vercel.app/api/v1/internal/automation/reminders",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "X-N8N-Execution-Id",
+              "value": "={{ $execution.id }}"
+            },
+            {
+              "name": "X-N8N-Workflow-Id",
+              "value": "={{ $workflow.id }}"
+            }
+          ]
+        },
+        "options": {
+          "timeout": 240000
+        }
+      },
+      "id": "9a373dfa-8b97-4edf-a00b-c71fa6605e14",
+      "name": "Missions non pourvues",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        240,
+        0
+      ],
+      "retryOnFail": true,
+      "maxTries": 3,
+      "waitBetweenTries": 5000
+    },
+    {
+      "id": "087be8bb-588e-422b-a13a-109ed865a2f3",
+      "name": "Missions non pourvues — contrôle",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        480,
+        0
+      ],
+      "parameters": {
+        "jsCode": "if(typeof $json.hasMore!=='boolean') throw new Error('INVALID_BATCH_RESPONSE'); if($json.hasMore && $runIndex>=19) throw new Error('REMINDER_BATCH_LIMIT_REACHED'); return [{json:$json}];"
+      }
+    },
+    {
+      "id": "a4996b1a-e19f-42ba-9467-6eee264cd9b6",
+      "name": "Missions non pourvues — suite",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        720,
+        0
+      ],
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "5e03befd-28a2-4528-8fee-3be2621901a3",
+              "leftValue": "={{ $json.hasMore }}",
+              "rightValue": "",
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      }
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://infimactch-prod-backend.vercel.app/api/v1/internal/automation/scheduled-reminders",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "X-N8N-Execution-Id",
+              "value": "={{ $execution.id }}"
+            },
+            {
+              "name": "X-N8N-Workflow-Id",
+              "value": "={{ $workflow.id }}"
+            }
+          ]
+        },
+        "options": {
+          "timeout": 240000
+        }
+      },
+      "id": "60000097-fb10-456e-bcb9-9c7f7484ad2c",
+      "name": "Avant prise de poste",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        950,
+        0
+      ],
+      "retryOnFail": true,
+      "maxTries": 3,
+      "waitBetweenTries": 5000
+    },
+    {
+      "id": "dc6371fe-ef0a-4b64-b86a-07b523c224a1",
+      "name": "Avant prise de poste — contrôle",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1190,
+        0
+      ],
+      "parameters": {
+        "jsCode": "if(typeof $json.hasMore!=='boolean') throw new Error('INVALID_BATCH_RESPONSE'); if($json.hasMore && $runIndex>=19) throw new Error('REMINDER_BATCH_LIMIT_REACHED'); return [{json:$json}];"
+      }
+    },
+    {
+      "id": "c4b7d4a8-fae8-47ea-9a28-c122be7ea349",
+      "name": "Avant prise de poste — suite",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        1430,
+        0
+      ],
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "cc00a988-2bca-410b-b6e2-e3a672aaecf9",
+              "leftValue": "={{ $json.hasMore }}",
+              "rightValue": "",
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      }
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://infimactch-prod-backend.vercel.app/api/v1/internal/automation/jobs/dispatch",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "X-N8N-Execution-Id",
+              "value": "={{ $execution.id }}"
+            },
+            {
+              "name": "X-N8N-Workflow-Id",
+              "value": "={{ $workflow.id }}"
+            }
+          ]
+        },
+        "options": {
+          "timeout": 240000
+        }
+      },
+      "id": "d4992a2a-f160-4794-9a31-804c78e554ec",
+      "name": "Distribuer après création",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1750,
+        0
+      ],
+      "retryOnFail": true,
+      "maxTries": 3,
+      "waitBetweenTries": 5000
+    }
+  ],
+  "connections": {
+    "Missions non pourvues": {
+      "main": [
+        [
+          {
+            "node": "Missions non pourvues — contrôle",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Missions non pourvues — contrôle": {
+      "main": [
+        [
+          {
+            "node": "Missions non pourvues — suite",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Missions non pourvues — suite": {
+      "main": [
+        [
+          {
+            "node": "Missions non pourvues",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Avant prise de poste",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Avant prise de poste": {
+      "main": [
+        [
+          {
+            "node": "Avant prise de poste — contrôle",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Avant prise de poste — contrôle": {
+      "main": [
+        [
+          {
+            "node": "Avant prise de poste — suite",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Avant prise de poste — suite": {
+      "main": [
+        [
+          {
+            "node": "Avant prise de poste",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Distribuer après création",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Toutes les 4 heures": {
+      "main": [
+        [
+          {
+            "node": "Missions non pourvues",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "timezone": "Europe/Paris",
+    "saveDataErrorExecution": "all",
+    "saveDataSuccessExecution": "none",
+    "saveManualExecutions": false,
+    "saveExecutionProgress": false
+  },
+  "meta": {
+    "templateCredsSetupCompleted": false
+  }
+}

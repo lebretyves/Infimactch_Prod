@@ -1,3 +1,4 @@
+import {validate} from 'class-validator';
 ﻿import { test } from "node:test";
 import assert from "node:assert/strict";
 import { createHash } from "node:crypto";
@@ -207,4 +208,41 @@ test("notification controller returns scoped preferences and disconnect revokes 
   assert.deepEqual(await c.disconnect(req), { ok: true });
   assert.equal(f.calls.filter((c) => c.sql.startsWith("DELETE")).length, 2);
   assert.ok(f.calls.every((c) => c.args[0] === "actor"));
+});
+
+for (const state of ['active','cancelled','missing','expired','no-expiry','muted'] as const)
+ test('private scheduled reminder checks assignment, expiry and preferences: '+state,async(t)=>{
+ t.mock.method(discord,'discordConfigured',()=>true);
+ const old=process.env.APP_ORIGIN;process.env.APP_ORIGIN='https://example.invalid';t.after(()=>{if(old===undefined)delete process.env.APP_ORIGIN;else process.env.APP_ORIGIN=old;});
+ let sent=0,batch=0;t.mock.method(discord,'sendDiscord',async()=>{sent++;return {id:'123456789012345678'};});
+ const row={id:'delivery',notification_id:'notice',user_id:'actor',connected_by:'actor',organization_id:'org',target_type:'user',target_id:'123456789012345678',kind:'START_REMINDER_2H',enabled:true,version:1,destination_version:1,events:['START_REMINDER_2H'],attempts:0,message:'Votre mission approche',href:'/gestion/missions/mission',context:{missionId:'mission',version:1,assignmentId:'assignment',expiresAt:state==='no-expiry'?undefined:new Date(Date.now()+(state==='expired'?-60000:3600000)).toISOString()}};
+ const f=fixture(sql=>{
+ if(sql.startsWith('SELECT d.*'))return batch++===0?[row]:[];
+ if(sql.includes('FROM notification_preference'))return state==='muted'?[{}]:[];
+ if(sql.startsWith('SELECT status,version'))return [{status:'FILLED',version:1,start_at:'2030-01-01'}];
+ if(sql.startsWith('SELECT status FROM assignment'))return state==='missing'?[]:[{status:state==='cancelled'?'CANCELLED':'ACTIVE'}];
+ if(sql.startsWith('SELECT 1 FROM account'))return [{}];return [];
+ });
+ const result=await f.s.dispatch(1);assert.equal(sent,state==='active'?1:0);assert.equal(result.sent,sent);
+ if(state!=='active')assert.ok(f.calls.some(c=>c.sql.includes("status='CANCELLED'")));
+});
+
+test('destination validation rejects unknown notification events and malformed channel IDs',async()=>{
+ const Dto=Reflect.getMetadata('design:paramtypes',NotificationsController.prototype,'destination')[1];
+ const value=Object.assign(new Dto(),{enabled:true,events:['UNRECOGNIZED_EVENT'],channelId:'not-a-discord-id'});
+ const errors=await validate(value);assert.ok(errors.some(e=>e.property==='events'));assert.ok(errors.some(e=>e.property==='channelId'));
+});
+for(const assignmentStatus of ['CANCELLED','ACTIVE','MISSING'])test('cancellation notification follows assignment even if mission reopened: '+assignmentStatus,async(t)=>{
+ t.mock.method(discord,'discordConfigured',()=>true);
+ const old=process.env.APP_ORIGIN;process.env.APP_ORIGIN='https://example.invalid';t.after(()=>{if(old===undefined)delete process.env.APP_ORIGIN;else process.env.APP_ORIGIN=old;});
+ let calls=0,sent=0;t.mock.method(discord,'sendDiscord',async()=>{sent++;return {id:'123456789012345678'};});
+ const row={id:'delivery',notification_id:'notice',user_id:'actor',connected_by:'actor',organization_id:null,target_type:'user',target_id:'123456789012345678',kind:'CANCELLATION',enabled:true,version:1,destination_version:1,events:['CANCELLATION'],attempts:0,message:'Annulation',href:'/missions/m_mission',context:{missionId:'mission',version:1,assignmentId:'assignment'}};
+ const f=fixture(sql=>{
+ if(sql.startsWith('SELECT d.*'))return calls++===0?[row]:[];
+ if(sql.includes('FROM notification_preference'))return [];
+ if(sql.startsWith('SELECT status,version'))return [{status:'OPEN',version:2,start_at:'2030-01-01'}];
+ if(sql.startsWith('SELECT status FROM assignment'))return assignmentStatus==='MISSING'?[]:[{status:assignmentStatus}];
+ if(sql.startsWith('SELECT 1 FROM account'))return [{}];return [];
+ });
+ await f.s.dispatch(1);assert.equal(sent,assignmentStatus==='CANCELLED'?1:0);
 });

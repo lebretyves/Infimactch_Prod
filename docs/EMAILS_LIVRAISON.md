@@ -2,6 +2,10 @@
 
 Implémentation : migration additive `EmailDelivery1789844400000`, `EmailDeliveryModule` et journal dans Notifications / fiche compte administrateur. Le coordinateur doit enregistrer la migration et le module, appliquer la migration avant déploiement et configurer le webhook ; ce document seul ne prouve pas cette activation.
 
+## Constat réel du 24 septembre
+
+10 emails métier étaient acceptés à l’envoi, tous sans retour de livraison enregistré. L’interface SMTP2GO affichait 14 retours webhook en échec ; ce nombre ne correspond pas nécessairement à 14 emails différents. La clé d’envoi refuse la lecture de l’historique et des webhooks (`ENDPOINT_PERMISSION_DENIED`). La réception effective n’est pas confirmée et le raccordement fournisseur reste à corriger/vérifier. [Audit daté](audits/2026-09-24-notifications/AUDIT_NOTIFICATIONS.md).
+
 ## Configuration
 
 - URL HTTPS : `/api/v1/internal/automation/smtp2go/webhook` sur le backend.

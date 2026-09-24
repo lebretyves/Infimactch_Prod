@@ -1,5 +1,6 @@
 > Mise à jour après ajout des six fonctionnalités : **652/652 tests backend, 95,08 % des lignes**. [Rapport et preuves](quality/INTEGRATION_SIX_FONCTIONNALITES_2026-09-23.md). Les chiffres ci-dessous documentent la campagne initiale.
 
+> Cette page conserve la campagne du 23 septembre. Pour le code réuni le 24 septembre, consulter [l’état courant](ETAT_COURANT.md) et les preuves de la nouvelle revue.
 # Couverture unitaire du backend — 23 septembre 2026
 
 Commande reproductible depuis la racine : `npm run coverage:unit`.

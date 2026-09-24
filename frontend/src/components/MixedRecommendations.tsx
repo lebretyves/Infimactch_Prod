@@ -9,7 +9,7 @@ import { date, salary, sourceLabel, type Listing } from "@/services/market";
 import { labelCode } from "@/data/professional";
 import { Button, ButtonLink } from "@/ui/Button";
 import { Icon } from "@/ui/Icon";
-import { missionCrushs } from "@/lib/missionCrushs";
+import { missionTopMatches } from "@/lib/missionTopMatches";
 import s from "./MixedRecommendations.module.css";
 function contractLabel(value: string) {
   const labels: Record<string, string> = {
@@ -42,7 +42,7 @@ export function MixedRecommendations({
     userId + ":" + origin,
   );
   const data = result.data;
-  const selected = data ? missionCrushs(data, origin) : [];
+  const selected = data ? missionTopMatches(data, origin) : [];
   const showExternes = data?.externalCatalogueVisible !== false;
   useEffect(() => {
     if (!data || showExternes || origin !== "externes") return;
@@ -180,10 +180,10 @@ export function MixedRecommendations({
       ) : data && (
         <>
           {origin !== "externes" && data.internal.personalization === "GENERAL_PROFILE_INCOMPLETE" && (
-            <p className={s.notice}>Ces missions partenaires sont consultables. Votre profil ou votre vérification professionnelle est incomplet : leur compatibilité n’est pas confirmée. <Link to="/profil">Compléter mon profil</Link>.</p>
+            <p className={s.notice}>Ces missions partenaires sont consultables. Votre profil ou votre vérification professionnelle est incomplet : leur compatibilité n’est pas confirmée. <Link to="/profil">Compléter mon profil</Link></p>
           )}
           {origin !== "partenaires" && showExternes && data.external.personalization === "GENERAL_PROFILE_INCOMPLETE" && (
-            <p className={s.notice}>Votre profil est incomplet : ces offres externes générales ne sont pas des recommandations personnalisées. <Link to="/profil">Compléter mon profil</Link>.</p>
+            <p className={s.notice}>Votre profil est incomplet : ces offres externes générales ne sont pas des recommandations personnalisées. <Link to="/profil">Compléter mon profil</Link></p>
           )}
           {origin !== "externes" && data.internal.status === "UNAVAILABLE" && (
             <div className={s.notice} role="status"><p>La recherche de missions compatibles est temporairement indisponible.</p><Button variant="outline" onClick={result.reload}>Réessayer les missions compatibles</Button></div>

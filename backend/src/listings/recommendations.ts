@@ -46,7 +46,7 @@ export class RecommendationsController {
   }
   private async internal(actor:string,profile:any) {
     if(!profile.qualifications.length || profile.rpps_status!=='FOUND'){
-      const rows=await this.db.query("SELECT id,title,qualification,service,shift,address,start_at,end_at,timezone,hourly_salary,status,version,created_at FROM mission WHERE status='OPEN' AND start_at>now() ORDER BY created_at DESC,id LIMIT 3");
+      const rows=await this.db.query("SELECT id,title,qualification,service,shift,address,start_at,end_at,timezone,hourly_salary,status,version,created_at FROM mission WHERE status='OPEN' AND start_at>now() AND (cardinality($1::text[])=0 OR qualification=ANY($1::text[])) ORDER BY created_at DESC,id LIMIT 3",[profile.qualifications]);
       return {status:'READY',personalization:'GENERAL_PROFILE_INCOMPLETE',rppsStatus:profile.rpps_status,items:rows.map(m=>({...m,id:'m_'+m.id,kind:'INTERNAL_MISSION',publicationDate:m.created_at,importedAt:null,sourceUpdatedAt:null,salary:{amount:Number(m.hourly_salary),currency:'EUR',unit:'HOUR',gross:true}}))};
     }
     const selected=await this.matching.forNurse(actor,{limit:3,offset:0},'recent');

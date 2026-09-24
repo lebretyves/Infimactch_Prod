@@ -1,14 +1,11 @@
-# Chiffrage post-POC
-Les dix-huit lots reprennent CHIFFRAGE_V1.csv : **348–528 heures-personnes estimées**. Le centre de fourchette, 438 h, est un repère calculé, pas une estimation ponctuelle prétendument validée à J+2.
+# Chiffrage estimé et réalisé — actualisation du 24/09/2026
 
-Le fichier TEMPS_HUMAINS.csv ne contient que ses en-têtes. Les heures réelles ne sont donc pas disponibles. Ni les durées de sessions agent, ni l'intervalle entre commits, ni les lignes de code ne mesurent des heures humaines. Réalisé et écarts restent vides jusqu'à saisie documentée.
+L’équipe déclare quatre personnes, onze jours, sept heures minimum par jour et environ deux heures le soir par personne. **Total reconstitué : environ 396 heures-personnes**, dont 308 h de journée et 88 h du soir ; 99 h par personne. La précision de la formule n’efface pas le caractère approximatif de la déclaration.
 
-## Classeur
-Onglet Lots : D/E = estimation min/max ; F = centre calculé ; G = réel à saisir ; H/I = écarts heures/pourcentage vs centre ; J = sous/dans/au-dessus de la fourchette ; K/L = justificatif et explication.
+La capacité initiale à cinq personnes était de 385 h : le réalisé déclaré dépasse cette capacité de 11 h (+2,86 %). Les 88 h du soir compensent les 77 h du cinquième membre absent. L’estimation fonctionnelle initiale, distincte, était de 348–528 h, centre 438 h : Écart au centre −42 h (−9,59 %).
 
-Le total réel reste INCOMPLET tant que les dix-huit lots ne sont pas renseignés. Un zéro saisi est distinct d'une cellule vide. L'onglet Journal recueille personne, date, lot, activité et durée ; l'équipe consolide ensuite dans Lots pour éviter les doubles comptes. Un travail hors périmètre initial doit être identifié comme tel.
+Valorisation au benchmark APEC 41 000 EUR brut/an / 1 820 h : **8 920,88 EUR brut**. Ajouter **133,33 EUR** de matériel amorti affecté aux onze jours, soit **9 054,21 EUR**. En hypothèse employeur +42 %, le coût de réalisation travail + matériel est **12 800,98 EUR**, hors frais historiques non documentés et éventuelles majorations horaires.
 
-## Analyse à finaliser
-Après saisie, expliquer les dépassements par des faits attestés : changement demandé, intégration, incident, reprise ou recette. Les causes ne sont pas préremplies comme si elles avaient été mesurées. Les quatre membres doivent valider les heures et leurs preuves.
+[Calcul détaillé, matériel, abonnements et coût par mission](09_COUTS_PRODUCTION.md). [Classeur de coût](COUTS_PRODUCTION.xlsx).
 
-Le tableau est prêt ; le chiffrage réel n'est pas finalisé sans ces données.
+Le classeur CHIFFRAGE_ESTIME_REEL.xlsx conserve les estimations par lot ; son onglet « Synthèse déclarée » consigne le total d’équipe. Les cases réelles par fonctionnalité restent vides : il manque encore la ventilation et les justificatifs, aucun partage arbitraire des 396 h n’est présenté comme mesuré. Les horodatages des commits et les sessions d’agents ne sont pas des feuilles de temps.
