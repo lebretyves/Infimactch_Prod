@@ -440,7 +440,7 @@
 .confirmedSlot { background: var(--brand-600); color: white; border-color: var(--brand-600); }
 .slot.confirmedSlot:disabled { opacity: 1; cursor: default; }
 .monthHint { font-size: 12px; line-height: 1.6; color: #526579; }
-.dayDetail { border: 1px solid #c8dbee; border-radius: 8px; overflow: hidden; background: #f8fbff; }
+.dayDetail { width: min(560px, calc(100vw - 24px)); max-height: calc(100dvh - 32px); padding: 0; margin: auto; color: #20344b; border: 1px solid #c8dbee; border-radius: 8px; overflow: auto; background: #f8fbff; }
 .detailHeading { display: flex; align-items: center; justify-content: space-between; padding: 8px 12px; gap: 10px; font-size: 13px; }
 .dayDetail .day { border: 0; }
 .dayDetail .day h3 { min-height: 0; padding: 9px 12px; text-align: left; }
@@ -467,3 +467,6 @@
 /* Keep location help below its input without displacing the radius field. */
 .mobility > button { grid-column: 1 / -1; justify-self: start; }
 @media (min-width: 601px) { .mobility label { min-height: 3em; } }
+
+.dayDetail::backdrop { background: rgb(15 30 48 / 50%); }
+.detailHelp { padding: 0 12px; font-size: 14px; line-height: 1.5; }

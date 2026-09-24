@@ -32,8 +32,9 @@ const narration=JSON.parse(await readFile(output+'/voice-durations.json','utf8')
 const reports=[];
 try{for(const id of ids.filter(x=>!process.env.ONLY||process.env.ONLY.split(',').includes(x))){
  Object.assign(profile,structuredClone(initialProfile));
+ if(id==='candidature-agenda'){profile.available=[];profile.unavailable=[];}
  let auth=id==='inscription-diplomes'?'public':id==='confirmation-pdf'||id==='annulation-emails'?'agence':'candidat';
- const cvDocuments=[];let cvBytes;const entry={};const calls=[],unknown=[],errors=[];let discordLinked=false,discordDestination=null;
+ const cvDocuments=[];let cvBytes;const entry={};const calls=[],unknown=[],errors=[];let discordLinked=false,discordDestination=null,applicationSubmitted=id!=='candidature-agenda';
  const currentMission={...mission,...(id==='recherche-matching'?{location_label:'Rennes',address:'8 rue des Exemples, 35000 Rennes',latitude:48.1113,longitude:-1.6800}:{}),can_manage:auth==='agence',timezone:'Europe/Paris',schedule_precision:'EXACT',status:id==='confirmation-pdf'?'DRAFT':id==='annulation-emails'?'FILLED':'OPEN',matching_score:92,assignments:id==='annulation-emails'?[{id:assignmentId,status:'ACTIVE',display_name:'Camille Exemple'}]:[]};
  const application={id:applicationId,mission_id:missionId,title:mission.title,status:id==='annulation-emails'?'ASSIGNED':'SUBMITTED',created_at:'2026-09-20T08:00:00Z',updated_at:'2026-09-20T08:00:00Z',requires_reconsent:false,current_version:2};
  const context=await browser.newContext({viewport:{width:1280,height:800},recordVideo:{dir:output+'/raw',size:{width:1280,height:800}},locale:'fr-FR',timezoneId:'Europe/Paris',serviceWorkers:'block',acceptDownloads:true});
@@ -47,6 +48,7 @@ try{for(const id of ids.filter(x=>!process.env.ONLY||process.env.ONLY.split(',')
  if(p==='/auth/register'&&method==='POST'){const b=route.request().postDataJSON();assert.equal(b.family,'NURSE');assert.ok(b.profile);Object.assign(profile,b.profile);auth='candidat';return send({id:nurseId,csrfToken:'catalogue-fictional-csrf'},201);}
  if(p==='/profile/search-area'&&method==='PATCH'){const b=route.request().postDataJSON();profile.latitude=b.latitude;profile.longitude=b.longitude;profile.radius_km=b.radiusKm;profile.details={...profile.details,mobilityCity:b.city,mobilityLatitude:b.latitude,mobilityLongitude:b.longitude};return send(profile);}
  if(p==='/listings/locations')return send({items:[{label:'Rennes',latitude:48.1113,longitude:-1.6800}]});
+ if(p==='/profile/availability'&&method==='PATCH'){const {changes}=route.request().postDataJSON();assert.equal(changes.length,1);assert.equal(changes[0].state,'available');const {start,end}=changes[0];profile.available.push({start,end});return send({available:profile.available,unavailable:profile.unavailable});}
  if(p==='/profile'&&method==='PUT'){const b=route.request().postDataJSON();Object.assign(profile,b);return send({ok:true});}
  if(p==='/me/cv-document'&&method==='POST'){const body=route.request().postDataJSON();cvBytes=Buffer.from(body.contentBase64,'base64');cvDocuments.push({id:uid(80),kind:'CV',mime:body.mime,size_bytes:cvBytes.length,status:'READY',created_at:new Date().toISOString()});return send({id:uid(80),status:'READY'},201);}
  if(p==='/me/documents/'+uid(80))return route.fulfill({status:200,contentType:'application/pdf',body:cvBytes});
@@ -95,6 +97,7 @@ try{for(const id of ids.filter(x=>!process.env.ONLY||process.env.ONLY.split(',')
     if(p==='/me/matches')return send({items:[{missionId,score:92,eligible:true,reasons:[],explanationId:null,historyStatus:'UNAVAILABLE'}],total:1,limit:20,offset:0});
     if(p.startsWith('/me/listings/'))return send({mode:'PARTIAL',score:null,eligibilityVerified:false,profileCorrespondence:{criteria:{}},profileToComplete:[]});
     if(p==='/me/favorites')return send([{kind:'MISSION',target_id:missionId,title:mission.title},{kind:'EXTERNAL',target_id:'demo-annonce',title:external.title,active:true},{kind:'ESTABLISHMENT',target_id:facilityId,title:facility.name}]);
+    if(p==='/me/applications'&&!applicationSubmitted)return send([]);
     if(p==='/me/applications')return send([application,{...application,id:uid(25),title:'Mission de nuit en médecine — démonstration',status:'SELECTED'}]);
     if(p==='/applications/'+applicationId)return send({...application,status:'ASSIGNED',assignments:[{id:assignmentId,status:'ACTIVE'}],events:[{event:'APPLICATION_SUBMITTED',created_at:'2026-09-15T08:00:00Z'},{event:'APPLICATION_SELECTED',created_at:'2026-09-15T12:00:00Z'},{event:'ASSIGNMENT_CREATED',created_at:'2026-09-16T08:00:00Z'}]});
     if(p==='/me/history')return send([{id:assignmentId,mission_id:missionId,title:mission.title,status:'ACTIVE',start_at:mission.start_at,end_at:mission.end_at,temporal_position:'upcoming'},{id:uid(26),mission_id:uid(27),title:'Renfort en médecine — démonstration',status:'COMPLETED',start_at:'2026-09-01T05:00:00Z',end_at:'2026-09-01T17:00:00Z',temporal_position:'past'}]);
@@ -105,7 +108,7 @@ try{for(const id of ids.filter(x=>!process.env.ONLY||process.env.ONLY.split(',')
     if(p==='/staffing-requests/'+staffingNeed.id)return send(staffingNeed);
     if(p==='/missions')return send([currentMission,{...currentMission,id:uid(24),title:'Remplacement en médecine — démonstration',status:'DRAFT'}]);
     if(p==='/missions/'+missionId)return send(currentMission);
-    if(p==='/missions/'+missionId+'/applications')return method==='POST'?send(application,201):send(entry.variant==='draft'?[]:[{...application,nurse_id:nurseId,display_name:'Camille Exemple',qualifications:['IDE'],skills:profile.skills,rpps_status:'FOUND',experience:profile.experience,available:profile.available,city:'Paris',radius_km:30}]);
+    if(p==='/missions/'+missionId+'/applications')return method==='POST'?(applicationSubmitted=true,send(application,201)):send(entry.variant==='draft'?[]:[{...application,nurse_id:nurseId,display_name:'Camille Exemple',qualifications:['IDE'],skills:profile.skills,rpps_status:'FOUND',experience:profile.experience,available:profile.available,city:'Paris',radius_km:30}]);
     if(p==='/missions/'+missionId+'/candidates')return send({items:[{candidateId:nurseId,display_name:'Camille Exemple',score:92,qualifications:['IDE'],skills:profile.skills,reasons:[]}],total:1,limit:20,offset:0});
 
  unknown.push(method+' '+p);return send({message:'Fixture manquante'},501);});
@@ -209,6 +212,16 @@ try{for(const id of ids.filter(x=>!process.env.ONLY||process.env.ONLY.split(',')
   currentMission.assignments=[{id:assignmentId,status:'ACTIVE',display_name:'Camille Exemple'}];application.status='ASSIGNED';
   await go('/calendrier');await page.getByLabel('Aller à la date').fill('2026-09-21');await focus(page.getByRole('button',{name:/vendredi 25 septembre 2026.*Mission confirmée, créneau réservé/}).first());await hold('Exemple après confirmation par le recruteur : la mission apparaît dans l’agenda.',4500);
   await page.screenshot({path:publicDir+'/'+id+'.jpg',type:'jpeg',quality:78});
+  await page.getByLabel('Vue du calendrier').selectOption('month');await hold('En vue Mois, choisissez un jour pour modifier ses créneaux.',4000);
+  await click(page.locator('[data-day="2026-09-28"]'));
+  const dialog=page.getByRole('dialog',{name:'Modifier mes créneaux'});await dialog.waitFor();
+  await hold('Ouvrez le jour souhaité, puis cliquez sur le matin, l’après-midi ou la nuit.',4500);
+  await click(dialog.locator('[data-slot]').first());
+  await dialog.getByRole('status').filter({hasText:'Enregistré.'}).waitFor();
+  assert.equal(calls.filter(x=>x==='PATCH /profile/availability').length,1);
+  await hold('Le créneau devient disponible et se sauvegarde automatiquement. La mission confirmée reste protégée.',5000);
+  await page.screenshot({path:publicDir+'/'+id+'.jpg',type:'jpeg',quality:78});
+  await click(dialog.getByRole('button',{name:'Fermer',exact:true}));
  }
  if(id==='confirmation-pdf'){
   await go('/gestion/missions/'+missionId);await hold('5 · Recruteur : relisez puis publiez la mission. Démonstration simulée.');

@@ -142,129 +142,36 @@ try {
     return route.fulfill({ status: 200, json });
   });
   const page = await context.newPage();
-  await page.goto(base + "/accueil");
-  await page.getByRole("button", { name: "Tout refuser", exact: true }).click();
-  await page
-    .getByRole("heading", { name: "Vos matchs", exact: true })
-    .waitFor();
-  await page
-    .getByRole("heading", { name: external.title, exact: true })
-    .waitFor();
-  assert.ok(
-    (
-      await page
-        .getByRole("link", { name: "Voir la mission" })
-        .getAttribute("href")
-    ).endsWith("?correspondance=explanation-fixture"),
-  );
-  assert.equal(
-    await page
-      .getByRole("link", { name: "Voir l’offre", exact: true })
-      .getAttribute("href"),
-    "/missions/" + external.id,
-  );
-  await page
-    .getByText("Date de publication non renseignée", { exact: false })
-    .waitFor();
-  await page
-    .getByText("Rémunération non renseignée — voir la source")
-    .waitFor();
-  await page
-    .getByRole("button", {
-      name: "Ajouter " + external.title + " aux favoris",
-      exact: true,
-    })
-    .click();
-  await page
-    .getByRole("button", {
-      name: "Retirer " + external.title + " des favoris",
-      exact: true,
-    })
-    .waitFor();
-  assert.deepEqual(writes, [
-    { kind: "EXTERNAL", targetId: external.id.slice(2) },
-  ]);
-  await page.getByText("Intérim", { exact: true }).waitFor();
-  await page.getByText("Critères en écart", { exact: false }).waitFor();
-  await page
-    .locator("summary")
-    .filter({ hasText: "Actualisation de l’annonce" })
-    .click();
-  await page
-    .getByText("Mise à jour par la source le", { exact: false })
-    .waitFor();
-  assert.equal(
-    await page.getByText("INTERIM_CONTEXT_CONFIRMED", { exact: true }).count(),
-    0,
-  );
-  assert.equal(
-    await page
-      .getByRole("button", {
-        name: "Retirer " + external.title + " des favoris",
-        exact: true,
-      })
-      .getAttribute("aria-pressed"),
-    "true",
-  );
-  fs.mkdirSync("artifacts/browser-checks", { recursive: true });
-  for (const width of [375, 768, 1440]) {
-    await page.setViewportSize({ width, height: 1000 });
-    assert.equal(
-      await page.evaluate(
-        () => document.documentElement.scrollWidth > innerWidth + 1,
-      ),
-      false,
-      `overflow ${width}`,
-    );
-    await page.screenshot({
-      path: `artifacts/browser-checks/mixed-${width}.png`,
-      fullPage: true,
-    });
-  }
-  const matches = page.getByRole("region", { name: "Vos matchs", exact: true });
-  const partnerCard = matches.getByRole("listitem").filter({ has: page.getByRole("heading", { name: internal.title, exact: true }) });
-  const externalCard = matches.getByRole("listitem").filter({ has: page.getByRole("heading", { name: external.title, exact: true }) });
-  assert.equal(await matches.getByRole("listitem").count(), 2);
-  assert.match(await partnerCard.innerText(), /Partenaire InfiMatch/);
-  assert.match(await partnerCard.innerText(), /87\s*%/);
-  assert.match(await externalCard.innerText(), /France Travail/);
-  assert.match(await externalCard.innerText(), /Correspondance partielle/);
-  assert.doesNotMatch(await externalCard.innerText(), /\d+\s*%/);
-  const choices = page.getByRole("group", { name: "Origine des offres" });
-  assert.deepEqual(await choices.getByRole("button").allTextContents(), ["Partenaires", "Externes", "Toutes"]);
-  await Promise.all([
-    page.waitForResponse(r => {const u=new URL(r.url());return u.pathname.endsWith('/me/recommendations')&&u.searchParams.get('origine')==='partenaires'&&r.ok();}),
-    choices.getByRole("button", { name: "Partenaires", exact: true }).click(),
-  ]);
-  await page
-    .getByRole("heading", { name: "Vos matchs", exact: true })
-    .waitFor();
-  await page
-    .getByRole("heading", { name: external.title, exact: true })
-    .waitFor({ state: "hidden" });
-  assert.equal(origins.at(-1), "partenaires");
-  await Promise.all([
-    page.waitForResponse(r => {const u=new URL(r.url());return u.pathname.endsWith('/me/recommendations')&&u.searchParams.get('origine')==='externes'&&r.ok();}),
-    choices.getByRole("button", { name: "Externes", exact: true }).click(),
-  ]);
-  await page
-    .getByRole("heading", { name: external.title, exact: true })
-    .waitFor();
-  await page
-    .getByRole("heading", { name: internal.title, exact: true })
-    .waitFor({ state: "hidden" });
-  assert.equal(origins.at(-1), "externes");
-  incomplete = true;
-  await choices.getByRole("button", { name: "Toutes", exact: true }).click();
-  await page.reload();
-  await page
-    .getByText("Ces missions partenaires sont consultables.", { exact: false })
-    .waitFor();
-  await page
-    .getByRole("link", { name: "Voir la mission", exact: true })
-    .waitFor();
-  assert.match(await partnerCard.innerText(), /Matching non calculable/);
-  assert.doesNotMatch(await partnerCard.innerText(), /87\s*%/);
+  await page.goto(base + "/accueil?origine=toutes");
+  await page.getByRole("button", {name:"Tout refuser",exact:true}).click();
+  const matches=page.getByRole("region",{name:"Vos matchs",exact:true});
+  const choices=matches.getByRole("group",{name:"Origine des offres"});
+  const partnerCard=matches.getByRole("listitem").filter({has:page.getByRole("heading",{name:internal.title,exact:true})});
+  const externalCard=matches.getByRole("listitem").filter({has:page.getByRole("heading",{name:external.title,exact:true})});
+  await partnerCard.waitFor();
+  assert.equal(origins.at(-1),'partenaires');
+  assert.deepEqual(await choices.getByRole('button').allTextContents(),['Partenaires','Externes']);
+  assert.equal(await matches.getByRole('listitem').count(),1);
+  assert.match(await partnerCard.innerText(),/87\s*%/);
+  assert.ok((await matches.getByRole('link',{name:'Voir la mission',exact:true}).getAttribute('href')).endsWith('?correspondance=explanation-fixture'));
+  await choices.getByRole('button',{name:'Externes',exact:true}).click();await externalCard.waitFor();
+  assert.equal(origins.at(-1),'externes');assert.equal(await partnerCard.count(),0);
+  assert.match(await externalCard.innerText(),/France Travail/);assert.match(await externalCard.innerText(),/Correspondance partielle/);assert.doesNotMatch(await externalCard.innerText(),/\d+\s*%/);
+  assert.equal(await matches.getByRole('link',{name:'Voir l’offre',exact:true}).getAttribute('href'),'/missions/'+external.id);
+  await matches.getByText('Date de publication non renseignée',{exact:false}).waitFor();
+  await matches.getByText('Rémunération non renseignée — voir la source').waitFor();
+  await matches.getByRole('button',{name:'Ajouter '+external.title+' aux favoris',exact:true}).click();
+  await matches.getByRole('button',{name:'Retirer '+external.title+' des favoris',exact:true}).waitFor();
+  assert.deepEqual(writes,[{kind:'EXTERNAL',targetId:external.id.slice(2)}]);
+  await matches.getByText('Intérim',{exact:true}).waitFor();await matches.getByText('Critères en écart',{exact:false}).waitFor();
+  await matches.locator('summary').filter({hasText:'Actualisation de l’annonce'}).click();
+  await matches.getByText('Mise à jour par la source le',{exact:false}).waitFor();
+  assert.equal(await matches.getByText('INTERIM_CONTEXT_CONFIRMED',{exact:true}).count(),0);
+  fs.mkdirSync('artifacts/browser-checks',{recursive:true});
+  for(const width of [375,768,1440]){await page.setViewportSize({width,height:1000});assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth+1),false);}
+  incomplete=true;await choices.getByRole('button',{name:'Partenaires',exact:true}).click();
+  await matches.getByText('Ces missions partenaires sont consultables.',{exact:false}).waitFor();
+  assert.match(await partnerCard.innerText(),/Matching non calculable/);assert.doesNotMatch(await partnerCard.innerText(),/87\s*%/);
   await page.goto(base + "/missions");
   await page
     .getByRole("heading", { name: "37 offres disponibles", exact: true })
@@ -327,55 +234,21 @@ try {
       fullPage: true,
     });
   }
-  incomplete = false;
-  await page.goto(base + "/accueil?origine=toutes");
-  await page
-    .getByRole("heading", { name: "Vos matchs", exact: true })
-    .waitFor();
-  state = mixed();
-  state.internal.items = [];
-  await page.reload();
-  await page
-    .getByText("Aucune mission partenaire disponible dans cette sélection.", {
-      exact: false,
-    })
-    .waitFor();
-  await page
-    .getByRole("link", { name: "Voir l’offre", exact: true })
-    .waitFor();
-  state.external.personalization = "GENERAL_PROFILE_INCOMPLETE";
-  await page.reload();
-  await page
-    .getByText("ces offres externes générales ne sont pas", { exact: false })
-    .waitFor();
-  state.internal.status = "UNAVAILABLE";
-  state.external.sources[0].status = "FAILED";
-  await page.reload();
-  await page
-    .getByText(
-      "La recherche de missions compatibles est temporairement indisponible.",
-    )
-    .waitFor();
-  await page.getByText("La dernière actualisation", { exact: false }).waitFor();
-  await page.getByRole("heading", { name: "Vos disponibilités" }).waitFor();
-  await page
-    .getByRole("link", { name: "Voir l’offre", exact: true })
-    .waitFor();
-  fail = true;
-  await page.reload();
-  await page
-    .getByRole("button", { name: "Réessayer les suggestions" })
-    .waitFor();
-  await page.getByRole("heading", { name: "Vos disponibilités" }).waitFor();
-  fail = false;
-  state = mixed();
-  await page.getByRole("button", { name: "Réessayer les suggestions" }).click();
-  await page
-    .getByRole("link", { name: "Voir la mission" })
-    .waitFor();
-  console.log(
-    "PASS mixed groups, empty/internal retained external, incomplete/general, partial/source failure, complete retry isolated from dashboard, missing dates/salary, detail links, external favorites, 375/768/1440 no overflow.",
-  );
-} finally {
-  await browser.close();
-}
+  incomplete=false;state=mixed();state.internal.items=[];
+  await page.goto(base+'/accueil');
+  await matches.getByText('Aucune mission partenaire disponible dans cette sélection.',{exact:false}).waitFor();
+  assert.equal(await externalCard.count(),0);
+  await choices.getByRole('button',{name:'Externes',exact:true}).click();await externalCard.waitFor();
+  state.external.personalization='GENERAL_PROFILE_INCOMPLETE';state.external.sources[0].status='FAILED';await page.reload();
+  await matches.getByText('ces offres externes générales ne sont pas',{exact:false}).waitFor();await matches.getByText('La dernière actualisation',{exact:false}).waitFor();
+  state.internal.status='UNAVAILABLE';await choices.getByRole('button',{name:'Partenaires',exact:true}).click();
+  await matches.getByText('La recherche de missions compatibles est temporairement indisponible.').waitFor();
+  assert.equal(await matches.getByText('Aucune offre ne correspond à cette sélection pour le moment.').count(),0);
+  await page.getByRole('heading',{name:'Vos disponibilités'}).waitFor();
+  fail=true;await page.reload();await matches.getByRole('button',{name:'Réessayer les suggestions'}).waitFor();
+  fail=false;state=mixed();await matches.getByRole('button',{name:'Réessayer les suggestions'}).click();await partnerCard.waitFor();
+  state.externalCatalogueVisible=false;state.external.status='HIDDEN';state.external.items=[];
+  await page.goto(base+'/accueil?origine=externes');await partnerCard.waitFor();
+  assert.equal(origins.at(-1),'partenaires');assert.deepEqual(await choices.getByRole('button').allTextContents(),['Partenaires']);
+  console.log('PASS partner default, no All filter in matches, external selection/favorites, hidden source fallback, incomplete profiles, outage distinct from empty, search All preserved, responsive.');
+}finally{await browser.close();}

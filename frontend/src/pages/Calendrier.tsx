@@ -65,9 +65,9 @@ function Editor({
     [longitude, setLongitude] = useState(initial.longitude?.toString() || "");
   const form = useRef<HTMLFormElement>(null);
   const locked = useRef(false);
-  const detailPanel = useRef<HTMLElement>(null);
+  const detailPanel = useRef<HTMLDialogElement>(null);
   useEffect(() => {
-    if (detailDate) {detailPanel.current?.focus({preventScroll: true});detailPanel.current?.scrollIntoView({block: "nearest", behavior: "auto"});}
+    if (detailDate && detailPanel.current && !detailPanel.current.open) detailPanel.current.showModal();
   }, [detailDate]);
   const monthStart = view === "month" ? anchor.slice(0, 8) + "01" : anchor;
   const weekday = new Date(monthStart + "T12:00:00Z").getUTCDay();
@@ -207,7 +207,7 @@ function Editor({
                 return <button key={date} type="button" data-day={date}
                   className={`${s.monthDay} ${date === parisDateInput() ? s.monthToday : ""} ${date.slice(0, 7) !== anchor.slice(0, 7) ? s.monthOutside : ""} ${detailDate === date ? s.monthSelected : ""}`}
                   aria-label={`${label}. ${statuses.map(({slot,state}) => `${slot.label} : ${state === "confirmed" ? "Mission confirmée" : SLOT_STATUS_LABELS[state as keyof typeof SLOT_STATUS_LABELS]}`).join(". ")}. Modifier les créneaux.`}
-                  aria-pressed={detailDate === date} aria-expanded={detailDate === date} aria-controls="calendar-day-detail"
+                  aria-pressed={detailDate === date} aria-expanded={detailDate === date} aria-haspopup="dialog" aria-controls="calendar-day-detail"
                   onClick={() => setDetailDate(date)}>
                   <span className={s.dayNumber}>{Number(date.slice(-2))}</span>
                   <span className={s.dayStrokes} aria-hidden="true">{statuses.map(({slot,state}) => <i key={slot.key} data-indicator-slot={slot.key} data-state={state} className={`${s.stroke} ${stateClass(state)}`} />)}</span>
@@ -432,10 +432,15 @@ function Editor({
             {days.map(date => renderDay(date, view === "month"))}
           </div>
           {view === "month" && <p className={s.monthHint}>De gauche à droite : matin · après-midi · nuit. Sélectionnez un jour pour modifier ses créneaux.</p>}
-          {view === "month" && detailDate && <section ref={detailPanel} tabIndex={-1} id="calendar-day-detail" className={s.dayDetail} aria-label="Créneaux du jour sélectionné">
-            <div className={s.detailHeading}><strong>Modifier mes créneaux</strong><Button variant="ghost" size="sm" onClick={() => {const date=detailDate;setDetailDate(null);requestAnimationFrame(() => document.querySelector<HTMLButtonElement>(`[data-day="${date}"]`)?.focus());}}>Fermer</Button></div>
+          {view === "month" && detailDate && <dialog ref={detailPanel} id="calendar-day-detail" className={s.dayDetail} aria-labelledby="calendar-day-title"
+            onClose={() => {const date = detailDate; setDetailDate(null); requestAnimationFrame(() => document.querySelector<HTMLButtonElement>(`[data-day="${date}"]`)?.focus());}}>
+            <div className={s.detailHeading}><strong id="calendar-day-title">Modifier mes créneaux</strong><Button variant="ghost" size="sm" onClick={() => detailPanel.current?.close()}>Fermer</Button></div>
+            <p className={s.detailHelp}>Cliquez sur un créneau : non renseigné → disponible → indisponible. Chaque modification est enregistrée automatiquement.</p>
+            {error && <p role="alert" className={s.detailHelp}>{error}</p>}
+            {message && <p role="status" className={s.detailHelp}>{message}</p>}
+            {busy && <p role="status" className={s.detailHelp}>Enregistrement en cours…</p>}
             {renderDay(detailDate)}
-          </section>}
+          </dialog>}
           <div className={s.legend}>
             <span>
               <i className={s.blue} />

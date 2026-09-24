@@ -1,0 +1,528 @@
+[
+  {
+    "id": "inscription-diplomes",
+    "duration": 125.466,
+    "captions": [
+      {
+        "start": 1.014,
+        "end": 7.56,
+        "text": "1 · Inscription : renseignez votre identité. Exemple fictif."
+      },
+      {
+        "start": 7.56,
+        "end": 13.325,
+        "text": "Le nom complet permet de vous identifier dans les documents."
+      },
+      {
+        "start": 13.325,
+        "end": 22.977,
+        "text": "Votre domicile est facultatif. Il reste distinct de votre future zone d’alertes."
+      },
+      {
+        "start": 22.977,
+        "end": 28.713,
+        "text": "IADE sélectionne aussi IDE : ce sont deux diplômes distincts."
+      },
+      {
+        "start": 28.713,
+        "end": 36.117,
+        "text": "Chaque diplôme conserve sa propre année : IDE 2015, IADE 2020."
+      },
+      {
+        "start": 36.117,
+        "end": 44.695,
+        "text": "Choisissez votre rayon de mobilité. Vous pourrez modifier votre zone après inscription."
+      },
+      {
+        "start": 44.695,
+        "end": 51.107,
+        "text": "Indiquez vos horaires et vos disponibilités, si vous les connaissez."
+      },
+      {
+        "start": 51.107,
+        "end": 59.882,
+        "text": "Lisez les conditions. Le RIB et la géolocalisation restent facultatifs."
+      },
+      {
+        "start": 59.882,
+        "end": 67.717,
+        "text": "Discord est proposé après création du compte. Cette étape est facultative."
+      },
+      {
+        "start": 67.717,
+        "end": 75.362,
+        "text": "Configurer Discord, ou passer cette étape : le compte est déjà utilisable."
+      },
+      {
+        "start": 75.362,
+        "end": 82.18,
+        "text": "Dans Notifications, associez Discord puis choisissez les événements souhaités."
+      },
+      {
+        "start": 82.18,
+        "end": 89.604,
+        "text": "Rejoignez le serveur InfiMatch et autorisez ses messages privés, puis revenez ici."
+      },
+      {
+        "start": 89.604,
+        "end": 100.015,
+        "text": "Copiez votre identifiant utilisateur depuis Discord. Ici, nous utilisons un exemple fictif."
+      },
+      {
+        "start": 100.015,
+        "end": 109.983,
+        "text": "Le code arrive en message privé et expire après 10 minutes. Aucun message réel n’est envoyé ici."
+      },
+      {
+        "start": 109.983,
+        "end": 117.704,
+        "text": "L’association seule n’active aucun événement. Choisissez vos préférences."
+      },
+      {
+        "start": 117.704,
+        "end": 125.466,
+        "text": "Préférences enregistrées : les missions compatibles seulement. Vous pourrez modifier ce choix."
+      }
+    ],
+    "calls": [
+      "GET /auth/me",
+      "GET /auth/me",
+      "GET /reference-data",
+      "GET /reference-data",
+      "GET /auth/csrf",
+      "POST /auth/register",
+      "GET /auth/me",
+      "GET /profile",
+      "POST /auth/activity",
+      "GET /me/notifications-settings",
+      "GET /me/notifications",
+      "GET /me/notifications-settings/deliveries",
+      "GET /me/notifications-settings",
+      "GET /me/notifications",
+      "GET /me/notifications-settings/deliveries",
+      "POST /me/notifications-settings/discord/challenge",
+      "POST /auth/activity",
+      "POST /me/notifications-settings/discord/verify",
+      "GET /me/notifications-settings",
+      "GET /me/notifications",
+      "GET /me/notifications-settings/deliveries",
+      "PUT /me/notifications-settings/discord",
+      "GET /me/notifications-settings",
+      "GET /me/notifications",
+      "GET /me/notifications-settings/deliveries"
+    ],
+    "errors": [],
+    "unknown": []
+  },
+  {
+    "id": "profil-cv",
+    "duration": 71.603,
+    "captions": [
+      {
+        "start": 1.157,
+        "end": 9.394,
+        "text": "2 · Profil : importer un CV et choisir ses services. Données fictives."
+      },
+      {
+        "start": 9.394,
+        "end": 18.389,
+        "text": "Le CV propose des expériences. Vous gardez le contrôle avant tout ajout."
+      },
+      {
+        "start": 18.389,
+        "end": 26.303,
+        "text": "Relisez le service et les dates. Corrigez les propositions si nécessaire."
+      },
+      {
+        "start": 26.303,
+        "end": 37.008,
+        "text": "Le fichier CV est conservé dans Mes documents. L’application des propositions reste une étape distincte."
+      },
+      {
+        "start": 37.008,
+        "end": 43.188,
+        "text": "Ajoutez les expériences vérifiées, puis enregistrez le profil."
+      },
+      {
+        "start": 43.188,
+        "end": 47.812,
+        "text": "Choisissez plusieurs services si vous êtes polyvalent."
+      },
+      {
+        "start": 47.812,
+        "end": 55.541,
+        "text": "Les services restent facultatifs. Un encadré est prévu par métier."
+      },
+      {
+        "start": 55.541,
+        "end": 64.542,
+        "text": "Le profil est enregistré. Vos expériences et services souhaités sont conservés."
+      },
+      {
+        "start": 64.542,
+        "end": 71.603,
+        "text": "Retrouvez le CV enregistré dans la liste Mes documents et téléchargez-le quand vous en avez besoin."
+      }
+    ],
+    "calls": [
+      "GET /auth/me",
+      "GET /auth/me",
+      "GET /profile",
+      "GET /profile",
+      "GET /profile",
+      "GET /me/personal-corrections",
+      "GET /auth/psc/config",
+      "GET /reference-data",
+      "GET /me/bank-details",
+      "GET /me/personal-corrections",
+      "GET /auth/psc/config",
+      "GET /reference-data",
+      "GET /me/bank-details",
+      "GET /auth/csrf",
+      "POST /auth/activity",
+      "POST /profile/cv/parse",
+      "POST /me/cv-document",
+      "POST /auth/activity",
+      "GET /profile",
+      "PUT /profile",
+      "GET /profile",
+      "GET /auth/me",
+      "GET /profile",
+      "GET /auth/me",
+      "GET /auth/me",
+      "GET /profile",
+      "GET /me/bank-details",
+      "GET /profile",
+      "GET /me/documents",
+      "GET /me/bank-details",
+      "GET /me/bank-details",
+      "GET /profile",
+      "GET /me/documents",
+      "GET /me/bank-details",
+      "GET /me/bank-details",
+      "GET /me/bank-details"
+    ],
+    "errors": [],
+    "unknown": []
+  },
+  {
+    "id": "recherche-matching",
+    "duration": 67.122,
+    "captions": [
+      {
+        "start": 1.661,
+        "end": 11.134,
+        "text": "3 · La zone d’alertes est enregistrée sur votre compte. Ici : Paris, 30 km."
+      },
+      {
+        "start": 11.134,
+        "end": 19.76,
+        "text": "La recherche reprend vos derniers critères sur cet appareil, ou votre zone enregistrée."
+      },
+      {
+        "start": 19.76,
+        "end": 29.029,
+        "text": "Choisissez une ville dans les propositions et son rayon. Exemple : Rennes, 30 km."
+      },
+      {
+        "start": 29.029,
+        "end": 35.277,
+        "text": "Cette recherche ponctuelle ne change pas les alertes : elles restent sur Paris."
+      },
+      {
+        "start": 35.277,
+        "end": 41.771,
+        "text": "Pour conserver Rennes comme zone d’alertes, confirmez avec ce bouton."
+      },
+      {
+        "start": 41.771,
+        "end": 51.781,
+        "text": "Rennes, 30 km, est enregistré. Le domicile et les préférences de notification sont conservés."
+      },
+      {
+        "start": 51.781,
+        "end": 60.102,
+        "text": "Le matching utilise la zone du compte, les compétences, les disponibilités et l’expérience."
+      },
+      {
+        "start": 60.102,
+        "end": 67.122,
+        "text": "Le score aide à comparer. Relisez les conditions et les informations manquantes."
+      }
+    ],
+    "calls": [
+      "GET /auth/me",
+      "GET /auth/me",
+      "GET /profile",
+      "GET /profile",
+      "GET /profile",
+      "GET /me/personal-corrections",
+      "GET /auth/psc/config",
+      "GET /reference-data",
+      "GET /me/bank-details",
+      "GET /me/personal-corrections",
+      "GET /auth/psc/config",
+      "GET /reference-data",
+      "GET /me/bank-details",
+      "GET /auth/me",
+      "GET /auth/me",
+      "GET /profile",
+      "GET /matching/rules",
+      "GET /profile",
+      "GET /me/favorites",
+      "GET /facilities",
+      "GET /reference-data",
+      "GET /matching/rules",
+      "GET /profile",
+      "GET /me/favorites",
+      "GET /facilities",
+      "GET /reference-data",
+      "GET /auth/csrf",
+      "POST /listings/search",
+      "GET /listings/locations",
+      "POST /auth/activity",
+      "POST /listings/search",
+      "PATCH /profile/search-area",
+      "GET /profile",
+      "POST /listings/search",
+      "POST /auth/activity",
+      "GET /listings/m_00000000-0000-4000-8000-000000000004",
+      "GET /me/missions/00000000-0000-4000-8000-000000000004/assignments",
+      "GET /me/applications",
+      "GET /profile",
+      "GET /me/favorites",
+      "GET /listings/m_00000000-0000-4000-8000-000000000004",
+      "GET /me/missions/00000000-0000-4000-8000-000000000004/assignments",
+      "GET /me/applications",
+      "GET /profile",
+      "GET /me/favorites",
+      "GET /matching/rules",
+      "GET /me/matches/mission/00000000-0000-4000-8000-000000000004",
+      "GET /matching/rules",
+      "GET /me/matches/mission/00000000-0000-4000-8000-000000000004"
+    ],
+    "errors": [],
+    "unknown": []
+  },
+  {
+    "id": "confirmation-pdf",
+    "duration": 45.207,
+    "captions": [
+      {
+        "start": 1.089,
+        "end": 9.863,
+        "text": "5 · Recruteur : relisez puis publiez la mission. Démonstration simulée."
+      },
+      {
+        "start": 9.863,
+        "end": 16.322,
+        "text": "La mission est publiée. Consultez les candidatures reçues."
+      },
+      {
+        "start": 16.322,
+        "end": 22.622,
+        "text": "Examinez le candidat et les points à vérifier avant de confirmer."
+      },
+      {
+        "start": 22.622,
+        "end": 30.514,
+        "text": "Confirmez votre décision après avoir vérifié les informations avec le candidat."
+      },
+      {
+        "start": 30.514,
+        "end": 38.289,
+        "text": "L’affectation est confirmée. Le PDF est accessible dès qu’il est prêt."
+      },
+      {
+        "start": 38.289,
+        "end": 45.207,
+        "text": "Le PDF est téléchargé. Cette confirmation n’est pas un contrat signé."
+      }
+    ],
+    "calls": [
+      "GET /auth/me",
+      "GET /auth/me",
+      "GET /missions/00000000-0000-4000-8000-000000000004",
+      "GET /missions/00000000-0000-4000-8000-000000000004/applications",
+      "GET /missions/00000000-0000-4000-8000-000000000004/candidates",
+      "GET /missions/00000000-0000-4000-8000-000000000004",
+      "GET /missions/00000000-0000-4000-8000-000000000004/applications",
+      "GET /missions/00000000-0000-4000-8000-000000000004/candidates",
+      "GET /auth/csrf",
+      "POST /auth/activity",
+      "POST /missions/00000000-0000-4000-8000-000000000004/publish",
+      "GET /missions/00000000-0000-4000-8000-000000000004",
+      "GET /missions/00000000-0000-4000-8000-000000000004/applications",
+      "GET /missions/00000000-0000-4000-8000-000000000004/candidates",
+      "GET /matching/rules",
+      "GET /matching/rules",
+      "POST /missions/00000000-0000-4000-8000-000000000004/assignments",
+      "GET /missions/00000000-0000-4000-8000-000000000004",
+      "GET /missions/00000000-0000-4000-8000-000000000004/applications",
+      "GET /missions/00000000-0000-4000-8000-000000000004/candidates",
+      "GET /assignments/00000000-0000-4000-8000-000000000006/confirmation",
+      "GET /me/documents/00000000-0000-4000-8000-000000000007"
+    ],
+    "errors": [],
+    "unknown": []
+  },
+  {
+    "id": "annulation-emails",
+    "duration": 40.998,
+    "captions": [
+      {
+        "start": 1.115,
+        "end": 7.513,
+        "text": "6 · Annulation et emails : exemple simulé depuis l’espace agence."
+      },
+      {
+        "start": 7.513,
+        "end": 13.549,
+        "text": "L’annulation concerne aussi les affectations de cette mission."
+      },
+      {
+        "start": 13.549,
+        "end": 19.694,
+        "text": "Relisez la confirmation avant de valider l’annulation."
+      },
+      {
+        "start": 19.694,
+        "end": 28.751,
+        "text": "Le suivi indique l’annulation et permet de récupérer son document."
+      },
+      {
+        "start": 28.751,
+        "end": 34.286,
+        "text": "Dans Notifications, consultez le journal des emails de mission."
+      },
+      {
+        "start": 34.286,
+        "end": 40.998,
+        "text": "« Livré » confirme une remise au serveur destinataire, pas la lecture du message."
+      }
+    ],
+    "calls": [
+      "GET /auth/me",
+      "GET /auth/me",
+      "GET /missions/00000000-0000-4000-8000-000000000004",
+      "GET /missions/00000000-0000-4000-8000-000000000004/applications",
+      "GET /missions/00000000-0000-4000-8000-000000000004/candidates",
+      "GET /missions/00000000-0000-4000-8000-000000000004",
+      "GET /missions/00000000-0000-4000-8000-000000000004/applications",
+      "GET /missions/00000000-0000-4000-8000-000000000004/candidates",
+      "GET /auth/csrf",
+      "POST /auth/activity",
+      "POST /missions/00000000-0000-4000-8000-000000000004/cancel",
+      "GET /missions/00000000-0000-4000-8000-000000000004",
+      "GET /missions/00000000-0000-4000-8000-000000000004/applications",
+      "GET /missions/00000000-0000-4000-8000-000000000004/candidates",
+      "GET /assignments/00000000-0000-4000-8000-000000000006/cancellation",
+      "GET /me/documents/00000000-0000-4000-8000-000000000007",
+      "GET /auth/me",
+      "GET /auth/me",
+      "GET /me/email-deliveries",
+      "GET /me/notifications-settings",
+      "GET /me/notifications",
+      "GET /me/organizations",
+      "GET /me/notifications-settings/deliveries",
+      "GET /me/email-deliveries",
+      "GET /me/notifications-settings",
+      "GET /me/notifications",
+      "GET /me/organizations",
+      "GET /me/notifications-settings/deliveries",
+      "GET /auth/csrf",
+      "POST /auth/activity"
+    ],
+    "errors": [],
+    "unknown": []
+  },
+  {
+    "id": "candidature-agenda",
+    "duration": 58.301,
+    "captions": [
+      {
+        "start": 1.254,
+        "end": 9.566,
+        "text": "4 · Candidature : relisez les horaires et les conditions. Mission fictive."
+      },
+      {
+        "start": 9.566,
+        "end": 15.835,
+        "text": "La candidature demande votre accord sur les conditions affichées."
+      },
+      {
+        "start": 15.835,
+        "end": 22.807,
+        "text": "Votre candidature est enregistrée ; elle ne réserve pas encore le créneau."
+      },
+      {
+        "start": 22.807,
+        "end": 29.515,
+        "text": "Le suivi indique les étapes et la décision du recruteur."
+      },
+      {
+        "start": 29.515,
+        "end": 35.963,
+        "text": "Exemple après confirmation par le recruteur : la mission apparaît dans l’agenda."
+      },
+      {
+        "start": 35.963,
+        "end": 41.95,
+        "text": "En vue Mois, choisissez un jour pour modifier ses créneaux."
+      },
+      {
+        "start": 41.95,
+        "end": 49.062,
+        "text": "Ouvrez le jour souhaité, puis cliquez sur le matin, l’après-midi ou la nuit."
+      },
+      {
+        "start": 49.062,
+        "end": 58.301,
+        "text": "Le créneau devient disponible et se sauvegarde automatiquement. La mission confirmée reste protégée."
+      }
+    ],
+    "calls": [
+      "GET /auth/me",
+      "GET /auth/me",
+      "GET /profile",
+      "GET /listings/m_00000000-0000-4000-8000-000000000004",
+      "GET /me/missions/00000000-0000-4000-8000-000000000004/assignments",
+      "GET /me/applications",
+      "GET /profile",
+      "GET /me/favorites",
+      "GET /listings/m_00000000-0000-4000-8000-000000000004",
+      "GET /me/missions/00000000-0000-4000-8000-000000000004/assignments",
+      "GET /me/applications",
+      "GET /profile",
+      "GET /me/favorites",
+      "GET /matching/rules",
+      "GET /me/matches/mission/00000000-0000-4000-8000-000000000004",
+      "GET /matching/rules",
+      "GET /me/matches/mission/00000000-0000-4000-8000-000000000004",
+      "GET /auth/csrf",
+      "POST /auth/activity",
+      "GET /listings/m_00000000-0000-4000-8000-000000000004",
+      "GET /listings/m_00000000-0000-4000-8000-000000000004",
+      "GET /missions/00000000-0000-4000-8000-000000000004/application-check",
+      "GET /missions/00000000-0000-4000-8000-000000000004/application-check",
+      "POST /missions/00000000-0000-4000-8000-000000000004/applications",
+      "GET /auth/me",
+      "GET /auth/me",
+      "GET /profile",
+      "GET /applications/00000000-0000-4000-8000-000000000005",
+      "GET /applications/00000000-0000-4000-8000-000000000005",
+      "GET /auth/me",
+      "GET /auth/me",
+      "GET /profile",
+      "GET /profile",
+      "GET /me/history",
+      "GET /profile",
+      "GET /me/history",
+      "GET /auth/csrf",
+      "POST /auth/activity",
+      "PATCH /profile/availability"
+    ],
+    "errors": [],
+    "unknown": []
+  }
+]

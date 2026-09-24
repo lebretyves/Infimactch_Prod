@@ -2,27 +2,27 @@
 
 Cette page est le point d’entrée pour le rendu. Une présence dans cette branche n’est pas une preuve de publication en production.
 
-## Versions réunies dans la branche de revue
+## Versions réunies lors de la revue initiale
 
 - Yves `Main` observé : `53c09bd6faf0afff4cbb03f39ba9de3dd02e1bc2`.
 - Epitech `main` observé : `856ff02ab53a24940b4be24c18c0a71ac5f48f24` : un commit supplémentaire, 42 fichiers modifiés. Ses corrections d’interface et de recommandations sont conservées.
 - Dossier financier : branche `docs/couts-projet-exploitation-20260924`, jusqu’à `fb3e22f`, réunie dans cette branche de revue.
 - Notifications et alignement des boutons : changements locaux enregistrés dans `2dad137`, réunis et revus ici.
-- Travail consolidé : `chore/review-doc-code-20260924`. Les branches principales et la production ne sont pas modifiées par cette revue.
+- Travail consolidé : `chore/review-doc-code-20260924`. La consolidation a ensuite été fusionnée dans les deux branches principales (voir livraison ci-dessous).
 
 ## Ce qui est observé en production
 
 La campagne du 24 septembre confirme le passage des relances de missions non pourvues toutes les quatre heures. Trois rappels internes étaient présents, 31 livraisons Discord et 10 emails métier au statut d’envoi accepté. La livraison email n’est pas confirmée. La consultation de SMTP2GO a montré 14 retours webhook en échec. Ces chiffres sont des observations datées, pas un compteur en direct.
 
-Le dernier déploiement Production GitHub consulté correspondait à `53c09bd`. Le registre [LIVRAISON_VERIFIEE.json](rendu/LIVRAISON_VERIFIEE.json) conserve sa campagne du 23 septembre ; il n’atteste pas le déploiement des ajouts ci-dessous.
+Le 24 septembre à 08:32 UTC, la consolidation a été fusionnée chez Yves (`e3d91bd`) après approbation indépendante ; Epitech (`bc83881`) possède le même arbre de fichiers. Site, API et administration ont été publiés et leurs réponses HTTP vérifiées. La migration ScheduledReminders1790208000000 est appliquée ; sauvegarde PostgreSQL/configuration chiffrée et vérifiée, sauvegarde MongoDB échouée sur connexion. Le registre [LIVRAISON_VERIFIEE.json](rendu/LIVRAISON_VERIFIEE.json) conserve sa campagne du 23 septembre ; il n’atteste pas le déploiement des ajouts ci-dessous.
 
 ## Ce qui est préparé, pas encore déclaré actif
 
 | Changement | État et condition de mise en service |
 | --- | --- |
-| Relance email des missions non pourvues | Code et migration préparés ; destinataires actifs des organisations concernées |
-| Rappels avant mission J-1/H-2 | Code préparé ; affectation active et horaires précis requis |
-| Rappel Discord en message privé de membre | Repli préparé ; événement et destination doivent être activés, appartenance recontrôlée |
+| Relance email des missions non pourvues | Code déployé et migration appliquée ; activation et destinataires à contrôler |
+| Rappels avant mission J-1/H-2 | Code déployé ; nouveau scénario n8n encore inactif, affectation active et horaires précis requis |
+| Rappel Discord en message privé de membre | Repli déployé ; événement et destination doivent être activés, appartenance recontrôlée |
 | Nouveau scénario n8n | [Export inactif](n8n/2026-09-24/README.md), passage toutes les 4 h ; remplacer le planificateur existant sans doublon |
 | Suivi des retours SMTP2GO | Code existant testé ; raccordement fournisseur et retours réels encore à vérifier |
 | Boutons Connexion / Créer mon compte | Alignement conservé avec les composants de l’interface Epitech |
@@ -46,3 +46,7 @@ Les résultats des tests de cette revue sont publiés dans le rapport de revue. 
 ## Complément des branches
 
 [Reprise du 24 septembre](quality/REPRISE_BRANCHES_2026-09-24.md) : présentation Mon compte, renommage des recommandations et neuf fichiers de tests activés. Le frontend compte désormais **105/105 tests réussis** ; le résultat 81/81 ci-dessus reste la campagne précédente. Aucun code backend modifié dans ce complément.
+
+## Lot interface et aide suivant
+
+[Photo, filtres des matchs, calendrier mensuel et tutoriels](quality/AIDE_MATCHS_CALENDRIER_2026-09-24.md) : correctifs vérifiés localement, publication à confirmer par la PR associée.

@@ -28,7 +28,7 @@ export default function MotDePasseOublie() {
     } catch { setError("La demande n’a pas été confirmée. Réessayez dans un instant."); }
     finally { pending.current = false; setBusy(false); }
   }
-  return <EcranAuth compactMobile promo={<p>Retrouvez votre espace InfiMatch.</p>} lien={<Link to="/">Retour à l’accueil</Link>}>
+  return <EcranAuth photoMaquette="connexion" promo={<p>Retrouvez votre espace InfiMatch.</p>} lien={<Link to="/">Retour à l’accueil</Link>}>
     <div className={s.intro}><h1>Retrouver mon accès</h1><p>Indiquez l’adresse e-mail de votre compte pour demander un lien personnel de réinitialisation. Le lien est utilisable une seule fois et valable 30 minutes.</p></div>
     <form className={s.form} onSubmit={submit} noValidate aria-busy={busy}>
       {error && <p role="alert">{error}</p>}
