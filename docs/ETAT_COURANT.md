@@ -1,4 +1,17 @@
-# État courant — revue du 24 septembre 2026
+# État courant — 24 septembre 2026
+
+## Dernière publication vérifiée
+
+- Correctif des trois meilleures offres partenaires fusionné : Yves `172bd273432143d44e98ec58442241ceb4b03767`, Epitech `fd6ffa17fbeeb4a7499e9aa1c46571520a9dc593`.
+- Site et API Vercel observés `READY` au commit Yves ci-dessus ; santé API `ok`. Déploiements : `dpl_A6Ze45ouzW7umaC9cZawEor7Uh5S` (site), `dpl_ATvGwa2j5Ys77nDiPZpf9EgELedV` (API).
+- [n8n actuel et ses états](n8n/2026-09-24/README.md) : nouveau compte infimatch2, dix workflows conservés dont neuf actifs ; ancien compte inactif pour retour arrière.
+- Email de confirmation accepté le 24 septembre à 13 h 51 (Paris), réception confirmée par son destinataire. Le webhook automatique de livraison reste non confirmé.
+- [Guide d’installation local](INSTALLATION_LOCALE.md) : origines Vite, administration et bootstrap OWNER local.
+
+Les limites du rappel H-2 à cadence 4 h, la recette humaine et la ventilation des 396 h déclarées restent à conserver. Les paragraphes suivants retracent les observations antérieures et ne remplacent pas cet état.
+
+## Historique des vérifications précédentes
+
 
 Cette page est le point d’entrée pour le rendu. Une présence dans cette branche n’est pas une preuve de publication en production.
 

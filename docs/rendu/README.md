@@ -1,5 +1,7 @@
 # Rendu Epitech — InfiMatch
 
+[**Dossier Word actualisé et PDF — 24 septembre**](2026-09-24/REVISION_DOSSIER.md)
+
 
 ## Dossier actualisé du 23 septembre 2026
 

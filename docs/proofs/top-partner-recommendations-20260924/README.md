@@ -12,7 +12,7 @@ Le calcul utilise PostgreSQL en lecture seule dans une transaction cohérente, a
 
 La première exécution d’intégration a échoué sur une fixture FILLED sans affectation, interdite par la base. La fixture a été corrigée en DRAFT, puis les trois suites ont été réexécutées avec succès. Les preuves publiées ici sont celles de cette réexécution. Aucun assouplissement des contraintes de production.
 
-Publication de ce changement : à confirmer après fusion de sa PR. L’approbation de la PR #4 ne couvre pas ce changement supplémentaire.
+Publication vérifiée le 24 septembre : PR Yves #5 et Epitech #33 fusionnées. Le site et l’API utilisent le commit Yves `172bd27` ; les déploiements sont READY. Ces vérifications de publication complètent les preuves de la campagne ci-dessus sans modifier leurs résultats.
 
-- [Build frontend](frontend-build.txt) : typage et compilation de production r?ussis.
-- [Parcours navigateur](frontend-browser.txt) : campagne compl?te r?ussie, dont trois offres indicatives 87/68/42, crit?res bloquants expliqu?s, filtres et visibilit? externe conserv?s.
+- [Build frontend](frontend-build.txt) : typage et compilation de production réussis.
+- [Parcours navigateur](frontend-browser.txt) : campagne complète réussie, dont trois offres indicatives 87/68/42, critères bloquants expliqués, filtres et visibilité externe conservés.
