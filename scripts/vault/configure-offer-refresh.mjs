@@ -43,8 +43,8 @@ try {
    console.log(JSON.stringify({workflow:verified.name,id:verified.id,active:true,versionId:verified.versionId,timezone:verified.settings.timezone,plan:verified.nodes.filter(n=>n.type.endsWith('scheduleTrigger')).map(n=>n.parameters.rule)}));
   }else console.log(JSON.stringify({planned:payload.name,nodes:payload.nodes.map(n=>n.name),apply:false}));
   const clean=structuredClone(payload);for(const n of clean.nodes)delete n.credentials;
-  await mkdir(resolve(root,'docs/n8n'),{recursive:true});
-  await writeFile(resolve(root,'docs/n8n/'+payload.name.replace(/[^a-z0-9]+/gi,'-')+'.json'),JSON.stringify(clean,null,2)+'\n');
+  await mkdir(resolve(root,'annexe/n8n'),{recursive:true});
+  await writeFile(resolve(root,'annexe/n8n/'+payload.name.replace(/[^a-z0-9]+/gi,'-')+'.json'),JSON.stringify(clean,null,2)+'\n');
  }
- await unlink(resolve(root,'docs/n8n/InfiMatch-production-actualisation-quotidienne.json')).catch(e=>{if(e.code!=='ENOENT')throw e;});
+ await unlink(resolve(root,'annexe/n8n/InfiMatch-production-actualisation-quotidienne.json')).catch(e=>{if(e.code!=='ENOENT')throw e;});
 }catch(error){console.error('Offer schedule update failed: '+error.message);process.exitCode=1;}finally{ws.close();}

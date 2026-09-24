@@ -1,0 +1,28 @@
+{
+  "checkedAt": "2026-09-23T19:27:45.557857+00:00",
+  "scope": "Correction de l’audit ; validation automatisée locale complète. Les commits documentaires suivants conservent le même code applicatif. La recette humaine de production reste distincte.",
+  "applicationCommit": "423ae1e9d0bb02845c238cbd42da45a58ccc40e3",
+  "production": {
+    "branch": "Main",
+    "commit": "423ae1e9d0bb02845c238cbd42da45a58ccc40e3",
+    "ci": "https://github.com/lebretyves/Infimactch_Prod/actions?query=branch%3AMain",
+    "ciStatus": "CONSULTER_RUN_DU_COMMIT_DE_LIVRAISON",
+    "siteDeployment": "success",
+    "apiDeployment": "success"
+  },
+  "epitech": {
+    "branch": "main",
+    "commit": "423ae1e9d0bb02845c238cbd42da45a58ccc40e3",
+    "ci": "https://github.com/EpitechMscProPromo2027/D-WEB-901-PAR-9-1-InteriMatch-1/actions/runs/35908326280",
+    "ciStatus": "NOT_STARTED_ACTIONS_BUDGET",
+    "ciReason": "The job was not started because an Actions budget is preventing further use."
+  },
+  "localEvidence": "annexe/proofs/audit-final-20260923/summary.json",
+  "limits": [
+    "Recette humaine et réception réelle non attestées",
+    "Protection Epitech exige administrateur",
+    "Maintenance Vault manuelle choisie par l’utilisateur",
+    "Temps humains et responsable des données à renseigner"
+  ],
+  "ciNote": "Le code applicatif est fige au SHA applicationCommit ; les commits documentaires suivants contiennent les preuves et declenchent leur propre CI. Le lien CI permet de verifier le run du commit de livraison. Le run 35909095701 a echoue sur deux liens vers des fichiers de preuves pas encore publies ; la publication complete les ajoute et le controle local passe."
+}

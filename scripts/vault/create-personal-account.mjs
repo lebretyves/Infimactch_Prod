@@ -69,10 +69,10 @@ try {
   }else if(attempt){await request('sys/generate-root/attempt',{method:'DELETE'});}
  }finally{
   if(changed){await writeFile(configPath,original);await restart();proof.recoveryConfigurationRestored=true;}
-  await writeFile(root+'/docs/proofs/vault-personal-account.json',JSON.stringify(proof,null,2)+'\n');
+  await writeFile(root+'/annexe/proofs/vault-personal-account.json',JSON.stringify(proof,null,2)+'\n');
  }
 }
 await assert.rejects(request('sys/generate-root/attempt'),e=>e.status===403);
 proof.unauthenticatedRecoveryDenied=true;
-await writeFile(root+'/docs/proofs/vault-personal-account.json',JSON.stringify(proof,null,2)+'\n');
+await writeFile(root+'/annexe/proofs/vault-personal-account.json',JSON.stringify(proof,null,2)+'\n');
 console.log(JSON.stringify(proof));

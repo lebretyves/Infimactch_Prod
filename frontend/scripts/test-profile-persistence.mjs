@@ -22,5 +22,5 @@ try{
  const locked=await write('PUT','/profile',{...profile,details:{...profile.details,lastName:'Modification interdite'}});assert.equal(locked.status(),403);p=await read();assert.deepEqual(p.details,profile.details);checks.push('personal_information_locked_after_signup');
  const invalid=await write('PUT','/profile',{...profile,details:{...profile.details,birthDate:'2026-02-30'}});assert.equal(invalid.status(),400);p=await read();assert.deepEqual(p.details,profile.details);checks.push('invalid_date_rejected_without_data_loss');
  await write('POST','/auth/logout',{});
- await mkdir('docs/proofs',{recursive:true});await writeFile('docs/proofs/profile-persistence.json',JSON.stringify({date:new Date().toISOString(),scope:'Real local API, isolated fictional account, no provider RPPS verification',checks},null,2));console.log(JSON.stringify({checks}));
+ await mkdir('annexe/proofs',{recursive:true});await writeFile('annexe/proofs/profile-persistence.json',JSON.stringify({date:new Date().toISOString(),scope:'Real local API, isolated fictional account, no provider RPPS verification',checks},null,2));console.log(JSON.stringify({checks}));
 }finally{await client.dispose();}

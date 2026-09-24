@@ -4,7 +4,7 @@ import path from 'node:path';
 import assert from 'node:assert/strict';
 const base = process.env.CATALOGUE_BASE_URL || 'http://127.0.0.1:5173';
 // Historical screenshot evidence stays outside public assets. The gallery route was retired.
-const output = path.resolve(process.env.CATALOGUE_OUTPUT || 'docs/proofs/catalogue-archives');
+const output = path.resolve(process.env.CATALOGUE_OUTPUT || 'annexe/proofs/catalogue-archives');
 const uid = (n) => `00000000-0000-4000-8000-${String(n).padStart(12,'0')}`;
 const nurseId=uid(1), agencyId=uid(2), facilityId=uid(3), missionId=uid(4), applicationId=uid(5), assignmentId=uid(6), documentId=uid(7);
 const agency={id:agencyId,kind:'AGENCY',name:'Agence Horizon — démonstration',address:'12 avenue des Exemples, 75001 Paris',referent:'Camille Exemple · Référente agence · 0600000000',siret:'00000000000000',finess:null};
@@ -165,6 +165,6 @@ for(const entry of entries.filter(item=>!process.env.CATALOGUE_ONLY || process.e
 const router=await readFile('src/router.tsx','utf8');const routes=[...router.matchAll(/path:\s*["']([^"']+)["']/g)].map(m=>m[1]);const capturedRoutes=[...new Set(entries.map(e=>e.route))];const uncovered=routes.filter(r=>!capturedRoutes.includes(r)&&r!=='/catalogue');if(!process.env.CATALOGUE_ONLY)assert.deepEqual(uncovered,[],'Route frontend non couverte');
 const selectedCount=entries.filter(item=>!process.env.CATALOGUE_ONLY||process.env.CATALOGUE_ONLY.split(',').includes(item.id)).length;
 assert.equal(reports.length,selectedCount*2,'Une capture manque');
-await mkdir('docs/proofs',{recursive:true});await writeFile(path.join(output,'catalogue-captures.json'),JSON.stringify({generatedAt:manifest.generatedAt,partial:Boolean(process.env.CATALOGUE_ONLY),entryCount:selectedCount,captureCount:reports.length,viewports:{desktop:'1440x960',mobile:'375x812'},scope:'Composants réels, API entièrement interceptée, données fictives uniquement, aucun compte ni enregistrement serveur. Polices publiques autorisées. Google OAuth hors capture. Le catalogue lui-même est la page de consultation, sans capture récursive.',routes,capturedRoutes,uncovered,reports},null,2)+'\n');
+await mkdir('annexe/proofs',{recursive:true});await writeFile(path.join(output,'catalogue-captures.json'),JSON.stringify({generatedAt:manifest.generatedAt,partial:Boolean(process.env.CATALOGUE_ONLY),entryCount:selectedCount,captureCount:reports.length,viewports:{desktop:'1440x960',mobile:'375x812'},scope:'Composants réels, API entièrement interceptée, données fictives uniquement, aucun compte ni enregistrement serveur. Polices publiques autorisées. Google OAuth hors capture. Le catalogue lui-même est la page de consultation, sans capture récursive.',routes,capturedRoutes,uncovered,reports},null,2)+'\n');
 console.log(JSON.stringify({entries:entries.length,captures:reports.length,uncovered,overflow:reports.filter(r=>r.width.document>r.width.viewport).map(r=>r.id+' '+r.device)}));
 }finally{await browser.close();}

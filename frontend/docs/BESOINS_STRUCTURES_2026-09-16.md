@@ -1,6 +1,6 @@
 # Besoins de personnel structurés — 16 septembre 2026
 
-> Note historique : depuis le 21 septembre 2026, ce formulaire séparé est retiré. Le parcours courant est décrit dans [Création et suivi des missions](../../docs/ENTERPRISE_FOLLOW_UP.md). Les résultats ci-dessous concernent la version du 16 septembre.
+> Note historique : depuis le 21 septembre 2026, ce formulaire séparé est retiré. Le parcours courant est décrit dans [Création et suivi des missions](../../annexe/ENTERPRISE_FOLLOW_UP.md). Les résultats ci-dessous concernent la version du 16 septembre.
 
 ## Correction
 
@@ -48,7 +48,7 @@ Les annonces externes importées et les besoins internes restent deux sources di
 
 Preuves :
 
-- `../../InfiMatch/docs/proofs/staffing-details/backend.json`
+- `../../InfiMatch/annexe/proofs/staffing-details/backend.json`
 - `proofs/staffing-details/browser.json`
 - `proofs/staffing-details/form-1440.png`, variantes 375/320 px et vues agence/préparation de mission.
 

@@ -30,7 +30,7 @@ try{
  assert.equal(response?.status,'ok');proof.checks.push('api_started_with_vault_secrets_health_200');
  run(process.execPath,['scripts/vault/manage.mjs','snapshot']);proof.checks.push('encrypted_raft_snapshot_created');
  proof.scope='Local Vault lifecycle and isolated API health; no live AppRole credential rotation or full restore performed.';
- await writeFile(resolve(root,'docs/proofs/vault-lifecycle.json'),JSON.stringify(proof,null,2)+'\n');
+ await writeFile(resolve(root,'annexe/proofs/vault-lifecycle.json'),JSON.stringify(proof,null,2)+'\n');
  console.log(JSON.stringify(proof,null,2));
 }catch(e){console.error('Vault lifecycle verification failed: '+e.message);process.exitCode=1;}
 finally{

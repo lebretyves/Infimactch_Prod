@@ -22,4 +22,4 @@ Google n'est proposé que si le backend fournit sa configuration publique. La pr
 
 ## Production
 
-Site, API et administration ont des déploiements Vercel distincts. Les bases sont Supabase/PostGIS et MongoDB Atlas ; les variables publiques du frontend ne doivent contenir aucun secret serveur. Voir [l'architecture](../../docs/SCHEMA_ARCHITECTURE_V1.md), [le déploiement](../../docs/DEPLOIEMENT_PRODUCTION.md), [Google](../../docs/FRONTEND_AUTH_GOOGLE.md) et [le guide utilisateur](../../docs/GUIDE_UTILISATEUR.md).
+Site, API et administration ont des déploiements Vercel distincts. Les bases sont Supabase/PostGIS et MongoDB Atlas ; les variables publiques du frontend ne doivent contenir aucun secret serveur. Voir [l'architecture](../../annexe/SCHEMA_ARCHITECTURE_V1.md), [le déploiement](../../annexe/DEPLOIEMENT_PRODUCTION.md), [Google](../../annexe/FRONTEND_AUTH_GOOGLE.md) et [le guide utilisateur](../../annexe/GUIDE_UTILISATEUR.md).

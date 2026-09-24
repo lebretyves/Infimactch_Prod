@@ -20,6 +20,6 @@ await withRole('operator',async token=>{
   const counts=(await c.query("SELECT source,provenance->>'normalizationVersion' version,count(*)::int total FROM external_offer GROUP BY 1,2 ORDER BY 1,2")).rows;
   await c.query(apply?'COMMIT':'ROLLBACK');
   const proof={checkedAt:new Date().toISOString(),mode:apply?'APPLIED':'DRY_RUN',candidates:rows.length,dateValuesChanged:changed,affected,counts,providerCalls:0,scope:'Only provenance publication/update dates and normalizationVersion 2 to 3. No mission dates, import timestamps, visibility or other fields changed.'};
-  const dir=resolve(root,'docs/proofs');mkdirSync(dir,{recursive:true});writeFileSync(resolve(dir,apply?'date-normalization-production.json':'date-normalization-dry-run.json'),JSON.stringify(proof,null,2)+'\n');console.log(JSON.stringify(proof));
+  const dir=resolve(root,'annexe/proofs');mkdirSync(dir,{recursive:true});writeFileSync(resolve(dir,apply?'date-normalization-production.json':'date-normalization-dry-run.json'),JSON.stringify(proof,null,2)+'\n');console.log(JSON.stringify(proof));
  }catch(e){await c.query('ROLLBACK');throw e;}finally{await c.end();}
 }).catch(()=>{console.error('Date normalization failed; no secrets logged');process.exitCode=1;});

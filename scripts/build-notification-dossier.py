@@ -11,7 +11,7 @@ from reportlab.platypus import Paragraph
 from reportlab.lib.styles import ParagraphStyle
 from pypdf import PdfReader,PdfWriter
 ROOT=Path(__file__).resolve().parents[1]
-OUT=ROOT/'docs/rendu/2026-09-24';OUT.mkdir(parents=True,exist_ok=True)
+OUT=ROOT/'annexe/rendu/2026-09-24';OUT.mkdir(parents=True,exist_ok=True)
 BLUE='#1466e0';NAVY='#102d48';TEAL='#20b8b4'
 def diagram(name,labels,caption):
  fig,ax=plt.subplots(figsize=(12,4),dpi=180);fig.patch.set_facecolor('#f1f6fc');ax.set_facecolor('#f1f6fc');ax.set_xlim(0,12);ax.set_ylim(0,4);ax.axis('off')
@@ -37,7 +37,7 @@ def start(title,sub):
  c.setFillColor(HexColor(TEAL));c.roundRect(42,529,14,42,3,fill=1,stroke=0);c.roundRect(28,543,42,14,3,fill=1,stroke=0)
  c.setFillColor(HexColor(BLUE));c.rect(49,543,21,14,fill=1,stroke=0)
  c.setFillColor(HexColor(NAVY));c.setFont('Helvetica-Bold',22);c.drawString(84,541,'InfiMatch')
- c.drawImage(str(ROOT/'docs/rendu/2026-09-23/assets/epitech-noir.png'),684,529,width=118,height=40,preserveAspectRatio=True,mask='auto')
+ c.drawImage(str(ROOT/'annexe/rendu/2026-09-23/assets/epitech-noir.png'),684,529,width=118,height=40,preserveAspectRatio=True,mask='auto')
  text(title,42,484,size=29);text(sub,42,431,size=12)
  c.setStrokeColor(HexColor('#d8e2ed'));c.line(42,43,800,43);c.setFont('Helvetica',9);c.setFillColor(HexColor('#50657b'));c.drawString(42,26,'DOSSIER TECHNIQUE • 24 SEPTEMBRE 2026');c.drawRightString(800,26,f'{page:02d}')
 def end():c.showPage()
@@ -68,7 +68,7 @@ y=374
 for t in ['<b>688 tests unitaires réussis</b> sur le code réuni le 24 septembre ; 95,00 % de couverture des lignes.', '<b>192 tests d’intégration réussis</b> : campagne complète isolée, incluant 4 nouveaux cas sur les rappels.', '<b>À déployer :</b> migration SQL et backend, interface puis nouveau scénario n8n ; associer le credential du service et éviter deux planificateurs concurrents.', '<b>À activer et vérifier :</b> événements des destinations privées concernées, webhook SMTP2GO, premier passage n8n et suivi de livraison réel.', '<b>Aucun secret dans les exports :</b> identifiants n8n à associer dans l’interface ; secret de webhook conservé dans Vault.']:
  y=text(t,42,y,size=13)-22
 end();c.save()
-base=ROOT/'docs/rendu/2026-09-23/InfiMatch_Soutenance_Pro_2026-09-23.pdf'
+base=ROOT/'annexe/rendu/2026-09-23/InfiMatch_Soutenance_Pro_2026-09-23.pdf'
 if base.exists():
  writer=PdfWriter();writer.append(str(base));writer.append(str(OUT/'InfiMatch_Dossier_Notifications.pdf'));writer.write(str(OUT/'InfiMatch_Soutenance_avec_notifications.pdf'))
 print(OUT)

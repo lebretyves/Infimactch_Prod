@@ -5,8 +5,8 @@ dist/
 !.env.example
 data/
 *.log
-docs/proofs/coverage/
-docs/proofs/unit-coverage/
+annexe/proofs/coverage/
+annexe/proofs/unit-coverage/
 backups/
 
 .test-build/
@@ -24,7 +24,7 @@ backups/
 frontend/dist-admin/
 
 # Local working notes and generated browser artifacts (not delivery documents)
-/docs/audit/
+/annexe/audit/
 /frontend/artifacts/
 /workspace-docs/
 /archive/

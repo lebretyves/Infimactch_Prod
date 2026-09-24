@@ -33,7 +33,7 @@ const client=new pg.Client({connectionString:values.DATABASE_URL});
 await client.connect();let rows;
 try{await client.query('BEGIN READ ONLY');rows=(await client.query("SELECT id,title,description,source,url,location_label FROM external_offer WHERE active ORDER BY imported_at DESC,id LIMIT 10")).rows;await client.query('COMMIT');}finally{await client.end();}
 const parsed=rows.map(parseOffer);
-const out=resolve(root,'docs/proofs/parser-pilot');await mkdir(out,{recursive:true});
+const out=resolve(root,'annexe/proofs/parser-pilot');await mkdir(out,{recursive:true});
 await writeFile(resolve(out,'resultats.json'),JSON.stringify({createdAt:new Date().toISOString(),mode:'READ_ONLY_NO_API_NO_LLM',offers:parsed},null,2));
 const md=['# Essai du parseur metier','',`Annonces existantes examinees : ${rows.length}. Lecture seule, aucun appel API, aucun LLM.`, '', 'Les mentions ne constituent pas des exigences validees. Le texte source reste necessaire.',''];
 for(const p of parsed){md.push(`## ${p.title}`,'',`Source : ${p.source} | Lieu : ${p.location||'inconnu'}`,`Lien : ${p.url}`,'','| Champ | Valeur | Etat | Extrait justificatif |','|---|---|---|---|');for(const f of p.extractions)md.push('| '+[f.field,f.value,f.state,f.evidence].map(v=>v.replace(/\|/g,'/').replace(/\r?\n/g,' ')).join(' | ')+' |');md.push('','Non valides : '+p.unknown.join(', '),'');}

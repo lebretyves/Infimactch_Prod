@@ -4,7 +4,7 @@ import {resolve,dirname} from 'node:path';
 import {mkdirSync,writeFileSync,existsSync} from 'node:fs';
 const root=resolve(import.meta.dirname,'../..');
 const optimization=process.argv.includes('--optimization');
-const proof=resolve(root,existsSync(resolve(root,'docs_intern'))?'docs_intern':'docs','proofs',optimization?'matching-optimization':'matching-diagnostic');mkdirSync(proof,{recursive:true});
+const proof=resolve(root,existsSync(resolve(root,'docs_intern'))?'docs_intern':'annexe','proofs',optimization?'matching-optimization':'matching-diagnostic');mkdirSync(proof,{recursive:true});
 const host=Object.fromEntries(['PATH','Path','SystemRoot','SYSTEMROOT','SystemDrive','ComSpec','TEMP','TMP','USERPROFILE','APPDATA','LOCALAPPDATA','ProgramData','ProgramFiles','DOCKER_CONFIG'].filter(k=>process.env[k]).map(k=>[k,process.env[k]]));
 const secret=randomBytes(24).toString('hex');
 const env={...host,NODE_ENV:'test',INFIMATCH_SECRET_SOURCE:'vault',DATABASE_URL:`postgresql://test_admin:${secret}@127.0.0.1:55433/infimatch_test`,MONGODB_URI:`mongodb://test_admin:${secret}@127.0.0.1:57018/infimatch_test?authSource=admin`,SESSION_SECRET:randomBytes(32).toString('hex'),DOCUMENT_KEY:randomBytes(32).toString('base64'),SERVICE_TOKEN:secret,TEST_PASSWORD:secret,TEST_SERVICE_TOKEN:secret,APP_ORIGIN:'http://127.0.0.1:5173',BENCH_PROOF:proof,BENCH_COMPARE_BASELINE:optimization?'1':''};

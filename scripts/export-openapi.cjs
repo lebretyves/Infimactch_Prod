@@ -22,9 +22,9 @@ const {createApp}=require('../backend/dist/app');
   assert.ok(!webhook.parameters?.some(p=>p.name==='X-InfiMatch-Token'||p.name==='X-CSRF-Token'));
   assert.ok(webhook.responses['200']);
   assert.ok(!doc.components.schemas.BankDto.required.includes('bic'));
-  const output=resolve(__dirname,'../docs/openapi.json');
+  const output=resolve(__dirname,'../annexe/openapi.json');
   writeFileSync(output,JSON.stringify(doc,null,2)+'\n');
   const operations=Object.values(doc.paths).reduce((n,path)=>n+Object.keys(path).filter(k=>['get','post','put','patch','delete'].includes(k)).length,0);
-  console.log(JSON.stringify({exported:'docs/openapi.json',paths:Object.keys(doc.paths).length,operations,webhookBearer:true,bicOptional:true}));
+  console.log(JSON.stringify({exported:'annexe/openapi.json',paths:Object.keys(doc.paths).length,operations,webhookBearer:true,bicOptional:true}));
  } finally {await app.close();}
 })().catch(error=>{console.error(error.message);process.exitCode=1;});

@@ -3,7 +3,7 @@ import {mkdir} from 'node:fs/promises';
 import {chromium} from 'playwright';
 const base=process.env.BASE_URL||'http://127.0.0.1:4187';
 const browser=await chromium.launch({channel:'msedge',headless:true});
-const out='docs/proofs/compact-month';await mkdir(out,{recursive:true});
+const out='annexe/proofs/compact-month';await mkdir(out,{recursive:true});
 try{
  const page=await browser.newPage({viewport:{width:375,height:950}}),writes=[],errors=[];
  let failSave=false;

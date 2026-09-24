@@ -26,4 +26,4 @@ try{
  const other=(await f.call(f.other,'GET','/profile')).body;assert.deepEqual(other.available,[]);assert.deepEqual(other.unavailable,[]);f.ok('Another account is unaffected');
  await require('supertest')(f.app.getHttpServer()).patch('/api/v1/profile/availability').send({changes:[{...all,state:'available'}]}).expect(403);f.ok('Anonymous change is rejected');
 }finally{await f.close();}
-await mkdir('docs/proofs/agenda-slots',{recursive:true});await writeFile('docs/proofs/agenda-slots/backend.json',JSON.stringify({at:new Date().toISOString(),checks:f.checks,isolated:true,rollback:true},null,2));
+await mkdir('annexe/proofs/agenda-slots',{recursive:true});await writeFile('annexe/proofs/agenda-slots/backend.json',JSON.stringify({at:new Date().toISOString(),checks:f.checks,isolated:true,rollback:true},null,2));

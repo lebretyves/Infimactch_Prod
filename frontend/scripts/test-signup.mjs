@@ -295,9 +295,9 @@ try {
       checks.push('missing_confirmation_session_never_silently_redirects');
     },
   );
-  await mkdir('docs/proofs', { recursive: true });
+  await mkdir('annexe/proofs', { recursive: true });
   await writeFile(
-    'docs/proofs/signup-regression.json',
+    'annexe/proofs/signup-regression.json',
     JSON.stringify(
       {
         date: new Date().toISOString(),

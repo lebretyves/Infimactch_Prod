@@ -39,6 +39,6 @@ Backend : `backend/src/domain/availability.ts`, `backend/src/profiles/profiles.m
 
 Rejouer les tests frontend : `npm run test:availability` et `npm test`. Test API/base : `node --use-system-ca scripts/test-availability-slots.mjs` depuis InfiMatch.
 
-Preuves navigateur : `docs/proofs/agenda-slots/browser.json`. Preuves backend : `InfiMatch/docs/proofs/agenda-slots/backend.json`. Catalogue : vues semaine et mois.
+Preuves navigateur : `annexe/proofs/agenda-slots/browser.json`. Preuves backend : `InfiMatch/annexe/proofs/agenda-slots/backend.json`. Catalogue : vues semaine et mois.
 
 Compilation finale TypeScript/Vite réussie, API locale relancée et santé vérifiée. Évaluation visuelle indépendante : PASS après amélioration de la largeur, de la lisibilité et de l'alignement des créneaux. Catalogue actualisé : vues semaine et mois.
