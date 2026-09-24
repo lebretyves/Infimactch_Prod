@@ -118,7 +118,7 @@ Contrôle documentaire et comparaison des branches : `python scripts/check-repos
 
 ## État de livraison et limites
 
-État documentaire : **21 septembre 2026**. Les versions applicatives vérifiées, les déploiements et les résultats CI sont regroupés dans [le registre de livraison](docs/rendu/LIVRAISON_VERIFIEE.json). Le manifeste du rendu identifie le commit effectivement remis. Une mise à jour documentaire ne constitue pas une nouvelle recette métier ; les preuves datées conservent leur périmètre.
+État documentaire : **24 septembre 2026**. Consulter en priorité [l’état courant du code, des documents et du déploiement](docs/ETAT_COURANT.md). Les versions applicatives vérifiées, les déploiements et les résultats CI sont regroupés dans [le registre de livraison](docs/rendu/LIVRAISON_VERIFIEE.json). Le manifeste du rendu identifie le commit effectivement remis. Une mise à jour documentaire ne constitue pas une nouvelle recette métier ; les preuves datées conservent leur périmètre.
 
 - Optimisation du matching testée sur bases isolées ; résultats et comparaisons conservés.
 - Étape Discord facultative testée sur les trois familles de comptes avec API fictive ; aucune réception Discord réelle n'en est déduite.

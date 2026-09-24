@@ -98,12 +98,12 @@
   {
     "tag": "09 / LA QUALITÉ",
     "title": "Des résultats mesurés, un périmètre précis",
-    "subtitle": "Dernière campagne unitaire backend du 23 septembre",
-    "leftTitle": "660 / 660",
-    "left": "Tests unitaires réussis. Couverture : 95,11 % des lignes, 89,98 % des branches, 82,41 % des fonctions.",
+    "subtitle": "Revue locale du 24 septembre — publication distincte",
+    "leftTitle": "688 / 688",
+    "left": "Tests unitaires réussis. Couverture : 95,00 % des lignes, 90,12 % des branches, 82,63 % des fonctions.",
     "rightTitle": "Tests complémentaires",
-    "right": "11 intégrations notifications réussies. Régressions SQL réussies. Frontend : 81/81 dans la campagne antérieure.",
-    "notes": "Preuves : docs/proofs/discord-notifications-20260923/ . Distinguer réussite des tests et couverture. Les résultats frontend sont antérieurs, non relancés pour le changement Discord. Ce n’est pas une certification de sécurité ou une garantie sans bugs.",
+    "right": "192 intégrations réussies. Frontend : 81/81. Parcours navigateur public et administrateur réussis.",
+    "notes": "Preuves : docs/proofs/review-20260924/. Tests isolés et API simulées pour les parcours navigateur. Le test de sécurité a été adapté au nouveau filtrage des candidats ayant déjà postulé et fait l’objet d’une relance séparée. Pas de preuve de déploiement ou de réception email déduite de ces tests.",
     "seconds": 60,
     "speaker": "D"
   },

@@ -1,5 +1,5 @@
 # Exports n8n et provenance
-Les neuf [JSON joints](n8n/) proviennent des versions publiées observées le 23 septembre 2026 à 12:46 UTC. Le manifeste contient versions et identifiants de cette lecture. Ce ne sont pas les trois modèles de recette locale.
+Les neuf [JSON de référence](../../n8n/published-20260923/) proviennent des versions publiées observées le 23 septembre 2026 à 12:46 UTC. Le manifeste contient versions et identifiants de cette lecture. Ce ne sont pas les trois modèles de recette locale.
 
 | Scénario | Déclenchement et usage |
 | --- | --- |

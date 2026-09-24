@@ -1,5 +1,6 @@
 # Flux métier et techniques — 21 septembre 2026
 
+> Actualisation du 24 septembre : voir [l’état courant](ETAT_COURANT.md) pour les nouveaux rappels préparés, les tests et la différence avec la production. Les preuves datées ci-dessous conservent leur portée.
 Ces schémas décrivent les mécanismes implémentés, pas une nouvelle recette publiée. Voir les [exigences](REQUIREMENTS_V1.md), les [automatisations](AUTOMATISATIONS.md) et les [réserves du rendu](rendu/README.md). Les appels utilisateurs portent le préfixe `/api/v1`.
 
 

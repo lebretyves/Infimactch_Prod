@@ -1,0 +1,44 @@
+{
+  "date": "2026-09-24",
+  "unit": {
+    "tests": 688,
+    "passed": 688,
+    "lines": {
+      "total": 12659,
+      "covered": 12027,
+      "skipped": 0,
+      "pct": 95
+    },
+    "branches": {
+      "total": 5256,
+      "covered": 4737,
+      "skipped": 0,
+      "pct": 90.12
+    },
+    "functions": {
+      "total": 956,
+      "covered": 790,
+      "skipped": 0,
+      "pct": 82.63
+    }
+  },
+  "integration": {
+    "tests": 192,
+    "passed": 192,
+    "suites": 30,
+    "fullCampaign": "All unit and integration suites passed; subsequent security regression initially failed on an obsolete expectation after Epitech changed candidate proposals."
+  },
+  "securityRerun": {
+    "status": "PASS",
+    "scope": "Four reminder integrations and five real SQL security scenarios, after preserving the applicant exclusion rule and using a separate un-applied mission to check disabled accounts."
+  },
+  "frontend": {
+    "tests": 81,
+    "passed": 81,
+    "typecheck": "PASS",
+    "publicBuild": "PASS",
+    "adminBuild": "PASS",
+    "browserSuites": "PASS (mock APIs)"
+  },
+  "deployment": "Not deployed; no production workflow run by this review"
+}

@@ -1,0 +1,15 @@
+
+
+> interimatch@0.1.0 test:admin
+
+> node src/admin/smoke.mjs
+
+
+
+PASS admin management: invite without existing account, instructions, renew, cancel deletion, confirm deletion, mobile.
+
+PASS admin malformed response: accessible fallback and recovery without mutation replay
+
+PASS invitation: new/existing accounts, invalid and malformed responses, password retry, recovery reenrollment, no CSRF replacement or activation replay.
+
+PASS isolated admin UI: MFA enrollment/login, recovery-code acknowledgement, role navigation, reason, CSRF, explicit reauth retry, mobile, logout. Backend authentication not tested by this fixture.

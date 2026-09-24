@@ -274,3 +274,29 @@ for (const scenario of ["ready", "storage-failure", "lost-lease"])
         );
     },
   );
+
+for (const scenario of [
+ {kind:'REMINDER',status:'OPEN',allowed:true},
+ {kind:'START_REMINDER_24H',status:'FILLED',allowed:true},
+ {kind:'START_REMINDER_2H',status:'FILLED',allowed:true},
+ {kind:'REMINDER',status:'FILLED',allowed:false},
+ {kind:'START_REMINDER_2H',status:'OPEN',allowed:false},
+ {kind:'REMINDER',status:'OPEN',allowed:false,expired:true},
+ {kind:'REMINDER',status:'OPEN',allowed:false,version:9},
+ {kind:'REMINDER',status:'OPEN',allowed:false,missing:true},
+]) test('reminder transport revalidates mission without reading a PDF: '+JSON.stringify(scenario),async(t)=>{
+ env(t);let served=false,cancelled=false,sends=0;
+ const row={id:'mail',kind:scenario.kind,user_id:'actor',recipient:'unit@example.invalid',organization_id:'org',mission_id:'mission',mission_version:1,assignment_status:'ACTIVE',expires_at:new Date(Date.now()+(scenario.expired?-60000:3600000)),attempts:0,payload:{subject:'Rappel',html:'<p>Rappel</p>',text:'Rappel'}};
+ const f=fixture((sql)=>{
+  if(sql.startsWith('SELECT e.*')){if(served)return [];served=true;return [row];}
+  if(sql.startsWith('SELECT 1 FROM account'))return [{}];
+  if(sql.startsWith('SELECT status,version,start_at,reminders_enabled'))return scenario.missing?[]:[{status:scenario.status,version:scenario.version||1,reminders_enabled:true}];
+  if(sql.includes("SET status='CANCELLED'"))cancelled=true;
+  return [];
+ });
+ const result=await dispatchMissionEmails(f.db,{read:async()=>{throw Error('A reminder must not read a PDF');}} as any,1,async(_url,options)=>{
+  sends++;const body=JSON.parse(String(options?.body));assert.deepEqual(body.attachments,[]);assert.equal(body.to.length,1);
+  return Response.json({data:{email_id:'receipt',succeeded:1,failed:0}});
+ });
+ assert.equal(sends,scenario.allowed?1:0);assert.equal(result.sent,sends);assert.equal(cancelled,!scenario.allowed);
+});

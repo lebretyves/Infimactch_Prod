@@ -4,6 +4,12 @@ La confirmation d’affectation, après génération du PDF, met en file un emai
 
 L’intérimaire peut annuler depuis la fiche mission avant son début. L’opération libère son créneau, retire sa candidature acceptée et rouvre la mission. Une mission commencée nécessite de contacter l’entreprise. Le PDF reste accessible dans la fiche mission et le suivi, avec les mêmes contrôles d’accès que la confirmation.
 
+## Extension du 24 septembre : préparée, non déployée
+
+`ScheduledReminders1790208000000` étend la file existante : relances de missions non pourvues aux membres actifs des organisations ; rappels avant mission aux personnes affectées et aux membres concernés. La mise en service exige migration, backend et workflow cohérents. Le contrôle retenu reste toutes les **4 heures** ; le rappel H-2 n’est donc pas garanti. Les emails expirés, missions modifiées ou annulées et destinataires révoqués sont écartés avant l’envoi.
+
+Voir [l’état courant](ETAT_COURANT.md) et [le workflow préparé](n8n/2026-09-24/README.md). Aucun ancien envoi n’est présenté comme une preuve de ces nouvelles fonctions.
+
 ## Configuration SMTP2GO
 
 Resend a été abandonné à la demande de l’utilisateur. La clé créée pour cette intégration a été révoquée et retirée de Vercel. Aucun envoi réel via Resend n’a été effectué.
@@ -19,7 +25,7 @@ Le job n8n existant appelle `/internal/automation/jobs/dispatch`, qui traite ég
 
 ## Fiabilité
 
-Chaque message est individuel, contient le PDF et une version texte/HTML. Les réservations SQL empêchent les traitements concurrents. Les limitations HTTP 429 sont réessayées ; une requête interrompue ou une réponse ambiguë passe en `UNCERTAIN` et ne sera pas renvoyée automatiquement, afin d’éviter les doublons. Une erreur permanente passe en `FAILED`. `SENT` signifie accepté par le fournisseur, pas preuve d’arrivée dans la boîte ; vérifier celle-ci dans SMTP2GO.
+Chaque email de confirmation ou d’annulation est individuel, contient le PDF et une version texte/HTML. Les nouveaux rappels préparés le 24 septembre sont individuels, sans PDF joint ; ils dirigent vers le suivi de la mission. Les réservations SQL empêchent les traitements concurrents. Les limitations HTTP 429 sont réessayées ; une requête interrompue ou une réponse ambiguë passe en `UNCERTAIN` et ne sera pas renvoyée automatiquement, afin d’éviter les doublons. Une erreur permanente passe en `FAILED`. `SENT` signifie accepté par le fournisseur, pas preuve d’arrivée dans la boîte ; vérifier celle-ci dans SMTP2GO.
 
 Les changements d’adresse, la désactivation du compte et la perte d’accès à l’organisation annulent les emails en attente. Une confirmation obsolète n’est pas envoyée. Le PDF d’annulation conserve les données au moment de l’événement même si la mission est rouverte ensuite. Le stockage des documents reste chiffré.
 

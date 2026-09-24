@@ -60,6 +60,10 @@ La tentative immédiate appelle le dispatch, pas toute la chaîne périodique de
 
 Les imports ne font pas partie de cette boucle. Les rappels contrôlent notamment une mission ouverte et à venir, l'ancienneté minimale, l'intervalle entre rappels et un maximum de trois rappels par mission. Le débit réduit préserve le quota mais peut allonger l'attente d'une file chargée.
 
+## Évolution préparée le 24 septembre
+
+Le [nouvel export](n8n/2026-09-24/README.md) conserve la cadence de quatre heures et ajoute les rappels avant mission puis la distribution après leur création. Il est inactif dans le dépôt ; ne pas l’assimiler au workflow réellement publié. Le rappel H-2 n’est pas garanti. Le socle planifié observé consomme environ 10 exécutions/jour : 6 contrôles, 2 imports France Travail, 1 JobsPipe et 1 maintenance, hors événements, relais et reprises.
+
 ## Deux preuves à remettre au jury
 
 Privilégier deux workflows métier distincts : **matching** et **confirmation PDF**. Pour chacun, conserver :

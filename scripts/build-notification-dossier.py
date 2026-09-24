@@ -65,7 +65,7 @@ for title,body in [('MISSION À POURVOIR — AGENCE / ÉTABLISSEMENT','Cette mis
 end()
 start('05 — Validation et mise en service','Les preuves de tests ne remplacent pas la vérification de la configuration de production.')
 y=374
-for t in ['<b>661 tests unitaires réussis</b> sur la première passe après modification ; les nouveaux cas sont vérifiés en intégration.', '<b>28 tests d’intégration réussis</b> : emails, retours de livraison, permissions, garde-fous et 4 nouveaux cas sur les rappels.', '<b>À déployer :</b> migration SQL et backend, interface puis nouveau scénario n8n ; associer le credential du service et éviter deux planificateurs concurrents.', '<b>À activer et vérifier :</b> événements des destinations privées concernées, webhook SMTP2GO, premier passage n8n et suivi de livraison réel.', '<b>Aucun secret dans les exports :</b> identifiants n8n à associer dans l’interface ; secret de webhook conservé dans Vault.']:
+for t in ['<b>688 tests unitaires réussis</b> sur le code réuni le 24 septembre ; 95,00 % de couverture des lignes.', '<b>192 tests d’intégration réussis</b> : campagne complète isolée, incluant 4 nouveaux cas sur les rappels.', '<b>À déployer :</b> migration SQL et backend, interface puis nouveau scénario n8n ; associer le credential du service et éviter deux planificateurs concurrents.', '<b>À activer et vérifier :</b> événements des destinations privées concernées, webhook SMTP2GO, premier passage n8n et suivi de livraison réel.', '<b>Aucun secret dans les exports :</b> identifiants n8n à associer dans l’interface ; secret de webhook conservé dans Vault.']:
  y=text(t,42,y,size=13)-22
 end();c.save()
 base=ROOT/'docs/rendu/2026-09-23/InfiMatch_Soutenance_Pro_2026-09-23.pdf'

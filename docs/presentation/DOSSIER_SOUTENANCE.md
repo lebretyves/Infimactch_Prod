@@ -2,7 +2,11 @@
 
 Actualisation technique du 21 septembre 2026 ; étude de marché et références externes conservées avec leur date du 19 septembre, sans nouvelle recherche marché dans cette passe. Ce dossier ne constitue ni un procès-verbal de recette globale, ni une preuve de publication des derniers correctifs.
 
-## Livrables utilisables
+## Support remplacé
+
+Les PDF/PPTX de ce dossier sont les versions historiques du 21 septembre. Pour l’oral de 15 minutes, utiliser le [dossier actualisé du rendu](../rendu/2026-09-23/README.md), le [complément notifications](../rendu/2026-09-24/InfiMatch_Dossier_Notifications.pdf) et le [dossier financier](../business/2026-09-24/README.md). Les notes et sources ci-dessous restent consultables avec leur date ; elles ne certifient pas les nouveaux changements.
+
+## Livrables historiques
 
 - [PowerPoint éditable, 12 diapositives](InfiMatch_Soutenance.pptx), avec notes orales dans chaque diapositive.
 - [PDF imprimable, 12 pages](InfiMatch_Soutenance.pdf).
@@ -53,7 +57,7 @@ Les versions applicatives et déploiements vérifiés figurent dans [le registre
 | Récupération autonome | [Parcours et contrôles](../quality/RECUPERATION_AUTONOME_2026-09-19.md) | Configurer et recetter le canal réel avant promesse d’envoi |
 | Livraison email | [Modèle des statuts et webhook](../EMAILS_LIVRAISON.md) | Accepté ≠ livré au serveur ≠ lu ; webhook fournisseur à vérifier |
 | Limiteurs partagés | [Tests atomiques multi-instance](../quality/LIMITEURS_PARTAGES_2026-09-19.md) | Contrôles présents dans le code livré ; la recette ciblée reste datée |
-| Sauvegarde | [Restauration de copie réelle](../quality/restore-production.json) et [fixture chiffrée](../quality/restore-synthetic.json) | La copie réelle ne contient aucun document ; le déchiffrement est prouvé sur fixture, pas sur d’anciens PDF absents |
+| Sauvegarde | [Restauration de copie réelle](../proofs/audit-final-20260923/restore-production.json) et [fixture chiffrée](../quality/restore-synthetic.json) | La copie réelle ne contient aucun document ; le déchiffrement est prouvé sur fixture, pas sur d’anciens PDF absents |
 | Imports sobres | [Créneaux et limites](../quality/IMPORTS_SOBRIETE_2026-09-19.md) | Nouveau succès fournisseur→base→interface à observer |
 | API | [Contrat OpenAPI](../openapi.json) | Réexporter si les dernières réponses changent avant remise |
 

@@ -1,0 +1,164 @@
+[
+  {
+    "branch": "epitech/Backend",
+    "includedByHistory": false,
+    "onlyInReview": 229,
+    "onlyInBranch": 24
+  },
+  {
+    "branch": "epitech",
+    "includedByHistory": true,
+    "onlyInReview": 9,
+    "onlyInBranch": 0
+  },
+  {
+    "branch": "epitech/backup/main-avant-audit-final-20260923",
+    "includedByHistory": true,
+    "onlyInReview": 13,
+    "onlyInBranch": 0
+  },
+  {
+    "branch": "epitech/backup/main-avant-corrections-audit-20260923",
+    "includedByHistory": true,
+    "onlyInReview": 20,
+    "onlyInBranch": 0
+  },
+  {
+    "branch": "epitech/backup/main-avant-six-fonctionnalites-20260923",
+    "includedByHistory": true,
+    "onlyInReview": 33,
+    "onlyInBranch": 0
+  },
+  {
+    "branch": "epitech/backup/main-avant-sync-20260923-unit95",
+    "includedByHistory": true,
+    "onlyInReview": 348,
+    "onlyInBranch": 0
+  },
+  {
+    "branch": "epitech/chore/cleanup-tests-dead-code",
+    "includedByHistory": false,
+    "onlyInReview": 229,
+    "onlyInBranch": 6
+  },
+  {
+    "branch": "epitech/docs/couts-projet-exploitation-20260924",
+    "includedByHistory": true,
+    "onlyInReview": 4,
+    "onlyInBranch": 0
+  },
+  {
+    "branch": "epitech/feature/admin-external-offers-visibility",
+    "includedByHistory": false,
+    "onlyInReview": 229,
+    "onlyInBranch": 8
+  },
+  {
+    "branch": "epitech/feature/google-maps-itinerary",
+    "includedByHistory": false,
+    "onlyInReview": 229,
+    "onlyInBranch": 7
+  },
+  {
+    "branch": "epitech/feature/nurse-personal-calendar-confirmed-missions",
+    "includedByHistory": false,
+    "onlyInReview": 229,
+    "onlyInBranch": 32
+  },
+  {
+    "branch": "epitech/fix/admin-mission-consulter",
+    "includedByHistory": false,
+    "onlyInReview": 311,
+    "onlyInBranch": 1
+  },
+  {
+    "branch": "epitech/fix/audit-p0-limites",
+    "includedByHistory": true,
+    "onlyInReview": 348,
+    "onlyInBranch": 0
+  },
+  {
+    "branch": "epitech/fix/audit-seo",
+    "includedByHistory": false,
+    "onlyInReview": 353,
+    "onlyInBranch": 1
+  },
+  {
+    "branch": "epitech/fix/inscription-message-diplome",
+    "includedByHistory": false,
+    "onlyInReview": 353,
+    "onlyInBranch": 1
+  },
+  {
+    "branch": "epitech/fix/rgaa-connexion-erreurs",
+    "includedByHistory": true,
+    "onlyInReview": 349,
+    "onlyInBranch": 0
+  },
+  {
+    "branch": "epitech/front_opti",
+    "includedByHistory": false,
+    "onlyInReview": 229,
+    "onlyInBranch": 16
+  },
+  {
+    "branch": "epitech/main",
+    "includedByHistory": true,
+    "onlyInReview": 9,
+    "onlyInBranch": 0
+  },
+  {
+    "branch": "epitech/sync/epitech-20260922",
+    "includedByHistory": false,
+    "onlyInReview": 229,
+    "onlyInBranch": 10
+  },
+  {
+    "branch": "origin/Backend",
+    "includedByHistory": true,
+    "onlyInReview": 213,
+    "onlyInBranch": 0
+  },
+  {
+    "branch": "origin",
+    "includedByHistory": true,
+    "onlyInReview": 10,
+    "onlyInBranch": 0
+  },
+  {
+    "branch": "origin/Main",
+    "includedByHistory": true,
+    "onlyInReview": 10,
+    "onlyInBranch": 0
+  },
+  {
+    "branch": "origin/backup/avant-notifications-20260917",
+    "includedByHistory": true,
+    "onlyInReview": 346,
+    "onlyInBranch": 0
+  },
+  {
+    "branch": "origin/fix/audit-a01-ci",
+    "includedByHistory": true,
+    "onlyInReview": 197,
+    "onlyInBranch": 0
+  },
+  {
+    "branch": "origin/fix/openapi-reverse-location",
+    "includedByHistory": false,
+    "onlyInReview": 253,
+    "onlyInBranch": 2
+  },
+  {
+    "branch": "origin/refactor/a07-20260922",
+    "includedByHistory": true,
+    "onlyInReview": 190,
+    "onlyInBranch": 0
+  },
+  {
+    "branch": "origin/sync/repos-20260922",
+    "includedByHistory": true,
+    "onlyInReview": 191,
+    "onlyInBranch": 0
+  }
+]

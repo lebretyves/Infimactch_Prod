@@ -440,3 +440,13 @@ test("automation endpoint rejects wrong tokens before calling service and forwar
   });
   assert.deepEqual(await fixture(() => []).service.reminders(), { sent: 0 });
 });
+
+test('scheduled reminder endpoint authorizes before invoking the scheduler',async(t)=>{
+ const old=process.env.SERVICE_TOKEN;process.env.SERVICE_TOKEN='test-service-token';t.after(()=>{if(old===undefined)delete process.env.SERVICE_TOKEN;else process.env.SERVICE_TOKEN=old;});
+ const [Controller]=Reflect.getMetadata('controllers',AutomationModule);let calls=0;
+ const service={scheduledReminders:async()=>{calls++;return {processed:0};}};
+ const controller=new Controller(service);
+ assert.throws(()=>controller.scheduledReminders('wrong'),status(401));assert.equal(calls,0);
+ assert.deepEqual(await controller.scheduledReminders('test-service-token'),{processed:0});assert.equal(calls,1);
+ const f=fixture(()=>[]);assert.equal((await f.service.scheduledReminders()).processed,0);
+});

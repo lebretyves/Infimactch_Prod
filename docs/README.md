@@ -2,6 +2,13 @@
 
 ## Références courantes
 
+- [Revue des dépôts et documents — 24 septembre](quality/REVUE_DEPOTS_2026-09-24.md).
+
+- **[État courant au 24 septembre](ETAT_COURANT.md)** : code réuni, tests, production et réserves.
+- [Coûts et rentabilité](business/2026-09-24/README.md) : hypothèses et résultats mensuels.
+- [Dossier notifications et schémas](rendu/2026-09-24/InfiMatch_Dossier_Notifications.pdf) ; [export n8n préparé à 4 h](n8n/2026-09-24/README.md).
+
+
 - [Positionnement SEO : bilan et preuves du 22 septembre 2026](quality/POSITIONNEMENT_SEO_2026-09-22.md).
 
 - [Exigences et critères d'acceptation](REQUIREMENTS_V1.md).

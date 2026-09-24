@@ -4,7 +4,7 @@
 
 L’estimation initiale de conception reste **348 à 528 heures-personnes** pour un projet neuf ; détail dans CHIFFRAGE_V1.csv. Cette fourchette n’a pas été mesurée sur l’équipe ni sur un dépôt applicatif et doit être recalibrée avec les bibliothèques maîtrisées, le code réutilisable et les premiers lots. Elle ne modifie pas la date de rendu.
 
-La capacité quotidienne réelle n’a pas été fournie. À titre de calcul, quatre personnes sur onze jours représentent 44 journées-personnes. Six heures productives par personne et par jour donneraient 264 heures, mais six heures n’est pas une disponibilité confirmée. L’ancienne hypothèse de cinq personnes et 330 heures est retirée.
+Capacité déclarée le 24 septembre : 4 personnes × 11 jours × (7 h + environ 2 h le soir), soit environ **396 heures-personnes**. L’équipe initialement prévue de 5 personnes représentait 385 h à 7 h/jour. Ce total est déclaré ; la ventilation réelle par fonctionnalité et les justificatifs restent à compléter. L’ancienne hypothèse de 6 h/jour ne sert plus au chiffrage courant.
 
 L’organisation retient quatre périmètres simultanés : backend métier ; backend données/intégrations ; frontend ; intégration/documents/automatisations. Les tests sont répartis entre les auteurs, la recette est collective. L’intégration quotidienne et les contrats communs limitent le travail refait ; le parallélisme ne réduit pas mécaniquement les heures-personnes.
 

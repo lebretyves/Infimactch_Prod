@@ -5,13 +5,17 @@ Coûts actualisés le 24 septembre 2026. Référence applicative : 423ae1e9d0bb0
 | --- | --- | --- |
 | Cahier des charges J+2 | [CDC et roadmap](01_CAHIER_DES_CHARGES.md) | Synthèse des exigences et estimations conservées ; preuve de validation J+2 à fournir |
 | Code frontend et backend | [Installation](02_DEPOT_ET_INSTALLATION.md) | Code complet et README dans le dépôt |
-| Workflows nocode | [Notice](03_WORKFLOWS_N8N.md), [JSON](n8n/) | Neuf exports des versions publiées observées le 23 septembre |
+| Workflows nocode | [Notice](03_WORKFLOWS_N8N.md), [JSON](../../n8n/published-20260923/) | Neuf exports des versions publiées observées le 23 septembre |
 | Données publiques | [Nettoyage](04_DONNEES_PUBLIQUES.md), [script](demonstration-finess.cjs) | Fonction de normalisation réellement utilisée par l'application |
 | Étude de marché | [Étude sourcée](05_ETUDE_DE_MARCHE.md) | Sources primaires et hypothèses commerciales distinguées |
 | Chiffrage réel | [Méthode](06_CHIFFRAGE_REEL.md), [Excel](CHIFFRAGE_ESTIME_REEL.xlsx), [CSV](CHIFFRAGE_ESTIME_REEL.csv) | 396 h déclarées ; ventilation par lot à compléter |
 | Pitch | [PowerPoint](InfiMatch_Soutenance_2026-09-23.pptx), [PDF — nouveau design](InfiMatch_Soutenance_Pro_2026-09-23.pdf), [texte oral](07_PITCH_ORAL.md) | Treize diapositives, quinze minutes, quatre rôles à attribuer |
 
 [Aperçu du nouveau PDF](apercu-design-pro.png) · [Dossier modifiable](DOSSIER_RENDU.docx) · [Preuves et réserves](08_PREUVES_ET_RESERVES.md) · [Manifeste](MANIFEST.json).
+
+## Actualisation du 24 septembre
+
+Le [registre courant](../../ETAT_COURANT.md) distingue cette branche de revue de la production. Les chiffres de tests du support sont actualisés à partir des preuves de la revue ; aucune fonctionnalité préparée n’est présentée comme active. Les [schémas et rappels multicanaux](../2026-09-24/InfiMatch_Dossier_Notifications.pdf) constituent un complément technique, pas du temps supplémentaire dans le pitch de 15 minutes.
 
 ## Dépôts
 - [Epitech — main](https://github.com/EpitechMscProPromo2027/D-WEB-901-PAR-9-1-InteriMatch-1/tree/main)

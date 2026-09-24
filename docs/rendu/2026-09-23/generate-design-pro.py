@@ -170,12 +170,12 @@ for row,(name,labels) in enumerate([('MATCHING',['Mission ouverte','Traitement n
 txt('Reprise toutes les 4 heures • Credentials à réassocier • JSON Cloud et modèles locaux distingués',62,587,1140,44,17,MUTED)
 finish()
 # 09 — numbers
-base(9,'LES PREUVES',True,source='Campagne backend du 23/09/2026 : docs/proofs/discord-notifications-20260923/. Frontend : campagne antérieure.')
+base(9,'LES PREUVES',True,source='Revue locale du 24/09/2026 : docs/proofs/review-20260924/. Publication et réception email non attestées.')
 heading('La qualité','Des résultats mesurés. Un périmètre précis.',dark=True)
-txt('660',57,277,510,144,130,WHITE,True,leading=1)
-txt('/ 660 tests unitaires réussis',66,434,493,48,27,'#BBD0E5')
-txt('11 intégrations notifications réussies.<br/>Régressions SQL réussies.<br/>Frontend : 81/81, campagne antérieure.',66,513,496,104,21,'#BBD0E5',leading=1.4)
-for i,(label,num) in enumerate([('Lignes',95.11),('Branches',89.98),('Fonctions',82.41)]):
+txt('688',57,277,510,144,130,WHITE,True,leading=1)
+txt('/ 688 tests unitaires réussis',66,434,493,48,27,'#BBD0E5')
+txt('192 intégrations réussies.<br/>Parcours navigateur réussis.<br/>Frontend : 81/81.',66,513,496,104,21,'#BBD0E5',leading=1.4)
+for i,(label,num) in enumerate([('Lignes',95.00),('Branches',90.12),('Fonctions',82.63)]):
  y=292+i*102
  txt(label,654,y,280,36,23,WHITE);txt(f'{num:.2f}'.replace('.',',')+' %',1027,y,189,39,26,TEAL,True,align=2)
  box(654,y+53,566,12,'#2A3D56',6);box(654,y+53,566*num/100,12,TEAL,6)

@@ -1,5 +1,6 @@
 # Architecture technique InfiMatch
 
+> Actualisation du 24 septembre : voir [l’état courant](ETAT_COURANT.md) pour les nouveaux rappels préparés, les tests et la différence avec la production. Les preuves datées ci-dessous conservent leur portée.
 Référence documentaire au **21 septembre 2026**. Cette vue décrit les composants implémentés et l'inventaire de déploiement connu ; elle ne remplace pas une recette de production. InfiMatch est un projet de mise en relation : les agences emploient et rémunèrent.
 
 ```mermaid

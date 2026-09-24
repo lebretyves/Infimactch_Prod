@@ -10,7 +10,7 @@
 .lien:hover { color: var(--brand-600); text-decoration: underline; text-underline-offset: 6px; }
 .actions { flex-direction: row; align-items: center; flex-wrap: wrap; gap: 8px 20px; }
 .actions .connexion { color: var(--brand-700); min-height: 44px; }
-.actions .inscription { color: var(--white); }
+.actions .inscription { color: var(--white); min-height: 44px; }
 .actions .inscription:hover { color: var(--white); text-decoration: none; }
 .inscription { font-size: 13px; padding-inline: 18px; }
 .burger { display: none; place-items: center; width: 44px; height: 44px; padding: 0; border: 0; border-radius: var(--radius-control); background: transparent; box-shadow: none; color: var(--ink-900); cursor: pointer; }

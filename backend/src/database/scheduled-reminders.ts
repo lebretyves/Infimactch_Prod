@@ -1,6 +1,7 @@
-import {MigrationInterface,QueryRunner} from 'typeorm';
+import { MigrationInterface, QueryRunner } from "typeorm";
 export class ScheduledReminders1790208000000 implements MigrationInterface {
- async up(q:QueryRunner) {await q.query(`
+  async up(q: QueryRunner) {
+    await q.query(`
  ALTER TABLE mission_email ALTER COLUMN assignment_id DROP NOT NULL;
  ALTER TABLE mission_email ALTER COLUMN document_id DROP NOT NULL;
  ALTER TABLE mission_email DROP CONSTRAINT mission_email_kind_check;
@@ -31,6 +32,11 @@ export class ScheduledReminders1790208000000 implements MigrationInterface {
  ON CONFLICT DO NOTHING;
  RETURN NEW;
  END $$;
- `);}
- async down(){throw new Error('Restore a verified backup instead of destructive rollback');}
+ `);
+  }
+  async down() {
+    throw new Error(
+      "Restore a verified backup instead of destructive rollback",
+    );
+  }
 }

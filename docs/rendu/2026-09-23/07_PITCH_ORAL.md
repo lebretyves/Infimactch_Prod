@@ -1,3 +1,5 @@
+> Actualisation du 24 septembre : [preuves de la revue](../../proofs/review-20260924/README.md). Les résultats historiques cités restent datés ; le code de cette branche n’est pas déclaré déployé.
+
 # Pitch oral — 15 minutes, 13 slides
 
 Budget actualisé le 24/09/2026 ; rôles A/B/C/D à attribuer. En cas de panne de démonstration, dérouler le parcours fictif de la slide 5 sans prétendre montrer la production.

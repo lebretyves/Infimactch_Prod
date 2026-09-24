@@ -846,7 +846,7 @@
       "available": 25
     },
     {
-      "text": "Campagne backend du 23/09/2026 : docs/proofs/disco",
+      "text": "Revue locale du 24/09/2026 : docs/proofs/review-20",
       "font": 10,
       "height": 12.2,
       "available": 21
@@ -864,19 +864,19 @@
       "available": 110
     },
     {
-      "text": "660",
+      "text": "688",
       "font": 130,
       "height": 130,
       "available": 144
     },
     {
-      "text": "/ 660 tests unitaires réussis",
+      "text": "/ 688 tests unitaires réussis",
       "font": 27,
       "height": 32.9,
       "available": 48
     },
     {
-      "text": "11 intégrations notifications réussies.<br/>Régres",
+      "text": "192 intégrations réussies.<br/>Parcours navigateur",
       "font": 21,
       "height": 88.2,
       "available": 104
@@ -888,7 +888,7 @@
       "available": 36
     },
     {
-      "text": "95,11 %",
+      "text": "95,00 %",
       "font": 26,
       "height": 31.7,
       "available": 39
@@ -900,7 +900,7 @@
       "available": 36
     },
     {
-      "text": "89,98 %",
+      "text": "90,12 %",
       "font": 26,
       "height": 31.7,
       "available": 39
@@ -912,7 +912,7 @@
       "available": 36
     },
     {
-      "text": "82,41 %",
+      "text": "82,63 %",
       "font": 26,
       "height": 31.7,
       "available": 39

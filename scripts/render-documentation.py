@@ -13,7 +13,7 @@ def render(vault_only=False):
   if vault_only and source!='VAULT_V1.md':continue
   d=Document();d.sections[0].header.paragraphs[0].text='InfiMatch | Documentation du projet'
   d.styles['Normal'].font.name='Calibri';d.styles['Normal'].font.size=Pt(11)
-  d.add_paragraph('Révision documentaire du 21 septembre 2026. Source maintenue : '+source+'. Les preuves datées et les réserves conservent leur portée ; ce document ne constitue pas une recette de production.')
+  d.add_paragraph('Révision documentaire du 24 septembre 2026. État de livraison : docs/ETAT_COURANT.md. Source maintenue : '+source+'. Les preuves datées et les réserves conservent leur portée ; ce document ne constitue pas une recette de production.')
   inside=False;table=None
   for line in (DOCS/source).read_text(encoding='utf-8').splitlines():
    if line.startswith('```'):
